@@ -1,0 +1,40 @@
+import { get } from 'lodash'
+import React, {FC} from 'react'
+
+import DateInput from './date_input'
+import {StoreContext} from './store'
+import {pathToId} from '../utilities/paths_utils'
+
+interface DateInputWrapperProps {
+  label: string,
+  path: string,
+}
+
+/**
+ * A component that wraps a DataInput component in order to tie it to the data store
+ * 
+ * @param label The label of the DataInput component
+ * @param path The path (consistent with the path provided to the lodash
+ * get() method) to the datum within the data store for the DataInput 
+ * component
+ */
+const DateInputWrapper: FC<DateInputWrapperProps> = ({label, path}) => {
+
+  // Generate an id for the input
+  const id = pathToId("input", path)
+
+  return (
+    <StoreContext.Consumer>
+      {({doc, upsertData}) => {
+          return (
+            <DateInput id={id} label={label} 
+              handleValueChange= {(value: any) => upsertData(path, value)}
+              value = {get(doc, path)}/>
+          )
+        }
+      }
+    </StoreContext.Consumer>
+)}
+
+
+export default DateInputWrapper
