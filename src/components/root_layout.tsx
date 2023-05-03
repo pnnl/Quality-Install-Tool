@@ -18,7 +18,7 @@ interface RootLayoutProps {
  */
 const RootLayout: FC<RootLayoutProps> = ({children}) => {
   return (
-    <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800}}>
+    <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(211, 211, 211, 0.5)"}}>
       {/* TODO: Add a menu */}
       <NavBar style={{backgroundColor: "green"}}>
         <Container>
