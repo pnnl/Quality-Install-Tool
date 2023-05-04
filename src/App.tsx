@@ -1,5 +1,4 @@
 import "bootstrap/dist/css/bootstrap.css";
-import React, { Component } from "react";
 import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
