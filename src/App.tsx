@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import React, { Component } from "react";
+import React from "react";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
@@ -41,17 +41,10 @@ const routes = [{
 // React Router
 const router = createBrowserRouter(routes);
 
-class App extends Component {
-  componentDidMount() {
-    if (window.location.pathname === "/") {
-      window.location.replace("/app/qa_hpwh/job_1");
-    }
-  }
-  render() {
-    return (
-      <RouterProvider router={router} />
-    )
-    }
+function App() {
+  return (
+    <RouterProvider router={router} />
+  )
 }
 
 
