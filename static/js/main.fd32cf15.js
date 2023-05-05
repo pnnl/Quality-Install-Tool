@@ -65807,7 +65807,7 @@ registerValidSW(swUrl,config);}}).catch(function(){console.log('No internet conn
 ;// CONCATENATED MODULE: ./src/reportWebVitals.ts
 var reportWebVitals=function reportWebVitals(onPerfEntry){if(onPerfEntry&&onPerfEntry instanceof Function){__webpack_require__.e(/* import() */ 787).then(__webpack_require__.bind(__webpack_require__, 787)).then(function(_ref){var getCLS=_ref.getCLS,getFID=_ref.getFID,getFCP=_ref.getFCP,getLCP=_ref.getLCP,getTTFB=_ref.getTTFB;getCLS(onPerfEntry);getFID(onPerfEntry);getFCP(onPerfEntry);getLCP(onPerfEntry);getTTFB(onPerfEntry);});}};/* harmony default export */ var src_reportWebVitals = (reportWebVitals);
 ;// CONCATENATED MODULE: ./src/index.tsx
-var root=client.createRoot(document.getElementById('root'));root.render(/*#__PURE__*/(0,jsx_runtime.jsx)(react.StrictMode,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(src_App,{})}));// If you want your app to work offline and load faster, you can change
+var root=client.createRoot(document.getElementById('root'));root.render(/*#__PURE__*/(0,jsx_runtime.jsx)(src_App,{}));// If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 unregister();// If you want to start measuring performance in your app, pass a function
@@ -65817,4 +65817,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.eecb38d0.js.map
+//# sourceMappingURL=main.fd32cf15.js.map
