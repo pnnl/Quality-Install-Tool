@@ -110,7 +110,9 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude && metadata?.geolocation?.longitude ? <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
+                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
+                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ? 
+                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
                   <span>Missing</span>
                 }
                 { metadata?.geolocation?.altitude && <><br /><span>Altitude: {metadata.geolocation.altitude.toString()} m</span></> }
