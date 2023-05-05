@@ -2,6 +2,7 @@
   "name": "qa-mdx-cra",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://pnnl.github.io/Remote-QA-Web-App/",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@mdx-js/loader": "^2.3.0",
@@ -98,7 +99,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -118,7 +121,9 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  },
   "jest": {
     "roots": [
       "<rootDir>/src"
