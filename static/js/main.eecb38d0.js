@@ -64861,7 +64861,7 @@ Navbar.displayName = 'Navbar';
  *
  * @remarks
  * Provides a banner that includes a menu
- */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"green"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_NavbarBrand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"gold",fontSize:"2rem"},children:"BASC QA Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
+ */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"green"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar.Brand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"gold",fontSize:"2rem"},children:"BASC QA Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
 ;// CONCATENATED MODULE: ./node_modules/markdown-to-jsx/dist/index.modern.js
 
 
@@ -65817,4 +65817,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.d3f88f49.js.map
+//# sourceMappingURL=main.eecb38d0.js.map
