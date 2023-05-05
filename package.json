@@ -2,6 +2,7 @@
   "name": "qa-mdx-cra",
   "version": "0.1.0",
   "private": true,
+  "homepage": "index.html",
   "proxy": "https://localhost:5000",
   "dependencies": {
     "@babel/core": "^7.16.0",
@@ -42,6 +43,7 @@
     "fs-extra": "^10.0.0",
     "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "http-server": "^14.1.1",
     "identity-obj-proxy": "^3.0.0",
     "image-blob-reduce": "^4.1.0",
     "jest": "^27.4.3",
