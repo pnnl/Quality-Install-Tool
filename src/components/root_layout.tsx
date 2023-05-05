@@ -10,7 +10,7 @@ interface RootLayoutProps {
 
 /**
  * The highest-level visible component for the app
- * 
+ *
  * @param children The content for the app
  *
  * @remarks
@@ -22,7 +22,7 @@ const RootLayout: FC<RootLayoutProps> = ({children}) => {
       {/* TODO: Add a menu */}
       <NavBar style={{backgroundColor: "green"}}>
         <Container>
-          <NavBar.Brand><span style={{color: "gold", fontSize: "2rem"}}>BASC QA Tool</span></NavBar.Brand>
+          <NavBar.Brand><span style={{color: "gold", fontSize: "2rem"}}>Quality Install Tool</span></NavBar.Brand>
         </Container>
       </NavBar>
       <div style={{paddingTop: "1rem"}}>
