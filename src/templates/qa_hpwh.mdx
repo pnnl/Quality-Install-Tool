@@ -24,8 +24,8 @@ import Tabs from 'react-bootstrap/Tabs'
 
     ##### HPWH Space Evaluation
     <Collapsible header="HPWH Space Evaluation — Instructions">
-      The successful installation of a heat pump water heater (HPWH) begins in the planning 
-      stage by assessing whether the location where the HPWH will be installed is suitable. 
+      The successful installation of a heat pump water heater (HPWH) begins in the planning
+      stage by assessing whether the location where the HPWH will be installed is suitable.
       The space around the HPWH must be...
       1. large enough to meet the air volume requirement (700 ft3 minimum) of the HPWH,
       2. where some compressor and fan noise (50 to 65 dB, normal conversation loudness) is
@@ -33,19 +33,19 @@ import Tabs from 'react-bootstrap/Tabs'
       3. where some cooled air (approximately a half-ton) is acceptable or desirable,
       4. not dusty, or where a significant amount of dust is generated,
       5. tall enough (~12” taller than the current tank height, ~76” if < 65 gals to ~ 86” if >= 80
-      gals) to allow the filter in the HPWH to be periodically accessed for cleaning, 
-      6. where there is access to a drain, drain line, or utility sink for condensate, and 
-      7. in the 40°–90° F (4.4°–32.2° C) temperature range year-round
+      gals) to allow the filter in the HPWH to be periodically accessed for cleaning,
+      6. where there is access to a drain, drain line, or utility sink for condensate, and
+      7. in the 40°–125° F (4.4°–51° C) temperature range year-round
 
-      It is possible to also meet the air volume requirement of the HPWH by installing it next 
-      to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust 
-      of the HPWH to an adjacent space. It is also possible to install a condensate pump where 
+      It is possible to also meet the air volume requirement of the HPWH by installing it next
+      to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
+      of the HPWH to an adjacent space. It is also possible to install a condensate pump where
       a drain located below the elevation of the HPWH’s condensate outlet is not available.
 
-      To verify conditions 1-7 have been met please use the "HPWH Location" photo input to 
-      take a 
-      wide-angle picture of the space where the HPWH will be installed. If the HPWH is to 
-      be ducted or using the air volume of an adjacent space via a louvered door, 
+      To verify conditions 1-7 have been met please use the "HPWH Location" photo input to
+      take a
+      wide-angle picture of the space where the HPWH will be installed. If the HPWH is to
+      be ducted or using the air volume of an adjacent space via a louvered door,
       please supply a photo of the connected space using the "Adjacent Space" photo input.
       Also use the "Space Air Volume Calculator" table to calculate the Air Volume of the space that the HPWH is
       using to meet its air volume requirement.
@@ -57,9 +57,9 @@ import Tabs from 'react-bootstrap/Tabs'
 
     <PhotoInput id="adjacent_space_photo" label="Adjacent Space – Photo">
       Provide a photo of any adjacent space that will supply air to meet the air volume requirement for the HPWH.
-      
+
       This is applicable to HPWH installations that will utilize a louvered door or ducting to
-      meet air volume requirements. 
+      meet air volume requirements.
     </PhotoInput>
 
 
@@ -68,14 +68,15 @@ import Tabs from 'react-bootstrap/Tabs'
 | <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />                                                                                                                                                            |
 | <NumberInput label="Width (ft)" path="volume_calculator.width"  />                                                                                                                                                                                      |
 | <NumberInput label="height (ft)" path="volume_calculator.height" />                                                                                                                                                                                    |
-| Air Volume = {props.doc.volume_calculator?.length} x {props.doc.volume_calculator?.width} x {props.doc.volume_calculator?.height} = {props.doc.volume_calculator?.length * props.doc.volume_calculator?.width * props.doc.volume_calculator?.height} ft<sup>3</sup> |
+| Air Volume = {props.doc.volume_calculator?.length} x {props.doc.volume_calculator?.width} x {props.doc.volume_calculator?.height} = {props.doc.volume_calculator?.length * props.doc.volume_calculator?.width * props.doc.volume_calculator?.height} ft<sup>3</sup>
 
-
+---
+##### Old Water Heater
 <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
-  For some jurisdictions, rebates for an HPWH might be conditioned on not only the 
-  efficiency specifications of the HPWH but also the fuel type of the existing water 
+  For some jurisdictions, rebates for an HPWH might be conditioned on not only the
+  efficiency specifications of the HPWH but also the fuel type of the existing water
   heater the HPWH is replacing. For jurisdictions where this applies, please provide
-  a photo of the nameplate showing the model number, 
+  a photo of the nameplate showing the model number,
   fuel type, and the serial number of the old water heater.
 </PhotoInput>
 
@@ -130,7 +131,7 @@ import Tabs from 'react-bootstrap/Tabs'
 - Check the water pressure to the house, and ensure it is between 45 and 80 psi.
 If it is above 80 PSI, a whole house water pressure reducing/regulating valve should
 be installed to protect the water heater and water fixture valves in the house.
-- Check that the floor can support the weight of the HPWH when filled with water. 
+- Check that the floor can support the weight of the HPWH when filled with water.
 This is especially important if the HPWH selected has a larger storage capacity than
 the original one.
 
@@ -191,7 +192,7 @@ this requires a thermostatic mixing valve at the water heater to prevent scaldin
 </PhotoInput>
 
 <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
-  Provide a close-up photo of the nameplate of the installed system showing the 
+  Provide a close-up photo of the nameplate of the installed system showing the
   model number an dserial number.
 </PhotoInput>
 
@@ -249,13 +250,15 @@ Install Date: {(new Date(props.doc.install_date)).toLocaleDateString('en-us', {t
   This space will supply air to meet the air volume requirement for the HPWH.
 </Photo>
 
+Volume of space supplying air to the HPWH = {props.doc.volume_calculator?.length * props.doc.volume_calculator?.width * props.doc.volume_calculator?.height} ft<sup>3</sup> (Must be at least 700 ft<sup>3</sup>)
+
 <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
   This photo shows the completed HPWH installation including the exhaust,
-  insulated hot water line, pressure relief valuve discharge, and condensate.
+  insulated hot water line, pressure relief valve discharge, and condensate.
 </Photo>
 
 <Photo id="nameplate_photo" label="Nameplate – Photo" required>
-  This photo shows the nameplate of the installed system including the 
+  This photo shows the nameplate of the installed system including the
   model number and serial number.
 </Photo>
 
