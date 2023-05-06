@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+card-body {
+  page-break-inside: avoid;
+  .uploaded-photo {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}

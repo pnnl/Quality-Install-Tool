@@ -42,7 +42,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
           </Card.Text>
           {photo? (
             <>
-              <Image src={URL.createObjectURL(photo)} thumbnail />
+              <Image className='uploaded-photo' src={URL.createObjectURL(photo)} thumbnail />
               <br />
               <small>
                 Timestamp: {
