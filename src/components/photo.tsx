@@ -18,7 +18,7 @@ interface PhotoProps {
 
 /**
  * A component that displays a photo, timestamp, geolocation, label, and description
- * 
+ *
  * @param description Content (most commonly markdown text) used to describe the photo
  * @param label Label for the component
  * @param metadata Photo metadata including timestamp and geolocation
@@ -51,11 +51,11 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude && metadata?.geolocation?.longitude ? 
+                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
+                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
                   <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
                   <span>Missing</span>
                 }
-                { metadata?.altitude && <><br /><span>Altitude: {metadata.altitude} meters</span></> }
               </small>
             </>
           ) : required && (
@@ -63,7 +63,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
           )
         }
         </Card.Body>
-        {notes && 
+        {notes &&
           <Card.Footer>{notes}</Card.Footer>}
       </Card>
     </>
