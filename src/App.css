@@ -38,7 +38,7 @@
 }
 
 h1 {
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -54,4 +54,10 @@ h1 {
 .flex-child {
   flex: 1;
   align-self: top;
-}  
+}
+
+/* Added to keep portrait photos from taking up too much vertical space
+- especially for printing */
+.img-thumbnail {
+  max-height: 500px;
+}
