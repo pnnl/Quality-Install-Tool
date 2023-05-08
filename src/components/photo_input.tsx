@@ -17,15 +17,15 @@ interface PhotoInputProps {
   upsertPhoto: (file: Blob) => void,
 }
 
-// TODO: Determine whether or not the useEffect() method is needed. 
-// We don't seem to need a separate camera button on an Android phone. 
+// TODO: Determine whether or not the useEffect() method is needed.
+// We don't seem to need a separate camera button on an Android phone.
 // However, we may need to request access to the camera
 // before it can me used. Then clean up the corresponding code that is currently
 // commented out.
 
 /**
  * Component for photo input
- * 
+ *
  * @param children Content (most commonly markdown text) describing the photo requirement
  * @param label Label for the photo requirement
  * @param metadata Abreviated photo metadata including timestamp and geolocation
@@ -111,11 +111,10 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
                 <br />
                 Geolocation: {
                   metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ? 
+                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
                   <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
                   <span>Missing</span>
                 }
-                { metadata?.geolocation?.altitude && <><br /><span>Altitude: {metadata.geolocation.altitude.toString()} m</span></> }
               </small>
             </>
           )}
