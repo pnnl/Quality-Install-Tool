@@ -8,6 +8,7 @@ import {getPhotoMetadata} from '../utilities/photo_utils'
 import { isEmptyBindingElement } from 'typescript';
 import Attachment from '../types/attachment.type'
 import type {Objectish, AnyObject, AnyArray, NonEmptyArray} from '../types/misc_types.type'
+import { AsyncResource } from 'async_hooks';
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -41,11 +42,11 @@ interface StoreProviderProps {
  * @param docId - Document instance id
  */
 export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId }) => {
-  const changesRef = useRef<PouchDB.Core.Changes<{}>>()
-  const revisionRef = useRef<string>()
+  const changesRef = useRef<PouchDB.Core.Changes<{}>>();
+  const revisionRef = useRef<string>();
   // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
-  const [attachments, setAttachments] = useState<Record<string, Attachment>>({})
-  const [db, setDB] = useState()
+  const [attachments, setAttachments] = useState<Record<string, Attachment>>({});
+  const [db, setDB] = useState();
   // The doc state could be anything that is JSON-compatible
   const [doc, setDoc] = useState();
 
@@ -143,9 +144,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         since: 'now',
       }).on('change', function (change) {
         console.log('Database changed')
-        console.log('_rev:', change.doc._rev)
+        console.log('_rev:', change.doc?._rev)
         console.log('current:', revisionRef.current)
-        if (change.doc._rev != revisionRef.current) {
+        if (change.doc?._rev !== revisionRef.current) {
           // The change must have originated from outside this component, so update component state
           console.log('processing DB change')
           processDBDocChange(db, change.doc)
@@ -190,7 +191,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
       return {...dbDoc, ...newDoc};
     }).then(function (res) {
       revisionRef.current = res.rev
-    }).catch(function (err) {
+    }).catch(function (err : Error) {
       console.error('upsert error:', err)
     });
 

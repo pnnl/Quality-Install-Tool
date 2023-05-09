@@ -11,6 +11,7 @@ import PhotoMetaData from '../types/photo_metadata.type'
 
 interface PhotoInputProps {
   children: React.ReactNode,
+  id: string,
   label: string,
   metadata: PhotoMetaData,
   photo: Blob | undefined,

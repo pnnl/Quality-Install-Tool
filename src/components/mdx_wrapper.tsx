@@ -34,7 +34,7 @@ const components = {
 };
 
 interface MdxWrapperProps {
-  Component: ReactNode,
+  Component: React.ComponentType<any>;
 }
 
 /**

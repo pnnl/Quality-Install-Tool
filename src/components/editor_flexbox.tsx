@@ -1,5 +1,5 @@
 import Markdown from 'markdown-to-jsx';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import StringInput from './string_input';
 import USStateSelectWrapper from './us_state_select_wrapper';
 import PhotoInput from './photo_input';
@@ -19,7 +19,7 @@ const EditorFlexBox = () => {
 
   const [text, setText] = useState('');
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
     event.target.style.height = 'auto'; // Reset the height to auto to adjust the size
     event.target.style.height = `${event.target.scrollHeight}px`; // Set the height to the scrollHeight to adjust the size
