@@ -240,7 +240,7 @@ Address: {props.doc.location?.street_address}, {props.doc.location?.city}, {prop
 
 Installer: {props.doc.installer}
 
-Install Date: {(new Date(props.doc.install_date)).toLocaleDateString('en-us', {timeZone: 'UTC', month:"long", day:"numeric", year:"numeric"})}
+Install Date: <MyDate dateparam={props.doc.install_date}/>
 
 <Photo id="house_number_photo" label="House Number – Photo" required />
 

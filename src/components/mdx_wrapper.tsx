@@ -14,9 +14,11 @@ import StringInputWrapper from "./string_input_wrapper";
 import TableWrapper from "./table_wrapper";
 import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
+import MyDate from "./date";
 
 
 import {StoreContext} from './store'
+
 
 const components = {
   Collapsible,
@@ -31,6 +33,7 @@ const components = {
   table: TableWrapper,
   TextInput: TextInputWrapper,
   USStateSelect: USStateSelectWrapper,
+  MyDate: MyDate,
 };
 
 interface MdxWrapperProps {
