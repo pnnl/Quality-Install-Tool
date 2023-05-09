@@ -1,28 +1,28 @@
-import ImageBlobReduce from 'image-blob-reduce';
-import {isEmpty} from 'lodash';
-import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react';
-import {Button, Card, Image} from 'react-bootstrap';
-import {TfiGallery} from 'react-icons/tfi';
+import ImageBlobReduce from 'image-blob-reduce'
+import {isEmpty} from 'lodash'
+import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react'
+import {Button, Card, Image} from 'react-bootstrap'
+import {TfiGallery} from 'react-icons/tfi'
 
-import Collapsible from './collapsible';
-import GpsCoordStr from './gps_coord_str';
-import PhotoMetaData from '../types/photo_metadata.type';
-import uuid from 'react-uuid';
+import Collapsible from './collapsible'
+import GpsCoordStr from './gps_coord_str'
+import PhotoMetaData from '../types/photo_metadata.type'
+import uuid from 'react-uuid'
 
 interface Photo {
-  id: string;
-  blob: Blob;
-  note?: string;
+  id: string
+  blob: Blob
+  note?: string
 }
 
 interface PhotoInputProps {
-  children: React.ReactNode;
-  label: string;
-  metadata: PhotoMetaData;
-  photos: Photo[];
-  upsertPhoto: (photo: Photo) => void;
-  deletePhoto: (id: string) => void;
-  maxPhotos?: number;
+  children: React.ReactNode
+  label: string
+  metadata: PhotoMetaData
+  photos: Photo[]
+  upsertPhoto: (photo: Photo) => void
+  deletePhoto: (id: string) => void
+  maxPhotos?: number
 }
 
 /**
@@ -47,24 +47,24 @@ const PhotoInput: FC<PhotoInputProps> = ({
 
   const handleFileupload = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      const photo = event.target.files[0];
-      const imageBlobReduce = new ImageBlobReduce();
-      const blob = await imageBlobReduce.toBlob(photo);
-      const id = uuid();
-      upsertPhoto({id, blob});
+      const photo = event.target.files[0]
+      const imageBlobReduce = new ImageBlobReduce()
+      const blob = await imageBlobReduce.toBlob(photo)
+      const id = uuid()
+      upsertPhoto({id, blob})
 
-      event.target.value = '';
+      event.target.value = ''
     }
-  };
+  }
 
   const handleNoteChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
-    const note = event.target.value;
-    const photoIndex = photos.findIndex(photo => photo.id === id);
+    const note = event.target.value
+    const photoIndex = photos.findIndex(photo => photo.id === id)
     if (photoIndex >= 0) {
-      const updatedPhoto = {...photos[photoIndex], note};
-      upsertPhoto(updatedPhoto);
+      const updatedPhoto = {...photos[photoIndex], note}
+      upsertPhoto(updatedPhoto)
     }
-  };
+  }
   
 
   return (
@@ -108,7 +108,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     </Card.Body>
   </Card>
   </>
-);
-};
+)
+}
 
-export default PhotoInput;
+export default PhotoInput
