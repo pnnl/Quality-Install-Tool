@@ -1,127 +1,114 @@
-import ImageBlobReduce from 'image-blob-reduce'
-import {isEmpty} from 'lodash'
-import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react'
-import {Button, Card, Image} from 'react-bootstrap'
-import {TfiGallery} from 'react-icons/tfi'
+import ImageBlobReduce from 'image-blob-reduce';
+import {isEmpty} from 'lodash';
+import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react';
+import {Button, Card, Image} from 'react-bootstrap';
+import {TfiGallery} from 'react-icons/tfi';
 
+import Collapsible from './collapsible';
+import GpsCoordStr from './gps_coord_str';
+import PhotoMetaData from '../types/photo_metadata.type';
+import uuid from 'react-uuid';
 
-import Collapsible from './collapsible'
-import GpsCoordStr from './gps_coord_str'
-import PhotoMetaData from '../types/photo_metadata.type'
-
-interface PhotoInputProps {
-  children: React.ReactNode,
-  label: string,
-  metadata: PhotoMetaData,
-  photo: Blob | undefined,
-  upsertPhoto: (file: Blob) => void,
+interface Photo {
+  id: string;
+  blob: Blob;
+  note?: string;
 }
 
-// TODO: Determine whether or not the useEffect() method is needed.
-// We don't seem to need a separate camera button on an Android phone.
-// However, we may need to request access to the camera
-// before it can me used. Then clean up the corresponding code that is currently
-// commented out.
+interface PhotoInputProps {
+  children: React.ReactNode;
+  label: string;
+  metadata: PhotoMetaData;
+  photos: Photo[];
+  upsertPhoto: (photo: Photo) => void;
+  deletePhoto: (id: string) => void;
+  maxPhotos?: number;
+}
 
 /**
  * Component for photo input
  *
  * @param children Content (most commonly markdown text) describing the photo requirement
  * @param label Label for the photo requirement
- * @param metadata Abreviated photo metadata including timestamp and geolocation
- * @param photo Blob containing the photo itself
+ * @param metadata Abbreviated photo metadata including timestamp and geolocation
+ * @param photos An array of photos with associated metadata
  * @param upsertPhoto Function used to update/insert a photo into the store
+ * @param deletePhoto Function used to delete a photo from the store
+ * @param maxPhotos Maximum number of photos that can be added (default: 1)
  */
-const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upsertPhoto}) => {
-  // Create references to the hidden file inputs
-  const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
-  const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
+const PhotoInput: FC<PhotoInputProps> = ({
+  children,
+  label,
+  photos,
+  upsertPhoto,
+  deletePhoto,
+  maxPhotos = 1,
+}) => {
 
-  const [cameraAvailable, setCameraAvailable] = useState(false)
+  const handleFileupload = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const photo = event.target.files[0];
+      const imageBlobReduce = new ImageBlobReduce();
+      const blob = await imageBlobReduce.toBlob(photo);
+      const id = uuid();
+      upsertPhoto({id, blob});
 
-  // Handle button clicks
-  const handlePhotoCaptureButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-    hiddenPhotoCaptureInputRef.current && hiddenPhotoCaptureInputRef.current.click()
-  }
-  const handlePhotoGalleryButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-    hiddenPhotoUploadInputRef.current && hiddenPhotoUploadInputRef.current.click()
-  }
-
-  useEffect(() => {
-    if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-      .then(() => {
-        setCameraAvailable(true)
-      });
+      event.target.value = '';
     }
+  };
 
-  })
-
-  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const file = event.target.files[0]
-      upsertPhoto(file)
+  const handleNoteChange = (id: string, event: ChangeEvent<HTMLInputElement>) => {
+    const note = event.target.value;
+    const photoIndex = photos.findIndex(photo => photo.id === id);
+    if (photoIndex >= 0) {
+      const updatedPhoto = {...photos[photoIndex], note};
+      upsertPhoto(updatedPhoto);
     }
-  }
+  };
+  
 
   return (
     <>
       <Card style={{pageBreakBefore: 'always', marginBottom: '1rem'}}>
         <Card.Body>
           <Collapsible header={label}>
-            {/* Card.Text renders a <p> by defult. The children come from markdown
+            {/* Card.Text renders a <p> by default. The children come from markdown
               and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
-            <Card.Text as="div">
-              {children}
-            </Card.Text>
+            <Card.Text as="div">{children}</Card.Text>
           </Collapsible>
+          {/* Display the photos */}
+        {photos.map((photo, index) => (
+        <div key={photo.id}>
+          {/* keeping blank so that it  */}
+          <Image src={} thumbnail style={{ maxWidth: '200px', maxHeight: '200px', marginRight: '1rem' }} />
           <div>
-            {/* {(cameraAvailable || cameraAvailable) &&
-              <Button onClick={handlePhotoCaptureButtonClick}
-              variant="outline-primary">
-              <TfiCamera/> Camera</Button>
-            } */}
-            <Button onClick={handlePhotoGalleryButtonClick}
-              variant="outline-primary"><TfiGallery/> Add Photo</Button>
+            {/* Input for the note */}
+            <Form.Control
+              type="text"
+              placeholder="Enter a note..."
+              value={photo.note}
+              onChange={(event) => handleNoteChange(id, event)}
+            />
+            {/* Delete button */}
+            <Button variant="outline-danger" onClick={() => deletePhoto(photo.id)}>
+              Delete
+            </Button>
           </div>
-          {/* <input
-            accept="image/jpeg"
-            capture="environment"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoCaptureInputRef}
-            style={{display: 'none'}}
-            type="file"
-          /> */}
-          <input
-            accept="image/jpeg"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoUploadInputRef}
-            style={{display: 'none'}}
-            type="file"
-          />
-          {photo && (
-            <>
-              <Image src={URL.createObjectURL(photo)} thumbnail />
-              <br />
-              <small>
-                Timestamp: {
-                  metadata?.timestamp ? (<span>{metadata.timestamp}</span>) :
-                  (<span>Missing</span>)
-                }
-                <br />
-                Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
-                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
-                  <span>Missing</span>
-                }
-              </small>
-            </>
-          )}
-        </Card.Body>
-      </Card>
-    </>
-  );
+        </div>
+      ))}
+      
+      {/* Display the "Add Photo" button if maxPhotos is not reached */}
+      {maxPhotos > photos.length && (
+        <div>
+          <Button onClick={} variant="outline-primary">
+            <TfiGallery /> Add Photo
+          </Button>
+        </div>
+      )}
+    </Card.Body>
+  </Card>
+  </>
+);
 };
 
-export default PhotoInput
+export default PhotoInput;

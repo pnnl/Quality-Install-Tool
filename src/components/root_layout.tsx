@@ -2,7 +2,7 @@ import {FC} from 'react'
 
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image'
-import NavBar from 'react-bootstrap/NavBar'
+import Navbar from 'react-bootstrap/Navbar'
 
 interface RootLayoutProps {
   children: React.ReactNode,
@@ -20,11 +20,11 @@ const RootLayout: FC<RootLayoutProps> = ({children}) => {
   return (
     <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
       {/* TODO: Add a menu */}
-      <NavBar style={{backgroundColor: "green"}}>
+      <Navbar style={{backgroundColor: "green"}}>
         <Container>
-          <NavBar.Brand><span style={{color: "gold", fontSize: "2rem"}}>Quality Install Tool</span></NavBar.Brand>
+          <Navbar.Brand><span style={{color: "gold", fontSize: "2rem"}}>Quality Install Tool</span></Navbar.Brand>
         </Container>
-      </NavBar>
+      </Navbar>
       <div style={{paddingTop: "1rem"}}>
         {children}
       </div>
