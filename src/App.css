@@ -55,3 +55,16 @@ h1 {
   flex: 1;
   align-self: top;
 }  
+
+.home-flex-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  align-content: center;
+  justify-content: space-around;
+}
+
+.flex-item {
+  align-self: top;
+}
