@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 
@@ -19,11 +19,26 @@ interface StringInputProps {
  * @param value The input value
  */
 const StringInput: FC<StringInputProps> = ({id, label, updateValue, value}) => {
+  const [error, setError] = useState<string>('');
+
+  const handleChange = (inputValue : string) => {
+    if (typeof inputValue !== 'string') {
+      setError('Input must be a string');
+    } else if (inputValue.length < 5) {
+      setError('Input must be at least 5 characters long');
+    } else if (inputValue.length > 1000) {
+      setError('Input must be at most 1000 characters long');
+    } else {
+      setError('');
+    }
+    updateValue(inputValue);
+  };
   return (
     <>
       <FloatingLabel className="mb-3" controlId={id} label={label}>
-        <Form.Control onChange={event => updateValue(event.target.value)}
-          type="text" value={value || ""}/>
+        <Form.Control onChange={event => handleChange(event.target.value)}
+          type="text" value={value || ""} isInvalid={Boolean(error)}/>
+          {error && <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>}
       </FloatingLabel>
     </>
   );

@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
@@ -25,12 +25,27 @@ interface NumberInputProps {
  * @param value The input value
  */
 const NumberInput: FC<NumberInputProps> = ({id, label, prefix="", suffix="", updateValue, value}) => {
+  const [error, setError] = useState<string>('');
+
+  const handleChange = (inputValue : string) => {
+    if (typeof inputValue !== 'number') {
+      setError('Input must be a string');
+    } else if (inputValue < 5) {
+      setError('Input must be at least 5');
+    } else if (inputValue > 1000) {
+      setError('Input must be at most 1000');
+    } else {
+      setError('');
+    }
+    updateValue(inputValue);
+  };
   return (
     <InputGroup>
       {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
       <FloatingLabel className="mb-3" controlId={id} label={label}>
-        <Form.Control onChange={event => updateValue(event.target.value)}
-          type="number" value={value || ""}/>
+        <Form.Control onChange={event => handleChange(event.target.value)}
+          type="number" value={value || ""} isInvalid={Boolean(error)}/>
+          {error && <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>}
       </FloatingLabel>
       {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
     </InputGroup>
