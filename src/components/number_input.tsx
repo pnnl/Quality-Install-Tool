@@ -9,7 +9,9 @@ interface NumberInputProps {
   prefix: string,
   suffix: string,
   updateValue: (inputValue: string) => void,
-  value: number
+  value: number,
+  min: number,
+  max: number
 }
 
 /**
@@ -24,16 +26,16 @@ interface NumberInputProps {
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
  */
-const NumberInput: FC<NumberInputProps> = ({id, label, prefix="", suffix="", updateValue, value}) => {
+const NumberInput: FC<NumberInputProps> = ({id, label, prefix="", suffix="", updateValue, value, min, max}) => {
   const [error, setError] = useState<string>('');
 
   const handleChange = (inputValue : string) => {
     if (typeof inputValue !== 'number') {
       setError('Input must be a string');
-    } else if (inputValue < 5) {
-      setError('Input must be at least 5');
-    } else if (inputValue > 1000) {
-      setError('Input must be at most 1000');
+    } else if (inputValue < min) {
+      setError('Input must be at least ' + min);
+    } else if (inputValue > max) {
+      setError('Input must be at most ' + max);
     } else {
       setError('');
     }

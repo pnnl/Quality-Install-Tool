@@ -6,7 +6,10 @@ interface StringInputProps {
   id: string,
   label: string,
   updateValue: (inputValue: string) => void,
-  value: string
+  value: string,
+  min: number,
+  max: number,
+  regexp: RegExp
 }
 
 /**
@@ -18,16 +21,18 @@ interface StringInputProps {
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
  */
-const StringInput: FC<StringInputProps> = ({id, label, updateValue, value}) => {
+const StringInput: FC<StringInputProps> = ({id, label, updateValue, value, min, max, regexp}) => {
   const [error, setError] = useState<string>('');
 
   const handleChange = (inputValue : string) => {
     if (typeof inputValue !== 'string') {
       setError('Input must be a string');
-    } else if (inputValue.length < 5) {
-      setError('Input must be at least 5 characters long');
-    } else if (inputValue.length > 1000) {
-      setError('Input must be at most 1000 characters long');
+    } else if (inputValue.length < min) {
+      setError('Input must be at least '+ min +' characters long');
+    } else if (inputValue.length > max) {
+      setError('Input must be at most '+ max +' characters long');
+    } else if (regexp.test(inputValue)){
+      setError('Input must match' + regexp);
     } else {
       setError('');
     }

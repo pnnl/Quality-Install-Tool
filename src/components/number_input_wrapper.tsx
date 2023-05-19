@@ -10,6 +10,8 @@ interface NumberInputWrapperProps {
   path: string,
   prefix: string,
   suffix: string,
+  min: number,
+  max: number
 }
 
 /**
@@ -23,7 +25,7 @@ interface NumberInputWrapperProps {
  * represents a number of dollars)
  * @param suffix Text to appear as a suffix to the NumberInput (e.g. "SqFt")
  */
-const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix}) => {
+const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=0, max=100000000}) => {
 
   // Generate an id for the input
   const id = pathToId("input", path)
@@ -34,7 +36,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, s
           return (
             <NumberInput id={id} label={label} prefix={prefix} suffix={suffix}
               updateValue= {(value: any) => upsertData(path, parseFloat(value))}
-              value = {get(doc, path)}/>
+              value = {get(doc, path)} min={min} max={max}/>
           )
         }
       }

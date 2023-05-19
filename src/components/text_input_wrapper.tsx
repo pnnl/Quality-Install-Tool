@@ -8,6 +8,9 @@ import {pathToId} from '../utilities/paths_utils'
 interface TextInputWrapperProps {
   label: string,
   path: string,
+  min: number,
+  max: number,
+  regexp: RegExp
 }
 
 /**
@@ -17,7 +20,7 @@ interface TextInputWrapperProps {
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the TextInput component
  */
-const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path}) => {
+const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path, min=0, max=1000, regexp=/.*/}) => {
 
   // Generate an id for the input
   const id = pathToId("input", path)
@@ -28,7 +31,7 @@ const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path}) => {
           return (
             <TextInput id={id} label={label} 
               updateValue= {(value: any) => upsertData(path, value)}
-              value = {get(doc, path)}/>
+              value = {get(doc, path)} min={min} max={max} regexp={regexp}/>
           )
         }
       }
