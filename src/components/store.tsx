@@ -48,7 +48,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
   const [attachments, setAttachments] = useState<Record<string, Attachment>>({});
   const [db, setDB] = useState();
   // The doc state could be anything that is JSON-compatible
-  const [doc, setDoc] = useState();
+  const [doc, setDoc] = useState({});
 
   /**
    * Updates component state based on a database document change
@@ -61,7 +61,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     revisionRef.current = dbDoc._rev
 
     // Set doc state
-    const newDoc = {...dbDoc}
+    const newDoc: Partial<typeof dbDoc> = {...dbDoc}
     delete newDoc._attachments
     delete newDoc._id
     delete newDoc._rev
