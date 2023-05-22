@@ -19,8 +19,11 @@ interface StringInputWrapperProps {
  * @param label The label of the StringInput component
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the StringInput component
+ * @param min The minimum allowed value for the input field, defult to 0.
+ * @param max The maximum allowed value for the input field, defult to 1024.
+ * @param regexp The regular expression pattern to validate the input string, defult to take anything.
  */
-const StringInputWrapper: FC<StringInputWrapperProps> = ({label, path, min=1, max=1000, regexp=/.*/}) => {
+const StringInputWrapper: FC<StringInputWrapperProps> = ({label, path, min=0, max=1024, regexp=/.*/}) => {
 
   // Generate an id for the input
   const id = pathToId("input", path)

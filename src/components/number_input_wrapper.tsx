@@ -24,8 +24,10 @@ interface NumberInputWrapperProps {
  * @param prefix Text to appear as a prefix to the NumberInput (e.g. "$" if the input
  * represents a number of dollars)
  * @param suffix Text to appear as a suffix to the NumberInput (e.g. "SqFt")
+ * @param min The minimum allowed value for the input field, defult to NEGATIVE_INFINITY.
+ * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
  */
-const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=0, max=100000000}) => {
+const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=Number.NEGATIVE_INFINITY, max=Number.POSITIVE_INFINITY}) => {
 
   // Generate an id for the input
   const id = pathToId("input", path)

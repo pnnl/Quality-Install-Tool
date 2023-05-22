@@ -25,16 +25,19 @@ interface NumberInputProps {
  * @param updateValue A function called whenever the user changes the 
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
+ * @param min The minimum allowed value for the input field.
+ * @param max The maximum allowed value for the input field.
  */
 const NumberInput: FC<NumberInputProps> = ({id, label, prefix="", suffix="", updateValue, value, min, max}) => {
   const [error, setError] = useState<string>('');
 
   const handleChange = (inputValue : string) => {
-    if (typeof inputValue !== 'number') {
-      setError('Input must be a string');
-    } else if (inputValue < min) {
+    const inputValueNum : number = parseInt(inputValue);
+    if (isNaN(inputValueNum)) {
+      setError('Input must be a number');
+    } else if (inputValueNum < min) {
       setError('Input must be at least ' + min);
-    } else if (inputValue > max) {
+    } else if (inputValueNum > max) {
       setError('Input must be at most ' + max);
     } else {
       setError('');
