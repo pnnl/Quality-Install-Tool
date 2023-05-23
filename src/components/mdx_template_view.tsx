@@ -18,9 +18,9 @@ interface MdxTemplateViewProps {
  *
  * @param dbName - The database name associated with an MDX template
  */
-const MdxTemplateView: FC<MdxTemplateViewProps> = ({dbName}) => {
-  const {docId} = useParams();
-  const config = templatesConfig[dbName]
+const MdxTemplateView: FC<MdxTemplateViewProps> = ({ dbName }) => {
+  const { docId } = useParams();
+  const config = templatesConfig[dbName];
   
   return (
     // Note: docId is guaranteed to be a string because this component is only

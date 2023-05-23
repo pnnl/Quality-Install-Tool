@@ -14,6 +14,8 @@ import StringInputWrapper from "./string_input_wrapper";
 import TableWrapper from "./table_wrapper";
 import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
 import MyDate from "./date";
 
 
@@ -34,10 +36,12 @@ const components = {
   TextInput: TextInputWrapper,
   USStateSelect: USStateSelectWrapper,
   MyDate: MyDate,
+  Tab: Tab,
+  Tabs: Tabs,
 };
 
 interface MdxWrapperProps {
-  Component: ReactNode,
+  Component: React.ComponentType<any>;
 }
 
 /**

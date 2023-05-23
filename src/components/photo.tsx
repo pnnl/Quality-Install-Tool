@@ -11,7 +11,6 @@ interface PhotoProps {
   id: string,
   label: string,
   metadata: PhotoMetadata,
-  notes: string,
   photo: Blob | undefined,
   required: boolean,
 }
@@ -28,9 +27,9 @@ interface PhotoProps {
  * photo attachement in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
  */
-const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, required}) => {
+const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) => {
 
-  return (photo || required) && (
+  return (photo || required)? (
     <>
       <Card style={{breakInside: 'avoid-page', marginBottom: '1rem'}}>
         <Card.Body>
@@ -63,11 +62,9 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
           )
         }
         </Card.Body>
-        {notes &&
-          <Card.Footer>{notes}</Card.Footer>}
       </Card>
     </>
-  );
+  ) : null;
 };
 
 export default Photo

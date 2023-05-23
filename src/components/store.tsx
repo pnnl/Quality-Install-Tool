@@ -16,14 +16,14 @@ interface UpsertAttachment {
 }
 
 interface UpsertData {
-  (path: string, data: any): void;
+  (pathStr: string, data: any): void;
 }
 
 export const StoreContext = React.createContext({
   attachments:  {} as Record<string, {blob: Blob, metadata: Record<string, JSONValue>}>,
   doc: {} as JSONValue,
-  upsertAttachment: (blob: Blob, id: any) => {},
-  upsertData: (path: string, data: any) => {},
+  upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
+  upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
 });
 
 
@@ -41,13 +41,13 @@ interface StoreProviderProps {
  * @param docId - Document instance id
  */
 export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId }) => {
-  const changesRef = useRef<PouchDB.Core.Changes<{}>>()
-  const revisionRef = useRef<string>()
+  const changesRef = useRef<PouchDB.Core.Changes<{}>>();
+  const revisionRef = useRef<string>();
   // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
-  const [attachments, setAttachments] = useState<Record<string, Attachment>>({})
-  const [db, setDB] = useState()
+  const [attachments, setAttachments] = useState<Record<string, Attachment>>({});
+  const [db, setDB] = useState<PouchDB.Database>();
   // The doc state could be anything that is JSON-compatible
-  const [doc, setDoc] = useState();
+  const [doc, setDoc] = useState({});
 
   /**
    * Updates component state based on a database document change
@@ -60,7 +60,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     revisionRef.current = dbDoc._rev
 
     // Set doc state
-    const newDoc = {...dbDoc}
+    const newDoc: Partial<typeof dbDoc> = {...dbDoc}
     delete newDoc._attachments
     delete newDoc._id
     delete newDoc._rev
@@ -77,18 +77,23 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         const docAttachment = dbDocAttachments[attachmentId]
         // digest is a hash of the attachment, so a different digest indicates a modified attachment
         const digest = docAttachment.digest
-        if (!attachments.hasOwnProperty(attachmentId) || attachments[attachmentId].digest != digest) {
+        if (digest && (!attachments.hasOwnProperty(attachmentId) || attachments[attachmentId].digest != digest)) {
           console.log('New attachment')
           // This is a new or modified attachment, so build a new attachment for state
-          const blob = (await db.getAttachment(docId, attachmentId) as unknown) as Blob
-
-          newAttachments = {
-            ...newAttachments,
-            [attachmentId]: {
-              blob,
-              digest,
-              metadata: blob.type === 'image/jpeg' ? await getPhotoMetadata(blob) : {}
+          const blobOrBuffer = await db.getAttachment(docId, attachmentId)
+          if (blobOrBuffer instanceof Blob) {
+            const blob = blobOrBuffer
+            const metadata = blob.type === 'image/jpeg' ? await getPhotoMetadata(blob) : {}
+            newAttachments = {
+              ...newAttachments,
+              [attachmentId]: {
+                blob,
+                digest,
+                metadata,
+              }
             }
+          } else {
+            throw new Error('Attachment must be a Blob')
           }
         } 
       }
@@ -121,6 +126,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
 
       // Initialize the DB document as needed
       try {
+        // It looks like the type def for putIfNotExists does not match its implementation
+        // TODO: Check this over carefully
         const result = await db.putIfNotExists(docId, {})
         revisionRef.current = result.rev
       } catch(err) {
@@ -143,9 +150,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         since: 'now',
       }).on('change', function (change) {
         console.log('Database changed')
-        console.log('_rev:', change.doc._rev)
+        console.log('_rev:', change.doc?._rev)
         console.log('current:', revisionRef.current)
-        if (change.doc._rev != revisionRef.current) {
+        if (change.doc && change.doc._rev !== revisionRef.current) {
           // The change must have originated from outside this component, so update component state
           console.log('processing DB change')
           processDBDocChange(db, change.doc)
@@ -176,23 +183,25 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * The given path is gauranteed to exist after the update/insertion.
    * This function is typically passed to an input wrapper component via the StoreContext.Provider value
    * 
-   * @param path An array such as ["foo", "bar", "2", "biz"] that represents a path into the doc state
+   * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
    * @param data The data that is to be updated/inserted at the path location in the doc state
    */
-  const upsertData: UpsertData = (path, data) => {
+  const upsertData = (pathStr: string, data: any) => {
     // Update doc state
-    const newDoc = immutableUpsert(doc, toPath(path), data)
+    const newDoc = immutableUpsert(doc, toPath(pathStr) as NonEmptyArray<string>, data)
     setDoc(newDoc);
 
 
     // Persist the doc
-    db.upsert(docId, function upsertFn(dbDoc: any) {
-      return {...dbDoc, ...newDoc};
-    }).then(function (res) {
-      revisionRef.current = res.rev
-    }).catch(function (err) {
-      console.error('upsert error:', err)
-    });
+    if (db) {
+      db.upsert(docId, function upsertFn(dbDoc: any) {
+        return {...dbDoc, ...newDoc};
+      }).then(function (res) {
+        revisionRef.current = res.rev
+      }).catch(function (err : Error) {
+        console.error('upsert error:', err)
+      })
+    }
 
   };
 
@@ -203,7 +212,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    */
   const upsertAttachment: UpsertAttachment = async (blob, id: string) => {
     // Create the metadata for the blob
-    const metadata = (
+    const metadata: Attachment["metadata"] = (
       blob.type === "image/jpeg" ? await getPhotoMetadata(blob) :
       {}
     )
@@ -219,22 +228,28 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     setAttachments(newAttachments)
 
     // Persist the blob
-    const upsertBlobDB = async (rev) => {
+    const upsertBlobDB = async (rev: string): Promise<PouchDB.Core.Response | null> => {
       let result = null
-      try {
-        result = await db.putAttachment(docId, id, rev, blob, blob.type)
-      } catch(err) {
-        // Try again with the latest rev value
-        const doc = await db.get(docId)
-        result = await upsertBlobDB(doc._rev)
-      } finally {
-        revisionRef.current = result.rev
-      }
+      if (db) {
+        try {
+          result = await db.putAttachment(docId, id, rev, blob, blob.type)
+        } catch(err) {
+          // Try again with the latest rev value
+          const doc = await db.get(docId)
+          result = await upsertBlobDB(doc._rev)
+        } finally {
+          if (result) {
+            revisionRef.current = result.rev
+          }
+        }
 
+      }
       return result
     }
 
-    upsertBlobDB(revisionRef.current)
+    if (revisionRef.current) {
+      upsertBlobDB(revisionRef.current)
+    }
   };
 
   return (
