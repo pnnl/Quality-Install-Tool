@@ -14,6 +14,8 @@ import StringInputWrapper from "./string_input_wrapper";
 import TableWrapper from "./table_wrapper";
 import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
 
 
 import {StoreContext} from './store'
@@ -31,10 +33,12 @@ const components = {
   table: TableWrapper,
   TextInput: TextInputWrapper,
   USStateSelect: USStateSelectWrapper,
+  Tab: Tab,
+  Tabs: Tabs,
 };
 
 interface MdxWrapperProps {
-  Component: ReactNode,
+  Component: React.ComponentType<any>;
 }
 
 /**

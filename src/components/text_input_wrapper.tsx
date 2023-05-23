@@ -8,6 +8,9 @@ import {pathToId} from '../utilities/paths_utils'
 interface TextInputWrapperProps {
   label: string,
   path: string,
+  min: number,
+  max: number,
+  regexp: RegExp
 }
 
 /**
@@ -16,8 +19,11 @@ interface TextInputWrapperProps {
  * @param label The label of the TextInput component
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the TextInput component
+ * @param min The minimum allowed value for the input field, defult to 0.
+ * @param max The maximum allowed value for the input field, defult to 10240.
+ * @param regexp The regular expression pattern to validate the input string, defult to take anything.
  */
-const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path}) => {
+const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path, min=0, max=10240, regexp=/.*/}) => {
 
   // Generate an id for the input
   const id = pathToId("input", path)
@@ -28,7 +34,7 @@ const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path}) => {
           return (
             <TextInput id={id} label={label} 
               updateValue= {(value: any) => upsertData(path, value)}
-              value = {get(doc, path)}/>
+              value = {get(doc, path)} min={min} max={max} regexp={regexp}/>
           )
         }
       }
