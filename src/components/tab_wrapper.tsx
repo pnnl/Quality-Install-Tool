@@ -1,16 +1,27 @@
 import {FC} from 'react'
+import React from 'react';
 import Tab from 'react-bootstrap/Tab'
 
-interface TabWrapperProps {
-  children: React.ReactNode,
-  printPdf: boolean,
-  title: string,
+interface CustomTabProps extends React.ComponentProps<typeof Tab> {
+  print?: boolean;
 }
 
-// Note: This is not currently being used.
-// TODO: Create a wrapper for the Tabs component instead
-const TabWrapper: FC<TabWrapperProps> = ({children, printPdf, title}) => {
-  return <Tab eventKey={title} style={{paddingTop:"1rem"}} title="Fooo">{children}</Tab>
+const CustomTab: React.FC<CustomTabProps> = ({print = false, ...tabProps }) => {
+  const handlePrint = () => {
+    window.print();
+  };
+
+  return (
+    <div>
+        {print && (
+          <button className="btn btn-primary" onClick={handlePrint}>
+            Print
+          </button>
+        )}
+    
+    <Tab {...tabProps} />
+    </div>
+  );
 };
 
-export default TabWrapper
+export default CustomTab
