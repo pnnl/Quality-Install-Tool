@@ -1,21 +1,25 @@
 import {Component, FC} from 'react'
 import templatesConfig from '../templates/templates_config'
+import { ListGroup } from 'react-bootstrap';
 
-export default class Home extends Component {
-    render() {
-        const homeFlexItems = Object.keys(templatesConfig).map((item, index) => (
-            <a key={index} className="flex-item" href={`/app/${item}`}>
-                {item}
-            </a>
-          ));
+const Home: FC = () => {
     
-    return (
-      <div>
-        <h1>Home</h1>
-        <div className="home-flex-container" id="homeFlexContainer">
-            {homeFlexItems}
-        </div>
-      </div>
-    ) 
-    }
-  }
+  const homeFlexItems = Object.keys(templatesConfig).map((key) => (
+    <ListGroup.Item key={key}>
+      <a href={`/app/${key}`}>
+      {templatesConfig[key as keyof typeof templatesConfig].title}
+      </a>
+    </ListGroup.Item>
+  ));
+    
+  return (
+    <div>
+      <h1>Home</h1>
+      <ListGroup>
+          {homeFlexItems}
+      </ListGroup>
+    </div>
+  ) 
+}
+
+export default Home;
