@@ -8,6 +8,7 @@ import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import templatesConfig from './templates/templates_config'
 import TemplateEditor from "./components/editor";
+import JobsView from "./components/jobs_view";
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
@@ -25,7 +26,7 @@ const routes = [{
     path: `/app/${dbName}`,
     // TODO: Create a component that provides the functionality
     // to manage the documents in this DB
-    element: <RootLayout>(<div>{templatesConfig[dbName].title}</div>)</RootLayout>,
+    element: <RootLayout>(<div><JobsView dbName={dbName} /></div>)</RootLayout>,
   },
   {
     path: `/app/${dbName}/:docId`,
