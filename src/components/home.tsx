@@ -4,7 +4,7 @@ import { ListGroup } from 'react-bootstrap';
 
 const Home: FC = () => {
     
-  const homeFlexItems = Object.keys(templatesConfig).map((key) => (
+  const templates = Object.keys(templatesConfig).map((key) => (
     <ListGroup.Item key={key}>
       <a href={`/app/${key}`}>
       {templatesConfig[key as keyof typeof templatesConfig].title}
@@ -14,9 +14,9 @@ const Home: FC = () => {
     
   return (
     <div>
-      <h1>Home</h1>
+      <h1>Choose a Document Type</h1>
       <ListGroup>
-          {homeFlexItems}
+          {templates}
       </ListGroup>
     </div>
   ) 
