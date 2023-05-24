@@ -16,10 +16,8 @@ import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
-import MyDate from "./date";
-
-
 import {StoreContext} from './store'
+import DateStr from './date';
 
 
 const components = {
@@ -35,7 +33,7 @@ const components = {
   table: TableWrapper,
   TextInput: TextInputWrapper,
   USStateSelect: USStateSelectWrapper,
-  MyDate: MyDate,
+  Date: DateStr,
   Tab: Tab,
   Tabs: Tabs,
 };
