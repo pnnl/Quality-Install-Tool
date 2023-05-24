@@ -26,7 +26,7 @@ const routes = [{
     path: `/app/${dbName}`,
     // TODO: Create a component that provides the functionality
     // to manage the documents in this DB
-    element: <RootLayout>(<div><JobsView dbName={dbName} /></div>)</RootLayout>,
+    element: <RootLayout><div><JobsView dbName={dbName} /></div></RootLayout>,
   },
   {
     path: `/app/${dbName}/:docId`,
