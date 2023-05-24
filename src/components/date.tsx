@@ -6,13 +6,13 @@ import React, { FC } from 'react';
 interface DateStrProps {
     date: string,
     locals: string,
-    options: any
+    options: Intl.DateTimeFormatOptions
 }
 
 /**
  * Default options for date formatting
  */
-const DEFAULT_OPTIONS = {timeZone: 'UTC', month:"long", day:"numeric", year:"numeric"};
+const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {timeZone: 'UTC', month:"long", day:"numeric", year:"numeric"};
 
 /**
  * DateStr component
