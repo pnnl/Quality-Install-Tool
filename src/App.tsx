@@ -8,13 +8,14 @@ import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import templatesConfig from './templates/templates_config'
 import TemplateEditor from "./components/editor";
+import Home from "./components/home";
 import JobsView from "./components/jobs_view";
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 const routes = [{
     path: "/",
-    element: <Navigate replace to="/app/qa_hpwh/job_1" />,
+    element: <RootLayout><Home/></RootLayout>
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
