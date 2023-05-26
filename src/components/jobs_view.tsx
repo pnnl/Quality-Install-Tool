@@ -51,7 +51,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     // adding a new job here
     const name = prompt('Enter job name');
     if (name !== null) {
-      await db.putIfNotExists(name)
+      await db.putIfNotExists(name, {})
     }
     // Refresh the job list after adding the new job
     const result = await db.allDocs({ include_docs: true });
