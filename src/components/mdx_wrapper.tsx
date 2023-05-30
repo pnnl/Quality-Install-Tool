@@ -33,7 +33,7 @@ const components = {
   table: TableWrapper,
   TextInput: TextInputWrapper,
   USStateSelect: USStateSelectWrapper,
-  Date: DateStr,
+  DateStr: DateStr,
   Tab: Tab,
   Tabs: Tabs,
 };

@@ -16,9 +16,9 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {timeZone: 'UTC', month:"lon
 
 /**
  * DateStr component
- * @param date - The date string
- * @param locals - The locals string for locale-specific formatting (default: 'en-us')
- * @param options - Additional options for date formatting (optional)
+ * @param date - A string appropriate as the single argument to the Date() constructor
+ * @param locals - An optional string used as the first argument to the Date.toLocalDateString() method (default: 'en-us')
+ * @param options - An optional objected used as the second argument to the Date.toLocalDateString() method
  * @returns The formatted date component
  */
 const DateStr: FC<DateStrProps>= ({date, locals = 'en-us', options = {}}) => {
