@@ -31,7 +31,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({children, id, label, required}) =>
       {({attachments, doc}) => {
         return (
           <Photo description={children} id={id} label={label}
-            metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata} notes={doc.photos?.[id]?.notes }
+            metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
             photo={attachments[id]?.blob} required={required}
           />
         )
