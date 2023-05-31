@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { TfiTrash, TfiPlus, TfiPencil } from "react-icons/tfi";
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
-import { ListGroup } from 'react-bootstrap';
+import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
 
 PouchDB.plugin(PouchDBUpsert);
@@ -83,26 +83,27 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>{templatesConfig[dbName].title} Installation</h1>
       <ListGroup>
+      <Button onClick={handleAddJob}><TfiPlus/></Button>
         {sortedJobs.map(job => (
           <ListGroup.Item action href={`/app/${dbName}/${job}`}>
           {job}{' '}
           <span className="icon-container">
-          <TfiTrash onClick={event => {
+          <Button onClick={event => {
             event.preventDefault();
             handleDeleteJob(job);
-          }}/>
-          <TfiPencil onClick={event => {
+          }}><TfiTrash/></Button>
+          <Button onClick={event => {
             event.preventDefault();
-            handleRenameJob(job);
-          }}/>
+            handleRenameJob(job);}}><TfiPencil
+          /></Button>
           </span>
         </ListGroup.Item>
       ))}
     </ListGroup>
-    <TfiPlus onClick={handleAddJob}/>
+    
     </div>
   );
 };
