@@ -55,3 +55,12 @@ h1 {
   flex: 1;
   align-self: top;
 }
+
+.icon-container {
+  float: right;
+  margin-left: 10px;
+}
+
+.icon-container > * {
+  margin-left: 10px;
+}

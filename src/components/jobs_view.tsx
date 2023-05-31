@@ -1,7 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react';
+import { TfiTrash, TfiPlus, TfiPencil } from "react-icons/tfi";
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
-import { result } from 'lodash';
+import { ListGroup } from 'react-bootstrap';
+import templatesConfig from '../templates/templates_config'
 
 PouchDB.plugin(PouchDBUpsert);
 
@@ -82,18 +84,25 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   return (
     <div>
-      <h1>Job List for DB: {dbName}</h1>
-      <ul>
+      <h1>{templatesConfig[dbName].title} Installation</h1>
+      <ListGroup>
         {sortedJobs.map(job => (
-          <li>
-            {job}{' '}
-            <button onClick={() => handleDeleteJob(job)}>Delete</button>{' '}
-            <button><a href={`/app/${dbName}/${job}`}>Open</a></button>
-            <button onClick={() => handleRenameJob(job)}>Rename</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={handleAddJob}>Add Job</button>
+          <ListGroup.Item action href={`/app/${dbName}/${job}`}>
+          {job}{' '}
+          <span className="icon-container">
+          <TfiTrash onClick={event => {
+            event.preventDefault();
+            handleDeleteJob(job);
+          }}/>
+          <TfiPencil onClick={event => {
+            event.preventDefault();
+            handleRenameJob(job);
+          }}/>
+          </span>
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+    <TfiPlus onClick={handleAddJob}/>
     </div>
   );
 };
