@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, Navigate, RouterProvider, BrowserRouter} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -8,7 +8,9 @@ import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import templatesConfig from './templates/templates_config'
 import TemplateEditor from "./components/editor";
+// import { basename } from "path";
 
+console.log("app.tsx")
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 const routes = [{
@@ -36,13 +38,15 @@ const routes = [{
     element: <RootLayout><JsonStoreView dbName={dbName} /></RootLayout>,
   }
 ]))
-
+console.log("routes:",routes)
 // React Router
-const router = createBrowserRouter(routes);
+const router = createBrowserRouter(routes, { basename: "/Remote-QA-Web-App" });
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <RouterProvider router={router}/>
+    
+    // <RootLayout><div>QA Type Selector View</div></RootLayout>
   )
 }
 
