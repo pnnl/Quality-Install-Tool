@@ -1,5 +1,5 @@
 "use strict";
-(self["webpackChunkquality_install_tool"] = self["webpackChunkquality_install_tool"] || []).push([[787],{
+(self["webpackChunkqa_mdx_cra"] = self["webpackChunkqa_mdx_cra"] || []).push([[787],{
 
 /***/ 787:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
@@ -236,4 +236,4 @@ var e,
 /***/ })
 
 }]);
-//# sourceMappingURL=787.f3f1eca8.chunk.js.map
+//# sourceMappingURL=787.8f91223b.chunk.js.map
