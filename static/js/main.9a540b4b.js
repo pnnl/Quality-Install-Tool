@@ -29334,6 +29334,43 @@ var client = __webpack_require__(250);
 ;// CONCATENATED MODULE: ./node_modules/bootstrap/dist/css/bootstrap.css
 // extracted by mini-css-extract-plugin
 /* harmony default export */ var bootstrap = ({});
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+  return arr2;
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
+
+
+
+
+function toConsumableArray_toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -29500,22 +29537,6 @@ function _iterableToArrayLimit(arr, i) {
     }
     return _arr;
   }
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-  return arr2;
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
 function _nonIterableRest() {
@@ -29933,10 +29954,6 @@ function _wrapNativeSuper(Class) {
   };
   return _wrapNativeSuper(Class);
 }
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-}
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toArray.js
 
 
@@ -29998,23 +30015,6 @@ function createForOfIteratorHelper_createForOfIteratorHelper(o, allowArrayLike) 
     }
   };
 }
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
-
-
-
-
-function toConsumableArray_toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-}
 ;// CONCATENATED MODULE: ./node_modules/@remix-run/router/dist/router.js
 
 
@@ -30060,7 +30060,7 @@ function router_extends() {
 /**
  * Actions represent the type of change to a location value.
  */
-var router_Action;
+var Action;
 (function (Action) {
   /**
    * A POP indicates a change to an arbitrary index in the history stack, such
@@ -30083,7 +30083,7 @@ var router_Action;
    */
 
   Action["Replace"] = "REPLACE";
-})(router_Action || (router_Action = {}));
+})(Action || (Action = {}));
 var PopStateEventType = "popstate";
 /**
  * Memory history stores the current location in memory. It is designed for use
@@ -30106,7 +30106,7 @@ function router_createMemoryHistory(options) {
     return createMemoryLocation(entry, typeof entry === "string" ? null : entry.state, index === 0 ? "default" : undefined);
   });
   var index = clampIndex(initialIndex == null ? entries.length - 1 : initialIndex);
-  var action = router_Action.Pop;
+  var action = Action.Pop;
   var listener = null;
   function clampIndex(n) {
     return Math.min(Math.max(n, 0), entries.length - 1);
@@ -30140,7 +30140,7 @@ function router_createMemoryHistory(options) {
       return new URL(createHref(to), "http://localhost");
     },
     encodeLocation: function encodeLocation(to) {
-      var path = typeof to === "string" ? router_parsePath(to) : to;
+      var path = typeof to === "string" ? parsePath(to) : to;
       return {
         pathname: path.pathname || "",
         search: path.search || "",
@@ -30148,7 +30148,7 @@ function router_createMemoryHistory(options) {
       };
     },
     push: function push(to, state) {
-      action = router_Action.Push;
+      action = Action.Push;
       var nextLocation = createMemoryLocation(to, state);
       index += 1;
       entries.splice(index, entries.length, nextLocation);
@@ -30161,7 +30161,7 @@ function router_createMemoryHistory(options) {
       }
     },
     replace: function replace(to, state) {
-      action = router_Action.Replace;
+      action = Action.Replace;
       var nextLocation = createMemoryLocation(to, state);
       entries[index] = nextLocation;
       if (v5Compat && listener) {
@@ -30173,7 +30173,7 @@ function router_createMemoryHistory(options) {
       }
     },
     go: function go(delta) {
-      action = router_Action.Pop;
+      action = Action.Pop;
       var nextIndex = clampIndex(index + delta);
       var nextLocation = entries[nextIndex];
       index = nextIndex;
@@ -30238,7 +30238,7 @@ function router_createHashHistory(options) {
     options = {};
   }
   function createHashLocation(window, globalHistory) {
-    var _parsePath = router_parsePath(window.location.hash.substr(1)),
+    var _parsePath = parsePath(window.location.hash.substr(1)),
       _parsePath$pathname = _parsePath.pathname,
       pathname = _parsePath$pathname === void 0 ? "/" : _parsePath$pathname,
       _parsePath$search = _parsePath.search,
@@ -30313,7 +30313,7 @@ function createLocation(current, to, state, key) {
     pathname: typeof current === "string" ? current : current.pathname,
     search: "",
     hash: ""
-  }, typeof to === "string" ? router_parsePath(to) : to, {
+  }, typeof to === "string" ? parsePath(to) : to, {
     state: state,
     // TODO: This could be cleaned up.  push/replace should probably just take
     // full Locations now and avoid the need to run through this flow at all
@@ -30342,7 +30342,7 @@ function router_createPath(_ref) {
  * Parses a string URL path into its separate pathname, search, and hash components.
  */
 
-function router_parsePath(path) {
+function parsePath(path) {
   var parsedPath = {};
   if (path) {
     var hashIndex = path.indexOf("#");
@@ -30371,7 +30371,7 @@ function getUrlBasedHistory(getLocation, _createHref, validateLocation, options)
     _options2$v5Compat = _options2.v5Compat,
     v5Compat = _options2$v5Compat === void 0 ? false : _options2$v5Compat;
   var globalHistory = window.history;
-  var action = router_Action.Pop;
+  var action = Action.Pop;
   var listener = null;
   var index = getIndex(); // Index should only be null when we initialize. If not, it's because the
   // user called history.pushState or history.replaceState directly, in which
@@ -30390,7 +30390,7 @@ function getUrlBasedHistory(getLocation, _createHref, validateLocation, options)
     return state.idx;
   }
   function handlePop() {
-    action = router_Action.Pop;
+    action = Action.Pop;
     var nextIndex = getIndex();
     var delta = nextIndex == null ? null : nextIndex - index;
     index = nextIndex;
@@ -30403,7 +30403,7 @@ function getUrlBasedHistory(getLocation, _createHref, validateLocation, options)
     }
   }
   function push(to, state) {
-    action = router_Action.Push;
+    action = Action.Push;
     var location = createLocation(history.location, to, state);
     if (validateLocation) validateLocation(location, to);
     index = getIndex() + 1;
@@ -30426,7 +30426,7 @@ function getUrlBasedHistory(getLocation, _createHref, validateLocation, options)
     }
   }
   function replace(to, state) {
-    action = router_Action.Replace;
+    action = Action.Replace;
     var location = createLocation(history.location, to, state);
     if (validateLocation) validateLocation(location, to);
     index = getIndex();
@@ -30535,12 +30535,12 @@ function convertRoutesToDataRoutes(routes, parentPath, allIds) {
  * @see https://reactrouter.com/utils/match-routes
  */
 
-function router_matchRoutes(routes, locationArg, basename) {
+function matchRoutes(routes, locationArg, basename) {
   if (basename === void 0) {
     basename = "/";
   }
-  var location = typeof locationArg === "string" ? router_parsePath(locationArg) : locationArg;
-  var pathname = router_stripBasename(location.pathname || "/", basename);
+  var location = typeof locationArg === "string" ? parsePath(locationArg) : locationArg;
+  var pathname = stripBasename(location.pathname || "/", basename);
   if (pathname == null) {
     return null;
   }
@@ -30897,7 +30897,7 @@ function safelyDecodeURIComponent(value, paramName) {
  * @private
  */
 
-function router_stripBasename(pathname, basename) {
+function stripBasename(pathname, basename) {
   if (basename === "/") return pathname;
   if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {
     return null;
@@ -30940,7 +30940,7 @@ function resolvePath(to, fromPathname) {
   if (fromPathname === void 0) {
     fromPathname = "/";
   }
-  var _ref3 = typeof to === "string" ? router_parsePath(to) : to,
+  var _ref3 = typeof to === "string" ? parsePath(to) : to,
     toPathname = _ref3.pathname,
     _ref3$search = _ref3.search,
     search = _ref3$search === void 0 ? "" : _ref3$search,
@@ -31008,7 +31008,7 @@ function router_resolveTo(toArg, routePathnames, locationPathname, isPathRelativ
   }
   var to;
   if (typeof toArg === "string") {
-    to = router_parsePath(toArg);
+    to = parsePath(toArg);
   } else {
     to = router_extends({}, toArg);
     router_invariant(!to.pathname || !to.pathname.includes("?"), getInvalidPathError("?", "pathname", "search", to));
@@ -31062,7 +31062,7 @@ function router_resolveTo(toArg, routePathnames, locationPathname, isPathRelativ
 
 function getToPathname(to) {
   // Empty strings should be treated the same as / paths
-  return to === "" || to.pathname === "" ? "/" : typeof to === "string" ? router_parsePath(to).pathname : to.pathname;
+  return to === "" || to.pathname === "" ? "/" : typeof to === "string" ? parsePath(to).pathname : to.pathname;
 }
 /**
  * @private
@@ -31374,7 +31374,7 @@ var ErrorResponse = /*#__PURE__*/_createClass(function ErrorResponse(status, sta
  * Check if the given error is an ErrorResponse generated from a 4xx/5xx
  * Response thrown from an action/loader
  */
-function router_isRouteErrorResponse(error) {
+function isRouteErrorResponse(error) {
   return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
 }
 var validMutationMethodsArr = ["post", "put", "patch", "delete"];
@@ -31436,7 +31436,7 @@ function router_createRouter(init) {
   // SSR did the initial scroll restoration.
 
   var initialScrollRestored = init.hydrationData != null;
-  var initialMatches = router_matchRoutes(dataRoutes, init.history.location, init.basename);
+  var initialMatches = matchRoutes(dataRoutes, init.history.location, init.basename);
   var initialErrors = null;
   if (initialMatches == null) {
     // If we do not match a user-provided-route, fall back to the root
@@ -31472,7 +31472,7 @@ function router_createRouter(init) {
   }; // -- Stateful internal variables to manage navigations --
   // Current navigation in progress (to be committed in completeNavigation)
 
-  var pendingAction = router_Action.Pop; // Should the current navigation prevent the scroll reset if scroll cannot
+  var pendingAction = Action.Pop; // Should the current navigation prevent the scroll reset if scroll cannot
   // be restored?
 
   var pendingPreventScrollReset = false; // AbortController for the active navigation
@@ -31571,7 +31571,7 @@ function router_createRouter(init) {
     }); // Kick off initial data load if needed.  Use Pop to avoid modifying history
 
     if (!state.initialized) {
-      startNavigation(router_Action.Pop, state.location);
+      startNavigation(Action.Pop, state.location);
     }
     return router;
   } // Clean up a router and it's side effects
@@ -31662,13 +31662,13 @@ function router_createRouter(init) {
       preventScrollReset: preventScrollReset,
       blockers: new Map(state.blockers)
     }));
-    if (isUninterruptedRevalidation) ;else if (pendingAction === router_Action.Pop) ;else if (pendingAction === router_Action.Push) {
+    if (isUninterruptedRevalidation) ;else if (pendingAction === Action.Pop) ;else if (pendingAction === Action.Push) {
       init.history.push(location, location.state);
-    } else if (pendingAction === router_Action.Replace) {
+    } else if (pendingAction === Action.Replace) {
       init.history.replace(location, location.state);
     } // Reset stateful navigation vars
 
-    pendingAction = router_Action.Pop;
+    pendingAction = Action.Pop;
     pendingPreventScrollReset = false;
     isUninterruptedRevalidation = false;
     isRevalidationRequired = false;
@@ -31703,15 +31703,15 @@ function router_createRouter(init) {
             // without having to touch history
             nextLocation = router_extends({}, nextLocation, init.history.encodeLocation(nextLocation));
             userReplace = opts && opts.replace != null ? opts.replace : undefined;
-            historyAction = router_Action.Push;
+            historyAction = Action.Push;
             if (userReplace === true) {
-              historyAction = router_Action.Replace;
+              historyAction = Action.Replace;
             } else if (userReplace === false) ;else if (submission != null && isMutationMethod(submission.formMethod) && submission.formAction === state.location.pathname + state.location.search) {
               // By default on submissions to the current location we REPLACE so that
               // users don't have to double-click the back button to get to the prior
               // location.  If the user redirects to a different location from the
               // action/loader this will be ignored and the redirect will be a PUSH
-              historyAction = router_Action.Replace;
+              historyAction = Action.Replace;
             }
             preventScrollReset = opts && "preventScrollReset" in opts ? opts.preventScrollReset === true : undefined;
             blockerKey = shouldBlockNavigation({
@@ -31815,7 +31815,7 @@ function router_createRouter(init) {
             saveScrollPosition(state.location, state.matches);
             pendingPreventScrollReset = (opts && opts.preventScrollReset) === true;
             loadingNavigation = opts && opts.overrideNavigation;
-            matches = router_matchRoutes(dataRoutes, location, init.basename); // Short circuit with a 404 on the root error boundary if we match nothing
+            matches = matchRoutes(dataRoutes, location, init.basename); // Short circuit with a 404 on the root error boundary if we match nothing
             if (matches) {
               _context3.next = 14;
               break;
@@ -31998,7 +31998,7 @@ function router_createRouter(init) {
             // back to PUSH so that the user can use the back button to get back to
             // the pre-submission form location to try again
             if ((opts && opts.replace) !== true) {
-              pendingAction = router_Action.Push;
+              pendingAction = Action.Push;
             }
             return _context4.abrupt("return", {
               // Send back an empty object we can use to clear out any prior actionData
@@ -32187,7 +32187,7 @@ function router_createRouter(init) {
       throw new Error("router.fetch() was called during the server render, but it shouldn't be. " + "You are likely calling a useFetcher() method in the body of your component. " + "Try moving it to a useEffect or a callback.");
     }
     if (fetchControllers.has(key)) abortFetcher(key);
-    var matches = router_matchRoutes(dataRoutes, href, init.basename);
+    var matches = matchRoutes(dataRoutes, href, init.basename);
     if (!matches) {
       setFetcherError(key, routeId, getInternalRouterError(404, {
         pathname: href
@@ -32306,7 +32306,7 @@ function router_createRouter(init) {
             // in the middle of a navigation
             nextLocation = state.navigation.location || state.location;
             revalidationRequest = createClientSideRequest(init.history, nextLocation, abortController.signal);
-            matches = state.navigation.state !== "idle" ? router_matchRoutes(dataRoutes, state.navigation.location, init.basename) : state.matches;
+            matches = state.navigation.state !== "idle" ? matchRoutes(dataRoutes, state.navigation.location, init.basename) : state.matches;
             router_invariant(matches, "Didn't find any matches after fetcher action");
             loadId = ++incrementingLoadId;
             fetchReloadIds.set(key, loadId);
@@ -32576,7 +32576,7 @@ function router_createRouter(init) {
             // redirect until the action/loaders have settled
 
             pendingNavigationController = null;
-            redirectHistoryAction = replace === true ? router_Action.Replace : router_Action.Push; // Use the incoming submission if provided, fallback on the active one in
+            redirectHistoryAction = replace === true ? Action.Replace : Action.Push; // Use the incoming submission if provided, fallback on the active one in
             // state.navigation
             _state$navigation = state.navigation, formMethod = _state$navigation.formMethod, formAction = _state$navigation.formAction, formEncType = _state$navigation.formEncType, formData = _state$navigation.formData;
             if (!submission && formMethod && formAction && formData && formEncType) {
@@ -32982,7 +32982,7 @@ function createStaticHandler(routes, opts) {
             url = new URL(request.url);
             method = request.method.toLowerCase();
             location = createLocation("", router_createPath(url), null, "default");
-            matches = router_matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
+            matches = matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
             if (!(!isValidMethod(method) && method !== "head")) {
               _context10.next = 11;
               break;
@@ -33060,7 +33060,7 @@ function createStaticHandler(routes, opts) {
             url = new URL(request.url);
             method = request.method.toLowerCase();
             location = createLocation("", router_createPath(url), null, "default");
-            matches = router_matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
+            matches = matchRoutes(dataRoutes, location, basename); // SSR supports HEAD requests while SPA doesn't
             if (!(!isValidMethod(method) && method !== "head" && method !== "options")) {
               _context11.next = 9;
               break;
@@ -33304,7 +33304,7 @@ function createStaticHandler(routes, opts) {
           case 28:
             _context13 = _context14.sent;
             return _context14.abrupt("return", router_extends({}, _context13, {
-              statusCode: router_isRouteErrorResponse(result.error) ? result.error.status : 500,
+              statusCode: isRouteErrorResponse(result.error) ? result.error.status : 500,
               actionData: null,
               actionHeaders: router_extends({}, result.headers ? _defineProperty({}, actionMatch.route.id, result.headers) : {})
             }));
@@ -33472,7 +33472,7 @@ function normalizeNavigateOptions(to, opts, isFetcher) {
     }
   } // Flatten submission onto URLSearchParams for GET submissions
 
-  var parsedPath = router_parsePath(path);
+  var parsedPath = parsePath(path);
   var searchParams = convertFormDataToSearchParams(opts.formData); // Since fetcher GET submissions only run a single loader (as opposed to
   // navigation GET submissions which run all loaders), we need to preserve
   // any incoming ?index params
@@ -33853,7 +33853,7 @@ function processRouteLoaderData(matches, matchesToLoad, results, pendingError, a
 
       if (!foundError) {
         foundError = true;
-        statusCode = router_isRouteErrorResponse(result.error) ? result.error.status : 500;
+        statusCode = isRouteErrorResponse(result.error) ? result.error.status : 500;
       }
       if (result.headers) {
         loaderHeaders[id] = result.headers;
@@ -34029,7 +34029,7 @@ function findRedirect(results) {
   }
 }
 function stripHashFromPath(path) {
-  var parsedPath = typeof path === "string" ? router_parsePath(path) : path;
+  var parsedPath = typeof path === "string" ? parsePath(path) : path;
   return router_createPath(router_extends({}, parsedPath, {
     hash: ""
   }));
@@ -34192,7 +34192,7 @@ function createUseMatchesMatch(match, loaderData) {
   };
 }
 function getTargetMatch(matches, location) {
-  var search = typeof location === "string" ? router_parsePath(location).search : location.search;
+  var search = typeof location === "string" ? parsePath(location).search : location.search;
   if (matches[matches.length - 1].route.index && hasNakedIndexQuery(search || "")) {
     // Return the leaf index route when index is present
     return matches[matches.length - 1];
@@ -34394,7 +34394,7 @@ var shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore$2
 var useSyncExternalStore =  true ? function (module) {
   return module.useSyncExternalStore;
 }(react_namespaceObject) : shim;
-var DataRouterContext = /*#__PURE__*/(/* unused pure expression or super */ null && (React.createContext(null)));
+var DataRouterContext = /*#__PURE__*/react.createContext(null);
 if (false) {}
 var DataRouterStateContext = /*#__PURE__*/react.createContext(null);
 if (false) {}
@@ -34613,11 +34613,11 @@ function dist_useResolvedPath(to, _temp2) {
  */
 
 function useRoutes(routes, locationArg) {
-  !useInRouterContext() ?  false ? 0 : invariant(false) : void 0;
-  var _React$useContext6 = React.useContext(NavigationContext),
+  !useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0;
+  var _React$useContext6 = react.useContext(NavigationContext),
     navigator = _React$useContext6.navigator;
-  var dataRouterStateContext = React.useContext(DataRouterStateContext);
-  var _React$useContext7 = React.useContext(RouteContext),
+  var dataRouterStateContext = react.useContext(DataRouterStateContext);
+  var _React$useContext7 = react.useContext(RouteContext),
     parentMatches = _React$useContext7.matches;
   var routeMatch = parentMatches[parentMatches.length - 1];
   var parentParams = routeMatch ? routeMatch.params : {};
@@ -34630,7 +34630,7 @@ function useRoutes(routes, locationArg) {
   if (locationArg) {
     var _parsedLocationArg$pa;
     var parsedLocationArg = typeof locationArg === "string" ? parsePath(locationArg) : locationArg;
-    !(parentPathnameBase === "/" || ((_parsedLocationArg$pa = parsedLocationArg.pathname) == null ? void 0 : _parsedLocationArg$pa.startsWith(parentPathnameBase))) ?  false ? 0 : invariant(false) : void 0;
+    !(parentPathnameBase === "/" || ((_parsedLocationArg$pa = parsedLocationArg.pathname) == null ? void 0 : _parsedLocationArg$pa.startsWith(parentPathnameBase))) ?  false ? 0 : router_invariant(false) : void 0;
     location = parsedLocationArg;
   } else {
     location = locationFromContext;
@@ -34644,10 +34644,10 @@ function useRoutes(routes, locationArg) {
   var renderedMatches = _renderMatches(matches && matches.map(function (match) {
     return Object.assign({}, match, {
       params: Object.assign({}, parentParams, match.params),
-      pathname: joinPaths([parentPathnameBase,
+      pathname: router_joinPaths([parentPathnameBase,
       // Re-encode pathnames that were decoded inside matchRoutes
       navigator.encodeLocation ? navigator.encodeLocation(match.pathname).pathname : match.pathname]),
-      pathnameBase: match.pathnameBase === "/" ? parentPathnameBase : joinPaths([parentPathnameBase,
+      pathnameBase: match.pathnameBase === "/" ? parentPathnameBase : router_joinPaths([parentPathnameBase,
       // Re-encode pathnames that were decoded inside matchRoutes
       navigator.encodeLocation ? navigator.encodeLocation(match.pathnameBase).pathname : match.pathnameBase])
     });
@@ -34656,7 +34656,7 @@ function useRoutes(routes, locationArg) {
   // to use the scoped location instead of the global location.
 
   if (locationArg && renderedMatches) {
-    return /*#__PURE__*/React.createElement(LocationContext.Provider, {
+    return /*#__PURE__*/react.createElement(LocationContext.Provider, {
       value: {
         location: dist_extends({
           pathname: "/",
@@ -34686,11 +34686,11 @@ function DefaultErrorElement() {
   };
   var devInfo = null;
   if (false) {}
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h2", null, "Unexpected Application Error!"), /*#__PURE__*/React.createElement("h3", {
+  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("h2", null, "Unexpected Application Error!"), /*#__PURE__*/react.createElement("h3", {
     style: {
       fontStyle: "italic"
     }
-  }, message), stack ? /*#__PURE__*/React.createElement("pre", {
+  }, message), stack ? /*#__PURE__*/react.createElement("pre", {
     style: preStyles
   }, stack) : null, devInfo);
 }
@@ -34762,13 +34762,13 @@ function RenderedRoute(_ref) {
   var routeContext = _ref.routeContext,
     match = _ref.match,
     children = _ref.children;
-  var dataRouterContext = React.useContext(DataRouterContext); // Track how deep we got in our render pass to emulate SSR componentDidCatch
+  var dataRouterContext = react.useContext(DataRouterContext); // Track how deep we got in our render pass to emulate SSR componentDidCatch
   // in a DataStaticRouter
 
   if (dataRouterContext && dataRouterContext.static && dataRouterContext.staticContext && match.route.errorElement) {
     dataRouterContext.staticContext._deepestRenderedBoundaryId = match.route.id;
   }
-  return /*#__PURE__*/React.createElement(RouteContext.Provider, {
+  return /*#__PURE__*/react.createElement(RouteContext.Provider, {
     value: routeContext
   }, children);
 }
@@ -34792,16 +34792,16 @@ function _renderMatches(matches, parentMatches, dataRouterState) {
     var errorIndex = renderedMatches.findIndex(function (m) {
       return m.route.id && (errors == null ? void 0 : errors[m.route.id]);
     });
-    !(errorIndex >= 0) ?  false ? 0 : invariant(false) : void 0;
+    !(errorIndex >= 0) ?  false ? 0 : router_invariant(false) : void 0;
     renderedMatches = renderedMatches.slice(0, Math.min(renderedMatches.length, errorIndex + 1));
   }
   return renderedMatches.reduceRight(function (outlet, match, index) {
     var error = match.route.id ? errors == null ? void 0 : errors[match.route.id] : null; // Only data routers handle errors
 
-    var errorElement = dataRouterState ? match.route.errorElement || /*#__PURE__*/React.createElement(DefaultErrorElement, null) : null;
+    var errorElement = dataRouterState ? match.route.errorElement || /*#__PURE__*/react.createElement(DefaultErrorElement, null) : null;
     var matches = parentMatches.concat(renderedMatches.slice(0, index + 1));
     var getChildren = function getChildren() {
-      return /*#__PURE__*/React.createElement(RenderedRoute, {
+      return /*#__PURE__*/react.createElement(RenderedRoute, {
         match: match,
         routeContext: {
           outlet: outlet,
@@ -34812,7 +34812,7 @@ function _renderMatches(matches, parentMatches, dataRouterState) {
     // errorElement on this route.  Otherwise let it bubble up to an ancestor
     // errorElement
 
-    return dataRouterState && (match.route.errorElement || index === 0) ? /*#__PURE__*/React.createElement(RenderErrorBoundary, {
+    return dataRouterState && (match.route.errorElement || index === 0) ? /*#__PURE__*/react.createElement(RenderErrorBoundary, {
       location: dataRouterState.location,
       component: errorElement,
       error: error,
@@ -34848,19 +34848,19 @@ function useDataRouterContext(hookName) {
   return ctx;
 }
 function useDataRouterState(hookName) {
-  var state = React.useContext(DataRouterStateContext);
-  !state ?  false ? 0 : invariant(false) : void 0;
+  var state = react.useContext(DataRouterStateContext);
+  !state ?  false ? 0 : router_invariant(false) : void 0;
   return state;
 }
 function useRouteContext(hookName) {
-  var route = React.useContext(RouteContext);
-  !route ?  false ? 0 : invariant(false) : void 0;
+  var route = react.useContext(RouteContext);
+  !route ?  false ? 0 : router_invariant(false) : void 0;
   return route;
 }
 function useCurrentRouteId(hookName) {
   var route = useRouteContext(hookName);
   var thisRoute = route.matches[route.matches.length - 1];
-  !thisRoute.route.id ?  false ? 0 : invariant(false) : void 0;
+  !thisRoute.route.id ?  false ? 0 : router_invariant(false) : void 0;
   return thisRoute.route.id;
 }
 /**
@@ -34950,7 +34950,7 @@ function useActionData() {
 
 function useRouteError() {
   var _state$errors;
-  var error = React.useContext(RouteErrorContext);
+  var error = react.useContext(RouteErrorContext);
   var state = useDataRouterState(DataRouterStateHook.UseRouteError);
   var routeId = useCurrentRouteId(DataRouterStateHook.UseRouteError); // If this was a render error, we put it in a RouteError context inside
   // of RenderErrorBoundary
@@ -35029,7 +35029,7 @@ function RouterProvider(_ref) {
   function () {
     return router.state;
   });
-  var navigator = React.useMemo(function () {
+  var navigator = react.useMemo(function () {
     return {
       createHref: router.createHref,
       encodeLocation: router.encodeLocation,
@@ -35058,7 +35058,7 @@ function RouterProvider(_ref) {
   // so we need to ensure it remains the same on the client even though
   // we don't need the <script> tag
 
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(DataRouterContext.Provider, {
+  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(DataRouterContext.Provider, {
     value: {
       router: router,
       navigator: navigator,
@@ -35066,14 +35066,14 @@ function RouterProvider(_ref) {
       // Do we need this?
       basename: basename
     }
-  }, /*#__PURE__*/React.createElement(DataRouterStateContext.Provider, {
+  }, /*#__PURE__*/react.createElement(DataRouterStateContext.Provider, {
     value: state
-  }, /*#__PURE__*/React.createElement(dist_Router, {
+  }, /*#__PURE__*/react.createElement(dist_Router, {
     basename: router.basename,
     location: router.state.location,
     navigationType: router.state.historyAction,
     navigator: navigator
-  }, router.state.initialized ? /*#__PURE__*/React.createElement(Routes, null) : fallbackElement))), null);
+  }, router.state.initialized ? /*#__PURE__*/react.createElement(Routes, null) : fallbackElement))), null);
 }
 
 /**
@@ -35163,7 +35163,7 @@ function Outlet(props) {
  * @see https://reactrouter.com/components/route
  */
 function Route(_props) {
-   false ? 0 : invariant(false);
+   false ? 0 : router_invariant(false);
 }
 
 /**
@@ -35186,11 +35186,11 @@ function dist_Router(_ref4) {
     navigator = _ref4.navigator,
     _ref4$static = _ref4.static,
     staticProp = _ref4$static === void 0 ? false : _ref4$static;
-  !!useInRouterContext() ?  false ? 0 : invariant(false) : void 0; // Preserve trailing slashes on basename, so we can let the user control
+  !!useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0; // Preserve trailing slashes on basename, so we can let the user control
   // the enforcement of trailing slashes throughout the app
 
   var basename = basenameProp.replace(/^\/*/, "/");
-  var navigationContext = React.useMemo(function () {
+  var navigationContext = react.useMemo(function () {
     return {
       basename: basename,
       navigator: navigator,
@@ -35211,7 +35211,7 @@ function dist_Router(_ref4) {
     state = _locationProp$state === void 0 ? null : _locationProp$state,
     _locationProp$key = _locationProp.key,
     key = _locationProp$key === void 0 ? "default" : _locationProp$key;
-  var location = React.useMemo(function () {
+  var location = react.useMemo(function () {
     var trailingPathname = stripBasename(pathname, basename);
     if (trailingPathname == null) {
       return null;
@@ -35228,9 +35228,9 @@ function dist_Router(_ref4) {
   if (location == null) {
     return null;
   }
-  return /*#__PURE__*/React.createElement(NavigationContext.Provider, {
+  return /*#__PURE__*/react.createElement(NavigationContext.Provider, {
     value: navigationContext
-  }, /*#__PURE__*/React.createElement(LocationContext.Provider, {
+  }, /*#__PURE__*/react.createElement(LocationContext.Provider, {
     children: children,
     value: {
       location: location,
@@ -35248,7 +35248,7 @@ function dist_Router(_ref4) {
 function Routes(_ref5) {
   var children = _ref5.children,
     location = _ref5.location;
-  var dataRouterContext = React.useContext(DataRouterContext); // When in a DataRouterContext _without_ children, we use the router routes
+  var dataRouterContext = react.useContext(DataRouterContext); // When in a DataRouterContext _without_ children, we use the router routes
   // directly.  If we have children, then we're in a descendant tree and we
   // need to use child routes.
 
@@ -35419,20 +35419,20 @@ function createRoutesFromChildren(children, parentPath) {
     parentPath = [];
   }
   var routes = [];
-  React.Children.forEach(children, function (element, index) {
-    if (! /*#__PURE__*/React.isValidElement(element)) {
+  react.Children.forEach(children, function (element, index) {
+    if (! /*#__PURE__*/react.isValidElement(element)) {
       // Ignore non-elements. This allows people to more easily inline
       // conditionals in their route config.
       return;
     }
-    if (element.type === React.Fragment) {
+    if (element.type === react.Fragment) {
       // Transparently support React.Fragment and its children.
       routes.push.apply(routes, createRoutesFromChildren(element.props.children, parentPath));
       return;
     }
-    !(element.type === Route) ?  false ? 0 : invariant(false) : void 0;
-    !(!element.props.index || !element.props.children) ?  false ? 0 : invariant(false) : void 0;
-    var treePath = [].concat(_toConsumableArray(parentPath), [index]);
+    !(element.type === Route) ?  false ? 0 : router_invariant(false) : void 0;
+    !(!element.props.index || !element.props.children) ?  false ? 0 : router_invariant(false) : void 0;
+    var treePath = [].concat(toConsumableArray_toConsumableArray(parentPath), [index]);
     var route = {
       id: element.props.id || treePath.join("-"),
       caseSensitive: element.props.caseSensitive,
@@ -65487,13 +65487,14 @@ var TemplateEditor=/*#__PURE__*/function(_Component){_inherits(TemplateEditor,_C
 // used when the :docId dynamic route segment is set.
 (0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Editor"}),/*#__PURE__*/(0,jsx_runtime.jsx)(editor_flexbox,{})]}));}}]);return TemplateEditor;}(react.Component);
 ;// CONCATENATED MODULE: ./src/App.tsx
+// import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));console.log("routes:",routes);// React Router
-var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/ (// <Router router={router} />
-(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})}));}/* harmony default export */ var src_App = (App_App);
+var router=createBrowserRouter(routes,{basename:"/Remote-QA-Web-App"});function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router})// <RootLayout><div>QA Type Selector View</div></RootLayout>
+;}/* harmony default export */ var src_App = (App_App);
 ;// CONCATENATED MODULE: ./src/serviceWorkerRegistration.ts
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -65540,4 +65541,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.d36d4042.js.map
+//# sourceMappingURL=main.9a540b4b.js.map
