@@ -29125,7 +29125,7 @@ module.exports = warning;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return "static/js/" + chunkId + "." + "8f91223b" + ".chunk.js";
+/******/ 			return "static/js/" + chunkId + "." + "f3f1eca8" + ".chunk.js";
 /******/ 		};
 /******/ 	}();
 /******/ 	
@@ -29158,7 +29158,7 @@ module.exports = warning;
 /******/ 	/* webpack/runtime/load script */
 /******/ 	!function() {
 /******/ 		var inProgress = {};
-/******/ 		var dataWebpackPrefix = "qa-mdx-cra:";
+/******/ 		var dataWebpackPrefix = "quality_install_tool:";
 /******/ 		// loadScript function to load a script via script tag
 /******/ 		__webpack_require__.l = function(url, done, key, chunkId) {
 /******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
@@ -29312,7 +29312,7 @@ module.exports = warning;
 /******/ 		
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkqa_mdx_cra"] = self["webpackChunkqa_mdx_cra"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkquality_install_tool"] = self["webpackChunkquality_install_tool"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	}();
@@ -29334,20 +29334,43 @@ var client = __webpack_require__(250);
 ;// CONCATENATED MODULE: ./node_modules/bootstrap/dist/css/bootstrap.css
 // extracted by mini-css-extract-plugin
 /* harmony default export */ var bootstrap = ({});
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+  if (null != _i) {
+    var _s,
+      _e,
+      _x,
+      _r,
+      _arr = [],
+      _n = !0,
+      _d = !1;
+    try {
+      if (_x = (_i = _i.call(arr)).next, 0 === i) {
+        if (Object(_i) !== _i) return;
+        _n = !1;
+      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+    } catch (err) {
+      _d = !0, _e = err;
+    } finally {
+      try {
+        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+}
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
   for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
   return arr2;
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
 
@@ -29358,6 +29381,27 @@ function _unsupportedIterableToArray(o, minLen) {
   if (n === "Object" && o.constructor) n = o.constructor.name;
   if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function slicedToArray_slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
 function _nonIterableSpread() {
@@ -29505,50 +29549,6 @@ function _createSuper(Derived) {
     }
     return _possibleConstructorReturn(this, result);
   };
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
-  if (null != _i) {
-    var _s,
-      _e,
-      _x,
-      _r,
-      _arr = [],
-      _n = !0,
-      _d = !1;
-    try {
-      if (_x = (_i = _i.call(arr)).next, 0 === i) {
-        if (Object(_i) !== _i) return;
-        _n = !1;
-      } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
-    } catch (err) {
-      _d = !0, _e = err;
-    } finally {
-      try {
-        if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-    return _arr;
-  }
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function slicedToArray_slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/regeneratorRuntime.js
 
@@ -30202,7 +30202,7 @@ function router_createMemoryHistory(options) {
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createbrowserhistory
  */
 
-function createBrowserHistory(options) {
+function router_createBrowserHistory(options) {
   if (options === void 0) {
     options = {};
   }
@@ -34507,22 +34507,22 @@ function useMatch(pattern) {
  * @see https://reactrouter.com/hooks/use-navigate
  */
 function dist_useNavigate() {
-  !useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0;
-  var _React$useContext2 = react.useContext(NavigationContext),
+  !useInRouterContext() ?  false ? 0 : invariant(false) : void 0;
+  var _React$useContext2 = React.useContext(NavigationContext),
     basename = _React$useContext2.basename,
     navigator = _React$useContext2.navigator;
-  var _React$useContext3 = react.useContext(RouteContext),
+  var _React$useContext3 = React.useContext(RouteContext),
     matches = _React$useContext3.matches;
   var _useLocation2 = dist_useLocation(),
     locationPathname = _useLocation2.pathname;
-  var routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map(function (match) {
+  var routePathnamesJson = JSON.stringify(UNSAFE_getPathContributingMatches(matches).map(function (match) {
     return match.pathnameBase;
   }));
-  var activeRef = react.useRef(false);
-  react.useEffect(function () {
+  var activeRef = React.useRef(false);
+  React.useEffect(function () {
     activeRef.current = true;
   });
-  var navigate = react.useCallback(function (to, options) {
+  var navigate = React.useCallback(function (to, options) {
     if (options === void 0) {
       options = {};
     }
@@ -34532,13 +34532,13 @@ function dist_useNavigate() {
       navigator.go(to);
       return;
     }
-    var path = router_resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, options.relative === "path"); // If we're operating within a basename, prepend it to the pathname prior
+    var path = resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, options.relative === "path"); // If we're operating within a basename, prepend it to the pathname prior
     // to handing off to history.  If this is a root navigation, then we
     // navigate to the raw basename which allows the basename to have full
     // control over the presence of a trailing slash on root links
 
     if (basename !== "/") {
-      path.pathname = path.pathname === "/" ? basename : router_joinPaths([basename, path.pathname]);
+      path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
     }
     (!!options.replace ? navigator.replace : navigator.push)(path, options.state, options);
   }, [basename, navigator, routePathnamesJson, locationPathname]);
@@ -35128,11 +35128,11 @@ function Navigate(_ref3) {
     replace = _ref3.replace,
     state = _ref3.state,
     relative = _ref3.relative;
-  !useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0;
+  !useInRouterContext() ?  false ? 0 : invariant(false) : void 0;
    false ? 0 : void 0;
-  var dataRouterState = react.useContext(DataRouterStateContext);
+  var dataRouterState = React.useContext(DataRouterStateContext);
   var navigate = dist_useNavigate();
-  react.useEffect(function () {
+  React.useEffect(function () {
     // Avoid kicking off multiple navigations if we're in the middle of a
     // data-router navigation, since components get re-rendered when we enter
     // a submitting/loading state
@@ -35700,7 +35700,7 @@ var _excluded = (/* unused pure expression or super */ null && (["onClick", "rel
 function createBrowserRouter(routes, opts) {
   return router_createRouter({
     basename: opts == null ? void 0 : opts.basename,
-    history: createBrowserHistory({
+    history: router_createBrowserHistory({
       window: opts == null ? void 0 : opts.window
     }),
     hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
@@ -35759,7 +35759,7 @@ function BrowserRouter(_ref) {
   var basename = _ref.basename,
     children = _ref.children,
     window = _ref.window;
-  var historyRef = react.useRef();
+  var historyRef = React.useRef();
   if (historyRef.current == null) {
     historyRef.current = createBrowserHistory({
       window: window,
@@ -35767,17 +35767,17 @@ function BrowserRouter(_ref) {
     });
   }
   var history = historyRef.current;
-  var _React$useState = react.useState({
+  var _React$useState = React.useState({
       action: history.action,
       location: history.location
     }),
-    _React$useState2 = slicedToArray_slicedToArray(_React$useState, 2),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
     state = _React$useState2[0],
     setState = _React$useState2[1];
-  react.useLayoutEffect(function () {
+  React.useLayoutEffect(function () {
     return history.listen(setState);
   }, [history]);
-  return /*#__PURE__*/react.createElement(dist_Router, {
+  return /*#__PURE__*/React.createElement(Router, {
     basename: basename,
     children: children,
     location: state.location,
@@ -47443,7 +47443,7 @@ cRef:GPSLatitudeRef||null}:null,longitude:GPSLongitude?{deg:GPSLongitude[0],min:
 // EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
 var jsx_runtime = __webpack_require__(184);
 ;// CONCATENATED MODULE: ./src/components/store.tsx
-index_browser_es.plugin((pouchdb_upsert_default()));var StoreContext=/*#__PURE__*/react.createContext({attachments:{},doc:{},upsertAttachment:function upsertAttachment(blob,id){},upsertData:function upsertData(path,data){}});/**
+index_browser_es.plugin((pouchdb_upsert_default()));var StoreContext=/*#__PURE__*/react.createContext({attachments:{},doc:{},upsertAttachment:function(blob,id){},upsertData:function(pathStr,data){}});/**
  * A wrapper component that connects its children to a data store via React Context
  * 
  * @param children - The content wrapped by this component
@@ -47451,19 +47451,19 @@ index_browser_es.plugin((pouchdb_upsert_default()));var StoreContext=/*#__PURE__
  * @param docId - Document instance id
  */var StoreProvider=function StoreProvider(_ref){var children=_ref.children,dbName=_ref.dbName,docId=_ref.docId;var changesRef=(0,react.useRef)();var revisionRef=(0,react.useRef)();// The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
 var _useState=(0,react.useState)({}),_useState2=slicedToArray_slicedToArray(_useState,2),attachments=_useState2[0],setAttachments=_useState2[1];var _useState3=(0,react.useState)(),_useState4=slicedToArray_slicedToArray(_useState3,2),db=_useState4[0],setDB=_useState4[1];// The doc state could be anything that is JSON-compatible
-var _useState5=(0,react.useState)(),_useState6=slicedToArray_slicedToArray(_useState5,2),doc=_useState6[0],setDoc=_useState6[1];/**
+var _useState5=(0,react.useState)({}),_useState6=slicedToArray_slicedToArray(_useState5,2),doc=_useState6[0],setDoc=_useState6[1];/**
    * Updates component state based on a database document change
    * 
    * @param dbDoc The full object representation of the changed document from the database
-   */function processDBDocChange(_x,_x2){return _processDBDocChange.apply(this,arguments);}function _processDBDocChange(){_processDBDocChange=asyncToGenerator_asyncToGenerator(/*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee4(db,dbDoc){var newDoc,dbDocAttachments,newAttachments,attachmentId,docAttachment,digest,_blob;return regeneratorRuntime_regeneratorRuntime().wrap(function _callee4$(_context4){while(1)switch(_context4.prev=_context4.next){case 0:console.log('processDBDocChange2');console.log('dbDoc:',dbDoc);revisionRef.current=dbDoc._rev;// Set doc state
+   */function processDBDocChange(_x,_x2){return _processDBDocChange.apply(this,arguments);}function _processDBDocChange(){_processDBDocChange=asyncToGenerator_asyncToGenerator(/*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee4(db,dbDoc){var newDoc,dbDocAttachments,newAttachments,attachmentId,docAttachment,digest,blobOrBuffer,_blob,metadata;return regeneratorRuntime_regeneratorRuntime().wrap(function _callee4$(_context4){while(1)switch(_context4.prev=_context4.next){case 0:console.log('processDBDocChange2');console.log('dbDoc:',dbDoc);revisionRef.current=dbDoc._rev;// Set doc state
 newDoc=_objectSpread2({},dbDoc);delete newDoc._attachments;delete newDoc._id;delete newDoc._rev;setDoc(newDoc);// Update the attachments state as needed
 // Note: dbDoc will not have a _attachments field if the document has no attachments
-if(!(db&&dbDoc.hasOwnProperty("_attachments"))){_context4.next=44;break;}console.log('dbDoc has _attachments');// Collect all the new or modified attachments
-dbDocAttachments=dbDoc._attachments;newAttachments={};_context4.t0=regeneratorRuntime_regeneratorRuntime().keys(dbDocAttachments);case 13:if((_context4.t1=_context4.t0()).done){_context4.next=43;break;}attachmentId=_context4.t1.value;docAttachment=dbDocAttachments[attachmentId];// digest is a hash of the attachment, so a different digest indicates a modified attachment
-digest=docAttachment.digest;if(!(!attachments.hasOwnProperty(attachmentId)||attachments[attachmentId].digest!=digest)){_context4.next=41;break;}console.log('New attachment');// This is a new or modified attachment, so build a new attachment for state
-_context4.next=21;return db.getAttachment(docId,attachmentId);case 21:_blob=_context4.sent;_context4.t2=_objectSpread2;_context4.t3=_objectSpread2({},newAttachments);_context4.t4={};_context4.t5=defineProperty_defineProperty;_context4.t6={};_context4.t7=attachmentId;_context4.t8=_blob;_context4.t9=digest;if(!(_blob.type==='image/jpeg')){_context4.next=36;break;}_context4.next=33;return getPhotoMetadata(_blob);case 33:_context4.t10=_context4.sent;_context4.next=37;break;case 36:_context4.t10={};case 37:_context4.t11=_context4.t10;_context4.t12={blob:_context4.t8,digest:_context4.t9,metadata:_context4.t11};_context4.t13=(0,_context4.t5)(_context4.t6,_context4.t7,_context4.t12);newAttachments=(0,_context4.t2)(_context4.t3,_context4.t4,_context4.t13);case 41:_context4.next=13;break;case 43:if(!(0,lodash.isEmpty)(newAttachments)){console.log('newAttachments:',newAttachments);// Update the attachments state
+if(!(db&&dbDoc.hasOwnProperty("_attachments"))){_context4.next=39;break;}console.log('dbDoc has _attachments');// Collect all the new or modified attachments
+dbDocAttachments=dbDoc._attachments;newAttachments={};_context4.t0=regeneratorRuntime_regeneratorRuntime().keys(dbDocAttachments);case 13:if((_context4.t1=_context4.t0()).done){_context4.next=38;break;}attachmentId=_context4.t1.value;docAttachment=dbDocAttachments[attachmentId];// digest is a hash of the attachment, so a different digest indicates a modified attachment
+digest=docAttachment.digest;if(!(digest&&(!attachments.hasOwnProperty(attachmentId)||attachments[attachmentId].digest!=digest))){_context4.next=36;break;}console.log('New attachment');// This is a new or modified attachment, so build a new attachment for state
+_context4.next=21;return db.getAttachment(docId,attachmentId);case 21:blobOrBuffer=_context4.sent;if(!(blobOrBuffer instanceof Blob)){_context4.next=35;break;}_blob=blobOrBuffer;if(!(_blob.type==='image/jpeg')){_context4.next=30;break;}_context4.next=27;return getPhotoMetadata(_blob);case 27:_context4.t2=_context4.sent;_context4.next=31;break;case 30:_context4.t2={};case 31:metadata=_context4.t2;newAttachments=_objectSpread2(_objectSpread2({},newAttachments),{},defineProperty_defineProperty({},attachmentId,{blob:_blob,digest:digest,metadata:metadata}));_context4.next=36;break;case 35:throw new Error('Attachment must be a Blob');case 36:_context4.next=13;break;case 38:if(!(0,lodash.isEmpty)(newAttachments)){console.log('newAttachments:',newAttachments);// Update the attachments state
 // Note: We update all new attachments at once to avoid a race condition with state update
-setAttachments(_objectSpread2(_objectSpread2({},attachments),newAttachments));}case 44:case"end":return _context4.stop();}},_callee4);}));return _processDBDocChange.apply(this,arguments);}(0,react.useEffect)(function(){/**
+setAttachments(_objectSpread2(_objectSpread2({},attachments),newAttachments));}case 39:case"end":return _context4.stop();}},_callee4);}));return _processDBDocChange.apply(this,arguments);}(0,react.useEffect)(function(){/**
      * Connects the store to the database document
      *
      * @remarks
@@ -47477,7 +47477,7 @@ setAttachments(_objectSpread2(_objectSpread2({},attachments),newAttachments));}c
 db=new index_browser_es(dbName,{auto_compaction:true});setDB(db);// Initialize the DB document as needed
 _context.prev=2;_context.next=5;return db.putIfNotExists(docId,{});case 5:result=_context.sent;revisionRef.current=result.rev;_context.next=12;break;case 9:_context.prev=9;_context.t0=_context["catch"](2);console.error('DB initialization error:',_context.t0);// TODO: Rethink how best to handle errors
 case 12:_context.prev=12;_context.next=15;return db.get(docId);case 15:dbDoc=_context.sent;processDBDocChange(db,dbDoc);_context.next=22;break;case 19:_context.prev=19;_context.t1=_context["catch"](12);console.error('Unable to initialize state from DB:',_context.t1);case 22:// Subscribe to DB document changes
-changesRef.current=db.changes({include_docs:true,live:true,since:'now'}).on('change',function(change){console.log('Database changed');console.log('_rev:',change.doc._rev);console.log('current:',revisionRef.current);if(change.doc._rev!=revisionRef.current){// The change must have originated from outside this component, so update component state
+changesRef.current=db.changes({include_docs:true,live:true,since:'now'}).on('change',function(change){var _change$doc;console.log('Database changed');console.log('_rev:',(_change$doc=change.doc)===null||_change$doc===void 0?void 0:_change$doc._rev);console.log('current:',revisionRef.current);if(change.doc&&change.doc._rev!==revisionRef.current){// The change must have originated from outside this component, so update component state
 console.log('processing DB change');processDBDocChange(db,change.doc);}// else: the change originated from this component, so ignore it
 }).on('error',function(err){// It's hard to imagine what would cause this since our DB is local
 console.error('DB subscription connection failed');});case 23:case"end":return _context.stop();}},_callee,null,[[2,9],[12,19]]);}));function connectStoreToDB(){return _connectStoreToDB.apply(this,arguments);}return connectStoreToDB;})()();// Cancel the DB subscription just before the component unmounts
@@ -47489,17 +47489,17 @@ return function(){if(changesRef.current){changesRef.current.cancel();}};// Run t
    * The given path is gauranteed to exist after the update/insertion.
    * This function is typically passed to an input wrapper component via the StoreContext.Provider value
    * 
-   * @param path An array such as ["foo", "bar", "2", "biz"] that represents a path into the doc state
+   * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
    * @param data The data that is to be updated/inserted at the path location in the doc state
-   */var upsertData=function upsertData(path,data){// Update doc state
-var newDoc=immutableUpsert(doc,(0,lodash.toPath)(path),data);setDoc(newDoc);// Persist the doc
-db.upsert(docId,function upsertFn(dbDoc){return _objectSpread2(_objectSpread2({},dbDoc),newDoc);}).then(function(res){revisionRef.current=res.rev;}).catch(function(err){console.error('upsert error:',err);});};/**
+   */var upsertData=function upsertData(pathStr,data){// Update doc state
+var newDoc=immutableUpsert(doc,(0,lodash.toPath)(pathStr),data);setDoc(newDoc);// Persist the doc
+if(db){db.upsert(docId,function upsertFn(dbDoc){return _objectSpread2(_objectSpread2({},dbDoc),newDoc);}).then(function(res){revisionRef.current=res.rev;}).catch(function(err){console.error('upsert error:',err);});}};/**
    * 
    * @param blob 
    * @param id 
    */var upsertAttachment=/*#__PURE__*/function(){var _ref2=asyncToGenerator_asyncToGenerator(/*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee3(blob,id){var metadata,newAttachments,upsertBlobDB;return regeneratorRuntime_regeneratorRuntime().wrap(function _callee3$(_context3){while(1)switch(_context3.prev=_context3.next){case 0:if(!(blob.type==="image/jpeg")){_context3.next=6;break;}_context3.next=3;return getPhotoMetadata(blob);case 3:_context3.t0=_context3.sent;_context3.next=7;break;case 6:_context3.t0={};case 7:metadata=_context3.t0;// Store the blob in memory
 newAttachments=_objectSpread2(_objectSpread2({},attachments),{},defineProperty_defineProperty({},id,{blob:blob,metadata:metadata}));setAttachments(newAttachments);// Persist the blob
-upsertBlobDB=/*#__PURE__*/function(){var _ref3=asyncToGenerator_asyncToGenerator(/*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee2(rev){var result,_doc;return regeneratorRuntime_regeneratorRuntime().wrap(function _callee2$(_context2){while(1)switch(_context2.prev=_context2.next){case 0:result=null;_context2.prev=1;_context2.next=4;return db.putAttachment(docId,id,rev,blob,blob.type);case 4:result=_context2.sent;_context2.next=15;break;case 7:_context2.prev=7;_context2.t0=_context2["catch"](1);_context2.next=11;return db.get(docId);case 11:_doc=_context2.sent;_context2.next=14;return upsertBlobDB(_doc._rev);case 14:result=_context2.sent;case 15:_context2.prev=15;revisionRef.current=result.rev;return _context2.finish(15);case 18:return _context2.abrupt("return",result);case 19:case"end":return _context2.stop();}},_callee2,null,[[1,7,15,18]]);}));return function upsertBlobDB(_x5){return _ref3.apply(this,arguments);};}();upsertBlobDB(revisionRef.current);case 12:case"end":return _context3.stop();}},_callee3);}));return function upsertAttachment(_x3,_x4){return _ref2.apply(this,arguments);};}();return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Provider,{value:{attachments:attachments,doc:doc,upsertAttachment:upsertAttachment,upsertData:upsertData},children:children});};/**
+upsertBlobDB=/*#__PURE__*/function(){var _ref3=asyncToGenerator_asyncToGenerator(/*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee2(rev){var result,_doc;return regeneratorRuntime_regeneratorRuntime().wrap(function _callee2$(_context2){while(1)switch(_context2.prev=_context2.next){case 0:result=null;if(!db){_context2.next=19;break;}_context2.prev=2;_context2.next=5;return db.putAttachment(docId,id,rev,blob,blob.type);case 5:result=_context2.sent;_context2.next=16;break;case 8:_context2.prev=8;_context2.t0=_context2["catch"](2);_context2.next=12;return db.get(docId);case 12:_doc=_context2.sent;_context2.next=15;return upsertBlobDB(_doc._rev);case 15:result=_context2.sent;case 16:_context2.prev=16;if(result){revisionRef.current=result.rev;}return _context2.finish(16);case 19:return _context2.abrupt("return",result);case 20:case"end":return _context2.stop();}},_callee2,null,[[2,8,16,19]]);}));return function upsertBlobDB(_x5){return _ref3.apply(this,arguments);};}();if(revisionRef.current){upsertBlobDB(revisionRef.current);}case 12:case"end":return _context3.stop();}},_callee3);}));return function upsertAttachment(_x3,_x4){return _ref2.apply(this,arguments);};}();return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Provider,{value:{attachments:attachments,doc:doc,upsertAttachment:upsertAttachment,upsertData:upsertData},children:children});};/**
  * Immutably updates/inserts a target value at a given path
  * @param recipient 
  * @param path 
@@ -47516,7 +47516,7 @@ newRecipient[propName]=immutableUpsert(newRecipient[propName],newPath,target);}r
  * of the route, :docId. 
  * 
  * @param dbName - The database name associated with an MDX template
- */var JsonStoreView=function JsonStoreView(_ref){var dbName=_ref.dbName;var _useParams=useParams(),docId=_useParams.docId;return docId&&/*#__PURE__*/(0,jsx_runtime.jsx)(StoreProvider,{dbName:dbName,docId:docId,children:/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var attachments=_ref2.attachments,doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:["Document:",/*#__PURE__*/(0,jsx_runtime.jsx)("pre",{children:JSON.stringify(doc,null,2)}),"Attachments:",/*#__PURE__*/(0,jsx_runtime.jsx)("pre",{children:JSON.stringify(attachments,null,2)})]});}})});};/* harmony default export */ var json_store_view = (JsonStoreView);
+ */var JsonStoreView=function JsonStoreView(_ref){var dbName=_ref.dbName;var _useParams=useParams(),docId=_useParams.docId;return docId?/*#__PURE__*/(0,jsx_runtime.jsx)(StoreProvider,{dbName:dbName,docId:docId,children:/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var attachments=_ref2.attachments,doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:["Document:",/*#__PURE__*/(0,jsx_runtime.jsx)("pre",{children:JSON.stringify(doc,null,2)}),"Attachments:",/*#__PURE__*/(0,jsx_runtime.jsx)("pre",{children:JSON.stringify(attachments,null,2)})]});}})}):null;};/* harmony default export */ var json_store_view = (JsonStoreView);
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
 function objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
@@ -50123,7 +50123,9 @@ InputGroup.displayName = 'InputGroup';
  * @param updateValue A function called whenever the user changes the 
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
- */var NumberInput=function NumberInput(_ref){var id=_ref.id,label=_ref.label,_ref$prefix=_ref.prefix,prefix=_ref$prefix===void 0?"":_ref$prefix,_ref$suffix=_ref.suffix,suffix=_ref$suffix===void 0?"":_ref$suffix,updateValue=_ref.updateValue,value=_ref.value;return/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_InputGroup,{children:[prefix&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_InputGroup.Text,{children:prefix}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{onChange:function onChange(event){return updateValue(event.target.value);},type:"number",value:value||""})}),suffix&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_InputGroup.Text,{children:suffix})]});};/* harmony default export */ var number_input = (NumberInput);
+ * @param min The minimum allowed value for the input field.
+ * @param max The maximum allowed value for the input field.
+ */var NumberInput=function NumberInput(_ref){var id=_ref.id,label=_ref.label,_ref$prefix=_ref.prefix,prefix=_ref$prefix===void 0?"":_ref$prefix,_ref$suffix=_ref.suffix,suffix=_ref$suffix===void 0?"":_ref$suffix,updateValue=_ref.updateValue,value=_ref.value,min=_ref.min,max=_ref.max;var _useState=(0,react.useState)(''),_useState2=slicedToArray_slicedToArray(_useState,2),error=_useState2[0],setError=_useState2[1];var handleChange=function handleChange(inputValue){var inputValueNum=parseInt(inputValue);if(isNaN(inputValueNum)){setError('Input must be a number');}else if(inputValueNum<min){setError('Input must be at least '+min);}else if(inputValueNum>max){setError('Input must be at most '+max);}else{setError('');}updateValue(inputValue);};return/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_InputGroup,{children:[prefix&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_InputGroup.Text,{children:prefix}),/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{onChange:function onChange(event){return handleChange(event.target.value);},type:"number",value:value||"",isInvalid:Boolean(error)}),error&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control.Feedback,{type:"invalid",children:error})]}),suffix&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_InputGroup.Text,{children:suffix})]});};/* harmony default export */ var number_input = (NumberInput);
 ;// CONCATENATED MODULE: ./src/components/number_input_wrapper.tsx
 /**
  * A component that wraps a NumberInput component in order to tie it to the data store
@@ -50135,8 +50137,10 @@ InputGroup.displayName = 'InputGroup';
  * @param prefix Text to appear as a prefix to the NumberInput (e.g. "$" if the input
  * represents a number of dollars)
  * @param suffix Text to appear as a suffix to the NumberInput (e.g. "SqFt")
- */var NumberInputWrapper=function NumberInputWrapper(_ref){var label=_ref.label,path=_ref.path,prefix=_ref.prefix,suffix=_ref.suffix;// Generate an id for the input
-var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(number_input,{id:id,label:label,prefix:prefix,suffix:suffix,updateValue:function updateValue(value){return upsertData(path,parseFloat(value));},value:(0,lodash.get)(doc,path)});}});};/* harmony default export */ var number_input_wrapper = (NumberInputWrapper);
+ * @param min The minimum allowed value for the input field, defult to NEGATIVE_INFINITY.
+ * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
+ */var NumberInputWrapper=function NumberInputWrapper(_ref){var label=_ref.label,path=_ref.path,prefix=_ref.prefix,suffix=_ref.suffix,_ref$min=_ref.min,min=_ref$min===void 0?Number.NEGATIVE_INFINITY:_ref$min,_ref$max=_ref.max,max=_ref$max===void 0?Number.POSITIVE_INFINITY:_ref$max;// Generate an id for the input
+var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(number_input,{id:id,label:label,prefix:prefix,suffix:suffix,updateValue:function updateValue(value){return upsertData(path,parseFloat(value));},value:(0,lodash.get)(doc,path),min:min,max:max});}});};/* harmony default export */ var number_input_wrapper = (NumberInputWrapper);
 ;// CONCATENATED MODULE: ./node_modules/react-bootstrap/esm/divWithClassName.js
 
 
@@ -50291,7 +50295,7 @@ Card.defaultProps = Card_defaultProps;
 ;// CONCATENATED MODULE: ./src/components/photo.tsx
 /**
  * A component that displays a photo, timestamp, geolocation, label, and description
- * 
+ *
  * @param description Content (most commonly markdown text) used to describe the photo
  * @param label Label for the component
  * @param metadata Photo metadata including timestamp and geolocation
@@ -50300,7 +50304,7 @@ Card.defaultProps = Card_defaultProps;
  * @param required When unset, the Photo component will only show if there is a
  * photo attachement in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
- */var Photo=function Photo(_ref){var _metadata$geolocation,_metadata$geolocation2;var description=_ref.description,label=_ref.label,metadata=_ref.metadata,notes=_ref.notes,photo=_ref.photo,required=_ref.required;return(photo||required)&&/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Card,{style:{breakInside:'avoid-page',marginBottom:'1rem'},children:[/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Card.Body,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Title,{children:label}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Text,{as:"div",children:description}),photo?/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Image,{src:URL.createObjectURL(photo),thumbnail:true}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("small",{children:["Timestamp: ",metadata!==null&&metadata!==void 0&&metadata.timestamp?/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:metadata.timestamp}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),"Geolocation: ",metadata!==null&&metadata!==void 0&&(_metadata$geolocation=metadata.geolocation)!==null&&_metadata$geolocation!==void 0&&_metadata$geolocation.latitude&&metadata!==null&&metadata!==void 0&&(_metadata$geolocation2=metadata.geolocation)!==null&&_metadata$geolocation2!==void 0&&_metadata$geolocation2.longitude?/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.latitude)),"  ",/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.longitude))]}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),(metadata===null||metadata===void 0?void 0:metadata.altitude)&&/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:["Altitude: ",metadata.altitude," meters"]})]})]})]}):required&&/*#__PURE__*/(0,jsx_runtime.jsx)("em",{children:"Missing Photo"})]}),notes&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Footer,{children:notes})]})});};/* harmony default export */ var photo = (Photo);
+ */var Photo=function Photo(_ref){var _metadata$geolocation,_metadata$geolocation2,_metadata$geolocation3,_metadata$geolocation4,_metadata$geolocation5,_metadata$geolocation6;var description=_ref.description,label=_ref.label,metadata=_ref.metadata,photo=_ref.photo,required=_ref.required;return photo||required?/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card,{style:{breakInside:'avoid-page',marginBottom:'1rem'},children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Card.Body,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Title,{children:label}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Text,{as:"div",children:description}),photo?/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Image,{src:URL.createObjectURL(photo),thumbnail:true}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("small",{children:["Timestamp: ",metadata!==null&&metadata!==void 0&&metadata.timestamp?/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:metadata.timestamp}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),"Geolocation: ",metadata!==null&&metadata!==void 0&&(_metadata$geolocation=metadata.geolocation)!==null&&_metadata$geolocation!==void 0&&_metadata$geolocation.latitude&&(metadata===null||metadata===void 0?void 0:(_metadata$geolocation2=metadata.geolocation)===null||_metadata$geolocation2===void 0?void 0:(_metadata$geolocation3=_metadata$geolocation2.latitude)===null||_metadata$geolocation3===void 0?void 0:_metadata$geolocation3.deg.toString())!=='NaN'&&metadata!==null&&metadata!==void 0&&(_metadata$geolocation4=metadata.geolocation)!==null&&_metadata$geolocation4!==void 0&&_metadata$geolocation4.longitude&&(metadata===null||metadata===void 0?void 0:(_metadata$geolocation5=metadata.geolocation)===null||_metadata$geolocation5===void 0?void 0:(_metadata$geolocation6=_metadata$geolocation5.longitude)===null||_metadata$geolocation6===void 0?void 0:_metadata$geolocation6.deg.toString())!=='NaN'?/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.latitude)),"  ",/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.longitude))]}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"})]})]}):required&&/*#__PURE__*/(0,jsx_runtime.jsx)("em",{children:"Missing Photo"})]})})}):null;};/* harmony default export */ var photo = (Photo);
 ;// CONCATENATED MODULE: ./src/components/photo_wrapper.tsx
 /**
  * A component that wraps a Photo component in order to tie it to the data store
@@ -50313,7 +50317,7 @@ Card.defaultProps = Card_defaultProps;
  * @param required When unset, the Photo component will only show if there is a
  * photo attachement in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
- */var PhotoWrapper=function PhotoWrapper(_ref){var _children=_ref.children,id=_ref.id,label=_ref.label,required=_ref.required;return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var _attachments$id,_doc$photos,_doc$photos$id,_attachments$id2;var attachments=_ref2.attachments,doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsx)(photo,{description:_children,id:id,label:label,metadata:(_attachments$id=attachments[id])===null||_attachments$id===void 0?void 0:_attachments$id.metadata,notes:(_doc$photos=doc.photos)===null||_doc$photos===void 0?void 0:(_doc$photos$id=_doc$photos[id])===null||_doc$photos$id===void 0?void 0:_doc$photos$id.notes,photo:(_attachments$id2=attachments[id])===null||_attachments$id2===void 0?void 0:_attachments$id2.blob,required:required});}});};/* harmony default export */ var photo_wrapper = (PhotoWrapper);
+ */var PhotoWrapper=function PhotoWrapper(_ref){var _children=_ref.children,id=_ref.id,label=_ref.label,required=_ref.required;return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var _attachments$id,_attachments$id2;var attachments=_ref2.attachments,doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsx)(photo,{description:_children,id:id,label:label,metadata:(_attachments$id=attachments[id])===null||_attachments$id===void 0?void 0:_attachments$id.metadata,photo:(_attachments$id2=attachments[id])===null||_attachments$id2===void 0?void 0:_attachments$id2.blob,required:required});}});};/* harmony default export */ var photo_wrapper = (PhotoWrapper);
 ;// CONCATENATED MODULE: ./node_modules/image-blob-reduce/dist/image-blob-reduce.esm.mjs
 /*! image-blob-reduce 4.1.0 https://github.com/nodeca/image-blob-reduce @license MIT */
 function commonjsRequire(path) {
@@ -60924,22 +60928,22 @@ function TfiZoomOut(props) {
 }
 ;
 ;// CONCATENATED MODULE: ./src/components/photo_input.tsx
-// TODO: Determine whether or not the useEffect() method is needed. 
-// We don't seem to need a separate camera button on an Android phone. 
+// TODO: Determine whether or not the useEffect() method is needed.
+// We don't seem to need a separate camera button on an Android phone.
 // However, we may need to request access to the camera
 // before it can me used. Then clean up the corresponding code that is currently
 // commented out.
 /**
  * Component for photo input
- * 
+ *
  * @param children Content (most commonly markdown text) describing the photo requirement
  * @param label Label for the photo requirement
  * @param metadata Abreviated photo metadata including timestamp and geolocation
  * @param photo Blob containing the photo itself
  * @param upsertPhoto Function used to update/insert a photo into the store
- */var PhotoInput=function PhotoInput(_ref){var _metadata$geolocation,_metadata$geolocation2,_metadata$geolocation3;var children=_ref.children,label=_ref.label,metadata=_ref.metadata,photo=_ref.photo,upsertPhoto=_ref.upsertPhoto;// Create references to the hidden file inputs
+ */var PhotoInput=function PhotoInput(_ref){var _metadata$geolocation,_metadata$geolocation2,_metadata$geolocation3,_metadata$geolocation4,_metadata$geolocation5,_metadata$geolocation6;var children=_ref.children,label=_ref.label,metadata=_ref.metadata,photo=_ref.photo,upsertPhoto=_ref.upsertPhoto;// Create references to the hidden file inputs
 var hiddenPhotoCaptureInputRef=(0,react.useRef)(null);var hiddenPhotoUploadInputRef=(0,react.useRef)(null);var _useState=(0,react.useState)(false),_useState2=slicedToArray_slicedToArray(_useState,2),cameraAvailable=_useState2[0],setCameraAvailable=_useState2[1];// Handle button clicks
-var handlePhotoCaptureButtonClick=function handlePhotoCaptureButtonClick(event){hiddenPhotoCaptureInputRef.current&&hiddenPhotoCaptureInputRef.current.click();};var handlePhotoGalleryButtonClick=function handlePhotoGalleryButtonClick(event){hiddenPhotoUploadInputRef.current&&hiddenPhotoUploadInputRef.current.click();};(0,react.useEffect)(function(){if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia({video:true}).then(function(){setCameraAvailable(true);});}});var handleFileInputChange=function handleFileInputChange(event){if(event.target.files){var _file=event.target.files[0];upsertPhoto(_file);}};return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card,{style:{pageBreakBefore:'always',marginBottom:'1rem'},children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Card.Body,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(collapsible,{header:label,children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Text,{as:"div",children:children})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:/*#__PURE__*/(0,jsx_runtime.jsxs)(react_bootstrap_esm_Button,{onClick:handlePhotoGalleryButtonClick,variant:"outline-primary",children:[/*#__PURE__*/(0,jsx_runtime.jsx)(TfiGallery,{})," Add Photo"]})}),/*#__PURE__*/(0,jsx_runtime.jsx)("input",{accept:"image/jpeg",onChange:handleFileInputChange,ref:hiddenPhotoUploadInputRef,style:{display:'none'},type:"file"}),photo&&/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Image,{src:URL.createObjectURL(photo),thumbnail:true}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("small",{children:["Timestamp: ",metadata!==null&&metadata!==void 0&&metadata.timestamp?/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:metadata.timestamp}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),"Geolocation: ",metadata!==null&&metadata!==void 0&&(_metadata$geolocation=metadata.geolocation)!==null&&_metadata$geolocation!==void 0&&_metadata$geolocation.latitude&&metadata!==null&&metadata!==void 0&&(_metadata$geolocation2=metadata.geolocation)!==null&&_metadata$geolocation2!==void 0&&_metadata$geolocation2.longitude?/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.latitude)),"  ",/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.longitude))]}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),(metadata===null||metadata===void 0?void 0:(_metadata$geolocation3=metadata.geolocation)===null||_metadata$geolocation3===void 0?void 0:_metadata$geolocation3.altitude)&&/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:["Altitude: ",metadata.geolocation.altitude.toString()," m"]})]})]})]})]})})});};/* harmony default export */ var photo_input = (PhotoInput);
+var handlePhotoCaptureButtonClick=function handlePhotoCaptureButtonClick(event){hiddenPhotoCaptureInputRef.current&&hiddenPhotoCaptureInputRef.current.click();};var handlePhotoGalleryButtonClick=function handlePhotoGalleryButtonClick(event){hiddenPhotoUploadInputRef.current&&hiddenPhotoUploadInputRef.current.click();};(0,react.useEffect)(function(){if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){navigator.mediaDevices.getUserMedia({video:true}).then(function(){setCameraAvailable(true);});}});var handleFileInputChange=function handleFileInputChange(event){if(event.target.files){var _file=event.target.files[0];upsertPhoto(_file);}};return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card,{style:{pageBreakBefore:'always',marginBottom:'1rem'},children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Card.Body,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(collapsible,{header:label,children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Card.Text,{as:"div",children:children})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:/*#__PURE__*/(0,jsx_runtime.jsxs)(react_bootstrap_esm_Button,{onClick:handlePhotoGalleryButtonClick,variant:"outline-primary",children:[/*#__PURE__*/(0,jsx_runtime.jsx)(TfiGallery,{})," Add Photo"]})}),/*#__PURE__*/(0,jsx_runtime.jsx)("input",{accept:"image/jpeg",onChange:handleFileInputChange,ref:hiddenPhotoUploadInputRef,style:{display:'none'},type:"file"}),photo&&/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Image,{src:URL.createObjectURL(photo),thumbnail:true}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),/*#__PURE__*/(0,jsx_runtime.jsxs)("small",{children:["Timestamp: ",metadata!==null&&metadata!==void 0&&metadata.timestamp?/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:metadata.timestamp}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"}),/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),"Geolocation: ",metadata!==null&&metadata!==void 0&&(_metadata$geolocation=metadata.geolocation)!==null&&_metadata$geolocation!==void 0&&_metadata$geolocation.latitude&&(metadata===null||metadata===void 0?void 0:(_metadata$geolocation2=metadata.geolocation)===null||_metadata$geolocation2===void 0?void 0:(_metadata$geolocation3=_metadata$geolocation2.latitude)===null||_metadata$geolocation3===void 0?void 0:_metadata$geolocation3.deg.toString())!=='NaN'&&metadata!==null&&metadata!==void 0&&(_metadata$geolocation4=metadata.geolocation)!==null&&_metadata$geolocation4!==void 0&&_metadata$geolocation4.longitude&&(metadata===null||metadata===void 0?void 0:(_metadata$geolocation5=metadata.geolocation)===null||_metadata$geolocation5===void 0?void 0:(_metadata$geolocation6=_metadata$geolocation5.longitude)===null||_metadata$geolocation6===void 0?void 0:_metadata$geolocation6.deg.toString())!=='NaN'?/*#__PURE__*/(0,jsx_runtime.jsxs)("span",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.latitude)),"  ",/*#__PURE__*/(0,jsx_runtime.jsx)(gps_coord_str,_objectSpread2({},metadata.geolocation.longitude))]}):/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:"Missing"})]})]})]})})});};/* harmony default export */ var photo_input = (PhotoInput);
 ;// CONCATENATED MODULE: ./src/components/photo_input_wrapper.tsx
 var MAX_IMAGE_DIM=1280;/**
  * A component that wraps a PhotoInput component in order to tie it to the data store
@@ -60950,7 +60954,7 @@ var MAX_IMAGE_DIM=1280;/**
  * the PhotoInput component
  * @param label The label of the PhotoInput component
  */var PhotoInputWrapper=function PhotoInputWrapper(_ref){var _children=_ref.children,id=_ref.id,label=_ref.label;return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var _attachments$id,_attachments$id2;var attachments=_ref2.attachments,upsertAttachment=_ref2.upsertAttachment;var upsertPhoto=function upsertPhoto(file){// Reduce the image size as needed
-imageBlobReduce().toBlob(file,{max:MAX_IMAGE_DIM}).then(function(blob){upsertAttachment(blob,id);});};return/*#__PURE__*/(0,jsx_runtime.jsx)(photo_input,{children:_children,id:id,label:label,metadata:(_attachments$id=attachments[id])===null||_attachments$id===void 0?void 0:_attachments$id.metadata,photo:(_attachments$id2=attachments[id])===null||_attachments$id2===void 0?void 0:_attachments$id2.blob,upsertPhoto:upsertPhoto});}});};/* harmony default export */ var photo_input_wrapper = (PhotoInputWrapper);
+imageBlobReduce().toBlob(file,{max:MAX_IMAGE_DIM}).then(function(blob){upsertAttachment(blob,id);});};return/*#__PURE__*/(0,jsx_runtime.jsx)(photo_input,{children:_children,label:label,metadata:(_attachments$id=attachments[id])===null||_attachments$id===void 0?void 0:_attachments$id.metadata,photo:(_attachments$id2=attachments[id])===null||_attachments$id2===void 0?void 0:_attachments$id2.blob,upsertPhoto:upsertPhoto});}});};/* harmony default export */ var photo_input_wrapper = (PhotoInputWrapper);
 // EXTERNAL MODULE: ./node_modules/print-js/dist/print.js
 var print = __webpack_require__(973);
 var print_default = /*#__PURE__*/__webpack_require__.n(print);
@@ -60992,7 +60996,10 @@ var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContex
  * @param updateValue A function called whenever the user changes the 
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
- */var StringInput=function StringInput(_ref){var id=_ref.id,label=_ref.label,updateValue=_ref.updateValue,value=_ref.value;return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{onChange:function onChange(event){return updateValue(event.target.value);},type:"text",value:value||""})})});};/* harmony default export */ var string_input = (StringInput);
+ * @param min The minimum allowed value for the input field.
+ * @param max The maximum allowed value for the input field.
+ * @param regexp The regular expression pattern to validate the input string.
+ */var StringInput=function StringInput(_ref){var id=_ref.id,label=_ref.label,updateValue=_ref.updateValue,value=_ref.value,min=_ref.min,max=_ref.max,regexp=_ref.regexp;var _useState=(0,react.useState)(''),_useState2=slicedToArray_slicedToArray(_useState,2),error=_useState2[0],setError=_useState2[1];var handleChange=function handleChange(inputValue){if(typeof inputValue!=='string'){setError('Input must be a string');}else if(inputValue.length<min){setError('Input must be at least '+min+' characters long');}else if(inputValue.length>max){setError('Input must be at most '+max+' characters long');}else if(regexp.test(inputValue)){setError('Input must match'+regexp);}else{setError('');}updateValue(inputValue);};return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{onChange:function onChange(event){return handleChange(event.target.value);},type:"text",value:value||"",isInvalid:Boolean(error)}),error&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control.Feedback,{type:"invalid",children:error})]})});};/* harmony default export */ var string_input = (StringInput);
 ;// CONCATENATED MODULE: ./src/components/string_input_wrapper.tsx
 /**
  * A component that wraps a StringInput component in order to tie it to the data store
@@ -61000,8 +61007,11 @@ var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContex
  * @param label The label of the StringInput component
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the StringInput component
- */var StringInputWrapper=function StringInputWrapper(_ref){var label=_ref.label,path=_ref.path;// Generate an id for the input
-var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(string_input,{id:id,label:label,updateValue:function updateValue(value){return upsertData(path,value);},value:(0,lodash.get)(doc,path)});}});};/* harmony default export */ var string_input_wrapper = (StringInputWrapper);
+ * @param min The minimum allowed value for the input field, defult to 0.
+ * @param max The maximum allowed value for the input field, defult to 1024.
+ * @param regexp The regular expression pattern to validate the input string, defult to take anything.
+ */var StringInputWrapper=function StringInputWrapper(_ref){var label=_ref.label,path=_ref.path,_ref$min=_ref.min,min=_ref$min===void 0?0:_ref$min,_ref$max=_ref.max,max=_ref$max===void 0?1024:_ref$max,_ref$regexp=_ref.regexp,regexp=_ref$regexp===void 0?/.*/:_ref$regexp;// Generate an id for the input
+var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(string_input,{id:id,label:label,updateValue:function updateValue(value){return upsertData(path,value);},value:(0,lodash.get)(doc,path),min:min,max:max,regexp:regexp});}});};/* harmony default export */ var string_input_wrapper = (StringInputWrapper);
 ;// CONCATENATED MODULE: ./node_modules/react-bootstrap/esm/Table.js
 
 
@@ -61055,7 +61065,10 @@ var Table = /*#__PURE__*/react.forwardRef(function (_ref, ref) {
  * @param updateValue A function called whenever the user changes the 
  * input value. The function has the new input value as the sole arguement. 
  * @param value The input value
- */var TextInput=function TextInput(_ref){var id=_ref.id,label=_ref.label,updateValue=_ref.updateValue,value=_ref.value;return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{as:"textarea",onChange:function onChange(event){return updateValue(event.target.value);},placeholder:"A placeholder",value:value||""})})});};/* harmony default export */ var text_input = (TextInput);
+ * @param min The minimum allowed value for the input field.
+ * @param max The maximum allowed value for the input field.
+ * @param regexp The regular expression pattern to validate the input string.
+ */var TextInput=function TextInput(_ref){var id=_ref.id,label=_ref.label,updateValue=_ref.updateValue,value=_ref.value,min=_ref.min,max=_ref.max,regexp=_ref.regexp;var _useState=(0,react.useState)(''),_useState2=slicedToArray_slicedToArray(_useState,2),error=_useState2[0],setError=_useState2[1];var handleChange=function handleChange(inputValue){if(typeof inputValue!=='string'){setError('Input must be a string');}else if(inputValue.length<min){setError('Input must be at least '+min+' characters long');}else if(inputValue.length>max){setError('Input must be at most '+max+' characters long');}else if(regexp.test(inputValue)){setError('Input must match'+regexp);}else{setError('');updateValue(inputValue);}};return/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_FloatingLabel,{className:"mb-3",controlId:id,label:label,children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control,{as:"textarea",onChange:function onChange(event){return handleChange(event.target.value);},placeholder:"A placeholder",value:value||"",isInvalid:Boolean(error)}),error&&/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Form.Control.Feedback,{type:"invalid",children:error})]})});};/* harmony default export */ var text_input = (TextInput);
 ;// CONCATENATED MODULE: ./src/components/text_input_wrapper.tsx
 /**
  * A component that wraps a TextInput component in order to tie it to the data store
@@ -61063,8 +61076,11 @@ var Table = /*#__PURE__*/react.forwardRef(function (_ref, ref) {
  * @param label The label of the TextInput component
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the TextInput component
- */var TextInputWrapper=function TextInputWrapper(_ref){var label=_ref.label,path=_ref.path;// Generate an id for the input
-var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(text_input,{id:id,label:label,updateValue:function updateValue(value){return upsertData(path,value);},value:(0,lodash.get)(doc,path)});}});};/* harmony default export */ var text_input_wrapper = (TextInputWrapper);
+ * @param min The minimum allowed value for the input field, defult to 0.
+ * @param max The maximum allowed value for the input field, defult to 10240.
+ * @param regexp The regular expression pattern to validate the input string, defult to take anything.
+ */var TextInputWrapper=function TextInputWrapper(_ref){var label=_ref.label,path=_ref.path,_ref$min=_ref.min,min=_ref$min===void 0?0:_ref$min,_ref$max=_ref.max,max=_ref$max===void 0?10240:_ref$max,_ref$regexp=_ref.regexp,regexp=_ref$regexp===void 0?/.*/:_ref$regexp;// Generate an id for the input
+var id=pathToId("input",path);return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc,upsertData=_ref2.upsertData;return/*#__PURE__*/(0,jsx_runtime.jsx)(text_input,{id:id,label:label,updateValue:function updateValue(value){return upsertData(path,value);},value:(0,lodash.get)(doc,path),min:min,max:max,regexp:regexp});}});};/* harmony default export */ var text_input_wrapper = (TextInputWrapper);
 ;// CONCATENATED MODULE: ./src/components/us_state_select_wrapper.tsx
 var US_STATES=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];/**
  * A component that *ultimately* wraps a Select component in order to tie it to the data store
@@ -61074,13 +61090,6 @@ var US_STATES=["Alabama","Alaska","Arizona","Arkansas","California","Colorado","
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the Select component
  */var USStateSelectWrapper=function USStateSelectWrapper(_ref){var label=_ref.label,path=_ref.path;return/*#__PURE__*/(0,jsx_runtime.jsx)(select_wrapper,{label:label,options:US_STATES,path:path});};/* harmony default export */ var us_state_select_wrapper = (USStateSelectWrapper);
-;// CONCATENATED MODULE: ./src/components/mdx_wrapper.tsx
-var components={Collapsible:collapsible,DateInput:date_input_wrapper,Figure:figure_wrapper,NumberInput:number_input_wrapper,Photo:photo_wrapper,PhotoInput:photo_input_wrapper,PrintSection:print_section,Select:select_wrapper,StringInput:string_input_wrapper,table:table_wrapper,TextInput:text_input_wrapper,USStateSelect:us_state_select_wrapper};/**
- * A component that wraps an MDX component instance in order to tie it to the data store
- * and place it inside a bootstrap container
- * 
- * @param Component An MDX component instance
- */var MdxWrapper=function MdxWrapper(_ref){var Component=_ref.Component;return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsx)("div",{className:"container",id:"mdx-container",children:doc?/*#__PURE__*/(0,jsx_runtime.jsx)(Component,{components:components,doc:doc}):null});}});};/* harmony default export */ var mdx_wrapper = (MdxWrapper);
 ;// CONCATENATED MODULE: ./node_modules/@react-aria/ssr/dist/import.mjs
 
 
@@ -62632,13 +62641,30 @@ var Tabs_Tabs = function Tabs(props) {
 Tabs_Tabs.defaultProps = Tabs_defaultProps;
 Tabs_Tabs.displayName = 'Tabs';
 /* harmony default export */ var react_bootstrap_esm_Tabs = (Tabs_Tabs);
+;// CONCATENATED MODULE: ./src/components/date.tsx
+/**
+ * Interface for the DateStrProps
+ *//**
+ * Default options for date formatting
+ */var DEFAULT_OPTIONS={timeZone:'UTC',month:"long",day:"numeric",year:"numeric"};/**
+ * DateStr component
+ * @param date - A string appropriate as the single argument to the Date() constructor
+ * @param locals - An optional string used as the first argument to the Date.toLocalDateString() method (default: 'en-us')
+ * @param options - An optional objected used as the second argument to the Date.toLocalDateString() method
+ * @returns The formatted date component
+ */var DateStr=function DateStr(_ref){var date=_ref.date,_ref$locals=_ref.locals,locals=_ref$locals===void 0?'en-us':_ref$locals,_ref$options=_ref.options,options=_ref$options===void 0?{}:_ref$options;var full_options=_objectSpread2(_objectSpread2({},DEFAULT_OPTIONS),options);var parsedDate=new Date(date);var formattedDate=parsedDate.toLocaleDateString(locals,full_options);return/*#__PURE__*/(0,jsx_runtime.jsx)("span",{children:formattedDate});};/* harmony default export */ var date = (DateStr);
+;// CONCATENATED MODULE: ./src/components/mdx_wrapper.tsx
+var components={Collapsible:collapsible,DateInput:date_input_wrapper,Figure:figure_wrapper,NumberInput:number_input_wrapper,Photo:photo_wrapper,PhotoInput:photo_input_wrapper,PrintSection:print_section,Select:select_wrapper,StringInput:string_input_wrapper,table:table_wrapper,TextInput:text_input_wrapper,USStateSelect:us_state_select_wrapper,DateStr:date,Tab:esm_Tab,Tabs:react_bootstrap_esm_Tabs};/**
+ * A component that wraps an MDX component instance in order to tie it to the data store
+ * and place it inside a bootstrap container
+ * 
+ * @param Component An MDX component instance
+ */var MdxWrapper=function MdxWrapper(_ref){var Component=_ref.Component;return/*#__PURE__*/(0,jsx_runtime.jsx)(StoreContext.Consumer,{children:function children(_ref2){var doc=_ref2.doc;return/*#__PURE__*/(0,jsx_runtime.jsx)("div",{className:"container",id:"mdx-container",children:doc?/*#__PURE__*/(0,jsx_runtime.jsx)(Component,{components:components,doc:doc}):null});}});};/* harmony default export */ var mdx_wrapper = (MdxWrapper);
 ;// CONCATENATED MODULE: ./src/templates/qa_hpwh.mdx
 /*@jsxRuntime automatic @jsxImportSource react*/
 
-
-
 function _createMdxContent(props) {
-  var _props$doc$volume_cal, _props$doc$volume_cal2, _props$doc$volume_cal3, _props$doc$volume_cal4, _props$doc$volume_cal5, _props$doc$volume_cal6, _props$doc$location, _props$doc$location2, _props$doc$location3, _props$doc$location4;
+  var _props$doc$volume_cal, _props$doc$volume_cal2, _props$doc$volume_cal3, _props$doc$volume_cal4, _props$doc$volume_cal5, _props$doc$volume_cal6, _props$doc$location, _props$doc$location2, _props$doc$location3, _props$doc$location4, _props$doc$volume_cal7, _props$doc$volume_cal8, _props$doc$volume_cal9;
   var _components = Object.assign({
       h1: "h1",
       h5: "h5",
@@ -62657,6 +62683,8 @@ function _createMdxContent(props) {
       h2: "h2",
       h3: "h3"
     }, props.components),
+    Tabs = _components.Tabs,
+    Tab = _components.Tab,
     DateInput = _components.DateInput,
     StringInput = _components.StringInput,
     USStateSelect = _components.USStateSelect,
@@ -62665,21 +62693,25 @@ function _createMdxContent(props) {
     NumberInput = _components.NumberInput,
     Figure = _components.Figure,
     PrintSection = _components.PrintSection,
+    DateStr = _components.DateStr,
     Photo = _components.Photo;
   if (!Collapsible) _missingMdxReference("Collapsible", true);
   if (!DateInput) _missingMdxReference("DateInput", true);
+  if (!DateStr) _missingMdxReference("DateStr", true);
   if (!Figure) _missingMdxReference("Figure", true);
   if (!NumberInput) _missingMdxReference("NumberInput", true);
   if (!Photo) _missingMdxReference("Photo", true);
   if (!PhotoInput) _missingMdxReference("PhotoInput", true);
   if (!PrintSection) _missingMdxReference("PrintSection", true);
   if (!StringInput) _missingMdxReference("StringInput", true);
+  if (!Tab) _missingMdxReference("Tab", true);
+  if (!Tabs) _missingMdxReference("Tabs", true);
   if (!USStateSelect) _missingMdxReference("USStateSelect", true);
   return (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, {
     children: [(0,jsx_runtime.jsx)(_components.h1, {
       children: "Heat Pump Water Heater Installation"
-    }), "\n", (0,jsx_runtime.jsxs)(react_bootstrap_esm_Tabs, {
-      children: [(0,jsx_runtime.jsxs)(esm_Tab, {
+    }), "\n", (0,jsx_runtime.jsxs)(Tabs, {
+      children: [(0,jsx_runtime.jsxs)(Tab, {
         eventKey: "qa_form",
         style: {
           paddingTop: "1rem"
@@ -62731,7 +62763,7 @@ function _createMdxContent(props) {
             }), "\n", (0,jsx_runtime.jsx)(_components.li, {
               children: "where there is access to a drain, drain line, or utility sink for condensate, and"
             }), "\n", (0,jsx_runtime.jsx)(_components.li, {
-              children: "in the 40°–90° F (4.4°–32.2° C) temperature range year-round"
+              children: "in the 40°–125° F (4.4°–51° C) temperature range year-round"
             }), "\n"]
           }), (0,jsx_runtime.jsx)(_components.p, {
             children: "It is possible to also meet the air volume requirement of the HPWH by installing it next\nto a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust\nof the HPWH to an adjacent space. It is also possible to install a condensate pump where\na drain located below the elevation of the HPWH’s condensate outlet is not available."
@@ -62790,6 +62822,8 @@ function _createMdxContent(props) {
               })
             })]
           })]
+        }), (0,jsx_runtime.jsx)(_components.hr, {}), (0,jsx_runtime.jsx)(_components.h5, {
+          children: "Old Water Heater"
         }), (0,jsx_runtime.jsx)(PhotoInput, {
           id: "old_nameplate_photo",
           label: "Old Water Heater Nameplate – Photo",
@@ -62941,7 +62975,7 @@ function _createMdxContent(props) {
             }), "\n"]
           })]
         })]
-      }), (0,jsx_runtime.jsx)(esm_Tab, {
+      }), (0,jsx_runtime.jsx)(Tab, {
         eventKey: "qa_report",
         style: {
           paddingTop: "1rem"
@@ -62958,11 +62992,8 @@ function _createMdxContent(props) {
           }), (0,jsx_runtime.jsxs)(_components.p, {
             children: ["Installer: ", props.doc.installer]
           }), (0,jsx_runtime.jsxs)(_components.p, {
-            children: ["Install Date: ", new Date(props.doc.install_date).toLocaleDateString('en-us', {
-              timeZone: 'UTC',
-              month: "long",
-              day: "numeric",
-              year: "numeric"
+            children: ["Install Date: ", (0,jsx_runtime.jsx)(DateStr, {
+              date: props.doc.install_date
             })]
           }), (0,jsx_runtime.jsx)(Photo, {
             id: "house_number_photo",
@@ -62978,12 +63009,18 @@ function _createMdxContent(props) {
             children: (0,jsx_runtime.jsx)(_components.p, {
               children: "This space will supply air to meet the air volume requirement for the HPWH."
             })
+          }), (0,jsx_runtime.jsxs)(_components.p, {
+            children: ["Volume of space supplying air to the HPWH = ", ((_props$doc$volume_cal7 = props.doc.volume_calculator) === null || _props$doc$volume_cal7 === void 0 ? void 0 : _props$doc$volume_cal7.length) * ((_props$doc$volume_cal8 = props.doc.volume_calculator) === null || _props$doc$volume_cal8 === void 0 ? void 0 : _props$doc$volume_cal8.width) * ((_props$doc$volume_cal9 = props.doc.volume_calculator) === null || _props$doc$volume_cal9 === void 0 ? void 0 : _props$doc$volume_cal9.height), " ft", (0,jsx_runtime.jsx)("sup", {
+              children: "3"
+            }), " (Must be at least 700 ft", (0,jsx_runtime.jsx)("sup", {
+              children: "3"
+            }), ")"]
           }), (0,jsx_runtime.jsx)(Photo, {
             id: "completed_installed_photo",
             label: "Completed Installation – Photo",
             required: true,
             children: (0,jsx_runtime.jsx)(_components.p, {
-              children: "This photo shows the completed HPWH installation including the exhaust,\ninsulated hot water line, pressure relief valuve discharge, and condensate."
+              children: "This photo shows the completed HPWH installation including the exhaust,\ninsulated hot water line, pressure relief valve discharge, and condensate."
             })
           }), (0,jsx_runtime.jsx)(Photo, {
             id: "nameplate_photo",
@@ -64578,12 +64615,12 @@ Navbar.displayName = 'Navbar';
 ;// CONCATENATED MODULE: ./src/components/root_layout.tsx
 /**
  * The highest-level visible component for the app
- * 
+ *
  * @param children The content for the app
  *
  * @remarks
  * Provides a banner that includes a menu
- */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"green"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_NavbarBrand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"gold",fontSize:"2rem"},children:"BASC QA Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
+ */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"green"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_NavbarBrand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"gold",fontSize:"2rem"},children:"Quality Install Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
 ;// CONCATENATED MODULE: ./node_modules/markdown-to-jsx/dist/index.modern.js
 
 
@@ -65486,13 +65523,112 @@ event.target.style.height="".concat(event.target.scrollHeight,"px");// Set the h
 var TemplateEditor=/*#__PURE__*/function(_Component){_inherits(TemplateEditor,_Component);var _super=_createSuper(TemplateEditor);function TemplateEditor(){_classCallCheck(this,TemplateEditor);return _super.apply(this,arguments);}_createClass(TemplateEditor,[{key:"render",value:function render(){return/*#__PURE__*/ (// Note: docId is guaranteed to be a string because this component is only
 // used when the :docId dynamic route segment is set.
 (0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Editor"}),/*#__PURE__*/(0,jsx_runtime.jsx)(editor_flexbox,{})]}));}}]);return TemplateEditor;}(react.Component);
+;// CONCATENATED MODULE: ./node_modules/react-bootstrap/esm/ListGroupItem.js
+
+
+
+var ListGroupItem_excluded = ["bsPrefix", "active", "disabled", "eventKey", "className", "variant", "action", "as"];
+
+
+
+
+
+
+
+
+var ListGroupItem = /*#__PURE__*/react.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+    active = _ref.active,
+    disabled = _ref.disabled,
+    eventKey = _ref.eventKey,
+    className = _ref.className,
+    variant = _ref.variant,
+    action = _ref.action,
+    as = _ref.as,
+    props = _objectWithoutProperties(_ref, ListGroupItem_excluded);
+  bsPrefix = useBootstrapPrefix(bsPrefix, 'list-group-item');
+  var _useNavItem = useNavItem(_objectSpread2({
+      key: makeEventKey(eventKey, props.href),
+      active: active
+    }, props)),
+    _useNavItem2 = slicedToArray_slicedToArray(_useNavItem, 2),
+    navItemProps = _useNavItem2[0],
+    meta = _useNavItem2[1];
+  var handleClick = useEventCallback_useEventCallback(function (event) {
+    if (disabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    navItemProps.onClick(event);
+  });
+  if (disabled && props.tabIndex === undefined) {
+    props.tabIndex = -1;
+    props['aria-disabled'] = true;
+  }
+
+  // eslint-disable-next-line no-nested-ternary
+  var Component = as || (action ? props.href ? 'a' : 'button' : 'div');
+   false ? 0 : void 0;
+  return /*#__PURE__*/(0,jsx_runtime.jsx)(Component, _objectSpread2(_objectSpread2(_objectSpread2({
+    ref: ref
+  }, props), navItemProps), {}, {
+    onClick: handleClick,
+    className: classnames_default()(className, bsPrefix, meta.isActive && 'active', disabled && 'disabled', variant && "".concat(bsPrefix, "-").concat(variant), action && "".concat(bsPrefix, "-action"))
+  }));
+});
+ListGroupItem.displayName = 'ListGroupItem';
+/* harmony default export */ var esm_ListGroupItem = (ListGroupItem);
+;// CONCATENATED MODULE: ./node_modules/react-bootstrap/esm/ListGroup.js
+
+
+var ListGroup_excluded = ["className", "bsPrefix", "variant", "horizontal", "numbered", "as"];
+
+
+
+
+
+
+
+
+var ListGroup = /*#__PURE__*/react.forwardRef(function (props, ref) {
+  var _useUncontrolled = useUncontrolled(props, {
+      activeKey: 'onSelect'
+    }),
+    className = _useUncontrolled.className,
+    initialBsPrefix = _useUncontrolled.bsPrefix,
+    variant = _useUncontrolled.variant,
+    horizontal = _useUncontrolled.horizontal,
+    numbered = _useUncontrolled.numbered,
+    _useUncontrolled$as = _useUncontrolled.as,
+    as = _useUncontrolled$as === void 0 ? 'div' : _useUncontrolled$as,
+    controlledProps = _objectWithoutProperties(_useUncontrolled, ListGroup_excluded);
+  var bsPrefix = useBootstrapPrefix(initialBsPrefix, 'list-group');
+  var horizontalVariant;
+  if (horizontal) {
+    horizontalVariant = horizontal === true ? 'horizontal' : "horizontal-".concat(horizontal);
+  }
+   false ? 0 : void 0;
+  return /*#__PURE__*/(0,jsx_runtime.jsx)(esm_Nav, _objectSpread2(_objectSpread2({
+    ref: ref
+  }, controlledProps), {}, {
+    as: as,
+    className: classnames_default()(className, bsPrefix, variant && "".concat(bsPrefix, "-").concat(variant), horizontalVariant && "".concat(bsPrefix, "-").concat(horizontalVariant), numbered && "".concat(bsPrefix, "-numbered"))
+  }));
+});
+ListGroup.displayName = 'ListGroup';
+/* harmony default export */ var esm_ListGroup = (Object.assign(ListGroup, {
+  Item: esm_ListGroupItem
+}));
+;// CONCATENATED MODULE: ./src/components/home.tsx
+var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("a",{href:"/app/".concat(key),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
 ;// CONCATENATED MODULE: ./src/App.tsx
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
+var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(home,{})})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));// React Router
-var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(BrowserRouter,{basename:"Remote-QA-Web-App",children:/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router})});}/* harmony default export */ var src_App = (App_App);
+var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
 ;// CONCATENATED MODULE: ./src/serviceWorkerRegistration.ts
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -65539,4 +65675,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.5c4048d6.js.map
+//# sourceMappingURL=main.c3133ec7.js.map
