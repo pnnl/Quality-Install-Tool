@@ -30202,7 +30202,7 @@ function router_createMemoryHistory(options) {
  * @see https://github.com/remix-run/history/tree/main/docs/api-reference.md#createbrowserhistory
  */
 
-function router_createBrowserHistory(options) {
+function createBrowserHistory(options) {
   if (options === void 0) {
     options = {};
   }
@@ -35700,7 +35700,7 @@ var _excluded = (/* unused pure expression or super */ null && (["onClick", "rel
 function createBrowserRouter(routes, opts) {
   return router_createRouter({
     basename: opts == null ? void 0 : opts.basename,
-    history: router_createBrowserHistory({
+    history: createBrowserHistory({
       window: opts == null ? void 0 : opts.window
     }),
     hydrationData: (opts == null ? void 0 : opts.hydrationData) || parseHydrationData(),
@@ -35759,7 +35759,7 @@ function BrowserRouter(_ref) {
   var basename = _ref.basename,
     children = _ref.children,
     window = _ref.window;
-  var historyRef = React.useRef();
+  var historyRef = react.useRef();
   if (historyRef.current == null) {
     historyRef.current = createBrowserHistory({
       window: window,
@@ -35767,17 +35767,17 @@ function BrowserRouter(_ref) {
     });
   }
   var history = historyRef.current;
-  var _React$useState = React.useState({
+  var _React$useState = react.useState({
       action: history.action,
       location: history.location
     }),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
+    _React$useState2 = slicedToArray_slicedToArray(_React$useState, 2),
     state = _React$useState2[0],
     setState = _React$useState2[1];
-  React.useLayoutEffect(function () {
+  react.useLayoutEffect(function () {
     return history.listen(setState);
   }, [history]);
-  return /*#__PURE__*/React.createElement(Router, {
+  return /*#__PURE__*/react.createElement(dist_Router, {
     basename: basename,
     children: children,
     location: state.location,
@@ -65492,7 +65492,7 @@ var TemplateEditor=/*#__PURE__*/function(_Component){_inherits(TemplateEditor,_C
 var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));// React Router
-var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
+var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(BrowserRouter,{basename:"Remote-QA-Web-App",children:/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router})});}/* harmony default export */ var src_App = (App_App);
 ;// CONCATENATED MODULE: ./src/serviceWorkerRegistration.ts
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -65539,4 +65539,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.be92f914.js.map
+//# sourceMappingURL=main.5c4048d6.js.map
