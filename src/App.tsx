@@ -21,7 +21,7 @@ const routes = [{
     element: <TemplateEditor />,
   },{
     path: "/app",
-    element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
+    element: <RootLayout><div>QA Type Selector View - Test</div></RootLayout>,
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
@@ -44,9 +44,7 @@ const router = createBrowserRouter(routes, { basename: "/Remote-QA-Web-App" });
 
 function App() {
   return (
-    <RouterProvider router={router}/>
-    
-    // <RootLayout><div>QA Type Selector View</div></RootLayout>
+    <RouterProvider router={router}/>    
   )
 }
 
