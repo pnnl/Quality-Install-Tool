@@ -21,9 +21,9 @@ const RootLayout: FC<RootLayoutProps> = ({children}) => {
   return (
     <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
       {/* TODO: Add a menu */}
-      <Navbar style={{backgroundColor: "green"}}>
+      <Navbar style={{backgroundColor: "blue"}}>
         <Container>
-          <NavbarBrand><span style={{color: "gold", fontSize: "2rem"}}>BASC QA Tool</span></NavbarBrand>
+          <NavbarBrand><span style={{color: "green", fontSize: "2rem"}}>BASC QA Tool</span></NavbarBrand>
         </Container>
       </Navbar>
       <div style={{paddingTop: "1rem"}}>

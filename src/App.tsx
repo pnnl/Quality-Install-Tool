@@ -21,7 +21,7 @@ const routes = [{
     element: <TemplateEditor />,
   },{
     path: "/app",
-    element: <RootLayout><div>QA Type Selector View - Test</div></RootLayout>,
+    element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
