@@ -64583,7 +64583,7 @@ Navbar.displayName = 'Navbar';
  *
  * @remarks
  * Provides a banner that includes a menu
- */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"green"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_NavbarBrand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"gold",fontSize:"2rem"},children:"BASC QA Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
+ */var RootLayout=function RootLayout(_ref){var children=_ref.children;return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{style:{marginLeft:"auto",marginRight:"auto",maxWidth:800,backgroundColor:"rgba(231, 231, 231)"},children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Navbar,{style:{backgroundColor:"blue"},children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_Container,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(esm_NavbarBrand,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("span",{style:{color:"green",fontSize:"2rem"},children:"BASC QA Tool"})})})}),/*#__PURE__*/(0,jsx_runtime.jsx)("div",{style:{paddingTop:"1rem"},children:children})]});};/* harmony default export */ var root_layout = (RootLayout);
 ;// CONCATENATED MODULE: ./node_modules/markdown-to-jsx/dist/index.modern.js
 
 
@@ -65490,7 +65490,7 @@ var TemplateEditor=/*#__PURE__*/function(_Component){_inherits(TemplateEditor,_C
 // import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View - Test"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
+var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));console.log("routes:",routes);// React Router
 var router=createBrowserRouter(routes,{basename:"/Remote-QA-Web-App"});function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
@@ -65540,4 +65540,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.495bf99a.js.map
+//# sourceMappingURL=main.db30efad.js.map
