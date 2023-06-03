@@ -29222,7 +29222,7 @@ module.exports = warning;
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	!function() {
-/******/ 		__webpack_require__.p = "/index.html/";
+/******/ 		__webpack_require__.p = "/Remote-QA-Web-App/";
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
@@ -65487,12 +65487,14 @@ var TemplateEditor=/*#__PURE__*/function(_Component){_inherits(TemplateEditor,_C
 // used when the :docId dynamic route segment is set.
 (0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Editor"}),/*#__PURE__*/(0,jsx_runtime.jsx)(editor_flexbox,{})]}));}}]);return TemplateEditor;}(react.Component);
 ;// CONCATENATED MODULE: ./src/App.tsx
-// Routes to be used by React Router, which handles all the
+// import { basename } from "path";
+console.log("app.tsx");// Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Navigate,{replace:true,to:"/app/qa_hpwh/job_1"})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
-element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));// React Router
-var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
+element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));console.log("routes:",routes);// React Router
+var router=createBrowserRouter(routes,{basename:"/Remote-QA-Web-App"});function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router})// <RootLayout><div>QA Type Selector View</div></RootLayout>
+;}/* harmony default export */ var src_App = (App_App);
 ;// CONCATENATED MODULE: ./src/serviceWorkerRegistration.ts
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -65506,10 +65508,10 @@ var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,
 var isLocalhost=Boolean(window.location.hostname==='localhost'||// [::1] is the IPv6 localhost address.
 window.location.hostname==='[::1]'||// 127.0.0.0/8 are considered localhost for IPv4.
 window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));function register(config){if( true&&'serviceWorker'in navigator){// The URL constructor is available in all browsers that support SW.
-var publicUrl=new URL("/index.html",window.location.href);if(publicUrl.origin!==window.location.origin){// Our service worker won't work if PUBLIC_URL is on a different origin
+var publicUrl=new URL("/Remote-QA-Web-App",window.location.href);if(publicUrl.origin!==window.location.origin){// Our service worker won't work if PUBLIC_URL is on a different origin
 // from what our page is served on. This might happen if a CDN is used to
 // serve assets; see https://github.com/facebook/create-react-app/issues/2374
-return;}window.addEventListener('load',function(){var swUrl="".concat("/index.html","/service-worker.js");if(isLocalhost){// This is running on localhost. Let's check if a service worker still exists or not.
+return;}window.addEventListener('load',function(){var swUrl="".concat("/Remote-QA-Web-App","/service-worker.js");if(isLocalhost){// This is running on localhost. Let's check if a service worker still exists or not.
 checkValidServiceWorker(swUrl,config);// Add some additional logging to localhost, pointing developers to the
 // service worker/PWA documentation.
 navigator.serviceWorker.ready.then(function(){console.log('This web app is being served cache-first by a service '+'worker. To learn more, visit https://cra.link/PWA');});}else{// Is not localhost. Just register service worker
@@ -65539,4 +65541,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.87a31344.js.map
+//# sourceMappingURL=main.9a540b4b.js.map
