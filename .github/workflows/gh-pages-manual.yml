@@ -1,0 +1,14 @@
+name: Build App and Deploy
+
+on:
+  push:
+    branches: [ gh-pages-deploy ]
+
+jobs:
+  deploy:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build application and push
+        run: |
+          yarn install
+          yarn deploy
