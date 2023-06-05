@@ -31002,7 +31002,7 @@ function getPathContributingMatches(matches) {
  * @private
  */
 
-function router_resolveTo(toArg, routePathnames, locationPathname, isPathRelative) {
+function resolveTo(toArg, routePathnames, locationPathname, isPathRelative) {
   if (isPathRelative === void 0) {
     isPathRelative = false;
   }
@@ -33676,7 +33676,7 @@ function _callLoaderOrAction() {
             routePathnames = getPathContributingMatches(activeMatches).map(function (match) {
               return match.pathnameBase;
             });
-            resolvedLocation = router_resolveTo(location, routePathnames, new URL(request.url).pathname);
+            resolvedLocation = resolveTo(location, routePathnames, new URL(request.url).pathname);
             router_invariant(router_createPath(resolvedLocation), "Unable to resolve redirect location: " + location); // Prepend the basename to the redirect location if we have one
 
             if (basename) {
@@ -34419,11 +34419,11 @@ if (false) {}
  * @see https://reactrouter.com/hooks/use-href
  */
 
-function dist_useHref(to, _temp) {
+function useHref(to, _temp) {
   var _ref8 = _temp === void 0 ? {} : _temp,
     relative = _ref8.relative;
-  !useInRouterContext() ?  false ? 0 : invariant(false) : void 0;
-  var _React$useContext = React.useContext(NavigationContext),
+  !useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0;
+  var _React$useContext = react.useContext(NavigationContext),
     basename = _React$useContext.basename,
     navigator = _React$useContext.navigator;
   var _useResolvedPath = dist_useResolvedPath(to, {
@@ -34438,7 +34438,7 @@ function dist_useHref(to, _temp) {
   // of a trailing slash on root links
 
   if (basename !== "/") {
-    joinedPathname = pathname === "/" ? basename : joinPaths([basename, pathname]);
+    joinedPathname = pathname === "/" ? basename : router_joinPaths([basename, pathname]);
   }
   return navigator.createHref({
     pathname: joinedPathname,
@@ -34507,22 +34507,22 @@ function useMatch(pattern) {
  * @see https://reactrouter.com/hooks/use-navigate
  */
 function dist_useNavigate() {
-  !useInRouterContext() ?  false ? 0 : invariant(false) : void 0;
-  var _React$useContext2 = React.useContext(NavigationContext),
+  !useInRouterContext() ?  false ? 0 : router_invariant(false) : void 0;
+  var _React$useContext2 = react.useContext(NavigationContext),
     basename = _React$useContext2.basename,
     navigator = _React$useContext2.navigator;
-  var _React$useContext3 = React.useContext(RouteContext),
+  var _React$useContext3 = react.useContext(RouteContext),
     matches = _React$useContext3.matches;
   var _useLocation2 = dist_useLocation(),
     locationPathname = _useLocation2.pathname;
-  var routePathnamesJson = JSON.stringify(UNSAFE_getPathContributingMatches(matches).map(function (match) {
+  var routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map(function (match) {
     return match.pathnameBase;
   }));
-  var activeRef = React.useRef(false);
-  React.useEffect(function () {
+  var activeRef = react.useRef(false);
+  react.useEffect(function () {
     activeRef.current = true;
   });
-  var navigate = React.useCallback(function (to, options) {
+  var navigate = react.useCallback(function (to, options) {
     if (options === void 0) {
       options = {};
     }
@@ -34538,7 +34538,7 @@ function dist_useNavigate() {
     // control over the presence of a trailing slash on root links
 
     if (basename !== "/") {
-      path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
+      path.pathname = path.pathname === "/" ? basename : router_joinPaths([basename, path.pathname]);
     }
     (!!options.replace ? navigator.replace : navigator.push)(path, options.state, options);
   }, [basename, navigator, routePathnamesJson, locationPathname]);
@@ -34592,14 +34592,14 @@ function useParams() {
 function dist_useResolvedPath(to, _temp2) {
   var _ref9 = _temp2 === void 0 ? {} : _temp2,
     relative = _ref9.relative;
-  var _React$useContext5 = React.useContext(RouteContext),
+  var _React$useContext5 = react.useContext(RouteContext),
     matches = _React$useContext5.matches;
   var _useLocation3 = dist_useLocation(),
     locationPathname = _useLocation3.pathname;
-  var routePathnamesJson = JSON.stringify(UNSAFE_getPathContributingMatches(matches).map(function (match) {
+  var routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map(function (match) {
     return match.pathnameBase;
   }));
-  return React.useMemo(function () {
+  return react.useMemo(function () {
     return resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === "path");
   }, [to, routePathnamesJson, locationPathname, relative]);
 }
@@ -35691,7 +35691,7 @@ function getFormSubmissionInfo(target, defaultAction, options) {
     formData: formData
   };
 }
-var _excluded = (/* unused pure expression or super */ null && (["onClick", "relative", "reloadDocument", "replace", "state", "target", "to", "preventScrollReset"])),
+var _excluded = ["onClick", "relative", "reloadDocument", "replace", "state", "target", "to", "preventScrollReset"],
   _excluded2 = (/* unused pure expression or super */ null && (["aria-current", "caseSensitive", "className", "end", "style", "to", "children"])),
   _excluded3 = (/* unused pure expression or super */ null && (["reloadDocument", "replace", "method", "action", "onSubmit", "fetcherKey", "routeId", "relative", "preventScrollReset"]));
 //#region Routers
@@ -35855,7 +35855,7 @@ var dist_isBrowser = typeof window !== "undefined" && typeof window.document !==
  * The public API for rendering a history-aware <a>.
  */
 
-var Link = /*#__PURE__*/(/* unused pure expression or super */ null && (React.forwardRef(function LinkWithRef(_ref4, ref) {
+var Link = /*#__PURE__*/react.forwardRef(function LinkWithRef(_ref4, ref) {
   var onClick = _ref4.onClick,
     relative = _ref4.relative,
     reloadDocument = _ref4.reloadDocument,
@@ -35899,14 +35899,14 @@ var Link = /*#__PURE__*/(/* unused pure expression or super */ null && (React.fo
   }
   return /*#__PURE__*/(
     // eslint-disable-next-line jsx-a11y/anchor-has-content
-    React.createElement("a", react_router_dom_dist_extends({}, rest, {
+    react.createElement("a", react_router_dom_dist_extends({}, rest, {
       href: absoluteHref || href,
       onClick: isExternal || reloadDocument ? onClick : handleClick,
       ref: ref,
       target: target
     }))
   );
-})));
+});
 if (false) {}
 /**
  * A <Link> wrapper that knows if it's "active" or not.
@@ -36080,17 +36080,17 @@ function useLinkClickHandler(to, _temp) {
     state = _ref9.state,
     preventScrollReset = _ref9.preventScrollReset,
     relative = _ref9.relative;
-  var navigate = useNavigate();
-  var location = useLocation();
-  var path = useResolvedPath(to, {
+  var navigate = dist_useNavigate();
+  var location = dist_useLocation();
+  var path = dist_useResolvedPath(to, {
     relative: relative
   });
-  return React.useCallback(function (event) {
+  return react.useCallback(function (event) {
     if (shouldProcessLinkClick(event, target)) {
       event.preventDefault(); // If the URL hasn't changed, a regular <a> will do a replace instead of
       // a push, so do the same here unless the replace prop is explicitly set
 
-      var replace = replaceProp !== undefined ? replaceProp : createPath(location) === createPath(path);
+      var replace = replaceProp !== undefined ? replaceProp : router_createPath(location) === router_createPath(path);
       navigate(to, {
         replace: replace,
         state: state,
@@ -65621,7 +65621,7 @@ ListGroup.displayName = 'ListGroup';
   Item: esm_ListGroupItem
 }));
 ;// CONCATENATED MODULE: ./src/components/home.tsx
-var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("a",{href:"/Remote-QA-Web-App/app/".concat(key),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
+var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/app/".concat(key,"/job1"),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
 ;// CONCATENATED MODULE: ./src/App.tsx
 // import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
@@ -65676,4 +65676,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.c949f54a.js.map
+//# sourceMappingURL=main.f31778a5.js.map
