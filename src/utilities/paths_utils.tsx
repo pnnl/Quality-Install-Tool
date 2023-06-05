@@ -10,6 +10,12 @@ import { isUndefined, toPath } from 'lodash'
  * @param separator String used to separate the path components (default: "-")
  * @returns 
  */
-export function pathToId(prefix: string = "path", path: string): string {
-  return [prefix, ...toPath(path)].join("-")
+export function pathToId(path: string, prefix?: string, separator?:string): string {
+  if (!prefix){
+    prefix = "path";
+  }
+  if(!separator){
+    separator = "-"
+  }
+  return [prefix, ...toPath(path)].join(separator)
 }
