@@ -13,12 +13,21 @@ const Home: FC = () => {
       </Link>
     </ListGroup.Item>
   ));
+
+  const editor = (
+    <ListGroup.Item key='template editor'>
+      <Link to={`/template_editor`}>
+      Template Editor
+      </Link>
+    </ListGroup.Item>
+  );
     
   return (
     <div>
       <h1>Choose a Document Type</h1>
       <ListGroup>
           {templates}
+          {editor}
       </ListGroup>
     </div>
   ) 
