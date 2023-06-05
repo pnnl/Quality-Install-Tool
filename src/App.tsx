@@ -14,15 +14,18 @@ import Home from "./components/home";
 console.log("app.tsx")
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-const routes = [{
-    path: "/",
-    element: <RootLayout><Home/></RootLayout>
-  },{
+const routes = [
+  {
     path: "/template_editor",
     element: <TemplateEditor />,
-  },{
+  },
+  {
     path: "/app",
     element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
+  },
+  {
+    path: "/",
+    element: <RootLayout><Home/></RootLayout>
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
