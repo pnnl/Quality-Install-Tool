@@ -47550,7 +47550,7 @@ function _objectWithoutProperties(source, excluded) {
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
 var classnames = __webpack_require__(694);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+;// CONCATENATED MODULE: ./node_modules/uncontrollable/node_modules/@babel/runtime/helpers/esm/extends.js
 function extends_extends() {
   extends_extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -47564,6 +47564,19 @@ function extends_extends() {
     return target;
   };
   return extends_extends.apply(this, arguments);
+}
+;// CONCATENATED MODULE: ./node_modules/uncontrollable/node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+function esm_objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+  return target;
 }
 // EXTERNAL MODULE: ./node_modules/invariant/browser.js
 var browser = __webpack_require__(176);
@@ -47656,7 +47669,7 @@ function useUncontrolled(props, config) {
     var _ref = result,
       defaultValue = _ref[defaultKey(fieldName)],
       propsValue = _ref[fieldName],
-      rest = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref, [defaultKey(fieldName), fieldName].map(hook_toPropertyKey));
+      rest = esm_objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_ref, [defaultKey(fieldName), fieldName].map(hook_toPropertyKey));
     var handlerName = config[fieldName];
     var _useUncontrolledProp = useUncontrolledProp(propsValue, defaultValue, props[handlerName]),
       value = _useUncontrolledProp[0],
@@ -48088,12 +48101,33 @@ function style(node, property) {
   node.style.cssText += ";" + css;
 }
 /* harmony default export */ var css = (style);
-;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
+;// CONCATENATED MODULE: ./node_modules/react-transition-group/node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+function helpers_esm_objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+;// CONCATENATED MODULE: ./node_modules/react-transition-group/node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+function setPrototypeOf_setPrototypeOf(o, p) {
+  setPrototypeOf_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+  return setPrototypeOf_setPrototypeOf(o, p);
+}
+;// CONCATENATED MODULE: ./node_modules/react-transition-group/node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
 
 function inheritsLoose_inheritsLoose(subClass, superClass) {
   subClass.prototype = Object.create(superClass.prototype);
   subClass.prototype.constructor = subClass;
-  _setPrototypeOf(subClass, superClass);
+  setPrototypeOf_setPrototypeOf(subClass, superClass);
 }
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
 var react_dom = __webpack_require__(164);
@@ -48464,7 +48498,7 @@ var Transition = /*#__PURE__*/function (_React$Component) {
       _onExiting = _this$props.onExiting,
       _onExited = _this$props.onExited,
       _nodeRef = _this$props.nodeRef,
-      childProps = objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
+      childProps = helpers_esm_objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
     return /*#__PURE__*/(
       // allows for nested Transitions
       react.createElement(TransitionGroupContext.Provider, {
@@ -65587,7 +65621,7 @@ ListGroup.displayName = 'ListGroup';
   Item: esm_ListGroupItem
 }));
 ;// CONCATENATED MODULE: ./src/components/home.tsx
-var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/app/".concat(key,"/job1"),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
+var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/app/".concat(key),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
 ;// CONCATENATED MODULE: ./src/App.tsx
 // import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
@@ -65642,4 +65676,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.6ed24daf.js.map
+//# sourceMappingURL=main.f92370db.js.map
