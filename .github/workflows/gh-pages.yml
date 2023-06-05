@@ -1,23 +1,19 @@
-name: Deploy to GitHub Pages
+name: Build App and Deploy
 
 on:
   push:
-    branches:
-      - main
-      # - gh-pages-deploy
+    branches: [ gh-pages-deploy ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-    - name: Build and deploy
-      uses: JamesIves/github-pages-deploy-action@3.7.1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
-        folder: build/
+      - uses: actions/checkout@v2
+      - name: Build application and push
+        run: |
+          yarn install
+          echo ${GITHUB_REPOSITORY}
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          yarn deploy -u "github-actions-bot <support+actions@github.com>"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

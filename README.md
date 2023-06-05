@@ -22,7 +22,8 @@ to serve the static files locally at `localhost:8080`. This
 serves `/build/index.html` for all routes (those without file extensions) and the 
 files within `./build/public/` for all other paths.
 
-
+## Deployment
+The QA webapp is hosted using github pages. When a commit is pushed to `main`, a github action is triggered which will build the widget and deploy the built artifact the branch `gh-pages`. This operation will overwrite the existing contents of the `gh-pages` branch. The target branch can be customized (see: https://github.com/tschaub/gh-pages)
 
 ## Short codes for the MDX templates 
 To avoid the template writter needing to import React components, a set of 
