@@ -1,18 +1,12 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { TfiTrash, TfiPlus, TfiPencil } from "react-icons/tfi";
+import { TfiTrash, TfiPlus, TfiPencil, TfiFilter } from "react-icons/tfi";
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
+import Dropdown from 'react-bootstrap/Dropdown';
 
 PouchDB.plugin(PouchDBUpsert);
-
-
-interface Job {
-  children: ReactNode;
-  dbName: string,
-  docId: string,
-}
 
 interface JobListProps {
   dbName: string;
@@ -20,30 +14,75 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const db = new PouchDB(dbName);
-  const [sortedJobs, setSortedJobs] = useState<string[]>([]);
+  const [sortedJobs, setSortedJobs] = useState<any[]>([]);
 
-  useEffect(() => {
-    const retrieveJobs = async () => {
-      try {
-        const result = await db.allDocs({ include_docs: true });
-        const sortedJobs = result.rows.map(row => row.id);
-        setSortedJobs(sortedJobs);
-      } catch (error) {
-        console.error('Error retrieving jobs:', error);
-      }
-    };
+  const retrieveJobs = async () => {
+    try {
+      const result = await db.allDocs({ include_docs: true });
+      //console.log(result.rows.map(row => row));
+      const sortedJobs = result.rows.map(row => row.doc?._id);
+      setSortedJobs(sortedJobs);
+    } catch (error) {
+      console.error('Error retrieving jobs:', error);
+    }
+  }
 
-    retrieveJobs();
-  });
+    useEffect(() => {
+      retrieveJobs();
+    }, []);
+
+
+  const sortByCreateTime =  async () =>{
+    try {
+      const result = await db.allDocs({ include_docs: true });
+      //console.log(result.rows.map(row => row));
+      let sortedJobs = result.rows.map(row => row.doc);
+      
+      sortedJobs = sortedJobs.sort((a, b) => {
+        if(a.meta_.created_at.toString() < b.meta_.created_at.toString()){
+          return 1;
+        } 
+        else if(a.meta_.created_at.toString() > b.meta_.created_at.toString()){
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      setSortedJobs(sortedJobs.map(doc => doc._id));
+    } catch (error) {
+      console.error('Error retrieving jobs:', error);
+    }
+  }
+
+  const sortByEditTime =  async () =>{
+    try {
+      const result = await db.allDocs({ include_docs: true });
+      //console.log(result.rows.map(row => row));
+      let sortedJobs = result.rows.map(row => row.doc);
+      
+      sortedJobs = sortedJobs.sort((a, b) => {
+        if(a.meta_.last_modified_at.toString() < b.meta_.last_modified_at.toString()){
+          return 1;
+        } 
+        else if(a.meta_.last_modified_at.toString() > b.meta_.last_modified_at.toString()){
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      setSortedJobs(sortedJobs.map(doc => doc._id));
+    } catch (error) {
+      console.error('Error retrieving jobs:', error);
+    }
+  }
+  
 
   const handleDeleteJob = async (jobId: string) => {
     try {
       const doc = await db.get(jobId);
       await db.remove(doc);
       // Refresh the job list after deletion
-      const result = await db.allDocs({ include_docs: true });
-      const sortedJobs = result.rows.map(row => row.id);
-      setSortedJobs(sortedJobs);
+      await retrieveJobs();
     } catch (error) {
       console.error('Error deleting job:', error);
     }
@@ -53,12 +92,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     // adding a new job here
     const name = prompt('Enter job name');
     if (name !== null) {
-      await db.putIfNotExists(name, {})
+      const date = new Date();
+      await db.putIfNotExists(name, {meta_:{created_at: date, last_modified_at: date}})
     }
     // Refresh the job list after adding the new job
-    const result = await db.allDocs({ include_docs: true });
-    const sortedJobs = result.rows.map(row => row.id);
-    setSortedJobs(sortedJobs);
+    await retrieveJobs();
   };
 
 
@@ -72,11 +110,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         await db.putIfNotExists(doc);
       }
       
-    
       // Refresh the job list after renaming
-      const result = await db.allDocs({ include_docs: true });
-      const sortedJobs = result.rows.map(row => row.id);
-      setSortedJobs(sortedJobs);
+      await retrieveJobs();
     } catch (error) {
       console.error('Error renaming job:', error);
     }
@@ -86,7 +121,23 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     <div className="container">
       <h1>{templatesConfig[dbName].title} Installation</h1>
       <ListGroup>
-      <Button onClick={handleAddJob}><TfiPlus/></Button>
+      <span className="icon-container">
+        <Button onClick={handleAddJob}><TfiPlus/></Button>
+      <Dropdown>
+        <Dropdown.Toggle variant="success">
+          <TfiFilter/>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={sortByCreateTime}>
+            Sort By Created Date
+          </Dropdown.Item>
+          <Dropdown.Item onClick={sortByEditTime}>
+            Sort By Edit Date
+          </Dropdown.Item> 
+        </Dropdown.Menu>
+      </Dropdown>
+          
+      </span>
         {sortedJobs.map(job => (
           <ListGroup.Item action href={`/app/${dbName}/${job}`}>
           {job}{' '}
@@ -97,8 +148,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           }}><TfiTrash/></Button>
           <Button onClick={event => {
             event.preventDefault();
-            handleRenameJob(job);}}><TfiPencil
-          /></Button>
+            handleRenameJob(job);}}><TfiPencil/>
+          </Button>
           </span>
         </ListGroup.Item>
       ))}
