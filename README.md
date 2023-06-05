@@ -24,6 +24,9 @@ files within `./build/public/` for all other paths.
 
 ## Deployment
 The QA webapp is hosted using github pages. When a commit is pushed to `main`, a github action is triggered which will build the widget and deploy the built artifact the branch `gh-pages`. This operation will overwrite the existing contents of the `gh-pages` branch. The target branch can be customized (see: https://github.com/tschaub/gh-pages)
+## linting and formatting
+The `yarn lint` command runs a linter to ensure all code is to the formatting standards for the repo before
+a pull request is made.
 
 ## Short codes for the MDX templates 
 To avoid the template writter needing to import React components, a set of 

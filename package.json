@@ -1,5 +1,5 @@
 {
-  "name": "qa-mdx-cra",
+  "name": "quality_install_tool",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://pnnl.github.io/Remote-QA-Web-App",
@@ -35,7 +35,7 @@
     "css-minimizer-webpack-plugin": "^3.2.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.0.1",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.1.1",
     "exif-js": "^2.3.0",
@@ -64,7 +64,6 @@
     "react": "^18.2.0",
     "react-app-polyfill": "^3.0.0",
     "react-bootstrap": "^2.7.2",
-    "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-refresh": "^0.11.0",
@@ -80,7 +79,7 @@
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.0.2",
     "terser-webpack-plugin": "^5.2.5",
-    "typescript": "^4.4.2",
+    "typescript": "*",
     "web-vitals": "^2.1.4",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.6.0",
@@ -100,8 +99,9 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "lint": "eslint --ext .js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
+    "start": "node scripts/start.js",
     "test": "node scripts/test.js",
     "predeploy": "yarn build && cp ./404.html ./build",
     "deploy": "gh-pages -d build"
@@ -124,7 +124,16 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.8",
+    "react-dev-utils": "^12.0.1"
+  },
   "jest": {
     "roots": [
       "<rootDir>/src"

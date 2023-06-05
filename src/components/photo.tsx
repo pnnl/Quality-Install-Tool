@@ -11,14 +11,13 @@ interface PhotoProps {
   id: string,
   label: string,
   metadata: PhotoMetadata,
-  notes: string,
   photo: Blob | undefined,
   required: boolean,
 }
 
 /**
  * A component that displays a photo, timestamp, geolocation, label, and description
- * 
+ *
  * @param description Content (most commonly markdown text) used to describe the photo
  * @param label Label for the component
  * @param metadata Photo metadata including timestamp and geolocation
@@ -28,9 +27,9 @@ interface PhotoProps {
  * photo attachement in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
  */
-const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, required}) => {
+const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) => {
 
-  return (photo || required) && (
+  return (photo || required)? (
     <>
       <Card style={{breakInside: 'avoid-page', marginBottom: '1rem'}}>
         <Card.Body>
@@ -51,11 +50,11 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude && metadata?.geolocation?.longitude ? 
+                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
+                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
                   <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
                   <span>Missing</span>
                 }
-                { metadata?.altitude && <><br /><span>Altitude: {metadata.altitude} meters</span></> }
               </small>
             </>
           ) : required && (
@@ -63,11 +62,9 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, notes, photo, requ
           )
         }
         </Card.Body>
-        {notes && 
-          <Card.Footer>{notes}</Card.Footer>}
       </Card>
     </>
-  );
+  ) : null;
 };
 
 export default Photo

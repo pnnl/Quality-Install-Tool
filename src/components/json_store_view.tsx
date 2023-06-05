@@ -19,26 +19,24 @@ interface JsonStoreViewProps {
  */
 const JsonStoreView: FC<JsonStoreViewProps> = ({dbName}) => {
   const {docId} = useParams();
-
-  return docId && (
+  return docId? (
     <StoreProvider dbName={dbName} docId={docId}>
       <StoreContext.Consumer>
-        {({attachments, doc}) => {
-            return (
-              <>
-                Document:
-                <pre>{JSON.stringify(doc, null, 2)}</pre>
+        {({ attachments, doc }) => {
+          return (
+            <>
+              Document:
+              <pre>{JSON.stringify(doc, null, 2)}</pre>
 
-                Attachments:
-                <pre>{JSON.stringify(attachments, null, 2)}</pre>
-              </>
-            )
-          }
-        }
+              Attachments:
+              <pre>{JSON.stringify(attachments, null, 2)}</pre>
+            </>
+          );
+        }}
       </StoreContext.Consumer>
     </StoreProvider>
-
-)}
+  ) : null
+}
 
 
 export default JsonStoreView

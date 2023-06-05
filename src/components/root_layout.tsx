@@ -11,7 +11,7 @@ interface RootLayoutProps {
 
 /**
  * The highest-level visible component for the app
- * 
+ *
  * @param children The content for the app
  *
  * @remarks
