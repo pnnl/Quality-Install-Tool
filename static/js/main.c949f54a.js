@@ -65621,12 +65621,12 @@ ListGroup.displayName = 'ListGroup';
   Item: esm_ListGroupItem
 }));
 ;// CONCATENATED MODULE: ./src/components/home.tsx
-var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("a",{href:"/app/".concat(key),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
+var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("a",{href:"/Remote-QA-Web-App/app/".concat(key),children:templates_config[key].title})},key);});return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup,{children:templates})]});};/* harmony default export */ var home = (Home);
 ;// CONCATENATED MODULE: ./src/App.tsx
 // import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(home,{})})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app/testtt",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
+var routes=[{path:"/",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(home,{})})},{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(TemplateEditor,{})},{path:"/app",element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:"QA Type Selector View"})})}].concat(Object.keys(templates_config).flatMap(function(dbName){return[{path:"/app/".concat(dbName),// TODO: Create a component that provides the functionality
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));console.log("routes:",routes);// React Router
 var router=createBrowserRouter(routes,{basename:"/Remote-QA-Web-App"});function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
@@ -65676,4 +65676,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.fa9e0f73.js.map
+//# sourceMappingURL=main.c949f54a.js.map
