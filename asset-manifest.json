@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/Remote-QA-Web-App/static/css/main.88df9b64.css",
-    "main.js": "/Remote-QA-Web-App/static/js/main.f92370db.js",
+    "main.js": "/Remote-QA-Web-App/static/js/main.c3416dbd.js",
     "static/js/787.f3f1eca8.chunk.js": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js",
     "service-worker.js": "/Remote-QA-Web-App/service-worker.js",
     "index.html": "/Remote-QA-Web-App/index.html",
     "main.88df9b64.css.map": "/Remote-QA-Web-App/static/css/main.88df9b64.css.map",
-    "main.f92370db.js.map": "/Remote-QA-Web-App/static/js/main.f92370db.js.map",
+    "main.c3416dbd.js.map": "/Remote-QA-Web-App/static/js/main.c3416dbd.js.map",
     "787.f3f1eca8.chunk.js.map": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.88df9b64.css",
-    "static/js/main.f92370db.js"
+    "static/js/main.c3416dbd.js"
   ]
 }
