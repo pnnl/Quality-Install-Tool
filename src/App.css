@@ -42,6 +42,10 @@ h1 {
   text-align: center;
 }
 
+
+/* Code below are added by PNNL */
+
+/* used in home.tsx */
 .flex-container {
   display: flex;
   flex-direction: row;
@@ -56,6 +60,7 @@ h1 {
   align-self: top;
 }
 
+/* used in jobs_view.tsx */
 .icon-container {
   float: right;
 }

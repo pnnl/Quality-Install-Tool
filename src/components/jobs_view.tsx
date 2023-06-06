@@ -15,13 +15,17 @@ interface JobListProps {
 const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const db = new PouchDB(dbName);
   const [sortedJobs, setSortedJobs] = useState<any[]>([]);
+  const [jobsList, setJobsList] = useState<any[]>([]);
 
   const retrieveJobs = async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
       //console.log(result.rows.map(row => row));
-      const sortedJobs = result.rows.map(row => row.doc?._id);
+      const jobsList = result.rows.map(row => row.doc);
+      setJobsList(jobsList);
+      let sortedJobs = jobsList.map(doc => doc._id)
       setSortedJobs(sortedJobs);
+      console.log(sortedJobs)
     } catch (error) {
       console.error('Error retrieving jobs:', error);
     }
@@ -32,13 +36,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     }, []);
 
 
-  const sortByCreateTime =  async () =>{
-    try {
-      const result = await db.allDocs({ include_docs: true });
-      //console.log(result.rows.map(row => row));
-      let sortedJobs = result.rows.map(row => row.doc);
-      
-      sortedJobs = sortedJobs.sort((a, b) => {
+  const sortByCreateTime = (jobsList: any[]) =>{
+      const sortedJobsByCreateTime = jobsList.sort((a, b) => {
         if(a.meta_.created_at.toString() < b.meta_.created_at.toString()){
           return 1;
         } 
@@ -48,19 +47,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           return 0;
         }
       });
-      setSortedJobs(sortedJobs.map(doc => doc._id));
-    } catch (error) {
-      console.error('Error retrieving jobs:', error);
-    }
+      setSortedJobs(sortedJobsByCreateTime.map(doc => doc._id));
   }
 
-  const sortByEditTime =  async () =>{
-    try {
-      const result = await db.allDocs({ include_docs: true });
-      //console.log(result.rows.map(row => row));
-      let sortedJobs = result.rows.map(row => row.doc);
-      
-      sortedJobs = sortedJobs.sort((a, b) => {
+  const sortByEditTime = (jobsList: any[]) =>{
+    const sortedJobsByEditTime = jobsList.sort((a, b) => {
         if(a.meta_.last_modified_at.toString() < b.meta_.last_modified_at.toString()){
           return 1;
         } 
@@ -70,10 +61,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           return 0;
         }
       });
-      setSortedJobs(sortedJobs.map(doc => doc._id));
-    } catch (error) {
-      console.error('Error retrieving jobs:', error);
-    }
+      setSortedJobs(sortedJobsByEditTime.map(doc => doc._id));
   }
   
 
@@ -128,10 +116,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           <TfiFilter/>
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item onClick={sortByCreateTime}>
+          <Dropdown.Item onClick={event => {sortByCreateTime(jobsList)}}>
             Sort By Created Date
           </Dropdown.Item>
-          <Dropdown.Item onClick={sortByEditTime}>
+          <Dropdown.Item onClick={event => {sortByEditTime(jobsList)}}>
             Sort By Edit Date
           </Dropdown.Item> 
         </Dropdown.Menu>
@@ -139,7 +127,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           
       </span>
         {sortedJobs.map(job => (
-          <ListGroup.Item action href={`/app/${dbName}/${job}`}>
+          <ListGroup.Item action href={`/app/${dbName}/${job._id}`}>
           {job}{' '}
           <span className="icon-container">
           <Button onClick={event => {
