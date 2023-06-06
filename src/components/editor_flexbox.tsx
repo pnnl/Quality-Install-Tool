@@ -1,6 +1,7 @@
 import Markdown from 'markdown-to-jsx';
 import React, { ChangeEvent, useState } from 'react';
 import StringInput from './string_input';
+import StringInputWrapper from './string_input_wrapper';
 import USStateSelectWrapper from './us_state_select_wrapper';
 import PhotoInput from './photo_input';
 import DateInputWrapper from './date_input_wrapper';
@@ -10,6 +11,9 @@ import NumberInputWrapper from './number_input_wrapper';
 import PrintSection from './print_section';
 import SelectWrapper from './select_wrapper';
 import TextInput from './text_input';
+import MdxTemplateView from '../components/mdx_template_view'
+import { StoreProvider } from './store';
+import MdxWrapper from './mdx_wrapper';
 
 //const md = `<StringInput label="Street Address" path="location.street_address" /><StringInput label="City" path="location.city" /><USStateSelect label="State" path="location.state" />`
 
@@ -42,40 +46,43 @@ const EditorFlexBox = () => {
           </div>
         </div>
         <div className="flex-child">
-            <p><Markdown children={text} options={{
-            overrides: {
-              StringInput: {
-                component: StringInput,
+          <StoreProvider dbName='template_editor' docId={'playground' as string}>
+            {/* <MdxWrapper Component={text} /> */}
+              <p><Markdown children={text} options={{
+              overrides: {
+                StringInput: {
+                  component: StringInputWrapper,
+                },
+                TextInput: {
+                  component: TextInput,
+                },
+                USStateSelect: {
+                  component: USStateSelectWrapper,
+                },
+                PhotoInput: {
+                  component: PhotoInput,
+                },
+                DataInput: {
+                  component: DateInputWrapper,
+                },
+                NumberInput: {
+                  component: NumberInputWrapper,
+                },
+                Collapse: {
+                  component: Collapsible,
+                },
+                PrintSection: {
+                  component: PrintSection,
+                },
+                Select: {
+                  component: SelectWrapper,
+                },
+                Figure: {
+                  component: FigureWrapper,
+                }
               },
-              TextInput: {
-                component: TextInput,
-              },
-              USStateSelect: {
-                component: USStateSelectWrapper,
-              },
-              PhotoInput: {
-                component: PhotoInput,
-              },
-              DataInput: {
-                component: DateInputWrapper,
-              },
-              NumberInput: {
-                component: NumberInputWrapper,
-              },
-              Collapse: {
-                component: Collapsible,
-              },
-              PrintSection: {
-                component: PrintSection,
-              },
-              Select: {
-                component: SelectWrapper,
-              },
-              Figure: {
-                component: FigureWrapper,
-              }
-            },
-        }}/></p>
+          }}/></p>
+          </StoreProvider>
         </div>
     </div>
   );
