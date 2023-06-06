@@ -54,7 +54,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * 
    * @param dbDoc The full object representation of the changed document from the database
    */
-  async function processDBDocChange(db: PouchDB.Database, dbDoc: PouchDB.Core.IdMeta & PouchDB.Core.GetMeta) {
+  async function processDBDocChange(db: PouchDB.Database, dbDoc: PouchDB.Core.IdMeta & PouchDB.Core.GetMeta & {_meta:{created_at:Date, last_modified_at:Date}}) {
     console.log('processDBDocChange2')
     console.log('dbDoc:', dbDoc)
     revisionRef.current = dbDoc._rev
@@ -64,6 +64,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     delete newDoc._attachments
     delete newDoc._id
     delete newDoc._rev
+
     setDoc(newDoc)
 
     // Update the attachments state as needed
@@ -128,7 +129,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
       try {
         // It looks like the type def for putIfNotExists does not match its implementation
         // TODO: Check this over carefully
-        const result = await db.putIfNotExists(docId, {})
+        const date = new Date()
+        const result = await db.putIfNotExists(docId, {meta_:{created_at: date, last_modified_at: date}})
         revisionRef.current = result.rev
       } catch(err) {
         console.error('DB initialization error:', err)
@@ -195,7 +197,16 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     // Persist the doc
     if (db) {
       db.upsert(docId, function upsertFn(dbDoc: any) {
-        return {...dbDoc, ...newDoc};
+        let result = {...dbDoc, ...newDoc};
+        if (!result.meta_) {
+          result.meta_ = {
+              created_at: new Date(),
+              last_modified_at: new Date()
+          };
+        } else {
+          result.meta_.last_modified_at = new Date();
+        }
+        return result;
       }).then(function (res) {
         revisionRef.current = res.rev
       }).catch(function (err : Error) {
