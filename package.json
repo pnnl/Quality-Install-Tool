@@ -2,7 +2,6 @@
   "name": "quality_install_tool",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://pnnl.github.io/Remote-QA-Web-App",
   "proxy": "https://localhost:5000",
   "dependencies": {
     "@babel/core": "^7.16.0",
