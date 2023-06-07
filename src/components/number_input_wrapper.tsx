@@ -30,7 +30,7 @@ interface NumberInputWrapperProps {
 const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=Number.NEGATIVE_INFINITY, max=Number.POSITIVE_INFINITY}) => {
 
   // Generate an id for the input
-  const id = pathToId("input", path)
+  const id = pathToId(path, "input")
 
   return (
     <StoreContext.Consumer>
