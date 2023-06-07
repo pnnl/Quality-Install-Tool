@@ -1,4 +1,4 @@
-name: Run Jest on commit
+name: Jest
 
 on:
   on:
