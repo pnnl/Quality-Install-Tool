@@ -23,7 +23,11 @@ serves `/build/index.html` for all routes (those without file extensions) and th
 files within `./build/public/` for all other paths.
 
 ## Deployment
-The QA webapp is hosted using github pages. When a commit is pushed to `main`, a github action is triggered which will build the widget and deploy the built artifact the branch `gh-pages`. This operation will overwrite the existing contents of the `gh-pages` branch. The target branch can be customized (see: https://github.com/tschaub/gh-pages)
+The QA webapp is hosted using github pages. When a commit is pushed to `main`, a github action is triggered which will build the widget and deploy the built artifact the branch `gh-pages`. This operation will overwrite the existing contents of the `gh-pages` branch. The target branch can be customized (see: https://github.com/tschaub/gh-pages).
+
+### A note about hosting on GH Pages
+Running the webapp on GH pages is different from a local environment in that the hosted app url includes a subdirectory (e.g. `Remote-QA-Web-App` in the case of `pnnl.github.io/Remote-QA-Web-App/`). To support this, the `PUBLIC_ENV` env var is to support proper app routing. If this repo is forked, `PUBLIC_ENV` will need to be set based on the name of the new repo that the app is hosted in. 
+
 ## linting and formatting
 The `yarn lint` command runs a linter to ensure all code is to the formatting standards for the repo before
 a pull request is made.
