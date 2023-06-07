@@ -100,8 +100,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js",
-    "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
-    "start": "node scripts/start.js",
+    "build": "PUBLIC_URL=Remote-QA-Web-App TSC_COMPILE_ON_ERROR=true node scripts/build.js",
+    "start": "PUBLIC_URL=Remote-QA-Web-App node scripts/start.js",
     "test": "node scripts/test.js",
     "predeploy": "yarn build && cp ./404.html ./build",
     "deploy": "gh-pages -d build"
