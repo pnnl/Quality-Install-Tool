@@ -29222,7 +29222,7 @@ module.exports = warning;
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	!function() {
-/******/ 		__webpack_require__.p = "/";
+/******/ 		__webpack_require__.p = "/Remote-QA-Web-App/";
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
@@ -65596,7 +65596,7 @@ var routes=[{path:"/template_editor",element:/*#__PURE__*/(0,jsx_runtime.jsx)(Te
 // to manage the documents in this DB
 element:/*#__PURE__*/(0,jsx_runtime.jsxs)(root_layout,{children:["(",/*#__PURE__*/(0,jsx_runtime.jsx)("div",{children:templates_config[dbName].title}),")"]})},{path:"/app/".concat(dbName,"/:docId"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(mdx_template_view,{dbName:dbName})})},{path:"/app/".concat(dbName,"/:docId/json"),element:/*#__PURE__*/(0,jsx_runtime.jsx)(root_layout,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(json_store_view,{dbName:dbName})})}];}));console.log("routes:",routes);// React Router
 // { basename: "/Remote-QA-Web-App" }
-var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
+console.log("PUBLIC_ENV:","/Remote-QA-Web-App");var router=createBrowserRouter(routes,{basename:"/Remote-QA-Web-App"});function App_App(){return/*#__PURE__*/(0,jsx_runtime.jsx)(RouterProvider,{router:router});}/* harmony default export */ var src_App = (App_App);
 ;// CONCATENATED MODULE: ./src/serviceWorkerRegistration.ts
 // This optional code is used to register a service worker.
 // register() is not called by default.
@@ -65610,10 +65610,10 @@ var router=createBrowserRouter(routes);function App_App(){return/*#__PURE__*/(0,
 var isLocalhost=Boolean(window.location.hostname==='localhost'||// [::1] is the IPv6 localhost address.
 window.location.hostname==='[::1]'||// 127.0.0.0/8 are considered localhost for IPv4.
 window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));function register(config){if( true&&'serviceWorker'in navigator){// The URL constructor is available in all browsers that support SW.
-var publicUrl=new URL("",window.location.href);if(publicUrl.origin!==window.location.origin){// Our service worker won't work if PUBLIC_URL is on a different origin
+var publicUrl=new URL("/Remote-QA-Web-App",window.location.href);if(publicUrl.origin!==window.location.origin){// Our service worker won't work if PUBLIC_URL is on a different origin
 // from what our page is served on. This might happen if a CDN is used to
 // serve assets; see https://github.com/facebook/create-react-app/issues/2374
-return;}window.addEventListener('load',function(){var swUrl="".concat("","/service-worker.js");if(isLocalhost){// This is running on localhost. Let's check if a service worker still exists or not.
+return;}window.addEventListener('load',function(){var swUrl="".concat("/Remote-QA-Web-App","/service-worker.js");if(isLocalhost){// This is running on localhost. Let's check if a service worker still exists or not.
 checkValidServiceWorker(swUrl,config);// Add some additional logging to localhost, pointing developers to the
 // service worker/PWA documentation.
 navigator.serviceWorker.ready.then(function(){console.log('This web app is being served cache-first by a service '+'worker. To learn more, visit https://cra.link/PWA');});}else{// Is not localhost. Just register service worker
@@ -65643,4 +65643,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.23e9f029.js.map
+//# sourceMappingURL=main.ecd8a11e.js.map
