@@ -1,6 +1,5 @@
 # BASC QA Tool
 
-
 ## An outline of the App startup process
 1. The server will serve the built (by webpack) version of `index.html` for any route.
 2. `index.html` will load `index.css` and `App.css`.
