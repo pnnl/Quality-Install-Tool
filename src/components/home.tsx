@@ -7,10 +7,8 @@ import { Link } from "react-router-dom";
 const Home: FC = () => {
     
   const templates = Object.keys(templatesConfig).map((key) => (
-    <ListGroup.Item key={key}>
-      <Link to={`/app/${key}/job1`}>
+    <ListGroup.Item key={key} action href={`/app/${key}`}>
       {templatesConfig[key as keyof typeof templatesConfig].title}
-      </Link>
     </ListGroup.Item>
   ));
 

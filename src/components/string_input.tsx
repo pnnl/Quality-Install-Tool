@@ -34,7 +34,7 @@ const StringInput: FC<StringInputProps> = ({id, label, updateValue, value, min, 
       setError('Input must be at least '+ min +' characters long');
     } else if (inputValue.length > max) {
       setError('Input must be at most '+ max +' characters long');
-    } else if (regexp.test(inputValue)){
+    } else if (!regexp.test(inputValue)){
       setError('Input must match' + regexp);
     } else {
       setError('');
