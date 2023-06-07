@@ -42,9 +42,9 @@ const routes = [
     element: <RootLayout><JsonStoreView dbName={dbName} /></RootLayout>,
   }
 ]))
-console.log("routes:",routes)
+
 // React Router
-const router = createBrowserRouter(routes, { basename: "/Remote-QA-Web-App" });
+const router = createBrowserRouter(routes, { basename: process.env.PUBLIC_URL });
 
 function App() {
   return (
