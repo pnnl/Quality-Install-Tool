@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.88df9b64.css",
-    "main.js": "/static/js/main.137adb2b.js",
-    "static/js/787.f3f1eca8.chunk.js": "/static/js/787.f3f1eca8.chunk.js",
-    "service-worker.js": "/service-worker.js",
-    "index.html": "/index.html",
-    "main.88df9b64.css.map": "/static/css/main.88df9b64.css.map",
-    "main.137adb2b.js.map": "/static/js/main.137adb2b.js.map",
-    "787.f3f1eca8.chunk.js.map": "/static/js/787.f3f1eca8.chunk.js.map"
+    "main.css": "Remote-QA-Web-App/static/css/main.88df9b64.css",
+    "main.js": "Remote-QA-Web-App/static/js/main.1d329e1b.js",
+    "static/js/787.f3f1eca8.chunk.js": "Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js",
+    "service-worker.js": "Remote-QA-Web-App/service-worker.js",
+    "index.html": "Remote-QA-Web-App/index.html",
+    "main.88df9b64.css.map": "Remote-QA-Web-App/static/css/main.88df9b64.css.map",
+    "main.1d329e1b.js.map": "Remote-QA-Web-App/static/js/main.1d329e1b.js.map",
+    "787.f3f1eca8.chunk.js.map": "Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.88df9b64.css",
-    "static/js/main.137adb2b.js"
+    "static/js/main.1d329e1b.js"
   ]
 }
