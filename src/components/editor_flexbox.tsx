@@ -1,9 +1,10 @@
 import Markdown from 'markdown-to-jsx';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import StringInput from './string_input';
 import StringInputWrapper from './string_input_wrapper';
 import USStateSelectWrapper from './us_state_select_wrapper';
 import PhotoInput from './photo_input';
+import PhotoInputWrapper from './photo_input_wrapper';
 import DateInputWrapper from './date_input_wrapper';
 import Collapsible from './collapsible';
 import FigureWrapper from './figure_wrapper';
@@ -14,20 +15,31 @@ import TextInput from './text_input';
 import MdxTemplateView from '../components/mdx_template_view'
 import { StoreProvider } from './store';
 import MdxWrapper from './mdx_wrapper';
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
+import {run} from '@mdx-js/mdx'
+import * as runtime from 'react/jsx-dev-runtime' // Development.
 
-//const md = `<StringInput label="Street Address" path="location.street_address" /><StringInput label="City" path="location.city" /><USStateSelect label="State" path="location.state" />`
+
+const md = `{1 + 1}`
 
 
 
 const EditorFlexBox = () => {
 
   const [text, setText] = useState('');
+  useEffect(() => {
+    const code = run(text, runtime)
+    console.log(code);
+  })
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
     event.target.style.height = 'auto'; // Reset the height to auto to adjust the size
     event.target.style.height = `${event.target.scrollHeight}px`; // Set the height to the scrollHeight to adjust the size
+    
   };
+
 
   return (
     <div className="flex-container">
@@ -47,9 +59,16 @@ const EditorFlexBox = () => {
         </div>
         <div className="flex-child">
           <StoreProvider dbName='template_editor' docId={'playground' as string}>
-            {/* <MdxWrapper Component={text} /> */}
-              <p><Markdown children={text} options={{
+            <Markdown children={md}></Markdown>
+            {/* <p><Markdown children={text} options={{
+              disableParsingRawHTML: true,
               overrides: {
+                Tab: {
+                  component: Tab,
+                },
+                Tabs: {
+                  component: Tabs,
+                },
                 StringInput: {
                   component: StringInputWrapper,
                 },
@@ -60,7 +79,7 @@ const EditorFlexBox = () => {
                   component: USStateSelectWrapper,
                 },
                 PhotoInput: {
-                  component: PhotoInput,
+                  component: PhotoInputWrapper,
                 },
                 DataInput: {
                   component: DateInputWrapper,
@@ -81,7 +100,7 @@ const EditorFlexBox = () => {
                   component: FigureWrapper,
                 }
               },
-          }}/></p>
+            }}/></p> */}
           </StoreProvider>
         </div>
     </div>
