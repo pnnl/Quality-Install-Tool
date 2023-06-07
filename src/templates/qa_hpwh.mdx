@@ -1,7 +1,3 @@
-
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
-
 # Heat Pump Water Heater Installation
 
 
@@ -240,7 +236,7 @@ Address: {props.doc.location?.street_address}, {props.doc.location?.city}, {prop
 
 Installer: {props.doc.installer}
 
-Install Date: {(new Date(props.doc.install_date)).toLocaleDateString('en-us', {timeZone: 'UTC', month:"long", day:"numeric", year:"numeric"})}
+Install Date: <DateStr date={props.doc.install_date}/>
 
 <Photo id="house_number_photo" label="House Number – Photo" required />
 

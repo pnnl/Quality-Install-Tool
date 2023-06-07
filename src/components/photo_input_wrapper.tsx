@@ -39,7 +39,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
         }
 
         return (
-          <PhotoInput children={children} id={id} label={label}
+          <PhotoInput children={children} label={label}
             metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
             photo={attachments[id]?.blob} upsertPhoto={upsertPhoto}
              />

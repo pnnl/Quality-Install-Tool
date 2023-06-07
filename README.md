@@ -22,7 +22,9 @@ to serve the static files locally at `localhost:8080`. This
 serves `/build/index.html` for all routes (those without file extensions) and the 
 files within `./build/public/` for all other paths.
 
-
+## linting and formatting
+The `yarn lint` command runs a linter to ensure all code is to the formatting standards for the repo before
+a pull request is made.
 
 ## Short codes for the MDX templates 
 To avoid the template writter needing to import React components, a set of 
