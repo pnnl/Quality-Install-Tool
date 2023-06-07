@@ -26,6 +26,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       const jobsList = result.rows.map(row => row.doc);
       setJobsList(jobsList);
       let sortedJobs = jobsList.map(doc => doc._id)
+
       setSortedJobs(sortedJobs);
       console.log(sortedJobs)
     } catch (error) {
@@ -129,8 +130,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           
       </span>
         {sortedJobs.map(job => (
-          <LinkContainer to={`/app/${dbName}/${job._id}`}>
-            <ListGroup.Item>
+          <LinkContainer to={`/app/${dbName}/${job}`}>
+            <ListGroup.Item action href={`/app/${dbName}/${job}`} key={job}>
               {job}{' '}
               <span className="icon-container">
               <Button onClick={event => {
