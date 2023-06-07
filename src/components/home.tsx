@@ -13,12 +13,6 @@ const Home: FC = () => {
         {templatesConfig[key as keyof typeof templatesConfig].title}
       </ListGroup.Item>
     </LinkContainer>
-
-    // <ListGroup.Item key={key}>
-    //   <Link to={`/app/${key}`}>
-    //     {templatesConfig[key as keyof typeof templatesConfig].title}
-    //   </Link>
-    // </ListGroup.Item>
   ));
     
   return (
