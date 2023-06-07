@@ -65587,7 +65587,7 @@ ListGroup.displayName = 'ListGroup';
   Item: esm_ListGroupItem
 }));
 ;// CONCATENATED MODULE: ./src/components/home.tsx
-var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/app/".concat(key,"/job1"),children:templates_config[key].title})},key);});var editor=/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/template_editor",children:"Template Editor"})},'template editor');return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Choose a Document Type"}),/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_ListGroup,{children:[templates,editor]})]});};/* harmony default export */ var home = (Home);
+var Home=function Home(){var templates=Object.keys(templates_config).map(function(key){return/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/app/".concat(key,"/job1"),children:templates_config[key].title})},key);});var editor=/*#__PURE__*/(0,jsx_runtime.jsx)(esm_ListGroup.Item,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(Link,{to:"/template_editor",children:"Template Editor"})},'template editor');return/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h1",{children:"Test"}),/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_ListGroup,{children:[templates,editor]})]});};/* harmony default export */ var home = (Home);
 ;// CONCATENATED MODULE: ./src/App.tsx
 // import { basename } from "path";
 console.log("app.tsx");// Routes to be used by React Router, which handles all the
@@ -65642,4 +65642,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.6e2be29b.js.map
+//# sourceMappingURL=main.e4184e18.js.map
