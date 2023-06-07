@@ -50006,7 +50006,7 @@ var Figure = createWithBsPrefix('figure', {
  * 
  * @param children Content (most commonly markdown text) to be used as the figure caption
  * @param src The image source passed to an underlying img tag
- */var FigureWrapper=function FigureWrapper(_ref){var children=_ref.children,src=_ref.src;return/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Figure,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FigureImage,{src:src}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FigureCaption,{children:children})]});};/* harmony default export */ var figure_wrapper = (FigureWrapper);
+ */var FigureWrapper=function FigureWrapper(_ref){var children=_ref.children,src=_ref.src;var formattedUrl="/Remote-QA-Web-App"+src;return/*#__PURE__*/(0,jsx_runtime.jsxs)(esm_Figure,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FigureImage,{src:formattedUrl}),/*#__PURE__*/(0,jsx_runtime.jsx)(esm_FigureCaption,{children:children})]});};/* harmony default export */ var figure_wrapper = (FigureWrapper);
 ;// CONCATENATED MODULE: ./node_modules/react-bootstrap/esm/InputGroupContext.js
 
 var InputGroupContext_context = /*#__PURE__*/react.createContext(null);
@@ -65643,4 +65643,4 @@ src_reportWebVitals();
 }();
 /******/ })()
 ;
-//# sourceMappingURL=main.ecd8a11e.js.map
+//# sourceMappingURL=main.a2f202c4.js.map
