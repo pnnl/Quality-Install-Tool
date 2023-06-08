@@ -9,7 +9,7 @@ const Home: FC = () => {
     
   const templates = Object.keys(templatesConfig).map((key) => (
     <LinkContainer to={`/app/${key}`}>
-      <ListGroup.Item key={key} action href={`/app/${key}`}>
+      <ListGroup.Item key={key} action={true}>
         {templatesConfig[key as keyof typeof templatesConfig].title}
       </ListGroup.Item>
     </LinkContainer>

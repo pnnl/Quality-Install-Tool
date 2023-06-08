@@ -131,7 +131,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       </span>
         {sortedJobs.map(job => (
           <LinkContainer to={`/app/${dbName}/${job}`}>
-            <ListGroup.Item action href={`/app/${dbName}/${job}`} key={job}>
+            <ListGroup.Item action={true} key={job}>
               {job}{' '}
               <span className="icon-container">
               <Button onClick={event => {
