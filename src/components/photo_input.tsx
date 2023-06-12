@@ -16,10 +16,11 @@ interface Photo {
 }
 
 interface PhotoInputProps {
+  id: string,
   children: React.ReactNode
   label: string
   metadata: PhotoMetaData
-  photos: Photo[]
+  photos: [{id: string, photo: Photo }]
   upsertPhoto: (photo: Photo) => void
   deletePhoto: (id: string) => void
   maxPhotos?: number
@@ -37,6 +38,7 @@ interface PhotoInputProps {
  * @param maxPhotos Maximum number of photos that can be added (default: 1)
  */
 const PhotoInput: FC<PhotoInputProps> = ({
+  id,
   children,
   label,
   photos,
@@ -44,7 +46,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
   deletePhoto,
   maxPhotos = 1,
 }) => {
-
   const handleFileupload = async (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const photo = event.target.files[0]
