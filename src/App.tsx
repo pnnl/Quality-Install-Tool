@@ -46,6 +46,7 @@ const routes = [
 
 // React Router
 const router = createBrowserRouter(routes, { basename: process.env.PUBLIC_URL });
+console.log('router basename:',process.env.PUBLIC_URL)
 
 function App() {
   return (
