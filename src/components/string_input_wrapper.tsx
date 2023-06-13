@@ -26,7 +26,7 @@ interface StringInputWrapperProps {
 const StringInputWrapper: FC<StringInputWrapperProps> = ({label, path, min=0, max=1024, regexp=/.*/}) => {
 
   // Generate an id for the input
-  const id = pathToId(path, "input")
+  const id = pathToId("input", path)
 
   return (
     <StoreContext.Consumer>

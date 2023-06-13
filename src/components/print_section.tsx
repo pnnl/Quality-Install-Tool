@@ -1,8 +1,8 @@
-import {useEffect, useId, useRef} from 'react'
+import {useId} from 'react'
 import print from 'print-js'
 import React, {FC, ReactNode} from 'react'
 import Button from 'react-bootstrap/Button'
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
+
 
 
 interface PrintSectionProps {
@@ -18,22 +18,20 @@ interface PrintSectionProps {
  */
 const PrintSection: FC<PrintSectionProps> = ({children, label}) => {
   const printContainerId = useId();
+  
   return (
     <>
       <Button onClick={event => print({
           maxWidth: 2000,
           printable: printContainerId,
           type: 'html', 
-          targetStyles: ["*"],
-          css: '/print.css',
+          targetStyles: ["*"]
         })} 
         variant="primary">
         {label}
       </Button>
       <div id={printContainerId}>
-        <div className='print-wrapper'>
-          {children}
-        </div>
+        {children}
       </div>
     </>
   )

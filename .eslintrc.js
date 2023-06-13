@@ -4,9 +4,10 @@ module.exports = {
     es2021: true
   },
   extends: [
-    'plugin:react/recommended',
-    'standard-with-typescript',
-    'prettier'
+    // 'plugin:react/recommended',
+    // 'standard-with-typescript',
+    // 'eslint:recomended',
+    // 'prettier'
   ],
   overrides: [
   ],

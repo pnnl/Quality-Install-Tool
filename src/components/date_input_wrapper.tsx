@@ -21,7 +21,7 @@ interface DateInputWrapperProps {
 const DateInputWrapper: FC<DateInputWrapperProps> = ({label, path}) => {
 
   // Generate an id for the input
-  const id = pathToId(path, "input")
+  const id = pathToId("input", path)
 
   return (
     <StoreContext.Consumer>
