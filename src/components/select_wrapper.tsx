@@ -23,7 +23,7 @@ interface SelectWrapperProps {
 const SelectWrapper: FC<SelectWrapperProps> = ({label, options, path}) => {
 
   // Generate an id for the input
-  const id = pathToId("input", path)
+  const id = pathToId(path, "input")
 
   return (
     <StoreContext.Consumer>
