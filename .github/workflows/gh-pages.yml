@@ -2,7 +2,7 @@ name: Build App and Deploy
 
 on:
   push:
-    branches: [ gh-pages-deploy ]
+    branches: [ gh-pages-code ]
 
 jobs:
   deploy:
