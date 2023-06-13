@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Remote-QA-Web-App/static/css/main.fd630494.css",
+    "main.js": "/Remote-QA-Web-App/static/js/main.5d7a9ce5.js",
+    "static/js/787.f3f1eca8.chunk.js": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js",
+    "service-worker.js": "/Remote-QA-Web-App/service-worker.js",
+    "index.html": "/Remote-QA-Web-App/index.html",
+    "main.fd630494.css.map": "/Remote-QA-Web-App/static/css/main.fd630494.css.map",
+    "main.5d7a9ce5.js.map": "/Remote-QA-Web-App/static/js/main.5d7a9ce5.js.map",
+    "787.f3f1eca8.chunk.js.map": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fd630494.css",
+    "static/js/main.5d7a9ce5.js"
+  ]
+}
