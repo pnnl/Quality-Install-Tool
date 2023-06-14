@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
-import Dropdown from 'react-bootstrap/Dropdown';
+import InputModal from './prompt_box';
 
 PouchDB.plugin(PouchDBUpsert);
 
@@ -16,16 +16,24 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const db = new PouchDB(dbName);
   const [sortedJobs, setSortedJobs] = useState<any[]>([]);
   const [jobsList, setJobsList] = useState<any[]>([]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [modalOpenMap, setModalOpenMap] = useState<{ [jobId: string]: boolean }>({});
+
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
 
   const retrieveJobs = async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
-      //console.log(result.rows.map(row => row));
       const jobsList = result.rows.map(row => row.doc);
       setJobsList(jobsList);
-      let sortedJobs = jobsList.map(doc => doc._id)
-      setSortedJobs(sortedJobs);
-      console.log(sortedJobs)
+      sortByEditTime(jobsList);
     } catch (error) {
       console.error('Error retrieving jobs:', error);
     }
@@ -76,9 +84,9 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     }
   };
 
-  const handleAddJob = async () => {
+  const handleAddJob = async (input : string) => {
     // adding a new job here
-    const name = prompt('Enter job name');
+    const name = input;
     if (name !== null) {
       const date = new Date();
       await db.putIfNotExists(name, {meta_:{created_at: date, last_modified_at: date}})
@@ -88,9 +96,9 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   };
 
 
-  const handleRenameJob = async (jobId: string) => {
+  const handleRenameJob = async (input : string, jobId: string) => {
     try {
-      const newName = prompt('Enter new name');
+      const newName = input;
       if (newName !== null) {
         const doc = await db.get(jobId);
         await db.remove(doc); // Remove the existing document
@@ -110,8 +118,13 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       <h1>{templatesConfig[dbName].title} Installation</h1>
       <ListGroup>
       <span className="icon-container">
-        <Button onClick={handleAddJob}><TfiPlus/></Button>
-      <Dropdown>
+        <Button onClick={openAddModal}><TfiPlus/></Button>
+        <InputModal
+          isOpen={isAddModalOpen}
+          closeModal={closeAddModal}
+          onSubmit={handleAddJob}
+        />
+      {/* <Dropdown>
         <Dropdown.Toggle variant="success">
           <TfiFilter/>
         </Dropdown.Toggle>
@@ -123,11 +136,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
             Sort By Edit Date
           </Dropdown.Item> 
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown> */}
           
       </span>
         {sortedJobs.map(job => (
-          <ListGroup.Item action href={`/app/${dbName}/${job._id}`}>
+          <ListGroup.Item action href={`/app/${dbName}/${job}`}>
           {job}{' '}
           <span className="icon-container">
           <Button onClick={event => {
@@ -135,9 +148,24 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
             handleDeleteJob(job);
           }}><TfiTrash/></Button>
           <Button onClick={event => {
-            event.preventDefault();
-            handleRenameJob(job);}}><TfiPencil/>
-          </Button>
+        event.preventDefault();
+        setModalOpenMap(prevState => ({
+          ...prevState,
+          [job]: true,
+        }));
+      }}>
+        <TfiPencil/>
+      </Button>
+          <InputModal
+        isOpen={modalOpenMap[job] || false}
+        closeModal={() => {
+          setModalOpenMap(prevState => ({
+            ...prevState,
+            [job]: false,
+          }));
+        }}
+        onSubmit={(input) => handleRenameJob(input, job)}
+      />
           </span>
         </ListGroup.Item>
       ))}

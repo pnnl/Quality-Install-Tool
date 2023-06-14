@@ -18,14 +18,14 @@ interface RootLayoutProps {
  */
 const RootLayout: FC<RootLayoutProps> = ({children}) => {
   return (
-    <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
+    <div style={{marginLeft: "auto", marginRight: "auto", height: "100vh", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
       {/* TODO: Add a menu */}
       <NavBar style={{backgroundColor: "green"}}>
         <Container>
           <NavBar.Brand><span style={{color: "gold", fontSize: "2rem"}}>Quality Install Tool</span></NavBar.Brand>
         </Container>
       </NavBar>
-      <div style={{paddingTop: "1rem"}}>
+      <div style={{paddingTop: "1rem", paddingBottom:"1rem"}}>
         {children}
       </div>
     </div>
