@@ -31,7 +31,7 @@ const InputModal: React.FC<InputModalProps> = ({
         onHide={closeModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Enter Name</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <input
