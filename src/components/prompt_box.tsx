@@ -1,3 +1,4 @@
+import { title } from 'process';
 import { SetStateAction, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
@@ -6,12 +7,14 @@ interface InputModalProps {
     isOpen: boolean;
     closeModal: () => void;
     onSubmit: (input: string) => void;
+    title: string
 }
 
 const InputModal: React.FC<InputModalProps> = ({
     isOpen,
     closeModal,
     onSubmit,
+    title,
   }) =>  {
     const [inputValue, setInputValue] = useState('');
 
@@ -31,7 +34,7 @@ const InputModal: React.FC<InputModalProps> = ({
         onHide={closeModal}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Enter Name</Modal.Title>
+          <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <input

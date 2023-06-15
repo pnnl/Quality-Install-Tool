@@ -123,8 +123,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           isOpen={isAddModalOpen}
           closeModal={closeAddModal}
           onSubmit={handleAddJob}
+          title="Enter a name"
         />
-      {/* <Dropdown>
+        <div style={{ marginBottom: '10px' }}></div>
+      {/* Sort feature, not used now but will be used in future. */ 
+      /* <Dropdown>
         <Dropdown.Toggle variant="success">
           <TfiFilter/>
         </Dropdown.Toggle>
@@ -143,10 +146,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           <ListGroup.Item action href={`/app/${dbName}/${job}`}>
           {job}{' '}
           <span className="icon-container">
-          <Button onClick={event => {
-            event.preventDefault();
-            handleDeleteJob(job);
-          }}><TfiTrash/></Button>
+          
           <Button onClick={event => {
         event.preventDefault();
         setModalOpenMap(prevState => ({
@@ -154,7 +154,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           [job]: true,
         }));
       }}>
-        <TfiPencil/>
+        Rename
       </Button>
           <InputModal
         isOpen={modalOpenMap[job] || false}
@@ -165,7 +165,12 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           }));
         }}
         onSubmit={(input) => handleRenameJob(input, job)}
+        title = "Enter a new name"
       />
+      <Button onClick={event => {
+            event.preventDefault();
+            handleDeleteJob(job);
+          }}><TfiTrash/></Button>
           </span>
         </ListGroup.Item>
       ))}
