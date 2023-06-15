@@ -1,5 +1,5 @@
 import ImageBlobReduce from 'image-blob-reduce'
-import React, {FC} from 'react'
+import React, {FC, useState} from 'react'
 
 import {StoreContext} from './store'
 import PhotoInput from './photo_input'
@@ -12,6 +12,12 @@ interface PhotoInputWrapperProps {
   children: React.ReactNode
   id: string,
   label: string
+}
+
+const filterAttachmentsByIdPrefix = (attachments, idPrefix: string)=> {
+  return Object.entries(attachments).filter((attachment: any) => attachment[0].startsWith(idPrefix)).map((attachment: any) => { 
+    return {id: attachment[0], data: attachment[1] }
+  })
 }
 
 /**
@@ -37,11 +43,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
             upsertAttachment(blob, photoId)
           })
         }
+        const photos = filterAttachmentsByIdPrefix(attachments, id)
 
         return (
           <PhotoInput children={children} label={label}
-            metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
-            photo={attachments[id]?.blob} upsertPhoto={upsertPhoto}
+            photos={photos} upsertPhoto={upsertPhoto} id={id}
              />
         )
       }}
