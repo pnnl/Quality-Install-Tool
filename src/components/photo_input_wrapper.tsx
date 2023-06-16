@@ -1,5 +1,7 @@
 import ImageBlobReduce from 'image-blob-reduce'
 import React, {FC} from 'react'
+import heicConvert from 'heic-convert'
+//import heic2jpg from 'heic-jpg'
 
 import {StoreContext} from './store'
 import PhotoInput from './photo_input'
@@ -29,15 +31,54 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
     <StoreContext.Consumer>
       {({attachments, upsertAttachment}) => {
 
-        const upsertPhoto = (file: Blob) => {
+        const upsertPhoto = (img_file: Blob) => {
+          
+
+          // Modification for Test Photo meta data module #45  - Start */ 
+          if (img_file.type == 'image/heic') 
+          {
+             /* heic2any(
+              { blob: img_file, toType: "image/jpeg", quality: 0.5, // cuts the quality and size by half
+              }).then (jpeg_blob => 
+                {
+                 //console.log(jpeg_blob)
+                  
+                 const blob = new Blob([jpeg_blob as BlobPart], {
+                  type: 'image/jpeg',
+                });
+                 console.log(blob)
+                 upsertAttachment(blob, id)
+                 console.log("hei2any input", img_file)
+                 console.log("hei2any output", jpeg_blob)
+                });*/
+
+                img_file.arrayBuffer().then (arrayBuffer => {
+              
+
+                  console.log("img_file arrayBuffer", arrayBuffer)
+                  const outputBuffer = heicConvert({buffer: arrayBuffer, format: 'JPEG' }).then (outputBuffer =>
+                    {
+                      const blob2 = new Blob([outputBuffer], {type: 'image/jpeg'});
+                      //upsertAttachment(blob, id)
+                      console.log("heicConvert input", img_file)
+                      console.log("heicConvert output", blob2)
+                    })
+  
+                });
+               
+             
+          }      
+          else
+          {
           // Reduce the image size as needed
           ImageBlobReduce()
-          .toBlob(file, {max: MAX_IMAGE_DIM})
+          .toBlob(img_file, {max: MAX_IMAGE_DIM})
           .then(blob => {
             upsertAttachment(blob, id)
           })
+          }
         }
-
+      
         return (
           <PhotoInput children={children} label={label}
             metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}

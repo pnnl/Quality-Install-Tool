@@ -45,6 +45,8 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
         },
         timestamp: DateTimeOriginal || null
       }
+      // Temp - remove later
+      console.log(fullMetaData)
       resolve(metadata)
 
     })

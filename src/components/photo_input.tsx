@@ -92,8 +92,10 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
             style={{display: 'none'}}
             type="file"
           /> */}
+        
+          {/*  modifying to accept *.heic and *.jpeg files - Test Photo meta data module #45 */} 
           <input
-            accept="image/jpeg"
+            accept="image/jpeg, image/heic"
             onChange={handleFileInputChange}
             ref={hiddenPhotoUploadInputRef}
             style={{display: 'none'}}
