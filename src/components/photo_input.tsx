@@ -2,8 +2,6 @@ import React, { ChangeEvent, FC, MouseEvent, useEffect, useRef, useState } from 
 import { Button, Card, Image } from 'react-bootstrap'
 import { TfiCamera, TfiGallery } from 'react-icons/tfi'
 import Collapsible from './collapsible'
-import GpsCoordStr from './gps_coord_str'
-import PhotoMetaData from '../types/photo_metadata.type'
 import ImageBlobReduce from 'image-blob-reduce'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
@@ -14,15 +12,15 @@ interface PhotoInputProps {
   label: string
   photos: {id: string, data: {blob: Blob, metadata: PhotoMetadata}}[]
   upsertPhoto: (file: Blob, id: string) => void
+  removeAttachment: (id: string) => void
   id: string
 }
 
-const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto, id }) => {
+const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto, removeAttachment, id }) => {
   const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
   const hiddenCameraInputRef = useRef<HTMLInputElement>(null)
   const photoIds = [photos.map((photo) => photo.id.split('~').pop())]
   const [photoId, setPhotoId] = useState(photoIds.length > 0 ? Math.max(photoIds as any as number) : 0)
-  console.log(photoId)
   const handlePhotoGalleryButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
@@ -47,6 +45,10 @@ const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto,
 
       event.target.value = ''
     }
+  }
+
+  const handleFileDelete = (id: string) => {
+    removeAttachment(id)
   }
 
   return (
@@ -86,7 +88,7 @@ const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto,
             <>
               {photos.map((photo, index) => (
                 <div key={index}>
-                  <Photo id={photo.id} photo={photo.data.blob} metadata={photo.data.metadata} label='' description='' required={false}/>
+                  <Photo id={photo.id} photo={photo.data.blob} metadata={photo.data.metadata} label='' description='' required={false} deletePhoto={handleFileDelete}/>
                 </div>
               ))}
             </>

@@ -14,7 +14,7 @@ interface PhotoInputWrapperProps {
   label: string
 }
 
-const filterAttachmentsByIdPrefix = (attachments, idPrefix: string)=> {
+const filterAttachmentsByIdPrefix = (attachments: { [s: string]: unknown } | ArrayLike<unknown>, idPrefix: string)=> {
   return Object.entries(attachments).filter((attachment: any) => attachment[0].startsWith(idPrefix)).map((attachment: any) => { 
     return {id: attachment[0], data: attachment[1] }
   })
@@ -33,7 +33,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
 
   return (
     <StoreContext.Consumer>
-      {({attachments, upsertAttachment}) => {
+      {({attachments, upsertAttachment, removeAttachment}) => {
 
         const upsertPhoto = (file: Blob, photoId: string) => {
           // Reduce the image size as needed
@@ -47,7 +47,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
 
         return (
           <PhotoInput children={children} label={label}
-            photos={photos} upsertPhoto={upsertPhoto} id={id}
+            photos={photos} upsertPhoto={upsertPhoto} id={id} removeAttachment={removeAttachment}
              />
         )
       }}
