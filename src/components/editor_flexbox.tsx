@@ -53,7 +53,7 @@ function generateTemplateView(templateText: string) {
     useDynamicImport: true
   })
 }
-const initialTemplateText = `
+let initialTemplateText = `
 <br></br>
 <PrintSection label="Print Report">
 <Collapsible header="Collapsible — Instructions">
@@ -78,10 +78,15 @@ Value:{props.doc.state_select?.value}
 `
 
 const EditorFlexBox: FC = () => {
+  let savedTemplateText = localStorage.getItem("templateText");
+  if (savedTemplateText) {
+    initialTemplateText = savedTemplateText;
+  }
   const [templateText, setTemplateText] = useState(initialTemplateText); // Declare a state variable...
   const [mdxComponent, setMdxComponent] = useState(generateTemplateView(initialTemplateText))
 
   const handleButtonClick = () => {
+    localStorage.setItem("templateText",templateText)
     setMdxComponent(generateTemplateView(templateText));
   }
 
