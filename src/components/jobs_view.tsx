@@ -5,6 +5,8 @@ import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
 import Dropdown from 'react-bootstrap/Dropdown';
+import {LinkContainer} from 'react-router-bootstrap'
+import { Link } from 'react-router-dom';
 
 PouchDB.plugin(PouchDBUpsert);
 
@@ -24,6 +26,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       const jobsList = result.rows.map(row => row.doc);
       setJobsList(jobsList);
       let sortedJobs = jobsList.map(doc => doc._id)
+
       setSortedJobs(sortedJobs);
       console.log(sortedJobs)
     } catch (error) {
@@ -127,19 +130,21 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           
       </span>
         {sortedJobs.map(job => (
-          <ListGroup.Item action href={`/app/${dbName}/${job._id}`}>
-          {job}{' '}
-          <span className="icon-container">
-          <Button onClick={event => {
-            event.preventDefault();
-            handleDeleteJob(job);
-          }}><TfiTrash/></Button>
-          <Button onClick={event => {
-            event.preventDefault();
-            handleRenameJob(job);}}><TfiPencil/>
-          </Button>
-          </span>
-        </ListGroup.Item>
+          <LinkContainer to={`/app/${dbName}/${job}`}>
+            <ListGroup.Item action={true} key={job}>
+              {job}{' '}
+              <span className="icon-container">
+              <Button onClick={event => {
+                event.preventDefault();
+                handleDeleteJob(job);
+              }}><TfiTrash/></Button>
+              <Button onClick={event => {
+                event.preventDefault();
+                handleRenameJob(job);}}><TfiPencil/>
+              </Button>
+              </span>
+            </ListGroup.Item>
+          </LinkContainer>
       ))}
     </ListGroup>
     
