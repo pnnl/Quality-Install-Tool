@@ -85,9 +85,9 @@ const EditorFlexBox: FC = () => {
     setMdxComponent(generateTemplateView(templateText));
   }
 
-  let Content = mdxComponent.default
+  let MDXContent = mdxComponent.default
   useEffect(() => {    
-    Content = mdxComponent.default
+    MDXContent = mdxComponent.default
   }, [])
 
   return (
@@ -113,7 +113,7 @@ const EditorFlexBox: FC = () => {
                 </div>
                 <div className="flex-child">
                   Content Code:
-                  <Content components={components} doc={doc}/>
+                  <MDXContent components={components} doc={doc}/>
                 </div>
               </div>          
             </div>
