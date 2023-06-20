@@ -43,7 +43,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
       <NavBar style={{ backgroundColor: "green" }}>
         {showBackButtonToHome && (
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/app" style={{ textDecoration: "none" }}>
             <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
           </Link>
         )}
