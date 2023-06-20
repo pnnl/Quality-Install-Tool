@@ -5,6 +5,8 @@ import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
 import InputModal from './prompt_box';
+import {LinkContainer} from 'react-router-bootstrap'
+import { Link } from 'react-router-dom';
 
 PouchDB.plugin(PouchDBUpsert);
 
