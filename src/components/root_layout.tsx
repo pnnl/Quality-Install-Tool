@@ -23,11 +23,12 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const location = useLocation();
   const [templateName, setTemplateName] = useState("");
   const [jobName, setJobName] = useState("");
+  const [showBackButtonToTemplate, setShowBackButtonToTemplate] = useState(false);
 
-  const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
-  const showBackButtonToTemplate = regexPatternToTemplate.test(location.pathname);
-  
   useEffect(() => {
+    const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
+    const show = regexPatternToTemplate.test(location.pathname);
+    setShowBackButtonToTemplate(show);
     const matchResult = location.pathname.match(regexPatternToTemplate);
     if (matchResult) {
       const [, capturedTemplateName, capturedJobName] = matchResult;
