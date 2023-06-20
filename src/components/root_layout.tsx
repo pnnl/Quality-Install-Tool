@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import { Button } from 'react-bootstrap';
 import { TfiAngleLeft } from "react-icons/tfi";
 
@@ -22,16 +22,16 @@ interface RootLayoutProps {
 const RootLayout: FC<RootLayoutProps> = ({children}) => {
 
   const location = useLocation();
+  const [templateName, setTemplateName] = useState("");
+  const [jobName, setJobName] = useState("");
 
   // Regular expression pattern to match the desired paths
-  const regexPatternToHome = /^(.*)\/app\/([^\/]+)$/;
-  const regexPatternToHPWH = /^(.*)\/app\/qa_hpwh\/([^\/]+)$/
-  const regexPatternToPlayGround = /^(.*)\/app\/playground\/([^\/]+)$/
+  const regexPatternToHome = /^(.*?)\/app\/([^\/]+)$/;
+  const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
 
   // Determine whether to show the back button based on the current route
   const showBackButtonToHome = regexPatternToHome.test(location.pathname);
-  const showBackButtonToHPWH = regexPatternToHPWH.test(location.pathname);
-  const showBackButtonToPlayGround = regexPatternToPlayGround.test(location.pathname);
+  const matchResult = location.pathname.match(regexPatternToTemplate);
   
   return (
     <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
