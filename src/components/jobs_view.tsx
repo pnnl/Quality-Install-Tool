@@ -4,7 +4,7 @@ import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
-import InputModal from './prompt_box';
+import StringInputModal from './string_input_modal';
 import {LinkContainer} from 'react-router-bootstrap'
 import { Link } from 'react-router-dom';
 
@@ -29,6 +29,24 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const closeAddModal = () => {
     setIsAddModalOpen(false);
   };
+
+  const validateInput = [
+    {
+      validator: (input:string) => {
+        // Restrict the character set to [a-zA-Z0-9-_#:>]
+        const regex = /^(?![\-_#:>])[a-zA-Z0-9\-_#:>]+$/;
+        return regex.test(input);
+      },
+      errorMsg: 'Invalid characters used. Please use only [a-zA-Z0-9-_#:>] and do not start with a speical character.',
+    },
+    {
+      validator: (input:string) => {
+        // Not allow a duplicate with an existing job name
+        return !sortedJobs.includes(input);
+      },
+      errorMsg: 'Job name already exists. Please choose a different name.',
+    },
+  ];
 
   const retrieveJobs = async () => {
     try {
@@ -121,10 +139,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       <ListGroup>
       <span className="icon-container">
         <Button onClick={openAddModal}><TfiPlus/></Button>
-        <InputModal
+        <StringInputModal
           isOpen={isAddModalOpen}
           closeModal={closeAddModal}
           onSubmit={handleAddJob}
+          validateInput={validateInput}
           title="Enter a name"
         />
         <div style={{ marginBottom: '10px' }}></div>
@@ -146,7 +165,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       </span>
         {sortedJobs.map(job => (
           <ListGroup.Item action href={`/app/${dbName}/${job}`}>
-          {job}{' '}
+              {job}{' '}
           <span className="icon-container">
           
           <Button onClick={event => {
@@ -158,7 +177,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
       }}>
         Rename
       </Button>
-          <InputModal
+          <StringInputModal
         isOpen={modalOpenMap[job] || false}
         closeModal={() => {
           setModalOpenMap(prevState => ({
@@ -167,6 +186,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           }));
         }}
         onSubmit={(input) => handleRenameJob(input, job)}
+        validateInput={validateInput}
         title = "Enter a new name"
       />
       <Button onClick={event => {
@@ -175,6 +195,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           }}><TfiTrash/></Button>
           </span>
         </ListGroup.Item>
+    
       ))}
     </ListGroup>
     
