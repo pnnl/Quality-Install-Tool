@@ -164,7 +164,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           
       </span>
         {sortedJobs.map(job => (
-          <ListGroup.Item action href={`/app/${dbName}/${job}`}>
+          <LinkContainer to={`/app/${dbName}/${job}`}>
+          <ListGroup.Item action={true} key={job}>
               {job}{' '}
           <span className="icon-container">
           
@@ -174,6 +175,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           ...prevState,
           [job]: true,
         }));
+        event.stopPropagation();
       }}>
         Rename
       </Button>
@@ -195,7 +197,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           }}><TfiTrash/></Button>
           </span>
         </ListGroup.Item>
-    
+        </LinkContainer>
       ))}
     </ListGroup>
     
