@@ -1,4 +1,4 @@
-import {FC, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 import { Button } from 'react-bootstrap';
 import { TfiAngleLeft } from "react-icons/tfi";
 
@@ -19,54 +19,49 @@ interface RootLayoutProps {
  * @remarks
  * Provides a banner that includes a menu
  */
-const RootLayout: FC<RootLayoutProps> = ({children}) => {
-
+const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const location = useLocation();
   const [templateName, setTemplateName] = useState("");
   const [jobName, setJobName] = useState("");
 
-  // Regular expression pattern to match the desired paths
-  const regexPatternToHome = /^(.*?)\/app\/([^\/]+)$/;
   const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
-
-  // Determine whether to show the back button based on the current route
-  const showBackButtonToHome = regexPatternToHome.test(location.pathname);
-  const matchResult = location.pathname.match(regexPatternToTemplate);
+  const showBackButtonToTemplate = regexPatternToTemplate.test(location.pathname);
   
+  useEffect(() => {
+    const matchResult = location.pathname.match(regexPatternToTemplate);
+    if (matchResult) {
+      const [, capturedTemplateName, capturedJobName] = matchResult;
+      setTemplateName(capturedTemplateName);
+      setJobName(capturedJobName);
+    }
+  }, [location.pathname]);
+
+  const showBackButtonToHome = /^.*?\/app\/[^\/]+$/.test(location.pathname);
+
   return (
-    <div style={{marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)"}}>
-      {/* TODO: Add a menu */}
-      <NavBar style={{backgroundColor: "green"}}>
+    <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
+      <NavBar style={{ backgroundColor: "green" }}>
         {showBackButtonToHome && (
           <Link to="/" style={{ textDecoration: "none" }}>
-            <TfiAngleLeft  style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }}/>
+            <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
           </Link>
         )}
-        {showBackButtonToHPWH && (
-          <Link to="/app/qa_hpwh" style={{ textDecoration: "none" }}>
-            <TfiAngleLeft  style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }}/>
+        {showBackButtonToTemplate && templateName && jobName && (
+          <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}>
+            <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
           </Link>
         )}
-        {showBackButtonToPlayGround && (
-          <Link to="/app/playground" style={{ textDecoration: "none" }}>
-            <TfiAngleLeft  style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }}/>
-          </Link>
-        )}
-        <Container
-        style = {{display: "flex",
-        alignItems: "center",
-        justifyContent: "center",}}>
-          <NavBar.Brand><span style={{
-            color: "gold", 
-            fontSize: "2rem", 
-          }}>Quality Install Tool</span></NavBar.Brand>
+        <Container style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <NavBar.Brand>
+            <span style={{ color: "gold", fontSize: "2rem" }}>Quality Install Tool</span>
+          </NavBar.Brand>
         </Container>
       </NavBar>
-      <div style={{paddingTop: "1rem"}}>
+      <div style={{ paddingTop: "1rem" }}>
         {children}
       </div>
     </div>
   );
 };
 
-export default RootLayout
+export default RootLayout;
