@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "BASC QI Tool",
+    "short_name": "QI Tool",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
