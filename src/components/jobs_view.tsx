@@ -164,40 +164,44 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           
       </span>
         {sortedJobs.map(job => (
+          <>
           <LinkContainer to={`/app/${dbName}/${job}`}>
           <ListGroup.Item action={true} key={job}>
               {job}{' '}
           <span className="icon-container">
           
           <Button onClick={event => {
-        event.preventDefault();
-        setModalOpenMap(prevState => ({
-          ...prevState,
-          [job]: true,
-        }));
-        event.stopPropagation();
-      }}>
-        Rename
-      </Button>
-          <StringInputModal
-        isOpen={modalOpenMap[job] || false}
-        closeModal={() => {
-          setModalOpenMap(prevState => ({
-            ...prevState,
-            [job]: false,
-          }));
-        }}
-        onSubmit={(input) => handleRenameJob(input, job)}
-        validateInput={validateInput}
-        title = "Enter a new name"
-      />
-      <Button onClick={event => {
-            event.preventDefault();
-            handleDeleteJob(job);
+              event.nativeEvent.stopPropagation();
+              event.preventDefault();
+              setModalOpenMap(prevState => ({
+                  ...prevState,
+                  [job]: true,
+              }));
+          }}>
+              Rename
+          </Button>
+          
+
+          <Button onClick={event => {
+              event.preventDefault();
+              handleDeleteJob(job);
           }}><TfiTrash/></Button>
           </span>
         </ListGroup.Item>
         </LinkContainer>
+        <StringInputModal
+              isOpen={modalOpenMap[job] || false}
+              closeModal={() => {
+              setModalOpenMap(prevState => ({
+                  ...prevState,
+                  [job]: false,
+              }));
+              }}
+              onSubmit={(input) => handleRenameJob(input, job)}
+              validateInput={validateInput}
+              title = "Enter a new name"
+          />
+        </>
       ))}
     </ListGroup>
     
