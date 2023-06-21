@@ -3,6 +3,7 @@ import React, {FC} from 'react'
 import {StoreContext} from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
+import { filterAttachmentsByIdPrefix } from './photo_input_wrapper'
 
 
 interface PhotoWrapperProps {
@@ -29,11 +30,22 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({children, id, label, required}) =>
   return (
     <StoreContext.Consumer>
       {({attachments, doc}) => {
+        const photos = filterAttachmentsByIdPrefix(attachments, id)
+        
         return (
-          <Photo description={children} id={id} label={label}
-            metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
-            photo={attachments[id]?.blob} required={required}
-          />
+          <div className='photo-display-container' style={{ display: 'flex', flexWrap: 'wrap' }}>
+            { photos.map((photo, index) => {
+              return(
+                <div key={index} style={{ flexBasis: photos.length % 2 === 1 && photos.length > 1 ? '50%' : '100%' }}>
+                  <Photo description={children} id={photo.id} label={label}
+                  metadata={photo.data.metadata}
+                  photo={photo.data.blob} required={required}
+                  />
+                </div>
+              )
+            })
+            }
+          </div>
         )
       }}
     </StoreContext.Consumer>

@@ -14,7 +14,7 @@ interface PhotoInputWrapperProps {
   label: string
 }
 
-const filterAttachmentsByIdPrefix = (attachments: { [s: string]: unknown } | ArrayLike<unknown>, idPrefix: string)=> {
+export const filterAttachmentsByIdPrefix = (attachments: { [s: string]: unknown } | ArrayLike<unknown>, idPrefix: string)=> {
   return Object.entries(attachments).filter((attachment: any) => attachment[0].startsWith(idPrefix)).map((attachment: any) => { 
     return {id: attachment[0], data: attachment[1] }
   })
