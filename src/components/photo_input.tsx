@@ -16,11 +16,13 @@ interface PhotoInputProps {
   id: string
 }
 
+
 const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto, removeAttachment, id }) => {
   const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
   const hiddenCameraInputRef = useRef<HTMLInputElement>(null)
   const photoIds = [photos.map((photo) => photo.id.split('~').pop())]
   const [photoId, setPhotoId] = useState(photoIds.length > 0 ? Math.max(photoIds as any as number) : 0)
+  const isMobile = /Mobi/.test(navigator.userAgent)
   const handlePhotoGalleryButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({ video: true })
@@ -59,7 +61,7 @@ const PhotoInput: FC<PhotoInputProps> = ({ children, label, photos, upsertPhoto,
             <Card.Text as="div">{children}</Card.Text>
           </Collapsible>
           <div>
-            {(
+            {( isMobile &&
               <Button onClick={handleCameraButtonClick} variant="outline-primary">
                 <TfiCamera /> Camera
               </Button>
