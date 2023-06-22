@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, Navigate, RouterProvider, useRouteError} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -19,6 +19,7 @@ const routes = [{
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
+    errorElement: <ErrorBoundary />
   },{
     path: "/app",
     element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
@@ -46,6 +47,14 @@ function App() {
   return (
     <RouterProvider router={router} />
   )
+}
+
+function ErrorBoundary() {
+  let error = useRouteError();
+  console.error(error);
+  // Uncaught ReferenceError: path is not defined
+  localStorage.removeItem("templateText");
+  return <div>Dang!</div>;
 }
 
 
