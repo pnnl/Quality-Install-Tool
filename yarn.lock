@@ -1728,10 +1728,10 @@
   dependencies:
     "@swc/helpers" "^0.4.14"
 
-"@remix-run/router@1.6.3":
-  version "1.6.3"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.6.3.tgz#8205baf6e17ef93be35bf62c37d2d594e9be0dad"
-  integrity sha512-EXJysQ7J3veRECd0kZFQwYYd5sJMcq2O/m60zu1W2l3oVQ9xtub8jTOtYRE0+M2iomyG/W3Ps7+vp2kna0C27Q==
+"@remix-run/router@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.0.tgz#550a8d5760b78efc5d60f62b5829b0f74c1fde81"
+  integrity sha512-Eu1V3kz3mV0wUpVTiFHuaT8UD1gj/0VnoFHQYX35xlslQUpe8CuYoKFn9d4WZFHm3yDywz6ALZuGdnUPKrNeAw==
 
 "@restart/hooks@^0.4.9":
   version "0.4.9"
@@ -2453,6 +2453,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-router-bootstrap@^0.26.0":
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/@types/react-router-bootstrap/-/react-router-bootstrap-0.26.0.tgz#bf9436be4e8d7152de089cfe23904729b2ebad11"
+  integrity sha512-x6sVsURU9GDlM9nosIyVLx//3uya4KAp99UoAz/K4De/UVo26s2mqG0GE/3iwPu8YJjDob1Dr3PgXTY5cKfLRA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-transition-group@^4.4.5":
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.6.tgz#18187bcda5281f8e10dfc48f0943e2fdf4f75e2e"
@@ -2485,6 +2492,11 @@
   version "0.16.3"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.3.tgz#cef09e3ec9af1d63d2a6cc5b383a737e24e6dcf5"
   integrity sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==
+
+"@types/semver@^7.3.12":
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.0.tgz#591c1ce3a702c45ee15f47a42ade72c2fd78978a"
+  integrity sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==
 
 "@types/send@*":
   version "0.17.1"
@@ -2612,6 +2624,14 @@
     "@typescript-eslint/typescript-estree" "5.59.11"
     debug "^4.3.4"
 
+"@typescript-eslint/scope-manager@5.52.0":
+  version "5.52.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.52.0.tgz#a993d89a0556ea16811db48eabd7c5b72dcb83d1"
+  integrity sha512-AR7sxxfBKiNV0FWBSARxM8DmNxrwgnYMPwmpkC1Pl1n+eT8/I2NAUPuwDy/FmDcC6F8pBfmOcaxcxRHspgOBMw==
+  dependencies:
+    "@typescript-eslint/types" "5.52.0"
+    "@typescript-eslint/visitor-keys" "5.52.0"
+
 "@typescript-eslint/scope-manager@5.59.11":
   version "5.59.11"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.59.11.tgz#5d131a67a19189c42598af9fb2ea1165252001ce"
@@ -2638,20 +2658,33 @@
     debug "^4.3.4"
     tsutils "^3.21.0"
 
+"@typescript-eslint/types@5.52.0":
+  version "5.52.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.52.0.tgz#19e9abc6afb5bd37a1a9bea877a1a836c0b3241b"
+  integrity sha512-oV7XU4CHYfBhk78fS7tkum+/Dpgsfi91IIDy7fjCyq2k6KB63M6gMC0YIvy+iABzmXThCRI6xpCEyVObBdWSDQ==
+
 "@typescript-eslint/types@5.59.11":
   version "5.59.11"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.59.11.tgz#1a9018fe3c565ba6969561f2a49f330cf1fe8db1"
   integrity sha512-epoN6R6tkvBYSc+cllrz+c2sOFWkbisJZWkOE+y3xHtvYaOE6Wk6B8e114McRJwFRjGvYdJwLXQH5c9osME/AA==
 
-"@typescript-eslint/types@5.59.5":
-  version "5.59.5"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.59.5.tgz#e63c5952532306d97c6ea432cee0981f6d2258c7"
-  integrity sha512-xkfRPHbqSH4Ggx4eHRIO/eGL8XL4Ysb4woL8c87YuAo8Md7AUjyWKa9YMwTL519SyDPrfEgKdewjkxNCVeJW7w==
-
 "@typescript-eslint/types@5.59.9":
   version "5.59.9"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.59.9.tgz#3b4e7ae63718ce1b966e0ae620adc4099a6dcc52"
   integrity sha512-uW8H5NRgTVneSVTfiCVffBb8AbwWSKg7qcA4Ot3JI3MPCJGsB4Db4BhvAODIIYE5mNj7Q+VJkK7JxmRhk2Lyjw==
+
+"@typescript-eslint/typescript-estree@5.52.0":
+  version "5.52.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.52.0.tgz#6408cb3c2ccc01c03c278cb201cf07e73347dfca"
+  integrity sha512-WeWnjanyEwt6+fVrSR0MYgEpUAuROxuAH516WPjUblIrClzYJj0kBbjdnbQXLpgAN8qbEuGywiQsXUVDiAoEuQ==
+  dependencies:
+    "@typescript-eslint/types" "5.52.0"
+    "@typescript-eslint/visitor-keys" "5.52.0"
+    debug "^4.3.4"
+    globby "^11.1.0"
+    is-glob "^4.0.3"
+    semver "^7.3.7"
+    tsutils "^3.21.0"
 
 "@typescript-eslint/typescript-estree@5.59.11":
   version "5.59.11"
@@ -2693,20 +2726,20 @@
     eslint-scope "^5.1.1"
     semver "^7.3.7"
 
+"@typescript-eslint/visitor-keys@5.52.0":
+  version "5.52.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.52.0.tgz#e38c971259f44f80cfe49d97dbffa38e3e75030f"
+  integrity sha512-qMwpw6SU5VHCPr99y274xhbm+PRViK/NATY6qzt+Et7+mThGuFSl/ompj2/hrBlRP/kq+BFdgagnOSgw9TB0eA==
+  dependencies:
+    "@typescript-eslint/types" "5.52.0"
+    eslint-visitor-keys "^3.3.0"
+
 "@typescript-eslint/visitor-keys@5.59.11":
   version "5.59.11"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.59.11.tgz#dca561ddad169dc27d62396d64f45b2d2c3ecc56"
   integrity sha512-KGYniTGG3AMTuKF9QBD7EIrvufkB6O6uX3knP73xbKLMpH+QRPcgnCxjWXSHjMRuOxFLovljqQgQpR0c7GvjoA==
   dependencies:
     "@typescript-eslint/types" "5.59.11"
-    eslint-visitor-keys "^3.3.0"
-
-"@typescript-eslint/visitor-keys@5.59.5":
-  version "5.59.5"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.59.5.tgz#ba5b8d6791a13cf9fea6716af1e7626434b29b9b"
-  integrity sha512-qL+Oz+dbeBRTeyJTIy0eniD3uvqU7x+y1QceBismZ41hd4aBSRh8UAw4pZP0+XzLuPZmx4raNMq/I+59W2lXKA==
-  dependencies:
-    "@typescript-eslint/types" "5.59.5"
     eslint-visitor-keys "^3.3.0"
 
 "@typescript-eslint/visitor-keys@5.59.9":
@@ -4837,7 +4870,7 @@ eslint-plugin-testing-library@^5.0.1:
   dependencies:
     "@typescript-eslint/utils" "^5.58.0"
 
-eslint-scope@5.1.1:
+eslint-scope@5.1.1, eslint-scope@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/eslint-scope/-/eslint-scope-5.1.1.tgz#e786e59a66cb92b3f6c1fb0d508aab174848f48c"
   integrity sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==
@@ -9178,7 +9211,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^4.0.0"
 
-prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -9369,20 +9402,27 @@ react-refresh@^0.11.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
   integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
-react-router-dom@^6.8.1:
-  version "6.12.1"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.12.1.tgz#601fe7eb493071a33dc7573a20b920324a834606"
-  integrity sha512-POIZN9UDKWwEDga054LvYr2KnK8V+0HR4Ny4Bwv8V7/FZCPxJgsCjYxXGxqxzHs7VBxMKZfgvtKhafuJkJSPGA==
+react-router-bootstrap@^0.26.2:
+  version "0.26.2"
+  resolved "https://registry.yarnpkg.com/react-router-bootstrap/-/react-router-bootstrap-0.26.2.tgz#255ffb662b77141624d89d97105ba4f93863e664"
+  integrity sha512-YlpI9Xi+Uqp6zFAUO8D/wu6P8mr1ujqq+0V5MhJG1kx9dr/95fAMoGk4J+/CsysOkwtR3tYSac4DDWmHwXvC8w==
   dependencies:
-    "@remix-run/router" "1.6.3"
-    react-router "6.12.1"
+    prop-types "^15.7.2"
 
-react-router@6.12.1:
-  version "6.12.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.12.1.tgz#9e4126aa1139ec6b5d347e19576d5e940cd46362"
-  integrity sha512-evd/GrKJOeOypD0JB9e1r7pQh2gWCsTbUfq059Wm1AFT/K2MNZuDo19lFtAgIhlBrp0MmpgpqtvZC7LPAs7vSw==
+react-router-dom@^6.12.0:
+  version "6.14.0"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.14.0.tgz#7ce6c3f73549e4d40216ba150253d3bf30812b33"
+  integrity sha512-YEwlApKwzMMMbGbhh+Q7MsloTldcwMgHxUY/1g0uA62+B1hZo2jsybCWIDCL8zvIDB1FA0pBKY9chHbZHt+2dQ==
   dependencies:
-    "@remix-run/router" "1.6.3"
+    "@remix-run/router" "1.7.0"
+    react-router "6.14.0"
+
+react-router@6.14.0:
+  version "6.14.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.14.0.tgz#1c3e8e922d934d43a253fd862c72c82167c0a7f1"
+  integrity sha512-OD+vkrcGbvlwkspUFDgMzsu1RXwdjNh83YgG/28lBnDzgslhCgxIqoExLlxsfTpIygp7fc+Hd3esloNwzkm2xA==
+  dependencies:
+    "@remix-run/router" "1.7.0"
 
 react-simple-code-editor@^0.13.1:
   version "0.13.1"
