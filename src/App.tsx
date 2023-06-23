@@ -19,7 +19,6 @@ const routes = [{
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
-    errorElement: <ErrorBoundary />
   },{
     path: "/app",
     element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
@@ -48,14 +47,5 @@ function App() {
     <RouterProvider router={router} />
   )
 }
-
-function ErrorBoundary() {
-  let error = useRouteError();
-  console.error(error);
-  // Uncaught ReferenceError: path is not defined
-  localStorage.removeItem("templateText");
-  return <div>Dang!</div>;
-}
-
 
 export default App;

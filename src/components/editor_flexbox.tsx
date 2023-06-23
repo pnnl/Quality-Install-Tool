@@ -1,29 +1,28 @@
-import {FC} from 'react'
-import { StoreContext, StoreProvider } from './store';
-import { useEffect, useState } from 'react';
-import {evaluateSync} from '@mdx-js/mdx'
-import {Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs} from 'react/jsx-runtime'
-import * as provider from '@mdx-js/react'
-import { useMDXComponents } from '@mdx-js/react';
-import Collapsible from './collapsible';
-import DateInputWrapper from './date_input_wrapper';
-import DateStr from './date';
-import FigureWrapper from './figure_wrapper';
-import NumberInputWrapper from './number_input_wrapper';
-import PhotoInput from './photo_input';
-import PhotoInputWrapper from './photo_input_wrapper';
-import PhotoWrapper from './photo_wrapper';
-import PrintSection from './print_section';
-import SelectWrapper from './select_wrapper';
-import StringInput from './string_input';
-import StringInputWrapper from './string_input_wrapper';
-import Tab from 'react-bootstrap/Tab'
-import TableWrapper from './table_wrapper';
-import Tabs from 'react-bootstrap/Tabs'
-import TextInput from './text_input';
-import TextInputWrapper from './text_input_wrapper';
-import USStateSelectWrapper from './us_state_select_wrapper';
-import ErrorBoundary from './error_boundary';
+import { FC } from "react";
+import { StoreContext, StoreProvider } from "./store";
+import { useEffect, useState } from "react";
+import { evaluateSync } from "@mdx-js/mdx";
+import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import * as provider from "@mdx-js/react";
+import { useMDXComponents } from "@mdx-js/react";
+import Collapsible from "./collapsible";
+import DateInputWrapper from "./date_input_wrapper";
+import DateStr from "./date";
+import FigureWrapper from "./figure_wrapper";
+import NumberInputWrapper from "./number_input_wrapper";
+import PhotoInput from "./photo_input";
+import PhotoInputWrapper from "./photo_input_wrapper";
+import PhotoWrapper from "./photo_wrapper";
+import PrintSection from "./print_section";
+import SelectWrapper from "./select_wrapper";
+import StringInput from "./string_input";
+import StringInputWrapper from "./string_input_wrapper";
+import Tab from "react-bootstrap/Tab";
+import TableWrapper from "./table_wrapper";
+import Tabs from "react-bootstrap/Tabs";
+import TextInput from "./text_input";
+import TextInputWrapper from "./text_input_wrapper";
+import USStateSelectWrapper from "./us_state_select_wrapper";
 
 const components = {
   Collapsible,
@@ -41,7 +40,7 @@ const components = {
   DateStr: DateStr,
   Tab: Tab,
   Tabs: Tabs,
-};  
+};
 
 let initialTemplateText = `
 <br></br>
@@ -65,7 +64,7 @@ Value:{props.doc.string_input?.value}
 </PrintSection>
 <USStateSelect label="State" path="state_select.value" />
 Value:{props.doc.state_select?.value}
-`
+`;
 
 function generateTemplateView(templateText: string) {
   let MDXContent;
@@ -76,95 +75,71 @@ function generateTemplateView(templateText: string) {
       jsx: _jsx,
       jsxs: _jsxs,
       useMDXComponents,
-      useDynamicImport: true
-    })
-  } catch{
-    // Error generating MDX, so use initial text (it should compile successfully)
-    console.log("Error in generation method. Using Fallback")
-    MDXContent = evaluateSync(initialTemplateText, {
-      ...provider,
-      Fragment: _Fragment,
-      jsx: _jsx,
-      jsxs: _jsxs,
-      useMDXComponents,
-      useDynamicImport: true
-    })
+      useDynamicImport: true,
+    });
+  } catch {
+    throw new Error("Error evaluating MDX");
   }
-  return MDXContent
+  return MDXContent;
 }
 
-const MDXContentFallback = generateTemplateView('Syntax Error in MDX');
-let MDXContent = MDXContentFallback.default;
 const EditorFlexBox: FC = () => {
   let savedTemplateText = localStorage.getItem("templateText");
   if (savedTemplateText) {
     initialTemplateText = savedTemplateText;
   }
+
   const [templateText, setTemplateText] = useState(initialTemplateText);
-  const [mdxComponent, setMdxComponent] = useState(generateTemplateView(initialTemplateText))
+  const [hasError, setHasError] = useState(false);
+  const [mdxComponent, setMdxComponent] = useState(generateTemplateView(initialTemplateText));
   const handleButtonClick = () => {
-    // Example to see what happens if I throw an arbitrary error
-    try {
-      throw new Error("error")
-    } catch (e) {
-      console.log("error caught")
-    }
-    localStorage.setItem("templateText",templateText)
     try {
       setMdxComponent(generateTemplateView(templateText));
-    } catch{
-      // Error generating MDX, so use initial text (it should compile successfully)
-      console.log("error generating mdx")
-      setMdxComponent(generateTemplateView(initialTemplateText));
-    }
-  }
-  try {
-    MDXContent = mdxComponent.default
-  } catch {
-    // Error saving the generated MDX component, so use fallback component (it should exist and be renderable)
-    console.log('using fallback content')
-    MDXContent = MDXContentFallback.default
-  }
-  useEffect(() => {    
-    try {
-      MDXContent = mdxComponent.default
+      localStorage.setItem("templateText", templateText);
+      setHasError(false);
     } catch {
-      // Error saving the generated MDX component, so use fallback component (it should exist and be renderable)
-      console.log('using fallback content')
-      MDXContent = MDXContentFallback.default
-    }  
-  }, [])
+      setHasError(true);
+    }
+  };
+
+  let MDXContent = mdxComponent.default;
+  useEffect(() => {
+    MDXContent = mdxComponent.default;
+  }, []);
 
   return (
-    <StoreProvider dbName='template_editor' docId={'playground' as string}>
+    <StoreProvider dbName="template_editor" docId={"playground" as string}>
       <StoreContext.Consumer>
-        {({doc}) => {
+        {({ doc }) => {
           return (
-            <ErrorBoundary>
             <div className="container" id="mdx-container">
               <div className="flex-container">
                 <div className="flex-child">
-                  <div className="form-group" >
-                    <label>textarea</label>
+                  <div className="form-group">
                     <textarea
-                      className='form-control'
+                      className="form-control"
                       id="message"
                       name="message"
                       value={templateText}
-                      onChange={e => setTemplateText(e.target.value)} 
-                      style={{ height: 'auto', minHeight: '700px', resize: 'none' }}
+                      onChange={(e) => setTemplateText(e.target.value)}
+                      style={{
+                        height: "auto",
+                        minHeight: "700px",
+                        resize: "none",
+                      }}
                     />
-                      <button type="submit" onClick={handleButtonClick}>Submit</button>
+                    <button type="submit" onClick={handleButtonClick}>
+                      Submit
+                    </button>
                   </div>
                 </div>
                 <div className="flex-child">
-                  Content Code:
-                  <MDXContent components={components} doc={doc}/>}
+                  {!hasError && <MDXContent components={components} doc={doc} />}
+                  {hasError && <b>There was an issue rendering the provided template. Please correct any syntax error and resubmit.</b>}
                 </div>
-              </div>          
+              </div>
             </div>
-            </ErrorBoundary>
-          )
+          );
         }}
       </StoreContext.Consumer>
     </StoreProvider>
