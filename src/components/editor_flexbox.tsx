@@ -108,7 +108,7 @@ const EditorFlexBox: FC = () => {
   }, []);
 
   return (
-    <StoreProvider dbName="template_editor" docId={"playground" as string}>
+    <StoreProvider dbName="template_editor" docId={"playground"}>
       <StoreContext.Consumer>
         {({ doc }) => {
           return (
