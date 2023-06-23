@@ -32,7 +32,7 @@ const Home: FC = () => {
     
   return (
     <div>
-      <h1>Choose a Document Type</h1>
+      <h1>Hello World</h1>
       <ListGroup>
           {templates}
           {editor}
