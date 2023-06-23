@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Remote-QA-Web-App/static/css/main.fd630494.css",
-    "main.js": "/Remote-QA-Web-App/static/js/main.8cc66b20.js",
-    "static/js/787.f3f1eca8.chunk.js": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js",
-    "service-worker.js": "/Remote-QA-Web-App/service-worker.js",
-    "index.html": "/Remote-QA-Web-App/index.html",
-    "main.fd630494.css.map": "/Remote-QA-Web-App/static/css/main.fd630494.css.map",
-    "main.8cc66b20.js.map": "/Remote-QA-Web-App/static/js/main.8cc66b20.js.map",
-    "787.f3f1eca8.chunk.js.map": "/Remote-QA-Web-App/static/js/787.f3f1eca8.chunk.js.map"
+    "main.css": "/Quality-Install-Tool/static/css/main.fd630494.css",
+    "main.js": "/Quality-Install-Tool/static/js/main.e0df2ccb.js",
+    "static/js/787.f3f1eca8.chunk.js": "/Quality-Install-Tool/static/js/787.f3f1eca8.chunk.js",
+    "service-worker.js": "/Quality-Install-Tool/service-worker.js",
+    "index.html": "/Quality-Install-Tool/index.html",
+    "main.fd630494.css.map": "/Quality-Install-Tool/static/css/main.fd630494.css.map",
+    "main.e0df2ccb.js.map": "/Quality-Install-Tool/static/js/main.e0df2ccb.js.map",
+    "787.f3f1eca8.chunk.js.map": "/Quality-Install-Tool/static/js/787.f3f1eca8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fd630494.css",
-    "static/js/main.8cc66b20.js"
+    "static/js/main.e0df2ccb.js"
   ]
 }
