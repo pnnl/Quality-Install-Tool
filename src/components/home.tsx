@@ -1,11 +1,19 @@
-import {Component, FC} from 'react'
+import {Component, FC, useEffect} from 'react'
 import templatesConfig from '../templates/templates_config'
 import { ListGroup } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap'
+import { useNavigate } from "react-router-dom";
 
 const Home: FC = () => {
-    
+  const path = window.location.href.split('?')[1];
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(path){
+      navigate(path);
+    }
+  }, []);
+
   const templates = Object.keys(templatesConfig).map((key) => (
     <LinkContainer to={`/app/${key}`}>
       <ListGroup.Item key={key} action={true}>
