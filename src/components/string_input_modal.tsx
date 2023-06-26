@@ -1,4 +1,3 @@
-import { title } from 'process';
 import { SetStateAction, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
@@ -11,12 +10,19 @@ interface StringInputModalProps {
     closeModal: () => void;
     onSubmit: (input: string) => void;
     validateInput: Array<{ validator: (input: string) => boolean; errorMsg: string }>;
-    title: string
+    title: string;
+    okButton: string;
 }
 
 /**
  * Modal component with an input field for string input.
- * @param {StringInputModalProps} props - The component props.
+ * @param {StringInputModalProps} props - The component receives several props:
+ *    isOpen: Indicates whether the modal is open or closed.
+ *    closeModal: A callback function to close the modal.
+ *    onSubmit: A callback function invoked when the user submits the input value.
+ *    validateInput: An array of validators for input validation. Each validator is an object with a validator function and an errorMsg string.
+ *    title: The title of the modal.
+ *    okButton: the message appare for the ok button.
  * @returns {JSX.Element} The rendered component.
  */
 const StringInputModal: React.FC<StringInputModalProps> = ({
@@ -25,6 +31,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     onSubmit,
     validateInput,
     title,
+    okButton,
   }) =>  {
     const [inputValue, setInputValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -49,18 +56,21 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
       setInputValue(event.target.value);
       setErrorMessage('');
     };
+
+    const modalTitle = title || 'Default Title';
+    const modalOK = okButton || 'OK';
   
     return (
       <Modal show={isOpen} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{title}</Modal.Title>
+          <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input type="text" value={inputValue} onChange={handleInputChange} />
           {errorMessage && <div className="error">{errorMessage}</div>}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={handleSubmit}>{modalOK}</Button>
         </Modal.Footer>
       </Modal>
     );

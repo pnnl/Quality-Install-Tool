@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { TfiTrash, TfiPlus, TfiPencil, TfiFilter } from "react-icons/tfi";
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
-import { Button, ListGroup } from 'react-bootstrap';
+import { Button, ListGroup, Modal } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
 import StringInputModal from './string_input_modal';
 import {LinkContainer} from 'react-router-bootstrap'
@@ -20,6 +20,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const [jobsList, setJobsList] = useState<any[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [modalOpenMap, setModalOpenMap] = useState<{ [jobId: string]: boolean }>({});
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [selectedJobToDelete, setSelectedJobToDelete] = useState('');
 
 
   const openAddModal = () => {
@@ -34,10 +36,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     {
       validator: (input:string) => {
         // Restrict the character set to [a-zA-Z0-9-_#:>]
-        const regex = /^(?![\-_#:>])[a-zA-Z0-9\-_#:>]+$/;
+        const regex = /^[a-zA-Z0-9#][a-zA-Z0-9#, -]{0,62}[a-zA-Z0-9#]$/;
         return regex.test(input);
       },
-      errorMsg: 'Invalid characters used. Please use only [a-zA-Z0-9-_#:>] and do not start with a speical character.',
+      errorMsg: 'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, #, dash, comma, and single spaces between other characters',
     },
     {
       validator: (input:string) => {
@@ -93,15 +95,28 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   }
   
 
-  const handleDeleteJob = async (jobId: string) => {
+  const handleDeleteJob = (jobId: string) => {
+    setSelectedJobToDelete(jobId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteJob = async () => {
     try {
-      const doc = await db.get(jobId);
+      const doc = await db.get(selectedJobToDelete);
       await db.remove(doc);
       // Refresh the job list after deletion
       await retrieveJobs();
     } catch (error) {
       console.error('Error deleting job:', error);
+    } finally {
+      setShowDeleteConfirmation(false);
+      setSelectedJobToDelete('');
     }
+  };
+
+  const cancelDeleteJob = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedJobToDelete('');
   };
 
   const handleAddJob = async (input : string) => {
@@ -136,15 +151,17 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   return (
     <div className="container">
       <h1>{templatesConfig[dbName].title} Installation</h1>
-      <ListGroup>
-      <span className="icon-container">
+      
+      <h3>Projects List</h3>
+      
         <Button onClick={openAddModal}><TfiPlus/></Button>
         <StringInputModal
           isOpen={isAddModalOpen}
           closeModal={closeAddModal}
           onSubmit={handleAddJob}
           validateInput={validateInput}
-          title="Enter a name"
+          title="Enter new project name"
+          okButton='Add'
         />
         <div style={{ marginBottom: '10px' }}></div>
       {/* Sort feature, not used now but will be used in future. */ 
@@ -162,7 +179,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         </Dropdown.Menu>
       </Dropdown> */}
           
-      </span>
+      
+      <ListGroup>
         {sortedJobs.map(job => (
           <>
           <LinkContainer to={`/app/${dbName}/${job}`}>
@@ -171,7 +189,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           <span className="icon-container">
           
           <Button onClick={event => {
-              event.nativeEvent.stopPropagation();
+              event.stopPropagation();
               event.preventDefault();
               setModalOpenMap(prevState => ({
                   ...prevState,
@@ -181,11 +199,17 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
               Rename
           </Button>
           
-
-          <Button onClick={event => {
+          <Button
+            onClick={(event) => {
+              event.stopPropagation();
               event.preventDefault();
               handleDeleteJob(job);
-          }}><TfiTrash/></Button>
+            }}
+            variant="danger"
+          >
+            <TfiTrash />
+          </Button>
+
           </span>
         </ListGroup.Item>
         </LinkContainer>
@@ -199,8 +223,27 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
               }}
               onSubmit={(input) => handleRenameJob(input, job)}
               validateInput={validateInput}
-              title = "Enter a new name"
+              title = "Enter new project name"
+              okButton='Rename'
           />
+
+        <Modal show={showDeleteConfirmation} onHide={cancelDeleteJob}>
+          <Modal.Header closeButton>
+              <Modal.Title>Confirm Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              Are you sure you want to permanently delete {selectedJobToDelete}? This action cannot be undone.
+          </Modal.Body>
+          <Modal.Footer>
+              <Button variant="secondary" onClick={cancelDeleteJob}>
+                  Cancel
+              </Button>
+              <Button variant="danger" onClick={confirmDeleteJob}>
+                  Permanently Delete
+              </Button>
+          </Modal.Footer>
+        </Modal>
+
         </>
       ))}
     </ListGroup>
