@@ -68,3 +68,9 @@ h1 {
 .icon-container > * {
   margin-left: 5px;
 }
+
+/* headding */
+h3 {
+  font-size: 1.3rem; 
+  text-align: center;
+}

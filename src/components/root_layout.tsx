@@ -19,6 +19,7 @@ interface RootLayoutProps {
  * @remarks
  * Provides a banner that includes a menu
  */
+
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const location = useLocation();
 
@@ -46,7 +47,7 @@ useEffect(() => {
 }, [location.pathname]);
 
 return (
-  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
+  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", height: "100vh" }}>
     <NavBar style={{ backgroundColor: "green" }}>
       {/* Conditional rendering of a back button */}
       {showBackButton && (
@@ -64,7 +65,7 @@ return (
         </NavBar.Brand>
       </Container>
     </NavBar>
-    <div style={{ paddingTop: "1rem" }}>
+    <div style={{ paddingTop: "1rem" ,paddingBottom:"1rem"}}>
       {children}
     </div>
   </div>
