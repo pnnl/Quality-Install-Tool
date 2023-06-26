@@ -1,5 +1,4 @@
 import {FC, useEffect, useState} from 'react'
-import { Button } from 'react-bootstrap';
 import { TfiAngleLeft } from "react-icons/tfi";
 
 import Container from 'react-bootstrap/Container';
@@ -21,33 +20,34 @@ interface RootLayoutProps {
  */
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   const location = useLocation();
-  const [templateName, setTemplateName] = useState("");
-  const [jobName, setJobName] = useState("");
-  const [showBackButtonToTemplate, setShowBackButtonToTemplate] = useState(false);
 
-  useEffect(() => {
-    const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
-    const show = regexPatternToTemplate.test(location.pathname);
-    setShowBackButtonToTemplate(show);
-    const matchResult = location.pathname.match(regexPatternToTemplate);
-    if (matchResult) {
-      const [, capturedTemplateName, capturedJobName] = matchResult;
-      setTemplateName(capturedTemplateName);
-      setJobName(capturedJobName);
+// templateName set to anything other than the empty string while showBackButton is true indicates that the 
+// back button should send the user to the JobsView. templateName set to the empty string while 
+// showBackButton is true indicates that the back button should send the user to the Home screen.
+const [templateName, setTemplateName] = useState("");
+const [showBackButton, setShowBackButton] = useState(false);
+
+useEffect(() => {
+    const regexPatternToHome = /^.*?\/app\/[^\/]+$/;
+    const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/[^\/]+$/;
+    const toTemplateMatchResult = location.pathname.match(regexPatternToTemplate);
+    if (toTemplateMatchResult) {
+        setShowBackButton(true);
+        const [, capturedTemplateName] = toTemplateMatchResult;
+        setTemplateName(capturedTemplateName);
+    } else if (regexPatternToHome.test(location.pathname)) {
+        setShowBackButton(true);
+        setTemplateName("");
+    } else {
+        setShowBackButton(false);
+        setTemplateName("");
     }
-  }, [location.pathname]);
-
-  const showBackButtonToHome = /^.*?\/app\/[^\/]+$/.test(location.pathname);
+}, [location.pathname]);
 
   return (
     <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
       <NavBar style={{ backgroundColor: "green" }}>
-        {showBackButtonToHome && (
-          <Link to="/app" style={{ textDecoration: "none" }}>
-            <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
-          </Link>
-        )}
-        {showBackButtonToTemplate && templateName && jobName && (
+        {showBackButton && (
           <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}>
             <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
           </Link>
