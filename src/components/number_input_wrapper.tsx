@@ -30,6 +30,7 @@ interface NumberInputWrapperProps {
 const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=Number.NEGATIVE_INFINITY, max=Number.POSITIVE_INFINITY}) => {
 
   // Generate an id for the input
+  path = "data_."+path // DB datastructure change
   const id = pathToId(path, "input")
 
   return (

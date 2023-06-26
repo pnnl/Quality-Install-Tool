@@ -130,7 +130,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         // It looks like the type def for putIfNotExists does not match its implementation
         // TODO: Check this over carefully
         const date = new Date()
-        const result = await db.putIfNotExists(docId, {meta_:{created_at: date, last_modified_at: date}})
+        const result = await db.putIfNotExists(docId, {metadata_:{created_at: date, last_modified_at: date}}) // DB datastructure change
         revisionRef.current = result.rev
       } catch(err) {
         console.error('DB initialization error:', err)
@@ -198,13 +198,13 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
     if (db) {
       db.upsert(docId, function upsertFn(dbDoc: any) {
         let result = {...dbDoc, ...newDoc};
-        if (!result.meta_) {
-          result.meta_ = {
+        if (!result.metadata_) { // DB datastructure change
+          result.metadata_ = {
               created_at: new Date(),
               last_modified_at: new Date()
           };
         } else {
-          result.meta_.last_modified_at = new Date();
+          result.metadata_.last_modified_at = new Date();
         }
         return result;
       }).then(function (res) {

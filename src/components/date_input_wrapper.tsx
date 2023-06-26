@@ -21,6 +21,7 @@ interface DateInputWrapperProps {
 const DateInputWrapper: FC<DateInputWrapperProps> = ({label, path}) => {
 
   // Generate an id for the input
+  path = "data_."+path  // DB datastructure change
   const id = pathToId(path, "input")
 
   return (

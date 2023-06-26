@@ -23,6 +23,7 @@ interface SelectWrapperProps {
 const SelectWrapper: FC<SelectWrapperProps> = ({label, options, path}) => {
 
   // Generate an id for the input
+  path = "data_."+path // DB datastructure change
   const id = pathToId(path, "input")
 
   return (

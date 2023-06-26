@@ -41,10 +41,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   const sortByCreateTime = (jobsList: any[]) =>{
       const sortedJobsByCreateTime = jobsList.sort((a, b) => {
-        if(a.meta_.created_at.toString() < b.meta_.created_at.toString()){
+        console.log(a,b)
+        if(a.metadata_.created_at.toString() < b.metadata_.created_at.toString()){
           return 1;
         } 
-        else if(a.meta_.created_at.toString() > b.meta_.created_at.toString()){
+        else if(a.metadata_.created_at.toString() > b.metadata_.created_at.toString()){
           return -1;
         } else {
           return 0;
@@ -55,10 +56,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   const sortByEditTime = (jobsList: any[]) =>{
     const sortedJobsByEditTime = jobsList.sort((a, b) => {
-        if(a.meta_.last_modified_at.toString() < b.meta_.last_modified_at.toString()){
+        if(a.metadata_.last_modified_at.toString() < b.metadata_.last_modified_at.toString()){
           return 1;
         } 
-        else if(a.meta_.last_modified_at.toString() > b.meta_.last_modified_at.toString()){
+        else if(a.metadata_.last_modified_at.toString() > b.metadata_.last_modified_at.toString()){
           return -1;
         } else {
           return 0;
@@ -84,7 +85,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     const name = prompt('Enter job name');
     if (name !== null) {
       const date = new Date();
-      await db.putIfNotExists(name, {meta_:{created_at: date, last_modified_at: date}})
+      await db.putIfNotExists(name, {metadata_:{created_at: date, last_modified_at: date}})
     }
     // Refresh the job list after adding the new job
     await retrieveJobs();

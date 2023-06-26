@@ -26,6 +26,7 @@ interface StringInputWrapperProps {
 const StringInputWrapper: FC<StringInputWrapperProps> = ({label, path, min=0, max=1024, regexp=/.*/}) => {
 
   // Generate an id for the input
+  path = "data_."+path // DB datastructure change
   const id = pathToId(path, "input")
 
   return (
