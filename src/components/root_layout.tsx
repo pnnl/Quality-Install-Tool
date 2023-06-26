@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image'
 import NavBar from 'react-bootstrap/NavBar'
 import { useLocation, Link } from "react-router-dom";
+import { Button } from 'react-bootstrap';
 
 interface RootLayoutProps {
   children: React.ReactNode,
@@ -44,25 +45,31 @@ useEffect(() => {
     }
 }, [location.pathname]);
 
-  return (
-    <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
-      <NavBar style={{ backgroundColor: "green" }}>
-        {showBackButton && (
+return (
+  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)" }}>
+    <NavBar style={{ backgroundColor: "green" }}>
+      {/* Conditional rendering of a back button */}
+      {showBackButton && (
+        <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
           <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}>
-            <TfiAngleLeft style={{ marginLeft: "1rem", marginRight: "1rem", color: "white" }} />
+            <Button variant="outline-light" style={{ padding: "1rem" }}>
+              <TfiAngleLeft style={{ color: "white", height: "100%"}} />
+            </Button>
           </Link>
-        )}
-        <Container style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <NavBar.Brand>
-            <span style={{ color: "gold", fontSize: "2rem" }}>Quality Install Tool</span>
-          </NavBar.Brand>
-        </Container>
-      </NavBar>
-      <div style={{ paddingTop: "1rem" }}>
-        {children}
-      </div>
+        </div>
+      )}
+      <Container style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <NavBar.Brand>
+          <span style={{ color: "gold", fontSize: "2rem" }}>Quality Install Tool</span>
+        </NavBar.Brand>
+      </Container>
+    </NavBar>
+    <div style={{ paddingTop: "1rem" }}>
+      {children}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default RootLayout;
