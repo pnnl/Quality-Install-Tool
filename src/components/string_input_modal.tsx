@@ -47,6 +47,12 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
         setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
       }
     };
+
+    const handleKeyPress = (target: KeyboardEvent) => {
+      if(target.key=="Enter"){
+        handleSubmit();  
+      } 
+    }
   
     /**
      * Handles the change in the input field value.
@@ -61,12 +67,12 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const modalOK = okButton || 'OK';
   
     return (
-      <Modal show={isOpen} onHide={closeModal}>
+      <Modal show={isOpen} onHide={closeModal} onKeyPress={handleKeyPress}>
         <Modal.Header closeButton>
           <Modal.Title>{modalTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <input type="text" value={inputValue} onChange={handleInputChange} />
+          <input type="text" value={inputValue} onChange={handleInputChange}/>
           {errorMessage && <div className="error">{errorMessage}</div>}
         </Modal.Body>
         <Modal.Footer>
