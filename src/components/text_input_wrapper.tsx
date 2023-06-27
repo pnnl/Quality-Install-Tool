@@ -26,16 +26,15 @@ interface TextInputWrapperProps {
 const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path, min=0, max=10240, regexp=/.*/}) => {
 
   // Generate an id for the input
-  path = "data_."+path // DB datastructure change
   const id = pathToId(path, "input")
 
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <TextInput id={id} label={label} 
               updateValue= {(value: any) => upsertData(path, value)}
-              value = {get(doc, path)} min={min} max={max} regexp={regexp}/>
+              value = {get(data, path)} min={min} max={max} regexp={regexp}/>
           )
         }
       }

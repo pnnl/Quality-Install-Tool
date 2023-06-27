@@ -30,16 +30,15 @@ interface NumberInputWrapperProps {
 const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, suffix, min=Number.NEGATIVE_INFINITY, max=Number.POSITIVE_INFINITY}) => {
 
   // Generate an id for the input
-  path = "data_."+path // DB datastructure change
   const id = pathToId(path, "input")
 
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <NumberInput id={id} label={label} prefix={prefix} suffix={suffix}
               updateValue= {(value: any) => upsertData(path, parseFloat(value))}
-              value = {get(doc, path)} min={min} max={max}/>
+              value = {get(data, path)} min={min} max={max}/>
           )
         }
       }

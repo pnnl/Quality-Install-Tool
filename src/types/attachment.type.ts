@@ -5,7 +5,7 @@ import JSONValue from './json_value.type'
 interface Attachment  {
   blob: Blob,
   digest?: string,
-  metadata: Record<string, any>,
+  metadata: JSONValue,
 }
 
 export default Attachment
