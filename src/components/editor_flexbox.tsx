@@ -23,6 +23,7 @@ import Tabs from "react-bootstrap/Tabs";
 import TextInput from "./text_input";
 import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
+import DisplayErrorErrorBoundary from "./display_error_error_boundary";
 
 const components = {
   Collapsible,
@@ -102,10 +103,18 @@ const EditorFlexBox: FC = () => {
     }
   };
 
+  const handleSetText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTemplateText(event.currentTarget.value);
+    try {
+      setMdxComponent(generateTemplateView(templateText));
+      localStorage.setItem("templateText", templateText);
+      setHasError(false);
+    } catch {
+      setHasError(true);
+    }
+  };
+
   let MDXContent = mdxComponent.default;
-  useEffect(() => {
-    MDXContent = mdxComponent.default;
-  }, []);
 
   return (
     <StoreProvider dbName="template_editor" docId={"playground"}>
@@ -121,7 +130,7 @@ const EditorFlexBox: FC = () => {
                       id="message"
                       name="message"
                       value={templateText}
-                      onChange={(e) => setTemplateText(e.target.value)}
+                      onChange={handleSetText}
                       style={{
                         height: "auto",
                         minHeight: "700px",
@@ -129,13 +138,18 @@ const EditorFlexBox: FC = () => {
                       }}
                     />
                     <button type="submit" onClick={handleButtonClick}>
-                      Submit
+                      Re-Render
                     </button>
                   </div>
                 </div>
                 <div className="flex-child">
-                  {!hasError && <MDXContent components={components} doc={doc} />}
-                  {hasError && <b>There was an issue rendering the provided template. Please correct any syntax error and resubmit.</b>}
+                  {/* {!hasError && <MDXContent components={components} doc={doc} />}
+                  {hasError && <b>There was an issue rendering the provided template. Please correct any syntax error and resubmit.</b>} */}
+                  <div className="flex-child">
+                    <DisplayErrorErrorBoundary>
+                      <MDXContent components={components} doc={doc} />
+                    </DisplayErrorErrorBoundary>
+                  </div>
                 </div>
               </div>
             </div>
