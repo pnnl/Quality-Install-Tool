@@ -25,6 +25,8 @@ import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
 import DisplayErrorErrorBoundary from "./display_error_error_boundary";
 
+
+
 const components = {
   Collapsible,
   DateInput: DateInputWrapper,
@@ -68,9 +70,9 @@ Value:{props.doc.state_select?.value}
 `;
 
 function generateTemplateView(templateText: string) {
-  let MDXContent;
+  let MDXModule;
   try {
-    MDXContent = evaluateSync(templateText, {
+    MDXModule = evaluateSync(templateText, {
       ...provider,
       Fragment: _Fragment,
       jsx: _jsx,
@@ -81,7 +83,7 @@ function generateTemplateView(templateText: string) {
   } catch {
     throw new Error("Error evaluating MDX");
   }
-  return MDXContent;
+  return MDXModule;
 }
 
 const EditorFlexBox: FC = () => {
@@ -92,10 +94,10 @@ const EditorFlexBox: FC = () => {
 
   const [templateText, setTemplateText] = useState(initialTemplateText);
   const [hasError, setHasError] = useState(false);
-  const [mdxComponent, setMdxComponent] = useState(generateTemplateView(initialTemplateText));
+  const [mdxModule, setMdxModule] = useState(generateTemplateView(initialTemplateText));
   const handleButtonClick = () => {
     try {
-      setMdxComponent(generateTemplateView(templateText));
+      setMdxModule(generateTemplateView(templateText));
       localStorage.setItem("templateText", templateText);
       setHasError(false);
     } catch {
@@ -106,7 +108,7 @@ const EditorFlexBox: FC = () => {
   const handleSetText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTemplateText(event.currentTarget.value);
     try {
-      setMdxComponent(generateTemplateView(templateText));
+      setMdxModule(generateTemplateView(templateText));
       localStorage.setItem("templateText", templateText);
       setHasError(false);
     } catch {
@@ -114,7 +116,7 @@ const EditorFlexBox: FC = () => {
     }
   };
 
-  let MDXContent = mdxComponent.default;
+  let MDXComponent = mdxModule.default;
 
   return (
     <StoreProvider dbName="template_editor" docId={"playground"}>
@@ -147,7 +149,7 @@ const EditorFlexBox: FC = () => {
                   {hasError && <b>There was an issue rendering the provided template. Please correct any syntax error and resubmit.</b>} */}
                   <div className="flex-child">
                     <DisplayErrorErrorBoundary>
-                      <MDXContent components={components} doc={doc} />
+                      <MDXComponent components={components} doc={doc} />
                     </DisplayErrorErrorBoundary>
                   </div>
                 </div>
