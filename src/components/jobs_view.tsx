@@ -41,7 +41,6 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   const sortByCreateTime = (jobsList: any[]) =>{
       const sortedJobsByCreateTime = jobsList.sort((a, b) => {
-        console.log(a,b)
         if(a.metadata_.created_at.toString() < b.metadata_.created_at.toString()){
           return 1;
         } 

@@ -13,7 +13,7 @@ import Metadata from '../types/metadata.type';
 PouchDB.plugin(PouchDBUpsert)
 
 interface UpsertAttachment {
-  (blob: Blob, id: string): void;
+  (blob: Blob, id: string, img_blob?:Blob): void;
 }
 
 interface UpsertData {
@@ -27,8 +27,8 @@ interface UpsertDoc{
 export const StoreContext = React.createContext({
   attachments:  {} as Record<string, {blob: Blob, metadata: Record<string, JSONValue>}>,
   doc: {} as JSONValue,
-  data: {} as JSONValue,
-  metadata: {} as Metadata,
+  data: {} as any,
+  metadata: {} as any,
   upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
   upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
   upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
@@ -64,7 +64,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * 
    * @param dbDoc The full object representation of the changed document from the database
    */
-  async function processDBDocChange(db: PouchDB.Database, dbDoc: PouchDB.Core.IdMeta & PouchDB.Core.GetMeta & {data_: {}} & {metadata_: {created_at: Date, last_modified_at: Date, attachments: {}}}) {
+  async function processDBDocChange(db: PouchDB.Database, dbDoc: PouchDB.Core.IdMeta & PouchDB.Core.GetMeta & {data_: {}} & {metadata_: Metadata}) {
     console.log('processDBDocChange2')
     console.log('dbDoc:', dbDoc)
     revisionRef.current = dbDoc._rev
@@ -93,11 +93,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
       console.log('dbDoc has _attachments')
       // Collect all the new or modified attachments
       const dbDocAttachments = dbDoc._attachments
-      const photoMetadata = dbDoc.metadata_.attachments
+      const photoMetadatas = dbDoc.metadata_.attachments
       let newAttachments: Record<string, Attachment> = {}
       for (const attachmentId in dbDocAttachments) {
         const docAttachment = dbDocAttachments[attachmentId]
-        const photoMetadataAttachments = photoMetadata[attachmentId]
+        const photoMetadataAttachments = photoMetadatas[attachmentId]
         // digest is a hash of the attachment, so a different digest indicates a modified attachment
         const digest = docAttachment.digest
         if (digest && (!attachments.hasOwnProperty(attachmentId) || attachments[attachmentId].digest != digest)) {
@@ -109,7 +109,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
             const blob = blobOrBuffer
             //const metadata = blob.type === 'image/jpeg' ? getPhotoMetadata(blob) : {}
             // Fetching the PhotoMetadata from DB
-            const metadata = blob.type === 'image/jpeg' ? photoMetadataAttachments : {} 
+            const metadata = (blob.type == 'image/jpeg' || blob.type == 'image/heic') ? photoMetadataAttachments : photoMetadataAttachments 
             console.log("fetch",metadata)
             newAttachments = {
               ...newAttachments,
@@ -257,15 +257,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * @param blob 
    * @param id 
    */
-  const upsertAttachment: UpsertAttachment = async (blob, id: string) => {
-    // Create the metadata for the blob
+  const upsertAttachment: UpsertAttachment = async (blob, id: string, img_blob) => {
+    // Create the metadata for the blob  (added heic format)
    const metadata: Attachment["metadata"] = (
-      blob.type === "image/jpeg" ? await getPhotoMetadata(blob) :
-      {}
+      blob.type === "image/jpeg" ? await getPhotoMetadata(blob) : blob.type === "image/heic" ? await getPhotoMetadata(img_blob) : {}
     )
 
-     // Storing PhotoMetaData in the DB 
-     upsertDoc("metadata_.attachments."+id, metadata)
+    // Storing PhotoMetaData in the DB 
+    upsertDoc("metadata_.attachments."+id, metadata)
       
     // Store the blob in memory
     const newAttachments = {
