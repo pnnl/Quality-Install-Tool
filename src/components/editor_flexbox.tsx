@@ -5,6 +5,7 @@ import { evaluateSync } from "@mdx-js/mdx";
 import { Fragment as _Fragment, jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import * as provider from "@mdx-js/react";
 import { useMDXComponents } from "@mdx-js/react";
+import ClimateZoneSelectWrapper from "./climate_zone_select_wrapper";
 import Collapsible from "./collapsible";
 import DateInputWrapper from "./date_input_wrapper";
 import DateStr from "./date";
@@ -24,17 +25,21 @@ import TextInput from "./text_input";
 import TextInputWrapper from "./text_input_wrapper";
 import USStateSelectWrapper from "./us_state_select_wrapper";
 import DisplayErrorErrorBoundary from "./display_error_error_boundary";
+import Select from "./select";
+import RadioWrapper from "./radio_wrapper";
 
 
 
 const components = {
   Collapsible,
+  ClimateZoneSelect: ClimateZoneSelectWrapper,
   DateInput: DateInputWrapper,
   Figure: FigureWrapper,
   NumberInput: NumberInputWrapper,
   Photo: PhotoWrapper,
   PhotoInput: PhotoInputWrapper,
   PrintSection,
+  Radio: RadioWrapper,
   Select: SelectWrapper,
   StringInput: StringInputWrapper,
   Table: TableWrapper,
@@ -80,7 +85,8 @@ function generateTemplateView(templateText: string) {
       useMDXComponents,
       useDynamicImport: true,
     });
-  } catch {
+  } catch (error){
+    console.log("error log:", error.message);
     throw new Error("Error evaluating MDX");
   }
   return MDXModule;
