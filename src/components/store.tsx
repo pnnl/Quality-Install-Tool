@@ -13,7 +13,7 @@ import Metadata from '../types/metadata.type';
 PouchDB.plugin(PouchDBUpsert)
 
 interface UpsertAttachment {
-  (blob: Blob, id: string, img_blob?:Blob): void;
+  (blob: Blob, id: string): void;
 }
 
 interface UpsertData {
@@ -26,8 +26,8 @@ interface UpsertDoc{
 
 export const StoreContext = React.createContext({
   attachments:  {} as Record<string, {blob: Blob, metadata: Record<string, JSONValue>}>,
-  doc: {} as JSONValue,
-  data: {} as any,
+  data: {} as JSONValue,
+  
   metadata: {} as any,
   upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
   upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
@@ -65,7 +65,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * @param dbDoc The full object representation of the changed document from the database
    */
   async function processDBDocChange(db: PouchDB.Database, dbDoc: PouchDB.Core.IdMeta & PouchDB.Core.GetMeta & {data_: {}} & {metadata_: Metadata}) {
-   
+    console.log('processDBDocChange2')
+    console.log('dbDoc:', dbDoc)
     revisionRef.current = dbDoc._rev
 
     // Set doc state
@@ -76,14 +77,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
 
     setDoc(newDoc)
     if (db && dbDoc.hasOwnProperty("data_")) {
-      const data = dbDoc.data_
-
-    setData(data)
+    
+    setData(dbDoc.data_)
     }
 
     if (db && dbDoc.hasOwnProperty("metadata_")) {
-      const metadata = dbDoc.metadata_
-      setMetaData (metadata)
+      setMetaData (dbDoc.metadata_)
     }
 
     // Update the attachments state as needed
@@ -92,11 +91,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
       console.log('dbDoc has _attachments')
       // Collect all the new or modified attachments
       const dbDocAttachments = dbDoc._attachments
-      const photoMetadata = dbDoc.metadata_.attachments
+      const attachmentsMetadata = dbDoc.metadata_.attachments
       let newAttachments: Record<string, Attachment> = {}
       for (const attachmentId in dbDocAttachments) {
         const docAttachment = dbDocAttachments[attachmentId]
-        const photoMetadataAttachments = photoMetadata[attachmentId]
+        const singleAttachmentMetadata = attachmentsMetadata[attachmentId]
         // digest is a hash of the attachment, so a different digest indicates a modified attachment
         const digest = docAttachment.digest
         if (digest && (!attachments.hasOwnProperty(attachmentId) || attachments[attachmentId].digest != digest)) {
@@ -107,9 +106,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
           if (blobOrBuffer instanceof Blob) {
             const blob = blobOrBuffer
             //const metadata = blob.type === 'image/jpeg' ? getPhotoMetadata(blob) : {}
+            // Fetching the SingleAttachmentMetadata from DB
+            const metadata = blob.type == 'image/jpeg'  ? singleAttachmentMetadata : {} 
             
-            // Fetching the PhotoMetadata from DB
-            const metadata = blob.type == 'image/jpeg'  ? photoMetadataAttachments : {} 
             newAttachments = {
               ...newAttachments,
               [attachmentId]: {
@@ -155,7 +154,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         // It looks like the type def for putIfNotExists does not match its implementation
         // TODO: Check this over carefully
         const date = new Date()
-        const result = await db.putIfNotExists(docId, {metadata_:{created_at: date, last_modified_at: date}})
+        const result = await db.putIfNotExists(docId, {metadata_:{created_at: date, last_modified_at: date, attachments : {}}})
         revisionRef.current = result.rev
       } catch(err) {
         console.error('DB initialization error:', err)
@@ -208,7 +207,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
    * 
    * @remarks
    * The given path is gauranteed to exist after the update/insertion.
-   * This function is typically passed to an input wrapper component via the StoreContext.Provider value
+   * This function is called internally from upsertData and upsertAttachments function to update the doc with respective information.
    * 
    * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
    * @param data The data that is to be updated/inserted at the path location in the doc state
@@ -242,9 +241,16 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
   };
 
 
-  
-
-  /* Updates (or inserts) data into the data state */
+  /**
+   * Updates (or inserts) data into the data_ state by invoking updatedDoc function
+   * 
+   * @remarks
+   * This function is typically passed to an input wrapper component via the StoreContext.Provider value
+   * This function calls updateDoc, with the path to "data_" in dbDoc.
+   * 
+   * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
+   * @param data The data that is to be updated/inserted at the path location in the data state
+   */
   const upsertData = (pathStr:string, data:any) => {
     
     pathStr = "data_."+pathStr
@@ -262,7 +268,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
       blob.type === "image/jpeg" ? await getPhotoMetadata(blob) :  {}
     )
 
-    // Storing PhotoMetaData in the DB 
+    // Storing SingleAttachmentMetaData in the DB 
     upsertDoc("metadata_.attachments."+id, metadata)
       
     // Store the blob in memory
@@ -302,7 +308,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
   };
 
   return (
-    <StoreContext.Provider value={{attachments, doc, data, metadata, upsertAttachment, upsertData}}>
+    <StoreContext.Provider value={{attachments,  data, metadata, upsertAttachment, upsertData}}>
       {children}
     </StoreContext.Provider>
   );

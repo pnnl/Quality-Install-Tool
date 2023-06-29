@@ -84,7 +84,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     const name = prompt('Enter job name');
     if (name !== null) {
       const date = new Date();
-      await db.putIfNotExists(name, {metadata_:{created_at: date, last_modified_at: date}})
+      await db.putIfNotExists(name, {metadata_:{created_at: date, last_modified_at: date, attachments: {}}})
     }
     // Refresh the job list after adding the new job
     await retrieveJobs();
