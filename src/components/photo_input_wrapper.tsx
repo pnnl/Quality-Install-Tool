@@ -1,6 +1,5 @@
 import ImageBlobReduce from 'image-blob-reduce'
 import React, {FC} from 'react'
-import heic2any from 'heic2any'
 
 import {StoreContext} from './store'
 import PhotoInput from './photo_input'
@@ -32,25 +31,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
 
         const upsertPhoto = (img_file: Blob) => {
 
-
-          // Modification for Test Photo meta data module #45  
-          if (img_file.type == 'image/heic') 
-          {
-            //upsertAttachment(img_file, id) 
-            heic2any({ blob : img_file, toType: "image/jpg", quality: 1, }).then(jpeg_blob => {
-            const jpg_blob = new Blob([jpeg_blob as BlobPart]);
-            upsertAttachment(jpg_blob, id, img_file);    
-            img_file = jpg_blob
-            
-            })         
-          }
-          else
-
           // Reduce the image size as needed
           ImageBlobReduce()
           .toBlob(img_file, {max: MAX_IMAGE_DIM})
           .then(blob => {
-            upsertAttachment(blob, id, img_file)
+            upsertAttachment(blob, id)
           })
         }
 

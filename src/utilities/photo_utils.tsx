@@ -1,5 +1,4 @@
 import EXIF from 'exif-js'
-import ExifReader from 'exifreader';
 
 import Attachment from '../types/attachment.type'
 import Metadata from '../types/metadata.type';
@@ -25,43 +24,7 @@ import Metadata from '../types/metadata.type';
 export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadata"]> {
 
   return new Promise((resolve) => {
-
-    if (photo.type =='image/heic' || photo.type =='image/jpeg'){
-      photo.arrayBuffer().then(arrayBuffer =>
-      {
-        console.log ("Entered", photo.type)
-        const tags =  ExifReader.load(arrayBuffer);
-        console.log ("tags", tags)
-        const {DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = tags
-        const metadata = {
-          geolocation: {
-            altitude: GPSAltitude || null,
-            latitude: GPSLatitude ? {
-              deg: GPSLatitude.value[0],
-              min: GPSLatitude.value[1],
-              sec: GPSLatitude.value[2],
-              // Note: Naming this property ref would interfere with the React property
-              cRef: GPSLatitudeRef?.value || null
-            } : null,
-            longitude: GPSLongitude ? {
-              deg: GPSLongitude.value[0],
-              min: GPSLongitude.value[1],
-              sec: GPSLongitude.value[2],
-              cRef: GPSLongitudeRef?.value || null
-            } : null,
-          },
-          timestamp: DateTimeOriginal?.description || null
-        }
-        console.log("metadata",metadata)
-        resolve(metadata)
-        })
-        
-      }
-
-
-
-
-   /* EXIF.getData(photo, function() {
+  EXIF.getData(photo, function() {
       const fullMetaData = EXIF.getAllTags(this)
       const {DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
       const metadata = {
@@ -85,6 +48,6 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
       }
       resolve(metadata)
 
-    }) */
+    }) 
   })
 }
