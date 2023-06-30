@@ -50,7 +50,15 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
 
     const handleKeyPress = (target: KeyboardEvent) => {
       if(target.key=="Enter"){
-        handleSubmit();  
+        const isValid = validateInput.every((validator) => validator.validator(inputValue));
+  
+      if (isValid) {
+        onSubmit(inputValue);
+        closeModal();
+        setErrorMessage('');
+      } else {
+        setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
+      } 
       } 
     }
   
