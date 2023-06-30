@@ -17,7 +17,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <h1>Choose an installation type</h1>
+      <h1>Choose an Installation Type</h1>
       <ListGroup>
           {templates}
       </ListGroup>
