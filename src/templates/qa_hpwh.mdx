@@ -61,7 +61,7 @@
 | <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />                                                                                                                                                            |
 | <NumberInput label="Width (ft)" path="volume_calculator.width"  />                                                                                                                                                                                      |
 | <NumberInput label="height (ft)" path="volume_calculator.height" />                                                                                                                                                                                    |
-| Air Volume = {props.doc.volume_calculator?.length} x {props.doc.volume_calculator?.width} x {props.doc.volume_calculator?.height} = {props.doc.volume_calculator?.length * props.doc.volume_calculator?.width * props.doc.volume_calculator?.height} ft<sup>3</sup>
+| Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup>
 
 ---
 ##### Old Water Heater
@@ -229,11 +229,11 @@ one is present, and reopen the cold water main shutoff valve.
 ## Quality Assurance Report
 ### Heat Pump Water Heater Installation
 
-Address: {props.doc.location?.street_address}, {props.doc.location?.city}, {props.doc.location?.state} {props.doc.location?.zip_code}
+Address: {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
 
-Installer: {props.doc.installer}
+Installer: {props.data.installer}
 
-Install Date: <DateStr date={props.doc.install_date}/>
+Install Date: <DateStr date={props.data.install_date}/>
 
 <Photo id="house_number_photo" label="House Number – Photo" required />
 
@@ -243,7 +243,7 @@ Install Date: <DateStr date={props.doc.install_date}/>
   This space will supply air to meet the air volume requirement for the HPWH.
 </Photo>
 
-Volume of space supplying air to the HPWH = {props.doc.volume_calculator?.length * props.doc.volume_calculator?.width * props.doc.volume_calculator?.height} ft<sup>3</sup> (Must be at least 700 ft<sup>3</sup>)
+Volume of space supplying air to the HPWH = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup> (Must be at least 700 ft<sup>3</sup>)
 
 <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
   This photo shows the completed HPWH installation including the exhaust,

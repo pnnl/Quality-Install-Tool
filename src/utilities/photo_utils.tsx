@@ -1,6 +1,7 @@
 import EXIF from 'exif-js'
 
 import Attachment from '../types/attachment.type'
+import Metadata from '../types/metadata.type';
 
 /**
  * Extracts the timestamp and geolocation data from a JPEG photo's
@@ -23,7 +24,7 @@ import Attachment from '../types/attachment.type'
 export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadata"]> {
 
   return new Promise((resolve) => {
-    EXIF.getData(photo, function() {
+  EXIF.getData(photo, function() {
       const fullMetaData = EXIF.getAllTags(this)
       const {DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
       const metadata = {
@@ -47,6 +48,6 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
       }
       resolve(metadata)
 
-    })
+    }) 
   })
 }
