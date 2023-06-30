@@ -1,5 +1,17 @@
-# BASC QA Tool
+# Quality Install Tool
+The Quality Install Tool is a web app that implements quality installation documentation requirements for various residential energy efficiency upgrades developed by Pacific Northwest National Laboratory (PNNL) as described at http://pnnl.gov/projects/quality-install-tool. Importantly, the requirements list a set of photos that must be taken before, during, and/or after installation.
 
+### Features
+- Runs on any device with a modern browser
+- Runs entirely inside the browser
+- All data are stored on the user's device – no data is sent to a server
+- Will run offline – no internet connection is neccessary once it is installed
+- Generates a PDF report that is stored on the user's device – the user may email, or otherwise transfer, the PDF to others separately from the web app
+
+## Using the Web App
+- The web app is publicly accessible at https://quality-install-tool.pnnl.gov/. Visiting this site will automatically install the web app in the browser's App Cache for offline use.
+- The initial (home) screen allows the user to select from a list of installation types.
+- Choosing an installation type takes the user to 
 ## An outline of the App startup process
 1. The server will serve the built (by webpack) version of `index.html` for any route.
 2. `index.html` will load `index.css` and `App.css`.
