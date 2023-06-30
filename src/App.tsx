@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, Navigate, RouterProvider, useRouteError} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -47,6 +47,5 @@ function App() {
     <RouterProvider router={router} />
   )
 }
-
 
 export default App;

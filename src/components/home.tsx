@@ -14,7 +14,7 @@ const Home: FC = () => {
       </ListGroup.Item>
     </LinkContainer>
   ));
-    
+
   return (
     <div>
       <h1>Choose a Document Type</h1>
