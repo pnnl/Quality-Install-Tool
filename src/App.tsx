@@ -17,14 +17,14 @@ console.log("app.tsx")
 // browser routing within this domain.
 const routes = [{
     path: "/",
-    element: <Navigate to="/app" replace={true} />
+    element: <RootLayout><Home/></RootLayout> //<Navigate to="/" replace={true} />
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
   },
   {
     path: "/app",
-    element: <RootLayout><Home/></RootLayout>,
+    element: <RootLayout><div>QA Type Selector View</div></RootLayout> //<RootLayout><Home/></RootLayout>,
   },
   {
     path: "/",

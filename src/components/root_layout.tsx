@@ -54,7 +54,8 @@ return (
       {/* Conditional rendering of a back button */}
       {showBackButton && (
         <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
-          <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}>
+          {/* <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}> */}
+          <Link to="/" style={{ textDecoration: "none" }}>
             <Button variant="outline-light" style={{ padding: "1rem" }}>
               <TfiAngleLeft style={{ color: "white", height: "100%"}} />
             </Button>
