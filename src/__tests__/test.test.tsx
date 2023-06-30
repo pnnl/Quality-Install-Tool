@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from '../components/home';
 import { MemoryRouter } from 'react-router-dom';

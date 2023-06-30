@@ -15,14 +15,16 @@ import JobsView from "./components/jobs_view";
 console.log("app.tsx")
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-const routes = [
-  {
+const routes = [{
+    path: "/",
+    element: <Navigate to="/app" replace={true} />
+  },{
     path: "/template_editor",
     element: <TemplateEditor />,
   },
   {
     path: "/app",
-    element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
+    element: <RootLayout><Home/></RootLayout>,
   },
   {
     path: "/",

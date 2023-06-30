@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import {LinkContainer} from 'react-router-bootstrap'
 import { useNavigate } from "react-router-dom";
 
+
 const Home: FC = () => {
   const path = window.location.href.split('?')[1];
   const navigate = useNavigate();

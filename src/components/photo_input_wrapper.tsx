@@ -29,10 +29,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
     <StoreContext.Consumer>
       {({attachments, upsertAttachment}) => {
 
-        const upsertPhoto = (file: Blob) => {
+        const upsertPhoto = (img_file: Blob) => {
+
           // Reduce the image size as needed
           ImageBlobReduce()
-          .toBlob(file, {max: MAX_IMAGE_DIM})
+          .toBlob(img_file, {max: MAX_IMAGE_DIM})
           .then(blob => {
             upsertAttachment(blob, id)
           })

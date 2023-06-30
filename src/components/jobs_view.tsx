@@ -2,9 +2,9 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { TfiTrash, TfiPlus, TfiPencil, TfiFilter } from "react-icons/tfi";
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
-import { Button, ListGroup } from 'react-bootstrap';
+import { Button, ListGroup, Modal } from 'react-bootstrap';
 import templatesConfig from '../templates/templates_config'
-import Dropdown from 'react-bootstrap/Dropdown';
+import StringInputModal from './string_input_modal';
 import {LinkContainer} from 'react-router-bootstrap'
 import { Link } from 'react-router-dom';
 
@@ -18,16 +18,44 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   const db = new PouchDB(dbName);
   const [sortedJobs, setSortedJobs] = useState<any[]>([]);
   const [jobsList, setJobsList] = useState<any[]>([]);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [modalOpenMap, setModalOpenMap] = useState<{ [jobId: string]: boolean }>({});
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [selectedJobToDelete, setSelectedJobToDelete] = useState('');
+
+
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const validateInput = [
+    {
+      validator: (input:string) => {
+        // Restrict the character set to [a-zA-Z0-9-_#:>]
+        const regex = /^[a-zA-Z0-9#][a-zA-Z0-9#, -]{0,62}[a-zA-Z0-9#]$/;
+        return regex.test(input);
+      },
+      errorMsg: 'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, #, dash, comma, and single spaces between other characters',
+    },
+    {
+      validator: (input:string) => {
+        // Not allow a duplicate with an existing job name
+        return !sortedJobs.includes(input);
+      },
+      errorMsg: 'Job name already exists. Please choose a different name.',
+    },
+  ];
 
   const retrieveJobs = async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
-      //console.log(result.rows.map(row => row));
       const jobsList = result.rows.map(row => row.doc);
       setJobsList(jobsList);
-      let sortedJobs = jobsList.map(doc => doc._id)
-      setSortedJobs(sortedJobs);
-      console.log(sortedJobs)
+      sortByEditTime(jobsList);
     } catch (error) {
       console.error('Error retrieving jobs:', error);
     }
@@ -40,10 +68,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   const sortByCreateTime = (jobsList: any[]) =>{
       const sortedJobsByCreateTime = jobsList.sort((a, b) => {
-        if(a.meta_.created_at.toString() < b.meta_.created_at.toString()){
+        if(a.metadata_.created_at.toString() < b.metadata_.created_at.toString()){
           return 1;
         } 
-        else if(a.meta_.created_at.toString() > b.meta_.created_at.toString()){
+        else if(a.metadata_.created_at.toString() > b.metadata_.created_at.toString()){
           return -1;
         } else {
           return 0;
@@ -54,10 +82,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
   const sortByEditTime = (jobsList: any[]) =>{
     const sortedJobsByEditTime = jobsList.sort((a, b) => {
-        if(a.meta_.last_modified_at.toString() < b.meta_.last_modified_at.toString()){
+        if(a.metadata_.last_modified_at.toString() < b.metadata_.last_modified_at.toString()){
           return 1;
         } 
-        else if(a.meta_.last_modified_at.toString() > b.meta_.last_modified_at.toString()){
+        else if(a.metadata_.last_modified_at.toString() > b.metadata_.last_modified_at.toString()){
           return -1;
         } else {
           return 0;
@@ -67,32 +95,45 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   }
   
 
-  const handleDeleteJob = async (jobId: string) => {
+  const handleDeleteJob = (jobId: string) => {
+    setSelectedJobToDelete(jobId);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDeleteJob = async () => {
     try {
-      const doc = await db.get(jobId);
+      const doc = await db.get(selectedJobToDelete);
       await db.remove(doc);
       // Refresh the job list after deletion
       await retrieveJobs();
     } catch (error) {
       console.error('Error deleting job:', error);
+    } finally {
+      setShowDeleteConfirmation(false);
+      setSelectedJobToDelete('');
     }
   };
 
-  const handleAddJob = async () => {
+  const cancelDeleteJob = () => {
+    setShowDeleteConfirmation(false);
+    setSelectedJobToDelete('');
+  };
+
+  const handleAddJob = async (input : string) => {
     // adding a new job here
-    const name = prompt('Enter job name');
+    const name = input;
     if (name !== null) {
       const date = new Date();
-      await db.putIfNotExists(name, {meta_:{created_at: date, last_modified_at: date}})
+      await db.putIfNotExists(name, {metadata_:{created_at: date, last_modified_at: date, attachments: {}}})
     }
     // Refresh the job list after adding the new job
     await retrieveJobs();
   };
 
 
-  const handleRenameJob = async (jobId: string) => {
+  const handleRenameJob = async (input : string, jobId: string) => {
     try {
-      const newName = prompt('Enter new name');
+      const newName = input;
       if (newName !== null) {
         const doc = await db.get(jobId);
         await db.remove(doc); // Remove the existing document
@@ -110,10 +151,21 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
   return (
     <div className="container">
       <h1>{templatesConfig[dbName].title} Installation</h1>
-      <ListGroup>
-      <span className="icon-container">
-        <Button onClick={handleAddJob}><TfiPlus/></Button>
-      <Dropdown>
+      
+      <h3>Projects List</h3>
+      
+        <Button onClick={openAddModal}><TfiPlus/></Button>
+        <StringInputModal
+          isOpen={isAddModalOpen}
+          closeModal={closeAddModal}
+          onSubmit={handleAddJob}
+          validateInput={validateInput}
+          title="Enter new project name"
+          okButton='Add'
+        />
+        <div style={{ marginBottom: '10px' }}></div>
+      {/* Sort feature, not used now but will be used in future. */ 
+      /* <Dropdown>
         <Dropdown.Toggle variant="success">
           <TfiFilter/>
         </Dropdown.Toggle>
@@ -125,26 +177,75 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
             Sort By Edit Date
           </Dropdown.Item> 
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown> */}
           
-      </span>
+      
+      <ListGroup>
         {sortedJobs.map(job => (
+          <>
           <LinkContainer to={`/app/${dbName}/${job}`}>
-            <ListGroup.Item action={true} key={job}>
+          <ListGroup.Item action={true} key={job}>
               {job}{' '}
-              <span className="icon-container">
-              <Button onClick={event => {
-                event.preventDefault();
-                handleDeleteJob(job);
-              }}><TfiTrash/></Button>
-              <Button onClick={event => {
-                event.preventDefault();
-                handleRenameJob(job);}}><TfiPencil/>
-              </Button>
-              </span>
-            </ListGroup.Item>
+          <span className="icon-container">
+          
+          <Button onClick={event => {
+              event.stopPropagation();
+              event.preventDefault();
+              setModalOpenMap(prevState => ({
+                  ...prevState,
+                  [job]: true,
+              }));
+          }}>
+              Rename
+          </Button>
+          
+          <Button
+            onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              handleDeleteJob(job);
+            }}
+            variant="danger"
+          >
+            <TfiTrash />
+          </Button>
+
+          </span>
+        </ListGroup.Item>
         </LinkContainer>
-    ))}
+        <StringInputModal
+              isOpen={modalOpenMap[job] || false}
+              closeModal={() => {
+              setModalOpenMap(prevState => ({
+                  ...prevState,
+                  [job]: false,
+              }));
+              }}
+              onSubmit={(input) => handleRenameJob(input, job)}
+              validateInput={validateInput}
+              title = "Enter new project name"
+              okButton='Rename'
+          />
+
+        <Modal show={showDeleteConfirmation} onHide={cancelDeleteJob}>
+          <Modal.Header closeButton>
+              <Modal.Title>Confirm Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+              Are you sure you want to permanently delete {selectedJobToDelete}? This action cannot be undone.
+          </Modal.Body>
+          <Modal.Footer>
+              <Button variant="secondary" onClick={cancelDeleteJob}>
+                  Cancel
+              </Button>
+              <Button variant="danger" onClick={confirmDeleteJob}>
+                  Permanently Delete
+              </Button>
+          </Modal.Footer>
+        </Modal>
+
+        </>
+      ))}
     </ListGroup>
     
     </div>

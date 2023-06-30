@@ -28,7 +28,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({children, id, label, required}) =>
 
   return (
     <StoreContext.Consumer>
-      {({attachments, doc}) => {
+      {({attachments, data}) => {
         return (
           <Photo description={children} id={id} label={label}
             metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
