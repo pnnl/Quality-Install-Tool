@@ -13,10 +13,6 @@ const templatesConfig : TemplateConfig = {
   qa_hpwh: {
     title: "Heat Pump Water Heater",
     template: QaHPWHTemplate,
-  },
-  playground: {
-    title: "MDX Playground",
-    template: MdxPlayground,
   }
 }
 
