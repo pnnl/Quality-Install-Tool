@@ -9,7 +9,7 @@
 
 // @ts-ignore
 try {
-  self['workbox:core:6.5.3'] && _();
+  self['workbox:core:6.6.0'] && _();
 } catch (e) {}
 
 /***/ }),
@@ -21,7 +21,7 @@ try {
 
 // @ts-ignore
 try {
-  self['workbox:expiration:6.5.3'] && _();
+  self['workbox:expiration:6.6.0'] && _();
 } catch (e) {}
 
 /***/ }),
@@ -33,7 +33,7 @@ try {
 
 // @ts-ignore
 try {
-  self['workbox:precaching:6.5.3'] && _();
+  self['workbox:precaching:6.6.0'] && _();
 } catch (e) {}
 
 /***/ }),
@@ -45,7 +45,7 @@ try {
 
 // @ts-ignore
 try {
-  self['workbox:routing:6.5.3'] && _();
+  self['workbox:routing:6.6.0'] && _();
 } catch (e) {}
 
 /***/ }),
@@ -57,7 +57,7 @@ try {
 
 // @ts-ignore
 try {
-  self['workbox:strategies:6.5.3'] && _();
+  self['workbox:strategies:6.6.0'] && _();
 } catch (e) {}
 
 /***/ })
@@ -170,7 +170,7 @@ function _setPrototypeOf(o, p) {
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
 
-function _inherits(subClass, superClass) {
+function inherits_inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function");
   }
@@ -227,7 +227,7 @@ function _possibleConstructorReturn(self, call) {
 
 
 
-function _createSuper(Derived) {
+function createSuper_createSuper(Derived) {
   var hasNativeReflectConstruct = _isNativeReflectConstruct();
   return function _createSuperInternal() {
     var Super = _getPrototypeOf(Derived),
@@ -591,8 +591,8 @@ var messageGenerator =  true ? fallback : 0;
  * @private
  */
 var WorkboxError_WorkboxError = /*#__PURE__*/function (_Error) {
-  _inherits(WorkboxError, _Error);
-  var _super = _createSuper(WorkboxError);
+  inherits_inherits(WorkboxError, _Error);
+  var _super = createSuper_createSuper(WorkboxError);
   /**
    *
    * @param {string} errorCode The error code that
@@ -4456,7 +4456,7 @@ var StrategyHandler = /*#__PURE__*/function () {
  *
  * @memberof workbox-strategies
  */
-var Strategy = /*#__PURE__*/function () {
+var Strategy_Strategy = /*#__PURE__*/function () {
   /**
    * Creates a new instance of the strategy and sets all documented option
    * properties as public instance properties.
@@ -4834,8 +4834,8 @@ var Strategy = /*#__PURE__*/function () {
  * @memberof workbox-precaching
  */
 var PrecacheStrategy = /*#__PURE__*/function (_Strategy) {
-  _inherits(PrecacheStrategy, _Strategy);
-  var _super = _createSuper(PrecacheStrategy);
+  inherits_inherits(PrecacheStrategy, _Strategy);
+  var _super = createSuper_createSuper(PrecacheStrategy);
   /**
    *
    * @param {Object} [options]
@@ -5102,7 +5102,7 @@ var PrecacheStrategy = /*#__PURE__*/function (_Strategy) {
     }
   }]);
   return PrecacheStrategy;
-}(Strategy);
+}(Strategy_Strategy);
 PrecacheStrategy.defaultPrecacheCacheabilityPlugin = {
   cacheWillUpdate: function cacheWillUpdate(_ref) {
     return asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee4() {
@@ -5711,7 +5711,7 @@ var normalizeHandler = function normalizeHandler(handler) {
  *
  * @memberof workbox-routing
  */
-var Route = /*#__PURE__*/function () {
+var Route_Route = /*#__PURE__*/function () {
   /**
    * Constructor for Route class.
    *
@@ -5775,8 +5775,8 @@ var Route = /*#__PURE__*/function () {
  * @extends workbox-routing.Route
  */
 var RegExpRoute = /*#__PURE__*/function (_Route) {
-  _inherits(RegExpRoute, _Route);
-  var _super = _createSuper(RegExpRoute);
+  inherits_inherits(RegExpRoute, _Route);
+  var _super = createSuper_createSuper(RegExpRoute);
   /**
    * If the regular expression contains
    * [capture groups]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp#grouping-back-references},
@@ -5817,7 +5817,7 @@ var RegExpRoute = /*#__PURE__*/function (_Route) {
     return _super.call(this, match, handler, method);
   }
   return createClass_createClass(RegExpRoute);
-}(Route);
+}(Route_Route);
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-routing/Router.js
 
@@ -6283,14 +6283,14 @@ function registerRoute(capture, handler, method) {
       return url.href === captureUrl.href;
     };
     // If `capture` is a string then `handler` and `method` must be present.
-    route = new Route(matchCallback, handler, method);
+    route = new Route_Route(matchCallback, handler, method);
   } else if (capture instanceof RegExp) {
     // If `capture` is a `RegExp` then `handler` and `method` must be present.
     route = new RegExpRoute(capture, handler, method);
   } else if (typeof capture === 'function') {
     // If `capture` is a function then `handler` and `method` must be present.
-    route = new Route(capture, handler, method);
-  } else if (capture instanceof Route) {
+    route = new Route_Route(capture, handler, method);
+  } else if (capture instanceof Route_Route) {
     route = capture;
   } else {
     throw new WorkboxError_WorkboxError('unsupported-route-type', {
@@ -6473,8 +6473,8 @@ function generateURLVariations(url) {
  * @extends workbox-routing.Route
  */
 var PrecacheRoute = /*#__PURE__*/function (_Route) {
-  _inherits(PrecacheRoute, _Route);
-  var _super = _createSuper(PrecacheRoute);
+  inherits_inherits(PrecacheRoute, _Route);
+  var _super = createSuper_createSuper(PrecacheRoute);
   /**
    * @param {PrecacheController} precacheController A `PrecacheController`
    * instance used to both match requests and respond to fetch events.
@@ -6521,7 +6521,7 @@ var PrecacheRoute = /*#__PURE__*/function (_Route) {
     return _super.call(this, match, precacheController.strategy);
   }
   return createClass_createClass(PrecacheRoute);
-}(Route);
+}(Route_Route);
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-precaching/addRoute.js
 /*
@@ -6986,7 +6986,7 @@ function PrecacheFallbackPlugin(_ref) {
  * @memberof workbox-routing
  * @extends workbox-routing.Route
  */
-var NavigationRoute = /*#__PURE__*/function (_Route) {
+var NavigationRoute = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Route) {
   _inherits(NavigationRoute, _Route);
   var _super = _createSuper(NavigationRoute);
   /**
@@ -7020,7 +7020,7 @@ var NavigationRoute = /*#__PURE__*/function (_Route) {
       allowlist = _ref$allowlist === void 0 ? [/./] : _ref$allowlist,
       _ref$denylist = _ref.denylist,
       denylist = _ref$denylist === void 0 ? [] : _ref$denylist;
-    classCallCheck_classCallCheck(this, NavigationRoute);
+    _classCallCheck(this, NavigationRoute);
     if (false) {}
     _this = _super.call(this, function (options) {
       return _this._match(options);
@@ -7039,7 +7039,7 @@ var NavigationRoute = /*#__PURE__*/function (_Route) {
    *
    * @private
    */
-  createClass_createClass(NavigationRoute, [{
+  _createClass(NavigationRoute, [{
     key: "_match",
     value: function _match(_ref2) {
       var url = _ref2.url,
@@ -7048,7 +7048,7 @@ var NavigationRoute = /*#__PURE__*/function (_Route) {
         return false;
       }
       var pathnameAndSearch = url.pathname + url.search;
-      var _iterator = createForOfIteratorHelper_createForOfIteratorHelper(this._denylist),
+      var _iterator = _createForOfIteratorHelper(this._denylist),
         _step;
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -7074,7 +7074,7 @@ var NavigationRoute = /*#__PURE__*/function (_Route) {
     }
   }]);
   return NavigationRoute;
-}(Route);
+}(Route)));
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-routing/setCatchHandler.js
 /*
@@ -7207,14 +7207,14 @@ var utils_messages_messages = {
  * @extends workbox-strategies.Strategy
  * @memberof workbox-strategies
  */
-var CacheFirst = /*#__PURE__*/function (_Strategy) {
+var CacheFirst = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Strategy) {
   _inherits(CacheFirst, _Strategy);
   var _super = _createSuper(CacheFirst);
   function CacheFirst() {
-    classCallCheck_classCallCheck(this, CacheFirst);
+    _classCallCheck(this, CacheFirst);
     return _super.apply(this, arguments);
   }
-  createClass_createClass(CacheFirst, [{
+  _createClass(CacheFirst, [{
     key: "_handle",
     value:
     /**
@@ -7225,9 +7225,9 @@ var CacheFirst = /*#__PURE__*/function (_Strategy) {
      * @return {Promise<Response>}
      */
     function () {
-      var _handle2 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee(request, handler) {
+      var _handle2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(request, handler) {
         var logs, response, error, _iterator, _step, log;
-        return regeneratorRuntime_regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               logs = [];
@@ -7267,7 +7267,7 @@ var CacheFirst = /*#__PURE__*/function (_Strategy) {
                 _context.next = 24;
                 break;
               }
-              throw new WorkboxError_WorkboxError('no-response', {
+              throw new WorkboxError('no-response', {
                 url: request.url,
                 error: error
               });
@@ -7286,7 +7286,7 @@ var CacheFirst = /*#__PURE__*/function (_Strategy) {
     }()
   }]);
   return CacheFirst;
-}(Strategy);
+}(Strategy)));
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-strategies/CacheOnly.js
 
@@ -7320,14 +7320,14 @@ var CacheFirst = /*#__PURE__*/function (_Strategy) {
  * @extends workbox-strategies.Strategy
  * @memberof workbox-strategies
  */
-var CacheOnly = /*#__PURE__*/function (_Strategy) {
+var CacheOnly = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Strategy) {
   _inherits(CacheOnly, _Strategy);
   var _super = _createSuper(CacheOnly);
   function CacheOnly() {
-    classCallCheck_classCallCheck(this, CacheOnly);
+    _classCallCheck(this, CacheOnly);
     return _super.apply(this, arguments);
   }
-  createClass_createClass(CacheOnly, [{
+  _createClass(CacheOnly, [{
     key: "_handle",
     value:
     /**
@@ -7338,9 +7338,9 @@ var CacheOnly = /*#__PURE__*/function (_Strategy) {
      * @return {Promise<Response>}
      */
     function () {
-      var _handle2 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee(request, handler) {
+      var _handle2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(request, handler) {
         var response;
-        return regeneratorRuntime_regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               if (false) {}
@@ -7353,7 +7353,7 @@ var CacheOnly = /*#__PURE__*/function (_Strategy) {
                 _context.next = 7;
                 break;
               }
-              throw new WorkboxError_WorkboxError('no-response', {
+              throw new WorkboxError('no-response', {
                 url: request.url
               });
             case 7:
@@ -7371,7 +7371,7 @@ var CacheOnly = /*#__PURE__*/function (_Strategy) {
     }()
   }]);
   return CacheOnly;
-}(Strategy);
+}(Strategy)));
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-strategies/plugins/cacheOkAndOpaquePlugin.js
 
@@ -7384,7 +7384,7 @@ var CacheOnly = /*#__PURE__*/function (_Strategy) {
   https://opensource.org/licenses/MIT.
 */
 
-var cacheOkAndOpaquePlugin = {
+var cacheOkAndOpaquePlugin_cacheOkAndOpaquePlugin = {
   /**
    * Returns a valid response (to allow caching) if the status is 200 (OK) or
    * 0 (opaque).
@@ -7459,7 +7459,7 @@ var cacheOkAndOpaquePlugin = {
  * @extends workbox-strategies.Strategy
  * @memberof workbox-strategies
  */
-var NetworkFirst = /*#__PURE__*/function (_Strategy) {
+var NetworkFirst = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Strategy) {
   _inherits(NetworkFirst, _Strategy);
   var _super = _createSuper(NetworkFirst);
   /**
@@ -7484,7 +7484,7 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
   function NetworkFirst() {
     var _this;
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    classCallCheck_classCallCheck(this, NetworkFirst);
+    _classCallCheck(this, NetworkFirst);
     _this = _super.call(this, options);
     // If this instance contains no plugins with a 'cacheWillUpdate' callback,
     // prepend the `cacheOkAndOpaquePlugin` plugin to the plugins list.
@@ -7504,12 +7504,12 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
    *     triggered the request.
    * @return {Promise<Response>}
    */
-  createClass_createClass(NetworkFirst, [{
+  _createClass(NetworkFirst, [{
     key: "_handle",
     value: function () {
-      var _handle2 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee2(request, handler) {
+      var _handle2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(request, handler) {
         var logs, promises, timeoutId, _this$_getTimeoutProm, id, promise, networkPromise, response, _iterator, _step, log;
-        return regeneratorRuntime_regeneratorRuntime().wrap(function _callee2$(_context2) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               logs = [];
@@ -7532,8 +7532,8 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
               });
               promises.push(networkPromise);
               _context2.next = 8;
-              return handler.waitUntil(asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee() {
-                return regeneratorRuntime_regeneratorRuntime().wrap(function _callee$(_context) {
+              return handler.waitUntil(_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+                return _regeneratorRuntime().wrap(function _callee$(_context) {
                   while (1) switch (_context.prev = _context.next) {
                     case 0:
                       _context.next = 2;
@@ -7563,7 +7563,7 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
                 _context2.next = 12;
                 break;
               }
-              throw new WorkboxError_WorkboxError('no-response', {
+              throw new WorkboxError('no-response', {
                 url: request.url
               });
             case 12:
@@ -7598,8 +7598,8 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
       var timeoutId;
       var timeoutPromise = new Promise(function (resolve) {
         var onNetworkTimeout = /*#__PURE__*/function () {
-          var _ref3 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee3() {
-            return regeneratorRuntime_regeneratorRuntime().wrap(function _callee3$(_context3) {
+          var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
               while (1) switch (_context3.prev = _context3.next) {
                 case 0:
                   if (false) {}
@@ -7639,9 +7639,9 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
   }, {
     key: "_getNetworkPromise",
     value: function () {
-      var _getNetworkPromise2 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee4(_ref4) {
+      var _getNetworkPromise2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(_ref4) {
         var timeoutId, request, logs, handler, error, response;
-        return regeneratorRuntime_regeneratorRuntime().wrap(function _callee4$(_context4) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               timeoutId = _ref4.timeoutId, request = _ref4.request, logs = _ref4.logs, handler = _ref4.handler;
@@ -7687,7 +7687,7 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
     }()
   }]);
   return NetworkFirst;
-}(Strategy);
+}(Strategy)));
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-strategies/NetworkOnly.js
 
@@ -7723,7 +7723,7 @@ var NetworkFirst = /*#__PURE__*/function (_Strategy) {
  * @extends workbox-strategies.Strategy
  * @memberof workbox-strategies
  */
-var NetworkOnly = /*#__PURE__*/function (_Strategy) {
+var NetworkOnly = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Strategy) {
   _inherits(NetworkOnly, _Strategy);
   var _super = _createSuper(NetworkOnly);
   /**
@@ -7740,7 +7740,7 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
   function NetworkOnly() {
     var _this;
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    classCallCheck_classCallCheck(this, NetworkOnly);
+    _classCallCheck(this, NetworkOnly);
     _this = _super.call(this, options);
     _this._networkTimeoutSeconds = options.networkTimeoutSeconds || 0;
     return _this;
@@ -7752,12 +7752,12 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
    *     triggered the request.
    * @return {Promise<Response>}
    */
-  createClass_createClass(NetworkOnly, [{
+  _createClass(NetworkOnly, [{
     key: "_handle",
     value: function () {
-      var _handle2 = asyncToGenerator_asyncToGenerator( /*#__PURE__*/regeneratorRuntime_regeneratorRuntime().mark(function _callee(request, handler) {
+      var _handle2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(request, handler) {
         var error, response, promises, timeoutPromise;
-        return regeneratorRuntime_regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
               if (false) {}
@@ -7765,7 +7765,7 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
               _context.prev = 2;
               promises = [handler.fetch(request)];
               if (this._networkTimeoutSeconds) {
-                timeoutPromise = timeout_timeout(this._networkTimeoutSeconds * 1000);
+                timeoutPromise = timeout(this._networkTimeoutSeconds * 1000);
                 promises.push(timeoutPromise);
               }
               _context.next = 7;
@@ -7792,7 +7792,7 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
                 _context.next = 18;
                 break;
               }
-              throw new WorkboxError_WorkboxError('no-response', {
+              throw new WorkboxError('no-response', {
                 url: request.url,
                 error: error
               });
@@ -7811,7 +7811,7 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
     }()
   }]);
   return NetworkOnly;
-}(Strategy);
+}(Strategy)));
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-strategies/StaleWhileRevalidate.js
 
@@ -7857,8 +7857,8 @@ var NetworkOnly = /*#__PURE__*/function (_Strategy) {
  * @memberof workbox-strategies
  */
 var StaleWhileRevalidate = /*#__PURE__*/function (_Strategy) {
-  _inherits(StaleWhileRevalidate, _Strategy);
-  var _super = _createSuper(StaleWhileRevalidate);
+  inherits_inherits(StaleWhileRevalidate, _Strategy);
+  var _super = createSuper_createSuper(StaleWhileRevalidate);
   /**
    * @param {Object} [options]
    * @param {string} [options.cacheName] Cache name to store and retrieve
@@ -7882,7 +7882,7 @@ var StaleWhileRevalidate = /*#__PURE__*/function (_Strategy) {
     if (!_this.plugins.some(function (p) {
       return 'cacheWillUpdate' in p;
     })) {
-      _this.plugins.unshift(cacheOkAndOpaquePlugin);
+      _this.plugins.unshift(cacheOkAndOpaquePlugin_cacheOkAndOpaquePlugin);
     }
     return _this;
   }
@@ -7959,7 +7959,7 @@ var StaleWhileRevalidate = /*#__PURE__*/function (_Strategy) {
     }()
   }]);
   return StaleWhileRevalidate;
-}(Strategy);
+}(Strategy_Strategy);
 
 ;// CONCATENATED MODULE: ./node_modules/workbox-strategies/index.js
 /*
@@ -7998,7 +7998,7 @@ clientsClaim();// Precache all of the assets generated by your build process.
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute([{'revision':'a1b00ec58490f8b7c0b2fa7c56cbba58','url':'/index.html'},{'revision':null,'url':'/static/css/main.4dee22b1.css'},{'revision':null,'url':'/static/js/787.f3f1eca8.chunk.js'},{'revision':null,'url':'/static/js/main.0f41a2ec.js'}]);// Set up App Shell-style routing, so that all navigation requests
+precacheAndRoute([{'revision':'a7ada86ad200ed2f569f9db157cf80c0','url':'/index.html'},{'revision':null,'url':'/static/css/main.5baa0f15.css'},{'revision':null,'url':'/static/js/787.c4a51308.chunk.js'},{'revision':null,'url':'/static/js/main.973c65f2.js'}]);// Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 var fileExtensionRegexp=new RegExp('/[^/?]+\\.[^/]+$');registerRoute(// Return false to exempt requests from being fulfilled by index.html.
