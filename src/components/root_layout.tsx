@@ -2,9 +2,6 @@ import {FC, useEffect, useState} from 'react'
 import { TfiAngleLeft } from "react-icons/tfi";
 
 import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image'
-import Navbar from 'react-bootstrap/Navbar'
-import NavbarBrand from 'react-bootstrap/NavbarBrand'
 import NavBar from 'react-bootstrap/NavBar'
 import { useLocation, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap';
