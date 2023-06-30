@@ -27,6 +27,7 @@ import USStateSelectWrapper from "./us_state_select_wrapper";
 import DisplayErrorErrorBoundary from "./display_error_error_boundary";
 import Select from "./select";
 import RadioWrapper from "./radio_wrapper";
+import React from "react";
 
 
 
@@ -127,7 +128,7 @@ const EditorFlexBox: FC = () => {
   return (
     <StoreProvider dbName="template_editor" docId={"playground"}>
       <StoreContext.Consumer>
-        {({ doc }) => {
+        {({ data }) => {
           return (
             <div className="container" id="mdx-container">
               <div className="flex-container">
@@ -153,7 +154,7 @@ const EditorFlexBox: FC = () => {
                 <div className="flex-child">
                   <div className="flex-child">
                     <DisplayErrorErrorBoundary>
-                      <MDXComponent components={components} doc={doc} />
+                      <MDXComponent components={components} doc={data} />
                     </DisplayErrorErrorBoundary>
                   </div>
                 </div>

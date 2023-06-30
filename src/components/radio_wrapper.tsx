@@ -26,12 +26,12 @@ const RadioWrapper: FC<RadioWrapperProps> = ({label, options, path}) => {
   const id = pathToId(path, "input")
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <Radio id={id} label={label} 
               options={options}
               updateValue={(value: any) => upsertData(path, value)}
-              value={get(doc, path)}
+              value={get(data, path)}
             />
           )
         }
