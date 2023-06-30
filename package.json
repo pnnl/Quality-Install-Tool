@@ -48,6 +48,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "jsx": "^0.9.89",
     "lodash": "^4.17.21",
     "markdown-to-jsx": "^7.2.0",
     "mini-css-extract-plugin": "^2.4.5",

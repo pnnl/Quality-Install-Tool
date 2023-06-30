@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider, BrowserRouter} from 'react-router-dom'
-import logo from "./logo.svg";
+import {createBrowserRouter, Navigate, RouterProvider, useRouteError} from 'react-router-dom'
 import "./App.css";
 
 import JsonStoreView from './components/json_store_view'
@@ -11,6 +10,7 @@ import TemplateEditor from "./components/editor";
 // import { basename } from "path";
 import Home from "./components/home";
 import JobsView from "./components/jobs_view";
+import React from "react";
 
 console.log("app.tsx")
 // Routes to be used by React Router, which handles all the
@@ -55,6 +55,5 @@ function App() {
     <RouterProvider router={router}/>    
   )
 }
-
 
 export default App;

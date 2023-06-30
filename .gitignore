@@ -1,2 +1,5 @@
-node_modules/
-build/
+/node_modules
+/build
+.vscode
+.DS_Store
+yarn-error.log
