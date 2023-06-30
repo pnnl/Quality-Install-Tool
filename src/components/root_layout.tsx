@@ -2,7 +2,7 @@ import {FC, useEffect, useState} from 'react'
 import { TfiAngleLeft } from "react-icons/tfi";
 
 import Container from 'react-bootstrap/Container';
-import NavBar from 'react-bootstrap/NavBar'
+import Navbar from 'react-bootstrap/Navbar';
 import { useLocation, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap';
 
@@ -47,7 +47,7 @@ useEffect(() => {
 
 return (
   <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", height: "100vh" }}>
-    <NavBar style={{ backgroundColor: "green" }}>
+    <Navbar style={{ backgroundColor: "green" }}>
       {/* Conditional rendering of a back button */}
       {showBackButton && (
         <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
@@ -60,11 +60,11 @@ return (
         </div>
       )}
       <Container style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
-        <NavBar.Brand>
+        <Navbar.Brand>
           <span style={{ color: "gold", fontSize: "2rem" }}>Quality Install Tool</span>
-        </NavBar.Brand>
+        </Navbar.Brand>
       </Container>
-    </NavBar>
+    </Navbar>
     <div style={{ paddingTop: "1rem" ,paddingBottom:"1rem"}}>
       {children}
     </div>
