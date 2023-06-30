@@ -151,8 +151,6 @@ const EditorFlexBox: FC = () => {
                   </div>
                 </div>
                 <div className="flex-child">
-                  {/* {!hasError && <MDXContent components={components} doc={doc} />}
-                  {hasError && <b>There was an issue rendering the provided template. Please correct any syntax error and resubmit.</b>} */}
                   <div className="flex-child">
                     <DisplayErrorErrorBoundary>
                       <MDXComponent components={components} doc={doc} />
