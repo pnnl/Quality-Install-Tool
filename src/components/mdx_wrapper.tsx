@@ -55,11 +55,11 @@ interface MdxWrapperProps {
 const MdxWrapper: FC<MdxWrapperProps> = ({Component}) => {
   return (
     <StoreContext.Consumer>
-      {({doc}) => {
+      {({metadata, data}) => {
         return (
           <div className="container" id="mdx-container">
             {/* doc will be undefined for the very first render */}
-            {doc ? <Component components={components} doc={doc} /> : null}
+            {metadata && data ? <Component components={components} metada={metadata} data={data} /> : null}
           </div>
         )
       }}

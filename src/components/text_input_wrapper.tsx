@@ -30,11 +30,11 @@ const TextInputWrapper: FC<TextInputWrapperProps> = ({label, path, min=0, max=10
 
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <TextInput id={id} label={label} 
               updateValue= {(value: any) => upsertData(path, value)}
-              value = {get(doc, path)} min={min} max={max} regexp={regexp}/>
+              value = {get(data, path)} min={min} max={max} regexp={regexp}/>
           )
         }
       }
