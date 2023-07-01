@@ -1,7 +1,11 @@
 
 
 <Tabs>
-  <Tab eventKey="customer" style={{paddingTop:"1rem"}} title="Customer Info">
+  <Tab eventKey="customer" style={{paddingTop:"1rem"}} title="Project Info">
+    ##### Installer
+    <StringInput label="Technician Name" path="technician_name" />
+    <StringInput label="Installation Company" path="installation_company" />
+    
     ##### Builiding Location
     <StringInput label="Street Address" path="location.street_address" />
     <StringInput label="City" path="location.city" />
@@ -10,10 +14,6 @@
     <PhotoInput id="house_number_photo" label="House Number – Photo">
       Provide a photo of the house that shows the house number.
     </PhotoInput>
-    <StringInput label="Technician Name" path="technician_name" />
-    <StringInput label="Installation Company" path="installation_company" />
-    <DateInput label="Installation Date" path="install_date" />
-    <StringInput label="Customer Name" path="customer_name" />
   </Tab>
   <Tab eventKey="planned" style={{paddingTop:"1rem"}} title="Planned Install Area">
     ##### HPWH Space Evaluation
@@ -202,6 +202,7 @@
 
   </Tab>
   <Tab eventKey="install" style={{paddingTop:"1rem"}} title="Installation Day Photos">
+    <DateInput label="Installation Date" path="install_date" />
     <PhotoInput id="completed_installed_photo" label="Completed Installation – Photo">
       Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
       insulated hot water line, pressure relief valuve discharge, and condensate.
