@@ -2,7 +2,7 @@
 
 <Tabs>
   <Tab eventKey="customer" style={{paddingTop:"1rem"}} title="Project">
-    The inputs on this tab could be filled in prior to the initial site visit.
+    The data for this tab should be know prior to the initial site visit.
 
     ##### Installer
     <StringInput label="Technician Name" path="installer.name" />
@@ -14,47 +14,62 @@
     <USStateSelect label="State" path="location.state" />
     <StringInput label="Zip Code" path="location.zip_code" />
   </Tab>
-  <Tab eventKey="planned" style={{paddingTop:"1rem"}} title="Assessment">
-  The inputs on this tab could be filled in during the initial site visit.
 
+  <Tab eventKey="planned" style={{paddingTop:"1rem"}} title="Assessment">
+  The data for this tab should be collected during the initial site visit.
+
+    ##### Building
     <PhotoInput id="street_number_photo" label="Street Number – Photo">
       Provide a photo of the building that shows the street number.
     </PhotoInput>
+
+    ##### Old Water Heater
+    <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
+      For some jurisdictions, rebates for an HPWH might be conditioned on not only the
+      efficiency specifications of the HPWH but also the fuel type of the existing water
+      heater the HPWH is replacing. For jurisdictions where this applies, provide
+      a photo of the nameplate showing the model number,
+      fuel type, and the serial number of the old water heater.
+    </PhotoInput>
+
     ##### HPWH Space Evaluation
     <Collapsible header="HPWH Space Evaluation — Instructions">
       The successful installation of a heat pump water heater (HPWH) begins in the planning
       stage by assessing whether the location where the HPWH will be installed is suitable.
-      The space around the HPWH must be...
-      1. large enough to meet the air volume requirement (700 ft3 minimum) of the HPWH,
-      2. where some compressor and fan noise (50 to 65 dB, normal conversation loudness) is
-      acceptable,
-      3. where some cooled air (approximately a half-ton) is acceptable or desirable,
-      4. not dusty, or where a significant amount of dust is generated,
-      5. tall enough (~12” taller than the current tank height, ~76” if < 65 gals to ~ 86” if >= 80
-      gals) to allow the filter in the HPWH to be periodically accessed for cleaning,
-      6. where there is access to a drain, drain line, or utility sink for condensate, and
-      7. in the 40°–125° F (4.4°–51° C) temperature range year-round
+      The space around the HPWH must be:
+      1. Large enough to meet the minimum HPWH air volume requirement of 700 ft<sup>3</sup>
+      2. Where some compressor and fan noise (50 to 65 dB, normal conversation loudness) is
+      acceptable
+      3. Where the cooled air exhausted from the HPWH (approximately a half-ton) is acceptable or desirable
+      4. Not dusty, or where a significant amount of dust is generated
+      5. Tall enough (~12” taller than the tank height, ~76” if < 65 gals to ~86” if &ge; 80
+      gals) to allow the filter in the HPWH to be periodically accessed for cleaning
+      6. Where there is access to a drain, drain line, or utility sink for condensate
+      7. In the 40°F–125°F (4.4°C–51°C) temperature range year-round
 
       It is possible to also meet the air volume requirement of the HPWH by installing it next
       to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
       of the HPWH to an adjacent space. It is also possible to install a condensate pump where
       a drain located below the elevation of the HPWH’s condensate outlet is not available.
 
-      To verify conditions 1-7 have been met please use the "HPWH Location" photo input to
+      To verify conditions 1-7 have been met, use the "HPWH Location" photo input to
       take a
-      wide-angle picture of the space where the HPWH will be installed. If the HPWH is to
+      wide-angle photo of the space where the HPWH will be installed. If the HPWH is to
       be ducted or using the air volume of an adjacent space via a louvered door,
-      please supply a photo of the connected space using the "Adjacent Space" photo input.
+      supply a photo of the connected space using the "Adjacent Space" photo input.
       Also use the "Space Air Volume Calculator" table to calculate the Air Volume of the space that the HPWH is
       using to meet its air volume requirement.
     </Collapsible>
 
     <PhotoInput id="hpwh_location_photo" label="HPWH Location – Photo">
-      Provide a wide-angle photo of the space where the HPWH is/will be installed.
+      Provide a wide-angle photo of the space where the HPWH will be installed to best capture the space requirements
+      from the "HPWH Space Evaluation - Instructions" above.
     </PhotoInput>
 
     <PhotoInput id="adjacent_space_photo" label="Adjacent Space – Photo">
-      Provide a photo of any adjacent space that will supply air to meet the air volume requirement for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting to meet air volume requirements.
+      Provide a photo of any adjacent space that will supply air to meet the minimum air volume requirement for the HPWH.
+      This is applicable to HPWH installations that will utilize a louvered door or ducting to meet the minimum air volume 
+      requirement.
     </PhotoInput>
 
     Length (ft) of the space that the HPWH is using to meet its air volume requirement.
@@ -65,17 +80,6 @@
     <NumberInput label="height (ft)" path="volume_calculator.height" />
     Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup>
 
-    ---
-    ##### Old Water Heater
-    <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
-      For some jurisdictions, rebates for an HPWH might be conditioned on not only the
-      efficiency specifications of the HPWH but also the fuel type of the existing water
-      heater the HPWH is replacing. For jurisdictions where this applies, please provide
-      a photo of the nameplate showing the model number,
-      fuel type, and the serial number of the old water heater.
-    </PhotoInput>
-
-    ---
   </Tab>
   <Tab eventKey="sizing" style={{paddingTop:"1rem"}} title="Sizing">
     <Collapsible header="HPWH Selection – Instructions">
@@ -256,7 +260,7 @@
     ---
     **Heat Pump Water Heater Quality Installation Documentation Report**
 
-    ##### Builiding Location
+    ##### Building Location
     **Street Address:** {props.data.location?.street_address}
     **City:** {props.data.location?.city}
     **State:** {props.data.location?.state}
@@ -297,15 +301,15 @@
     
     The quality installation documentation components include a:
     
-    1. Picture (wide-angle) of the space where the HPWH is/will be installed
-    2. Picture of the adjacent space if an adjacent space supplying air to meet the air volume requirement of the HPWH is used via a louvered door, high and low air grill, or ducting.
+    1. Photo (wide-angle) of the space where the HPWH is/will be installed
+    2. Photo of the adjacent space if an adjacent space supplying air to meet the air volume requirement of the HPWH is used via a louvered door, high and low air grill, or ducting.
     3. Enter the length, width, and height measurements of the space used to meet the air volume requirement of the HPWH.
-    4. Picture of the nameplate of the old water heater.
+    4. Photo of the nameplate of the old water heater.
     5. Record the inputs used on the Heat Pump Water Heater Decision Tool from the Building American Solution Center for calculating the recommended HPWH size
-    6. A wide-angle picture of the completed HPWH installation
-    7. Picture of the HPWH nameplate
-    8. Picture of the HPWH screen showing the mode
-    9. Picture of the utility energy management communication module CTA-2045 module if one is installed
+    6. A wide-angle photo of the completed HPWH installation
+    7. Photo of the HPWH nameplate
+    8. Photo of the HPWH screen showing the mode
+    9. Photo of the utility energy management communication module CTA-2045 module if one is installed
     </Collapsible>
 
     <br></br>
@@ -376,7 +380,7 @@
     <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo" required>
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
       efficiency specifications of the HPWH but also the fuel type of the existing water
-      heater the HPWH is replacing. For jurisdictions where this applies, please provide
+      heater the HPWH is replacing. For jurisdictions where this applies, provide
       a photo of the nameplate showing the model number,
       fuel type, and the serial number of the old water heater.
     </Photo>
