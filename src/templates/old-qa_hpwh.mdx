@@ -1,0 +1,555 @@
+
+
+<Tabs>
+  <Tab eventKey="customer" style={{paddingTop:"1rem"}} title="Customer Info">
+    ##### Builiding Location
+    <StringInput label="Street Address" path="location.street_address" />
+    <StringInput label="City" path="location.city" />
+    <USStateSelect label="State" path="location.state" />
+    <StringInput label="Zip Code" path="location.zip_code" />
+    <PhotoInput id="house_number_photo" label="House Number – Photo">
+      Provide a photo of the house that shows the house number.
+    </PhotoInput>
+    <StringInput label="Technician Name" path="technician_name" />
+    <StringInput label="Installation Company" path="installation_company" />
+    <DateInput label="Installation Date" path="install_date" />
+    <StringInput label="Customer Name" path="customer_name" />
+  </Tab>
+  <Tab eventKey="planned" style={{paddingTop:"1rem"}} title="Planned Install Area">
+    ##### HPWH Space Evaluation
+    <Collapsible header="HPWH Space Evaluation — Instructions">
+      The successful installation of a heat pump water heater (HPWH) begins in the planning
+      stage by assessing whether the location where the HPWH will be installed is suitable.
+      The space around the HPWH must be...
+      1. large enough to meet the air volume requirement (700 ft3 minimum) of the HPWH,
+      2. where some compressor and fan noise (50 to 65 dB, normal conversation loudness) is
+      acceptable,
+      3. where some cooled air (approximately a half-ton) is acceptable or desirable,
+      4. not dusty, or where a significant amount of dust is generated,
+      5. tall enough (~12” taller than the current tank height, ~76” if < 65 gals to ~ 86” if >= 80
+      gals) to allow the filter in the HPWH to be periodically accessed for cleaning,
+      6. where there is access to a drain, drain line, or utility sink for condensate, and
+      7. in the 40°–125° F (4.4°–51° C) temperature range year-round
+
+      It is possible to also meet the air volume requirement of the HPWH by installing it next
+      to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
+      of the HPWH to an adjacent space. It is also possible to install a condensate pump where
+      a drain located below the elevation of the HPWH’s condensate outlet is not available.
+
+      To verify conditions 1-7 have been met please use the "HPWH Location" photo input to
+      take a
+      wide-angle picture of the space where the HPWH will be installed. If the HPWH is to
+      be ducted or using the air volume of an adjacent space via a louvered door,
+      please supply a photo of the connected space using the "Adjacent Space" photo input.
+      Also use the "Space Air Volume Calculator" table to calculate the Air Volume of the space that the HPWH is
+      using to meet its air volume requirement.
+    </Collapsible>
+
+    <PhotoInput id="hpwh_location_photo" label="HPWH Location – Photo">
+      Provide a wide-angle photo of the space where the HPWH is/will be installed.
+    </PhotoInput>
+
+    ##### Air Volume
+    <PhotoInput id="adjacent_space_photo" label="Adjacent Space – Photo">
+      Provide a photo of any adjacent space that will supply air to meet the air volume requirement for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting to meet air volume requirements.
+    </PhotoInput>
+
+    Length (ft) of the space that the HPWH is using to meet its air volume requirement.
+    <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />
+    Width (ft) of the space that the HPWH is using to meet its air volume requirement.
+    <NumberInput label="Width (ft)" path="volume_calculator.width"  />
+    Height (ft) of the space that the HPWH is using to meet its air volume requirement.
+    <NumberInput label="height (ft)" path="volume_calculator.height" />
+    Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup>
+
+    ---
+    ##### Old Water Heater
+    <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
+      For some jurisdictions, rebates for an HPWH might be conditioned on not only the
+      efficiency specifications of the HPWH but also the fuel type of the existing water
+      heater the HPWH is replacing. For jurisdictions where this applies, please provide
+      a photo of the nameplate showing the model number,
+      fuel type, and the serial number of the old water heater.
+    </PhotoInput>
+
+    ---
+  </Tab>
+  <Tab eventKey="sizing" style={{paddingTop:"1rem"}} title="HPWH Sizing">
+    <Collapsible header="HPWH Selection – Instructions">
+      The efficiency of HPWHs is profoundly affected by the way hot water is used and thus,
+      selecting the right sized HPWH is important to user satisfaction.
+      Most HPWHs on the market are the type with a small heat pump (e.g., 550-watt compressor)
+      on top of a storage water heater tank. These products have a refrigerant loop
+      heat exchanger wrapped around and integrated into the tank as well as electric
+      resistance elements to provide supplemental/back up heat when hot water demands
+      deplete the tank faster than the small heat pump can replenish the tank with heat.
+      An illustration of how a HPWH works is shown below.
+
+      <Figure src="/images/hpwh/hpwh_components.jpeg">
+        The components in a common HPWH (BASC 2015)
+      </Figure>
+
+      The heat pump can deliver the same heat into the water in the tank using 1/3 to ¼ of
+      the electricity of the electric resistance elements but requires more time to do this.
+      The HPWH will operate less efficiently when the electric resistance elements are used
+      to provide supplemental heat. If the typical hot water demands are mostly satisfied by
+      the stored hot water in the tank, then it does not affect user comfort whether the HPWH
+      replenishes the heat in the tank quickly but less efficiently or slower but much more
+      efficiently. Water heater manufacturers list how much hot water a water heater can
+      supply during a period of high demand using a metric called the first-hour rating (FHR).
+      The first-hour rating (FHR) is a hot water delivery calculation that factors in both
+      the water heater volume and the heating rate. Since the heat pump heats the water
+      slowly, the tank volume of hot water will largely determine the FHR in a HPWH. This is
+      why selecting a HPWH with a tank large enough to satisfy the peak hour of hot water
+      demand is important in selecting the correct HPWH for the needs of the house.
+
+      To estimate your peak hour demand:
+      - Determine what time of day (morning, noon, evening) you use the highest amount of
+      hot water in your home. Keep in mind the number of people living in your home.
+      - Use the worksheet below to estimate your maximum usage of hot water during this
+      one-hour period of the day—this is your peak hour demand. Note: the worksheet does not
+      estimate total daily hot water usage.
+
+      * Image*: Worksheet for Estimating Peak Hour Demand/First Hour Rating
+      *Table*: Source: *Link*: U.S. Department of Energy, Sizing a New Water Heater
+
+      *Image*: Table 1. Example of First Hour Ratings of HPWHs with Different Storage
+      Tank Sizes
+    </Collapsible>
+
+    ---
+
+    <Collapsible header="HPWH Installation - Instructions">
+      - Check the water pressure to the house, and ensure it is between 45 and 80 psi.
+      If it is above 80 PSI, a whole house water pressure reducing/regulating valve should
+      be installed to protect the water heater and water fixture valves in the house.
+      - Check that the floor can support the weight of the HPWH when filled with water.
+      This is especially important if the HPWH selected has a larger storage capacity than
+      the original one.
+
+      | Capcity (gal)| Filled Weight (lbs) |
+      | --- | --- |
+      | 50  | 573 |
+      | 66  | 796 |
+      | 80  | 921 |
+
+      - Install the HPWH into a drain pan to protect the surrounding location from water
+      damage if a leak occurs. Install the leak detection sensor into the drain pan if the
+      HPWH includes one.
+      - Rotate the HPWH during installation so that the exhaust does not face a solid wall.
+      The exhaust of the HPWH must be more than the HPWH manufacturer’s minimum required
+      distance from a solid wall, usually 7 inches. If installing into a closet with a
+      louvered door or high and low air grill, there is a maximum distance, typically around
+      12 inches, between the exhaust and the louvers, refer to the manufacturer’s specific
+      instructions. The louvers on the door must extend to the bottom of the door to allow
+      the cold air to fall out.
+      - Replace the thermal expansion tank when replacing the water heater, expansion tanks
+      typically last 5 to 10 years. Adjust the pre-charge pressure of the thermal expansion
+      tank to match the home’s water pressure using a tire pump. This 2009 Watts Water video
+      shows how to do this step. Write down the pre-charge pressure onto the tank. A thermal
+      expansion tank is not needed if the water heater is connected to a well pressure tank
+      and there are no check valves to prevent backflow.
+      - Follow local code requirements on dielectric unions and anti-siphon vacuum relief
+      valve requirements. Flexible supply lines made of corrugated copper, corrugated
+      stainless steel, and braided stainless steel often have dielectric sleeves in the
+      design.
+      - External heat traps are not if the HPWH has a built-in heat trap. To determine the
+      presence of in-built heat traps, look at the cold water inlet and hot water outlet for
+      plastic or metal hardware that captures a ball or rubber flap as shown in the examples
+      below.
+
+      <Figure src="/images/hpwh/heattraps.png" />
+
+      - Do not make any soldered inlet and outlet connections while connected to the water
+      heater, the built-in heat traps are plastic
+      - Insulate the first 5 ft of hot water pipe to R-3 or more. If a recirculation pump is
+      installed insulate all hot water and recirculation piping. Some HPWH rebates may
+      require the recirculation pump to operate on a timer or demand button to reduce standby
+      energy loss penalties.
+      - The pressure relief valve discharge must terminate no more than 6 inches above the
+      floor surface to a waste receptor or floor drain to prevent hot water discharge from
+      being directed onto a building occupant that may be nearby.
+      - The condensate is piped to a drain, sink, or condensate pump.
+      - Install earthquake straps if required by local code to the bottom 1/3 and top 1/3 of
+      the tank, do not install the straps to the heat pump portion.
+      - Set the HPWH to hybrid mode.
+      - Set the HPWH temperature to no more than 120 F. Setting temperatures higher than
+      this requires a thermostatic mixing valve at the water heater to prevent scalding.
+    </Collapsible>
+
+    ---
+    ##### HPWH Sizing
+    Record below the input selections entered into the Heat Pump Water Heater Decision Tool on the Building American Solution Center. ([Reference](https://dfdev01.pnl.gov/trisha/basc8/cchp/docroot/hpwh_installation_tool))
+
+    ---
+    <Radio label="Electrical Availability" options={["30A 240V near water heater OR 30A 240V circuit added to home with 10 AWG wire to HPWH", "240V circuit with 12/14 AWG wire if 10 AWG wire is not cost effective", "120V 15A dedicated circuit", "120V 15A shared circuit"]} path="electrical_availability" />
+
+    <StringInput label="Zip Code" path="location.zip_code" />
+
+    <ClimateZoneSelect label="Climate Zone" path="location.climate_zone" />
+
+    <Radio label="Water heater will draw air from" options={["Conditioned space (including finished or conditioned basement, crawlspace, or attic)", "Garage", "Unconditioned basement", "Unconditioned crawlspace", "Unconditioned attic", "Closet/shed connected to outdoor"]} path="hpwh_location" />
+
+    <NumberInput label="Number of Bedrooms" min={0} path="bedrooms"  />
+
+    <NumberInput label="Number of Bathrooms" min={0} path="bathrooms"  />
+
+    ##### HPWH Sizing Outputs
+    <Select label="HPWH Voltage" options={["120", "240"]} path="hpwh_voltage" />
+
+    <Select label="HPWH Gallon Tank" options={["40", "50", "65/66", "80"]} path="hpwh_gallon_tank" />
+
+
+  </Tab>
+  <Tab eventKey="install" style={{paddingTop:"1rem"}} title="Installation Day Photos">
+    <PhotoInput id="completed_installed_photo" label="Completed Installation – Photo">
+      Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
+      insulated hot water line, pressure relief valuve discharge, and condensate.
+    </PhotoInput>
+
+    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
+      Provide a close-up photo of the nameplate of the installed system showing the
+      model number an dserial number.
+    </PhotoInput>
+
+    <PhotoInput id="mode_photo" label="HPWH Screen with Mode – Photo">
+      Prove a close-up photo of the HPWH Screen showing the mode.
+    </PhotoInput>
+
+    <PhotoInput id="cta_2045_module_photo" label="CTA-2045 Module – Photo">
+      Provide a photo of the CTA-2045 Module if installed.
+    </PhotoInput>
+
+    ##### HPWHW Post-Installation
+    <Collapsible header="HPWH Post-Install – Instructions">
+      Inform the homeowner on how to access the air filter to check and clean as needed. A
+      filter check should be performed every 3 months. If dirty, clean the air filter by
+      vacuuming the dust and washing with mild soap and detergent. Thoroughly dry before
+      reinstalling.
+
+      It is also suggested to inform the homeowner on how to perform the following annual
+      water heaters checks that are not specific to a HPWH:
+      1. Check the pressure relief valve by placing a small bucket at the end of the
+      discharge pipe and pull and rotate the handle to open the valve for a few seconds to
+      ensure it opens fully. When performing this check, stand back and wear closed-toe shoes
+      to protect your feet from hot water. Once you begin to rotate the handle back close it
+      should snap close by itself. The discharge pipe should stop dripping shortly. If it
+      continues to drip, call a plumber to have the pressure relief valve replaced.
+      2. Check the expansion tank. Remove the cap and briefly press in the Schrader valve to
+      check that air (and not water) is expelled. If water is expelled the thermal expansion
+      tank has failed and will need replacement, call a plumber to have the thermal expansion
+      tank replaced. If air is expelled, the thermal expansion tank is working as expected.
+      The pre-charge pressure of the thermal expansion tank can be checked by turning off the
+      cold water main, opening a faucet to relieve the water pressure in the pipes, then
+      checking the pre-charge with a tire pressure gauge. Adjust as needed using a tire pump
+      to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
+      one is present, and reopen the cold water main shutoff valve.
+    </Collapsible>
+
+  </Tab>
+  <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Final Report">
+    <PrintSection label="Print Report">
+    ---
+    **Heat Pump Water Heater Quality Installation Documentation Report**
+
+    ##### Builiding Location
+    **Street Address:** {props.data.location?.street_address}
+    **City:** {props.data.location?.city}
+    **State:** {props.data.location?.state}
+    **Zip:** {props.data.location?.zip_code}
+
+
+    **Technician Name:** {props.data.technician_name}
+
+    **Installation Company:** {props.data.installation_company}
+
+    **Date:** {props.data.install_date}
+
+    <Photo id="house_number_photo" label="House Number – Photo" required />
+
+    Report for {props.data.customer_name}, and energy efficiency program quality assurance and quality control implementation contractor staff.
+
+    *The photos and information in this report use timestamps and geotags to prevent the reuse of photos from an unrelated project. The report's content is available only to the parties above. Any additional use such as for marketing and training purposes requires written permissions from the customer, in which case all timestamps, geotags, and other metadata from the photos and any identifiable characteristics that links the photos to this specific house will be removed prior. The homeowner / landlord is encouraged to retain a copy of this report which could help add value to a home sale and foster buyer confidence in the quality of the energy efficiency upgrade work that was performed. This report's data is protected by the standard data security and privacy best practices.*
+
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+    <br/><br/>
+
+    ---
+    <Collapsible header="About the Report">
+    This report is intended to document the critical details of upgrading to a heat pump water heater spanning from the evaluative, pre-installation, steps including evaluating the space to ensure it is suitable for a heat pump water heater (HPWH) and selecting the right sized HPWH to the completed HPWH installation. 
+
+    ## About home performance
+    Treating a home as a system is a core principle of the home performance program. This means health and safety is the most important and thus matters that affect it need to be addressed first and foremost. Next in the order of importance is to ensure the home is properly managing bulk water from rain, snow, or groundwater since bulk water entering where it should not will rapidly cause mold and moisture damage to building materials. Next in the order of importance is to ensure the home doesn’t have significant air leakages which carries with it humidity that can condense and cause mold and moisture damage to building materials. While comfort and energy efficiency of the home are important, the aforementioned elements are more important. The program does not promote energy efficiency upgrades if the home needs more important repairs, remediations, and upgrades first to uphold and protect this building science order of importance and will ensure that any energy efficiency upgrade does not cause a health and safety problem to the home.
+
+    ## About Naturally Drafted Fossil Fuel Appliances Inside the Home:
+    If the old water heater is a naturally drafted, also known as an atmospherically vented water heater and there are other naturally drafted fossil fuel appliances inside the pressure boundary of the home, the naturally drafted fossil fuel appliances will be tested for proper draft and combustion during the evaluative step and after the heat pump water heater is installed. While unlikely, there is a small possibility that removing the naturally drafted water heater could cause remaining combustion appliances that share the chimney flue to fail to draft properly when the dryer, range hood, and exhaust fans are operated simultaneously in concert with the remaining naturally drafted combustion appliances. If this is found to be the case the contractor will remediate this health and safety impacting condition. The solution could include flue pipe modifications, adding a make-up air supply to the combustion appliance area or some other solution. The homeowner/landlord should be aware of this possibility and the costs of this remediation action.
+
+    ## About the Quality Installation Documentation Components
+    
+    The quality installation documentation components include a:
+    
+    1. Picture (wide-angle) of the space where the HPWH is/will be installed
+    2. Picture of the adjacent space if an adjacent space supplying air to meet the air volume requirement of the HPWH is used via a louvered door, high and low air grill, or ducting.
+    3. Enter the length, width, and height measurements of the space used to meet the air volume requirement of the HPWH.
+    4. Picture of the nameplate of the old water heater.
+    5. Record the inputs used on the Heat Pump Water Heater Decision Tool from the Building American Solution Center for calculating the recommended HPWH size
+    6. A wide-angle picture of the completed HPWH installation
+    7. Picture of the HPWH nameplate
+    8. Picture of the HPWH screen showing the mode
+    9. Picture of the utility energy management communication module CTA-2045 module if one is installed
+    </Collapsible>
+
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    ---
+
+
+    ## Planned Install Area
+    **HPWH Space Evaluation**
+    <Collapsible header="HPWH Space Evaluation — Instructions">
+      The successful installation of a heat pump water heater (HPWH) begins in the planning
+      stage by assessing whether the location where the HPWH will be installed is suitable.
+      The space around the HPWH must be...
+      1. large enough to meet the air volume requirement (700 ft3 minimum) of the HPWH,
+      2. where some compressor and fan noise (50 to 65 dB, normal conversation loudness) is
+      acceptable,
+      3. where some cooled air (approximately a half-ton) is acceptable or desirable,
+      4. not dusty, or where a significant amount of dust is generated,
+      5. tall enough (~12” taller than the current tank height, ~76” if < 65 gals to ~ 86” if >= 80
+      gals) to allow the filter in the HPWH to be periodically accessed for cleaning,
+      6. where there is access to a drain, drain line, or utility sink for condensate, and
+      7. in the 40°–125° F (4.4°–51° C) temperature range year-round
+
+      It is possible to also meet the air volume requirement of the HPWH by installing it next
+      to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
+      of the HPWH to an adjacent space. It is also possible to install a condensate pump where
+      a drain located below the elevation of the HPWH’s condensate outlet is not available.
+
+    </Collapsible>
+
+    <Photo id="hpwh_location_photo" label="HPWH Location – Photo" required>
+    </Photo>
+
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+
+    ---
+
+    **Air Volume**
+    <Photo id="adjacent_space_photo" label="Adjacent Space – Photo" required>
+      Provide a photo of any adjacent space that will supply air to meet the air volume requirement for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting to meet air volume requirements.
+    </Photo>
+
+    **Air Volume** = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup>
+
+    ---
+
+    ##### Old Water Heater
+    <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo" required>
+      For some jurisdictions, rebates for an HPWH might be conditioned on not only the
+      efficiency specifications of the HPWH but also the fuel type of the existing water
+      heater the HPWH is replacing. For jurisdictions where this applies, please provide
+      a photo of the nameplate showing the model number,
+      fuel type, and the serial number of the old water heater.
+    </Photo>
+
+    <br></br>
+
+    ---
+
+
+    <Collapsible header="HPWH Selection – Instructions">
+      The efficiency of HPWHs is profoundly affected by the way hot water is used and thus,
+      selecting the right sized HPWH is important to user satisfaction.
+      Most HPWHs on the market are the type with a small heat pump (e.g., 550-watt compressor)
+      on top of a storage water heater tank. These products have a refrigerant loop
+      heat exchanger wrapped around and integrated into the tank as well as electric
+      resistance elements to provide supplemental/back up heat when hot water demands
+      deplete the tank faster than the small heat pump can replenish the tank with heat.
+      An illustration of how a HPWH works is shown below.
+
+      <Figure src="/images/hpwh/hpwh_components.jpeg">
+        The components in a common HPWH (BASC 2015)
+      </Figure>
+
+      The heat pump can deliver the same heat into the water in the tank using 1/3 to ¼ of
+      the electricity of the electric resistance elements but requires more time to do this.
+      The HPWH will operate less efficiently when the electric resistance elements are used
+      to provide supplemental heat. If the typical hot water demands are mostly satisfied by
+      the stored hot water in the tank, then it does not affect user comfort whether the HPWH
+      replenishes the heat in the tank quickly but less efficiently or slower but much more
+      efficiently. Water heater manufacturers list how much hot water a water heater can
+      supply during a period of high demand using a metric called the first-hour rating (FHR).
+      The first-hour rating (FHR) is a hot water delivery calculation that factors in both
+      the water heater volume and the heating rate. Since the heat pump heats the water
+      slowly, the tank volume of hot water will largely determine the FHR in a HPWH. This is
+      why selecting a HPWH with a tank large enough to satisfy the peak hour of hot water
+      demand is important in selecting the correct HPWH for the needs of the house.
+
+      To estimate your peak hour demand:
+      - Determine what time of day (morning, noon, evening) you use the highest amount of
+      hot water in your home. Keep in mind the number of people living in your home.
+      - Use the worksheet below to estimate your maximum usage of hot water during this
+      one-hour period of the day—this is your peak hour demand. Note: the worksheet does not
+      estimate total daily hot water usage.
+
+      * Image*: Worksheet for Estimating Peak Hour Demand/First Hour Rating
+      *Table*: Source: *Link*: U.S. Department of Energy, Sizing a New Water Heater
+
+      *Image*: Table 1. Example of First Hour Ratings of HPWHs with Different Storage
+      Tank Sizes
+    </Collapsible>
+
+    ---
+    <Collapsible header="HPWH Installation - Instructions">
+      - Check the water pressure to the house, and ensure it is between 45 and 80 psi.
+      If it is above 80 PSI, a whole house water pressure reducing/regulating valve should
+      be installed to protect the water heater and water fixture valves in the house.
+      - Check that the floor can support the weight of the HPWH when filled with water.
+      This is especially important if the HPWH selected has a larger storage capacity than
+      the original one.
+
+      | Capcity (gal)| Filled Weight (lbs) |
+      | --- | --- |
+      | 50  | 573 |
+      | 66  | 796 |
+      | 80  | 921 |
+
+      - Install the HPWH into a drain pan to protect the surrounding location from water
+      damage if a leak occurs. Install the leak detection sensor into the drain pan if the
+      HPWH includes one.
+      - Rotate the HPWH during installation so that the exhaust does not face a solid wall.
+      The exhaust of the HPWH must be more than the HPWH manufacturer’s minimum required
+      distance from a solid wall, usually 7 inches. If installing into a closet with a
+      louvered door or high and low air grill, there is a maximum distance, typically around
+      12 inches, between the exhaust and the louvers, refer to the manufacturer’s specific
+      instructions. The louvers on the door must extend to the bottom of the door to allow
+      the cold air to fall out.
+      - Replace the thermal expansion tank when replacing the water heater, expansion tanks
+      typically last 5 to 10 years. Adjust the pre-charge pressure of the thermal expansion
+      tank to match the home’s water pressure using a tire pump. This 2009 Watts Water video
+      shows how to do this step. Write down the pre-charge pressure onto the tank. A thermal
+      expansion tank is not needed if the water heater is connected to a well pressure tank
+      and there are no check valves to prevent backflow.
+      - Follow local code requirements on dielectric unions and anti-siphon vacuum relief
+      valve requirements. Flexible supply lines made of corrugated copper, corrugated
+      stainless steel, and braided stainless steel often have dielectric sleeves in the
+      design.
+      - External heat traps are not if the HPWH has a built-in heat trap. To determine the
+      presence of in-built heat traps, look at the cold water inlet and hot water outlet for
+      plastic or metal hardware that captures a ball or rubber flap as shown in the examples
+      below.
+
+      <Figure src="/images/hpwh/heattraps.png" />
+
+      - Do not make any soldered inlet and outlet connections while connected to the water
+      heater, the built-in heat traps are plastic
+      - Insulate the first 5 ft of hot water pipe to R-3 or more. If a recirculation pump is
+      installed insulate all hot water and recirculation piping. Some HPWH rebates may
+      require the recirculation pump to operate on a timer or demand button to reduce standby
+      energy loss penalties.
+      - The pressure relief valve discharge must terminate no more than 6 inches above the
+      floor surface to a waste receptor or floor drain to prevent hot water discharge from
+      being directed onto a building occupant that may be nearby.
+      - The condensate is piped to a drain, sink, or condensate pump.
+      - Install earthquake straps if required by local code to the bottom 1/3 and top 1/3 of
+      the tank, do not install the straps to the heat pump portion.
+      - Set the HPWH to hybrid mode.
+      - Set the HPWH temperature to no more than 120 F. Setting temperatures higher than
+      this requires a thermostatic mixing valve at the water heater to prevent scalding.
+    </Collapsible>
+
+    ---
+
+    ##### HPWH Sizing
+    Record below the input selections entered into the Heat Pump Water Heater Decision Tool on the Building American Solution Center. ([Reference](https://dfdev01.pnl.gov/trisha/basc8/cchp/docroot/hpwh_installation_tool))
+
+    **Electrical Availability:** {props.data.electrical_availability}
+
+    **Zip Code:** {props.data.location?.zip_code}
+    
+    **Climate Zone:** {props.data.location?.climate_zone}
+
+    **Water heater will draw air from:** {props.data.hpwh_location}
+
+    **Number of Bedrooms:** {props.data.bedrooms}
+
+    **Number of Bathrooms:** {props.data.bathrooms}
+
+    **RESULT:** {props.data.hpwh_voltage} Volt Heat Pump Water Heater with a {props.data.hpwh_gallon_tank} Gallon Tank
+
+    ---
+
+    # Installation Day Photos
+    <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
+      Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
+      insulated hot water line, pressure relief valuve discharge, and condensate.
+    </Photo>
+
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+      Provide a close-up photo of the nameplate of the installed system showing the
+      model number an dserial number.
+    </Photo>
+
+    <Photo id="mode_photo" label="HPWH Screen with Mode – Photo" required>
+      Prove a close-up photo of the HPWH Screen showing the mode.
+    </Photo>
+
+    <Photo id="cta_2045_module_photo" label="CTA-2045 Module – Photo" required>
+      Provide a photo of the CTA-2045 Module if installed.
+    </Photo>
+
+
+    ##### HPWHW Post-Installation
+    <Collapsible header="HPWH Post-Install – Instructions">
+      Inform the homeowner on how to access the air filter to check and clean as needed. A
+      filter check should be performed every 3 months. If dirty, clean the air filter by
+      vacuuming the dust and washing with mild soap and detergent. Thoroughly dry before
+      reinstalling.
+
+      It is also suggested to inform the homeowner on how to perform the following annual
+      water heaters checks that are not specific to a HPWH:
+      1. Check the pressure relief valve by placing a small bucket at the end of the
+      discharge pipe and pull and rotate the handle to open the valve for a few seconds to
+      ensure it opens fully. When performing this check, stand back and wear closed-toe shoes
+      to protect your feet from hot water. Once you begin to rotate the handle back close it
+      should snap close by itself. The discharge pipe should stop dripping shortly. If it
+      continues to drip, call a plumber to have the pressure relief valve replaced.
+      2. Check the expansion tank. Remove the cap and briefly press in the Schrader valve to
+      check that air (and not water) is expelled. If water is expelled the thermal expansion
+      tank has failed and will need replacement, call a plumber to have the thermal expansion
+      tank replaced. If air is expelled, the thermal expansion tank is working as expected.
+      The pre-charge pressure of the thermal expansion tank can be checked by turning off the
+      cold water main, opening a faucet to relieve the water pressure in the pipes, then
+      checking the pre-charge with a tire pressure gauge. Adjust as needed using a tire pump
+      to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
+      one is present, and reopen the cold water main shutoff valve.
+    </Collapsible>
+    ---
+    </PrintSection>
+  </Tab>
+</Tabs>
