@@ -1,7 +1,7 @@
 
 
 <Tabs>
-  <Tab eventKey="customer" style={{paddingTop:"1rem"}} title="Project">
+  <Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
     The data for this tab should be know prior to the initial site visit.
 
     ##### Installer
@@ -15,7 +15,7 @@
     <StringInput label="Zip Code" path="location.zip_code" />
   </Tab>
 
-  <Tab eventKey="planned" style={{paddingTop:"1rem"}} title="Assessment">
+  <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
   The data for this tab should be collected during the initial site visit.
 
     ##### Building
@@ -52,14 +52,19 @@
       of the HPWH to an adjacent space. It is also possible to install a condensate pump where
       a drain located below the elevation of the HPWH’s condensate outlet is not available.
 
-      To verify conditions 1-7 have been met, use the "HPWH Location" photo input to
-      take a
-      wide-angle photo of the space where the HPWH will be installed. If the HPWH is to
-      be ducted or using the air volume of an adjacent space via a louvered door,
-      supply a photo of the connected space using the "Adjacent Space" photo input.
-      Also use the "Space Air Volume Calculator" table to calculate the Air Volume of the space that the HPWH is
-      using to meet its air volume requirement.
+      You may find the following Space Air Volume Calculator useful in determining the volume to be 
+      entered in the "Space Air Volume" input below.
+
+| Space Air Volume Calculator                                                                                                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />                                                                                                                                                            |
+| <NumberInput label="Width (ft)" min={0} path="volume_calculator.width"  />                                                                                                                                                                                      |
+| <NumberInput label="height (ft)" min={0} path="volume_calculator.height" />                                                                                                                                                                                    |
+| Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup> |
+
     </Collapsible>
+
+    <NumberInput label="Space Air Volume (ft&#179;)" min={0} path="space_air_volume" />
 
     <PhotoInput id="hpwh_location_photo" label="HPWH Location – Photo">
       Provide a wide-angle photo of the space where the HPWH will be installed to best capture the space requirements
@@ -71,14 +76,6 @@
       This is applicable to HPWH installations that will utilize a louvered door or ducting to meet the minimum air volume 
       requirement.
     </PhotoInput>
-
-    Length (ft) of the space that the HPWH is using to meet its air volume requirement.
-    <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />
-    Width (ft) of the space that the HPWH is using to meet its air volume requirement.
-    <NumberInput label="Width (ft)" path="volume_calculator.width"  />
-    Height (ft) of the space that the HPWH is using to meet its air volume requirement.
-    <NumberInput label="height (ft)" path="volume_calculator.height" />
-    Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup>
 
   </Tab>
   <Tab eventKey="sizing" style={{paddingTop:"1rem"}} title="Sizing">
@@ -208,7 +205,7 @@
 
 
   </Tab>
-  <Tab eventKey="install" style={{paddingTop:"1rem"}} title="Installation">
+  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
     <DateInput label="Installation Date" path="install_date" />
     <PhotoInput id="completed_installed_photo" label="Completed Installation – Photo">
       Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
