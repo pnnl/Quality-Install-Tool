@@ -22,7 +22,7 @@
     The data for this tab should be collected during the initial site visit.
 
     ##### Building
-    <PhotoInput id="street_number_photo" label="Street Number – Photo">
+    <PhotoInput id="building_number_photo" label="Building Number – Photo">
       Provide a photo of the building that shows the street number.
     </PhotoInput>
 
@@ -275,20 +275,14 @@
     {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
     {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
 
-    **Installation Date:** <Date date={props.data.install_date}/>
-    ##### Building Location
-    **Street Address:** {props.data.location?.street_address}
-    **City:** {props.data.location?.city}
-    **State:** {props.data.location?.state}
-    **Zip:** {props.data.location?.zip_code}
+    **Installation Date:** <DateStr date={props.data.install_date}/>
 
+    **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+   
 
-    **Technician Name:** {props.data.technician_name}
-
-    **Installation Company:** {props.data.installation_company}
-
-
-    <Photo id="house_number_photo" label="House Number – Photo" required />
+    <Photo id="building_number_photo" label="Building Number" required>
+      A photo of the building showing the building number.
+    </Photo>
 
     Report for {props.data.customer_name}, and energy efficiency program quality assurance and quality control implementation contractor staff.
 
@@ -303,7 +297,7 @@
     <br/><br/>
 
     ---
-    <Collapsible header="About the Report">
+    ## About the Report
     This report is intended to document the critical details of upgrading to a heat pump water heater spanning from the evaluative, pre-installation, steps including evaluating the space to ensure it is suitable for a heat pump water heater (HPWH) and selecting the right sized HPWH to the completed HPWH installation. 
 
     ## About home performance
