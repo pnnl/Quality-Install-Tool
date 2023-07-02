@@ -16,7 +16,7 @@
   </Tab>
 
   <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
-  The data for this tab should be collected during the initial site visit.
+    The data for this tab should be collected during the initial site visit.
 
     ##### Building
     <PhotoInput id="street_number_photo" label="Street Number – Photo">
@@ -78,7 +78,7 @@
     </PhotoInput>
 
   </Tab>
-  <Tab eventKey="sizing" style={{paddingTop:"1rem"}} title="Sizing">
+  <Tab eventKey="selection" style={{paddingTop:"1rem"}} title="Selection">
     <Collapsible header="HPWH Selection – Instructions">
       The efficiency of HPWHs is profoundly affected by the way hot water is used and thus,
       selecting the right sized HPWH is important to user satisfaction.
@@ -123,6 +123,36 @@
 
     ---
 
+
+    ---
+    ##### HPWH Sizing
+    Record below the input selections entered into the Heat Pump Water Heater Decision Tool on the Building American Solution Center. ([Reference](https://dfdev01.pnl.gov/trisha/basc8/cchp/docroot/hpwh_installation_tool))
+
+    ---
+    <Radio label="Electrical Availability" options={["30A 240V near water heater OR 30A 240V circuit added to home with 10 AWG wire to HPWH", "240V circuit with 12/14 AWG wire if 10 AWG wire is not cost effective", "120V 15A dedicated circuit", "120V 15A shared circuit"]} path="electrical_availability" />
+
+    <StringInput label="Zip Code" path="location.zip_code" />
+
+    <ClimateZoneSelect label="Climate Zone" path="location.climate_zone" />
+
+    <Radio label="Water heater will draw air from" options={["Conditioned space (including finished or conditioned basement, crawlspace, or attic)", "Garage", "Unconditioned basement", "Unconditioned crawlspace", "Unconditioned attic", "Closet/shed connected to outdoor"]} path="hpwh_location" />
+
+    <NumberInput label="Number of Bedrooms" min={0} path="bedrooms"  />
+
+    <NumberInput label="Number of Bathrooms" min={0} path="bathrooms"  />
+
+    ##### HPWH Sizing Outputs
+    <Select label="HPWH Voltage" options={["120", "240"]} path="hpwh_voltage" />
+
+    <Select label="HPWH Gallon Tank" options={["40", "50", "65/66", "80"]} path="hpwh_gallon_tank" />
+
+
+  </Tab>
+  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
+    ##### HPWH Installation
+
+    <DateInput label="Installation Date" path="install_date" />
+
     <Collapsible header="HPWH Installation - Instructions">
       - Check the water pressure to the house, and ensure it is between 45 and 80 psi.
       If it is above 80 PSI, a whole house water pressure reducing/regulating valve should
@@ -131,11 +161,11 @@
       This is especially important if the HPWH selected has a larger storage capacity than
       the original one.
 
-      | Capcity (gal)| Filled Weight (lbs) |
-      | --- | --- |
-      | 50  | 573 |
-      | 66  | 796 |
-      | 80  | 921 |
+  | Capcity (gal)| Filled Weight (lbs) | 
+  | --- | --- | 
+  | 50  | 573 | 
+  | 66  | 796 | 
+  | 80  | 921 | 
 
       - Install the HPWH into a drain pan to protect the surrounding location from water
       damage if a leak occurs. Install the leak detection sensor into the drain pan if the
@@ -181,35 +211,9 @@
       this requires a thermostatic mixing valve at the water heater to prevent scalding.
     </Collapsible>
 
-    ---
-    ##### HPWH Sizing
-    Record below the input selections entered into the Heat Pump Water Heater Decision Tool on the Building American Solution Center. ([Reference](https://dfdev01.pnl.gov/trisha/basc8/cchp/docroot/hpwh_installation_tool))
-
-    ---
-    <Radio label="Electrical Availability" options={["30A 240V near water heater OR 30A 240V circuit added to home with 10 AWG wire to HPWH", "240V circuit with 12/14 AWG wire if 10 AWG wire is not cost effective", "120V 15A dedicated circuit", "120V 15A shared circuit"]} path="electrical_availability" />
-
-    <StringInput label="Zip Code" path="location.zip_code" />
-
-    <ClimateZoneSelect label="Climate Zone" path="location.climate_zone" />
-
-    <Radio label="Water heater will draw air from" options={["Conditioned space (including finished or conditioned basement, crawlspace, or attic)", "Garage", "Unconditioned basement", "Unconditioned crawlspace", "Unconditioned attic", "Closet/shed connected to outdoor"]} path="hpwh_location" />
-
-    <NumberInput label="Number of Bedrooms" min={0} path="bedrooms"  />
-
-    <NumberInput label="Number of Bathrooms" min={0} path="bathrooms"  />
-
-    ##### HPWH Sizing Outputs
-    <Select label="HPWH Voltage" options={["120", "240"]} path="hpwh_voltage" />
-
-    <Select label="HPWH Gallon Tank" options={["40", "50", "65/66", "80"]} path="hpwh_gallon_tank" />
-
-
-  </Tab>
-  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
-    <DateInput label="Installation Date" path="install_date" />
     <PhotoInput id="completed_installed_photo" label="Completed Installation – Photo">
       Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
-      insulated hot water line, pressure relief valuve discharge, and condensate.
+      insulated hot water line, pressure relief valve discharge, and condensate.
     </PhotoInput>
 
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
@@ -512,7 +516,7 @@
     # Installation Day Photos
     <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
       Provide a wide-angle photo of the completed HPWH installation showing the exhaust,
-      insulated hot water line, pressure relief valuve discharge, and condensate.
+      insulated hot water line, pressure relief valve discharge, and condensate.
     </Photo>
 
     <Photo id="nameplate_photo" label="Nameplate – Photo" required>
