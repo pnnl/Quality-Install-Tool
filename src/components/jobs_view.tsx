@@ -36,10 +36,10 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     {
       validator: (input:string) => {
         // Restrict the character set to [a-zA-Z0-9-_#:>]
-        const regex = /^[a-zA-Z0-9#][a-zA-Z0-9#, -]{0,62}[a-zA-Z0-9#]$/;
+        const regex = /(?=.{1,64}$)^(?!.*\s\s)[a-zA-Z0-9](?:[a-zA-Z0-9, -]*[a-zA-Z0-9])?$/ 
         return regex.test(input);
       },
-      errorMsg: 'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, #, dash, comma, and single spaces between other characters',
+      errorMsg: 'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, dash, comma, and single spaces between other characters',
     },
     {
       validator: (input:string) => {
@@ -54,7 +54,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     try {
       const result = await db.allDocs({ include_docs: true });
       const jobsList = result.rows.map(row => row.doc);
-      setJobsList(jobsList);
+      setJobsList(jobsList);  
       sortByEditTime(jobsList);
     } catch (error) {
       console.error('Error retrieving jobs:', error);

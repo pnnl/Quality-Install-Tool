@@ -17,18 +17,10 @@ console.log("app.tsx")
 // browser routing within this domain.
 const routes = [{
     path: "/",
-    element: <RootLayout><Home/></RootLayout> //<Navigate to="/" replace={true} />
+    element: <RootLayout><Home/></RootLayout>
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
-  },
-  {
-    path: "/app",
-    element: <RootLayout><div>QA Type Selector View</div></RootLayout> //<RootLayout><Home/></RootLayout>,
-  },
-  {
-    path: "/",
-    element: <RootLayout><Home/></RootLayout>
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
