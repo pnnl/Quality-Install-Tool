@@ -26,9 +26,8 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
 // templateName set to anything other than the empty string while showBackButton is true indicates that the 
 // back button should send the user to the JobsView. templateName set to the empty string while 
 // showBackButton is true indicates that the back button should send the user to the Home screen.
-const [templateName, setTemplateName] = useState("");
 const [showBackButtonToTemplate, setShowBackButtonToTemplate] = useState(false);
-const [showBackButtonToHome, setShowBackButtonToHome] = useState(false);
+const [backUrl, setBackUrl] = useState("/");
 
 useEffect(() => {
     const regexPatternToHome = /^(.*?)\/app\//;
@@ -36,18 +35,14 @@ useEffect(() => {
     const toTemplateMatchResult = location.pathname.match(regexPatternToTemplate);
     if (toTemplateMatchResult) {
         setShowBackButtonToTemplate(true);
-        setShowBackButtonToHome(false);
         const [, capturedTemplateName] = toTemplateMatchResult;
-        setTemplateName(capturedTemplateName);
-    }  else if (regexPatternToHome.test(location.pathname)){
-        setShowBackButtonToHome(true);
-        setShowBackButtonToTemplate(false);
-        setTemplateName("");
+        setBackUrl("\/app\/"+capturedTemplateName);
+    } else if(regexPatternToHome.test(location.pathname)){
+        setShowBackButtonToTemplate(true);
+        setBackUrl("/")
     }
     else {
-        setShowBackButtonToHome(false);
         setShowBackButtonToTemplate(false);
-        setTemplateName("");
     }
 }, [location.pathname]);
 
@@ -55,18 +50,9 @@ return (
   <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", height: "100vh" }}>
     <NavBar style={{ backgroundColor: "green" }}>
       {/* Conditional rendering of a back button */}
-      {showBackButtonToHome && (
-        <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
-          <Link to={`/`} style={{ textDecoration: "none" }}>
-            <Button variant="outline-light" style={{ padding: "1rem" }}>
-              <TfiAngleLeft style={{ color: "white", height: "100%"}} />
-            </Button>
-          </Link>
-        </div>
-      )}
       {showBackButtonToTemplate && (
         <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
-          <Link to={`/app/${templateName}`} style={{ textDecoration: "none" }}>
+          <Link to={backUrl} style={{ textDecoration: "none" }}>
             <Button variant="outline-light" style={{ padding: "1rem" }}>
               <TfiAngleLeft style={{ color: "white", height: "100%"}} />
             </Button>
