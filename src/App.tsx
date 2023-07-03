@@ -15,13 +15,10 @@ import JobsView from "./components/jobs_view";
 // browser routing within this domain.
 const routes = [{
     path: "/",
-    element: <Navigate to="/app" replace={true} />
+    element: <RootLayout><Home/></RootLayout>
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
-  },{
-    path: "/app",
-    element: <RootLayout><Home/></RootLayout>,
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
