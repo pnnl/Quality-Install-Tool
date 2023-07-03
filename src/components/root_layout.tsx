@@ -26,7 +26,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
 // templateName set to anything other than the empty string while showBackButton is true indicates that the 
 // back button should send the user to the JobsView. templateName set to the empty string while 
 // showBackButton is true indicates that the back button should send the user to the Home screen.
-const [showBackButtonToTemplate, setShowBackButtonToTemplate] = useState(false);
+const [showBackButton, setShowBackButton] = useState(false);
 const [backUrl, setBackUrl] = useState("/");
 
 useEffect(() => {
@@ -34,15 +34,15 @@ useEffect(() => {
     const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/;
     const toTemplateMatchResult = location.pathname.match(regexPatternToTemplate);
     if (toTemplateMatchResult) {
-        setShowBackButtonToTemplate(true);
+        setShowBackButton(true);
         const [, capturedTemplateName] = toTemplateMatchResult;
         setBackUrl("\/app\/"+capturedTemplateName);
     } else if(regexPatternToHome.test(location.pathname)){
-        setShowBackButtonToTemplate(true);
+        setShowBackButton(true);
         setBackUrl("/")
     }
     else {
-        setShowBackButtonToTemplate(false);
+        setShowBackButton(false);
     }
 }, [location.pathname]);
 
@@ -50,7 +50,7 @@ return (
   <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", height: "100vh" }}>
     <NavBar style={{ backgroundColor: "green" }}>
       {/* Conditional rendering of a back button */}
-      {showBackButtonToTemplate && (
+      {showBackButton && (
         <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
           <Link to={backUrl} style={{ textDecoration: "none" }}>
             <Button variant="outline-light" style={{ padding: "1rem" }}>
