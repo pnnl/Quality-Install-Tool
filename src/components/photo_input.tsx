@@ -46,6 +46,12 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
   const handlePhotoGalleryButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     hiddenPhotoUploadInputRef.current && hiddenPhotoUploadInputRef.current.click()
   }
+  //Request user location services
+  function locationSuccessCallback(photo: any) {
+    const latitude = photo.coords.latitude;
+    const longitude = photo.coords.longitude;
+  }
+  navigator.geolocation.getCurrentPosition(locationSuccessCallback)
 
   useEffect(() => {
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
