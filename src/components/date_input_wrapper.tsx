@@ -25,11 +25,11 @@ const DateInputWrapper: FC<DateInputWrapperProps> = ({label, path}) => {
 
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <DateInput id={id} label={label} 
               handleValueChange= {(value: any) => upsertData(path, value)}
-              value = {get(doc, path)}/>
+              value = {get(data, path)}/>
           )
         }
       }

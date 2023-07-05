@@ -80,7 +80,7 @@ A calendar date input
 
 ### Select
 ```
-<Select label="INPUT_LABEL" options={["OPTION_1", "OPTION_2"] path="DOCUMENT_PATH"} />
+<Select label="INPUT_LABEL" options={["OPTION_1", "OPTION_2"]} path="DOCUMENT_PATH" />
 ```
 
 ### StringInput

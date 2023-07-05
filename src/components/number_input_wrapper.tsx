@@ -34,11 +34,11 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({label, path, prefix, s
 
   return (
     <StoreContext.Consumer>
-      {({doc, upsertData}) => {
+      {({data, upsertData}) => {
           return (
             <NumberInput id={id} label={label} prefix={prefix} suffix={suffix}
               updateValue= {(value: any) => upsertData(path, parseFloat(value))}
-              value = {get(doc, path)} min={min} max={max}/>
+              value = {get(data, path)} min={min} max={max}/>
           )
         }
       }

@@ -13,7 +13,7 @@ interface PhotoProps {
   metadata: PhotoMetadata,
   photo: Blob | undefined,
   required: boolean,
-  deletePhoto: (id: string) => void,
+  deletePhoto?: (id: string) => void,
 }
 
 /**
@@ -57,14 +57,14 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required, d
                   <span>Missing</span>
                 }
                 <br />
-                <button onClick={() => setShowDeleteModal(true)} style={{cursor: 'pointer', color: 'red', borderWidth: '1px', borderRadius: '6px'}}> Delete Photo </button>
+                {deletePhoto && <button onClick={() => setShowDeleteModal(true)} style={{cursor: 'pointer', color: 'red', borderWidth: '1px', borderRadius: '6px'}}> Delete Photo </button>}
               </small>
               <Modal show={showDeleteModal}>
                 <ModalBody>
                   <p>Are you sure you want to delete this photo?</p>
                   <div style={{display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
                     <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
-                    <Button onClick={() => {deletePhoto(id); setShowDeleteModal(false)}} style={{cursor: 'pointer', color: 'red', borderWidth: '1px', borderRadius: '6px'}}>Delete</Button>
+                    {deletePhoto && <Button onClick={() => {deletePhoto(id); setShowDeleteModal(false)}} style={{cursor: 'pointer', color: 'red', borderWidth: '1px', borderRadius: '6px'}}>Delete</Button>}
                   </div>
                 </ModalBody >
               </Modal>

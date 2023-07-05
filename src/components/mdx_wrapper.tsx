@@ -18,16 +18,20 @@ import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import {StoreContext} from './store'
 import DateStr from './date';
+import ClimateZoneSelectWrapper from './climate_zone_select_wrapper';
+import RadioWrapper from './radio_wrapper';
 
 
 const components = {
   Collapsible,
+  ClimateZoneSelect: ClimateZoneSelectWrapper,
   DateInput: DateInputWrapper,
   Figure: FigureWrapper,
   NumberInput: NumberInputWrapper,
   Photo: PhotoWrapper,
   PhotoInput: PhotoInputWrapper,
   PrintSection,
+  Radio: RadioWrapper,
   Select: SelectWrapper,
   StringInput: StringInputWrapper,
   table: TableWrapper,
@@ -51,11 +55,11 @@ interface MdxWrapperProps {
 const MdxWrapper: FC<MdxWrapperProps> = ({Component}) => {
   return (
     <StoreContext.Consumer>
-      {({doc}) => {
+      {({metadata, data}) => {
         return (
           <div className="container" id="mdx-container">
             {/* doc will be undefined for the very first render */}
-            {doc ? <Component components={components} doc={doc} /> : null}
+            {metadata && data ? <Component components={components} metada={metadata} data={data} /> : null}
           </div>
         )
       }}
