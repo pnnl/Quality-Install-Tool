@@ -1,16 +1,14 @@
 import {Component, FC} from 'react'
 import EditorFlexBox from "./editor_flexbox"
+import { StoreContext } from './store'
 
-export default class TemplateEditor extends Component {
-    render() {
-    
-    return (
-      // Note: docId is guaranteed to be a string because this component is only
-      // used when the :docId dynamic route segment is set.
-      <div>
-        <h1>Editor</h1>
-          <EditorFlexBox />
-      </div>
-    ) 
-    }
-  }
+const TemplateEditor: FC = () => {    
+  return (
+    <div>
+      <h1>Template Editor</h1>
+        <EditorFlexBox />
+    </div>
+  ) 
+}
+
+export default TemplateEditor

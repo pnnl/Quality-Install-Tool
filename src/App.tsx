@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom'
+import {createBrowserRouter, Navigate, RouterProvider, useRouteError} from 'react-router-dom'
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -19,9 +19,6 @@ const routes = [{
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
-  },{
-    path: "/app",
-    element: <RootLayout><div>QA Type Selector View</div></RootLayout>,
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
@@ -47,6 +44,5 @@ function App() {
     <RouterProvider router={router} />
   )
 }
-
 
 export default App;

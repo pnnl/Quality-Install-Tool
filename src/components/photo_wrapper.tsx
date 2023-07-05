@@ -29,7 +29,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({children, id, label, required}) =>
 
   return (
     <StoreContext.Consumer>
-      {({attachments, doc}) => {
+      {({attachments, data}) => {
         const photos = filterAttachmentsByIdPrefix(attachments, id)
         
         return (
