@@ -47,7 +47,7 @@ useEffect(() => {
 }, [location.pathname]);
 
 return (
-  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", height: "100vh" }}>
+  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", minHeight: "100vh" }}>
     <Navbar style={{ backgroundColor: "green" }}>
       {/* Conditional rendering of a back button */}
       {showBackButton && (
