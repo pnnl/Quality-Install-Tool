@@ -2,7 +2,7 @@ import EXIF from 'exif-js'
 
 import Attachment from '../types/attachment.type'
 import Metadata from '../types/metadata.type';
-import DateDiff from 'date-diff'
+import { compareAsc, format } from 'date-fns'
 
 /**
  * Extracts the timestamp and geolocation data from a JPEG photo's
@@ -26,10 +26,9 @@ import DateDiff from 'date-diff'
 
 
 
-
+// Geolocation data from Web browser
 function getPosition(options?: PositionOptions): Promise<Position> {
   return new Promise((resolve, reject) => {
-   
     navigator.geolocation.getCurrentPosition(resolve, reject, options)
     }
 
@@ -39,13 +38,14 @@ function getPosition(options?: PositionOptions): Promise<Position> {
 
 
 export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadata"]> {
-  //const browserGeo = await getPosition()
+  //let browserGeoData ={}
+ 
+
   return new Promise((resolve) => {
-  EXIF.getData(photo, function() {
+
+
+    EXIF.getData(photo, function() {
       const fullMetaData = EXIF.getAllTags(this)
-      console.log("fullMetaData",fullMetaData)
-      console.log(photo)
-      alert("metadata"+JSON.stringify(photo.exifdata))
       const {DateTime, DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
       let metadata = {
         geolocation: {
@@ -65,64 +65,38 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
           } : null,
         },
         timestamp: DateTimeOriginal || null
-      }
-     
-      alert(metadata.timestamp)
-      if (!metadata.timestamp)
+       }
+      if (!metadata.timestamp)  // It photo.exif do not have timestamp, this is in iOS devices. For Android, geolocation is fetched from Photo 
       {
-        alert("getPosition")
-        getPosition({enableHighAccuracy: true}).then((browserGeoData) =>{
-        console.log("browserGeoData",browserGeoData.code)
-        alert(browserGeoData.code)
-       const safeNewDate = function(localDateTimeStr) {
-          let formatteddate = localDateTimeStr
-          var match = localDateTimeStr.match(/(\d{4}):(\d{2}):(\d{2})[\sT](\d{2}):(\d{2}):(\d{2})(.(\d+))?/,)
-          if (match)
-          {
-            var [, year, month, date, hours, minutes, seconds, , millseconds] = match
-            formatteddate= new Date(
-              year,
-              Number(month) - 1,
-              date,
-              hours,
-              minutes,
-              seconds,
-              millseconds || 0,
-            )
-          }
-          return formatteddate
-        }
-        //const datediff =  new DateDiff(new Date(), safeNewDate(metadata.timestamp))
-        console.log(browserGeoData)
-        const geoDate = new Date() 
-        console.log(geoDate)
-        const browsermetadata = {
-          geolocation: {
-            altitude: browserGeoData.coords.altitude || null,
-            latitude: browserGeoData.coords.latitude ? {
-              deg: browserGeoData.coords.latitude,
-              min:'',
-              sec: '',
-              // Note: Naming this property ref would interfere with the React property
-              cRef: ' ' || null
-            } : null,
-            longitude: browserGeoData.coords.longitude ? {
-              deg: browserGeoData.coords.longitude,
-              min: '',
-              sec: '',
-              cRef: '' || null
-            } : null,
-          },
-          timestamp:  geoDate.toString() || null
-        }
-        alert(browsermetadata)
-        console.log("browser",browsermetadata)
-        resolve(browsermetadata)
-       }).catch((error) => {alert(error.code)}) 
+        
+          getPosition({enableHighAccuracy: true, timeout: 3000}).then((Position) => {
+        
+            const browsermetadata = {
+                    geolocation: {
+                      altitude: Position.coords.altitude || null,
+                      latitude: Position.coords.latitude ? {
+                        deg: Position.coords.latitude,
+                        min:'',
+                        sec: '',
+                        // Note: Naming this property ref would interfere with the React property
+                        cRef: ' ' || null
+                      } : null,
+                      longitude: Position.coords.longitude ? {
+                        deg: Position.coords.longitude,
+                        min: '',
+                        sec: '',
+                        cRef: '' || null
+                      } : null,
+                    },
+                    timestamp:  format(Position.timestamp,'yyyy:MM:dd HH:mm:ss') || null
+                  }
+                  resolve(browsermetadata)
+                }).catch((err) => {
+                  alert(err.message)
+                });
       }
       else
       resolve(metadata)
-      
-    }) 
+    })
   })
 }
