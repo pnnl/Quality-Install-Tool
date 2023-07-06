@@ -289,18 +289,21 @@
 
     {
       props.data.space_air_volume
-      ? <span><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></span> 
+      ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p> 
       : null
     }
-
-    {/* {
-      props.metadata.old_nameplate_photo
-      ? <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">
-          This photo shows the name plate of the old water heater. It may be used for rebate purposes
-          or to determine the energy savings.
-        </Photo>
-      : null
-    } */}
+  
+    {
+      props.metadata?.attachments?.old_nameplate_photo
+      ? <>
+          <h2>Old Hot Water Heater</h2>
+          <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">
+            This photo shows the name plate of the old water heater. It may be used for rebate purposes
+            or to determine the energy savings.
+          </Photo>
+        </>
+      : null 
+    }
 
     ## Installation Day Photos
     <Photo id="completed_installed_photo" label="4. Completed Installation – Photo" required>
