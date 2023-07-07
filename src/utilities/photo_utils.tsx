@@ -153,10 +153,10 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
           const datefromPhoto = new Date(parse(metadataFromPhoto.timestamp,'YYYY:MM:DD HH:mm:ss'))
           const datefromGPS = new Date(parse(metadatafromGPS.timestamp,'YYYY:MM:DD HH:mm:ss'))
           var diff = (datefromGPS.getTime() -  datefromPhoto.getTime()) / 1000;
-          var hr_diff = diff/ (60 * 60 * 24)
+          var hr_diff = diff/ (60 * 60)
 
           // if time from Photo is than 2 hrs from the current GPS time, updating the GPS location data from device
-          if (hr_diff < 25 )
+          if (hr_diff < 2 )
           {
             metadatafromGPS.timestamp = metadataFromPhoto.timestamp   // Keeping the timesstamp form Photo
             resolve(metadatafromGPS)
