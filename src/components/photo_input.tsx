@@ -54,7 +54,6 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
         setCameraAvailable(true)
       });
     }
-
   })
 
 
@@ -65,6 +64,12 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
       upsertPhoto(file)
     }
   }
+
+    // Check if there is already a photo
+    const hasPhoto = !!photo;
+  
+    // Button text based on whether there is a photo or not
+    const buttonText = hasPhoto ? 'Replace Photo' : 'Add Photo';
 
   return (
     <>
@@ -84,7 +89,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
               <TfiCamera/> Camera</Button>
             } */}
             <Button onClick={handlePhotoGalleryButtonClick}
-              variant="outline-primary"><TfiGallery/> Add Photo</Button>
+              variant="outline-primary"><TfiGallery/> {buttonText} </Button>
           </div>
           {/* <input
             accept="image/jpeg"

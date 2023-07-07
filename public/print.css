@@ -1,8 +1,3 @@
-
-.print-wrapper {
-    display: flex;
-    flex-direction: column;
-}
 .img-thumbnail {
     object-fit: contain !important;
     max-height: 500px !important;
@@ -12,7 +7,73 @@ div {
     flex-direction: column !important;
     width: 100% !important;
     height: 80% !important;
+    margin: 0 !important;
+    padding: .25% !important;
+    margin-top: 6px !important;
 }
 p {
     width: 100% !important;
+    break-before: avoid-page !important;
+    padding: 2px !important;
+    height: fit-content !important;
+}
+
+input {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+    text-align: center !important;
+    color: #000 !important;
+}
+
+button {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+    text-align: center !important;
+    color: #000 !important;
+}
+
+.card-body {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 4px !important;
+    margin-top: 3px !important;
+    .img-thumbnail{
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+ul {
+    width: 100% !important;
+    height: fit-content !important;
+}
+ol {
+    width: 100% !important;
+    break-before: avoid-page !important;
+    height: fit-content !important;
+}
+li {
+    width: 100% !important;
+    height: fit-content !important;
+}
+em {
+    width: 100% !important;
+    height: fit-content !important;
+}
+h2 {
+    margin-top: 10px !important;
+    font-size: 3em !important;
+    margin-bottom: 4px !important;
+    font-weight: 500 !important;
+    break-after: avoid-page !important;
 }
