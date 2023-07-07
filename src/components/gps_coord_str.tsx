@@ -1,22 +1,17 @@
 import {FC} from 'react'
 
-import DegMinSecCRef from '../types/deg_min_sec_cref.type'
+import GpsDecimalDeg from '../types/gps_decimal_degrees.type'
 
 /**
  * 
- * @param degrees Geographic degrees
- * @param minutes Geographic minutes
- * @param seconds Geographic seconds
- * @param cRef Geographic reference direction (N, S, E, W)
+ * @param dec Geographic degrees 
  * @returns 
  */
-const GpsCoordStr: FC<DegMinSecCRef> = ({deg, min, sec, cRef}) => {
+const GpsCoordStr: FC<GpsDecimalDeg> = ({dec}) => {
+  
   return (
     <>
-      <span>{String(deg)}&deg;</span>
-      <span>{String(min)}&prime;</span>
-      <span>{String(sec)}&Prime;</span>
-      <span>{cRef}</span>
+      <span>{Number(dec).toFixed(4)}&deg;</span>
     </>
   )
 }

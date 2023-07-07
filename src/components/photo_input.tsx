@@ -3,7 +3,7 @@ import {isEmpty} from 'lodash'
 import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react'
 import {Button, Card, Image} from 'react-bootstrap'
 import {TfiGallery} from 'react-icons/tfi'
-
+ 
 
 import Collapsible from './collapsible'
 import GpsCoordStr from './gps_coord_str'
@@ -57,12 +57,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
 
   })
 
-  //Request user location services
-  function locationSuccessCallback(photo: any) {
-    const latitude = photo.coords.latitude;
-    const longitude = photo.coords.longitude;
-  }
-  navigator.geolocation.getCurrentPosition(locationSuccessCallback)
+
 
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -117,8 +112,8 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
+                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.dec.toString() !== 'NaN' &&
+                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.dec.toString() !== 'NaN' ?
                   <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
                   <span>Missing</span>
                 }
