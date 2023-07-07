@@ -13,7 +13,7 @@ const GpsCoordStr: FC<PhotoMetadata["geolocation"]> = (geolocation) => {
   return (
     <> {
      (lat  && lat.toString() !== 'NaN' && long  && long.toString() !== 'NaN') ?
-      <span>{Number(lat).toFixed(4)}&deg;  {Number(long).toFixed(4)}&deg;</span> : <span>Missing</span>
+      <span>{Number(lat).toFixed(4)}&deg;N  {Number(long).toFixed(4)}&deg;E</span> : <span>Missing</span>
         }
     </>
   )
