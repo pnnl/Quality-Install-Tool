@@ -12,7 +12,42 @@ div {
     flex-direction: column !important;
     width: 100% !important;
     height: 80% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: .25% !important;
 }
 p {
     width: 100% !important;
+}
+
+input {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+    text-align: center !important;
+    color: #000 !important;
+}
+
+button {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+    text-align: center !important;
+    color: #000 !important;
+}
+
+.card-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
