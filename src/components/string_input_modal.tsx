@@ -36,31 +36,33 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const [inputValue, setInputValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSubmit = () => {
-      const isValid = validateInput.every((validator) => validator.validator(inputValue));
-  
+
+    const handleValidationAndSubmission = () => {
+      const trimedInputValue = inputValue.trim();
+      setInputValue(trimedInputValue);
+      const isValid = validateInput.every((validator) => validator.validator(trimedInputValue));
+    
       if (isValid) {
-        onSubmit(inputValue);
+        onSubmit(trimedInputValue);
         closeModal();
         setErrorMessage('');
       } else {
-        setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
+        const errorValidator = validateInput.find((validator) => !validator.validator(trimedInputValue));
+        const errorMessage = errorValidator?.errorMsg || '';
+        setErrorMessage(errorMessage);
       }
     };
-
+    
+    const handleSubmit = () => {
+      handleValidationAndSubmission();
+    };
+    
     const handleKeyPress = (target: KeyboardEvent) => {
-      if(target.key=="Enter"){
-        const isValid = validateInput.every((validator) => validator.validator(inputValue));
-  
-      if (isValid) {
-        onSubmit(inputValue);
-        closeModal();
-        setErrorMessage('');
-      } else {
-        setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
-      } 
-      } 
-    }
+      if (target.key === "Enter") {
+        handleValidationAndSubmission();
+      }
+    };
+    
   
     /**
      * Handles the change in the input field value.
