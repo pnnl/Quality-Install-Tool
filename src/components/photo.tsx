@@ -50,10 +50,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) 
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
-                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
-                  <span>Missing</span>
+                         <span><GpsCoordStr {...metadata.geolocation} /> </span> 
                 }
               </small>
             </>

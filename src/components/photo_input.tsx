@@ -3,7 +3,7 @@ import {isEmpty} from 'lodash'
 import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react'
 import {Button, Card, Image} from 'react-bootstrap'
 import {TfiGallery} from 'react-icons/tfi'
-
+ 
 
 import Collapsible from './collapsible'
 import GpsCoordStr from './gps_coord_str'
@@ -56,6 +56,8 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
     }
   })
 
+
+
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const file = event.target.files[0]
@@ -102,7 +104,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
             onChange={handleFileInputChange}
             ref={hiddenPhotoUploadInputRef}
             style={{display: 'none'}}
-            type="file"
+            type="file" capture="environment"
           />
           {photo && (
             <>
@@ -115,10 +117,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
-                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
-                  <span>Missing</span>
+                  <span><GpsCoordStr {...metadata.geolocation} />  </span>
                 }
               </small>
             </>
