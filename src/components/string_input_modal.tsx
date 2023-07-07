@@ -37,27 +37,31 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = () => {
-      const isValid = validateInput.every((validator) => validator.validator(inputValue));
+      const trimedInputValue = inputValue.trim();
+      setInputValue(trimedInputValue);
+      const isValid = validateInput.every((validator) => validator.validator(trimedInputValue));
   
       if (isValid) {
-        onSubmit(inputValue);
+        onSubmit(trimedInputValue);
         closeModal();
         setErrorMessage('');
       } else {
-        setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
+        setErrorMessage(validateInput.find((validator) => !validator.validator(trimedInputValue))?.errorMsg || '');
       }
     };
 
     const handleKeyPress = (target: KeyboardEvent) => {
       if(target.key=="Enter"){
-        const isValid = validateInput.every((validator) => validator.validator(inputValue));
+        const trimedInputValue = inputValue.trim();
+        setInputValue(trimedInputValue);
+        const isValid = validateInput.every((validator) => validator.validator(trimedInputValue));
   
       if (isValid) {
-        onSubmit(inputValue);
+        onSubmit(trimedInputValue);
         closeModal();
         setErrorMessage('');
       } else {
-        setErrorMessage(validateInput.find((validator) => !validator.validator(inputValue))?.errorMsg || '');
+        setErrorMessage(validateInput.find((validator) => !validator.validator(trimedInputValue))?.errorMsg || '');
       } 
       } 
     }
