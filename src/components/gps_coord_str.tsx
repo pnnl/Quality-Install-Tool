@@ -1,24 +1,23 @@
 import {FC} from 'react'
 
-import DegMinSecCRef from '../types/deg_min_sec_cref.type'
+import PhotoMetadata from '../types/photo_metadata.type'
+import { loadPartialConfig } from '@babel/core'
 
 /**
  * 
- * @param degrees Geographic degrees
- * @param minutes Geographic minutes
- * @param seconds Geographic seconds
- * @param cRef Geographic reference direction (N, S, E, W)
+ * @param dec Geographic degrees 
  * @returns 
  */
-const GpsCoordStr: FC<DegMinSecCRef> = ({deg, min, sec, cRef}) => {
+const GpsCoordStr: FC<PhotoMetadata["geolocation"]> = (geolocation) => {
+  const {latitude: lat, longitude: long} = geolocation
   return (
-    <>
-      <span>{String(deg)}&deg;</span>
-      <span>{String(min)}&prime;</span>
-      <span>{String(sec)}&Prime;</span>
-      <span>{cRef}</span>
+    <> {
+     (lat  && lat.toString() !== 'NaN' && long  && long.toString() !== 'NaN') ?
+      <span>{Number(lat).toFixed(4)}&deg;N  {Number(long).toFixed(4)}&deg;E</span> : <span>Missing</span>
+        }
     </>
   )
 }
+
 
 export default GpsCoordStr

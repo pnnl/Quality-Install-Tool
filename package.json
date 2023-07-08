@@ -32,6 +32,9 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
+    "date-fns": "^2.30.0",
+    "date-format-parse": "^0.2.7",
+    "dms2dec": "^1.1.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
     "eslint": "^8.0.1",
@@ -101,8 +104,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js",
+    "start": "HTTPS=true node scripts/start.js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
-    "start": "node scripts/start.js",
     "test": "node scripts/test.js",
     "predeploy": "yarn build && cp ./404.html ./build",
     "deploy": "gh-pages -d build"

@@ -26,6 +26,7 @@ const PrintSection: FC<PrintSectionProps> = ({children, label}) => {
           type: 'html', 
           targetStyles: ["*"],
           css: '/print.css',
+          documentTitle: 'DOE - Quality Installation Report',
         })} 
         variant="primary">
         {label}

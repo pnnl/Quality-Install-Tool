@@ -3,7 +3,7 @@ import {isEmpty} from 'lodash'
 import React, {ChangeEvent, FC, MouseEvent, useEffect, useRef, useState} from 'react'
 import {Button, Card, Image} from 'react-bootstrap'
 import {TfiGallery} from 'react-icons/tfi'
-
+ 
 
 import Collapsible from './collapsible'
 import GpsCoordStr from './gps_coord_str'
@@ -54,8 +54,9 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
         setCameraAvailable(true)
       });
     }
-
   })
+
+
 
   const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -63,6 +64,12 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
       upsertPhoto(file)
     }
   }
+
+    // Check if there is already a photo
+    const hasPhoto = !!photo;
+  
+    // Button text based on whether there is a photo or not
+    const buttonText = hasPhoto ? 'Replace Photo' : 'Add Photo';
 
   return (
     <>
@@ -82,7 +89,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
               <TfiCamera/> Camera</Button>
             } */}
             <Button onClick={handlePhotoGalleryButtonClick}
-              variant="outline-primary"><TfiGallery/> Add Photo</Button>
+              variant="outline-primary"><TfiGallery/> {buttonText} </Button>
           </div>
           {/* <input
             accept="image/jpeg"
@@ -97,7 +104,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
             onChange={handleFileInputChange}
             ref={hiddenPhotoUploadInputRef}
             style={{display: 'none'}}
-            type="file"
+            type="file" capture="environment"
           />
           {photo && (
             <>
@@ -110,10 +117,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
-                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
-                  <span>Missing</span>
+                  <span><GpsCoordStr {...metadata.geolocation} />  </span>
                 }
               </small>
             </>
