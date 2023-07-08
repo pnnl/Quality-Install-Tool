@@ -27,6 +27,35 @@ function getCurrentGeolocation(): Promise<GeolocationPosition> {
   });
 }
 
+
+/**
+ * Retrieves Geolocation data from device gps
+ *   Internally calls getCurrentGeolocation for current location data
+ *  
+ * @returns An object of the form:
+ * {
+ *  geolocation: {
+ *    altitude,
+ *    latitude,
+ *    longitude
+ *  },
+ *  timestamp
+ * }
+ */
+async function getMetadataFromCurrentGPSLocation() : Promise<Attachment["metadata"]> {
+  const position = await getCurrentGeolocation()
+  const metadata = {
+    geolocation: {
+      altitude: position.coords.altitude || null,
+      latitude: position.coords.latitude || null,
+      longitude: position.coords.longitude || null,
+    },
+    timestamp:  format(new Date(position.timestamp),'YYYY:MM:DD HH:mm:ss') || null
+  }
+
+  return metadata
+}
+
 /**
  * Retrieves geolocation data from the Photo
  * @param photo 
@@ -57,39 +86,6 @@ function getMetadataFromPhoto(photo: Blob) : Promise<Attachment["metadata"]>  {
       resolve(metadata)
     })
   });
-}
-
-/**
- * Retrieves Geolocation data from device gps
- *   Internally calls getCurrentGeolocation for current location data
- *  
- * @returns An object of the form:
- * {
- *  geolocation: {
- *    altitude,
- *    latitude,
- *    longitude
- *  },
- *  timestamp
- * }
- */
-function getMetadataFromCurrentGPSLocation() : Promise<Attachment["metadata"]> {
-  return new Promise((resolve) => {
-    getCurrentGeolocation().then((position) => {
-    const browsermetadata = {
-            geolocation: {
-              altitude: position.coords.altitude || null,
-              latitude: position.coords.latitude || null,
-              longitude: position.coords.longitude || null,
-            },
-            timestamp:  format(position.timestamp,'YYYY:MM:DD HH:mm:ss') || null
-          }
-          resolve(browsermetadata)
-        }).catch((err) => {
-          console.error("GPS Location could not be retrieved ",err.message)
-        });
-    })
-
 }
 
 /**
