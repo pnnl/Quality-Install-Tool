@@ -8,15 +8,23 @@ import Metadata from '../types/metadata.type';
 
 
 /**
- * Geolocation data from Web browser - navigator
+ * Get the current geolocation data from the device
  * 
- * 
- * @returns An object of the current location data from device gps:
+ * @returns A GeolocationPosition object
  */
-function getCurrentGeolocation(): Promise<position> {
+function getCurrentGeolocation(): Promise<GeolocationPosition> {
   return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true, timeout: 30000})
-    });
+    navigator.geolocation.getCurrentPosition(
+      resolve, 
+      reject, 
+      {
+        // Allow a cached GPS value to be used for up to 5 minutes
+        maximumAge: 5 * 60 * 1000,
+        // Assume the GPS is unavailable after a minute
+        timeout: 60 * 1000
+      }
+    )
+  });
 }
 
 /**
