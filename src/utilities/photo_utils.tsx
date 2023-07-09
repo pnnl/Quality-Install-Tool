@@ -18,8 +18,8 @@ function getCurrentGeolocation(): Promise<GeolocationPosition> {
       resolve, 
       reject, 
       {
-        // Allow a cached GPS value to be used for up to 5 minutes
-        maximumAge: 5 * 60 * 1000,
+        // Allow a cached GPS value to be used for up to a minute
+        maximumAge: 1 * 60 * 1000,
         // Assume the GPS is unavailable after a minute
         timeout: 60 * 1000
       }
@@ -74,7 +74,7 @@ function getMetadataFromPhoto(photo: Blob) : Promise<Attachment["metadata"]>  {
   return new Promise((resolve) => {
     EXIF.getData(photo, function() {
       const fullMetaData = EXIF.getAllTags(this)
-      const {DateTime, DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
+      const {DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
       const metadata = {
         geolocation: {
           altitude: GPSAltitude || null,
@@ -115,14 +115,15 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
   
   // Fetching geolocation from photo
   const metadataFromPhoto =  await getMetadataFromPhoto(photo)
- 
+ console.log('metadataFromPhoto', metadataFromPhoto)
   let photoMetadata = metadataFromPhoto;
   const {timestamp: photoTimestamp, geolocation: photoGelolocation} = metadataFromPhoto
  
-  // Metadata from Photo do not have required fileds such as timestamp and geotagging data. iOS devices.
-  if (!photoTimestamp && !photoGelolocation.latitude && !photoGelolocation.longitude)  
+  if (!photoTimestamp && !(photoGelolocation.latitude || photoGelolocation.longitude))  
   {
+    //This case routinely happens when taking a photo using an iOS camera
     photoMetadata = await getMetadataFromCurrentGPSLocation()
+    console.log('metadataFromGPS', photoMetadata)
   }
   else if (photoTimestamp)  //Metadata from Photo do not have required geotagging data.
   {
@@ -137,9 +138,10 @@ export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadat
       if (hr_diff < 25 )
       {
         photoMetadata = {timestamp: photoTimestamp, geolocation: metadatafromGPS.geolocation}
+        console.log('metadataFromBoth:',photoMetadata )
       }
   }
-   
+   console.log('photoMetadata:', photoMetadata)
   // return photoMetadata  
   return photoMetadata
     
