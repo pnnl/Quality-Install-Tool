@@ -7,14 +7,16 @@ The Quality Install Tool is a web app that implements quality installation docum
 - Runs on any device with a modern browser
 - Runs entirely inside the browser
 - All data are stored on the user's device – no data is sent to a server
+- Photos are taken with the device camera while on the job site
+- All photos are timestamped and geotagged when uploaded
 - Will run offline – no internet connection is neccessary once it is installed (Coming Soon)
 - Generates a PDF report that is stored on the user's device – the user may send the PDF to others separately from the web app
 
 ## Using the Web App
 - The web app is publicly accessible at https://quality-install-tool.pnnl.gov. 
-- The initial (home) screen allows the user to select from a list of installation types.
-  - The current version only supports the Heat Pump Water Heater installation. (More are coming soon)
-- Choosing an installation type takes the user to the Projects List for that installation type.
+- The initial (home) screen allows the user to select from a list of workflows.
+  - The current version only supports the Heat Pump Water Heater workflow. (More are coming soon.)
+- Choosing an installation type takes the user to the Projects List for that workflow.
   - The user can create new projects and rename, delete, or open existing projects.
 - Opening a project takes the user to a project page where the user can fill in the input form(s), add photos, and generate a PDF report.
 
