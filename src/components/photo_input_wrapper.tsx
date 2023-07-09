@@ -4,7 +4,6 @@ import React, {FC} from 'react'
 import {StoreContext} from './store'
 import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
-import { getPhotoMetadata } from '../utilities/photo_utils'
 
 const MAX_IMAGE_DIM = 1280
 

@@ -17,7 +17,7 @@ import USStateSelectWrapper from "./us_state_select_wrapper";
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
 import {StoreContext} from './store'
-import DateStr from './date';
+import DateStr from './date_str';
 import ClimateZoneSelectWrapper from './climate_zone_select_wrapper';
 import RadioWrapper from './radio_wrapper';
 

@@ -5,14 +5,18 @@ import React, { FC } from 'react';
  */
 interface DateStrProps {
     date: string,
-    locals: string,
-    options: Intl.DateTimeFormatOptions
+    locals?: string,
+    options?: Intl.DateTimeFormatOptions
 }
 
 /**
  * Default options for date formatting
  */
-const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {timeZone: 'UTC', month:"long", day:"numeric", year:"numeric"};
+const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
+  day: "numeric", 
+  month: "long", 
+  year: "numeric"
+};
 
 /**
  * DateStr component
@@ -24,7 +28,7 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {timeZone: 'UTC', month:"lon
 const DateStr: FC<DateStrProps>= ({date, locals = 'en-us', options = {}}) => {
   const full_options = {...DEFAULT_OPTIONS, ...options};
   const parsedDate = new Date(date);
-  const formattedDate = parsedDate.toLocaleDateString(locals, full_options);
+  const formattedDate = parsedDate.toLocaleString(locals, full_options);
 
   return <span>{formattedDate}</span>;
 }
