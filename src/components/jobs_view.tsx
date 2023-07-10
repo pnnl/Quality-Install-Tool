@@ -7,6 +7,7 @@ import templatesConfig from '../templates/templates_config'
 import StringInputModal from './string_input_modal';
 import {LinkContainer} from 'react-router-bootstrap'
 import { Link } from 'react-router-dom';
+import { putNewDoc } from '../utilities/database_utils';
 
 PouchDB.plugin(PouchDBUpsert);
 
@@ -124,7 +125,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     const name = input;
     if (name !== null) {
       const date = new Date();
-      await db.putIfNotExists(name, {metadata_:{created_at: date, last_modified_at: date, attachments: {}}})
+      await putNewDoc(db, name, date);
     }
     // Refresh the job list after adding the new job
     await retrieveJobs();
