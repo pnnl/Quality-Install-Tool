@@ -6,6 +6,7 @@ import {TfiGallery} from 'react-icons/tfi'
  
 
 import Collapsible from './collapsible'
+import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import PhotoMetaData from '../types/photo_metadata.type'
 
@@ -112,7 +113,7 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
               <br />
               <small>
                 Timestamp: {
-                  metadata?.timestamp ? (<span>{metadata.timestamp}</span>) :
+                   metadata?.timestamp ? <DateTimeStr date={metadata.timestamp}/> :
                   (<span>Missing</span>)
                 }
                 <br />

@@ -2,7 +2,7 @@ import {isEmpty} from 'lodash'
 import React, {FC, useEffect, useState} from 'react'
 import {Button, Card, Image} from 'react-bootstrap'
 
-
+import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import PhotoMetadata from '../types/photo_metadata.type'
 
@@ -45,7 +45,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) 
               <br />
               <small>
                 Timestamp: {
-                  metadata?.timestamp ? (<span>{metadata.timestamp}</span>) :
+                  metadata?.timestamp ? <DateTimeStr date={metadata.timestamp} /> :
                   (<span>Missing</span>)
                 }
                 <br />

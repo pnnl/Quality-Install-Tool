@@ -4,7 +4,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from "react";
 
 import { isEmpty, isUndefined, toPath } from 'lodash'
 import JSONValue from '../types/json_value.type'
-import {getPhotoMetadata} from '../utilities/photo_utils'
+import {getMetadataFromCurrentGPSLocation} from '../utilities/photo_utils'
 import { isEmptyBindingElement } from 'typescript';
 import Attachment from '../types/attachment.type'
 import type {Objectish, AnyObject, AnyArray, NonEmptyArray} from '../types/misc_types.type'
@@ -266,7 +266,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
   const upsertAttachment: UpsertAttachment = async (blob, id: string) => {
     // Create the metadata for the blob  
    const metadata: Attachment["metadata"] = (
-      blob.type === "image/jpeg" ? await getPhotoMetadata(blob) :  {}
+      blob.type === "image/jpeg" ? await getMetadataFromCurrentGPSLocation() :  {}
     )
 
     // Storing SingleAttachmentMetaData in the DB 

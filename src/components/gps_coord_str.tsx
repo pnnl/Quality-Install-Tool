@@ -9,12 +9,12 @@ import { loadPartialConfig } from '@babel/core'
  * @returns 
  */
 const GpsCoordStr: FC<PhotoMetadata["geolocation"]> = (geolocation) => {
-  const {latitude: lat, longitude: long} = geolocation
+  const {latitude, longitude} = geolocation
+  const geoStr = latitude && longitude ? Number(latitude).toFixed(4) + "," + Number(longitude).toFixed(4) : null
+  
   return (
-    <> {
-     (lat  && lat.toString() !== 'NaN' && long  && long.toString() !== 'NaN') ?
-      <span>{Number(lat).toFixed(4)}&deg;N  {Number(long).toFixed(4)}&deg;E</span> : <span>Missing</span>
-        }
+    <> 
+      {geoStr ? <a href={"https://www.google.com/maps/search/?api=1&query=" + geoStr} target="_blank">{geoStr}</a> : <span>Missing</span>}
     </>
   )
 }
