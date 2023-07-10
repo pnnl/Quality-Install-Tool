@@ -9,6 +9,7 @@ import { isEmptyBindingElement } from 'typescript';
 import Attachment from '../types/attachment.type'
 import type {Objectish, AnyObject, AnyArray, NonEmptyArray} from '../types/misc_types.type'
 import Metadata from '../types/metadata.type';
+import { putNewDoc } from '../utilities/database_utils';
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -154,7 +155,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({ children, dbName, docId 
         // It looks like the type def for putIfNotExists does not match its implementation
         // TODO: Check this over carefully
         const date = new Date()
-        const result = await db.putIfNotExists(docId, {metadata_:{created_at: date, last_modified_at: date, attachments : {}}})
+        const result = await putNewDoc(db,docId,date);
         revisionRef.current = result.rev
       } catch(err) {
         console.error('DB initialization error:', err)
