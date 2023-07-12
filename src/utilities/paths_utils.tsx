@@ -23,9 +23,9 @@ export function pathToId(path: string, prefix?: string, separator?:string): stri
   }
   if(!pathRegex.test(path)){
     throw new Error("path name " + path +" is not allowed"); //TODO: decide what to do when not pass
-  } else if(prefixRegex.test(prefix)){
+  } else if(!prefixRegex.test(prefix)){
     throw new Error("prefix name " + prefix +" is not allowed"); //TODO: decide what to do when not pass
-  } else if(separatorRegex.test(separator)){
+  } else if(!separatorRegex.test(separator)){
     throw new Error("separator char " + separator + " is not allowed"); //TODO: decide what to do when not pass
   }
   else {
