@@ -1,7 +1,7 @@
 import { isUndefined, toPath } from 'lodash'
 
-const pathRegex = /^[a-zA-Z0-9]{1,64}$/ //TODO: decide on what regex to use.
-const prefixRegex = /^[a-zA-Z0-9]{1,64}$/ //TODO: decide on what regex to use.
+const pathRegex = /^.{1,64}$/ //TODO: decide on what regex to use.
+const prefixRegex = /^.{1,64}$/ //TODO: decide on what regex to use.
 const separatorRegex = /^[!@#$%^&*()]$/ //TODO: decide on what regex to use.
 
 /**
