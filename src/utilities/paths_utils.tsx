@@ -2,7 +2,7 @@ import { isUndefined, toPath } from 'lodash'
 
 const pathRegex = /^.{1,64}$/ //TODO: decide on what regex to use.
 const prefixRegex = /^.{1,64}$/ //TODO: decide on what regex to use.
-const separatorRegex = /^[!@#$%^&*()]$/ //TODO: decide on what regex to use.
+const separatorRegex = /^.{1,64}$/ //TODO: decide on what regex to use.
 
 /**
  * Utility function used to convert a string path into a string 
@@ -22,11 +22,11 @@ export function pathToId(path: string, prefix?: string, separator?:string): stri
     separator = "-"
   }
   if(!pathRegex.test(path)){
-    throw new Error("path name is not allowed"); //TODO: decide what to do when not pass
+    throw new Error("path name " + path +" is not allowed"); //TODO: decide what to do when not pass
   } else if(prefixRegex.test(prefix)){
-    throw new Error("prefix name is not allowed"); //TODO: decide what to do when not pass
+    throw new Error("prefix name " + prefix +" is not allowed"); //TODO: decide what to do when not pass
   } else if(separatorRegex.test(separator)){
-    throw new Error("separator char is not allowed"); //TODO: decide what to do when not pass
+    throw new Error("separator char " + separator + " is not allowed"); //TODO: decide what to do when not pass
   }
   else {
     return [prefix, ...toPath(path)].join(separator)
