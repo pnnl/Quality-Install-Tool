@@ -1,6 +1,7 @@
 import { SetStateAction, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import PropTypes from 'prop-types';
 
 /**
  * Props for the StringInputModal component.
@@ -17,7 +18,7 @@ interface StringInputModalProps {
 /**
  * Modal component with an input field for string input.
  * @param {StringInputModalProps} props - The component receives several props:
- *    isOpen: Indicates whether the modal is open or closed.
+ *    isOpen: Indicates whether the mvalidateInput.findodal is open or closed.
  *    closeModal: A callback function to close the modal.
  *    onSubmit: A callback function invoked when the user submits the input value.
  *    validateInput: An array of validators for input validation. Each validator is an object with a validator function and an errorMsg string.
@@ -41,7 +42,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
       const trimedInputValue = inputValue.trim();
       setInputValue(trimedInputValue);
       const isValid = validateInput.every((validator) => validator.validator(trimedInputValue));
-    
+
       if (isValid) {
         onSubmit(trimedInputValue);
         closeModal();
@@ -52,18 +53,18 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
         setErrorMessage(errorMessage);
       }
     };
-    
+
     const handleSubmit = () => {
       handleValidationAndSubmission();
     };
-    
+
     const handleKeyPress = (target: KeyboardEvent) => {
       if (target.key === "Enter") {
         handleValidationAndSubmission();
       }
     };
-    
-  
+
+
     /**
      * Handles the change in the input field value.
      * @param {Object} event - The input change event.
@@ -75,7 +76,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
 
     const modalTitle = title || 'Default Title';
     const modalOK = okButton || 'OK';
-  
+
     return (
       <Modal show={isOpen} onHide={closeModal} onKeyPress={handleKeyPress}>
         <Modal.Header closeButton>
@@ -91,5 +92,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
       </Modal>
     );
   };
-  
-  export default StringInputModal;
+
+
+
+export default StringInputModal;

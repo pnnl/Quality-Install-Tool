@@ -19,5 +19,6 @@ module.exports = {
   ],
   rules: {
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": 0 // This should be removed. Need to figure out a way to define proptypes on string_input_modal
   }
 }

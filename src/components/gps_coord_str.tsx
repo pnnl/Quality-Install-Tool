@@ -14,7 +14,7 @@ const GpsCoordStr: FC<PhotoMetadata["geolocation"]> = (geolocation) => {
 
   return (
     <>
-      {geoStr ? <a href={"https://www.google.com/maps/search/?api=1&query=" + geoStr} target="_blank">{geoStr}</a> : <span>Missing</span>}
+      {geoStr ? <a href={"https://www.google.com/maps/search/?api=1&query=" + geoStr} rel="noreferrer" target="_blank">{geoStr}</a> : <span>Missing</span>}
     </>
   )
 }
