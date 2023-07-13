@@ -8,7 +8,7 @@ import {LinkContainer} from 'react-router-bootstrap'
 const Home: FC = () => {
     
   const templates = Object.keys(templatesConfig).map((key) => (
-    <LinkContainer to={`/app/${key}`}>
+    <LinkContainer key={key} to={`/app/${key}`}>
       <ListGroup.Item key={key} action={true}>
         {templatesConfig[key as keyof typeof templatesConfig].title}
       </ListGroup.Item>

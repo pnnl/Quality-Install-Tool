@@ -5,8 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript',
-    'prettier'
+    // 'standard-with-typescript'
+    // 'prettier'
   ],
   overrides: [
   ],
@@ -18,5 +18,6 @@ module.exports = {
     'react'
   ],
   rules: {
+    "react/react-in-jsx-scope": "off",
   }
 }

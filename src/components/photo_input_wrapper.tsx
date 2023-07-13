@@ -43,7 +43,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({children, id, label}) =>
           <PhotoInput children={children} label={label}
             metadata={(attachments[id]?.metadata as unknown) as PhotoMetadata}
             photo={attachments[id]?.blob} upsertPhoto={upsertPhoto}
-             />
+          />
         )
       }}
     </StoreContext.Consumer>
