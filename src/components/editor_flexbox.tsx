@@ -8,7 +8,7 @@ import { useMDXComponents } from "@mdx-js/react";
 import ClimateZoneSelectWrapper from "./climate_zone_select_wrapper";
 import Collapsible from "./collapsible";
 import DateInputWrapper from "./date_input_wrapper";
-import DateStr from "./date";
+import DateStr from "./date_str";
 import FigureWrapper from "./figure_wrapper";
 import NumberInputWrapper from "./number_input_wrapper";
 import PhotoInput from "./photo_input";

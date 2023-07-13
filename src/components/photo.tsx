@@ -2,7 +2,7 @@ import {isEmpty} from 'lodash'
 import React, {FC, useEffect, useState} from 'react'
 import {Button, Card, Image} from 'react-bootstrap'
 
-
+import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import PhotoMetadata from '../types/photo_metadata.type'
 
@@ -31,7 +31,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) 
 
   return (photo || required)? (
     <>
-      <Card style={{breakInside: 'avoid-page', marginBottom: '1rem'}}>
+      <Card style={{breakInside: 'avoid-page', marginBottom: '1rem', marginTop: '1rem'}}>
         <Card.Body>
           <Card.Title>{label}</Card.Title>
           {/* Card.Text renders a <p> by defult. The description comes from markdown
@@ -45,15 +45,12 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) 
               <br />
               <small>
                 Timestamp: {
-                  metadata?.timestamp ? (<span>{metadata.timestamp}</span>) :
+                  metadata?.timestamp ? <DateTimeStr date={metadata.timestamp} /> :
                   (<span>Missing</span>)
                 }
                 <br />
                 Geolocation: {
-                  metadata?.geolocation?.latitude  && metadata?.geolocation?.latitude?.deg.toString() !== 'NaN' &&
-                  metadata?.geolocation?.longitude && metadata?.geolocation?.longitude?.deg.toString() !== 'NaN' ?
-                  <span><GpsCoordStr {...metadata.geolocation.latitude} />  <GpsCoordStr {...metadata.geolocation.longitude} /></span> :
-                  <span>Missing</span>
+                         <span><GpsCoordStr {...metadata.geolocation} /> </span> 
                 }
               </small>
             </>

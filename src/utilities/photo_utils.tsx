@@ -1,16 +1,33 @@
 import EXIF from 'exif-js'
 
 import Attachment from '../types/attachment.type'
-import Metadata from '../types/metadata.type';
+
 
 /**
- * Extracts the timestamp and geolocation data from a JPEG photo's
- * metadata
+ * Get the current geolocation data from the device
  * 
- * @remarks
- * The caller must ensure that the photo is in jpeg format.
- * 
- * @param photo A Blob for a jpeg photo
+ * @returns A GeolocationPosition object
+ */
+function getCurrentGeolocation(): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      resolve, 
+      reject, 
+      {
+        // Allow a cached GPS value to be used for up to a minute
+        maximumAge: 0,
+        // Assume the GPS is unavailable after a minute
+        timeout: 60 * 1000
+      }
+    )
+  });
+}
+
+
+/**
+ * Retrieves Geolocation data from device gps
+ *   Internally calls getCurrentGeolocation for current location data
+ *  
  * @returns An object of the form:
  * {
  *  geolocation: {
@@ -21,33 +38,21 @@ import Metadata from '../types/metadata.type';
  *  timestamp
  * }
  */
-export async function getPhotoMetadata(photo: Blob): Promise<Attachment["metadata"]> {
-
-  return new Promise((resolve) => {
-  EXIF.getData(photo, function() {
-      const fullMetaData = EXIF.getAllTags(this)
-      const {DateTimeOriginal, GPSAltitude, GPSLatitude, GPSLatitudeRef, GPSLongitude, GPSLongitudeRef} = fullMetaData
-      const metadata = {
-        geolocation: {
-          altitude: GPSAltitude || null,
-          latitude: GPSLatitude ? {
-            deg: GPSLatitude[0],
-            min: GPSLatitude[1],
-            sec: GPSLatitude[2],
-            // Note: Naming this property ref would interfere with the React property
-            cRef: GPSLatitudeRef || null
-          } : null,
-          longitude: GPSLongitude ? {
-            deg: GPSLongitude[0],
-            min: GPSLongitude[1],
-            sec: GPSLongitude[2],
-            cRef: GPSLongitudeRef || null
-          } : null,
-        },
-        timestamp: DateTimeOriginal || null
-      }
-      resolve(metadata)
-
-    }) 
-  })
+export async function getMetadataFromCurrentGPSLocation() : Promise<Attachment["metadata"]> {
+  const position = await getCurrentGeolocation()
+  const metadata = {
+    geolocation: {
+      altitude: position.coords.altitude || null,
+      latitude: position.coords.latitude || null,
+      longitude: position.coords.longitude || null,
+    },
+    // Do NOT get the timestamp from position because getCurrentGeolocation
+    // may return a cached GeolocationPosition if the lat, long have not 
+    // changed sufficiently.
+    timestamp:  new Date(Date.now()).toUTCString()
+  }
+  return metadata
 }
+
+  
+
