@@ -7,32 +7,38 @@ import JsonStoreView from './components/json_store_view'
 import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import templatesConfig from './templates/templates_config'
-import TemplateEditor from "./components/editor";
-import Home from "./components/home";
-import JobsView from "./components/jobs_view";
+import TemplateEditor from "./components/editor"
+import Home from "./components/home"
+import JobsView from "./components/jobs_view"
+import ErrorElement from "./components/error"
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 const routes = [{
     path: "/",
-    element: <RootLayout><Home/></RootLayout>
+    element: <RootLayout><Home/></RootLayout>,
+    errorElement: <ErrorElement/>,
   },{
     path: "/template_editor",
     element: <TemplateEditor />,
+    errorElement: <ErrorElement/>,
   },
 ].concat(Object.keys(templatesConfig).flatMap(dbName => [{
     path: `/app/${dbName}`,
     // TODO: Create a component that provides the functionality
     // to manage the documents in this DB
     element: <RootLayout><div><JobsView dbName={dbName} /></div></RootLayout>,
+    errorElement: <ErrorElement/>,
   },
   {
     path: `/app/${dbName}/:docId`,
     element: <RootLayout><MdxTemplateView dbName={dbName} /></RootLayout>,
+    errorElement: <ErrorElement/>,
   },
   {
     path: `/app/${dbName}/:docId/json`,
     element: <RootLayout><JsonStoreView dbName={dbName} /></RootLayout>,
+    errorElement: <ErrorElement/>,
   }
 ]))
 
