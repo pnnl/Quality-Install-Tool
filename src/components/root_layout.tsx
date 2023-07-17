@@ -47,25 +47,25 @@ useEffect(() => {
 }, [location.pathname]);
 
 return (
-  <div style={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800, backgroundColor: "rgba(231, 231, 231)", minHeight: "100vh" }}>
-    <NavBar style={{ backgroundColor: "green" }}>
+  <div className='root-background'>
+    <NavBar className='root-banner'>
       {/* Conditional rendering of a back button */}
       {showBackButton && (
-        <div style={{ marginLeft: "0.5rem", marginRight: "0.5rem"}}>
-          <Link to={backUrl} style={{ textDecoration: "none" }}>
-            <Button variant="outline-light" style={{ padding: "1rem" }}>
-              <TfiAngleLeft style={{ color: "white", height: "100%"}} />
+        <div className='back-button-container'>
+          <Link to={backUrl} className='back-button-link'>
+            <Button variant="outline-light" className='back-button'>
+              <TfiAngleLeft className='back-button-logo'/>
             </Button>
           </Link>
         </div>
       )}
-      <Container style={{ display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <Container className='root-flex-layout'>
         <NavBar.Brand>
-          <span style={{ color: "gold", fontSize: "2rem" }}>Quality Install Tool</span>
+          <span className='root-title'>Quality Install Tool</span>
         </NavBar.Brand>
       </Container>
     </NavBar>
-    <div style={{ paddingTop: "1rem" ,paddingBottom:"1rem"}}>
+    <div className='root-body'>
       {children}
     </div>
   </div>

@@ -164,7 +164,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
           title="Enter new project name"
           okButton='Add'
         />
-        <div style={{ marginBottom: '10px' }}></div>
+        <div className='bottom-margin'></div>
       {/* Sort feature, not used now but will be used in future. */ 
       /* <Dropdown>
         <Dropdown.Toggle variant="success">

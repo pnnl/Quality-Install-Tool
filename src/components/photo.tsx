@@ -31,7 +31,7 @@ const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) 
 
   return (photo || required)? (
     <>
-      <Card style={{breakInside: 'avoid-page', marginBottom: '1rem', marginTop: '1rem'}}>
+      <Card className='photo-card'>
         <Card.Body>
           <Card.Title>{label}</Card.Title>
           {/* Card.Text renders a <p> by defult. The description comes from markdown
