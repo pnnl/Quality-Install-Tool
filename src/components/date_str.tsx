@@ -1,22 +1,22 @@
-import React, { FC } from 'react';
+import type { FC } from 'react'
 
 /**
  * Interface for the DateStrProps
  */
 interface DateStrProps {
-    date: string,
-    locals?: string,
-    options?: Intl.DateTimeFormatOptions
+  date: string
+  locals?: string
+  options?: Intl.DateTimeFormatOptions
 }
 
 /**
  * Default options for date formatting
  */
 const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
-  day: "numeric", 
-  month: "long", 
-  year: "numeric"
-};
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric'
+}
 
 /**
  * DateStr component
@@ -25,12 +25,12 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
  * @param options - An optional objected used as the second argument to the Date.toLocalDateString() method
  * @returns The formatted date component
  */
-const DateStr: FC<DateStrProps>= ({date, locals = 'en-us', options = {}}) => {
-  const full_options = {...DEFAULT_OPTIONS, ...options};
-  const parsedDate = new Date(date);
-  const formattedDate = parsedDate.toLocaleString(locals, full_options);
+const DateStr: FC<DateStrProps> = ({ date, locals = 'en-us', options = {} }) => {
+  const fullOptions = { ...DEFAULT_OPTIONS, ...options }
+  const parsedDate = new Date(date)
+  const formattedDate = parsedDate.toLocaleString(locals, fullOptions)
 
-  return <span>{formattedDate}</span>;
+  return <span>{formattedDate}</span>
 }
 
-export default DateStr;
+export default DateStr

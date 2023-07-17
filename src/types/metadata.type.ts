@@ -5,7 +5,7 @@ import PhotoMetadata from "./photo_metadata.type"
 interface Metadata  {
   created_at: Date,
   last_modified_at: Date,
-  attachments: JSONValue,
+  attachments: Record<string, JSONValue>,
     
 }
 export default Metadata
