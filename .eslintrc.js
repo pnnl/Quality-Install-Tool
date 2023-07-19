@@ -5,8 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript'
-    // 'prettier'
+    'standard-with-typescript',
+    // 'prettier/@typescript-eslint',
   ],
   overrides: [
   ],
