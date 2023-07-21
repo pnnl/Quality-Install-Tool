@@ -1,0 +1,311 @@
+<Tabs>
+<Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
+    The data for this tab should be know prior to the initial site visit.
+
+    *The Installer inputs below are all optional, although you will want to 
+    fill in at least one for the report.*
+
+    ##### Installer
+    <StringInput label="Technician Name" path="installer.name" />
+    <StringInput label="Installation Company" path="installer.company_name" />
+    <StringInput label="Company Address" path="installer.mailing_address" />
+    <StringInput label="Company Phone" path="installer.phone" />
+    <StringInput label="Company Email" path="installer.email" />
+
+    ##### Project Address
+    <StringInput label="Street Address" path="location.street_address" />
+    <StringInput label="City" path="location.city" />
+    <USStateSelect label="State" path="location.state" />
+    <StringInput label="Zip Code" path="location.zip_code" />
+  </Tab>
+  <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
+    The data for this tab should be collected during the initial site visit.
+     
+     ##### Building
+     <PhotoInput id="building_number_photo" label="Building Number – Photo">
+      Provide a photo of the building that shows the street number.
+     </PhotoInput>
+
+     ##### Blower Door Setup
+     Blower door setup and manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    <PhotoInput id="blower_door_setup" label="Blower Door Setup – Photo">
+    Blower door setup
+    </PhotoInput>
+    <PhotoInput id="cfm_at_50pa" label="CFM at 50 Pa – Photo">
+    CFM at 50 Pa
+    </PhotoInput>
+    <TextInput  label="Comment on CFM50 and ACH results" path="cfm_at_50pa_comments"> </TextInput>
+    
+     ##### Floor Plan Sketch For The Air Leak
+     <PhotoInput id="floor_plan_sketch" label="Floor Plan Sketch – Photo">
+      Floor plan sketch showing the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
+     </PhotoInput>
+     <TextInput  label="Comment on any notable and unusual leaks" path="floor_plan_sketch_comments"> </TextInput>
+  </Tab>
+  <Tab eventKey="preparation" style={{paddingTop:"1rem"}} title="Preparation">
+    ##### Attic Floor Prepared for Air Sealing
+    <PhotoInput id="attic_floor_prepared" label=" Attic Floor Preparation – Photo">
+      Photo of attic floor prep before air sealing such as cleaned, insulation removed
+    </PhotoInput>
+    <TextInput  label="Comment on any notable and unusual leaks" path="attic_floor_prepared_comments" />
+
+    ##### Drywall To Top Plate
+    <PhotoInput id="dry_wall_to_top_plate" label="Drywall To Top Plate Seam Sealed– Photo ">
+      Photo of drywall to top plate seam sealed
+    </PhotoInput>
+
+
+  </Tab>
+  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation 1">
+
+
+    <DateInput label="Installation Date" path="install_date" />
+    ##### Soffit Air Baffles 
+    <PhotoInput id="soffit_air_baffles" label="Soffit Air Baffles Installed – Photo">
+    Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam  
+    </PhotoInput>
+
+    ##### Non-IC Can Lights
+    <PhotoInput id="non_ic_can_lights" label="Non-IC Rated Recessed Lights – Photo">
+    Photo of enclose and air seal non-IC rated recessed lights  
+    </PhotoInput>
+
+    ##### Fire Caulking And Sheet Metal Dam  
+    <PhotoInput id="fire_caulking_sheet_around_chimney" label="Fire Caulking And Sheet Metal Dam Around Chimney – Photo">
+    Photo of Fire Caulking And Sheet Metal Dam Around Chimney  
+    </PhotoInput>
+    <PhotoInput id="fire_caulking_sheet_around_hot_flue_pipes" label="Fire Caulking And Sheet Metal Dam Around Hot Flue Pipes – Photo">
+    Photo of Fire Caulking And Sheet Metal Dam Around Hot Flue Pipes
+    </PhotoInput>
+
+
+    ##### Electrical Wire and Pipe Penetrations 
+    <PhotoInput id="electrical_wire_and_pipe_penetrations" label="Electrical Wire and Pipe Penetrations Sealed – Photo">
+    Photo of Electrical Wire and Pipe Penetrations Sealed  
+    </PhotoInput> 
+
+
+    ##### Large Opening Sealed 
+    <PhotoInput id="large_opening_sealed" label="Large Opening Sealed with Rigid Foam and Spray Foam – Photo">
+    Photo of large opening such as a dropped soffit, dropped ceiling, or chase sealed with rigid foam and spray foam.  
+    </PhotoInput> 
+
+    ##### Duct Boot To Drywall Connection 
+    <PhotoInput id="duct_boot_to_drywall_connection" label="Duct Boot To Drywall Connection Sealed – Photo">
+    Photo of duct boot to drywall connection sealed
+    </PhotoInput> 
+
+    ##### Exhaust Fan Sealed to Drywall 
+    <PhotoInput id="exhaust_fan_sealed_to_drywall" label="Exhaust Fan Sealed to Drywall – Photo">
+    Photo of Exhaust Fan Sealed to Drywall
+    </PhotoInput> 
+
+    ##### Open Back Knee Walls  
+    <PhotoInput id="open_back_knee_walls_sealed" label="Open Back Knee Walls Sealed – Photo">
+    Photo of open back knee walls sealed. Install blocking if missing top or bottom plates.
+    </PhotoInput>  
+    <PhotoInput id="open_back_knee_walls_closed_with_air_barrier" label="Open Back Knee Walls Closed With Air Barrier or Foam Board – Photo">
+    Photo of open back knee wall closed with air barrier or foam board
+    </PhotoInput> 
+  </Tab>
+  <Tab eventKey="installation2" style={{paddingTop:"1rem"}} title="Installation 2">
+    ##### Open Back Skylight Shaft Wall  
+    <PhotoInput id="open_back_skylight_shaft_wall" label="Open Back Skylight Shaft Wall Air Sealed – Photo">
+    Photo of open back skylight shaft wall air sealed
+    </PhotoInput>
+
+    ##### Open Back Skylight Walls Closed With Air Barrier or Foam Board
+    <PhotoInput id="open_back_skylight_walls_closed_with_air_barrier" label="Open Back Skylight Walls Closed With Air Barrier or Foam Board – Photo">
+    Photo of open back skylight walls closed with air barrier or foam board
+    </PhotoInput>
+     
+    ##### Balloon Framed Walls Sealed
+    <PhotoInput id="balloon_framed_walls_sealed" label="Balloon Framed Walls Sealed With Blocking and Spray Foam – Photo">
+    Photo of balloon framed walls sealed with blocking and spray foam
+    </PhotoInput>
+
+    ##### Open Back Stairwell Wall Sealed
+    <PhotoInput id="open_back_stairwell_wall_sealed" label="Open Back Stairwell Wall Sealed with Air Barrier and Foam Board – Photo">
+    Photo of open back stairwell wall sealed with air barrier or foam board
+    </PhotoInput>
+
+    ##### Tongue And Groove Ceiling
+    <PhotoInput id="tongue_and_groove_ceiling_sealed" label="Tongue And Groove Ceiling Sealed – Photo">
+    Photo of tongue and groove ceiling sealed
+    </PhotoInput>
+
+    ##### Storage Platform Prepared For Insulation
+    <PhotoInput id="storage_platform_prepared_for_insulation" label="Storage Platform Prepared For Insulation – Photo">
+    Photo of storage platform prepared for insulation if no insulation underneath
+    </PhotoInput>
+
+    ##### Overview Photo of Air Sealed Attic
+    <PhotoInput id="overview_photo_of_air_sealed_attic" label="Overview of Air Sealed Attic – Photo">
+    Overview photo of air sealed attic
+    </PhotoInput>
+
+    ##### Installed And Sealed Insulation Dam Around Attic
+    <PhotoInput id="installed_and_sealed_insulation_dam_around_attic" label="Installed And Sealed Insulation Dam Around Attic Access – Photo">
+    Photo of installed and sealed insulation dam around attic access
+    </PhotoInput>
+
+    ##### Weatherstrip Air Sealed Attic Access
+    <PhotoInput id="weatherstrip_air_sealed_attic_access" label="Weatherstrip Air Sealed Attic Access – Photo">
+    Photo of weatherstrip air sealed attic access
+    </PhotoInput>
+
+    <TextInput  label="Summary Comments" path="installation_summary_comments" />
+    
+  </Tab>
+ <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Attic Air Sealing Upgrade Photo Report
+
+    **Installer**:<br/>
+    {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null}<br/>
+    {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}<br/>
+    {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}<br/>
+    {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
+    {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
+
+    **Installation Date:** <DateStr date={props.data.install_date}/>
+
+    **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+   
+
+    <Photo id="building_number_photo" label="Building Number" required>
+      A photo of the building showing the building number.
+    </Photo>
+
+    ## About the Report
+    This report is intended to show: 
+    1.	The air leakage rate of the home before attic envelope upgrades were performed, and 
+    2.	The critical details of the attic air sealing upgrades that were performed 
+
+    The report is not intended to be technically exhaustive, neither every single feature nor every example of every feature was photographed. 
+    The report does not imply that every single location that could have been air sealed and insulated was air sealed and insulated 100% perfectly, 
+    however, the contractor has made diligent effort to be meticulous and do a quality job. 
+
+    ## About Home Performance with ENERGY STAR
+    Treating a home as a system is a core principle of the Home Performance with ENERGY STAR program. The home as a system approach recognizes the 
+    building science order of importance to manage health & safety > water > air > vapor > thermal in that order of importance. 
+    The program does not promote energy efficiency upgrades if the home needs other more important repairs, remediations, and 
+    upgrades first in order to uphold and protect this building science order of importance. The program prioritizes comfort and health 
+    as much as lower utility bills and increased energy performance. 
+
+    ## About Naturally Drafted Fossil Fuel Appliances Inside the Home:
+    Naturally drafted fossil fuel appliances inside the pressure boundary of the home will be tested for proper draft and combustion during the 
+    pre-envelope upgrade health and safety inspection. However, there is the possibility that the comprehensive envelope air sealing and 
+    insulation energy efficiency upgrades could cause the naturally drafted water heater or furnace to fail to draft properly when dryers, 
+    range hoods, and exhaust fans are operated simultaneously with the naturally drafted water heater and/or furnace. If this is found to be the case, 
+    a combustion air opening connecting the combustion appliance area to the outdoors may need to be added or some other remediation may be required. 
+    The homeowner/landlord should be aware of this possibility and the costs of this remediation action. 
+
+    ## About Mechanical Ventilation:
+    One important aspect of a comprehensive energy efficiency upgrade is taking control of the air flowing in and out of the home. 
+    Without proper air sealing, the air flows in and out wherever it wants to, and primarily when it is very hot or very cold. 
+    This leads to comfort issues (drafts) and wasted energy. It also leads to moisture problems when the moisture in that air gets into the wall,
+     attic, or floor assemblies. To avoid these issues while providing adequate fresh air where and when it is needed, the strategy is to seal air 
+     leaks, especially high (attic) and low (basement or crawlspace) and then provide continuous mechanical ventilation with optional filtering or
+     other conditioning. 
+
+    
+    <Photo id="blower_door_setup" label="Blower Door Setup – Photo">
+    Blower door setup and manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </Photo>
+    <Photo id="cfm_at_50pa" label="CFM at 50 Pa – Photo">
+    </Photo>
+    {
+      props.data.cfm_at_50pa_comments
+      ? <p><strong>Comment:</strong> {props.data.cfm_at_50pa_comments}</p> 
+      : null
+    }
+        
+    <Photo id="floor_plan_sketch" label="Floor plan sketch – Photo">
+      Floor plan sketch showing the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
+    </Photo>
+    {
+      props.data.floor_plan_sketch_comments
+      ? <p><strong>Comment:</strong> {props.data.floor_plan_sketch_comments}</p> 
+      : null
+    }
+   
+    <Photo id="attic_floor_prepared" label="Attic Floor Preparation – Photo">
+      Photo of attic floor prep before air sealing such as cleaned, insulation removed
+    </Photo>
+    {
+      props.data.attic_floor_prepared_comments
+      ? <p><strong>Comment:</strong> {props.data.attic_floor_prepared_comments}</p> 
+      : null
+    }
+    
+    <Photo id="dry_wall_to_top_plate" label="Drywall To Top Plate Seam Sealed – Photo "/>
+
+
+    <Photo id="soffit_air_baffles" label="Soffit Air Baffles Installed – Photo">
+    Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam  
+    </Photo>
+
+    <Photo id="non_ic_can_lights" label="Non-IC Rated Recessed Lights – Photo">
+    Photo of enclose and air seal non-IC rated recessed lights  
+    </Photo>
+ 
+    <Photo id="fire_caulking_sheet_around_chimney" label="Fire Caulking And Sheet Metal Dam Around Chimney – Photo" />
+   
+    <Photo id="fire_caulking_sheet_around_hot_flue_pipes" label="Fire Caulking And Sheet Metal Dam Around Hot Flue Pipes – Photo" />
+  
+    <Photo id="electrical_wire_and_pipe_penetrations" label="Electrical Wire and Pipe Penetrations Sealed – Photo" />
+
+    <Photo id="large_opening_sealed" label="Large Opening Sealed with Rigid Foam and Spray Foam – Photo">
+    Photo of large opening such as a dropped soffit, dropped ceiling, or chase sealed with rigid foam and spray foam.  
+    </Photo> 
+
+    <Photo id="duct_boot_to_drywall_connection" label="Duct Boot To Drywall Connection Sealed – Photo">
+    Photo of duct boot to drywall connection sealed
+    </Photo> 
+
+    <Photo id="exhaust_fan_sealed_to_drywall" label="Exhaust Fan Sealed to Drywall – Photo">
+    Photo of Exhaust Fan Sealed to Drywall
+    </Photo> 
+
+    <Photo id="open_back_knee_walls_sealed" label="Open Back Knee Walls Sealed – Photo">
+    Photo of open back knee walls sealed. Install blocking if missing top or bottom plates.
+    </Photo>  
+    <Photo id="open_back_knee_walls_closed_with_air_barrier" label="Open Back Knee Walls Closed With Air Barrier or Foam Board – Photo" />    
+    
+   
+    <Photo id="open_back_skylight_shaft_wall" label="Open Back Skylight Shaft Wall Air Sealed – Photo" />
+
+    <Photo id="open_back_skylight_walls_closed_with_air_barrier" label="Open Back Skylight Walls Closed With Air Barrier or Foam Board – Photo" />
+  
+    <Photo id="balloon_framed_walls_sealed" label="Balloon Framed Walls Sealed With Blocking and Spray Foam – Photo" />
+    
+    <Photo id="open_back_stairwell_wall_sealed" label="Open Back Stairwell Wall Sealed with Air Barrier and Foam Board – Photo" />
+
+    <Photo id="tongue_and_groove_ceiling_sealed" label="Tongue And Groove Ceiling Sealed – Photo" />
+
+    <Photo id="storage_platform_prepared_for_insulation" label="Storage Platform Prepared For Insulation – Photo">
+    Photo of storage platform prepared for insulation if no insulation underneath
+    </Photo>
+
+    <Photo id="overview_photo_of_air_sealed_attic" label="Overview of Air Sealed Attic – Photo" />    
+
+    <Photo id="installed_and_sealed_insulation_dam_around_attic" label="Installed And Sealed Insulation Dam Around Attic Access – Photo" />
+   
+    <Photo id="weatherstrip_air_sealed_attic_access" label="Weatherstrip Air Sealed Attic Access – Photo" />
+   
+    {
+      props.data.installation_summary_comments
+      ? <p><strong>Summary Comments:</strong> {props.data.installation_summary_comments}</p> 
+      : null
+    }
+  
+    </PrintSection>
+  </Tab>
+
+
+
+
+
+</Tabs>
