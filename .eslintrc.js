@@ -5,10 +5,15 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
-    'standard-with-typescript',
-    // 'prettier/@typescript-eslint',
+    'prettier',
   ],
   overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -16,10 +21,10 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: [
-    'react'
+    '@typescript-eslint'
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 0 // This should be removed. Need to figure out a way to define proptypes on string_input_modal
+    'react/prop-types': 'off' // Disable proptypes for TypeScript projects
   }
-}
+};
