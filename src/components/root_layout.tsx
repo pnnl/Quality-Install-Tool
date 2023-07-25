@@ -6,6 +6,7 @@ import Image from 'react-bootstrap/Image'
 import NavBar from 'react-bootstrap/NavBar'
 import { useLocation, Link } from "react-router-dom";
 import { Button } from 'react-bootstrap';
+import DisplayErrorErrorBoundary from './display_error_error_boundary';
 
 interface RootLayoutProps {
   children: React.ReactNode,
@@ -65,9 +66,11 @@ return (
         </NavBar.Brand>
       </Container>
     </NavBar>
-    <div style={{ paddingTop: "1rem" ,paddingBottom:"1rem"}}>
-      {children}
-    </div>
+    <DisplayErrorErrorBoundary>
+      <div style={{ paddingTop: "1rem" ,paddingBottom:"1rem"}}>
+        {children}
+      </div>
+    </DisplayErrorErrorBoundary>
   </div>
 );
 
