@@ -141,7 +141,8 @@ h3 {
   margin-bottom: 1rem;
 } /*also in radio.tsx*/
 
-.photo-input {
+/* stylizes the hidden input for photo upload*/
+.photo-upload-input {
   display: none;
 }
 
@@ -149,5 +150,10 @@ h3 {
 .photo-card {
   break-inside: avoid-page;
   margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+/* stylizes tab component in editor to avoid putting styles in editor*/
+.tab-content {
   margin-top: 1rem;
 }
