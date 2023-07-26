@@ -1,4 +1,30 @@
-# BASC QA Tool
+# Quality Install Tool
+The Quality Install Tool is a web app that implements quality installation documentation requirements for various residential energy efficiency upgrades developed by Pacific Northwest National Laboratory (PNNL) as described at http://pnnl.gov/projects/quality-install-tool. Importantly, the requirements list a set of photos that must be taken before, during, and/or after installation.
+
+### Current Version: v1.0
+
+### Features:
+- Runs on any device with a modern browser
+- Runs entirely inside the browser
+- All data are stored on the user's device – no data is sent to a server
+- Photos are taken with the device camera while on the job site
+- All photos are timestamped and geotagged when uploaded
+- Will run offline – no internet connection is neccessary once it is installed (Coming Soon)
+- Generates a PDF report that is stored on the user's device – the user may send the PDF to others separately from the web app
+
+## Using the Web App
+- The web app is publicly accessible at https://quality-install-tool.pnnl.gov. 
+- The initial (home) screen allows the user to select from a list of workflows.
+  - The current version only supports the Heat Pump Water Heater workflow. (More are coming soon.)
+- Choosing an installation type takes the user to the Projects List for that workflow.
+  - The user can create new projects and rename, delete, or open existing projects.
+- Opening a project takes the user to a project page where the user can fill in the input form(s), add photos, and generate a PDF report.
+
+### Supported Photo Types:
+The current version only supports JPEG photos. (Newer iPhones store photos in the HEIC format by default. To store photos in the web app, you will need to change the camera settings to store photos in JPEG format.)
+
+### Offline Support:
+The current version does not support offline use. Once the web app has been thoroughly tested by others, we will turn this feature on.
 
 ## An outline of the App startup process
 1. The server will serve the built (by webpack) version of `index.html` for any route.
