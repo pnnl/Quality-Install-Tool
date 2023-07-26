@@ -1,0 +1,218 @@
+<Tabs>
+    <Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
+        The data for this tab should be know prior to the initial site visit.
+
+        *The Installer inputs below are all optional, although you will want to 
+        fill in at least one for the report.*
+
+        ##### Installer
+        <StringInput label="Technician Name" path="installer.name" />
+        <StringInput label="Installation Company" path="installer.company_name" />
+        <StringInput label="Company Address" path="installer.mailing_address" />
+        <StringInput label="Company Phone" path="installer.phone" />
+        <StringInput label="Company Email" path="installer.email" />
+
+        ##### Project Address
+        <StringInput label="Street Address" path="location.street_address" />
+        <StringInput label="City" path="location.city" />
+        <USStateSelect label="State" path="location.state" />
+        <StringInput label="Zip Code" path="location.zip_code" />
+
+        ##### Building
+        <PhotoInput id="building_number_photo" label="Building Number – Photo">
+         Provide a photo of the building that shows the street number.
+        </PhotoInput>
+
+    </Tab>
+    <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
+        
+        <DateInput label="Installation Date" path="install_date" />
+
+        
+        Skip photo if feature is N/A to house.
+        
+        <PhotoInput id="insulation_measuring_rulers " label="Insulation Measuring Rulers  – Photo ">
+            Overview of insulation measuring rulers, one installed every 300 sq. ft. visible 
+            from attic entrance (photo taken from attic entrance).     
+        </PhotoInput>
+
+        <PhotoInput id="rvalue" label="R-value Per Inch  – Photo ">
+        Photo of insulation bag R-value per inch table    
+        </PhotoInput>
+
+        <PhotoInput id="skylight_shaft" label="Skylight Shaft – Photo ">
+        Photot of skylight shaft insulation detail
+        </PhotoInput>
+
+        <PhotoInput id="knee_wall" label="Knee Wall – Photo ">
+            Photo of knee wall insulation detail     
+        </PhotoInput>
+
+        <PhotoInput id="stairwell_wall" label="Stairwell Wall – Photo ">
+        Photo of stairwell wall insulation detail     
+        </PhotoInput>
+
+        <PhotoInput id="storage_platform" label="Storage Platform – Photo ">
+        Photo of storage platform insulation detail    
+        </PhotoInput>
+
+        <PhotoInput id="wide_angle_photo" label="Wide Angle – Photo ">
+        Wide angle photo showing insulation uniformity with rulers visible
+        </PhotoInput>
+
+         <PhotoInput id="atticdoor_hatch" label="Attic Door/Hatch - Photo ">
+        Photo of insulation on attic door/hatch
+        </PhotoInput>
+    
+    </Tab>
+    <Tab eventKey="postassessment" style={{paddingTop:"1rem"}} title="Post Assessment">
+
+       
+
+        <PhotoInput id="blowerdoor_setup" label="Blower Door Setup - Photo ">
+            Photo of Blower door setup 
+        </PhotoInput>
+    
+        <PhotoInput id="blowerdoor_cfm50" label="Manometer CFM50 - Photo ">
+            Photo of blower door manometer showing CFM at 50 Pa read out
+        </PhotoInput>
+
+        | Leakage Reduction Calculator                                                                                                                                                                                                                                           |
+        | ----------------------------
+        | <NumberInput label="Final CFM50" min={0} path="ACH50_calculator.final_cfm50"  /> 
+        | <NumberInput label="Initial CFM50" min={0} path="ACH50_calculator.ini_cfm50"  /> 
+        | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ACH50_calculator.volume"  /> 
+        | Initial ACH50 = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.ini_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
+        | Final ACH50 = { props.data.ACH50_calculator?.final_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.final_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
+        | CFM50 Reduction = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.final_cfm50 ?  (props.data.ACH50_calculator.ini_cfm50 - props.data.ACH50_calculator.final_cfm50) : null } 
+
+        <TextInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
+        <TextInput  label="Summary Comment" path="comment_summary" />
+    </Tab>
+    <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+        <PrintSection label="Print Report">
+        ---
+        # Attic Insulation Upgrade Photo Report
+
+        **Installer**:<br/>
+        {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null}<br/>
+        {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}<br/>
+        {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}<br/>
+        {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
+        {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
+
+        **Installation Date:** <DateStr date={props.data.install_date}/>
+
+        **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+    
+        <Photo id="building_number_photo" label="Building Number" required>
+        A photo of the building showing the building number.
+        </Photo>
+
+        ## About the Report:
+        This report is intended to show:
+        1. The critical details of the attic insulation upgrades that were performed.
+        2. The subsequent air leakage rate of the home after all the air sealing and insulation work
+        in the scope of work has been performed.
+        The report is not intended to be technically exhaustive, neither every single feature nor every
+        example of every feature was photographed. The report does not imply that every single
+        location that could have been air sealed and insulated was air sealed and insulated 100%
+        perfectly, however, the contractor has made diligent effort to be meticulous and do a quality
+        job.
+        
+        ## About Naturally Drafted Fossil Fuel Appliances Inside the Home
+        Naturally drafted fossil fuel appliances inside the pressure boundary of the home will be tested
+        for proper draft and combustion during the pre-envelope upgrade health and safety inspection.
+        However, there is the possibility that the comprehensive envelope air sealing and insulation
+        energy efficiency upgrades could cause the naturally drafted water heater or furnace to fail to
+        draft properly when dryers, range hoods, and exhaust fans are operated simultaneously with
+        the naturally drafted water heater and/or furnace. If this is found to be the case, a combustion
+        air opening connecting the combustion appliance area to the outdoors may need to be added
+        or some other remediation may be required. The homeowner/landlord should be aware of this
+        possibility and the costs of this remediation action.
+        
+        ## About Mechanical Ventilation
+        One important aspect of a comprehensive energy efficiency upgrade is taking control of the air
+        flowing in and out of the home. Without proper air sealing, the air flows in and out wherever it
+        wants to, and primarily when it is very hot or very cold. This leads to comfort issues (drafts) and
+        wasted energy. It also leads to moisture problems when the moisture in that air gets into the
+        wall, attic, or floor assemblies. To avoid these issues while providing adequate fresh air where
+        and when it is needed, the strategy is to seal air leaks, especially high (attic) and low (basement
+        or crawlspace) and then provide continuous mechanical ventilation with optional filtering or
+        other conditioning.
+        
+        
+
+        ## Insulation Details
+
+        <Photo id="insulation_measuring_rulers " label="Insulation Measuring Rulers  – Photo " required>
+            Overview of insulation measuring rulers, one installed every 300 sq. ft. visible 
+            from attic entrance (photo taken from attic entrance).     
+        </Photo>
+
+        <Photo id="rvalue" label="R-value Per Inch  – Photo " required>
+        Photo of insulation bag R-value per inch table    
+        </Photo>
+
+        <Photo id="skylight_shaft" label="Skylight Shaft – Photo ">
+        Photo of skylight shaft insulation detail
+        </Photo>
+
+        <Photo id="knee_wall" label="Knee Wall – Photo ">
+            Photo of knee wall insulation detail     
+        </Photo>
+
+        <Photo id="stairwell_wall" label="Stairwell Wall – Photo ">
+        Photo of stairwell wall insulation detail     
+        </Photo>
+
+        <Photo id="storage_platform" label="Storage Platform – Photo ">
+        Photo of storage platform insulation detail    
+        </Photo>
+
+        <Photo id="wide_angle_photo" label="Wide Angle – Photo " required>
+        Wide angle photo showing insulation uniformity with rulers visible
+        </Photo>
+
+        <Photo id="atticdoor_hatch" label="Attic Door/Hatch - Photo " required>
+        Photo of insulation on attic door/hatch
+        </Photo>
+        
+        ## Post Air Sealing And Insulation Assessment
+
+       
+
+        <Photo id="blowerdoor_setup" label="Blower Door Setup - Photo " required>
+            Photo of blower door setup
+        </Photo>
+    
+        <Photo id="blowerdoor_cfm50" label="Manometer CFM50 - Photo " required>
+            Photo of blower door manometer showing CFM at 50 Pa read out
+        </Photo>
+
+        | Leakage Reduction Calculator                                                                                                                                                                                                                                           |
+        | ----------------------------
+        | Final CFM50 = { props.data.ACH50_calculator?.final_cfm50 ? props.data.ACH50_calculator?.final_cfm50 : null } 
+        | Initial CFM50 = { props.data.ACH50_calculator?.ini_cfm50 ? props.data.ACH50_calculator?.ini_cfm50 : null }  
+        | Building Volume (ft&#179;) = { props.data.ACH50_calculator?.volume ? props.data.ACH50_calculator?.volume : null } 
+        | Initial ACH50 = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.ini_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
+        | Final ACH50 = { props.data.ACH50_calculator?.final_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.final_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
+        | CFM50 Reduction = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.final_cfm50 ?  (props.data.ACH50_calculator.ini_cfm50 - props.data.ACH50_calculator.final_cfm50) : null } 
+
+        {
+         props.data.comment_blower_door_post_work
+         ? <p><strong>Comment on blower door post-work results:</strong> {props.data.comment_blower_door_post_work}</p> 
+         : null
+        }
+
+        {
+         props.data.comment_summary
+         ? <p><strong>Summary Comment:</strong> {props.data.comment_summary}</p> 
+         : null
+        }
+    
+
+        </PrintSection>
+    </Tab>
+</Tabs>
+  
