@@ -1,32 +1,32 @@
 <Tabs>
-<Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
+<Tab eventKey="project"  title="Project">
     The data for this tab should be know prior to the initial site visit.
 
     *The Installer inputs below are all optional, although you will want to 
     fill in at least one for the report.*
 
-    ##### Installer
+    ##Installer
     <StringInput label="Technician Name" path="installer.name" />
     <StringInput label="Installation Company" path="installer.company_name" />
     <StringInput label="Company Address" path="installer.mailing_address" />
     <StringInput label="Company Phone" path="installer.phone" />
     <StringInput label="Company Email" path="installer.email" />
 
-    ##### Project Address
+    ##Project Address
     <StringInput label="Street Address" path="location.street_address" />
     <StringInput label="City" path="location.city" />
     <USStateSelect label="State" path="location.state" />
     <StringInput label="Zip Code" path="location.zip_code" />
   </Tab>
-  <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
+  <Tab eventKey="assessment"  title="Assessment">
     The data for this tab should be collected during the initial site visit.
      
-     ##### Building
+     ##Building
      <PhotoInput id="building_number_photo" label="Building Number – Photo">
       Provide a photo of the building that shows the street number.
      </PhotoInput>
 
-    ##### Blower Door
+    ##Blower Door
     <PhotoInput id="blower_door_setup" label="Blower Door Setup – Photo">
         Photo of the blower door setup before the air sealing insulation work
     </PhotoInput>
@@ -39,26 +39,26 @@
     | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ACH50_calculator.volume"  /> 
     | ACH50 = { props.data.ACH50_calculator?.cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
     
-     ##### Floor Plan Sketch For Air Leaks
+     ##Floor Plan Sketch For Air Leaks
      <PhotoInput id="floor_plan_sketch" label="Floor Plan Sketch – Photo">
       Floor plan sketch mapping the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
      </PhotoInput>
      <TextInput  label="Comment on any notable and unusual leaks" path="floor_plan_sketch_comments"> </TextInput>
   </Tab>
 
-  <Tab eventKey="preparation" style={{paddingTop:"1rem"}} title="Preparation">
+  <Tab eventKey="preparation"  title="Preparation">
   
-    ##### Attic Floor Prepared for Air Sealing
+    ##Attic Floor Prepared for Air Sealing
     <PhotoInput id="attic_floor_prepared" label=" Attic Floor Preparation – Photo">
       Photo of attic floor prepared for attic air sealing such as cleaned, insulation removed
     </PhotoInput>
   
   </Tab>
-  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation 1">
+  <Tab eventKey="installation"  title="Installation 1">
 
-   <DateInput label="Installation Date" path="install_date" />
+    <DateInput label="Installation Date" path="install_date" />
 
-   Take a single representative photo of each applicable feature
+    Take a single representative photo of each applicable feature
 
     <PhotoInput id="dry_wall_to_top_plate" label="Drywall To Top Plate – Photo ">
       Photo of drywall to top plate seam sealed
@@ -104,7 +104,7 @@
     Photo of open back knee wall enclosed with air barrier or foam board
     </PhotoInput> 
   </Tab>
-  <Tab eventKey="installation2" style={{paddingTop:"1rem"}} title="Installation 2">
+  <Tab eventKey="installation2"  title="Installation 2">
    
     <PhotoInput id="skylight_walls_sealed" label="Skylight Walls Sealed – Photo">
     Photo of open back skylight shaft wall drywall air sealed to studs
@@ -145,21 +145,12 @@
     <TextInput  label="Summary Comments" path="installation_summary_comments" />
     
   </Tab>
- <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+ <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
     # Attic Air Sealing Upgrade Photo Report
 
-    **Installer**:<br/>
-    {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null}<br/>
-    {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}<br/>
-    {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}<br/>
-    {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
-    {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
-
-    **Installation Date:** <DateStr date={props.data.install_date}/>
-
-    **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+    
    
     <Photo id="building_number_photo" label="Building Number" required>
       A photo of the building showing the building number.

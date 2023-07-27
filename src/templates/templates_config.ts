@@ -1,7 +1,7 @@
 import QaHPWHTemplate from './qa_hpwh.mdx'
 import DOEWorkflowHPWHTemplate from './doe_workflow_hpwh.mdx'
-import DOEWorkflowAtticAirSealTemplate from './doe_workflow_atticairsealing.mdx'
-import DOEWorkflowAtticInsulationTemplate from './doe_workflow_atticinsulation.mdx'
+import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
+import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -19,7 +19,7 @@ const templatesConfig : TemplateConfig = {
     title: "Heat Pump Water Heater",
     template: DOEWorkflowHPWHTemplate,
   },
-  doe_workflow_attic_sealing: {
+  doe_workflow_attic_air_sealing: {
     title: "Attic Air Sealing",
     template: DOEWorkflowAtticAirSealTemplate,
   },
