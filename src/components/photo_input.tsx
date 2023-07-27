@@ -104,7 +104,6 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
             accept="image/jpeg"
             onChange={handleFileInputChange}
             ref={hiddenPhotoUploadInputRef}
-            style={{display: 'none'}}
             type="file" capture="environment"
           />
           {photo && (

@@ -40,6 +40,8 @@
 h1 {
   font-size: 1.5rem; 
   text-align: center;
+  break-after: avoid-page;
+  justify-self: center;
 }
 
 
@@ -73,4 +75,18 @@ h1 {
 h3 {
   font-size: 1.3rem; 
   text-align: center;
+}
+
+.img-thumbnail {
+  object-fit: contain;
+  max-height: 500px;
+}
+
+p {
+  break-before: avoid-page;
+}
+
+h2 {
+  break-after: avoid-page;
+  height: 1.25rem;
 }

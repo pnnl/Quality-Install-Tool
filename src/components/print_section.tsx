@@ -2,7 +2,6 @@ import {useEffect, useId, useRef} from 'react'
 import print from 'print-js'
 import React, {FC, ReactNode} from 'react'
 import Button from 'react-bootstrap/Button'
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
 
 
 interface PrintSectionProps {
@@ -25,8 +24,9 @@ const PrintSection: FC<PrintSectionProps> = ({children, label}) => {
           printable: printContainerId,
           type: 'html', 
           targetStyles: ["*"],
-          css: '/print.css',
+          css: ['https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css', '/App.css'],
           documentTitle: 'DOE - Quality Installation Report',
+          scanStyles: false
         })} 
         variant="primary">
         {label}
