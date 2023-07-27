@@ -1,33 +1,18 @@
 <Tabs>
-    <Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
+    <Tab eventKey="project" title="Project">
         The data for this tab should be know prior to the initial site visit.
 
-        *The Installer inputs below are all optional, although you will want to 
-        fill in at least one for the report.*
-
-        ##### Installer
-        <StringInput label="Technician Name" path="installer.name" />
-        <StringInput label="Installation Company" path="installer.company_name" />
-        <StringInput label="Company Address" path="installer.mailing_address" />
-        <StringInput label="Company Phone" path="installer.phone" />
-        <StringInput label="Company Email" path="installer.email" />
-
-        ##### Project Address
-        <StringInput label="Street Address" path="location.street_address" />
-        <StringInput label="City" path="location.city" />
-        <USStateSelect label="State" path="location.state" />
-        <StringInput label="Zip Code" path="location.zip_code" />
-
-        ##### Building
-        <PhotoInput id="building_number_photo" label="Building Number – Photo">
-         Provide a photo of the building that shows the street number.
-        </PhotoInput>
+        <ProjectInfoInputs {...props} />   
 
     </Tab>
-    <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
+    <Tab eventKey="installation" title="Installation">
         
         <DateInput label="Installation Date" path="install_date" />
 
+        ## Building
+        <PhotoInput id="building_number_photo" label="Building Number – Photo">
+         Provide a photo of the building that shows the street number.
+        </PhotoInput>
         
         Skip photo if feature is N/A to house.
         
@@ -65,7 +50,7 @@
         </PhotoInput>
     
     </Tab>
-    <Tab eventKey="postassessment" style={{paddingTop:"1rem"}} title="Post Assessment">
+    <Tab eventKey="postassessment" title="Post Assessment">
 
        
 
@@ -89,21 +74,12 @@
         <TextInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
         <TextInput  label="Summary Comment" path="comment_summary" />
     </Tab>
-    <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+    <Tab eventKey="report" title="Report">
         <PrintSection label="Print Report">
         ---
         # Attic Insulation Upgrade Photo Report
 
-        **Installer**:<br/>
-        {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null}<br/>
-        {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}<br/>
-        {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}<br/>
-        {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
-        {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
-
-        **Installation Date:** <DateStr date={props.data.install_date}/>
-
-        **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+        <ProjectInfoReport {...props} />
     
         <Photo id="building_number_photo" label="Building Number" required>
         A photo of the building showing the building number.
@@ -179,8 +155,6 @@
         </Photo>
         
         ## Post Air Sealing And Insulation Assessment
-
-       
 
         <Photo id="blowerdoor_setup" label="Blower Door Setup - Photo " required>
             Photo of blower door setup
