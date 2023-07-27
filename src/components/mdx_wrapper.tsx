@@ -21,6 +21,7 @@ import DateStr from './date_str';
 import ClimateZoneSelectWrapper from './climate_zone_select_wrapper';
 import RadioWrapper from './radio_wrapper';
 import PageBreak from './page_break';
+import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 
 
 const components = {
@@ -42,10 +43,11 @@ const components = {
   Tab: Tab,
   Tabs: Tabs,
   PageBreak: PageBreak,
+  ProjectInfoInputs: ProjectInfoInputs,
 };
 
 interface MdxWrapperProps {
-  Component: React.ComponentType<any>;
+  Component: React.ComponentType<any>
 }
 
 /**
@@ -61,7 +63,7 @@ const MdxWrapper: FC<MdxWrapperProps> = ({Component}) => {
         return (
           <div className="container" id="mdx-container">
             {/* doc will be undefined for the very first render */}
-            {metadata && data ? <Component components={components} metadata={metadata} data={data} /> : null}
+            {metadata && data ? <Component components={components}  metadata={metadata} data={data} /> : null}
           </div>
         )
       }}
