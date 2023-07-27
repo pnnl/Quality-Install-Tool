@@ -2,13 +2,43 @@ import {useEffect, useId, useRef} from 'react'
 import print from 'print-js'
 import React, {FC, ReactNode} from 'react'
 import Button from 'react-bootstrap/Button'
-import ReactToPrint, { useReactToPrint } from 'react-to-print'
 
 
 interface PrintSectionProps {
   children: ReactNode,
   label: string
   filename_suffix: string
+}
+
+type UrlFields = {
+  workflowName: string,
+  projectName: string
+} | null
+
+/**
+ * Extracts fields from a URL.
+ *
+ * This function takes a URL and extracts specific portions from it.
+ *
+ * @param {string} url - The URL from which to extract the fields.
+ * @returns {UrlFields | null} An object containing the extracted fields: workflowName and projectName,
+ *                             or null if the URL does not match the expected pattern.
+ *
+ * @typedef {Object} UrlFields
+ * @property {string} workflowName - The name of the workflow extracted from the URL.
+ * @property {string} projectName - The name of the project extracted from the URL.
+ */
+function extractFieldsFromURL(url: string): UrlFields {
+  const regex = /\/([^/]+)\/([^/]+)\/([^/]+)$/; // Regex to match the desired portions
+  const match = url.match(regex);
+
+  if (match) {
+    const workflowName = match[2]; // e.g. "doe_workflow_hpwh"
+    const projectName = match[3]; // e.g. "job"
+    return { workflowName, projectName };
+  } else {
+    return null;
+  }
 }
 
 /**
@@ -22,12 +52,15 @@ const PrintSection: FC<PrintSectionProps> = ({children, label, filename_suffix})
   return (
     <>
       <Button onClick={event => {
-        let title = 'BASC QA Tool'
-        if (filename_suffix) {title += ' - ' + filename_suffix}
+        let title = 'Quality Install Tool'
+        const urlFields = extractFieldsFromURL(document.location.href);
+        console.log(urlFields)
+        if (filename_suffix) {title = urlFields?.projectName + '-' + urlFields?.workflowName + '-report'}
         document.title = title
         print({
           maxWidth: 2000,
           printable: printContainerId,
+          onPrintDialogClose: () => {document.title = 'Quality Install Tool'},
           type: 'html', 
           targetStyles: ["*"],
           css: '/print.css',
