@@ -20,6 +20,8 @@ import DateStr from './date_str'
 import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
 import RadioWrapper from './radio_wrapper'
 import PageBreak from './page_break'
+import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
+import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 
 const components = {
     Collapsible,
@@ -40,6 +42,8 @@ const components = {
     Tab: Tab,
     Tabs: Tabs,
     PageBreak: PageBreak,
+    ProjectInfoInputs: ProjectInfoInputs,
+    ProjectInfoReport: ProjectInfoReport,
 }
 
 interface MdxWrapperProps {
@@ -58,8 +62,8 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component }) => {
             {({ metadata, data }) => {
                 return (
                     <div className="container" id="mdx-container">
-                        {/* doc will be undefined for the very first render */}
-                        {metadata !== null && data !== null ? (
+                        {/* metadata and data will be undefined for the very first render */}
+                        {metadata && data ? (
                             <Component
                                 components={components}
                                 metadata={metadata}

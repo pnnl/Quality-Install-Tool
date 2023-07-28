@@ -1,4 +1,5 @@
-import type { FC } from 'react'
+import { isEmpty } from 'lodash'
+import React, { FC } from 'react'
 
 /**
  * Interface for the DateStrProps
@@ -19,7 +20,7 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
 }
 
 /**
- * DateStr component
+ * DateStr component : Returns date only in UTC format
  * @param date - A string appropriate as the single argument to the Date() constructor
  * @param locals - An optional string used as the first argument to the Date.toLocalDateString() method (default: 'en-us')
  * @param options - An optional objected used as the second argument to the Date.toLocalDateString() method
@@ -30,10 +31,9 @@ const DateStr: FC<DateStrProps> = ({
     locals = 'en-us',
     options = {},
 }) => {
-    const fullOptions = { ...DEFAULT_OPTIONS, ...options }
+    const full_options = { ...DEFAULT_OPTIONS, ...options, timeZone: 'UTC' }
     const parsedDate = new Date(date)
-    const formattedDate = parsedDate.toLocaleString(locals, fullOptions)
-
+    const formattedDate = parsedDate.toLocaleDateString(locals, full_options)
     return <span>{formattedDate}</span>
 }
 
