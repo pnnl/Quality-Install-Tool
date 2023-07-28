@@ -4,8 +4,8 @@ import FigureImage from 'react-bootstrap/FigureImage'
 import FigureCaption from 'react-bootstrap/FigureCaption'
 
 interface FigureWrapperProps {
-  children: React.ReactNode
-  src: string
+    children: React.ReactNode
+    src: string
 }
 
 /**
@@ -15,13 +15,12 @@ interface FigureWrapperProps {
  * @param src The image source passed to an underlying img tag
  */
 const FigureWrapper: FC<FigureWrapperProps> = ({ children, src }) => {
-  return (
-    <Figure>
-      <FigureImage src={src} />
-      <FigureCaption>
-        {children}
-      </FigureCaption>
-    </Figure>)
+    return (
+        <Figure>
+            <FigureImage src={src} />
+            <FigureCaption>{children}</FigureCaption>
+        </Figure>
+    )
 }
 
 export default FigureWrapper

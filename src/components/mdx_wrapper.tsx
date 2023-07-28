@@ -22,28 +22,28 @@ import RadioWrapper from './radio_wrapper'
 import PageBreak from './page_break'
 
 const components = {
-  Collapsible,
-  ClimateZoneSelect: ClimateZoneSelectWrapper,
-  DateInput: DateInputWrapper,
-  Figure: FigureWrapper,
-  NumberInput: NumberInputWrapper,
-  Photo: PhotoWrapper,
-  PhotoInput: PhotoInputWrapper,
-  PrintSection,
-  Radio: RadioWrapper,
-  Select: SelectWrapper,
-  StringInput: StringInputWrapper,
-  table: TableWrapper,
-  TextInput: TextInputWrapper,
-  USStateSelect: USStateSelectWrapper,
-  DateStr: DateStr,
-  Tab: Tab,
-  Tabs: Tabs,
-  PageBreak: PageBreak
+    Collapsible,
+    ClimateZoneSelect: ClimateZoneSelectWrapper,
+    DateInput: DateInputWrapper,
+    Figure: FigureWrapper,
+    NumberInput: NumberInputWrapper,
+    Photo: PhotoWrapper,
+    PhotoInput: PhotoInputWrapper,
+    PrintSection,
+    Radio: RadioWrapper,
+    Select: SelectWrapper,
+    StringInput: StringInputWrapper,
+    table: TableWrapper,
+    TextInput: TextInputWrapper,
+    USStateSelect: USStateSelectWrapper,
+    DateStr: DateStr,
+    Tab: Tab,
+    Tabs: Tabs,
+    PageBreak: PageBreak,
 }
 
 interface MdxWrapperProps {
-  Component: React.ComponentType<any>
+    Component: React.ComponentType<any>
 }
 
 /**
@@ -53,18 +53,24 @@ interface MdxWrapperProps {
  * @param Component An MDX component instance
  */
 const MdxWrapper: FC<MdxWrapperProps> = ({ Component }) => {
-  return (
-    <StoreContext.Consumer>
-      {({ metadata, data }) => {
-        return (
-          <div className='container' id='mdx-container'>
-            {/* doc will be undefined for the very first render */}
-            {metadata !== null && data !== null ? <Component components={components} metadata={metadata} data={data} /> : null}
-          </div>
-        )
-      }}
-    </StoreContext.Consumer>
-  )
+    return (
+        <StoreContext.Consumer>
+            {({ metadata, data }) => {
+                return (
+                    <div className="container" id="mdx-container">
+                        {/* doc will be undefined for the very first render */}
+                        {metadata !== null && data !== null ? (
+                            <Component
+                                components={components}
+                                metadata={metadata}
+                                data={data}
+                            />
+                        ) : null}
+                    </div>
+                )
+            }}
+        </StoreContext.Consumer>
+    )
 }
 
 export default MdxWrapper

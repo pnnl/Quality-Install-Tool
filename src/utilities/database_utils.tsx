@@ -6,7 +6,17 @@
  * @returns {Promise<void>} - A Promise that resolves when the document is successfully added.
  */
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export async function putNewDoc (db: PouchDB.Database<{}>, name: string, date: Date): Promise<void> {
-  void db.putIfNotExists({ _id: name, metadata_: { created_at: date, last_modified_at: date, attachments: {} } })
+export async function putNewDoc(
+    db: PouchDB.Database<{}>,
+    name: string,
+    date: Date,
+): Promise<void> {
+    void db.putIfNotExists({
+        _id: name,
+        metadata_: {
+            created_at: date,
+            last_modified_at: date,
+            attachments: {},
+        },
+    })
 }

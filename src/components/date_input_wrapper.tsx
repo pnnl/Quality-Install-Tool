@@ -6,8 +6,8 @@ import { StoreContext } from './store'
 import { pathToId } from '../utilities/paths_utils'
 
 interface DateInputWrapperProps {
-  label: string
-  path: string
+    label: string
+    path: string
 }
 
 /**
@@ -19,20 +19,24 @@ interface DateInputWrapperProps {
  * component
  */
 const DateInputWrapper: FC<DateInputWrapperProps> = ({ label, path }) => {
-  // Generate an id for the input
-  const id = pathToId(path, 'input')
-  return (
-    <StoreContext.Consumer>
-      {({ data, upsertData }) => {
-        return (
-          <DateInput id={id} label={label}
-            handleValueChange={(value: any) => { upsertData(path, value) }}
-            value={get(data, path)} />
-        )
-      }
-      }
-    </StoreContext.Consumer>
-  )
+    // Generate an id for the input
+    const id = pathToId(path, 'input')
+    return (
+        <StoreContext.Consumer>
+            {({ data, upsertData }) => {
+                return (
+                    <DateInput
+                        id={id}
+                        label={label}
+                        handleValueChange={(value: any) => {
+                            upsertData(path, value)
+                        }}
+                        value={get(data, path)}
+                    />
+                )
+            }}
+        </StoreContext.Consumer>
+    )
 }
 
 export default DateInputWrapper

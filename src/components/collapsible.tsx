@@ -2,8 +2,8 @@ import type { FC } from 'react'
 import Accordion from 'react-bootstrap/Accordion'
 
 interface CollapsibleProps {
-  children: React.ReactNode
-  header: string
+    children: React.ReactNode
+    header: string
 }
 
 /**
@@ -16,14 +16,14 @@ interface CollapsibleProps {
  * it is collapsed or not
  */
 const Collapsible: FC<CollapsibleProps> = ({ children, header }) => {
-  return (
-    <Accordion style={ { marginBottom: '1rem' } }>
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>{header}</Accordion.Header>
-        <Accordion.Body>{children}</Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
-  )
+    return (
+        <Accordion style={{ marginBottom: '1rem' }}>
+            <Accordion.Item eventKey="0">
+                <Accordion.Header>{header}</Accordion.Header>
+                <Accordion.Body>{children}</Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
+    )
 }
 
 export default Collapsible

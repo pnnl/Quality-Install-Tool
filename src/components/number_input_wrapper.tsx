@@ -6,12 +6,12 @@ import NumberInput from './number_input'
 import { pathToId } from '../utilities/paths_utils'
 
 interface NumberInputWrapperProps {
-  label: string
-  path: string
-  prefix: string
-  suffix: string
-  min: number
-  max: number
+    label: string
+    path: string
+    prefix: string
+    suffix: string
+    min: number
+    max: number
 }
 
 /**
@@ -28,25 +28,37 @@ interface NumberInputWrapperProps {
  * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
  */
 
-const NumberInputWrapper: FC<NumberInputWrapperProps> = ({ label, path, prefix, suffix, min = Number.NEGATIVE_INFINITY, max = Number.POSITIVE_INFINITY }) => {
-  // Generate an id for the input
-  const id = pathToId(path, 'input')
+const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
+    label,
+    path,
+    prefix,
+    suffix,
+    min = Number.NEGATIVE_INFINITY,
+    max = Number.POSITIVE_INFINITY,
+}) => {
+    // Generate an id for the input
+    const id = pathToId(path, 'input')
 
-  return (
-
-    <StoreContext.Consumer>
-      {({ data, upsertData }) => {
-        return (
-          <NumberInput id={id} label={label} prefix={prefix} suffix={suffix}
-            updateValue={(value: any) => { upsertData(path, parseFloat(value)) }}
-            value={get(data, path)} min={min} max={max} />
-        )
-      }
-
-      }
-    </StoreContext.Consumer>
-
-  )
+    return (
+        <StoreContext.Consumer>
+            {({ data, upsertData }) => {
+                return (
+                    <NumberInput
+                        id={id}
+                        label={label}
+                        prefix={prefix}
+                        suffix={suffix}
+                        updateValue={(value: any) => {
+                            upsertData(path, parseFloat(value))
+                        }}
+                        value={get(data, path)}
+                        min={min}
+                        max={max}
+                    />
+                )
+            }}
+        </StoreContext.Consumer>
+    )
 }
 
 export default NumberInputWrapper

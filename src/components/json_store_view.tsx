@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { StoreContext, StoreProvider } from './store'
 
 interface JsonStoreViewProps {
-  dbName: string
+    dbName: string
 }
 
 /**
@@ -17,24 +17,24 @@ interface JsonStoreViewProps {
  * @param dbName - The database name associated with an MDX template
  */
 const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName }) => {
-  const { docId } = useParams()
+    const { docId } = useParams()
 
-  return docId != null ? (<StoreProvider dbName={dbName} docId={docId}>
-      <StoreContext.Consumer>
-        {({ attachments, data }) => {
-          return (
-            <>
-              Document:
-              <pre>{JSON.stringify(data, null, 2)}</pre>
-
-              Attachments:
-              <pre>{JSON.stringify(attachments, null, 2)}</pre>
-            </>
-          )
-        }}
-      </StoreContext.Consumer>
-    </StoreProvider>
-  ) : null
+    return docId != null ? (
+        <StoreProvider dbName={dbName} docId={docId}>
+            <StoreContext.Consumer>
+                {({ attachments, data }) => {
+                    return (
+                        <>
+                            Document:
+                            <pre>{JSON.stringify(data, null, 2)}</pre>
+                            Attachments:
+                            <pre>{JSON.stringify(attachments, null, 2)}</pre>
+                        </>
+                    )
+                }}
+            </StoreContext.Consumer>
+        </StoreProvider>
+    ) : null
 }
 
 export default JsonStoreView

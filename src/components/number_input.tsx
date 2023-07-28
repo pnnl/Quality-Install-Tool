@@ -5,14 +5,14 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 
 interface NumberInputProps {
-  id: string
-  label: string
-  prefix: string
-  suffix: string
-  updateValue: (inputValue: string) => void
-  value: number
-  min: number
-  max: number
+    id: string
+    label: string
+    prefix: string
+    suffix: string
+    updateValue: (inputValue: string) => void
+    value: number
+    min: number
+    max: number
 }
 
 /**
@@ -29,33 +29,50 @@ interface NumberInputProps {
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
  */
-const NumberInput: FC<NumberInputProps> = ({ id, label, prefix = '', suffix = '', updateValue, value, min, max }): any => {
-  const [error, setError] = useState<string>('')
+const NumberInput: FC<NumberInputProps> = ({
+    id,
+    label,
+    prefix = '',
+    suffix = '',
+    updateValue,
+    value,
+    min,
+    max,
+}): any => {
+    const [error, setError] = useState<string>('')
 
-  const handleChange = (inputValue: string): any => {
-    const inputValueNum: number = parseInt(inputValue)
-    if (isNaN(inputValueNum)) {
-      setError('Input must be a number')
-    } else if (inputValueNum < min) {
-      setError('Input must be at least ' + String(min))
-    } else if (inputValueNum > max) {
-      setError('Input must be at most ' + String(max))
-    } else {
-      setError('')
+    const handleChange = (inputValue: string): any => {
+        const inputValueNum: number = parseInt(inputValue)
+        if (isNaN(inputValueNum)) {
+            setError('Input must be a number')
+        } else if (inputValueNum < min) {
+            setError('Input must be at least ' + String(min))
+        } else if (inputValueNum > max) {
+            setError('Input must be at most ' + String(max))
+        } else {
+            setError('')
+        }
+        updateValue(inputValue)
     }
-    updateValue(inputValue)
-  }
-  return (
-    <InputGroup>
-      {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
-      <FloatingLabel className='mb-3' controlId={id} label={label}>
-        <Form.Control onChange={event => handleChange(event.target.value)}
-          type='number' value={value != null ? value : ''} isInvalid={Boolean(error)} />
-        {error && <Form.Control.Feedback type='invalid'>{error}</Form.Control.Feedback>}
-      </FloatingLabel>
-      {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
-    </InputGroup>
-  )
+    return (
+        <InputGroup>
+            {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
+            <FloatingLabel className="mb-3" controlId={id} label={label}>
+                <Form.Control
+                    onChange={event => handleChange(event.target.value)}
+                    type="number"
+                    value={value != null ? value : ''}
+                    isInvalid={Boolean(error)}
+                />
+                {error && (
+                    <Form.Control.Feedback type="invalid">
+                        {error}
+                    </Form.Control.Feedback>
+                )}
+            </FloatingLabel>
+            {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
+        </InputGroup>
+    )
 }
 
 export default NumberInput
