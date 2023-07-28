@@ -37,13 +37,21 @@
   }
 }
 
+/*Headings*/
 h1 {
   font-size: 1.5rem; 
   text-align: center;
   break-after: avoid-page;
   justify-self: center;
 }
-
+h2 {
+  break-after: avoid-page;
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1rem;
+  break-after: avoid-page;
+}
 
 /* Code below are added by PNNL */
 
@@ -62,6 +70,10 @@ h1 {
   align-self: top;
 }
 
+p {
+  break-before: avoid-page;
+}
+
 /* used in jobs_view.tsx */
 .icon-container {
   float: right;
@@ -71,22 +83,7 @@ h1 {
   margin-left: 5px;
 }
 
-/* headding */
-h3 {
-  font-size: 1.3rem; 
-  text-align: center;
-}
-
 .img-thumbnail {
   object-fit: contain;
   max-height: 500px;
-}
-
-p {
-  break-before: avoid-page;
-}
-
-h2 {
-  break-after: avoid-page;
-  font-size: 1.25rem;
 }

@@ -14,29 +14,34 @@ interface PrintSectionProps {
  * @param children Content for printing
  * @param label Label for the print button
  */
-const PrintSection: FC<PrintSectionProps> = ({children, label}) => {
-  const printContainerId = useId();
-  return (
-    <>
-      <Button onClick={event => print({
-          maxWidth: 2000,
-          printable: printContainerId,
-          type: 'html', 
-          targetStyles: ["*"],
-          css: ['https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css', '/App.css'],
-          documentTitle: 'DOE - Quality Installation Report',
-          scanStyles: false
-        })} 
-        variant="primary">
-        {label}
-      </Button>
-      <div id={printContainerId}>
-        <div className='print-wrapper'>
-          {children}
-        </div>
-      </div>
-    </>
-  )
+const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
+    const printContainerId = useId()
+    return (
+        <>
+            <Button
+                onClick={event =>
+                    print({
+                        maxWidth: 2000,
+                        printable: printContainerId,
+                        type: 'html',
+                        targetStyles: ['*'],
+                        css: [
+                            'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
+                            '/App.css',
+                        ],
+                        documentTitle: 'DOE - Quality Installation Report',
+                        scanStyles: false,
+                    })
+                }
+                variant="primary"
+            >
+                {label}
+            </Button>
+            <div id={printContainerId}>
+                <div className="print-wrapper">{children}</div>
+            </div>
+        </>
+    )
 }
 
 export default PrintSection

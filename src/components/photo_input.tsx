@@ -108,32 +108,40 @@ const PhotoInput: FC<PhotoInputProps> = ({
             style={{display: 'none'}}
             type="file"
           /> */}
-          <input
-            accept="image/jpeg"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoUploadInputRef}
-            type="file" capture="environment"
-          />
-          {photo && (
-            <>
-              <Image src={URL.createObjectURL(photo)} thumbnail />
-              <br />
-              <small>
-                Timestamp: {
-                   metadata?.timestamp ? <DateTimeStr date={metadata.timestamp}/> :
-                  (<span>Missing</span>)
-                }
-                <br />
-                Geolocation: {
-                  <span><GpsCoordStr {...metadata.geolocation} />  </span>
-                }
-              </small>
-            </>
-          )}
-        </Card.Body>
-      </Card>
-    </>
-  );
-};
+                    <input
+                        accept="image/jpeg"
+                        onChange={handleFileInputChange}
+                        ref={hiddenPhotoUploadInputRef}
+                        type="file"
+                        capture="environment"
+                    />
+                    {photo && (
+                        <>
+                            <Image src={URL.createObjectURL(photo)} thumbnail />
+                            <br />
+                            <small>
+                                Timestamp:{' '}
+                                {metadata?.timestamp ? (
+                                    <DateTimeStr date={metadata.timestamp} />
+                                ) : (
+                                    <span>Missing</span>
+                                )}
+                                <br />
+                                Geolocation:{' '}
+                                {
+                                    <span>
+                                        <GpsCoordStr
+                                            {...metadata.geolocation}
+                                        />{' '}
+                                    </span>
+                                }
+                            </small>
+                        </>
+                    )}
+                </Card.Body>
+            </Card>
+        </>
+    )
+}
 
 export default PhotoInput
