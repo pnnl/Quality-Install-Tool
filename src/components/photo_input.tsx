@@ -80,11 +80,11 @@ const PhotoInput: FC<PhotoInputProps> = ({
 
     return (
         <>
-            <Card style={{ pageBreakBefore: 'always', marginBottom: '1rem' }}>
+            <Card className="input-card">
                 <Card.Body>
                     <Collapsible header={label}>
                         {/* Card.Text renders a <p> by defult. The children come from markdown
-              and may be a <p>. Nested <p>s are not allowed, so we use a <div> */}
+              and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
                         <Card.Text as="div">{children}</Card.Text>
                     </Collapsible>
                     <div>
@@ -105,13 +105,14 @@ const PhotoInput: FC<PhotoInputProps> = ({
             capture="environment"
             onChange={handleFileInputChange}
             ref={hiddenPhotoCaptureInputRef}
-            style={{display: 'none'}}
+            className='photo-input'
             type="file"
           /> */}
                     <input
                         accept="image/jpeg"
                         onChange={handleFileInputChange}
                         ref={hiddenPhotoUploadInputRef}
+                        className="photo-upload-input"
                         type="file"
                         capture="environment"
                     />

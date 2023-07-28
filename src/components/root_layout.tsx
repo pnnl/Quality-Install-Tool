@@ -48,50 +48,25 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     }, [location.pathname])
 
     return (
-        <div
-            style={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                maxWidth: 800,
-                backgroundColor: 'rgba(231, 231, 231)',
-                minHeight: '100vh',
-            }}
-        >
-            <NavBar style={{ backgroundColor: 'green' }}>
+        <div id="root-background">
+            <NavBar id="root-banner">
                 {/* Conditional rendering of a back button */}
                 {showBackButton && (
-                    <div
-                        style={{ marginLeft: '0.5rem', marginRight: '0.5rem' }}
-                    >
-                        <Link to={backUrl} style={{ textDecoration: 'none' }}>
-                            <Button
-                                variant="outline-light"
-                                style={{ padding: '1rem' }}
-                            >
-                                <TfiAngleLeft
-                                    style={{ color: 'white', height: '100%' }}
-                                />
+                    <div id="back-button-container">
+                        <Link to={backUrl} id="back-button-link">
+                            <Button variant="outline-light" id="back-button">
+                                <TfiAngleLeft id="back-button-logo" />
                             </Button>
                         </Link>
                     </div>
                 )}
-                <Container
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
+                <Container id="root-flex-layout">
                     <NavBar.Brand>
-                        <span style={{ color: 'gold', fontSize: '2rem' }}>
-                            Quality Install Tool
-                        </span>
+                        <span id="root-title">Quality Install Tool</span>
                     </NavBar.Brand>
                 </Container>
             </NavBar>
-            <div style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
-                {children}
-            </div>
+            <div id="root-body">{children}</div>
         </div>
     )
 }

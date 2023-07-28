@@ -27,13 +27,12 @@ const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
     }
     return (
         <>
-            <Card style={{ pageBreakBefore: 'always', marginBottom: '1rem' }}>
+            <Card className="input-card">
                 <Card.Body>
                     {label}
                     <Form.Group className="mb-3" controlId={label}>
                         {options.map(option => (
                             <Form.Check
-                                key={option}
                                 type="radio"
                                 label={option}
                                 name={label}

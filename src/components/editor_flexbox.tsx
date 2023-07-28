@@ -126,8 +126,6 @@ const EditorFlexBox: FC = () => {
         }
     }
 
-    const MDXComponent = mdxModule.default
-
     return (
         <StoreProvider dbName="template_editor" docId={'playground'}>
             <StoreContext.Consumer>
@@ -138,16 +136,11 @@ const EditorFlexBox: FC = () => {
                                 <div className="flex-child">
                                     <div className="form-group">
                                         <textarea
-                                            className="form-control"
+                                            className="form-control editor-textarea"
                                             id="message"
                                             name="message"
                                             value={templateText}
                                             onChange={handleSetText}
-                                            style={{
-                                                height: 'auto',
-                                                minHeight: '700px',
-                                                resize: 'none',
-                                            }}
                                         />
                                         <button
                                             type="submit"

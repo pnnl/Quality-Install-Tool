@@ -17,7 +17,7 @@ interface CollapsibleProps {
  */
 const Collapsible: FC<CollapsibleProps> = ({ children, header }) => {
     return (
-        <Accordion style={{ marginBottom: '1rem' }}>
+        <Accordion className="bottom-margin">
             <Accordion.Item eventKey="0">
                 <Accordion.Header>{header}</Accordion.Header>
                 <Accordion.Body>{children}</Accordion.Body>
