@@ -36,17 +36,11 @@ const Photo: FC<PhotoProps> = ({
 }) => {
     return photo || required ? (
         <>
-            <Card
-                style={{
-                    breakInside: 'avoid-page',
-                    marginBottom: '1rem',
-                    marginTop: '1rem',
-                }}
-            >
+            <Card className="photo-card">
                 <Card.Body>
                     <Card.Title>{label}</Card.Title>
                     {/* Card.Text renders a <p> by defult. The description comes from markdown
-            and may be a <p>. Nested <p>s are not allowed, so we use a <div> */}
+            and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
                     <Card.Text as="div">{description}</Card.Text>
                     {photo ? (
                         <>
