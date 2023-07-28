@@ -62,12 +62,12 @@
 
         | Leakage Reduction Calculator                                                                                                                                                                                                                                           |
         | ----------------------------
-        | <NumberInput label="Final CFM50" min={0} path="ACH50_calculator.final_cfm50"  /> 
-        | <NumberInput label="Initial CFM50" min={0} path="ACH50_calculator.ini_cfm50"  /> 
-        | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ACH50_calculator.volume"  /> 
-        | Initial ACH50 = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.ini_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
-        | Final ACH50 = { props.data.ACH50_calculator?.final_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.final_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
-        | CFM50 Reduction = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.final_cfm50 ?  (props.data.ACH50_calculator.ini_cfm50 - props.data.ACH50_calculator.final_cfm50) : null } 
+        | <NumberInput label="Final CFM50" min={0} path="ach50_calculator.final_cfm50"  /> 
+        | <NumberInput label="Initial CFM50" min={0} path="ach50_calculator.initial_cfm50"  /> 
+        | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ach50_calculator.volume"  /> 
+        | Initial ACH50 = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.initial_cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
+        | Final ACH50 = { props.data.ach50_calculator?.final_cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.final_cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
+        | CFM50 Reduction = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.final_cfm50 ?  (props.data.ach50_calculator.initial_cfm50 - props.data.ach50_calculator.final_cfm50) : null } 
 
         <TextInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
         <TextInput  label="Summary Comment" path="comment_summary" />
@@ -162,12 +162,12 @@
 
         | Leakage Reduction Calculator                                                                                                                                                                                                                                           |
         | ----------------------------
-        | Final CFM50 = { props.data.ACH50_calculator?.final_cfm50 ? props.data.ACH50_calculator?.final_cfm50 : null } 
-        | Initial CFM50 = { props.data.ACH50_calculator?.ini_cfm50 ? props.data.ACH50_calculator?.ini_cfm50 : null }  
-        | Building Volume (ft&#179;) = { props.data.ACH50_calculator?.volume ? props.data.ACH50_calculator?.volume : null } 
-        | Initial ACH50 = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.ini_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
-        | Final ACH50 = { props.data.ACH50_calculator?.final_cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.final_cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
-        | CFM50 Reduction = { props.data.ACH50_calculator?.ini_cfm50 && props.data.ACH50_calculator?.final_cfm50 ?  (props.data.ACH50_calculator.ini_cfm50 - props.data.ACH50_calculator.final_cfm50) : null } 
+        | Final CFM50 = { props.data.ach50_calculator?.final_cfm50 ? props.data.ach50_calculator?.final_cfm50 : null } 
+        | Initial CFM50 = { props.data.ach50_calculator?.initial_cfm50 ? props.data.ach50_calculator?.initial_cfm50 : null }  
+        | Building Volume (ft&#179;) = { props.data.ach50_calculator?.volume ? props.data.ach50_calculator?.volume : null } 
+        | Initial ACH50 = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.initial_cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
+        | Final ACH50 = { props.data.ach50_calculator?.final_cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.final_cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
+        | CFM50 Reduction = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.final_cfm50 ?  (props.data.ach50_calculator.initial_cfm50 - props.data.ach50_calculator.final_cfm50) : null } 
 
         {
          props.data.comment_blower_door_post_work

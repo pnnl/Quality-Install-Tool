@@ -21,15 +21,15 @@
     </PhotoInput>
     | ACH50 Calculator                                                                                                                                                                                                                                           |
     | ----------------------------
-    | <NumberInput label="CFM50" min={0} path="ACH50_calculator.cfm50"  /> 
-    | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ACH50_calculator.volume"  /> 
-    | ACH50 = { props.data.ACH50_calculator?.cfm50 && props.data.ACH50_calculator?.volume ? ((60 * props.data.ACH50_calculator.cfm50) / props.data.ACH50_calculator.volume).toFixed(2) : null } 
+    | <NumberInput label="CFM50" min={0} path="ach50_calculator.cfm50"  /> 
+    | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ach50_calculator.volume"  /> 
+    | ACH50 = { props.data.ach50_calculator?.cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
     
      ##Floor Plan Sketch For Air Leaks
      <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo">
       Floor plan sketch mapping the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
      </PhotoInput>
-     <TextInput  label="Comment on any notable and unusual leaks" path="floor_plan_sketch_comments"> </TextInput>
+     <TextInput  label="Comment on any notable and unusual leaks" path="comment_on_leaks_in_floor_plan_sketch"> </TextInput>
   </Tab>
 
   <Tab eventKey="preparation" title="Preparation">
@@ -128,7 +128,7 @@
     Photo of weatherstrip air sealed attic access
     </PhotoInput>
 
-    <TextInput  label="Summary Comments" path="installation_summary_comments" />
+    <TextInput  label="Summary Comments" path="comment_installation_summary" />
     
   </Tab>
  <Tab eventKey="report"  title="Report">
@@ -177,9 +177,9 @@
 
     | ACH50 Calculation                                                                                                                                                                                                                                           |
     | ----------------------------
-    | CFM50 = { props.data.ACH50_calculator?.cfm50 ? props.data.ACH50_calculator?.cfm50 : null }
-    | Building Volume (ft&#179;) = { props.data.ACH50_calculator?.volume ? props.data.ACH50_calculator?.volume : null }
-    | ACH50 = { (props.data.ACH50_calculator?.cfm50 && props.data.ACH50_calculator?.volume) ? ((60 * props.data.ACH50_calculator?.cfm50) / props.data.ACH50_calculator?.volume).toFixed(2) : null } 
+    | CFM50 = { props.data.ach50_calculator?.cfm50 ? props.data.ach50_calculator?.cfm50 : null }
+    | Building Volume (ft&#179;) = { props.data.ach50_calculator?.volume ? props.data.ach50_calculator?.volume : null }
+    | ACH50 = { (props.data.ach50_calculator?.cfm50 && props.data.ach50_calculator?.volume) ? ((60 * props.data.ach50_calculator?.cfm50) / props.data.ach50_calculator?.volume).toFixed(2) : null } 
 
     
     <Photo id="floor_plan_sketch_photo" label="Floor plan sketch – Photo" required>
@@ -187,8 +187,8 @@
        with the assistance of a thermal imaging camera while the blower door is running.
     </Photo>
     {
-      props.data.floor_plan_sketch_comments
-      ? <p><strong>Comment on any notable and unusual leaks:</strong> {props.data.floor_plan_sketch_comments}</p> 
+      props.data.comment_on_leaks_in_floor_plan_sketch
+      ? <p><strong>Comment on any notable and unusual leaks:</strong> {props.data.comment_on_leaks_in_floor_plan_sketch}</p> 
       : null
     }
     
@@ -281,8 +281,8 @@
     </Photo>  
    
     {
-      props.data.installation_summary_comments
-      ? <p><strong>Summary Comments:</strong> {props.data.installation_summary_comments}</p> 
+      props.data.comment_installation_summary
+      ? <p><strong>Summary Comments:</strong> {props.data.comment_installation_summary}</p> 
       : null
     }
   
