@@ -64,7 +64,7 @@ const MdxWrapper: FC<MdxWrapperProps> = ({Component}) => {
       {({metadata, data}) => {
         return (
           <div className="container" id="mdx-container">
-            {/* doc will be undefined for the very first render */}
+            {/* metadata and data will be undefined for the very first render */}
             {metadata && data ? <Component components={components}  metadata={metadata} data={data} /> : null}
           </div>
         )
