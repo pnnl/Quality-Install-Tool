@@ -1,5 +1,5 @@
 <Tabs>
-<Tab eventKey="project"  title="Project">
+<Tab eventKey="project" title="Project">
     The data for this tab should be know prior to the initial site visit.
 
     *The Installer inputs below are all optional, although you will want to 
@@ -18,7 +18,7 @@
     <USStateSelect label="State" path="location.state" />
     <StringInput label="Zip Code" path="location.zip_code" />
   </Tab>
-  <Tab eventKey="assessment"  title="Assessment">
+  <Tab eventKey="assessment" title="Assessment">
     The data for this tab should be collected during the initial site visit.
      
      ##Building
@@ -46,7 +46,7 @@
      <TextInput  label="Comment on any notable and unusual leaks" path="floor_plan_sketch_comments"> </TextInput>
   </Tab>
 
-  <Tab eventKey="preparation"  title="Preparation">
+  <Tab eventKey="preparation" title="Preparation">
   
     ##Attic Floor Prepared for Air Sealing
     <PhotoInput id="attic_floor_prepared" label=" Attic Floor Preparation – Photo">
@@ -54,7 +54,7 @@
     </PhotoInput>
   
   </Tab>
-  <Tab eventKey="installation"  title="Installation 1">
+  <Tab eventKey="installation" title="Installation 1">
 
     <DateInput label="Installation Date" path="install_date" />
 
@@ -150,7 +150,16 @@
     ---
     # Attic Air Sealing Upgrade Photo Report
 
+    **Installer**:<br/>
+    {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null} {props.data.installer?.name ? <br/>: null}
+    {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}{props.data.installer?.company_name ? <br/>: null}
+    {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}{props.data.installer?.mailing_address ? <br/>: null}
+    {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone} </span>: null}{props.data.installer?.phone ? <br/>: null}
+    {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span>: null} {props.data.installer?.email ? <br/>: null}
     
+    **Installation Date:** <DateStr date={props.data.install_date}/>
+
+    **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
    
     <Photo id="building_number_photo" label="Building Number" required>
       A photo of the building showing the building number.
