@@ -1,23 +1,23 @@
-import { isEmpty } from 'lodash';
-import React, { FC } from 'react';
+import { isEmpty } from 'lodash'
+import React, { FC } from 'react'
 
 /**
  * Interface for the DateStrProps
  */
 interface DateStrProps {
-  date: string,
-  locals?: string,
-  options?: Intl.DateTimeFormatOptions
+    date: string
+    locals?: string
+    options?: Intl.DateTimeFormatOptions
 }
 
 /**
  * Default options for date formatting
  */
 const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
-  day: "numeric",
-  month: "long",
-  year: "numeric"
-};
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+}
 
 /**
  * DateStr component : Returns date only in UTC format
@@ -26,11 +26,15 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
  * @param options - An optional objected used as the second argument to the Date.toLocalDateString() method
  * @returns The formatted date component
  */
-const DateStr: FC<DateStrProps> = ({ date, locals = 'en-us', options = {} }) => {
-  const full_options = { ...DEFAULT_OPTIONS, ...options , timeZone:'UTC'}
-  const parsedDate = new Date(date)
-  const formattedDate = parsedDate.toLocaleDateString(locals, full_options)
-  return <span>{formattedDate}</span>
+const DateStr: FC<DateStrProps> = ({
+    date,
+    locals = 'en-us',
+    options = {},
+}) => {
+    const full_options = { ...DEFAULT_OPTIONS, ...options, timeZone: 'UTC' }
+    const parsedDate = new Date(date)
+    const formattedDate = parsedDate.toLocaleDateString(locals, full_options)
+    return <span>{formattedDate}</span>
 }
 
 export default DateStr

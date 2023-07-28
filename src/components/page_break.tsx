@@ -1,7 +1,7 @@
-import { FC } from "react";
+import type { FC } from 'react'
 
 const PageBreak: FC = () => {
-    return <div style={{pageBreakBefore: 'always'}}></div>;
-};
-  
-export default PageBreak;
+    return <div style={{ pageBreakBefore: 'always' }}></div>
+}
+
+export default PageBreak
