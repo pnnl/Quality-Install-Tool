@@ -22,6 +22,7 @@ import ClimateZoneSelectWrapper from './climate_zone_select_wrapper';
 import RadioWrapper from './radio_wrapper';
 import PageBreak from './page_break';
 import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
+import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 
 
 const components = {
@@ -44,6 +45,7 @@ const components = {
   Tabs: Tabs,
   PageBreak: PageBreak,
   ProjectInfoInputs: ProjectInfoInputs,
+  ProjectInfoReport: ProjectInfoReport,
 };
 
 interface MdxWrapperProps {
