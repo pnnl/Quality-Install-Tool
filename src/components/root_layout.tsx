@@ -48,28 +48,28 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     }, [location.pathname])
 
     return (
-        <div className="root-background">
-            <NavBar className="root-banner">
+        <div id="root-background">
+            <NavBar id="root-banner">
                 {/* Conditional rendering of a back button */}
                 {showBackButton && (
-                    <div className="back-button-container">
-                        <Link to={backUrl} className="back-button-link">
+                    <div id="back-button-container">
+                        <Link to={backUrl} id="back-button-link">
                             <Button
                                 variant="outline-light"
-                                className="back-button"
+                                id="back-button"
                             >
-                                <TfiAngleLeft className="back-button-logo" />
+                                <TfiAngleLeft id="back-button-logo" />
                             </Button>
                         </Link>
                     </div>
                 )}
-                <Container className="root-flex-layout">
+                <Container id="root-flex-layout">
                     <NavBar.Brand>
-                        <span className="root-title">Quality Install Tool</span>
+                        <span id="root-title">Quality Install Tool</span>
                     </NavBar.Brand>
                 </Container>
             </NavBar>
-            <div className="root-body">{children}</div>
+            <div id="root-body">{children}</div>
         </div>
     )
 }
