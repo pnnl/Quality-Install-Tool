@@ -1,0 +1,10 @@
+**Installer:**<br/>
+{props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null} {props.data.installer?.name ? <br/>: null}
+{props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}{props.data.installer?.company_name ? <br/>: null}
+{props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}{props.data.installer?.mailing_address ? <br/>: null}
+{props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone} </span>: null}{props.data.installer?.phone ? <br/>: null}
+{props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span>: null} {props.data.installer?.email ? <br/>: null}
+
+**Installation Date:** <DateStr date={props.data.install_date} />
+
+**Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}

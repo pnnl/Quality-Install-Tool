@@ -2,7 +2,7 @@
 {
     "semi": false,
     "singleQuote": true,
-    "trailingComma": true,
+    "trailingComma": "all",
     "arrowParens": "avoid",
     "tabWidth": 4
 }
