@@ -1,14 +1,13 @@
-import {Component, FC} from 'react'
-import EditorFlexBox from "./editor_flexbox"
-import { StoreContext } from './store'
+import type { FC } from 'react'
+import EditorFlexBox from './editor_flexbox'
 
-const TemplateEditor: FC = () => {    
-  return (
-    <div>
-      <h1>Template Editor</h1>
-        <EditorFlexBox />
-    </div>
-  ) 
+const TemplateEditor: FC = () => {
+    return (
+        <div>
+            <h1>Template Editor</h1>
+            <EditorFlexBox />
+        </div>
+    )
 }
 
 export default TemplateEditor
