@@ -24,7 +24,6 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
                         maxWidth: 2000,
                         printable: printContainerId,
                         type: 'html',
-                        targetStyles: ['*'],
                         css: [
                             'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
                             '/App.css',

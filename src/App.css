@@ -45,7 +45,7 @@ h1 {
   justify-self: center;
 }
 h2 {
-  break-after: avoid-page;
+  page-break-after: avoid;
   font-size: 1.25rem;
 }
 h3 {
