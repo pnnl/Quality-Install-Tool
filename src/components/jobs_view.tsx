@@ -125,7 +125,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
     const name = input;
     if (name !== null) {
       const date = new Date();
-      await putNewDoc(db, name, date);
+      await putNewDoc(db, name, date, dbName);
     }
     // Refresh the job list after adding the new job
     await retrieveJobs();
