@@ -139,6 +139,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         const doc = await db.get(jobId);
         await db.remove(doc); // Remove the existing document
         doc._id = newName; // Set the new name as the ID
+        doc.metadata_.projectName = input;
         await db.putIfNotExists(doc);
       }
       
