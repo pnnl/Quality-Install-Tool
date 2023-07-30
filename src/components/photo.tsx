@@ -1,18 +1,18 @@
-import React from 'react'
-import type { FC } from 'react'
-import { Card, Image } from 'react-bootstrap'
+import {isEmpty} from 'lodash'
+import React, {FC, useEffect, useState} from 'react'
+import {Button, Card, Image} from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
-import type PhotoMetadata from '../types/photo_metadata.type'
+import PhotoMetadata from '../types/photo_metadata.type'
 
 interface PhotoProps {
-    description: React.ReactNode
-    id: string
-    label: string
-    metadata: PhotoMetadata
-    photo: Blob | undefined
-    required: boolean
+  description: React.ReactNode,
+  id: string,
+  label: string,
+  metadata: PhotoMetadata,
+  photo: Blob | undefined,
+  required: boolean,
 }
 
 /**
@@ -27,50 +27,41 @@ interface PhotoProps {
  * photo attachement in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
  */
-const Photo: FC<PhotoProps> = ({
-    description,
-    label,
-    metadata,
-    photo,
-    required,
-}) => {
-    return photo || required ? (
-        <>
-            <Card className="photo-card">
-                <Card.Body>
-                    <Card.Title>{label}</Card.Title>
-                    {/* Card.Text renders a <p> by defult. The description comes from markdown
+const Photo: FC<PhotoProps> = ({description, label, metadata, photo, required}) => {
+
+  return (photo || required)? (
+    <>
+      <Card style={{breakInside: 'avoid-page', marginBottom: '1rem', marginTop: '1rem'}}>
+        <Card.Body>
+          <Card.Title>{label}</Card.Title>
+          {/* Card.Text renders a <p> by defult. The description comes from markdown
             and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
-                    <Card.Text as="div">{description}</Card.Text>
-                    {photo ? (
-                        <>
-                            <Image src={URL.createObjectURL(photo)} thumbnail />
-                            <br />
-                            <small>
-                                Timestamp:{' '}
-                                {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
-                                ) : (
-                                    <span>Missing</span>
-                                )}
-                                <br />
-                                Geolocation:{' '}
-                                {
-                                    <span>
-                                        <GpsCoordStr
-                                            {...metadata.geolocation}
-                                        />{' '}
-                                    </span>
-                                }
-                            </small>
-                        </>
-                    ) : (
-                        required && <em>Missing Photo</em>
-                    )}
-                </Card.Body>
-            </Card>
-        </>
-    ) : null
-}
+          <Card.Text as="div">
+            {description}
+          </Card.Text>
+          {photo? (
+            <>
+              <Image src={URL.createObjectURL(photo)} thumbnail />
+              <br />
+              <small>
+                Timestamp: {
+                  metadata?.timestamp ? <DateTimeStr date={metadata.timestamp} /> :
+                  (<span>Missing</span>)
+                }
+                <br />
+                Geolocation: {
+                         <span><GpsCoordStr {...metadata.geolocation} /> </span> 
+                }
+              </small>
+            </>
+          ) : required && (
+            <em>Missing Photo</em>
+          )
+        }
+        </Card.Body>
+      </Card>
+    </>
+  ) : null;
+};
 
 export default Photo

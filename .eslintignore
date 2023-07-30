@@ -1,7 +1,0 @@
-/node_modules
-# /build
-# .vscode
-# .DS_Store
-# yarn-error.log
-/scripts
-/config
