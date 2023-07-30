@@ -21,6 +21,7 @@ import DateStr from './date_str';
 import ClimateZoneSelectWrapper from './climate_zone_select_wrapper';
 import RadioWrapper from './radio_wrapper';
 import PageBreak from './page_break';
+import PrintSectionWrapper from './print_section_wrapper';
 
 
 const components = {
@@ -31,7 +32,7 @@ const components = {
   NumberInput: NumberInputWrapper,
   Photo: PhotoWrapper,
   PhotoInput: PhotoInputWrapper,
-  PrintSection,
+  PrintSection: PrintSectionWrapper,
   Radio: RadioWrapper,
   Select: SelectWrapper,
   StringInput: StringInputWrapper,
