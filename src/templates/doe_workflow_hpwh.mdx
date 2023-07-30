@@ -1,35 +1,22 @@
 
 
 <Tabs>
-  <Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
-    The data for this tab should be know prior to the initial site visit.
-
-    *The Installer inputs below are all optional, although you will want to 
-    fill in at least one for the report.*
-
-    ##### Installer
-    <StringInput label="Technician Name" path="installer.name" />
-    <StringInput label="Installation Company" path="installer.company_name" />
-    <StringInput label="Company Address" path="installer.mailing_address" />
-    <StringInput label="Company Phone" path="installer.phone" />
-    <StringInput label="Company Email" path="installer.email" />
-
-    ##### Project Address
-    <StringInput label="Street Address" path="location.street_address" />
-    <StringInput label="City" path="location.city" />
-    <USStateSelect label="State" path="location.state" />
-    <StringInput label="Zip Code" path="location.zip_code" />
+  <Tab eventKey="project" title="Project">
+    The data for this tab should be known prior to the initial site visit.
+    
+    <ProjectInfoInputs {...props} />    
   </Tab>
 
-  <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
+  <Tab eventKey="assessment" title="Assessment">
+    
     The data for this tab should be collected during the initial site visit.
 
-    ##### Building
+    ## Building
     <PhotoInput id="building_number_photo" label="Building Number – Photo">
       Provide a photo of the building that shows the street number.
     </PhotoInput>
 
-    ##### Old Water Heater
+    ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
       efficiency specifications of the HPWH but also the fuel type of the existing water
@@ -38,7 +25,7 @@
       fuel type, and the serial number of the old water heater.
     </PhotoInput>
 
-    ##### HPWH Space Evaluation
+    ## HPWH Space Evaluation
     <Collapsible header="HPWH Space Evaluation — Instructions">
       The successful installation of a heat pump water heater (HPWH) begins in the planning
       stage by assessing whether the location where the HPWH will be installed is suitable.
@@ -100,8 +87,8 @@
     </Collapsible>
 
   </Tab>
-  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
-    ##### HPWH Installation
+  <Tab eventKey="installation" title="Installation">
+    ## HPWH Installation
 
     <DateInput label="Installation Date" path="install_date" />
 
@@ -181,7 +168,7 @@
       Provide a photo of the CTA-2045 Module if installed.
     </PhotoInput>
 
-    ##### HPWHW Post-Installation
+    ## HPWHW Post-Installation
     <Collapsible header="HPWH Post-Install – Instructions">
       Inform the homeowner on how to access the air filter to check and clean as needed. A
       filter check should be performed every three months. If dirty, clean the air filter by
@@ -216,23 +203,13 @@
     </Collapsible>
 
   </Tab>
-  <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+  <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report" filename_suffix={props.data.location?.street_address}>
     ---
     # Heat Pump Water Heater Quality Installation Report
 
-    **Installer**:<br/>
-    {props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null}<br/>
-    {props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}<br/>
-    {props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}<br/>
-    {props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone}</span> : null}<br/>
-    {props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span> : null}<br/>
-
-    **Installation Date:** <DateStr date={props.data.install_date}/>
-
-    **Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+    <ProjectInfoReport {...props} />
    
-
     <Photo id="building_number_photo" label="Building Number" required>
       A photo of the building showing the building number.
     </Photo>
