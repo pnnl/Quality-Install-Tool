@@ -131,7 +131,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         const name = input
         if (name !== null) {
             const date = new Date()
-            await putNewDoc(db, name, date)
+            await putNewDoc(db, name, date, dbName)
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -144,6 +144,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
                 const doc = await db.get(jobId)
                 await db.remove(doc) // Remove the existing document
                 doc._id = newName // Set the new name as the ID
+                doc.metadata_.projectName = input;
                 await db.putIfNotExists(doc)
             }
 

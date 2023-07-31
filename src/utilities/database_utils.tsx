@@ -10,6 +10,7 @@ export async function putNewDoc(
     db: PouchDB.Database<{}>,
     name: string,
     date: Date,
+    dbName: string
 ): Promise<void> {
     void db.putIfNotExists({
         _id: name,
@@ -17,6 +18,8 @@ export async function putNewDoc(
             created_at: date,
             last_modified_at: date,
             attachments: {},
+            workflowName: dbName,
+            projectName: name
         },
     })
 }

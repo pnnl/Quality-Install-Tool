@@ -22,6 +22,7 @@ import RadioWrapper from './radio_wrapper'
 import PageBreak from './page_break'
 import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
+import PrintSectionWrapper from './print_section wrapper'
 
 const components = {
     Collapsible,
@@ -31,7 +32,7 @@ const components = {
     NumberInput: NumberInputWrapper,
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
-    PrintSection,
+    PrintSection: PrintSectionWrapper,
     Radio: RadioWrapper,
     Select: SelectWrapper,
     StringInput: StringInputWrapper,
