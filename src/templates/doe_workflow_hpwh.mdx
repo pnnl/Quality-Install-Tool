@@ -1,21 +1,22 @@
 
 
 <Tabs>
-  <Tab eventKey="project" style={{paddingTop:"1rem"}} title="Project">
-    The data for this tab should be know prior to the initial site visit.
+  <Tab eventKey="project" title="Project">
+    The data for this tab should be known prior to the initial site visit.
     
     <ProjectInfoInputs {...props} />    
   </Tab>
 
-  <Tab eventKey="assessment" style={{paddingTop:"1rem"}} title="Assessment">
+  <Tab eventKey="assessment" title="Assessment">
+    
     The data for this tab should be collected during the initial site visit.
 
-    ##### Building
+    ## Building
     <PhotoInput id="building_number_photo" label="Building Number – Photo">
       Provide a photo of the building that shows the street number.
     </PhotoInput>
 
-    ##### Old Water Heater
+    ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
       efficiency specifications of the HPWH but also the fuel type of the existing water
@@ -24,7 +25,7 @@
       fuel type, and the serial number of the old water heater.
     </PhotoInput>
 
-    ##### HPWH Space Evaluation
+    ## HPWH Space Evaluation
     <Collapsible header="HPWH Space Evaluation — Instructions">
       The successful installation of a heat pump water heater (HPWH) begins in the planning
       stage by assessing whether the location where the HPWH will be installed is suitable.
@@ -86,8 +87,8 @@
     </Collapsible>
 
   </Tab>
-  <Tab eventKey="installation" style={{paddingTop:"1rem"}} title="Installation">
-    ##### HPWH Installation
+  <Tab eventKey="installation" title="Installation">
+    ## HPWH Installation
 
     <DateInput label="Installation Date" path="install_date" />
 
@@ -167,7 +168,7 @@
       Provide a photo of the CTA-2045 Module if installed.
     </PhotoInput>
 
-    ##### HPWHW Post-Installation
+    ## HPWHW Post-Installation
     <Collapsible header="HPWH Post-Install – Instructions">
       Inform the homeowner on how to access the air filter to check and clean as needed. A
       filter check should be performed every three months. If dirty, clean the air filter by
@@ -202,7 +203,7 @@
     </Collapsible>
 
   </Tab>
-  <Tab eventKey="report" style={{paddingTop:"1rem"}} title="Report">
+  <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
     ---
     # Heat Pump Water Heater Quality Installation Report

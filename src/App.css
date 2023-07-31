@@ -178,7 +178,7 @@ h3 {
   break-inside: avoid;
 }
 
-/* stylizes tab component in editor to avoid putting styles in editor*/
+/* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
   margin-top: 1rem;
 }

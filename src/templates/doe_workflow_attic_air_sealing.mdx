@@ -1,0 +1,291 @@
+<Tabs>
+<Tab eventKey="project" title="Project">
+    The data for this tab should be known prior to the initial site visit.
+
+    <ProjectInfoInputs {...props} />    
+  </Tab>
+  <Tab eventKey="assessment" title="Assessment">
+    The data for this tab should be collected during the initial site visit.
+     
+    ## Building 
+    <PhotoInput id="building_number_photo" label="Building Number – Photo">
+      Provide a photo of the building that shows the street number.
+    </PhotoInput>
+
+    ## Blower Door
+    <PhotoInput id="blower_door_setup_photo" label="Blower Door Setup – Photo">
+        Photo of the blower door setup before the air sealing insulation work
+    </PhotoInput>
+    <PhotoInput id="cfm50_photo" label="CFM50 – Photo">
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </PhotoInput>
+    | ACH50 Calculator                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM50" min={0} path="ach50_calculator.cfm50"  /> 
+    | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ach50_calculator.volume"  /> 
+    | ACH50 = { props.data.ach50_calculator?.cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
+    
+     ##Floor Plan Sketch For Air Leaks
+     <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo">
+      Floor plan sketch mapping the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
+     </PhotoInput>
+     <TextInput  label="Comment on any notable and unusual leaks" path="comment_on_leaks_in_floor_plan_sketch"> </TextInput>
+  </Tab>
+
+  <Tab eventKey="preparation" title="Preparation">
+  
+    ## Attic Floor Prepared for Air Sealing
+    <PhotoInput id="attic_floor_prepared_photo" label=" Attic Floor Preparation – Photo">
+      Photo of attic floor prepared for attic air sealing such as cleaned, insulation removed
+    </PhotoInput>
+  
+  </Tab>
+  <Tab eventKey="installation" title="Installation 1">
+
+    <DateInput label="Installation Date" path="install_date" />
+
+    Take a single representative photo of each applicable feature
+
+    <PhotoInput id="dry_wall_to_top_plate_photo" label="Drywall To Top Plate – Photo ">
+      Photo of drywall to top plate seam sealed
+    </PhotoInput>
+    
+    <PhotoInput id="soffit_air_baffles_photo" label="Soffit Air Baffles – Photo">
+    Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam  
+    </PhotoInput>
+
+    <PhotoInput id="non_ic_can_lights_photo" label="Non-IC Rated Can Lights – Photo">
+    Photo of enclose and air seal non-IC rated recessed lights  
+    </PhotoInput>
+   
+    <PhotoInput id="chimney_dam_photo" label="Chimney Dam – Photo">
+    Photo of fire caulking and sheet metal dam around chimney  
+    </PhotoInput>
+
+    <PhotoInput id="hot_flue_pipe_dam_photo" label="Hot Flue Pipe Dam – Photo">
+    Photo of fire caulking and sheet metal dam around hot flue pipes
+    </PhotoInput>
+
+    <PhotoInput id="wire_and_pipe_penetrations_photo" label="Wire and Pipe Penetrations – Photo">
+    Photo of electrical wire and pipe penetrations Sealed  
+    </PhotoInput> 
+
+    <PhotoInput id="large_opening_sealed_photo" label="Large Opening Sealed – Photo">
+    Photo of large opening such as a dropped soffit, dropped ceiling, or chase sealed with rigid foam and spray foam.  
+    </PhotoInput> 
+
+    <PhotoInput id="duct_boot_to_drywall_photo" label="Duct Boot To Drywall – Photo">
+    Photo of duct boot to drywall connection sealed
+    </PhotoInput> 
+
+    <PhotoInput id="exhaust_fan_sealed_to_drywall_photo" label="Exhaust Fan Sealed to Drywall – Photo">
+    Photo of exhaust fan sealed to drywall
+    </PhotoInput> 
+
+    <PhotoInput id="knee_walls_sealed_photo" label="Knee Walls Sealed – Photo">
+    Photo of open back knee walls drywall sealed to studs. Install blocking if missing top or bottom plates.
+    </PhotoInput>
+      
+    <PhotoInput id="knee_walls_enclosed_photo" label="Knee Walls Enclosed – Photo">
+    Photo of open back knee wall enclosed with air barrier or foam board
+    </PhotoInput> 
+  </Tab>
+  <Tab eventKey="installation2"  title="Installation 2">
+   
+    <PhotoInput id="skylight_walls_sealed_photo" label="Skylight Walls Sealed – Photo">
+    Photo of open back skylight shaft wall drywall air sealed to studs
+    </PhotoInput>
+
+    <PhotoInput id="skylight_walls_enclosed_photo" label="Skylight Walls Enclosed – Photo">
+    Photo of open back skylight walls enclosed with air barrier or foam board
+    </PhotoInput>
+     
+    <PhotoInput id="balloon_walls_sealed_photo" label="Balloon Walls Sealed – Photo">
+    Photo of balloon framed walls sealed with blocking and spray foam
+    </PhotoInput>
+
+    <PhotoInput id="stairwell_wall_sealed_photo" label="Stairwell Wall Sealed – Photo">
+    Photo of open back stairwell wall sealed with air barrier or foam board
+    </PhotoInput>
+
+    <PhotoInput id="tongue_and_groove_ceiling_sealed_photo" label="T&G Ceiling Sealed – Photo">
+    Photo of tongue and groove ceiling sealed
+    </PhotoInput>
+
+    <PhotoInput id="storage_platform_preparation_photo" label="Storage Platform Preparation – Photo">
+    Photo of storage platform prepared for insulation using batts as blocking if no insulation underneath
+    </PhotoInput>
+
+    <PhotoInput id="overview_of_air_sealed_attic_photo" label="Overview of Air Sealed Attic – Photo">
+    Overview photo of air sealed attic
+    </PhotoInput>
+
+    <PhotoInput id="attic_access_dam_photo" label="Attic Access Dam – Photo">
+    Photo of installed and sealed insulation dam around attic access
+    </PhotoInput>
+
+    <PhotoInput id="attic_access_weatherstrip_photo" label="Attic Access Weatherstrip – Photo">
+    Photo of weatherstrip air sealed attic access
+    </PhotoInput>
+
+    <TextInput  label="Summary Comments" path="comment_installation_summary" />
+    
+  </Tab>
+ <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Attic Air Sealing Upgrade Photo Report
+
+    <ProjectInfoReport {...props} />
+   
+    <Photo id="building_number_photo" label="Building Number" required>
+      A photo of the building showing the building number.
+    </Photo>
+
+    ## About the Report
+    This report is intended to show: 
+    1.	The air leakage rate of the home before attic envelope upgrades were performed, and 
+    2.	The critical details of the attic air sealing upgrades that were performed 
+
+    The report is not intended to be technically exhaustive, neither every single feature nor every example of every feature was photographed. 
+    The report does not imply that every single location that could have been air sealed and insulated was air sealed and insulated 100% perfectly, 
+    however, the contractor has made diligent effort to be meticulous and do a quality job. 
+
+    ## About Naturally Drafted Fossil Fuel Appliances Inside the Home:
+    Naturally drafted fossil fuel appliances inside the pressure boundary of the home will be tested for proper draft and combustion during the 
+    pre-envelope upgrade health and safety inspection. However, there is the possibility that the comprehensive envelope air sealing and 
+    insulation energy efficiency upgrades could cause the naturally drafted water heater or furnace to fail to draft properly when dryers, 
+    range hoods, and exhaust fans are operated simultaneously with the naturally drafted water heater and/or furnace. If this is found to be the case, 
+    a combustion air opening connecting the combustion appliance area to the outdoors may need to be added or some other remediation may be required. 
+    The homeowner/landlord should be aware of this possibility and the costs of this remediation action. 
+
+    ## About Mechanical Ventilation:
+    One important aspect of a comprehensive energy efficiency upgrade is taking control of the air flowing in and out of the home. 
+    Without proper air sealing, the air flows in and out wherever it wants to, and primarily when it is very hot or very cold. 
+    This leads to comfort issues (drafts) and wasted energy. It also leads to moisture problems when the moisture in that air gets into the wall,
+     attic, or floor assemblies. To avoid these issues while providing adequate fresh air where and when it is needed, the strategy is to seal air 
+     leaks, especially high (attic) and low (basement or crawlspace) and then provide continuous mechanical ventilation with optional filtering or
+     other conditioning. 
+
+    ## Blower Door
+    <Photo id="blower_door_setup_photo" label="Blower Door  – Photo" required>
+        Photo of the blower door setup before the air sealing insulation work
+    </Photo>
+    <Photo id="cfm50_photo" label="CFM50 – Photo" required>
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </Photo>
+
+    | ACH50 Calculation                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | CFM50 = { props.data.ach50_calculator?.cfm50 ? props.data.ach50_calculator?.cfm50 : null }
+    | Building Volume (ft&#179;) = { props.data.ach50_calculator?.volume ? props.data.ach50_calculator?.volume : null }
+    | ACH50 = { (props.data.ach50_calculator?.cfm50 && props.data.ach50_calculator?.volume) ? ((60 * props.data.ach50_calculator?.cfm50) / props.data.ach50_calculator?.volume).toFixed(2) : null } 
+
+    
+    <Photo id="floor_plan_sketch_photo" label="Floor plan sketch – Photo" required>
+      Floor plan sketch showing the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or
+       with the assistance of a thermal imaging camera while the blower door is running.
+    </Photo>
+    {
+      props.data.comment_on_leaks_in_floor_plan_sketch
+      ? <p><strong>Comment on any notable and unusual leaks:</strong> {props.data.comment_on_leaks_in_floor_plan_sketch}</p> 
+      : null
+    }
+    
+
+    ## Attic Preparation
+    <Photo id="attic_floor_prepared_photo" label="Attic Floor Preparation – Photo" required>
+      Photo of attic floor prep before air sealing such as cleaned, insulation removed
+    </Photo>
+
+  
+    ## Attic Air Sealing Details
+    <Photo id="dry_wall_to_top_plate_photo" label="Drywall To Top Plate – Photo ">
+      Photo of drywall to top plate seam sealed
+    </Photo>
+
+    <Photo id="soffit_air_baffles_photo" label="Soffit Air Baffles – Photo">
+    Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam  
+    </Photo>
+
+    <Photo id="non_ic_can_lights_photo" label="Non-IC Rated Can Lights – Photo">
+    Photo of enclose and air seal non-IC rated recessed lights  
+    </Photo>
+
+    <Photo id="chimney_dam_photo" label="Chimney Dam – Photo">
+    Photo of fire caulking and sheet metal dam around chimney  
+    </Photo>
+
+    <Photo id="hot_flue_pipe_dam_photo" label="Hot Flue Pipe Dam – Photo">
+    Photo of fire caulking and sheet metal dam around hot flue pipes
+    </Photo>
+    
+    <Photo id="wire_and_pipe_penetrations_photo" label="Wire and Pipe Penetrations – Photo">
+    Photo of electrical wire and pipe penetrations Sealed  
+    </Photo> 
+
+    <Photo id="large_opening_sealed_photo" label="Large Opening Sealed – Photo">
+    Photo of large opening such as a dropped soffit, dropped ceiling, or chase sealed with rigid foam and spray foam.  
+    </Photo> 
+
+    <Photo id="duct_boot_to_drywall_photo" label="Duct Boot To Drywall – Photo">
+    Photo of duct boot to drywall connection sealed
+    </Photo> 
+
+    <Photo id="exhaust_fan_sealed_to_drywall_photo" label="Exhaust Fan Sealed to Drywall – Photo">
+    Photo of exhaust fan sealed to drywall
+    </Photo> 
+
+    <Photo id="knee_walls_sealed_photo" label="Knee Walls Sealed – Photo">
+    Photo of open back knee walls drywall sealed to studs. Install blocking if missing top or bottom plates.
+    </Photo>  
+
+    <Photo id="knee_walls_enclosed_photo" label="Knee Walls Enclosed – Photo">
+    Photo of open back knee wall enclosed with air barrier or foam board
+    </Photo> 
+   
+    <Photo id="skylight_walls_sealed_photo" label="Skylight Walls Sealed – Photo">
+    Photo of open back skylight shaft wall drywall air sealed to studs
+    </Photo>
+
+    <Photo id="skylight_walls_enclosed_photo" label="Skylight Walls Enclosed – Photo">
+    Photo of open back skylight walls enclosed with air barrier or foam board
+    </Photo>
+     
+    <Photo id="balloon_walls_sealed_photo" label="Balloon Walls Sealed – Photo">
+    Photo of balloon framed walls sealed with blocking and spray foam
+    </Photo>
+
+    <Photo id="stairwell_wall_sealed_photo" label="Stairwell Wall Sealed – Photo">
+    Photo of open back stairwell wall sealed with air barrier or foam board
+    </Photo>
+
+    <Photo id="tongue_and_groove_ceiling_sealed_photo" label="T&G Ceiling Sealed – Photo">
+    Photo of tongue and groove ceiling sealed
+    </Photo>
+
+    <Photo id="storage_platform_preparation_photo" label="Storage Platform Preparation – Photo">
+    Photo of storage platform prepared for insulation using batts as blocking if no insulation underneath
+    </Photo>
+
+    <Photo id="overview_of_air_sealed_attic_photo" label="Overview of Air Sealed Attic – Photo" required>
+    Overview photo of air sealed attic
+    </Photo>
+
+    <Photo id="attic_access_dam_photo" label="Attic Access Dam – Photo">
+    Photo of installed and sealed insulation dam around attic access
+    </Photo>
+
+    <Photo id="attic_access_weatherstrip_photo" label="Attic Access Weatherstrip – Photo">
+    Photo of weatherstrip air sealed attic access
+    </Photo>  
+   
+    {
+      props.data.comment_installation_summary
+      ? <p><strong>Summary Comments:</strong> {props.data.comment_installation_summary}</p> 
+      : null
+    }
+  
+    </PrintSection>
+  </Tab>
+</Tabs>
