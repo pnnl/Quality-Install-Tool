@@ -75,6 +75,9 @@ const PhotoInput: FC<PhotoInputProps> = ({
     // Check if there is already a photo
     const hasPhoto = !!photo
 
+    // Button text based on whether there is a photo or not
+    const buttonText = hasPhoto ? 'Replace Photo' : 'Add Photo'
+
     return (
         <>
             <Card className="input-card">
