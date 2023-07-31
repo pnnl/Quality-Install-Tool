@@ -74,3 +74,81 @@ h3 {
   font-size: 1.3rem; 
   text-align: center;
 }
+
+
+/* root_layout.tsx */
+#root-flex-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#root-background {
+  margin-left: auto;
+  margin-right: auto; 
+  max-width: 800px; 
+  background-color: rgba(231, 231, 231);
+  min-height: 100vh;
+}
+
+#root-banner {
+  background-color: green;
+}
+
+#root-title {
+  color: gold;
+  font-size: 2rem;
+}
+
+#root-body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#back-button-logo {
+  color: white;
+  height: 100%;
+}
+
+#back-button {
+  padding: 1rem;
+}
+
+#back-button-link {
+  text-decoration: none;
+}
+
+#back-button-container {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* editor-flexbox.tsx */
+.editor-textarea{
+  height: auto;
+  min-height: 700px;
+  resize: none;
+}
+
+/* photo_input.tsx */
+.input-card {
+  page-break-before: always;
+  margin-bottom: 1rem;
+} /*also in radio.tsx*/
+
+/* stylizes the hidden input for photo upload*/
+.photo-upload-input {
+  display: none;
+}
+
+/* photo.tsx */
+.photo-card {
+  break-inside: avoid-page;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+/* stylizes tab component here to avoid putting styles in editor*/
+.tab-content {
+  margin-top: 1rem;
+}
