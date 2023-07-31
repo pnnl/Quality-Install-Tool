@@ -72,12 +72,12 @@ const PhotoInput: FC<PhotoInputProps> = ({children, label, metadata, photo, upse
     // Button text based on whether there is a photo or not
     const buttonText = hasPhoto ? 'Replace Photo' : 'Add Photo';
 
-    return (
-        <>
-            <Card className="input-card">
-                <Card.Body>
-                    <Collapsible header={label}>
-                        {/* Card.Text renders a <p> by defult. The children come from markdown
+  return (
+    <>
+      <Card style={{pageBreakBefore: 'always', marginBottom: '1rem'}}>
+        <Card.Body>
+          <Collapsible header={label}>
+            {/* Card.Text renders a <p> by defult. The children come from markdown
               and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
             <Card.Text as="div">
               {children}
