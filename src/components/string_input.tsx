@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect, useRef } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 
@@ -34,6 +34,15 @@ const StringInput: FC<StringInputProps> = ({
     regexp,
 }) => {
     const [error, setError] = useState<string>('')
+    
+    const [cursor, setCursor] = useState(null)
+    const ref = useRef(null)
+
+    useEffect(() => {
+        const input = ref.current
+        if (input) input.setSelectionRange(cursor, cursor)
+     }, [ref, cursor, value]);
+
 
     const handleChange = (inputValue: string) => {
         if (typeof inputValue !== 'string') {
@@ -53,7 +62,12 @@ const StringInput: FC<StringInputProps> = ({
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    onChange={event => handleChange(event.target.value)}
+                    ref={ref}
+                    onChange={ event => 
+                        {   setCursor(event.target.selectionStart)
+                            handleChange(event.target.value)
+                        }
+                    }
                     type="text"
                     value={value || ''}
                     isInvalid={Boolean(error)}
@@ -69,3 +83,5 @@ const StringInput: FC<StringInputProps> = ({
 }
 
 export default StringInput
+
+
