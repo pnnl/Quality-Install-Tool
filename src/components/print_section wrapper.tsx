@@ -22,7 +22,7 @@ const PrintSectionWrapper: FC<PrintSectionWrapperProps> = ({children, label}) =>
     <StoreContext.Consumer>
       {({metadata}) => {
           return (
-            <PrintSection children={children} label={label} project_name={metadata.projectName} workflow_name={metadata.workflowName} />
+            <PrintSection children={children} label={label} project_name={metadata.project_name} workflow_name={metadata.workflow_name} />
           )
         }
       }

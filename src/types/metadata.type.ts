@@ -6,7 +6,8 @@ interface Metadata {
     created_at: Date
     last_modified_at: Date
     attachments: Record<string, JSONValue>
-    projectName: string
-    workflowName: string
+    project_name: string
+    workflow_name: string
+    workflow_title: string
 }
 export default Metadata
