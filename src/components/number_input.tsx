@@ -4,6 +4,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 
+
 interface NumberInputProps {
     id: string
     label: string
@@ -92,3 +93,6 @@ const NumberInput: FC<NumberInputProps> = ({
 }
 
 export default NumberInput
+
+
+
