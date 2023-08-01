@@ -72,6 +72,9 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+//added 
+const LicensePlugin = require('webpack-license-plugin')
+
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
     return false;
@@ -587,6 +590,9 @@ module.exports = async function (webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
+
+      isEnvProduction && new LicensePlugin({outputFilename: "third_party_license.json"}),
+      
       new HtmlWebpackPlugin(
         Object.assign(
           {},
