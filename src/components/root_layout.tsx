@@ -54,7 +54,10 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
                 {showBackButton && (
                     <div id="back-button-container">
                         <Link to={backUrl} id="back-button-link">
-                            <Button variant="outline-light" id="back-button">
+                            <Button
+                                variant="outline-light"
+                                id="back-button"
+                            >
                                 <TfiAngleLeft id="back-button-logo" />
                             </Button>
                         </Link>

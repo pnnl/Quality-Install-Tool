@@ -14,19 +14,19 @@ interface TemplateConfig {
     }
 }
 
-const templatesConfig: TemplateConfig = {
-    doe_workflow_hpwh: {
-        title: 'Heat Pump Water Heater',
-        template: DOEWorkflowHPWHTemplate,
-    },
-    doe_workflow_attic_air_sealing: {
-        title: 'Attic Air Sealing',
-        template: DOEWorkflowAtticAirSealTemplate,
-    },
-    doe_workflow_attic_insulation: {
-        title: 'Attic Insulation',
-        template: DOEWorkflowAtticInsulationTemplate,
-    },
+const templatesConfig : TemplateConfig = {
+  doe_workflow_hpwh: {
+    title: "Heat Pump Water Heater",
+    template: DOEWorkflowHPWHTemplate,
+  },
+  doe_workflow_attic_air_sealing: {
+    title: "Attic Air Sealing",
+    template: DOEWorkflowAtticAirSealTemplate,
+  },
+  doe_workflow_attic_insulation: {
+    title: "Attic Insulation",
+    template: DOEWorkflowAtticInsulationTemplate,
+  }
 }
 
 export default templatesConfig
