@@ -72,6 +72,7 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+// Added by PNNL
 // 'webpack-license-plugin' added to extracts open source license information about all of the dependency packages used in the application
 const LicensePlugin = require('webpack-license-plugin')
 
@@ -589,11 +590,12 @@ module.exports = async function (webpackEnv) {
       ].filter(Boolean),
     },
     plugins: [
-      // Generates an `index.html` file with the <script> injected.
 
+      // Added by PNNL
       // 'webpack-license-plugin' outputs the dependecy pacakges license information to 'build/third_party_license.json' file.
       isEnvProduction && new LicensePlugin({outputFilename: "third_party_license.json"}),
       
+      // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
           {},
