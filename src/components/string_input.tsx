@@ -83,5 +83,3 @@ const StringInput: FC<StringInputProps> = ({
 }
 
 export default StringInput
-
-
