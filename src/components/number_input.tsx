@@ -3,8 +3,6 @@ import { useState, useRef, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
-import debounce from 'lodash.debounce';
-
 
 interface NumberInputProps {
     id: string
@@ -49,7 +47,7 @@ const NumberInput: FC<NumberInputProps> = ({
     useEffect(() => {
         const input = ref.current
         if (input) input.setSelectionRange(cursor, cursor)
-     }, [ref, cursor, value]);
+    }, [ref, cursor, value])
 
     const handleChange = (inputValue: string): any => {
         const inputValueNum: number = parseInt(inputValue)
@@ -71,11 +69,10 @@ const NumberInput: FC<NumberInputProps> = ({
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
                     ref={ref}
-                    onChange={event => 
-                        { 
-                            setCursor(event.target.selectionStart)
-                            handleChange(event.target.value)
-                        }}
+                    onChange={event => {
+                        setCursor(event.target.selectionStart)
+                        handleChange(event.target.value)
+                    }}
                     type="text"
                     inputMode="numeric"
                     value={value != null ? value : ''}
@@ -93,6 +90,3 @@ const NumberInput: FC<NumberInputProps> = ({
 }
 
 export default NumberInput
-
-
-
