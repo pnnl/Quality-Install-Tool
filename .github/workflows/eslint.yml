@@ -37,7 +37,7 @@ jobs:
 
       - name: Run ESLint
         run: |
-          npx eslint "src/**/*.{js,jsx,ts,tsx}" \
+          npx eslint "src/*" \
             --config .eslintrc.json \
             --ext .js,.jsx,.ts,.tsx \
             --format @microsoft/eslint-formatter-sarif \
