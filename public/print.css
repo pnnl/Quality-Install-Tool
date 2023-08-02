@@ -39,18 +39,21 @@
 
 /*Headings*/
 h1 {
-  font-size: 2rem; 
+  font-size: 1.5rem; 
   text-align: center;
   break-after: avoid-page;
   justify-self: center;
 }
 h2 {
-  page-break-after: avoid;
-  font-size: 1.75rem;
+  break-after: avoid-page;
+  font-size: 1.25rem;
 }
 h3 {
   font-size: 1rem;
   break-after: avoid-page;
+}
+h1 + h2 {
+  text-align: center;
 }
 
 /* Code below are added by PNNL */
@@ -175,7 +178,7 @@ h3 {
   break-inside: avoid;
 }
 
-/* stylizes tab component in editor to avoid putting styles in editor*/
+/* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
   margin-top: 1rem;
 }

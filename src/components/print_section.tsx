@@ -25,8 +25,8 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
                         printable: printContainerId,
                         type: 'html',
                         css: [
-                            'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css',
-                            '/App.css',
+                            '/bootstrap.min.css',
+                            '/print.css',
                         ],
                         documentTitle: 'DOE - Quality Installation Report',
                         scanStyles: false,
