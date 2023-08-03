@@ -1,8 +1,9 @@
 import type { FC } from 'react'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
+
 
 interface NumberInputProps {
     id: string
@@ -41,6 +42,16 @@ const NumberInput: FC<NumberInputProps> = ({
 }): any => {
     const [error, setError] = useState<string>('')
 
+    // use the cursor postion when user edits the data in the component
+    const [cursor, setCursor] = useState<number | null>(null)
+    const ref = useRef<HTMLInputElement>(null)
+
+    // Refresh after the first render and every time the component updates
+    useEffect(() => {
+        const input = ref.current
+        if (input) input.setSelectionRange(cursor, cursor)
+    }, [ref, cursor, value])
+
     const handleChange = (inputValue: string): any => {
         const inputValueNum: number = parseInt(inputValue)
         if (isNaN(inputValueNum)) {
@@ -54,13 +65,19 @@ const NumberInput: FC<NumberInputProps> = ({
         }
         updateValue(inputValue)
     }
+
     return (
         <InputGroup>
             {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    onChange={event => handleChange(event.target.value)}
-                    type="number"
+                    ref={ref}
+                    onChange={event => {
+                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
+                        handleChange(event.target.value)
+                    }}
+                    type="text"
+                    inputMode="numeric"
                     value={value != null ? value : ''}
                     isInvalid={Boolean(error)}
                 />
@@ -76,3 +93,6 @@ const NumberInput: FC<NumberInputProps> = ({
 }
 
 export default NumberInput
+
+
+

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect, useRef } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 
@@ -35,6 +35,16 @@ const StringInput: FC<StringInputProps> = ({
 }) => {
     const [error, setError] = useState<string>('')
 
+    // use the cursor postion when user edits the data in the component
+    const [cursor, setCursor] = useState<number | null>(null)
+    const ref = useRef<HTMLInputElement>(null)
+
+    // Refresh after the first render and every time the component updates
+    useEffect(() => {
+        const input = ref.current
+        if (input) input.setSelectionRange(cursor, cursor)
+    }, [ref, cursor, value])
+
     const handleChange = (inputValue: string) => {
         if (typeof inputValue !== 'string') {
             setError('Input must be a string')
@@ -53,7 +63,11 @@ const StringInput: FC<StringInputProps> = ({
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    onChange={event => handleChange(event.target.value)}
+                    ref={ref}
+                    onChange={event => {
+                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
+                        handleChange(event.target.value)
+                    }}
                     type="text"
                     value={value || ''}
                     isInvalid={Boolean(error)}
@@ -69,3 +83,5 @@ const StringInput: FC<StringInputProps> = ({
 }
 
 export default StringInput
+
+
