@@ -36,7 +36,7 @@ const StringInput: FC<StringInputProps> = ({
     const [error, setError] = useState<string>('')
 
     // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<any>(null)
+    const [cursor, setCursor] = useState<number|null>(null)
     const ref = useRef<HTMLInputElement>(null)
 
     // Refresh after the first render and every time the component updates
