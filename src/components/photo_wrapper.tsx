@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
+import { filterAttachmentsByIdPrefix } from './photo_input_wrapper'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -32,18 +33,36 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ attachments, data }) => {
+                const photos = filterAttachmentsByIdPrefix(attachments, id)
                 return (
-                    <Photo
-                        description={children}
-                        id={id}
-                        label={label}
-                        metadata={
-                            attachments[id]
-                                ?.metadata as unknown as PhotoMetadata
-                        }
-                        photo={attachments[id]?.blob}
-                        required={required}
-                    />
+                    <div
+                        className="photo-display-container"
+                        style={{ display: 'flex', flexWrap: 'wrap' }}
+                    >
+                        {photos.map((photo, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    style={{
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                    }}
+                                >
+                                    <Photo
+                                        description={children}
+                                        id={photo.id}
+                                        label={label}
+                                        metadata={photo.data.metadata}
+                                        photo={photo.data.blob}
+                                        required={required}
+                                        count={`${index + 1} of ${
+                                            photos.length
+                                        }`}
+                                    />
+                                </div>
+                            )
+                        })}
+                    </div>
                 )
             }}
         </StoreContext.Consumer>

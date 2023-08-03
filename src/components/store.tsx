@@ -19,6 +19,8 @@ import { putNewDoc } from '../utilities/database_utils'
 PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (blob: Blob, id: string) => void
+type RemoveAttachment = (id: string) => void
+type UpdateAttachmentMetaData = (id: string, metadata: any) => void
 
 type UpsertData = (pathStr: string, data: any) => void
 
@@ -35,6 +37,11 @@ export const StoreContext = React.createContext({
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | undefined,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
+    removeAttachment: ((id: string) => {}) as RemoveAttachment,
+    updateAttachmentMetaData: ((
+        id: string,
+        metadata: any,
+    ) => {}) as UpdateAttachmentMetaData,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
 })
@@ -340,6 +347,81 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         }
     }
 
+    const removeAttachment: RemoveAttachment = async (id: string) => {
+        // Remove the attachment from memory
+        const newAttachments = { ...attachments }
+        delete newAttachments[id]
+        setAttachments(newAttachments)
+
+        // Remove the attachment from the database
+        const removeBlobDB = async (
+            rev: string,
+        ): Promise<PouchDB.Core.Response | null> => {
+            let result = null
+            if (db) {
+                try {
+                    result = await db.removeAttachment(docId, id, rev)
+                } catch (err) {
+                    // Try again with the latest rev value
+                    const doc = await db.get(docId)
+                    result = await removeBlobDB(doc._rev)
+                } finally {
+                    if (result) {
+                        revisionRef.current = result.rev
+                    }
+                }
+            }
+            return result
+        }
+
+        if (revisionRef.current) {
+            await removeBlobDB(revisionRef.current)
+        }
+    }
+
+    const updateAttachmentMetaData = async (id: string, metadata: any) => {
+        // Update the attachment metadata in memory
+        const newAttachments = {
+            ...attachments,
+            [id]: {
+                ...attachments[id],
+                metadata,
+            },
+        }
+        setAttachments(newAttachments)
+
+        // Update the attachment metadata in the database
+        const updateBlobDB = async (
+            rev: string,
+        ): Promise<PouchDB.Core.Response | null> => {
+            let result = null
+            if (db != null) {
+                try {
+                    result = await db.putAttachment(
+                        docId,
+                        id,
+                        rev,
+                        attachments[id].blob,
+                        attachments[id].blob.type,
+                    )
+                } catch (err) {
+                    // Try again with the latest rev value
+                    const doc = await db.get(docId)
+                    result = await updateBlobDB(doc._rev)
+                } finally {
+                    if (result != null) {
+                        revisionRef.current = result.rev
+                    }
+                }
+            }
+            return result
+        }
+
+        if (revisionRef.current) {
+            updateBlobDB(revisionRef.current)
+        }
+    }
+
     return (
         <StoreContext.Provider
             value={{
@@ -347,6 +429,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 data,
                 metadata,
                 upsertAttachment,
+                removeAttachment,
+                updateAttachmentMetaData,
                 upsertData,
                 upsertDoc,
             }}

@@ -157,3 +157,9 @@ h3 {
 .tab-content {
   margin-top: 1rem;
 }
+
+.photo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -6,6 +6,7 @@ interface PhotoMetadata {
     }
     // TODO: replace string with more precise type
     timestamp: string
+    notes?: string | null
 }
 
 export default PhotoMetadata
