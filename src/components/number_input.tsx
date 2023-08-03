@@ -49,7 +49,7 @@ const NumberInput: FC<NumberInputProps> = ({
     // Refresh after the first render and every time the component updates
     useEffect(() => {
         const input = ref.current
-        if (!!input) input.setSelectionRange(cursor, cursor)
+        if (input) input.setSelectionRange(cursor, cursor)
     }, [ref, cursor, value])
 
     const handleChange = (inputValue: string): any => {
