@@ -45,16 +45,6 @@ const StringInput: FC<StringInputProps> = ({
         if (input) input.setSelectionRange(cursor, cursor)
     }, [ref, cursor, value])
 
-    // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<number | null>(null)
-    const ref = useRef<HTMLInputElement>(null)
-
-    // Refresh after the first render and every time the component updates
-    useEffect(() => {
-        const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
-    }, [ref, cursor, value])
-
     const handleChange = (inputValue: string) => {
         if (typeof inputValue !== 'string') {
             setError('Input must be a string')
