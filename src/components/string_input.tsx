@@ -34,7 +34,7 @@ const StringInput: FC<StringInputProps> = ({
     regexp,
 }) => {
     const [error, setError] = useState<string>('')
-    
+
     // use the cursor postion when user edits the data in the component
     const [cursor, setCursor] = useState<number | null>(null)
     const ref = useRef<HTMLInputElement>(null)
@@ -83,5 +83,3 @@ const StringInput: FC<StringInputProps> = ({
 }
 
 export default StringInput
-
-
