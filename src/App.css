@@ -36,14 +36,25 @@
     transform: rotate(360deg);
   }
 }
-
+/* Code below are added by PNNL */
+/*Headings*/
 h1 {
   font-size: 1.5rem; 
   text-align: center;
+  break-after: avoid-page;
+  justify-self: center;
 }
-
-
-/* Code below are added by PNNL */
+h2 {
+  break-after: avoid-page;
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1rem;
+  break-after: avoid-page;
+}
+h1 + h2 {
+  text-align: center;
+}
 
 /* used in home.tsx */
 .flex-container {
@@ -67,6 +78,10 @@ h1 {
 
 .icon-container > * {
   margin-left: 5px;
+}
+.img-thumbnail {
+  object-fit: contain;
+  max-height: 500px;
 }
 
 /* jobs_view.tsx & collapsible.tsx */
@@ -148,9 +163,13 @@ h3 {
 
 /* photo.tsx */
 .photo-card {
-  break-inside: avoid-page;
+  break-inside: avoid;
   margin-bottom: 1rem;
   margin-top: 1rem;
+}
+
+.card-body {
+  break-inside: avoid;
 }
 
 /* stylizes tab component here to avoid putting styles in editor*/

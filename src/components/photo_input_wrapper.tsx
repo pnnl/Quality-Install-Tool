@@ -5,7 +5,7 @@ import { StoreContext } from './store'
 import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
 
-const MAX_IMAGE_DIM = 1280
+const MAX_IMAGE_DIM = 500
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
