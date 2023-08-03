@@ -10,6 +10,7 @@ interface TextInputProps {
     min: number
     max: number
     regexp: RegExp
+    disabled?: boolean
 }
 
 /**
@@ -32,6 +33,7 @@ const TextInput: FC<TextInputProps> = ({
     min,
     max,
     regexp,
+    disabled,
 }) => {
     const [error, setError] = useState<string>('')
 
@@ -59,6 +61,8 @@ const TextInput: FC<TextInputProps> = ({
                     placeholder="A placeholder"
                     value={value || ''}
                     isInvalid={Boolean(error)}
+                    disabled={disabled}
+                    draggable={!disabled}
                 />
                 {error && (
                     <Form.Control.Feedback type="invalid">

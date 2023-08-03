@@ -7,6 +7,7 @@ import GpsCoordStr from './gps_coord_str'
 import type PhotoMetadata from '../types/photo_metadata.type'
 import { debounce } from 'lodash'
 import TextInput from './text_input'
+import { pathToId } from '../utilities/paths_utils'
 
 interface PhotoProps {
     description: React.ReactNode
@@ -47,7 +48,7 @@ const Photo: FC<PhotoProps> = ({
     const [notes, setNotes] = useState(metadata.notes || '')
     const handleNotesChange = (input: string) => {
         setNotes(input)
-        debounce(() => updateNotes && updateNotes(id, notes), 500)
+        updateNotes && updateNotes(`${id}.notes`, input)
     }
     return photo || required ? (
         <>
@@ -88,6 +89,7 @@ const Photo: FC<PhotoProps> = ({
                                         min={0}
                                         max={280}
                                         regexp={/^[a-zA-Z0-9\s]*$/}
+                                        disabled={!updateNotes}
                                     />
                                 )}
                                 {deletePhoto && (

@@ -20,7 +20,7 @@ PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (blob: Blob, id: string) => void
 type RemoveAttachment = (id: string) => void
-type UpdateAttachmentMetaData = (id: string, metadata: any) => void
+type UpsertMetaData = (id: string, metadata: any) => void
 
 type UpsertData = (pathStr: string, data: any) => void
 
@@ -38,10 +38,7 @@ export const StoreContext = React.createContext({
     metadata: {} satisfies Metadata | undefined,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     removeAttachment: ((id: string) => {}) as RemoveAttachment,
-    updateAttachmentMetaData: ((
-        id: string,
-        metadata: any,
-    ) => {}) as UpdateAttachmentMetaData,
+    upsertMetaData: ((id: string, metadata: any) => {}) as UpsertMetaData,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
 })
@@ -379,47 +376,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         }
     }
 
-    const updateAttachmentMetaData = async (id: string, metadata: any) => {
-        // Update the attachment metadata in memory
-        const newAttachments = {
-            ...attachments,
-            [id]: {
-                ...attachments[id],
-                metadata,
-            },
-        }
-        setAttachments(newAttachments)
-
-        // Update the attachment metadata in the database
-        const updateBlobDB = async (
-            rev: string,
-        ): Promise<PouchDB.Core.Response | null> => {
-            let result = null
-            if (db != null) {
-                try {
-                    result = await db.putAttachment(
-                        docId,
-                        id,
-                        rev,
-                        attachments[id].blob,
-                        attachments[id].blob.type,
-                    )
-                } catch (err) {
-                    // Try again with the latest rev value
-                    const doc = await db.get(docId)
-                    result = await updateBlobDB(doc._rev)
-                } finally {
-                    if (result != null) {
-                        revisionRef.current = result.rev
-                    }
-                }
-            }
-            return result
-        }
-
-        if (revisionRef.current) {
-            updateBlobDB(revisionRef.current)
-        }
+    const upsertMetaData = (path: string, metadata: any) => {
+        path = 'metadata_.attachments.' + path
+        console.log(metadata, path, doc)
+        upsertDoc(path, metadata)
     }
 
     return (
@@ -430,7 +390,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 metadata,
                 upsertAttachment,
                 removeAttachment,
-                updateAttachmentMetaData,
+                upsertMetaData,
                 upsertData,
                 upsertDoc,
             }}
