@@ -42,11 +42,11 @@ const NumberInput: FC<NumberInputProps> = ({
     const [error, setError] = useState<string>('')
 
     const [cursor, setCursor] = useState(null)
-    const ref = useRef(null)
+    const ref = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
+        if (!!input) input.setSelectionRange(cursor, cursor)
     }, [ref, cursor, value])
 
     const handleChange = (inputValue: string): any => {
