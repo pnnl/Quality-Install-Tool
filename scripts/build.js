@@ -59,6 +59,8 @@ checkBrowsers(paths.appPath, isInteractive)
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
+    // Copy and rename the 'app.css' and bootstrap node module css file to 'print.css' and bootstrap.min.css in the public directory
+    copyAndRenameCss();
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
@@ -223,4 +225,20 @@ function copyPublicFolder() {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });
+}
+
+export function copyAndRenameCss() {
+  const appCssSource = path.join(paths.appSrc, 'App.css'); // Replace 'app.css' with the actual source file name and path
+  const printCssDest = path.join(paths.appPublic, 'print.css');
+  const bootstrapCssSource = path.join(paths.appNodeModules, 'bootstrap/dist/css/bootstrap.min.css');
+  const bootstrapCssDest = path.join(paths.appPublic, 'bootstrap.min.css');
+  try {
+    // Copy and rename the 'app.css' file to 'print.css' in the build directory
+    fs.copySync(appCssSource, printCssDest);
+    fs.copySync(bootstrapCssSource, bootstrapCssDest);
+    console.log('app.css copied and renamed to print.css successfully.');
+  } catch (err) {
+    console.error('Error copying and renaming app.css:', err);
+    process.exit(1); // Exit the build process with an error if the copy fails
+  }
 }
