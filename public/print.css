@@ -36,7 +36,7 @@
     transform: rotate(360deg);
   }
 }
-
+/* Code below are added by PNNL */
 /*Headings*/
 h1 {
   font-size: 1.5rem; 
@@ -56,8 +56,6 @@ h1 + h2 {
   text-align: center;
 }
 
-/* Code below are added by PNNL */
-
 /* used in home.tsx */
 .flex-container {
   display: flex;
@@ -71,10 +69,6 @@ h1 + h2 {
 .flex-child {
   flex: 1;
   align-self: top;
-}
-
-p {
-  break-before: avoid-page;
 }
 
 /* used in jobs_view.tsx */
