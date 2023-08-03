@@ -36,7 +36,7 @@ const StringInput: FC<StringInputProps> = ({
     const [error, setError] = useState<string>('')
 
     const [cursor, setCursor] = useState(null)
-    const ref = useRef(null)
+    const ref = useRef<HTMLInputElement>(null)
 
     // Refresh after the first render and every time the component updates
     useEffect(() => {
