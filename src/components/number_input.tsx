@@ -41,8 +41,12 @@ const NumberInput: FC<NumberInputProps> = ({
 }): any => {
     const [error, setError] = useState<string>('')
 
+<<<<<<< HEAD
     // use the cursor postion when user edits the data in the component
     const [cursor, setCursor] = useState<number | null>(null)
+=======
+    const [cursor, setCursor] = useState(null)
+>>>>>>> 5f64963 (Set the type in useRef)
     const ref = useRef<HTMLInputElement>(null)
 
     // Refresh after the first render and every time the component updates
@@ -92,3 +96,6 @@ const NumberInput: FC<NumberInputProps> = ({
 }
 
 export default NumberInput
+
+
+
