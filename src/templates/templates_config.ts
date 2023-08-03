@@ -2,6 +2,7 @@ import QaHPWHTemplate from './qa_hpwh.mdx'
 import DOEWorkflowHPWHTemplate from './doe_workflow_hpwh.mdx'
 import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
+import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -26,6 +27,10 @@ const templatesConfig: TemplateConfig = {
     doe_workflow_attic_insulation: {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
+    },
+    doe_workflow_ductless_heat_pump: {
+        title: 'Ductless Heat Pump',
+        template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
 }
 
