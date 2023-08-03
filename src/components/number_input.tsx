@@ -41,9 +41,11 @@ const NumberInput: FC<NumberInputProps> = ({
 }): any => {
     const [error, setError] = useState<string>('')
 
-    const [cursor, setCursor] = useState(null)
+    // use the cursor postion when user edits the data in the component
+    const [cursor, setCursor] = useState<any>(null)
     const ref = useRef<HTMLInputElement>(null)
 
+    // Refresh after the first render and every time the component updates
     useEffect(() => {
         const input = ref.current
         if (!!input) input.setSelectionRange(cursor, cursor)
@@ -70,7 +72,7 @@ const NumberInput: FC<NumberInputProps> = ({
                 <Form.Control
                     ref={ref}
                     onChange={event => {
-                        setCursor(event.target.selectionStart)
+                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
                         handleChange(event.target.value)
                     }}
                     type="text"
