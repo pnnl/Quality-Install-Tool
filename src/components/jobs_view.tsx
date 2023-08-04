@@ -38,11 +38,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
             validator: (input: string) => {
                 // Restrict the character set to [a-zA-Z0-9-_#:>]
                 const regex =
-                    /(?=.{1,64}$)^(?!.*\s\s)[a-zA-Z0-9](?:[a-zA-Z0-9, -]*[a-zA-Z0-9])?$/
+                    /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
                 return regex.test(input)
             },
             errorMsg:
-                'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, dash, comma, and single spaces between other characters',
+                'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
         },
         {
             validator: (input: string) => {
@@ -84,6 +84,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
    }    */
 
     const sortByEditTime = (jobsList: any[]) => {
+        console.log('jobsList:', jobsList)
         const sortedJobsByEditTime = jobsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
