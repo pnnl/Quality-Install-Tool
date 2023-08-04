@@ -13,7 +13,8 @@ export async function putNewDoc(
     dbName: string,
     workflow_title: string,
 ): Promise<void> {
-    void db.putIfNotExists({
+    db.info((err, info) => console.log('db.info:', info))
+    void await db.putIfNotExists({
         _id: name,
         metadata_: {
             created_at: date,
