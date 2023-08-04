@@ -1,4 +1,4 @@
-import templatesConfig from "../templates/templates_config"
+import templatesConfig from '../templates/templates_config'
 
 /**
  * Adds a new document to the PouchDB database with the provided name and date.
@@ -15,7 +15,7 @@ export async function putNewDoc(
     // TODO: Handle the error case better
     const dbInfo = await promisifiedDBInfo(db)
     if (!dbInfo) {
-        throw new Error("Database info should never be null")
+        throw new Error('Database info should never be null')
     }
     // The workflow name is the database name
     const workflow_name = dbInfo.db_name
@@ -41,13 +41,16 @@ export async function putNewDoc(
  * @param {PouchDB.Database<{}>} db - The PouchDB database instance.
  * @returns A Promise to the database's info object
  */
-function promisifiedDBInfo(db: PouchDB.Database<{}>): Promise<PouchDB.Core.DatabaseInfo|null> {
-    return new Promise((res, rej) => db.info(
-        (err, info) => {
+function promisifiedDBInfo(
+    db: PouchDB.Database<{}>,
+): Promise<PouchDB.Core.DatabaseInfo | null> {
+    return new Promise((res, rej) =>
+        db.info((err, info) => {
             if (err) {
-                rej(err);
+                rej(err)
             } else {
-                res(info);
+                res(info)
             }
-    }))
+        }),
+    )
 }

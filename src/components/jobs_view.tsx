@@ -37,8 +37,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         {
             validator: (input: string) => {
                 // Restrict the character set to [a-zA-Z0-9-_#:>]
-                const regex =
-                    /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
+                const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
                 return regex.test(input)
             },
             errorMsg:
@@ -130,10 +129,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         // adding a new job here
         const docName = input
         if (name !== null) {
-            await putNewDoc(
-                db,
-                docName,
-            )
+            await putNewDoc(db, docName)
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -146,7 +142,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
                 const doc = await db.get(jobId)
                 await db.remove(doc) // Remove the existing document
                 doc._id = newName // Set the new name as the ID
-                if (doc.metadata_?.project_name) doc.metadata_.project_name = input
+                if (doc.metadata_?.project_name)
+                    doc.metadata_.project_name = input
                 await db.putIfNotExists(doc)
             }
 
