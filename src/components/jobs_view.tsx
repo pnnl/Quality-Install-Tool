@@ -84,7 +84,6 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
    }    */
 
     const sortByEditTime = (jobsList: any[]) => {
-        console.log('jobsList:', jobsList)
         const sortedJobsByEditTime = jobsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
@@ -129,15 +128,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
     const handleAddJob = async (input: string) => {
         // adding a new job here
-        const name = input
+        const docName = input
         if (name !== null) {
-            const date = new Date()
             await putNewDoc(
                 db,
-                name,
-                date,
-                dbName,
-                templatesConfig[dbName].title,
+                docName,
             )
         }
         // Refresh the job list after adding the new job
