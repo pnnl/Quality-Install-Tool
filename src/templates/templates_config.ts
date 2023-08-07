@@ -4,24 +4,28 @@ import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
 import { MDXProps } from 'mdx/types';
 
-interface TemplateConfig {
+interface TemplatesConfig {
   [key: string]: {
     title: string;
     template: (props: MDXProps) => JSX.Element;
   };
 }
 
-const templateRegex = /^[a-zA-Z0-9!@#$%^&*()-+=_{}|:;"'<>,.?~`]{1,64}$/ //TODO: decide on the Regex
+const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
-const templatesConfig : TemplateConfig = {
+const templatesConfig : TemplatesConfig = {
   doe_workflow_hpwh: {
     title: "Heat Pump Water Heater",
     template: DOEWorkflowHPWHTemplate,
   }
   // Add other template configurations here...
 }
-
-const validateTemplatesConfig = (config: TemplateConfig) => {
+/**
+ * Validates a TemplatesConfig object by checking if template names adhere to templateRegex pattern.
+ * @param {TemplatesConfig} config - The TemplatesConfig object to validate.
+ * @throws {Error} Throws an error if one or more template names are not allowed.
+ */
+function validateTemplatesConfig(config: TemplatesConfig) {
   const isValidKeys = Object.keys(config).every((key) =>
     {
       if(!templateRegex.test(key)){
@@ -30,12 +34,9 @@ const validateTemplatesConfig = (config: TemplateConfig) => {
       return templateRegex.test(key)
     }
   );
-
-  if (isValidKeys) {
-    return config;
-  } else {
     throw new Error("one or more template names are not allowed") //Decide on what to do if not pass
-  }
 };
 
-export default validateTemplatesConfig(templatesConfig);
+validateTemplatesConfig(templatesConfig);
+
+export default templatesConfig;
