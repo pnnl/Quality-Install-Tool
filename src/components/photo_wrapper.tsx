@@ -1,9 +1,10 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
 import { filterAttachmentsByIdPrefix } from './photo_input_wrapper'
+import { get } from 'lodash'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -32,27 +33,19 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, data }) => {
+            {({ attachments, data, metadata }) => {
                 const photos = filterAttachmentsByIdPrefix(attachments, id)
                 return (
-                    <div
-                        className="photo-display-container"
-                        style={{ display: 'flex', flexWrap: 'wrap' }}
-                    >
+                    <div className="photo-wrapper" >
                         {photos.map((photo, index) => {
                             return (
-                                <div
-                                    key={index}
-                                    style={{
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-                                    }}
-                                >
+                                <div className='photo-display-container' key={index}>
                                     <Photo
                                         description={children}
                                         id={photo.id}
                                         label={label}
-                                        metadata={photo.data.metadata}
+                                        metadata={metadata?.attachments[photo.id]}
+                                        notes={get(metadata,`attachments.${photo.id}.notes`)}
                                         photo={photo.data.blob}
                                         required={required}
                                         count={`${index + 1} of ${

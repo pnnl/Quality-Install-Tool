@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
 import { Button, Card, Image, Modal, ModalBody, Popover } from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetadata from '../types/photo_metadata.type'
-import { debounce } from 'lodash'
 import TextInput from './text_input'
 import { pathToId } from '../utilities/paths_utils'
 
@@ -19,6 +18,8 @@ interface PhotoProps {
     deletePhoto?: (id: string) => void
     updateNotes?: (id: string, notes: string) => void
     count?: string
+    disallowNotes?: boolean
+    notes?: any
 }
 
 /**
@@ -39,17 +40,10 @@ const Photo: FC<PhotoProps> = ({
     metadata,
     photo,
     required,
-    deletePhoto,
-    updateNotes,
-    id,
     count,
+    disallowNotes,
+    notes
 }) => {
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [notes, setNotes] = useState(metadata.notes || '')
-    const handleNotesChange = (input: string) => {
-        setNotes(input)
-        updateNotes && updateNotes(`${id}.notes`, input)
-    }
     return photo || required ? (
         <>
             <Card className="photo-card">
@@ -64,88 +58,31 @@ const Photo: FC<PhotoProps> = ({
                         <>
                             <Image src={URL.createObjectURL(photo)} thumbnail />
                             <br />
-                            <small>
-                                Timestamp:{' '}
-                                {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
-                                ) : (
-                                    <span>Missing</span>
+                            <div className='photo-metadata-container'>
+                                <small>
+                                    Timestamp:{' '}
+                                    {metadata?.timestamp ? (
+                                        <DateTimeStr date={metadata.timestamp} />
+                                    ) : (
+                                        <span>Missing</span>
+                                    )}
+                                    <br />
+                                    Geolocation:{' '}
+                                    {
+                                        <span>
+                                            <GpsCoordStr
+                                                {...metadata.geolocation}
+                                            />{' '}
+                                        </span>
+                                    }
+                                </small>
+                                {(notes && !disallowNotes) && (
+                                    <div className='report-print-photo-notes'>
+                                        <span>Notes:</span>
+                                        <span className='photo-notes'>{notes}</span>
+                                    </div>
                                 )}
-                                <br />
-                                Geolocation:{' '}
-                                {
-                                    <span>
-                                        <GpsCoordStr
-                                            {...metadata.geolocation}
-                                        />{' '}
-                                    </span>
-                                }
-                                {(updateNotes || metadata.notes) && (
-                                    <TextInput
-                                        id="notes"
-                                        label="Notes"
-                                        value={notes}
-                                        updateValue={handleNotesChange}
-                                        min={0}
-                                        max={280}
-                                        regexp={/^[a-zA-Z0-9\s]*$/}
-                                        disabled={!updateNotes}
-                                    />
-                                )}
-                                {deletePhoto && (
-                                    <button
-                                        onClick={() => setShowDeleteModal(true)}
-                                        style={{
-                                            cursor: 'pointer',
-                                            color: 'red',
-                                            borderWidth: '1px',
-                                            borderRadius: '6px',
-                                        }}
-                                    >
-                                        {' '}
-                                        Delete Photo{' '}
-                                    </button>
-                                )}
-                            </small>
-                            {deletePhoto && (
-                                <Modal show={showDeleteModal}>
-                                    <ModalBody>
-                                        <p>
-                                            Are you sure you want to delete this
-                                            photo?
-                                        </p>
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'space-between',
-                                            }}
-                                        >
-                                            <Button
-                                                onClick={() =>
-                                                    setShowDeleteModal(false)
-                                                }
-                                            >
-                                                Cancel
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    deletePhoto(id)
-                                                    setShowDeleteModal(false)
-                                                }}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    color: 'red',
-                                                    borderWidth: '1px',
-                                                    borderRadius: '6px',
-                                                }}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </div>
-                                    </ModalBody>
-                                </Modal>
-                            )}
+                            </div>
                         </>
                     ) : (
                         required && <em>Missing Photo</em>

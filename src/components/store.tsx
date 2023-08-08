@@ -15,6 +15,7 @@ import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import { putNewDoc } from '../utilities/database_utils'
+import { satisfies } from 'semver'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -35,7 +36,7 @@ type Attachments = Record<
 export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
-    metadata: {} satisfies Metadata | undefined,
+    metadata: {} satisfies MetaData,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     removeAttachment: ((id: string) => {}) as RemoveAttachment,
     upsertMetaData: ((id: string, metadata: any) => {}) as UpsertMetaData,
@@ -260,6 +261,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 } else {
                     result.metadata_.last_modified_at = new Date()
                 }
+                setMetaData(result.metadata_)
                 return result
             })
                 .then(function (res) {

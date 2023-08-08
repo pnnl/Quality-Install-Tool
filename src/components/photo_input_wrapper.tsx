@@ -45,6 +45,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 upsertAttachment,
                 removeAttachment,
                 upsertMetaData,
+                metadata
             }) => {
                 const upsertPhoto = (img_file: Blob, photoId: string) => {
                     // Reduce the image size as needed
@@ -63,6 +64,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                         id={id}
                         removeAttachment={removeAttachment}
                         updateNotes={upsertMetaData}
+                        metadata={metadata}
                     >
                         {children}
                     </PhotoInput>

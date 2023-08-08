@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
-import { Button, Card, Image } from 'react-bootstrap'
+import { Button, Card, Image, Modal, ModalBody } from 'react-bootstrap'
 import { TfiGallery } from 'react-icons/tfi'
 import Collapsible from './collapsible'
-import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
 import ImageBlobReduce from 'image-blob-reduce'
+import GpsCoordStr from './gps_coord_str'
+import DateTimeStr from './date_time_str'
+import NotesInput from './notes'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -16,6 +18,8 @@ interface PhotoInputProps {
     id: string
     maxPhotos?: number
     updateNotes?: (id: string, notes: string) => void
+    disallowNotes?: boolean,
+    metadata?: any
 }
 
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -42,6 +46,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
     maxPhotos = 1,
     id,
     updateNotes,
+    disallowNotes,
+    metadata
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -51,6 +57,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     const [photoId, setPhotoId] = useState(
         photoIds.length > 0 ? Math.max(photoIds as any as number) : 0,
     )
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     const [cameraAvailable, setCameraAvailable] = useState(false)
 
@@ -115,21 +122,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
               and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
                         <Card.Text as="div">{children}</Card.Text>
                     </Collapsible>
-                    <div>
-                        {/* {(cameraAvailable || cameraAvailable) &&
-              <Button onClick={handlePhotoCaptureButtonClick}
-              variant="outline-primary">
-              <TfiCamera/> Camera</Button>
-            } */}
-                    </div>
-                    {/* <input
-            accept="image/jpeg"
-            capture="environment"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoCaptureInputRef}
-            className='photo-input'
-            type="file"
-          /> */}
                     <input
                         accept="image/jpeg"
                         onChange={handleFileInputChange}
@@ -138,26 +130,104 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         type="file"
                         capture="environment"
                     />
-                    {photos.length && (
+                    {(
                         <>
                             {photos.map((photo, index) => (
                                 <div
+                                    className='photo-input-photos-container'
                                     key={index}
-                                    style={{
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-                                    }}
                                 >
-                                    <Photo
-                                        id={photo.id}
-                                        photo={photo.data.blob}
-                                        metadata={photo.data.metadata}
-                                        label=""
-                                        description=""
-                                        required={false}
-                                        deletePhoto={handleFileDelete}
-                                        updateNotes={updateNotes}
-                                    />
+                                    <Card className="photo-card">
+                                        <Card.Body>
+                                            <>
+                                                <Image
+                                                    src={URL.createObjectURL(photo.data.blob)}
+                                                    thumbnail
+                                                />
+                                                <br />
+                                                <small>
+                                                    Timestamp:{' '}
+                                                    {photo.data.metadata?.timestamp ? (
+                                                        <DateTimeStr
+                                                            date={
+                                                                photo.data.metadata.timestamp
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <span>Missing</span>
+                                                    )}
+                                                    <br />
+                                                    Geolocation:{' '}
+                                                    {
+                                                        <span>
+                                                            <GpsCoordStr
+                                                                {...photo.data
+                                                                    .metadata
+                                                                    .geolocation}
+                                                            />{' '}
+                                                        </span>
+                                                    }
+                                                    {(updateNotes || !disallowNotes) &&
+                                                        <NotesInput 
+                                                            value={metadata.attachments[photo.id]?.notes}
+                                                            updateValue={updateNotes}
+                                                            id={photo.id}
+                                                        />
+                                                    }
+                                                    {
+                                                        <Button
+                                                            className='photo-input-delete-button'
+                                                            onClick={() =>
+                                                                setShowDeleteModal(
+                                                                    true,
+                                                                )
+                                                            }
+                                                        >
+                                                            {' '}
+                                                            Delete Photo{' '}
+                                                        </Button>
+                                                    }
+                                                </small>
+                                                {handleFileDelete && (
+                                                    <Modal
+                                                        show={showDeleteModal}
+                                                    >
+                                                        <ModalBody>
+                                                            <p>
+                                                                Are you sure you
+                                                                want to delete
+                                                                this photo?
+                                                            </p>
+                                                            <div className='delete-modal-container'>
+                                                                <Button
+                                                                    onClick={() =>
+                                                                        setShowDeleteModal(
+                                                                            false,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                                <Button
+                                                                    className='delete-modal-delete'
+                                                                    onClick={() => {
+                                                                        handleFileDelete(
+                                                                            photo.id,
+                                                                        )
+                                                                        setShowDeleteModal(
+                                                                            false,
+                                                                        )
+                                                                    }}
+                                                                >
+                                                                    Delete
+                                                                </Button>
+                                                            </div>
+                                                        </ModalBody>
+                                                    </Modal>
+                                                )}
+                                            </>
+                                        </Card.Body>
+                                    </Card>
                                 </div>
                             ))}
                         </>
