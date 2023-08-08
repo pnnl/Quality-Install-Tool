@@ -42,7 +42,9 @@ const isInteractive = process.stdout.isTTY;
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
 }
-
+// PNNL added this to ensure that the print.css and bootstrap.min.css files are updated when running start.
+const { copyAndRenameCss } = require('./utils');
+copyAndRenameCss();
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';

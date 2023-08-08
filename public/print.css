@@ -1,79 +1,178 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Code below are added by PNNL */
+/*Headings*/
+h1 {
+  font-size: 1.5rem; 
+  text-align: center;
+  break-after: avoid-page;
+  justify-self: center;
+}
+h2 {
+  break-after: avoid-page;
+  font-size: 1.25rem;
+}
+h3 {
+  font-size: 1rem;
+  break-after: avoid-page;
+}
+h1 + h2 {
+  text-align: center;
+}
+
+/* used in home.tsx */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  align-content: center;
+  justify-content: space-around;
+}
+
+.flex-child {
+  flex: 1;
+  align-self: top;
+}
+
+/* used in jobs_view.tsx */
+.icon-container {
+  float: right;
+}
+
+.icon-container > * {
+  margin-left: 5px;
+}
 .img-thumbnail {
-    object-fit: contain !important;
-    max-height: 500px !important;
-}
-div {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    height: 80% !important;
-    margin: 0 !important;
-    padding: .25% !important;
-    margin-top: 6px !important;
-}
-p {
-    width: 100% !important;
-    break-before: avoid-page !important;
-    padding: 2px !important;
-    height: fit-content !important;
+  object-fit: contain;
+  max-height: 500px;
 }
 
-input {
-    width: 100% !important;
-    height: 100% !important;
-    border: none !important;
-    outline: none !important;
-    background: none !important;
-    text-align: center !important;
-    color: #000 !important;
+/* jobs_view.tsx & collapsible.tsx */
+.bottom-margin {
+  margin-bottom: 10px;
 }
 
-button {
-    width: 100% !important;
-    height: 100% !important;
-    border: none !important;
-    outline: none !important;
-    background: none !important;
-    text-align: center !important;
-    color: #000 !important;
+/* headding */
+h3 {
+  font-size: 1.3rem; 
+  text-align: center;
+}
+
+
+/* root_layout.tsx */
+#root-flex-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#root-background {
+  margin-left: auto;
+  margin-right: auto; 
+  max-width: 800px; 
+  background-color: rgba(231, 231, 231);
+  min-height: 100vh;
+}
+
+#root-banner {
+  background-color: green;
+}
+
+#root-title {
+  color: gold;
+  font-size: 2rem;
+}
+
+#root-body {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#back-button-logo {
+  color: white;
+  height: 100%;
+}
+
+#back-button {
+  padding: 1rem;
+}
+
+#back-button-link {
+  text-decoration: none;
+}
+
+#back-button-container {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+/* editor-flexbox.tsx */
+.editor-textarea{
+  height: auto;
+  min-height: 700px;
+  resize: none;
+}
+
+/* photo_input.tsx */
+.input-card {
+  page-break-before: always;
+  margin-bottom: 1rem;
+} /*also in radio.tsx*/
+
+/* stylizes the hidden input for photo upload*/
+.photo-upload-input {
+  display: none;
+}
+
+/* photo.tsx */
+.photo-card {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .card-body {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 4px !important;
-    margin-top: 3px !important;
-    .img-thumbnail{
-        display: block !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
+  break-inside: avoid;
 }
 
-ul {
-    width: 100% !important;
-    height: fit-content !important;
-}
-ol {
-    width: 100% !important;
-    break-before: avoid-page !important;
-    height: fit-content !important;
-}
-li {
-    width: 100% !important;
-    height: fit-content !important;
-}
-em {
-    width: 100% !important;
-    height: fit-content !important;
-}
-h2 {
-    margin-top: 10px !important;
-    font-size: 3em !important;
-    margin-bottom: 4px !important;
-    font-weight: 500 !important;
-    break-after: avoid-page !important;
+/* stylizes tab component here to avoid putting styles in editor*/
+.tab-content {
+  margin-top: 1rem;
 }

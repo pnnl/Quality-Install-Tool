@@ -1,4 +1,4 @@
-# BASC QA Tool
+# Quality Install Tool
 
 ## An outline of the App startup process
 1. The server will serve the built (by webpack) version of `index.html` for any route.
