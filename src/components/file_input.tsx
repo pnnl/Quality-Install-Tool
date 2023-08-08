@@ -86,9 +86,9 @@ const FileInput: FC<FileInputProps> = ({
                         type="file"
                         capture="environment"
                     />
-                    {photo && (
+                    {file && (
                         <>
-                            <a href={URL.createObjectURL(photo)}>{}</a>
+                            <a href={URL.createObjectURL(file)}>{}</a>
                         </>
                     )}
                 </Card.Body>
