@@ -1,5 +1,8 @@
 import { isUndefined, toPath } from 'lodash'
 
+const pathRegex = /^(?![-])(?!.*[-]$)[a-z0-9-]{1,64}$/
+const prefixRegex = /^[a-z0-9]{1,64}$/
+
 /**
  * Utility function used to convert a string path into a string
  * suitable as an html id value
