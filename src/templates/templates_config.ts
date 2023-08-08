@@ -8,10 +8,10 @@ import MdxPlayground from './playground.mdx'
 import { MDXProps } from 'mdx/types'
 
 interface TemplatesConfig {
-  [key: string]: {
-    title: string;
-    template: (props: MDXProps) => JSX.Element;
-  };
+    [key: string]: {
+        title: string
+        template: (props: MDXProps) => JSX.Element
+    }
 }
 
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
@@ -36,14 +36,12 @@ const templatesConfig: TemplatesConfig = {
  * @throws {Error} Throws an error if one or more template names are not allowed.
  */
 function validateTemplatesConfig(config: TemplatesConfig) {
-  Object.keys(config).forEach((key) =>
-    {
-      if(!templateRegex.test(key)){
-        throw new Error(key + " template name is not allowed") //Decide on what to do if not pass
-      }
-    }
-  );
-};
+    Object.keys(config).forEach(key => {
+        if (!templateRegex.test(key)) {
+            throw new Error(key + ' template name is not allowed') //Decide on what to do if not pass
+        }
+    })
+}
 
 validateTemplatesConfig(templatesConfig)
 

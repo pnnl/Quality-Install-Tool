@@ -1,15 +1,20 @@
-import "bootstrap/dist/css/bootstrap.css";
-import {createBrowserRouter, Navigate, RouterProvider, useRouteError} from 'react-router-dom'
-import "./App.css";
+import 'bootstrap/dist/css/bootstrap.css'
+import {
+    createBrowserRouter,
+    Navigate,
+    RouterProvider,
+    useRouteError,
+} from 'react-router-dom'
+import './App.css'
 
 import JsonStoreView from './components/json_store_view'
 import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import templatesConfig from './templates/templates_config'
-import TemplateEditor from "./components/editor";
-import Home from "./components/home";
-import JobsView from "./components/jobs_view";
-import React from "react";
+import TemplateEditor from './components/editor'
+import Home from './components/home'
+import JobsView from './components/jobs_view'
+import React from 'react'
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
@@ -60,12 +65,10 @@ const routes = [
 )
 
 // React Router
-const router = createBrowserRouter(routes, { basename: process.env.PUBLIC_URL });
+const router = createBrowserRouter(routes, { basename: process.env.PUBLIC_URL })
 
 function App() {
-  return (
-    <RouterProvider router={router}/>    
-  )
+    return <RouterProvider router={router} />
 }
 
 export default App
