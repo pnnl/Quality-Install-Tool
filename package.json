@@ -2,6 +2,7 @@
   "name": "quality_install_tool",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://localhost:5000",
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-syntax-flow": "^7.22.5",
@@ -46,7 +47,9 @@
     "exif-js": "^2.3.0",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
+    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "http-server": "^14.1.1",
     "identity-obj-proxy": "^3.0.0",
     "image-blob-reduce": "^4.1.0",
     "jest": "^27.4.3",
@@ -110,7 +113,9 @@
     "test": "node scripts/test.js",
     "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "predeploy": "yarn build && cp ./404.html ./build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

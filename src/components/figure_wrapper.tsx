@@ -14,13 +14,16 @@ interface FigureWrapperProps {
  * @param children Content (most commonly markdown text) to be used as the figure caption
  * @param src The image source passed to an underlying img tag
  */
-const FigureWrapper: FC<FigureWrapperProps> = ({ children, src }) => {
-    return (
-        <Figure>
-            <FigureImage src={src} />
-            <FigureCaption>{children}</FigureCaption>
-        </Figure>
-    )
-}
+const FigureWrapper: FC<FigureWrapperProps> = ({children, src}) => {
+  
+  const formattedUrl = process.env.PUBLIC_URL + src
+  return (
+    <Figure>
+      <FigureImage src={formattedUrl} />
+      <FigureCaption>
+        {children}
+      </FigureCaption>
+    </Figure>)
+};
 
 export default FigureWrapper
