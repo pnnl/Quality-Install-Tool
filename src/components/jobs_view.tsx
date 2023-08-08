@@ -37,12 +37,11 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         {
             validator: (input: string) => {
                 // Restrict the character set to [a-zA-Z0-9-_#:>]
-                const regex =
-                    /(?=.{1,64}$)^(?!.*\s\s)[a-zA-Z0-9](?:[a-zA-Z0-9, -]*[a-zA-Z0-9])?$/
+                const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
                 return regex.test(input)
             },
             errorMsg:
-                'The name must be no more than 64 characters starting with a letter, a number, or # and followed by letters, numbers, dash, comma, and single spaces between other characters',
+                'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
         },
         {
             validator: (input: string) => {
@@ -128,10 +127,9 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
 
     const handleAddJob = async (input: string) => {
         // adding a new job here
-        const name = input
+        const docName = input
         if (name !== null) {
-            const date = new Date()
-            await putNewDoc(db, name, date, dbName, templatesConfig[dbName].title)
+            await putNewDoc(db, docName)
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -144,7 +142,8 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
                 const doc = await db.get(jobId)
                 await db.remove(doc) // Remove the existing document
                 doc._id = newName // Set the new name as the ID
-                doc.metadata_.project_name = input;
+                if (doc.metadata_?.project_name)
+                    doc.metadata_.project_name = input
                 await db.putIfNotExists(doc)
             }
 
