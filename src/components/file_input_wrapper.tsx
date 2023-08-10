@@ -12,12 +12,12 @@ interface FileInputWrapperProps {
 }
 
 /**
- * A component that wraps a PhotoInput component in order to tie it to the data store
+ * A component that wraps a FileInput component in order to tie it to the data store
  *
- * @param children Content (most commonly markdown text) to be passed on as the PhotInput
+ * @param children Content (most commonly markdown text) to be passed on as the FileInput
  * children
  * @param id An identifier for the store attachment that represents the photo for
- * the PhotoInput component
+ * the FileInput component
  * @param label The label of the PhotoInput component
  */
 const FileInputWrapper: FC<FileInputWrapperProps> = ({
@@ -32,8 +32,6 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
                     upsertAttachment(img_file, id, fileName)
                  
                 }
-                console.log("file", attachments[id])
-
                 return (
                     <FileInput
                         label={label}

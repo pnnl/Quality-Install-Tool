@@ -24,6 +24,8 @@ import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 import PrintSectionWrapper from './print_section wrapper'
 import FileInputWrapper from './file_input_wrapper'
+import FileWrapper from './file_wrapper'
+
 
 const components = {
     Collapsible,
@@ -46,7 +48,8 @@ const components = {
     PageBreak: PageBreak,
     ProjectInfoInputs: ProjectInfoInputs,
     ProjectInfoReport: ProjectInfoReport,
-    FileInput: FileInputWrapper
+    FileInput: FileInputWrapper,
+    File: FileWrapper
 }
 
 interface MdxWrapperProps {

@@ -40,7 +40,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 
                         
                 }
-                console.log("photo", attachments[id])
                 return (
                     <PhotoInput
                         label={label}
