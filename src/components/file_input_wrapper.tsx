@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { StoreContext } from './store'
 import FileInput from './file_input'
-import PhotoMetadata from '../types/photo_metadata.type'
+
 
 const MAX_IMAGE_DIM = 1280
 
@@ -28,21 +28,18 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ attachments, upsertAttachment }) => {
-                const upsertPhoto = (img_file: Blob) => {
-                    upsertAttachment(img_file, id)
+                const upsertFile = (img_file: Blob, fileName: string) => {
+                    upsertAttachment(img_file, id, fileName)
                  
                 }
+                console.log("file", attachments[id])
 
                 return (
                     <FileInput
                         label={label}
-                        metadata={
-                            attachments[id]
-                                ?.metadata as unknown as PhotoMetadata
-                        }
-                        photo={attachments[id]?.blob}
-                        upsertPhoto={upsertPhoto}
-                    >
+                        metadata={attachments[id]?.metadata}
+                        file={attachments[id]?.blob}
+                        upsertFile={upsertFile} >
                         {children}
                     </FileInput>
                 )

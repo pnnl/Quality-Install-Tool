@@ -2,95 +2,93 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
 import { Button, Card, Image } from 'react-bootstrap'
 import Collapsible from './collapsible'
+import type FileMetadata from '../types/file_metadata.types'
+import DateTimeStr from './date_time_str'
+
 
 interface FileInputProps {
     children: React.ReactNode
     label: string
-   file: Blob | undefined
-    upsertPhoto: (file: Blob) => void
+    metadata: FileMetadata
+    file: Blob | undefined
+    upsertFile: (file: Blob, fileName:string) => void
 }
 
-// TODO: Determine whether or not the useEffect() method is needed.
-// We don't seem to need a separate camera button on an Android phone.
-// However, we may need to request access to the camera
-// before it can me used. Then clean up the corresponding code that is currently
-// commented out.
-
 /**
- * Component for photo input
+ * Component for File input
  *
- * @param children Content (most commonly markdown text) describing the photo requirement
- * @param label Label for the photo requirement
- * @param metadata Abreviated photo metadata including timestamp and geolocation
+ * @param children Content (most commonly markdown text) describing the File requirement
+ * @param label Label for the File requirement
  * @param photo Blob containing the photo itself
- * @param upsertPhoto Function used to update/insert a photo into the store
+ * @param upsertFile Function used to update/insert a file into the store
  */
 const FileInput: FC<FileInputProps> = ({
     children,
     label,
     file,
+    metadata,
     upsertFile,
 }) => {
     // Create references to the hidden file inputs
-    const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
-    const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
+    const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
 
-    const [cameraAvailable, setCameraAvailable] = useState(false)
-
-    // Handle button clicks
-    const handlePhotoCaptureButtonClick = (
+    const handleFileInputButtonClick = (
         event: MouseEvent<HTMLButtonElement>,
     ) => {
-        hiddenPhotoCaptureInputRef.current &&
-            hiddenPhotoCaptureInputRef.current.click()
-    }
-    const handlePhotoGalleryButtonClick = (
-        event: MouseEvent<HTMLButtonElement>,
-    ) => {
-        hiddenPhotoUploadInputRef.current &&
-            hiddenPhotoUploadInputRef.current.click()
+        hiddenFileUploadInputRef.current &&
+        hiddenFileUploadInputRef.current.click()
     }
 
    
     const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             const file = event.target.files[0]
-            upsertFile(file)
+            const fileName = file.name
+            upsertFile(file, fileName)
         }
     }
 
-    // Check if there is already a photo
-    const hasPhoto = !!file
-
-    // Button text based on whether there is a photo or not
-    const buttonText = hasPhoto ? 'Replace File' : 'Add File'
+    // Button text based on whether there is a File or not
+    const buttonText = !file ? 'Add File' : 'Replace File'
 
     return (
         <>
             <Card className="input-card">
                 <Card.Body>
-                        
+                    <h2> {label} </h2>
                     <Card.Text as="div">{children}</Card.Text>
                     <div>
+                        {file && (<>
+                        <Card className="input-card">
+                            <Card.Body>
+                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}Test</a> 
+                                <br />
+                                <small>
+                                    Timestamp: 
+                                    {metadata?.timestamp ? (
+                                        <DateTimeStr date={metadata.timestamp} />
+                                    ) : ""
+                                    }
+                                </small>
+                                <br/>
+                            </Card.Body>
+                        </Card>
+                        </>)}
                         <Button
-                            onClick={handlePhotoGalleryButtonClick}
+                            onClick={handleFileInputButtonClick}
                             variant="outline-primary">{buttonText}
-                        </Button>
+                        </Button> 
                     </div>
                     
                     <input
                         accept="application/pdf, application/vnd.ms-excel"
                         onChange={handleFileInputChange}
-                        ref={hiddenPhotoUploadInputRef}
+                        ref={hiddenFileUploadInputRef}
                         className="photo-upload-input"
                         type="file"
                         capture="environment"
                     />
-                    {file && (
-                        <>
-                            <a href={URL.createObjectURL(file)}>{}</a>
-                        </>
-                    )}
+                    
                 </Card.Body>
             </Card>
         </>

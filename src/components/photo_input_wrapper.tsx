@@ -37,8 +37,10 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                         .then(blob => {
                             upsertAttachment(blob, id)
                         })
-                }
 
+                        
+                }
+                console.log("photo", attachments[id])
                 return (
                     <PhotoInput
                         label={label}
