@@ -3,6 +3,9 @@ import DOEWorkflowHPWHTemplate from './doe_workflow_hpwh.mdx'
 import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
+import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
+
+
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -34,6 +37,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'Ductless Heat Pump',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
+    doe_workflow_central_ducted_split_heat_pump: {
+      title: 'Central Ducted Split Heat Pump',
+      template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+  },
 }
 /**
  * Validates a TemplatesConfig object by checking if template names adhere to templateRegex pattern.

@@ -1,0 +1,416 @@
+<Tabs>
+    <Tab eventKey="project" title="Project">
+        The data for this tab should be known prior to the initial site visit.
+        <ProjectInfoInputs {...props} />   
+    </Tab>
+    <Tab eventKey="pre_updrade_tests" title="Pre-Upgrade Tests">
+        ## Building 
+        <PhotoInput id="building_number_photo" label="Building Number – Photo">
+            Provide a photo of the building that shows the building number.
+        </PhotoInput>
+
+         <Collapsible header="Pre-Upgrade Photo Documents">
+            It is important to evaluate the quality of the ductwork and electrical service prior to a heat pump
+            upgrade because installing a high-performance heat pump into poorly performing ductwork will result in
+            poor system performance. The duct evaluation accurately identifies the performance of the ducts and
+            what duct sealing, insulation, repairs, replacement, and cleaning are needed to apply the correct scope
+            of work. However, if the ducts will be entirely replaced or the visual inspection found significant duct
+            upgrades and repairs are needed make notes and skip performing a duct leakage test at the initial
+            phase. Instead perform the duct leakage test post upgrades and repairs to verify the ducts are
+            sufficiently airtight.
+            It is also important to select the right cold climate heat pump that can meet the needs of the installed
+            location’s climate. Many makes and models of cold climate heat pumps perform admirably in cold
+            weather, delivering over 2 units of heat or more for every unit of energy input even at temperatures of
+            5 °F or less and delivering 100% of the rated heat output even at that temperature. Many models are
+            rated to continue producing heat even at -13 °F and beyond. Thus dual-fuel or electric resistance
+            auxiliary heat is not always needed in moderately cold climates. However, in locations with mild winters
+            but humid summer, it could be advantageous to select a heat pump with worse cold climate
+            performance but better dehumidification during the cooling season. Lastly, there are some climates that
+            need both very good cold temperature performance and good dehumidification during the summer. In
+            these locations, pairing a heat pump with a dedicated dehumidifier could be the best option.
+            The following pictures verify and document well-sized, insulated, and sealed ductwork, and careful
+            equipment planning and selection:
+            1. Representative picture of the existing ductwork condition.
+            2. Picture of the manometer showing duct leakage CFM with the ring size in the picture’s
+            background. Show CFM per 100 ft2 of conditioned floor area calculation in the notes. Note
+            whether the results are total leakage or leakage to outside results.
+            3. Picture of the duct leakage test setup showing the ring/plug size used.
+            4. Picture of the manometer (micromanometer) showing total static pressure with the existing
+            system running.
+            5. Picture of manometer or manometer app screenshot showing the CFM of air flow measured via
+            flow plate OR the pressure matching technique using duct leakage measurement equipment.
+            6. Picture of the flow plate test setup OR the pressure matching technique setup using duct
+            leakage measurement equipment.
+            7. Picture of the proposed heat pump outdoor unit installation location. Enter in the notes any
+            relevant comments such as if the outdoor unit will be wall hung or installed on a platform.
+            8. Attached screenshot of Manual J load calculations showing design conditions, conditioned
+            square footage, and the heating and cooling load calculations. The room-by-room load
+            calculation method is required, the block load method is NOT acceptable as it will lead to
+            unnecessary oversizing. A PDF of the Manual J report must be included anytime this report is
+            transmitted.
+            9. Attached a screenshot of the manufacturer’s heating performance table for the heat pump
+            make and model selected showing the total capacity and input energy used versus outdoor
+            temperature. Write in the notes if backup electric heat or dual fuel is part of the plan and what
+            the planned switch over or lockout temperature will be.
+            10. Attached a screenshot of the manufacturer’s cooling performance table for the heat pump make
+            and model selected showing the sensible versus total cooling capacity at the design conditions.
+            11. Concluding comments on the existing ductwork’s ability to handle a heat pump, and what
+            remediations, if any, are needed.
+         </Collapsible>
+
+        ## Visual Assessment of the Ductwork
+        If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and 
+        repairs are needed make notes and skip performing a duct leakage test at the initial phase. Instead 
+        perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight.  
+        <PhotoInput id="existing_duckwork_photo" label="Ductwork – Photo">
+            Photo of existing ductwork condition. 
+        </PhotoInput>        
+        <StringInput label="Ductwork Comments" path="comments_duckwork" />
+        
+
+        ## Static Pressure Test
+        Total external static pressure measurement
+        <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo">
+            Photo of the manometer readout or screenshot from digital instrument app.
+        </PhotoInput>   
+        Pre-upgrade static pressure test notes
+        <StringInput label="Comment on remediation plans if total external static pressure is above 0.5 i.w.c" path="comments_pre_upgrade_static_pressure_test" />
+       
+
+        ## Air Flow Test
+        Use flow plate test OR the pressure matching technique
+        <PhotoInput id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Air Flow Test Setup – Photo">
+            Photo of manometer CFM or upload digital gauge app screenshot.
+        </PhotoInput>   
+        Pre-upgrade air flow test notes
+        <StringInput label="Comment on remediation plan if flow is much lower than 400 CFM per ton." path="comments_pre_upgrade_air_flow_test" />
+
+        ## Duct Leakage Testing
+        If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and 
+        repairs are needed make notes and skip performing a duct leakage test at the initial phase. 
+        Instead perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight.
+        <PhotoInput id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+            Photo of duct test setup showing ring size and how it is attached to the duct system.
+        </PhotoInput>   
+        <PhotoInput id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+            Photo of duct leakage test manometer, CFM at 25 Pa.
+        </PhotoInput>   
+        
+        | CFM per 100 ft2
+        | ---------------
+        | <NumberInput label="CFM @ 25 Pa" min={0} path="cfm_calculation.cfm_at_25pa"  /> 
+        | <NumberInput label="Conditioned Floor Area" min={0} path="cfm_calculattion.conditioned_floor_area"  /> 
+        | CFM per 100 ft2 = { props.data.cfm_calculation?.cfm_at_25pa && props.data.cfm_calculattion?.conditioned_floor_area ? ((props.data.cfm_calculation.cfm_at_25pa / props.data.cfm_calculattion.conditioned_floor_area) * 100).toFixed(2) : null } 
+        
+        ## Total Leakage
+        <Radio label="Check if the test results represents total leakage" options={['Yes','No']} path="leakage.total_leakage_radio" />
+
+        ## Leakage to Outside
+        <Radio label="Check if the test results represents leakage to outside" options={['Yes','No']} path="leakage.leakage_to_outside_radio" />
+
+    </Tab>
+     <Tab eventKey="planning" title="Planning">
+       ## Planned Install Location
+         <PhotoInput id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo">
+               Photo of proposed ODU install location
+          </PhotoInput>  
+          Install location notes
+          <StringInput label="Include notes on whether it will be elevated, by how much, or protected overhead." path="comments_installation_notes" />
+        
+        ## Manual J Calculation
+            <PhotoInput id="screenshot_of_manual_j_calculation_photo" label="Screenshot of Manual J Calculations – Photo">
+                Attach a screenshot of Manual J load calculations.
+            </PhotoInput>
+
+            <FileInput id="manual_j_file" label="Full Manual J Report Attachment - File">
+                 File Types Accepted: PDF, XLS and CSV
+            </FileInput>
+            <StringInput label="Manual J Notes or Comments" path="comments_manual_j" />
+        
+        ## Equipment Performance Tables
+            <PhotoInput id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo">
+                Screenshot of MFG's extended heating performance table
+            </PhotoInput>
+            ## Heating performance notes
+            <StringInput label="Ex: Planned backup electric heat lockout temp, dual fuel switch over temperature." path="comments_heating_performance_notes" />
+            <PhotoInput id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's cooling performance table – Photo">
+                Screenshot of MFG's extended cooling performance table showing sensible, latent, or SHR
+            </PhotoInput>
+        
+        ## Pre-installation Concluding Comments
+        <StringInput label="Ductwork Concluding Comments" path="comments_ductwork_concluding_summary" />
+    </Tab>
+    <Tab eventKey="installation" title="Installation">
+        <DateInput label="Installation Date" path="install_date" />
+        ## Equipment
+        <PhotoInput id="odu_nameplate_photo" label="ODU nameplate – Photo" />
+        <PhotoInput id="idu_nameplate_photo" label="IDU nameplate – Photo" />
+        ## Electrical
+        <PhotoInput id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
+            Photo showing the ampacity of the breaker
+        </PhotoInput>
+        <PhotoInput id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo">
+            Photo showing the ampacity of the breaker
+        </PhotoInput>
+        ## Circuit breaker notes
+        <StringInput label="Ex: wire size modifications, or shared or repurposed circuits." path="comment_circuit_breaker_notes" />
+        ## Installation Tests
+        <PhotoInput id="nitrogen_pressure_test_photo" label="Nitrogen Pressure Test – Photo">
+            Gauge readable in the image. Test to 400 psi or MFG's instructions. Use a digital pressure gauge.
+        </PhotoInput>
+        <PhotoInput id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
+            Picture of the vacuum decay test setup
+        </PhotoInput>
+        <PhotoInput id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
+            Picture of the vacuum decay test results. Use a digital micron gauge.
+        </PhotoInput>
+        <PhotoInput id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo">
+            Photo of scale readout and calculations for refrigerant charge adjustment.
+        </PhotoInput>
+        <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comments_refrigerant_quantity_adjustments_or_weigh_in" />
+        ## Protection
+        <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
+            Photo of the line set and line set wall penetration protection.
+        </PhotoInput>
+        ## Plenum connections
+         <PhotoInput id="plenum_connections_photo" label="Plenum Connections – Photo">
+            Supply and return plenum connections to air handler cabinet sealed, insulated, and vapor barrier.
+        </PhotoInput>
+    </Tab>
+    <Tab eventKey="post_install" title="Post-Installation">
+        ## Post-install Tests
+        <PhotoInput id="post_install_air_flow_test_results_photo" label="Post-Install Air Flow Test Results – Photo">
+            Post-install air flow test results
+        </PhotoInput>
+
+        <PhotoInput id="post_install_air_flow_test_setup_photo" label="Post-Install Air Flow Test Setup – Photo">
+            Post-install air flow test setup
+        </PhotoInput>
+        <PhotoInput id="post_install_static_pressure_test_photo" label="Post-Install Static Pressure Test Setup – Photo" />
+        ## Thermostat Settings
+        <PhotoInput id="thermostat_setting_photo" label="Thermostat Setting – Photo">
+            Thermostat setting for auxiliary heat lockout or dual fuel switch over temperature.
+        </PhotoInput>
+        <StringInput label="Notes about thermostat settings" path="comments_about_thermostat_settings" />
+        ## Mechanical Ventilation
+        | CFM of Ventilation Required
+        | ---------------------------
+        | <NumberInput label="Conditioned Floor Area" min={0} path="cfm_of_ventilation_calculation.conditioned_floor_area"  /> 
+        | <NumberInput label="Number of Bedrooms" min={0} path="cfm_of_ventilation_calculation.number_of_bedrooms"  /> 
+        | CFM of ventilation required = 7.5 
+        <PhotoInput id="mechanical_ventilation_photo" label="Mechanical Ventilation – Photo">
+            Photo of the mechanical ventilation controller settings if MV was included/added as part of the upgrade.
+        </PhotoInput>
+        ## Notes about the MV
+        <StringInput label="Include notes about maintenance and filter size if applicable." path="comments_about_about_maintenance_and_filter_size" />
+    </Tab>
+    <Tab eventKey="report" title="Report">
+         <File id="manual_j_file" label="PDF of Manual J - File" />
+         <PrintSection label="Print Report">
+            ---
+            # Central Ducted Split Heat Pump Upgrade
+            ## Photo Report
+
+            <ProjectInfoReport {...props} />
+        
+            <Photo id="building_number_photo" label="Building Number" required>
+                A photo of the building showing the building number.
+            </Photo>
+            ## About the Report:
+            This report is intended to document:
+            1. The critical tests for evaluating the ductwork in a home to determine what, if any, duct
+            repairs or upgrades are needed so that the upgrade to a heat pump yields the expected
+            efficiency benefits.
+            2. The home’s heating and cooling loads.
+            3. The heat pump equipment selection.
+            4. The heat pump installation.
+            
+            A successful gas furnace to electric heat pump upgrade starts with well-sealed, insulated, and
+            correctly sized ductwork, and careful equipment planning and selection. Proper installation and
+            commissioning are paramount to ensuring maximum equipment efficiency and a long troublefree equipment life.
+            The photo requirements in this document record the key steps to ensure
+            success. It is strongly recommended a printed copy of this report be attached to the air handler
+            as a record to help future home energy raters and HVAC techs.
+            
+            ## About Home Performance
+            Treating a home as a system is a core principle of the Home Performance program. This means
+            recognizing the building science order of importance by managing and prioritizing health &
+            safety > water > air > vapor > thermal in that order of importance. The program does not
+            promote energy efficiency upgrades if the home needs other more important repairs,
+            remediations, and upgrades first to uphold and protect this building science order of
+            importance. The program prioritizes comfort and health as much as lower utility bills and
+            increased energy performance.
+            
+            ## About Atmospherically Vented Water Heaters
+            If this heat pump installation occurs in a home with an atmospherically vented water heater
+            inside the conditioned envelope, please test for backdrafting under worse case
+            depressurization conditions. The risk of a backdrafting is particularly high if the former heating
+            system was a gas furnace that shared a vent pipe with the water heater. Please use the
+            combustion safety documentation workflow to document the combustion safety test results.
+            
+            ## Acronyms
+            ODU – Outdoor Unit <br/>
+            IDU – Outdoor Unit
+
+            ## Pre-Upgrade Tests
+            
+            <Photo id="existing_duckwork_photo" label="Ductwork – Photo" required>
+                Photo of existing ductwork condition. 
+            </Photo>        
+            {
+                props.data.comments_duckwork
+                ? <p><strong>Ductwork Comments:</strong> {props.data.comments_duckwork}</p> 
+                : null
+            }
+
+            Total external static pressure measurement
+            <Photo id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo">
+                Photo of the manometer readout or screenshot from digital instrument app.
+            </Photo>   
+            {
+                props.data.comments_pre_upgrade_static_pressure_test
+                ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comments_pre_upgrade_static_pressure_test}</p> 
+                : null
+            }
+
+            <Photo id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Air Flow Test Setup – Photo">
+                Photo of manometer CFM or upload digital gauge app screenshot.
+            </Photo>   
+            {
+                props.data.comments_pre_upgrade_static_pressure_test
+                ? <p><strong>Pre-Upgrade Air Flow Test Notes: </strong> {props.data.comments_pre_upgrade_air_flow_test}</p> 
+                : null
+            }
+
+            <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+                Photo of duct test setup showing ring size and how it is attached to the duct system.
+            </Photo>   
+            <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+                Photo of duct leakage test manometer, CFM at 25 Pa.
+            </Photo>   
+            
+            | CFM per 100 ft2
+            | ---------------
+            | CFM @ 25 Pa = {props.data.cfm_calculation?.cfm_at_25pa ? props.data.cfm_calculation?.cfm_at_25pa : null} 
+            | Conditioned Floor Area = {props.data.cfm_calculattion?.conditioned_floor_area ? props.data.cfm_calculattion?.conditioned_floor_area : null} 
+            | CFM per 100 ft2 = { props.data.cfm_calculation?.cfm_at_25pa && props.data.cfm_calculattion?.conditioned_floor_area ? (props.data.cfm_calculation.cfm_at_25pa / props.data.cfm_calculattion.conditioned_floor_area) * 100 : null } 
+            
+            Total Leakage: {props.data?.leakage?.total_leakage_radio ? props.data.leakage.total_leakage_radio: null}
+
+            Leakage To Outside: {props.data?.leakage?.leakage_to_outside_radio ? props.data.leakage.leakage_to_outside_radio: null}
+           
+            ## Planning
+            <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo">
+               Photo of proposed ODU install location
+            </Photo>  
+            {
+                props.data.comments_installation_notes
+                ? <p><strong>Install Location Notes: </strong> {props.data.comments_installation_notes}</p> 
+                : null
+            }
+            
+            <Photo id="screenshot_of_manual_j_calculation_photo" label="Screenshot of Manual J Calculations – Photo" required>
+                Attach a screenshot of Manual J load calculations.
+            </Photo>
+            {
+                props.data.comments_manual_j
+                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comments_manual_j}</p> 
+                : null
+            }
+            
+            <Photo id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" required>
+                Screenshot of MFG's extended heating performance table
+            </Photo>
+            {
+                props.data.comments_heating_performance_notes
+                ? <p><strong>Heating Performance Notes: </strong> {props.data.comments_heating_performance_notes}</p> 
+                : null
+            }
+           
+            <Photo id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's cooling performance table – Photo" required>
+                Screenshot of MFG's extended cooling performance table showing sensible, latent, or SHR
+            </Photo>
+            
+            {
+                props.data.comments_ductwork_concluding_summary
+                ? <p><strong>Ductwork Concluding Comments: </strong> {props.data.comments_ductwork_concluding_summary}</p> 
+                : null
+            }
+
+            ## Installation
+            <Photo id="odu_nameplate_photo" label="ODU nameplate – Photo" required />
+            <Photo id="idu_nameplate_photo" label="IDU nameplate – Photo" required />
+            <Photo id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
+                Photo showing the ampacity of the breaker
+            </Photo>
+            <Photo id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo">
+                Photo showing the ampacity of the breaker
+            </Photo>
+            {
+                props.data.comment_circuit_breaker_notes
+                ? <p><strong>Circuit Breaker Notes: </strong> {props.data.comment_circuit_breaker_notes}</p> 
+                : null
+            }
+
+            <Photo id="nitrogen_pressure_test_photo" label="Nitrogen Pressure Test – Photo" required>
+                Gauge readable in the image. Test to 400 psi or MFG's instructions. Use a digital pressure gauge.
+            </Photo>
+            <Photo id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
+                Picture of the vacuum decay test setup
+            </Photo>
+            <Photo id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
+                Picture of the vacuum decay test results. Use a digital micron gauge.
+            </Photo>
+            <Photo id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo">
+                Photo of scale readout and calculations for refrigerant charge adjustment.
+            </Photo>
+            {
+                props.data.comments_refrigerant_quantity_adjustments_or_weigh_in
+                ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comments_refrigerant_quantity_adjustments_or_weigh_in}</p> 
+                : null
+            }
+            <Photo id="line_set_protection_photo" label="Line Set Protection – Photo">
+                Photo of the line set and line set wall penetration protection.
+            </Photo>
+            <Photo id="plenum_connections_photo" label="Plenum Connections – Photo">
+                Supply and return plenum connections to air handler cabinet sealed, insulated, and vapor barrier.
+            </Photo>
+
+            ## Post-Installation
+            <Photo id="post_install_air_flow_test_results_photo" label="Post-Install Air Flow Test Results – Photo">
+                Post-install air flow test results
+            </Photo>
+
+            <Photo id="post_install_air_flow_test_setup_photo" label="Post-Install Air Flow Test Setup – Photo">
+                Post-install air flow test setup
+            </Photo>
+            <Photo id="post_install_static_pressure_test_photo" label="Post-Install Static Pressure Test Setup – Photo" />
+            
+            
+            <Photo id="thermostat_setting_photo" label="Thermostat Setting – Photo">
+                Thermostat setting for auxiliary heat lockout or dual fuel switch over temperature.
+            </Photo>
+
+            {
+                props.data.comments_about_thermostat_settings
+                ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comments_about_thermostat_settings}</p> 
+                : null
+            }
+           
+            | Mechanical Ventilation
+            | ----------------------
+            | Conditioned Floor Area = {props.data?.cfm_of_ventilation_calculation?.conditioned_floor_area ? props.data?.cfm_of_ventilation_calculation?.conditioned_floor_area : null}  
+            | Number of Bedrooms = {props.data?.cfm_of_ventilation_calculation?.number_of_bedrooms ? props.data?.cfm_of_ventilation_calculation?.number_of_bedrooms : null}
+            | CFM of ventilation required = 7.5 
+            <Photo id="mechanical_ventilation_photo" label="Mechanical Ventilation – Photo">
+                Photo of the mechanical ventilation controller settings if MV was included/added as part of the upgrade.
+            </Photo>
+
+            {
+                props.data.comments_refrigerant_quantity_adjustments_or_weigh_in
+                ? <p><strong>Notes About The Mechanical Ventilation: </strong> {props.data.comments_about_about_maintenance_and_filter_size}</p> 
+                : null
+            }            
+        </PrintSection>
+    </Tab>
+</Tabs>

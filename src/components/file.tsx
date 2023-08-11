@@ -4,6 +4,9 @@ import { Button, Card, Image } from 'react-bootstrap'
 import Collapsible from './collapsible'
 import type FileMetadata from '../types/file_metadata.types'
 import DateTimeStr from './date_time_str'
+import printJS from 'print-js'
+import { eventNames } from 'process'
+
 
 
 interface FileProps {
@@ -18,7 +21,7 @@ interface FileProps {
  *
  * @param children Content (most commonly markdown text) describing the File requirement
  * @param label Label for the File requirement
- * @param photo Blob containing the photo itself
+ * @param file Blob containing the file itself
  * @param upsertFile Function used to update/insert a file into the store
  */
 const File: FC<FileProps> = ({
@@ -28,21 +31,22 @@ const File: FC<FileProps> = ({
     metadata,
 }) => {
 
-    const handlePrintButtonClick = (event: ChangeEvent<HTMLInputElement>) => {
-       alert("print")
+    const handlePrintButtonClick = (event: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, fileBlob: Blob | MediaSource) => {
+        event.preventDefault();
+        printJS(URL.createObjectURL(fileBlob));
     }
 
     return (
         <>
-            <Card className="input-card">
-                <Card.Body> {file && (<>
-                    <h2> {label} </h2>
-                    <Card.Text as="div">{children}</Card.Text>
-                    <div>
-                       
-                        <Card className="input-card">
-                            <Card.Body>
-                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}Test</a> 
+            {file && (
+            
+                    <Card className="input-card">
+                        <Card.Body>
+                            <h2> {label} </h2>
+                            <Card.Text as="div">{children}</Card.Text>
+                            <div className="row">
+                                <div className="col-sm-8">
+                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}</a> 
                                 <br />
                                 <small>
                                     Timestamp: 
@@ -51,17 +55,18 @@ const File: FC<FileProps> = ({
                                     ) : ""
                                     }
                                 </small>
-                                <br/>
+                                </div>
+                                <div className="col-sm-4">
                                 <Button
-                                    onClick={handlePrintButtonClick}
-                                    variant="outline-primary">Print File
+                                    onClick={(event) => handlePrintButtonClick(event,file)}>Print File
                                 </Button> 
-                            </Card.Body>
-                        </Card>
-                        
-                    </div></>)}
-                </Card.Body>
-            </Card>
+                                </div>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                 
+            )}
+            
         </>
     )
 }

@@ -61,10 +61,10 @@ const FileInput: FC<FileInputProps> = ({
                         {file && (<>
                         <Card className="input-card">
                             <Card.Body>
-                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}Test</a> 
+                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}</a> 
                                 <br />
                                 <small>
-                                    Timestamp: 
+                                    Timestamp:&npsp;
                                     {metadata?.timestamp ? (
                                         <DateTimeStr date={metadata.timestamp} />
                                     ) : ""
@@ -81,7 +81,7 @@ const FileInput: FC<FileInputProps> = ({
                     </div>
                     
                     <input
-                        accept="application/pdf, application/vnd.ms-excel"
+                        accept="application/pdf, application/vnd.ms-excel, text/csv"
                         onChange={handleFileInputChange}
                         ref={hiddenFileUploadInputRef}
                         className="photo-upload-input"

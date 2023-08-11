@@ -12,36 +12,38 @@
             Provide a photo of the building that shows the street number.
         </PhotoInput>
 
-        <Collapsible header="Proposed Outdoor Unit">
-            Enter how the outdoor unit (ODU) will be installed and the location's average snow depth, the outdoor unit 
-            should be installed above the snow depth. The customer may also have knowledge on how high the snow 
-            typically gets at the planned heat pump location.
-            <PhotoInput id="proposed_odu_location_photo" label="Proposed ODU Location – Photo">
-                Picture of the proposed heat pump outdoor unit(ODU) installation location. 
-            </PhotoInput>
-
-            <Select label="ODU will be installed on a" path="outdoor_unit.install_location" options={['Pad','Gound Stand','Wall Mount','Roof Mount']} />
-
-            <NumberInput label="Average Snow Depth (in)" min={0} path="outdoor_unit.average_snow_depth"  />
-            
-            <TextInput  label="ODU Installation Location Comments" path="comment_odu_install_location" />
-
+        ## Proposed Outdoor Unit
+        <Collapsible header="Proposed Outdoor Unit Details">
+        Enter how the outdoor unit (ODU) will be installed and the location's average snow depth, the outdoor unit 
+        should be installed above the snow depth. The customer may also have knowledge on how high the snow 
+        typically gets at the planned heat pump location.
         </ Collapsible>
+        <PhotoInput id="proposed_odu_location_photo" label="Proposed ODU Location – Photo">
+            Picture of the proposed heat pump outdoor unit(ODU) installation location. 
+        </PhotoInput>
+
+        <Select label="ODU will be installed on a" path="outdoor_unit.install_location" options={['Pad','Gound Stand','Wall Mount','Roof Mount']} />
+
+        <NumberInput label="Average Snow Depth (in)" min={0} path="outdoor_unit.average_snow_depth"  />
+        
+        <StringInput  label="ODU Installation Location Comments" path="comment_odu_install_location" />
+
+        ## Proposed Indoor Unit
         <Collapsible header="Proposed Indoor Unit">
             Picture of the proposed indoor unit (IDU) installation location, if there are more than one IDU
             installation locations, write in the notes describing the others.
-            
-            <PhotoInput id="proposed_idu_location_photo" label="Proposed IDU Location – Photo">
-                Picture of the proposed heat pump outdoor unit(ODU) installation location. 
-            </PhotoInput>
-            
-            <TextInput  label="IDU Location Comments" path="comment_odu_location" />
-        </ Collapsible>
+         </ Collapsible>    
+        <PhotoInput id="proposed_idu_location_photo" label="Proposed IDU Location – Photo">
+            Picture of the proposed heat pump outdoor unit(ODU) installation location. 
+        </PhotoInput>
+        
+        <StringInput  label="IDU Location Comments" path="comment_odu_location" />
        
         <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo">
             Picture or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve.
         </PhotoInput>
 
+        ## Manual J Calculation
         <Collapsible header="Manual J Calculation">
             <p> If the ductless heat pump will be used a primary heating and cooling equipment for the home
             correctly sizing the equipment for the home’s heating and cooling needs is much more
@@ -51,32 +53,29 @@
             determine the most accurate values to enter. For example, ask the home occupant whether any
             rooms presently get too hot or cold, and whether any window or insulation upgrades were
             done in the past. </p>
-            
-            <PhotoInput id="screenshot_of_manual_j_calculation_photo" label="Screenshot of Manual J Calculations – Photo">
-                Attach a screenshot of Manual J load calculations showing design conditions, conditioned square footage, 
-                and the heating and cooling load calculations.
-            </PhotoInput>
+        </ Collapsible>   
+        <PhotoInput id="screenshot_of_manual_j_calculation_photo" label="Screenshot of Manual J Calculations – Photo">
+            Attach a screenshot of Manual J load calculations showing design conditions, conditioned square footage, 
+            and the heating and cooling load calculations.
+        </PhotoInput>
 
-            <FileInput id="manual_j_file" label="PDF of Manual J - Files">
-                 File Types Accepted: PDF,XLS
-            </FileInput>
+        <FileInput id="manual_j_file" label="PDF of Manual J - File">
+                File Types Accepted: PDF, XLS and CSV
+        </FileInput>
            
-        </ Collapsible>
+        
+        ## Equipment Selection
+        <PhotoInput id="heating_performance_table_photo" label="Heating Performance Table Screenshot – Photo">
+            Attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model 
+            selected showing the total capacity and input energy used versus outdoor temperature. If not available, 
+            use the data from the Northeast Energy Efficiency Partnership’s Air Source Heat Pump List.
+        </PhotoInput>
 
-        <Collapsible header="Equipment Selection">
-            
-            <PhotoInput id="heating_performance_table_photo" label="Heating Performance Table Screenshot – Photo">
-                Attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model 
-                selected showing the total capacity and input energy used versus outdoor temperature. If not available, 
-                use the data from the Northeast Energy Efficiency Partnership’s Air Source Heat Pump List.
-            </PhotoInput>
+        <PhotoInput id="cooling_performance_table_photo" label="Cooling Performance Table Screenshot – Photo">
+            Attach a screenshot of the manufacturer’s cooling performance table for the heat pump make
+            and model selected showing the sensible versus total cooling capacity at the design conditions.
+        </PhotoInput>
 
-            <PhotoInput id="cooling_performance_table_photo" label="Cooling Performance Table Screenshot – Photo">
-                Attach a screenshot of the manufacturer’s cooling performance table for the heat pump make
-                and model selected showing the sensible versus total cooling capacity at the design conditions.
-            </PhotoInput>
-
-        </ Collapsible>
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
@@ -132,13 +131,13 @@
             refrigerant to add (if applicable).
         </PhotoInput>
 
-        <TextInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
+        <StringInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
 
-        | Oz of refrigerant to add on top of factory charge
+        | Ounce of refrigerant to add on top of factory charge
         | --------------------------------------------------
         | <NumberInput label="Number of ft of line set beyond factory charge" min={0} path="oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge"  /> 
-        | <NumberInput label="Oz / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft"  /> 
-        | Oz to add= { props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft) : null } 
+        | <NumberInput label="Ounce / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft"  /> 
+        | Ounce to add= { props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft) : null } 
 
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
             Picture of the outdoor section of the refrigerant line set as it enters the building showing the 
@@ -148,12 +147,12 @@
     </Tab>
     <Tab eventKey="report" title="Report">
         
-        <File id="manual_j_file" label="PDF of Manual J - Files" />
-                
+        <File id="manual_j_file" label="PDF of Manual J - File" />
 
         <PrintSection label="Print Report">
             ---
-            # Ductless Heat Pump Quality Installation Documentation Report
+            # Ductless Heat Pump Upgrade
+            ## Photo Report
 
             <ProjectInfoReport {...props} />
         
@@ -333,7 +332,7 @@
                 : null
             }
 
-            <u>&nbsp;&nbsp;{props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge ? props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge : null } &nbsp;&nbsp;</u> ft of line set beyond factory charge  x  <u>&nbsp;&nbsp; { props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft : null } &nbsp;&nbsp;</u> 0z/ft = <u>&nbsp;&nbsp;{ props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft) : null }&nbsp;&nbsp;</u> oz to add.
+            <u>&nbsp;&nbsp;{props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge ? props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge : null } &nbsp;&nbsp;</u> ft of line set beyond factory charge  x  <u>&nbsp;&nbsp; { props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft : null } &nbsp;&nbsp;</u> Ounce/ft = <u>&nbsp;&nbsp;{ props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft) : null }&nbsp;&nbsp;</u> oz to add.
 
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
                 Picture of the outdoor section of the refrigerant line set as it enters the building showing the 
