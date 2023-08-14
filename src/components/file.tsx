@@ -9,6 +9,7 @@ import { eventNames } from 'process'
 
 
 
+
 interface FileProps {
     children: React.ReactNode
     label: string
@@ -33,7 +34,11 @@ const File: FC<FileProps> = ({
 
     const handlePrintButtonClick = (event: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>, fileBlob: Blob | MediaSource) => {
         event.preventDefault();
-        printJS(URL.createObjectURL(fileBlob));
+        if (-1 !== navigator.userAgent.toLowerCase().indexOf('crios')) {
+            window.open(URL.createObjectURL(fileBlob), '_blank')?.print()
+        } else {
+            printJS(URL.createObjectURL(fileBlob));
+        }
     }
 
     return (
@@ -56,6 +61,7 @@ const File: FC<FileProps> = ({
                                     }
                                 </small>
                                 </div>
+                                
                                 <div className="col-sm-4">
                                 <Button
                                     onClick={(event) => handlePrintButtonClick(event,file)}>Print File

@@ -38,6 +38,7 @@ const FileInput: FC<FileInputProps> = ({
         hiddenFileUploadInputRef.current &&
         hiddenFileUploadInputRef.current.click()
     }
+    
 
    
     const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -81,12 +82,11 @@ const FileInput: FC<FileInputProps> = ({
                     </div>
                     
                     <input
-                        accept="application/pdf, application/vnd.ms-excel, text/csv"
+                        accept="application/pdf"
                         onChange={handleFileInputChange}
                         ref={hiddenFileUploadInputRef}
                         className="photo-upload-input"
                         type="file"
-                        capture="environment"
                     />
                     
                 </Card.Body>
