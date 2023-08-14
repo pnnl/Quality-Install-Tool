@@ -240,11 +240,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 const result = { ...dbDoc, ...newDoc }
                 if (!result.metadata_) {
                     result.metadata_ = {
-                        created_at: new Date(),
-                        last_modified_at: new Date(),
+                        created_at: new Date().toISOString(),
+                        last_modified_at: new Date().toISOString(),
                     }
                 } else {
-                    result.metadata_.last_modified_at = new Date()
+                    result.metadata_.last_modified_at = new Date().toISOString()
                 }
                 return result
             })
