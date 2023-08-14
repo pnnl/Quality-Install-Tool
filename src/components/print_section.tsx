@@ -40,8 +40,9 @@ const PrintSection: FC<PrintSectionProps> = ({
                         },
                         type: 'html',
                         targetStyles: ['*'],
-                        css: '/print.css',
+                        css: ['/bootstrap.min.css', '/print.css'],
                         documentTitle: 'DOE - Quality Installation Report',
+                        scanStyles: false,
                     })
                 }}
                 variant="primary"

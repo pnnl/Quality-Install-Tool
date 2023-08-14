@@ -9,7 +9,7 @@
      
     ## Building 
     <PhotoInput id="building_number_photo" label="Building Number – Photo">
-      Provide a photo of the building that shows the street number.
+      Provide a photo of the building that shows the building number.
     </PhotoInput>
 
     ## Blower Door
@@ -19,17 +19,18 @@
     <PhotoInput id="cfm50_photo" label="CFM50 – Photo">
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </PhotoInput>
+
     | ACH50 Calculator                                                                                                                                                                                                                                           |
     | ----------------------------
     | <NumberInput label="CFM50" min={0} path="ach50_calculator.cfm50"  /> 
     | <NumberInput label="Building Volume (ft&#179;)" min={0} path="ach50_calculator.volume"  /> 
     | ACH50 = { props.data.ach50_calculator?.cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
     
-     ##Floor Plan Sketch For Air Leaks
+     ## Floor Plan Sketch For Air Leaks
      <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo">
       Floor plan sketch mapping the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
      </PhotoInput>
-     <TextInput  label="Comment on any notable and unusual leaks" path="comment_on_leaks_in_floor_plan_sketch"> </TextInput>
+     <StringInput  label="Comment on any notable and unusual leaks" path="comment_on_leaks_in_floor_plan_sketch" /> 
   </Tab>
 
   <Tab eventKey="preparation" title="Preparation">
@@ -128,13 +129,14 @@
     Photo of weatherstrip air sealed attic access
     </PhotoInput>
 
-    <TextInput  label="Summary Comments" path="comment_installation_summary" />
+    <StringInput  label="Summary Comments" path="comment_installation_summary" />
     
   </Tab>
  <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
-    # Attic Air Sealing Upgrade Photo Report
+    # Attic Air Sealing Upgrade
+    ## Photo Report
 
     <ProjectInfoReport {...props} />
    

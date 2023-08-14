@@ -13,7 +13,7 @@
 
     ## Building
     <PhotoInput id="building_number_photo" label="Building Number – Photo">
-      Provide a photo of the building that shows the street number.
+      Provide a photo of the building that shows the building number.
     </PhotoInput>
 
     ## Old Water Heater
@@ -206,7 +206,8 @@
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
     ---
-    # Heat Pump Water Heater Quality Installation Report
+    # Heat Pump Water Heater Upgrade
+    ## Photo Report
 
     <ProjectInfoReport {...props} />
    
@@ -270,9 +271,10 @@
       ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p> 
       : null
     }
-  
+       
+
     {
-      props.metadata?.attachments?.old_nameplate_photo
+      ( props.metadata?.attachments?.old_nameplate_photo != null )
       ? <>
           <h2>Old Hot Water Heater</h2>
           <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">

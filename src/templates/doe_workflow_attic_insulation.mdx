@@ -11,7 +11,7 @@
         
         ## Building
         <PhotoInput id="building_number_photo" label="Building Number – Photo">
-         Provide a photo of the building that shows the street number.
+         Provide a photo of the building that shows the building number.
         </PhotoInput>
 
         Skip photo if feature is N/A to house.
@@ -69,13 +69,14 @@
         | Final ACH50 = { props.data.ach50_calculator?.final_cfm50 && props.data.ach50_calculator?.volume ? ((60 * props.data.ach50_calculator.final_cfm50) / props.data.ach50_calculator.volume).toFixed(2) : null } 
         | CFM50 Reduction = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.final_cfm50 ?  (props.data.ach50_calculator.initial_cfm50 - props.data.ach50_calculator.final_cfm50) : null } 
 
-        <TextInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
-        <TextInput  label="Summary Comment" path="comment_summary" />
+        <StringInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
+        <StringInput  label="Summary Comment" path="comment_summary" />
     </Tab>
     <Tab eventKey="report" title="Report">
         <PrintSection label="Print Report">
         ---
-        # Attic Insulation Upgrade Photo Report
+        # Attic Insulation Upgrade
+        ## Photo Report
 
         <ProjectInfoReport {...props} />
     

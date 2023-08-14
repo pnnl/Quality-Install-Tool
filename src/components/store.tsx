@@ -75,8 +75,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param dbDoc The full object representation of the changed document from the database
      */
     async function processDBDocChange(db: PouchDB.Database, dbDoc: any) {
-        console.log('processDBDocChange2')
-        console.log('dbDoc:', dbDoc)
         revisionRef.current = dbDoc._rev
 
         // Set doc state
@@ -97,7 +95,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
         if (db && dbDoc.hasOwnProperty('_attachments')) {
-            console.log('dbDoc has _attachments')
             // Collect all the new or modified attachments
             const dbDocAttachments = dbDoc._attachments
             const attachmentsMetadata = dbDoc.metadata_.attachments
@@ -113,7 +110,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     (!attachments.hasOwnProperty(attachmentId) ||
                         attachments[attachmentId].digest !== digest)
                 ) {
-                    console.log('New attachment')
                     const blobOrBuffer = await db.getAttachment(
                         docId,
                         attachmentId,
@@ -143,7 +139,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 }
             }
             if (!isEmpty(newAttachments)) {
-                console.log('newAttachments:', newAttachments)
                 // Update the attachments state
                 // Note: We update all new attachments at once to avoid a race condition with state update
                 setAttachments({ ...attachments, ...newAttachments })
@@ -172,8 +167,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             try {
                 // It looks like the type def for putIfNotExists does not match its implementation
                 // TODO: Check this over carefully
-                const date = new Date()
-                const result = (await putNewDoc(db, docId, date)) as unknown
+                const result = (await putNewDoc(db, docId)) as unknown
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {
                 console.error('DB initialization error:', err)
@@ -196,15 +190,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     since: 'now',
                 })
                 .on('change', function (change) {
-                    console.log('Database changed')
-                    console.log('_rev:', change.doc?._rev)
-                    console.log('current:', revisionRef.current)
                     if (
                         change.doc != null &&
                         change.doc._rev !== revisionRef.current
                     ) {
                         // The change must have originated from outside this component, so update component state
-                        console.log('processing DB change')
                         processDBDocChange(db, change.doc)
                     }
                     // else: the change originated from this component, so ignore it
