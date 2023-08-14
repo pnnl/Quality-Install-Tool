@@ -39,4 +39,4 @@ jobs:
         run: NODE_ENV=development BABEL_ENV=development npx eslint .
           --config .eslintrc.json
           --ext .js,.jsx,.ts,.tsx
-        continue-on-error: true
+        continue-on-error: false
