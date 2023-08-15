@@ -176,3 +176,21 @@ h3 {
 .tab-content {
   margin-top: 1rem;
 }
+
+/* custom label style */
+.custom-label {
+  color: gray;
+  font-size: .9rem;
+}
+
+/* custom button  style */
+.custom-button {
+  background-color: gray;
+  font-size: .9rem;
+  border-color: gray;
+}
+.custom-button:hover{
+  background-color: gray;
+  border-color: gray;
+  color: black
+}

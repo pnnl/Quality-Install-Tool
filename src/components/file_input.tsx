@@ -56,8 +56,8 @@ const FileInput: FC<FileInputProps> = ({
         <>
             <Card className="input-card">
                 <Card.Body>
-                    <h2> {label} </h2>
-                    <Card.Text as="div">{children}</Card.Text>
+                    <label className='custom-label'> {label} </label>
+                    <Card.Text as="div" className='custom-label'>{children}</Card.Text>
                     <div>
                         {file && (<>
                         <Card className="input-card">

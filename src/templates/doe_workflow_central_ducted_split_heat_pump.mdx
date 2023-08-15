@@ -19,7 +19,7 @@
         <PhotoInput id="existing_duckwork_photo" label="Ductwork – Photo">
             Provide a representative photo of the existing ductwork condition.
         </PhotoInput>        
-        <StringInput label="Ductwork Comments" path="comments_duckwork" />
+        <StringInput label="Ductwork Comments" path="comments_ductwork" />
         
 
         ## Static Pressure Test
@@ -38,7 +38,7 @@
         <PhotoInput id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Air Flow Results – Photo" >
             Take a photo of the manometer CFM or upload a screenshot of the instrument app.
         </PhotoInput>   
-        <StringInput label="Comment on remediation plan if flow is much lower than 400 CFM per ton" path="comments_pre_upgrade_air_flow_test" />
+        <StringInput label="Comments on Pre-Upgrade Air Flow Test" path="comments_pre_upgrade_air_flow_test" hint="Comment on remediation plan if flow is much lower than 400 CFM per ton" />
 
         ## Duct Leakage Testing
         If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and 
@@ -54,25 +54,25 @@
         
         | CFM25 per 100 ft<sup>2</sup> Calculator
         | ---------------------------------------
-        | <NumberInput label="CFM25" min={0} path="cfm25_calculation.cfm25"  /> 
-        | <NumberInput label="Conditioned Floor Area (ft&#178;)" min={0} path="cfm25_calculation.conditioned_floor_area"  /> 
-        | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculation?.cfm_at_25pa && props.data.cfm_calculation?.conditioned_floor_area ? ((props.data.cfm_calculation.cfm_at_25pa / props.data.cfm_calculation.conditioned_floor_area) * 100).toFixed(2) : null } 
+        | <NumberInput label="CFM25" min={0} path="cfm25_calculator.cfm25"  /> 
+        | <NumberInput label="Conditioned Floor Area (ft&#178;)" min={0} path="cfm25_calculator.conditioned_floor_area"  /> 
+        | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } 
         
         ## Type Of Test
-        <Radio label="Type of duct leakage test performed" options={['Total Leakage','Leakage to Outside']} path="leakage_radio" />
+        <Radio label="Type of duct leakage test performed" options={['Total Leakage','Leakage to Outside']} path="type_of_duct_leakage_radio" />
 
         
     </Tab>
      <Tab eventKey="planning" title="Planning">
        ## Planned Install Location
         <PhotoInput id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo">
-            Photo of proposed ODU install location
+            Take a photo of proposed ODU install location.
         </PhotoInput>  
-        <Radio label="ODU Mounting Style" options={['Pad','Ground Stand','Wall Mount','Roof Mount']} path="mounting_style" />
+        <Radio label="ODU Mounting Style" options={['Pad','Ground Stand','Wall Mount','Roof Mount']} path="outdoor_unit.odu_mounting_style" />
 
-        <NumberInput label="ODU Inches Above The Ground (elevated above the snow)" min={0} path="odu_inches_above_ground" /> 
+        <NumberInput label="ODU Inches Above The Ground (elevated above the snow)" min={0} path="outdoor_unit.odu_inches_above_ground" /> 
        
-        <Radio label="Overhead Snow & Ice Protection" options={['Awning/Cover','None']} path="leakage_radio" />
+        <Radio label="Overhead Snow & Ice Protection" options={['Awning/Cover','None']} path="outdoor_unit.snow_ice_protection" />
        
         ## Manual J Calculation
         <Collapsible header="Manual J Calculation Details">
@@ -90,14 +90,14 @@
         <StringInput label="Manual J Notes or Comments" path="comments_manual_j" />
         
         ## Equipment Performance Tables
-        <PhotoInput id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" allowUpload>
+        <PhotoInput id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" allowUpload>
             Upload a photo of the MFG's extended heating performance table
         </PhotoInput>
-         <NumberInput label="Aux Heat Lockout Above This Temperature (&deg;F)" min={0} path="aux_heat_lockout_temperature" /> 
+        <NumberInput label="Aux Heat Lockout Above This Temperature (&deg;F)" min={0} path="aux_heat_lockout_temperature" /> 
         <NumberInput label="Compresser Lockout Below This Temperature (&deg;F)" min={0} path="compresser_lockout_temperature" /> 
         <NumberInput label="Dual Fuel Switch Over Temperature (&deg;F)" min={0} path="dual_fuel_switch_over_temperature" /> 
 
-        <PhotoInput id="screenshot_of_mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" allowUpload>
+        <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" allowUpload>
             Upload a photo of the MFG's extended cooling performance table showing sensible, latent, or SHR
         </PhotoInput>
         
@@ -111,29 +111,29 @@
         <PhotoInput id="idu_nameplate_photo" label="IDU nameplate – Photo" />
         ## Electrical
         <PhotoInput id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
-            Photo showing the ampacity of the breaker
+            Take a photo showing the ampacity of the breaker.
         </PhotoInput>
         <PhotoInput id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo">
-            Photo showing the ampacity of the breaker
+            Take a photo showing the ampacity of the breaker.
         </PhotoInput>
         ## Circuit breaker notes
         <StringInput label="Ex: wire size modifications, or shared or repurposed circuits." path="comment_circuit_breaker_notes" />
         ## Installation Tests
         <PhotoInput id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo">
-            Photo of the nitrogen pressure test setup
+            Take a photo of the nitrogen pressure test setup.
         </PhotoInput>
         <PhotoInput id="nitrogen_pressure_test_result_photo" label="Nitrogen Pressure Decay Test Results – Photo">
             Gauge readable in the image. Test to 500 psi or MFG's instructions. Use a digital temperature compensated pressure gauge setup. Not more than 2 psi decay in 10 minutes.
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
-            Photo of the vacuum decay test setup
+            Take a photo of the vacuum decay test setup.
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
-            Photo of the vacuum decay test results. Use a digital micron gauge. System must be isolated from vaccum pump. Vaccum must not rise above 500 microns in 15 minutes.
+            Take a photo of the vacuum decay test results. Use a digital micron gauge. System must be isolated from vaccum pump. Vaccum must not rise above 500 microns in 15 minutes.
         </PhotoInput>
         ## Refrigerant Adjustments
         <PhotoInput id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo">
-            Photo of scale readout and calculations for refrigerant charge adjustment.
+            Take a photo of scale readout and calculations for refrigerant charge adjustment.
         </PhotoInput>
         | Additional Refrigerant Calculator
         | ---------------------------------
@@ -223,17 +223,17 @@
             ## Pre-Upgrade Tests
             
             <Photo id="existing_duckwork_photo" label="Ductwork – Photo" required>
-                Photo of existing ductwork condition. 
+                Photo of existing ductwork condition
             </Photo>        
             {
-                props.data.comments_duckwork
-                ? <p><strong>Ductwork Comments:</strong> {props.data.comments_duckwork}</p> 
+                props.data.comments_ductwork
+                ? <p><strong>Ductwork Comments:</strong> {props.data.comments_ductwork}</p> 
                 : null
             }
 
             Total external static pressure measurement
             <Photo id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo">
-                Photo of the manometer readout or screenshot from digital instrument app.
+                Photo of the manometer readout or screenshot from digital instrument app
             </Photo>   
             {
                 props.data.comments_pre_upgrade_static_pressure_test
@@ -242,10 +242,13 @@
             }
 
             <Photo id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Air Flow Test Setup – Photo">
-                Photo of manometer CFM or upload digital gauge app screenshot.
+                Photo of manometer CFM or upload digital gauge app screenshot
             </Photo>   
+            <Photo id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Air Flow Results – Photo" >
+              Photo of the manometer CFM or upload a screenshot of the instrument app
+            </Photo>  
             {
-                props.data.comments_pre_upgrade_static_pressure_test
+                props.data.comments_pre_upgrade_air_flow_test
                 ? <p><strong>Pre-Upgrade Air Flow Test Notes: </strong> {props.data.comments_pre_upgrade_air_flow_test}</p> 
                 : null
             }
@@ -254,48 +257,67 @@
                 Photo of duct test setup showing ring size and how it is attached to the duct system.
             </Photo>   
             <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
-                Photo of duct leakage test manometer, CFM at 25 Pa.
+                Photo of duct leakage test manometer, CFM at 25 Pa
             </Photo>   
             
-            | CFM per 100 ft2
+            | CFM25 per 100 ft<sup>2</sup> Calculator
             | ---------------
-            | CFM @ 25 Pa = {props.data.cfm_calculation?.cfm_at_25pa ? props.data.cfm_calculation?.cfm_at_25pa : null} 
-            | Conditioned Floor Area = {props.data.cfm_calculattion?.conditioned_floor_area ? props.data.cfm_calculattion?.conditioned_floor_area : null} 
-            | CFM per 100 ft2 = { props.data.cfm_calculation?.cfm_at_25pa && props.data.cfm_calculattion?.conditioned_floor_area ? (props.data.cfm_calculation.cfm_at_25pa / props.data.cfm_calculattion.conditioned_floor_area) * 100 : null } 
+            | CFM @ 25 Pa = {props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null} 
+            | Conditioned Floor Area = {props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} 
+            | CFM25 per 100 per ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } 
             
-            Total Leakage: {props.data?.leakage?.total_leakage_radio ? props.data.leakage.total_leakage_radio: null}
+            {
+                props.data.type_of_duct_leakage_radio
+                ? <p><strong> Type of duct leakage test performed: </strong> {props.data.type_of_duct_leakage_radio}</p> 
+                : null
+            }
 
-            Leakage To Outside: {props.data?.leakage?.leakage_to_outside_radio ? props.data.leakage.leakage_to_outside_radio: null}
            
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo">
                Photo of proposed ODU install location
             </Photo>  
             {
-                props.data.comments_installation_notes
-                ? <p><strong>Install Location Notes: </strong> {props.data.comments_installation_notes}</p> 
+                props.data?.outdoor_unit?.odu_mounting_style
+                ? <p><strong>ODU Mounting Style: </strong> {props.data.outdoor_unit.odu_mounting_style}</p> 
                 : null
             }
-            
-            <Photo id="screenshot_of_manual_j_calculation_photo" label="Screenshot of Manual J Calculations – Photo" required>
-                Attach a screenshot of Manual J load calculations.
-            </Photo>
+            {
+                props.data.outdoor_unit?.odu_inches_above_ground
+                ? <p><strong>ODU Inches Above The Ground (elevated above the snow): </strong> {props.data.outdoor_unit.odu_inches_above_ground}</p> 
+                : null
+            }
+            {
+                props.data.outdoor_unit?.snow_ice_protection
+                ? <p><strong>Overhead Snow & Ice Protection: </strong> {props.data.outdoor_unit.snow_ice_protection}</p> 
+                : null
+            }
             {
                 props.data.comments_manual_j
                 ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comments_manual_j}</p> 
                 : null
             }
             
-            <Photo id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" required>
+            <Photo id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" required>
                 Screenshot of MFG's extended heating performance table
             </Photo>
             {
-                props.data.comments_heating_performance_notes
-                ? <p><strong>Heating Performance Notes: </strong> {props.data.comments_heating_performance_notes}</p> 
+                props.data.aux_heat_lockout_temperature
+                ? <p><strong>Aux Heat Lockout Above This Temperature (&deg;F): </strong> {props.data.aux_heat_lockout_temperature}</p> 
+                : null
+            }
+            {
+                props.data.compresser_lockout_temperature
+                ? <p><strong>Compresser Lockout Below This Temperature (&deg;F): </strong> {props.data.compresser_lockout_temperature}</p> 
+                : null
+            }
+            {
+                props.data.dual_fuel_switch_over_temperature
+                ? <p><strong>Dual Fuel Switch Over Temperature (&deg;F): </strong> {props.data.dual_fuel_switch_over_temperature}</p> 
                 : null
             }
            
-            <Photo id="screenshot_of_mfg_extended_heating_performance_table_photo" label="MFG's cooling performance table – Photo" required>
+            <Photo id="mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" required>
                 Screenshot of MFG's extended cooling performance table showing sensible, latent, or SHR
             </Photo>
             
@@ -327,10 +349,10 @@
                 Picture of the vacuum decay test setup
             </Photo>
             <Photo id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
-                Picture of the vacuum decay test results. Use a digital micron gauge.
+                Picture of the vacuum decay test results. Use a digital micron gauge
             </Photo>
             <Photo id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo">
-                Photo of scale readout and calculations for refrigerant charge adjustment.
+                Photo of scale readout and calculations for refrigerant charge adjustment
             </Photo>
             {
                 props.data.comments_refrigerant_quantity_adjustments_or_weigh_in
@@ -338,10 +360,10 @@
                 : null
             }
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo">
-                Photo of the line set and line set wall penetration protection.
+                Photo of the line set and line set wall penetration protection
             </Photo>
             <Photo id="plenum_connections_photo" label="Plenum Connections – Photo">
-                Supply and return plenum connections to air handler cabinet sealed, insulated, and vapor barrier.
+                Supply and return plenum connections to air handler cabinet sealed, insulated, and vapor barrier
             </Photo>
 
             ## Post-Installation

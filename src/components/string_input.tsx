@@ -10,6 +10,7 @@ interface StringInputProps {
     min: number
     max: number
     regexp: RegExp
+    hint: string
 }
 
 /**
@@ -23,6 +24,7 @@ interface StringInputProps {
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
  * @param regexp The regular expression pattern to validate the input string.
+ * @param hint Displays hint text for the StringInput component. 
  */
 const StringInput: FC<StringInputProps> = ({
     id,
@@ -32,6 +34,8 @@ const StringInput: FC<StringInputProps> = ({
     min,
     max,
     regexp,
+    hint,
+    
 }) => {
     const [error, setError] = useState<string>('')
 
@@ -72,6 +76,7 @@ const StringInput: FC<StringInputProps> = ({
                     value={value || ''}
                     isInvalid={Boolean(error)}
                 />
+                <Form.Text>{hint}</Form.Text>
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

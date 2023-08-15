@@ -1,5 +1,6 @@
 import React from 'react'
 import { FC, useEffect, useState } from 'react'
+import { FloatingLabel } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 
@@ -29,8 +30,9 @@ const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
         <>
             <Card className="input-card">
                 <Card.Body>
-                    {label}
-                    <Form.Group className="mb-3" controlId={label}>
+                   
+                    <Form.Group className="mb-3" controlId={label} >
+                        <label className="mb-3 custom-label">{label}</label>
                         {options.map(option => (
                             <Form.Check
                                 type="radio"

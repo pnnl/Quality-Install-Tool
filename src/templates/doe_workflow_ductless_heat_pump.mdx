@@ -37,7 +37,7 @@
             Picture of the proposed heat pump outdoor unit(ODU) installation location. 
         </PhotoInput>
         
-        <StringInput  label="IDU Location Comments" path="comment_odu_location" />
+        <StringInput  label="IDU Location Comments" path="comment_idu_install_location" />
        
         <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo">
             Picture or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve.
@@ -82,7 +82,7 @@
        
         <DateInput label="Installation Date" path="install_date" />
        
-        <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo">
+        <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo" uploadable>
             Picture of the outdoor unit name plate.
         </PhotoInput>
         
@@ -245,12 +245,12 @@
             Heat pump ODU will be installed on a <strong>{ props.data.outdoor_unit?.install_location ? props.data.outdoor_unit.install_location : null } </strong>
 
             <Photo id="proposed_idu_location_photo" label="Proposed IDU Location – Photo" required>
-                Picture of the proposed heat pump outdoor unit(ODU) installation location. 
+                Picture of the proposed heat pump indoor unit(IDU) installation location. 
             </Photo>
 
             {
-                props.data.comment_odu_location
-                ? <p><strong>Notes:</strong> {props.data.comment_odu_location}</p> 
+                props.data.comment_idu_install_location
+                ? <p><strong>Notes:</strong> {props.data.comment_idu_install_location}</p> 
                 : null
             }
 

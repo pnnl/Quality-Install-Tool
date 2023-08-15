@@ -11,6 +11,7 @@ interface PhotoInputWrapperProps {
     children: React.ReactNode
     id: string
     label: string
+    uploadable: boolean
 }
 
 /**
@@ -21,11 +22,14 @@ interface PhotoInputWrapperProps {
  * @param id An identifier for the store attachment that represents the photo for
  * the PhotoInput component
  * @param label The label of the PhotoInput component
+ * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo. 
+ *                   When unset, the PhotoInput component will use device camera for taking new photo.
  */
 const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,
     id,
     label,
+    uploadable
 }) => {
     return (
         <StoreContext.Consumer>
@@ -49,6 +53,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                         }
                         photo={attachments[id]?.blob}
                         upsertPhoto={upsertPhoto}
+                        uploadable={uploadable}
                     >
                         {children}
                     </PhotoInput>
