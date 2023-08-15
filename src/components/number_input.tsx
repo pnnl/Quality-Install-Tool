@@ -40,7 +40,9 @@ const NumberInput: FC<NumberInputProps> = ({
     max,
 }): any => {
     const [error, setError] = useState<string>('')
-    const [localValue, setLocalValue] = useState<string>(value as unknown as string)
+    const [localValue, setLocalValue] = useState<string>(
+        value as unknown as string,
+    )
     const ref = useRef<HTMLInputElement>(null)
 
     const handleChange = (inputValue: string): any => {
