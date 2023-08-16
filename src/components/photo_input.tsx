@@ -30,7 +30,7 @@ interface PhotoInputProps {
  * @param metadata Abreviated photo metadata including timestamp and geolocation
  * @param photo Blob containing the photo itself
  * @param upsertPhoto Function used to update/insert a photo into the store
- * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo. 
+ * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo (default).
  */
 const PhotoInput: FC<PhotoInputProps> = ({
@@ -111,25 +111,25 @@ const PhotoInput: FC<PhotoInputProps> = ({
             className='photo-input'
             type="file"
           /> */}
-                    
-                    { uploadable ?
-                    (<input
-                        accept="image/jpeg"
-                        onChange={handleFileInputChange}
-                        ref={hiddenPhotoUploadInputRef}
-                        className="photo-upload-input"
-                        type="file"
-                        
-                    />) :
-                    (<input
-                        accept="image/jpeg"
-                        onChange={handleFileInputChange}
-                        ref={hiddenPhotoUploadInputRef}
-                        className="photo-upload-input"
-                        type="file"
-                        capture="environment"
-                    /> )} 
-                    
+
+                    {uploadable ? (
+                        <input
+                            accept="image/jpeg"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoUploadInputRef}
+                            className="photo-upload-input"
+                            type="file"
+                        />
+                    ) : (
+                        <input
+                            accept="image/jpeg"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoUploadInputRef}
+                            className="photo-upload-input"
+                            type="file"
+                            capture="environment"
+                        />
+                    )}
 
                     {photo && (
                         <>
@@ -150,7 +150,9 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>
-                                ):(<span>Missing</span>)}
+                                ) : (
+                                    <span>Missing</span>
+                                )}
                             </small>
                         </>
                     )}

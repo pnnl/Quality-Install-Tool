@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { StoreContext } from './store'
 import FileInput from './file_input'
 
-
 const MAX_IMAGE_DIM = 1280
 
 interface FileInputWrapperProps {
@@ -30,14 +29,14 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
             {({ attachments, upsertAttachment }) => {
                 const upsertFile = (img_file: Blob, fileName: string) => {
                     upsertAttachment(img_file, id, fileName)
-                 
                 }
                 return (
                     <FileInput
                         label={label}
                         metadata={attachments[id]?.metadata}
                         file={attachments[id]?.blob}
-                        upsertFile={upsertFile} >
+                        upsertFile={upsertFile}
+                    >
                         {children}
                     </FileInput>
                 )

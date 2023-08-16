@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import { StoreContext } from './store'
 import File from './file'
 
-
 const MAX_IMAGE_DIM = 1280
 
 interface FileWrapperProps {
@@ -20,11 +19,7 @@ interface FileWrapperProps {
  * the PhotoInput component
  * @param label The label of the PhotoInput component
  */
-const FileWrapper: FC<FileWrapperProps> = ({
-    children,
-    id,
-    label,
-}) => {
+const FileWrapper: FC<FileWrapperProps> = ({ children, id, label }) => {
     return (
         <StoreContext.Consumer>
             {({ attachments, upsertAttachment }) => {
@@ -33,8 +28,9 @@ const FileWrapper: FC<FileWrapperProps> = ({
                         children={children}
                         label={label}
                         metadata={attachments[id]?.metadata}
-                        file={attachments[id]?.blob} />
-                    )
+                        file={attachments[id]?.blob}
+                    />
+                )
             }}
         </StoreContext.Consumer>
     )

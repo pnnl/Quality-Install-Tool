@@ -45,12 +45,12 @@ const PrintSection: FC<PrintSectionProps> = ({
                         scanStyles: false,
                     })
                 }}
-                variant="primary">
+                variant="primary"
+            >
                 {label}
             </Button>
             <div id={printContainerId}>
                 <div className="print-wrapper">{children}</div>
-               
             </div>
         </>
     )

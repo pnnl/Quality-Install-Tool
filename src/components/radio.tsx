@@ -30,8 +30,7 @@ const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
         <>
             <Card className="input-card">
                 <Card.Body>
-                   
-                    <Form.Group className="mb-3" controlId={label} >
+                    <Form.Group className="mb-3" controlId={label}>
                         <label className="mb-3 custom-label">{label}</label>
                         {options.map(option => (
                             <Form.Check

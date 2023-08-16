@@ -24,7 +24,7 @@ interface StringInputProps {
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
  * @param regexp The regular expression pattern to validate the input string.
- * @param hint Displays hint text for the StringInput component. 
+ * @param hint Displays hint text for the StringInput component.
  */
 const StringInput: FC<StringInputProps> = ({
     id,
@@ -35,7 +35,6 @@ const StringInput: FC<StringInputProps> = ({
     max,
     regexp,
     hint,
-    
 }) => {
     const [error, setError] = useState<string>('')
 

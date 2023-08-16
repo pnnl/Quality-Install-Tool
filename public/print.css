@@ -132,6 +132,7 @@ h3 {
 
 #back-button {
   padding: 1rem;
+  background-color: green;
 }
 
 #back-button-link {
@@ -193,4 +194,10 @@ h3 {
   background-color: gray;
   border-color: gray;
   color: black
+}
+.form-text{
+  margin-left:.50em;
+  margin-top:.25rem;
+  font-size:.875em;
+  color:var(--bs-secondary-color)
 }

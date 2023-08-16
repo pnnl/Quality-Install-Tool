@@ -18,7 +18,7 @@ import { putNewDoc } from '../utilities/database_utils'
 
 PouchDB.plugin(PouchDBUpsert)
 
-type UpsertAttachment = (blob: Blob, id: string, fileName?:string) => void
+type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
 
 type UpsertData = (pathStr: string, data: any) => void
 
@@ -33,7 +33,7 @@ type Attachments = Record<
 export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
-    metadata: {} satisfies Metadata | undefined | Record<string,string>,
+    metadata: {} satisfies Metadata | undefined | Record<string, string>,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
@@ -67,7 +67,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<Objectish>({})
     const [data, setData] = useState<JSONValue>({})
-    const [metadata, setMetaData] = useState<Metadata | undefined | Record<string,string>>(undefined)
+    const [metadata, setMetaData] = useState<
+        Metadata | undefined | Record<string, string>
+    >(undefined)
 
     /**
      * Updates component state based on a database document change
@@ -117,8 +119,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
                     if (blobOrBuffer instanceof Blob) {
                         const blob = blobOrBuffer
-                        const metadata: Record<string, any> = (singleAttachmentMetadata as Record<string,any>)
-                               
+                        const metadata: Record<string, any> =
+                            singleAttachmentMetadata as Record<string, any>
+
                         newAttachments = {
                             ...newAttachments,
                             [attachmentId]: {
@@ -251,7 +254,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     console.error('upsert error:', err)
                 })
         }
-        
     }
 
     /**
@@ -276,13 +278,15 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertAttachment: UpsertAttachment = async (blob, id, fileName?) => {
         // Create the metadata for the blob
 
-        console.log("file type", blob.type)
-        const metadata: Attachment['metadata']   =
+        console.log('file type', blob.type)
+        const metadata: Attachment['metadata'] =
             blob.type === 'image/jpeg'
                 ? await getMetadataFromCurrentGPSLocation()
-                : {'filename' : fileName, 'timestamp' : new Date(Date.now()).toUTCString(), }
+                : {
+                      filename: fileName,
+                      timestamp: new Date(Date.now()).toUTCString(),
+                  }
 
-        
         // Storing SingleAttachmentMetaData in the DB
         upsertDoc('metadata_.attachments.' + id, metadata)
 

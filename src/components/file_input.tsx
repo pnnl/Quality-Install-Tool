@@ -5,13 +5,12 @@ import Collapsible from './collapsible'
 import type FileMetadata from '../types/file_metadata.types'
 import DateTimeStr from './date_time_str'
 
-
 interface FileInputProps {
     children: React.ReactNode
     label: string
     metadata: FileMetadata
     file: Blob | undefined
-    upsertFile: (file: Blob, fileName:string) => void
+    upsertFile: (file: Blob, fileName: string) => void
 }
 
 /**
@@ -36,11 +35,9 @@ const FileInput: FC<FileInputProps> = ({
         event: MouseEvent<HTMLButtonElement>,
     ) => {
         hiddenFileUploadInputRef.current &&
-        hiddenFileUploadInputRef.current.click()
+            hiddenFileUploadInputRef.current.click()
     }
-    
 
-   
     const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             const file = event.target.files[0]
@@ -56,31 +53,46 @@ const FileInput: FC<FileInputProps> = ({
         <>
             <Card className="input-card">
                 <Card.Body>
-                    <label className='custom-label'> {label} </label>
-                    <Card.Text as="div" className='custom-label'>{children}</Card.Text>
+                    <label className="custom-label"> {label} </label>
+                    <Card.Text as="div" className="custom-label">
+                        {children}
+                    </Card.Text>
                     <div>
-                        {file && (<>
-                        <Card className="input-card">
-                            <Card.Body>
-                                File Name: <a href={URL.createObjectURL(file)} target="_blank">{metadata?.filename}</a> 
-                                <br />
-                                <small>
-                                    Timestamp:&npsp;
-                                    {metadata?.timestamp ? (
-                                        <DateTimeStr date={metadata.timestamp} />
-                                    ) : ""
-                                    }
-                                </small>
-                                <br/>
-                            </Card.Body>
-                        </Card>
-                        </>)}
+                        {file && (
+                            <>
+                                <Card className="input-card">
+                                    <Card.Body>
+                                        File Name:{' '}
+                                        <a
+                                            href={URL.createObjectURL(file)}
+                                            target="_blank"
+                                        >
+                                            {metadata?.filename}
+                                        </a>
+                                        <br />
+                                        <small>
+                                            Timestamp:&npsp;
+                                            {metadata?.timestamp ? (
+                                                <DateTimeStr
+                                                    date={metadata.timestamp}
+                                                />
+                                            ) : (
+                                                ''
+                                            )}
+                                        </small>
+                                        <br />
+                                    </Card.Body>
+                                </Card>
+                            </>
+                        )}
                         <Button
                             onClick={handleFileInputButtonClick}
-                            variant="outline-primary">{buttonText}
-                        </Button> 
+                            variant="outline-primary"
+                        >
+                            {buttonText}
+                        </Button>
                     </div>
-                    
+
                     <input
                         accept="application/pdf"
                         onChange={handleFileInputChange}
@@ -88,7 +100,6 @@ const FileInput: FC<FileInputProps> = ({
                         className="photo-upload-input"
                         type="file"
                     />
-                    
                 </Card.Body>
             </Card>
         </>

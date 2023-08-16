@@ -23,7 +23,7 @@ interface StringInputWrapperProps {
  * @param min The minimum allowed value for the input field, defult to 0.
  * @param max The maximum allowed value for the input field, defult to 1024.
  * @param regexp The regular expression pattern to validate the input string, defult to take anything.
- * @param hint Displays hint text for the StringInput component. 
+ * @param hint Displays hint text for the StringInput component.
  */
 const StringInputWrapper: FC<StringInputWrapperProps> = ({
     label,

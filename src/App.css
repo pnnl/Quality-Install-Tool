@@ -195,3 +195,9 @@ h3 {
   border-color: gray;
   color: black
 }
+.form-text{
+  margin-left:.50em;
+  margin-top:.25rem;
+  font-size:.875em;
+  color:var(--bs-secondary-color)
+}
