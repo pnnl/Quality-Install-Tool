@@ -13,6 +13,7 @@ interface NumberInputProps {
     value: number
     min: number
     max: number
+    hint: string
 }
 
 /**
@@ -28,6 +29,7 @@ interface NumberInputProps {
  * @param value The input value
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
+ * @param hint Displays hint text for the component.
  */
 const NumberInput: FC<NumberInputProps> = ({
     id,
@@ -38,6 +40,7 @@ const NumberInput: FC<NumberInputProps> = ({
     value,
     min,
     max,
+    hint
 }): any => {
     const [error, setError] = useState<string>('')
 
@@ -80,6 +83,9 @@ const NumberInput: FC<NumberInputProps> = ({
                     value={value != null ? value : ''}
                     isInvalid={Boolean(error)}
                 />
+                {hint && 
+                <Form.Text>Hint: {hint}</Form.Text>
+                }
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

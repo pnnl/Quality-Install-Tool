@@ -12,6 +12,7 @@ interface NumberInputWrapperProps {
     suffix: string
     min: number
     max: number
+    hint: string
 }
 
 /**
@@ -26,6 +27,7 @@ interface NumberInputWrapperProps {
  * @param suffix Text to appear as a suffix to the NumberInput (e.g. 'SqFt')
  * @param min The minimum allowed value for the input field, defult to NEGATIVE_INFINITY.
  * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
+ * @param hint Displays hint text for the component.
  */
 
 const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
@@ -35,6 +37,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
     suffix,
     min = Number.NEGATIVE_INFINITY,
     max = Number.POSITIVE_INFINITY,
+    hint
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
@@ -54,6 +57,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
                         value={get(data, path)}
                         min={min}
                         max={max}
+                        hint={hint}
                     />
                 )
             }}
