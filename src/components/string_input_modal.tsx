@@ -39,17 +39,34 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
 }) => {
     const [inputValue, setInputValue] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const [isValid, setIsValid] = useState(false)
 
-    const handleValidationAndSubmission = () => {
-        const trimedInputValue = inputValue.trim()
+    const handleSubmit = () => {
+        onSubmit(inputValue)
+        closeModal()
+    }
+
+    const handleKeyPress = (target: KeyboardEvent) => {
+        if (target.key === 'Enter') {
+            isValid && handleSubmit()
+        }
+    }
+
+    /**
+     * Handles the change in the input field value.
+     * @param {Object} event - The input change event.
+     */
+    const handleInputChange = (event: { target: { value: string } }) => {
+        let input = event.target.value
+        const trimedInputValue = input.trim()
         setInputValue(trimedInputValue)
-        const isValid = validateInput.every(validator =>
-            validator.validator(trimedInputValue),
+        setIsValid(
+            validateInput.every(validator =>
+                validator.validator(trimedInputValue),
+            ),
         )
 
         if (isValid) {
-            onSubmit(trimedInputValue)
-            closeModal()
             setErrorMessage('')
         } else {
             const errorValidator = validateInput.find(
@@ -60,32 +77,16 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
         }
     }
 
-    const handleSubmit = () => {
-        handleValidationAndSubmission()
-    }
-
-    const handleKeyPress = (target: KeyboardEvent) => {
-        if (target.key === 'Enter') {
-            handleValidationAndSubmission()
-        }
-    }
-
-    /**
-     * Handles the change in the input field value.
-     * @param {Object} event - The input change event.
-     */
-    const handleInputChange = (event: {
-        target: { value: SetStateAction<string> }
-    }) => {
-        setInputValue(event.target.value)
-        setErrorMessage('')
-    }
-
     const modalTitle = title || 'Default Title'
     const modalOK = okButton || 'OK'
 
     return (
-        <Modal show={isOpen} onHide={closeModal} onKeyPress={handleKeyPress}>
+        <Modal
+            show={isOpen}
+            onHide={closeModal}
+            onKeyPress={handleKeyPress}
+            className="string-input-modal"
+        >
             <Modal.Header closeButton>
                 <Modal.Title>{modalTitle}</Modal.Title>
             </Modal.Header>
@@ -94,11 +95,14 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
+                    autoFocus
                 />
                 {errorMessage && <div className="error">{errorMessage}</div>}
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={handleSubmit}>{modalOK}</Button>
+                <Button onClick={handleSubmit} disabled={!isValid}>
+                    {modalOK}
+                </Button>
             </Modal.Footer>
         </Modal>
     )

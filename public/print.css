@@ -95,6 +95,13 @@ h3 {
   text-align: center;
 }
 
+.string-input-modal{
+  .error{
+    color: red;
+    font-style: italic;
+  }
+}
+
 
 /* root_layout.tsx */
 #root-flex-layout {
