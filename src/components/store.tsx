@@ -20,7 +20,9 @@ PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (blob: Blob, id: string) => void
 
-type UpsertData = (pathStr: string, data: any) => void
+type UpsertData = (pathStr: string, value: any) => void
+
+type UpsertMetadata = (pathStr: string, value: any) => void
 
 type UpsertDoc = (pathStr: string, data: any) => void
 
@@ -36,6 +38,7 @@ export const StoreContext = React.createContext({
     metadata: {} satisfies Metadata | undefined,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
+    upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
 })
 
 interface StoreProviderProps {
@@ -248,19 +251,35 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     /**
-     * Updates (or inserts) data into the data_ state by invoking updatedDoc function
+     * Updates (or inserts) data into the data_ property of the doc state by invoking updatedDoc function
      *
      * @remarks
      * This function is typically passed to an input wrapper component via the StoreContext.Provider value
      * This function calls updateDoc, with the path to "data_" in dbDoc.
      *
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
-     * @param data The data that is to be updated/inserted at the path location in the data state
+     * @param value The value that is to be updated/inserted
      */
-    const upsertData: UpsertData = (pathStr, data) => {
+    const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
-        upsertDoc(pathStr, data)
+        upsertDoc(pathStr, value)
     }
+
+    /**
+     * Updates (or inserts) metadata into the metadata_ property of the doc state by invoking updatedDoc function
+     *
+     * @remarks
+     * This function is typically passed to an input wrapper component via the StoreContext.Provider value
+     * This function calls updateDoc, with the path to "data_" in dbDoc.
+     *
+     * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
+     * @param value The value that is to be updated/inserted
+     */
+    const upsertMetadata: UpsertMetadata = (pathStr, value) => {
+        pathStr = 'metadata_.' + pathStr
+        upsertDoc(pathStr, value)
+    }
+
     /**
      *
      * @param blob
@@ -326,6 +345,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 metadata: doc.metadata_,
                 upsertAttachment,
                 upsertData,
+                upsertMetadata,
             }}
         >
             {children}
