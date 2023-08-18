@@ -66,8 +66,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<Objectish>({})
-    const [data, setData] = useState<JSONValue>({})
-    const [metadata, setMetaData] = useState<Metadata | undefined>(undefined)
 
     /**
      * Updates component state based on a database document change
@@ -84,13 +82,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         delete newDoc._rev
 
         setDoc(newDoc)
-        if (db && Boolean(dbDoc.hasOwnProperty('data_'))) {
-            setData(dbDoc.data_)
-        }
-
-        if (db && dbDoc.hasOwnProperty('metadata_')) {
-            setMetaData(dbDoc.metadata_)
-        }
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
@@ -334,8 +325,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
-                data,
-                metadata,
+                data: doc.data_,
+                metadata: doc.metadata_,
                 upsertAttachment,
                 upsertData,
                 upsertDoc,
