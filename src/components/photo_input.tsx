@@ -1,18 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
-import { Button, Card, Image } from 'react-bootstrap'
+import { Button, Card, Image, Modal, ModalBody } from 'react-bootstrap'
 import { TfiGallery } from 'react-icons/tfi'
 import Collapsible from './collapsible'
-import DateTimeStr from './date_time_str'
+import PhotoMetadata from '../types/photo_metadata.type'
+import ImageBlobReduce from 'image-blob-reduce'
 import GpsCoordStr from './gps_coord_str'
-import type PhotoMetaData from '../types/photo_metadata.type'
+import DateTimeStr from './date_time_str'
+import NotesInput from './notes'
 
 interface PhotoInputProps {
     children: React.ReactNode
     label: string
-    metadata: PhotoMetaData
-    photo: Blob | undefined
-    upsertPhoto: (file: Blob) => void
+    photos: { id: string; data: { blob: Blob; metadata: PhotoMetadata } }[]
+    upsertPhoto: (file: Blob, id: string) => void
+    removeAttachment: (id: string) => void
+    id: string
+    maxPhotos?: number
+    updateNotes?: (id: string, notes: string) => void
+    disallowNotes?: boolean,
+    metadata?: any
 }
 
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -33,15 +40,30 @@ interface PhotoInputProps {
 const PhotoInput: FC<PhotoInputProps> = ({
     children,
     label,
-    metadata,
-    photo,
+    photos,
     upsertPhoto,
+    removeAttachment,
+    maxPhotos = 1,
+    id,
+    updateNotes,
+    disallowNotes,
+    metadata
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
     const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
+    const hiddenCameraInputRef = useRef<HTMLInputElement>(null)
+    const photoIds = [photos.map(photo => photo.id.split('~').pop())]
+    const [photoId, setPhotoId] = useState(
+        photoIds.length > 0 ? Math.max(photoIds as any as number) : 0,
+    )
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
 
     const [cameraAvailable, setCameraAvailable] = useState(false)
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+    }
 
     // Handle button clicks
     const handlePhotoCaptureButtonClick = (
@@ -65,18 +87,31 @@ const PhotoInput: FC<PhotoInputProps> = ({
         }
     })
 
-    const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const file = event.target.files[0]
-            upsertPhoto(file)
+    const handleFileInputChange = async (
+        event: ChangeEvent<HTMLInputElement>,
+    ) => {
+        if (event.target.files && event.target.files.length > 0) {
+            const files = Array.from(event.target.files)
+            for (const file of files) {
+                const imageBlobReduce = new ImageBlobReduce()
+                setPhotoId(photoId + 1)
+                const blob = await imageBlobReduce.toBlob(file)
+                const blobId = `${id}~${photoId.toString()}`
+                upsertPhoto(blob, blobId)
+            }
+            event.target.value = ''
         }
     }
 
+    const handleFileDelete = (id: string) => {
+        removeAttachment(id)
+    }
+
     // Check if there is already a photo
-    const hasPhoto = !!photo
+    const hasPhoto = !!photos.length
 
     // Button text based on whether there is a photo or not
-    const buttonText = hasPhoto ? 'Replace Photo' : 'Add Photo'
+    const buttonText = 'Add Photo'
 
     return (
         <>
@@ -87,27 +122,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
               and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
                         <Card.Text as="div">{children}</Card.Text>
                     </Collapsible>
-                    <div>
-                        {/* {(cameraAvailable || cameraAvailable) &&
-              <Button onClick={handlePhotoCaptureButtonClick}
-              variant="outline-primary">
-              <TfiCamera/> Camera</Button>
-            } */}
-                        <Button
-                            onClick={handlePhotoGalleryButtonClick}
-                            variant="outline-primary"
-                        >
-                            <TfiGallery /> {buttonText}{' '}
-                        </Button>
-                    </div>
-                    {/* <input
-            accept="image/jpeg"
-            capture="environment"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoCaptureInputRef}
-            className='photo-input'
-            type="file"
-          /> */}
                     <input
                         accept="image/jpeg"
                         onChange={handleFileInputChange}
@@ -116,28 +130,115 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         type="file"
                         capture="environment"
                     />
-                    {photo && (
+                    {(
                         <>
-                            <Image src={URL.createObjectURL(photo)} thumbnail />
-                            <br />
-                            <small>
-                                Timestamp:{' '}
-                                {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
-                                ) : (
-                                    <span>Missing</span>
-                                )}
-                                <br />
-                                Geolocation:{' '}
-                                {
-                                    <span>
-                                        <GpsCoordStr
-                                            {...metadata.geolocation}
-                                        />{' '}
-                                    </span>
-                                }
-                            </small>
+                            {photos.map((photo, index) => (
+                                <div
+                                    className='photo-input-photos-container'
+                                    key={index}
+                                >
+                                    <Card className="photo-card">
+                                        <Card.Body>
+                                            <>
+                                                <Image
+                                                    src={URL.createObjectURL(photo.data.blob)}
+                                                    thumbnail
+                                                />
+                                                <br />
+                                                <small>
+                                                    Timestamp:{' '}
+                                                    {photo.data.metadata?.timestamp ? (
+                                                        <DateTimeStr
+                                                            date={
+                                                                photo.data.metadata.timestamp
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <span>Missing</span>
+                                                    )}
+                                                    <br />
+                                                    Geolocation:{' '}
+                                                    {
+                                                        <span>
+                                                            <GpsCoordStr
+                                                                {...photo.data
+                                                                    .metadata
+                                                                    .geolocation}
+                                                            />{' '}
+                                                        </span>
+                                                    }
+                                                    {(updateNotes || !disallowNotes) &&
+                                                        <NotesInput 
+                                                            value={metadata.attachments[photo.id]?.notes}
+                                                            updateValue={updateNotes}
+                                                            id={photo.id}
+                                                        />
+                                                    }
+                                                    {
+                                                        <Button
+                                                            className='photo-input-delete-button'
+                                                            onClick={() =>
+                                                                setShowDeleteModal(
+                                                                    true,
+                                                                )
+                                                            }
+                                                        >
+                                                            {' '}
+                                                            Delete Photo{' '}
+                                                        </Button>
+                                                    }
+                                                </small>
+                                                {handleFileDelete && (
+                                                    <Modal
+                                                        show={showDeleteModal}
+                                                    >
+                                                        <ModalBody>
+                                                            <p>
+                                                                Are you sure you
+                                                                want to delete
+                                                                this photo?
+                                                            </p>
+                                                            <div className='delete-modal-container'>
+                                                                <Button
+                                                                    onClick={() =>
+                                                                        setShowDeleteModal(
+                                                                            false,
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Cancel
+                                                                </Button>
+                                                                <Button
+                                                                    className='delete-modal-delete'
+                                                                    onClick={() => {
+                                                                        handleFileDelete(
+                                                                            photo.id,
+                                                                        )
+                                                                        setShowDeleteModal(
+                                                                            false,
+                                                                        )
+                                                                    }}
+                                                                >
+                                                                    Delete
+                                                                </Button>
+                                                            </div>
+                                                        </ModalBody>
+                                                    </Modal>
+                                                )}
+                                            </>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+                            ))}
                         </>
+                    )}
+                    {photos.length <= maxPhotos && (
+                        <Button
+                            onClick={handlePhotoGalleryButtonClick}
+                            variant="outline-primary"
+                        >
+                            <TfiGallery /> {buttonText}{' '}
+                        </Button>
                     )}
                 </Card.Body>
             </Card>

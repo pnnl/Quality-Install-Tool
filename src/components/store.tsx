@@ -15,10 +15,13 @@ import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import { putNewDoc } from '../utilities/database_utils'
+import { satisfies } from 'semver'
 
 PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (blob: Blob, id: string) => void
+type RemoveAttachment = (id: string) => void
+type UpsertMetaData = (id: string, metadata: any) => void
 
 type UpsertData = (pathStr: string, data: any) => void
 
@@ -33,8 +36,10 @@ type Attachments = Record<
 export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
-    metadata: {} satisfies Metadata | undefined,
+    metadata: {} satisfies MetaData,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
+    removeAttachment: ((id: string) => {}) as RemoveAttachment,
+    upsertMetaData: ((id: string, metadata: any) => {}) as UpsertMetaData,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
 })
@@ -246,6 +251,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 } else {
                     result.metadata_.last_modified_at = new Date().toISOString()
                 }
+                setMetaData(result.metadata_)
                 return result
             })
                 .then(function (res) {
@@ -330,6 +336,44 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         }
     }
 
+    const removeAttachment: RemoveAttachment = async (id: string) => {
+        // Remove the attachment from memory
+        const newAttachments = { ...attachments }
+        delete newAttachments[id]
+        setAttachments(newAttachments)
+
+        // Remove the attachment from the database
+        const removeBlobDB = async (
+            rev: string,
+        ): Promise<PouchDB.Core.Response | null> => {
+            let result = null
+            if (db) {
+                try {
+                    result = await db.removeAttachment(docId, id, rev)
+                } catch (err) {
+                    // Try again with the latest rev value
+                    const doc = await db.get(docId)
+                    result = await removeBlobDB(doc._rev)
+                } finally {
+                    if (result) {
+                        revisionRef.current = result.rev
+                    }
+                }
+            }
+            return result
+        }
+
+        if (revisionRef.current) {
+            await removeBlobDB(revisionRef.current)
+        }
+    }
+
+    const upsertMetaData = (path: string, metadata: any) => {
+        path = 'metadata_.attachments.' + path
+        console.log(metadata, path, doc)
+        upsertDoc(path, metadata)
+    }
+
     return (
         <StoreContext.Provider
             value={{
@@ -337,6 +381,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 data,
                 metadata,
                 upsertAttachment,
+                removeAttachment,
+                upsertMetaData,
                 upsertData,
                 upsertDoc,
             }}

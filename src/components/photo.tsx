@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
-import { Card, Image } from 'react-bootstrap'
+import { Button, Card, Image, Modal, ModalBody, Popover } from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetadata from '../types/photo_metadata.type'
+import TextInput from './text_input'
+import { pathToId } from '../utilities/paths_utils'
 
 interface PhotoProps {
     description: React.ReactNode
@@ -13,6 +15,11 @@ interface PhotoProps {
     metadata: PhotoMetadata
     photo: Blob | undefined
     required: boolean
+    deletePhoto?: (id: string) => void
+    updateNotes?: (id: string, notes: string) => void
+    count?: string
+    disallowNotes?: boolean
+    notes?: any
 }
 
 /**
@@ -33,12 +40,17 @@ const Photo: FC<PhotoProps> = ({
     metadata,
     photo,
     required,
+    count,
+    disallowNotes,
+    notes
 }) => {
     return photo || required ? (
         <>
             <Card className="photo-card">
                 <Card.Body>
-                    <Card.Title>{label}</Card.Title>
+                    <div className="photo-card-header">
+                        <Card.Title>{label}</Card.Title> <small>{count}</small>
+                    </div>
                     {/* Card.Text renders a <p> by defult. The description comes from markdown
             and may be a <p>. Nested <p>s are not allowed, so we use a <div>*/}
                     <Card.Text as="div">{description}</Card.Text>
@@ -46,23 +58,31 @@ const Photo: FC<PhotoProps> = ({
                         <>
                             <Image src={URL.createObjectURL(photo)} thumbnail />
                             <br />
-                            <small>
-                                Timestamp:{' '}
-                                {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
-                                ) : (
-                                    <span>Missing</span>
+                            <div className='photo-metadata-container'>
+                                <small>
+                                    Timestamp:{' '}
+                                    {metadata?.timestamp ? (
+                                        <DateTimeStr date={metadata.timestamp} />
+                                    ) : (
+                                        <span>Missing</span>
+                                    )}
+                                    <br />
+                                    Geolocation:{' '}
+                                    {
+                                        <span>
+                                            <GpsCoordStr
+                                                {...metadata.geolocation}
+                                            />{' '}
+                                        </span>
+                                    }
+                                </small>
+                                {(notes && !disallowNotes) && (
+                                    <div className='report-print-photo-notes'>
+                                        <span>Notes:</span>
+                                        <span className='photo-notes'>{notes}</span>
+                                    </div>
                                 )}
-                                <br />
-                                Geolocation:{' '}
-                                {
-                                    <span>
-                                        <GpsCoordStr
-                                            {...metadata.geolocation}
-                                        />{' '}
-                                    </span>
-                                }
-                            </small>
+                            </div>
                         </>
                     ) : (
                         required && <em>Missing Photo</em>

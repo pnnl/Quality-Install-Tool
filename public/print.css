@@ -176,3 +176,38 @@ h3 {
 .tab-content {
   margin-top: 1rem;
 }
+
+.photo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.photo-input-delete-button {
+  cursor: 'pointer';
+  border-width: '1px';
+  border-radius: '6px';
+}
+
+.delete-modal-delete {
+  cursor: 'pointer';
+  color: 'red';
+  border-width: '1px';
+  border-radius: '6px';
+}
+
+.photo-input-photos-container {
+  display: 'flex';
+  flex-wrap: 'wrap';
+}
+
+.delete-modal-container {
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'space-between';
+}
+
+.report-print-photo-notes {
+  display: flex;
+  flex-direction: column;
+}
