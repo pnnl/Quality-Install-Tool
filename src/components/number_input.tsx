@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
@@ -40,7 +41,7 @@ const NumberInput: FC<NumberInputProps> = ({
     value,
     min,
     max,
-    hint
+    hint,
 }): any => {
     const [error, setError] = useState<string>('')
 
@@ -55,7 +56,7 @@ const NumberInput: FC<NumberInputProps> = ({
     }, [ref, cursor, value])
 
     const handleChange = (inputValue: string): any => {
-        const inputValueNum: number = parseInt(inputValue)
+        const inputValueNum: number = parseFloat(inputValue)
         if (isNaN(inputValueNum)) {
             setError('Input must be a number')
         } else if (inputValueNum < min) {
@@ -83,9 +84,7 @@ const NumberInput: FC<NumberInputProps> = ({
                     value={value != null ? value : ''}
                     isInvalid={Boolean(error)}
                 />
-                {hint && 
-                <Form.Text>Hint: {hint}</Form.Text>
-                }
+                {hint && <Form.Text>Hint: {hint}</Form.Text>}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

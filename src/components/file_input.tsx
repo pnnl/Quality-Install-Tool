@@ -18,7 +18,7 @@ interface FileInputProps {
  *
  * @param children Content (most commonly markdown text) describing the File requirement
  * @param label Label for the File requirement
- * @param photo Blob containing the photo itself
+ * @param file Blob containing the File itself
  * @param upsertFile Function used to update/insert a file into the store
  */
 const FileInput: FC<FileInputProps> = ({

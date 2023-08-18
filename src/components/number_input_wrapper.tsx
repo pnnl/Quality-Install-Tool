@@ -1,6 +1,6 @@
 import { get } from 'lodash'
 import type { FC } from 'react'
-
+import React from 'react'
 import { StoreContext } from './store'
 import NumberInput from './number_input'
 import { pathToId } from '../utilities/paths_utils'
@@ -37,7 +37,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
     suffix,
     min = Number.NEGATIVE_INFINITY,
     max = Number.POSITIVE_INFINITY,
-    hint
+    hint,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')

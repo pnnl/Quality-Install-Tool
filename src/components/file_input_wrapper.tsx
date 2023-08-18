@@ -2,8 +2,6 @@ import React, { FC } from 'react'
 import { StoreContext } from './store'
 import FileInput from './file_input'
 
-const MAX_IMAGE_DIM = 1280
-
 interface FileInputWrapperProps {
     children: React.ReactNode
     id: string
@@ -13,10 +11,8 @@ interface FileInputWrapperProps {
 /**
  * A component that wraps a FileInput component in order to tie it to the data store
  *
- * @param children Content (most commonly markdown text) to be passed on as the FileInput
- * children
- * @param id An identifier for the store attachment that represents the photo for
- * the FileInput component
+ * @param children Content (most commonly markdown text) to be passed on as the FileInput children
+ * @param id An identifier for the store attachment that represents the information of the file
  * @param label The label of the PhotoInput component
  */
 const FileInputWrapper: FC<FileInputWrapperProps> = ({
