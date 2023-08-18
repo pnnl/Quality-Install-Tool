@@ -240,9 +240,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 return result
             })
                 .then(function (res) {
-                    if (pathStr.includes('metadata_')) {
-                        revisionRef.current = res.rev
-                    }
+                    revisionRef.current = res.rev
                 })
                 .catch(function (err: Error) {
                     console.error('upsert error:', err)
