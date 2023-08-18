@@ -36,7 +36,6 @@ export const StoreContext = React.createContext({
     metadata: {} satisfies Metadata | undefined,
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
-    upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
 })
 
 interface StoreProviderProps {
@@ -327,7 +326,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 metadata: doc.metadata_,
                 upsertAttachment,
                 upsertData,
-                upsertDoc,
             }}
         >
             {children}
