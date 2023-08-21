@@ -284,7 +284,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 ? await getMetadataFromCurrentGPSLocation()
                 : {
                       filename: fileName,
-                      timestamp: new Date(Date.now()).toUTCString(),
+                      timestamp: new Date(Date.now()).toISOString(),
                   }
 
         // Storing SingleAttachmentMetaData in the DB

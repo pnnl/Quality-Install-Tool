@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import { StoreContext } from './store'
-import FileRenderer from './file_renderer'
+import PDFRenderer from './pdf_renderer'
 
 
 const MAX_FILE_SIZE = 5 // in MB
 
-interface FileRendererWrapperProps {
+interface PDFRenderedWrapperProps {
     children: React.ReactNode
     id: string
     label: string
@@ -18,12 +18,12 @@ interface FileRendererWrapperProps {
  * @param id An identifier for the store attachment that represents the File details 
  * @param label The label the FileRenderer component
  */
-const FileRenderedWrapper: FC<FileRendererWrapperProps> = ({ children, id, label }) => {
+const PDFRenderedWrapper: FC<PDFRenderedWrapperProps> = ({ children, id, label }) => {
     return (
         <StoreContext.Consumer>
             {({ attachments, upsertAttachment }) => {
                 return (
-                    <FileRenderer
+                    <PDFRenderer
                         children={children}
                         label={label}
                         metadata={attachments[id]?.metadata}
@@ -35,4 +35,4 @@ const FileRenderedWrapper: FC<FileRendererWrapperProps> = ({ children, id, label
     )
 }
 
-export default FileRenderedWrapper
+export default PDFRenderedWrapper

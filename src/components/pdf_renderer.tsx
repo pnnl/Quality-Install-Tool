@@ -9,7 +9,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-interface FileRendererProps {
+interface PDFRendererProps {
     children: React.ReactNode
     label: string
     metadata: FileMetadata
@@ -24,7 +24,7 @@ interface FileRendererProps {
  * @param file Blob containing the file itself
  * @param upsertFile Function used to update/insert a file into the store
  */
-const FileRenderer: FC<FileRendererProps> = ({ children, label, file, metadata }) => {
+const PDFRenderer: FC<PDFRendererProps> = ({ children, label, file, metadata }) => {
     const [numPages, setNumPages] = useState(0);
 
   return ( file && (
@@ -41,4 +41,4 @@ const FileRenderer: FC<FileRendererProps> = ({ children, label, file, metadata }
   )
 }
 
-export default FileRenderer
+export default PDFRenderer
