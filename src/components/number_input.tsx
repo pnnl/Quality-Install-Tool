@@ -41,18 +41,8 @@ const NumberInput: FC<NumberInputProps> = ({
 }): any => {
     const [error, setError] = useState<string>('')
 
-    // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<number | null>(null)
-    const ref = useRef<HTMLInputElement>(null)
-
-    // Refresh after the first render and every time the component updates
-    useEffect(() => {
-        const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
-    }, [ref, cursor, value])
-
-    const handleChange = (inputValue: string): any => {
-        const inputValueNum: number = parseInt(inputValue)
+    const handleChange = (inputValue: string): any => {    
+        const inputValueNum: number = parseFloat(inputValue)
         if (isNaN(inputValueNum)) {
             setError('Input must be a number')
         } else if (inputValueNum < min) {
@@ -70,13 +60,10 @@ const NumberInput: FC<NumberInputProps> = ({
             {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    ref={ref}
-                    onChange={event => {
-                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
+                    onChange={event => 
                         handleChange(event.target.value)
-                    }}
-                    type="text"
-                    inputMode="numeric"
+                    }
+                    type="number"
                     value={value != null ? value : ''}
                     isInvalid={Boolean(error)}
                 />
