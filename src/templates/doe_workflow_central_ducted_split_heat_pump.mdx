@@ -228,7 +228,7 @@
             ## Acronyms
             ODU – Outdoor Unit <br/>
             IDU – Outdoor Unit
-            <br/>
+           
             ## Pre-Upgrade Tests
             
             <Photo id="existing_duckwork_photo" label="Ductwork – Photo" required>
@@ -239,7 +239,7 @@
                 ? <p><strong>Ductwork Comments:</strong> {props.data.comments_ductwork}</p> 
                 : null
             }
-            <br/>
+            
             ## Static Pressure Test Results
             Total external static pressure measurement: This measurement is akin to taking the blood pressure of a person. 
             Having high blood pressure is an indicator of poor health. The same is true for a HVAC system. For an HVAC system, 
@@ -254,7 +254,7 @@
                 ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comments_pre_upgrade_static_pressure_test}</p> 
                 : null
             }
-            <br/>
+            
             ## Airflow Test Results
             In order for a heat pump to efficiently and effectively deliver the conditioned air to the house, 
             the ducts need to be able to move enough air. This test uses the home's existing air handler to measure how much air the ducts can move. 
@@ -270,7 +270,7 @@
                 ? <p><strong>Pre-Upgrade Airflow Test Notes: </strong> {props.data.comments_pre_upgrade_air_flow_test}</p> 
                 : null
             }
-            <br/>
+            
              ## Duck Leakage Test Results
              Leaky ducts mean the conditioned air doesn't make it to the rooms where the conditioned air is needed. 
              The worse kind of duct leakage is leakage to outside because that means the air you paid to conditioned 
@@ -295,7 +295,7 @@
             <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
             <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
             
-            <br/>           
+                       
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
@@ -316,7 +316,7 @@
                 : null
             }
 
-            <br/>
+            
             ## Manual J
             Please see the PDF containing the Manual J report attached.
             {
@@ -324,7 +324,7 @@
                 ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comments_manual_j}</p> 
                 : null
             }
-            <br/>
+            
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
             and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs.
@@ -357,7 +357,7 @@
                 ? <p><strong>Ductwork Concluding Comments: </strong> {props.data.comments_ductwork_concluding_summary}</p> 
                 : null
             }
-            <br/>           
+                       
             ## Installation
             <Photo id="odu_nameplate_photo" label="ODU Nameplate – Photo" required />
             <Photo id="idu_nameplate_photo" label="IDU Nameplate – Photo" required />
@@ -368,7 +368,7 @@
                 ? <p><strong>Circuit Breaker Notes: </strong> {props.data.comment_circuit_breaker_notes}</p> 
                 : null
             }
-            <br/>
+            
             ## Installation Tests
             <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
                 The test is conducted at 500 PSI or the manufacturer's recommended test pressure.             
@@ -405,7 +405,7 @@
             <Photo id="plenum_connections_photo" label="Plenum Connections – Photo" required >
                 The supply and return plenum connections to the air handler cabinet should be sealed, insulated, and have a vapor barrier.   
             </Photo>
-            <br/>
+            
             ## Post-Installation
            
             <Photo id="post_install_air_flow_test_setup_photo" label="Post-Install Airflow Test Setup – Photo" required />

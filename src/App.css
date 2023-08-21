@@ -48,6 +48,9 @@ h2 {
   break-after: avoid-page;
   font-size: 1.25rem;
 }
+h2:not(.accordion-header, h1+h2) {
+  margin-top: 30px;
+}
 h3 {
   font-size: 1rem;
   break-after: avoid-page;
