@@ -40,6 +40,7 @@ const NumberInput: FC<NumberInputProps> = ({
     max,
 }): any => {
     const [error, setError] = useState<string>('')
+    const [localValue, setLocalValue] = useState<string>(value as unknown as string,)
 
     const handleChange = (inputValue: string): any => {    
         const inputValueNum: number = parseFloat(inputValue)
@@ -61,10 +62,13 @@ const NumberInput: FC<NumberInputProps> = ({
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
                     onChange={event => 
-                        handleChange(event.target.value)
+                        {
+                            setLocalValue(event.target.value)
+                            handleChange(event.target.value)
+                        }
                     }
                     type="number"
-                    value={value != null ? value : ''}
+                    value={localValue}
                     isInvalid={Boolean(error)}
                 />
                 {error && (
