@@ -42,9 +42,11 @@ const NumberInput: FC<NumberInputProps> = ({
     hint,
 }): any => {
     const [error, setError] = useState<string>('')
-    const [localValue, setLocalValue] = useState<string>(value as unknown as string,)
+    const [localValue, setLocalValue] = useState<string>(
+        value as unknown as string,
+    )
 
-    const handleChange = (inputValue: string): any => {    
+    const handleChange = (inputValue: string): any => {
         const inputValueNum: number = parseFloat(inputValue)
         if (isNaN(inputValueNum)) {
             setError('Input must be a number')
@@ -63,12 +65,10 @@ const NumberInput: FC<NumberInputProps> = ({
             {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    onChange={event => 
-                        {
-                            setLocalValue(event.target.value)
-                            handleChange(event.target.value)
-                        }
-                    }
+                    onChange={event => {
+                        setLocalValue(event.target.value)
+                        handleChange(event.target.value)
+                    }}
                     type="number"
                     value={localValue}
                     isInvalid={Boolean(error)}

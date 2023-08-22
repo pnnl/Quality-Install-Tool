@@ -55,9 +55,7 @@ const StringInput: FC<StringInputProps> = ({
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    onChange={event => 
-                        handleChange(event.target.value)
-                    }
+                    onChange={event => handleChange(event.target.value)}
                     type="text"
                     value={value || ''}
                     isInvalid={Boolean(error)}

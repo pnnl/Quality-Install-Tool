@@ -14,7 +14,6 @@ interface StringInputWrapperProps {
     hint: string
 }
 
-
 /**
  * A component that wraps a StringInput component in order to tie it to the data store
  *
