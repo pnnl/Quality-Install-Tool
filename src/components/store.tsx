@@ -39,7 +39,6 @@ export const StoreContext = React.createContext({
     upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
-    
 })
 
 interface StoreProviderProps {
@@ -283,7 +282,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param blob
      * @param id
      */
-    const upsertAttachment: UpsertAttachment = async (blob: Blob, id: string, fileName?: string) => {
+    const upsertAttachment: UpsertAttachment = async (
+        blob: Blob,
+        id: string,
+        fileName?: string,
+    ) => {
         // Create the metadata for the blob
 
         const metadata: Attachment['metadata'] =

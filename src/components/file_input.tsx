@@ -51,7 +51,6 @@ const FileInput: FC<FileInputProps> = ({
 
     return (
         <>
-            
             <Card className="input-card">
                 <Card.Body>
                     <Collapsible header={label}>
@@ -85,7 +84,11 @@ const FileInput: FC<FileInputProps> = ({
                                 </Card>
                             </>
                         )}
-                        <div><label className="mb-3 custom-label">File Types Accepted: PDF</label></div>
+                        <div>
+                            <label className="mb-3 custom-label">
+                                File Types Accepted: PDF
+                            </label>
+                        </div>
 
                         <Button
                             onClick={handleFileInputButtonClick}
