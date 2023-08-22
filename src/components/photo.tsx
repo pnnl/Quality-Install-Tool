@@ -61,10 +61,9 @@ const Photo: FC<PhotoProps> = ({
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>
-                                ):(
+                                ) : (
                                     <span>Missing</span>
-                                )
-                                }
+                                )}
                             </small>
                         </>
                     ) : (
