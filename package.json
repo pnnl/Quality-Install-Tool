@@ -110,7 +110,7 @@
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {

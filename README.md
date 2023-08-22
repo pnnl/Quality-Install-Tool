@@ -8,6 +8,9 @@ React component, `<App />`, on the page.
 4. `App.tsx` defines the routes used by React Router.
 5. The routes of the form `/app/<database name>/:docId` use the `MdxTemplateView` component to render the templates from `src/templates` and connect them to the database. `src/templates/templates_config.ts` provides a mapping from database name to the template `title` and the template as a React component.
 
+## Installing dependencies
+When installing dependencies, using `yarn install --frozen-lock` is prefered over `yarn install` to ensure that the install does not update any packages and cause dependency issues.
+
 ## Development server
 The `yarn run start` command launches a server on localhost:3000. The browser view will automatically update whenever any file within the `src` folder is modified and saved. 
 
@@ -25,6 +28,8 @@ files within `./build/public/` for all other paths.
 ## linting and formatting
 The `yarn lint` command runs a linter to ensure all code is to the formatting standards for the repo before
 a pull request is made.
+
+The command `yarn lint:fix` can be used to automatically fix any linting or formatting errors that can be fixed.
 
 ## Short codes for the MDX templates 
 To avoid the template writter needing to import React components, a set of 
