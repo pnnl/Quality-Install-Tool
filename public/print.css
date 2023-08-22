@@ -132,6 +132,7 @@ h3 {
 
 #back-button {
   padding: 1rem;
+  background-color: green;
 }
 
 #back-button-link {
@@ -175,4 +176,13 @@ h3 {
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
   margin-top: 1rem;
+}
+
+/* Style for hint inthe input components */
+.form-text{
+  margin-left:.50em;
+  margin-top:.25rem;
+  font-size:.875em;
+  color:var(--bs-secondary-color);
+  font-style: italic;
 }
