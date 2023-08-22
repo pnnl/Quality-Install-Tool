@@ -11,6 +11,7 @@ interface PhotoInputWrapperProps {
     children: React.ReactNode
     id: string
     label: string
+    uploadable: boolean
 }
 
 /**
@@ -26,6 +27,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,
     id,
     label,
+    uploadable,
 }) => {
     return (
         <StoreContext.Consumer>
@@ -48,6 +50,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                         }
                         photo={attachments[id]?.blob}
                         upsertPhoto={upsertPhoto}
+                        uploadable={uploadable}
                     >
                         {children}
                     </PhotoInput>
