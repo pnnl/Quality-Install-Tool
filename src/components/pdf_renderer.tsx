@@ -29,7 +29,7 @@ const PDFRenderer: FC<PDFRendererProps> = ({ children, label, file, metadata }) 
 
   return ( file && (
           <div>
-            <h1>{label}: {metadata?.filename}</h1>
+            <h1>{label}</h1>
             <Document file={file}
                       onLoadSuccess={({ numPages })=>setNumPages(numPages)}
                       renderMode="canvas">

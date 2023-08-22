@@ -81,13 +81,14 @@
             Correctly sizing the heat pump for the home’s heating and cooling needs is much more
             important for a heat pump than for a furnace and AC system. Use ACCA-approved Manual J
             residential load calculation software. It is recommended that the Manual J calculations be
-            performed with the home occupant that knows the most about the home present to help
+            performed with the home occupant present that knows the most about the home to help
             determine the most accurate values to enter. Ask the home occupant whether any rooms
             presently get too hot or cold. 
         </Collapsible>
 
-        <FileInput id="manual_j_file" label="Full Manual J Report Attachment - File">
-                File Types Accepted: PDF
+         <FileInput id="manual_j_file" label="PDF of Manual J - File">
+                Attach the Manual J load calculations showing design conditions, conditioned square footage, 
+                and the heating and cooling load calculations.
         </FileInput>
         <StringInput label="Manual J Notes or Comments" path="comments_manual_j" />
         
@@ -138,7 +139,7 @@
             Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. Please use a digital pressure gauge.
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
-            Take a photo of the vacuum decay test setup.
+            Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
             Take a photo of the vacuum decay test results. Use a digital micron gauge. The system must be isolated from the vaccum pump. The vaccum must not rise above 500 microns in 15 minutes.
@@ -422,7 +423,8 @@
             </Photo>
             
             <Photo id="thermostat_setting_photo" label="Thermostat Setting – Photo" required>
-                Photo of thermostat setting for auxiliary heat lockout or dual fuel switch over temperature.
+                Photo of thermostat setting for auxiliary heat lockout or dual fuel switch over temperature. 
+                Compare these values to the planned values in the equipment selection section of the report.
             </Photo>
 
             {

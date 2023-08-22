@@ -283,10 +283,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param blob
      * @param id
      */
-    const upsertAttachment: UpsertAttachment = async (blob, id, fileName?) => {
+    const upsertAttachment: UpsertAttachment = async (blob: Blob, id: string, fileName?: string) => {
         // Create the metadata for the blob
 
-        console.log('file type', blob.type)
         const metadata: Attachment['metadata'] =
             blob.type === 'image/jpeg'
                 ? await getMetadataFromCurrentGPSLocation()
@@ -296,7 +295,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                   }
 
         // Storing SingleAttachmentMetaData in the DB
-        upsertDoc('metadata_.attachments.' + id, metadata)
+        upsertMetadata('attachments.' + id, metadata)
 
         // Store the blob in memory
         const newAttachments = {

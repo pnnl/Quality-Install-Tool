@@ -51,12 +51,12 @@ const FileInput: FC<FileInputProps> = ({
 
     return (
         <>
+            
             <Card className="input-card">
                 <Card.Body>
-                    <label className="custom-label"> {label} </label>
-                    <Card.Text as="div" className="custom-label">
-                        {children}
-                    </Card.Text>
+                    <Collapsible header={label}>
+                        <Card.Text as="div">{children}</Card.Text>
+                    </Collapsible>
                     <div>
                         {file && (
                             <>
@@ -71,7 +71,7 @@ const FileInput: FC<FileInputProps> = ({
                                         </a>
                                         <br />
                                         <small>
-                                            Timestamp:&npsp;
+                                            Timestamp:&nbsp;
                                             {metadata?.timestamp ? (
                                                 <DateTimeStr
                                                     date={metadata.timestamp}
@@ -85,6 +85,8 @@ const FileInput: FC<FileInputProps> = ({
                                 </Card>
                             </>
                         )}
+                        <div><label className="mb-3 custom-label">File Types Accepted: PDF</label></div>
+
                         <Button
                             onClick={handleFileInputButtonClick}
                             variant="outline-primary"
