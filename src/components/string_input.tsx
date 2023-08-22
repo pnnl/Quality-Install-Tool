@@ -10,6 +10,7 @@ interface StringInputProps {
     min: number
     max: number
     regexp: RegExp
+    hint: string
 }
 
 /**
@@ -32,6 +33,7 @@ const StringInput: FC<StringInputProps> = ({
     min,
     max,
     regexp,
+    hint,
 }) => {
     const [error, setError] = useState<string>('')
 
@@ -60,6 +62,7 @@ const StringInput: FC<StringInputProps> = ({
                     value={value || ''}
                     isInvalid={Boolean(error)}
                 />
+                <Form.Text>{hint}</Form.Text>
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

@@ -13,6 +13,7 @@ interface NumberInputProps {
     value: number
     min: number
     max: number
+    hint: string
 }
 
 /**
@@ -38,6 +39,7 @@ const NumberInput: FC<NumberInputProps> = ({
     value,
     min,
     max,
+    hint,
 }): any => {
     const [error, setError] = useState<string>('')
     const [localValue, setLocalValue] = useState<string>(value as unknown as string,)
@@ -71,6 +73,7 @@ const NumberInput: FC<NumberInputProps> = ({
                     value={localValue}
                     isInvalid={Boolean(error)}
                 />
+                <Form.Text>{hint}</Form.Text>
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

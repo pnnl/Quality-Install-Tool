@@ -177,3 +177,12 @@ h3 {
 .tab-content {
   margin-top: 1rem;
 }
+
+/* 'hint' styling - the input components */
+.form-text{
+  margin-left:.50em;
+  margin-top:.25rem;
+  font-size:.875em;
+  color:var(--bs-secondary-color);
+  font-style: italic;
+}
