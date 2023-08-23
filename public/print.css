@@ -180,9 +180,9 @@ h3 {
 
 /* 'hint' styling - the input components */
 .form-text{
-  margin-left:.50em;
+  margin-left:.50rem;
   margin-top:.25rem;
-  font-size:.875em;
+  font-size:.875rem;
   color:var(--bs-secondary-color);
   font-style: italic;
 }
