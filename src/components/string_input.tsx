@@ -60,7 +60,7 @@ const StringInput: FC<StringInputProps> = ({
                     value={value || ''}
                     isInvalid={Boolean(error)}
                 />
-                <Form.Text>{hint}</Form.Text>
+                { hint && (<Form.Text>{hint}</Form.Text>)}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}
