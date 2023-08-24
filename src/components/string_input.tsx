@@ -38,9 +38,7 @@ const StringInput: FC<StringInputProps> = ({
     const [error, setError] = useState<string>('')
 
     const handleChange = (inputValue: string) => {
-        if (typeof inputValue !== 'string') {
-            setError('Input must be a string')
-        } else if (inputValue.length < min) {
+        if (inputValue.length < min) {
             setError('Input must be at least ' + min + ' characters long')
         } else if (inputValue.length > max) {
             setError('Input must be at most ' + max + ' characters long')

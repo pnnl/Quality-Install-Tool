@@ -41,7 +41,17 @@ const NumberInput: FC<NumberInputProps> = ({
     max,
     hint,
 }): any => {
-    const [error, setError] = useState<string>('')
+    const validateInput = (inputValue: number): string => {
+        if (inputValue < min) {
+            return 'Input must be at least ' + String(min)
+        } else if (inputValue > max) {
+            return 'Input must be at most ' + String(max)
+        } else {
+            return ''
+        }
+    }
+
+    const [error, setError] = useState<string>(validateInput(value))
     const [localValue, setLocalValue] = useState<string>(
         value as unknown as string,
     )
@@ -50,14 +60,10 @@ const NumberInput: FC<NumberInputProps> = ({
         const inputValueNum: number = parseFloat(inputValue)
         if (isNaN(inputValueNum)) {
             setError('Input must be a number')
-        } else if (inputValueNum < min) {
-            setError('Input must be at least ' + String(min))
-        } else if (inputValueNum > max) {
-            setError('Input must be at most ' + String(max))
         } else {
-            setError('')
+            updateValue(inputValue)
+            setError(validateInput(inputValueNum))
         }
-        updateValue(inputValue)
     }
 
     return (
