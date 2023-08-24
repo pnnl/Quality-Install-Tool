@@ -200,6 +200,7 @@ h3 {
   font-size:.875rem;
   color:var(--bs-secondary-color);
   font-style: italic;
+}
 
 /* label styling for the Radio component */
 .custom-label {

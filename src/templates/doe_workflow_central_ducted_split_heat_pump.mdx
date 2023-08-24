@@ -6,7 +6,7 @@
     <Tab eventKey="assessment" title="Assessment">
         ## Building 
         <PhotoInput id="building_number_photo" label="Building Number – Photo">
-            Provide a photo of the building that shows the building number
+            Provide a photo of the building that shows the building number.        
         </PhotoInput>
 
         ## Visual Assessment of the Ductwork
@@ -14,10 +14,10 @@
         repairs are needed: 
         - Make notes and skip performing a duct leakage test at the initial phase 
         - Perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight 
-        <PhotoInput id="existing_duckwork_photo" label="Ductwork – Photo">
+        <PhotoInput id="existing_ductwork_photo" label="Ductwork – Photo">
             Provide a representative photo of the existing ductwork condition.
         </PhotoInput>        
-        <StringInput label="Ductwork Comments" path="comments_ductwork" />
+        <StringInput label="Ductwork Comments" path="comment_ductwork" />
         
 
         ## Static Pressure Test
@@ -25,7 +25,7 @@
         <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
             Take a photo of the manometer readout or screenshot from digital instrument app.
         </PhotoInput>   
-        <StringInput label="Comment on remediation plans if total external static pressure is above 0.5 i.w.c" path="comments_pre_upgrade_static_pressure_test" />
+        <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c" />
        
 
         ## Airflow Test
@@ -36,7 +36,7 @@
         <PhotoInput id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" uploadable >
             Take a photo of the manometer CFM or upload a screenshot of the instrument app.
         </PhotoInput>   
-        <StringInput label="Comments on Pre-Upgrade Airflow Test" path="comments_pre_upgrade_air_flow_test" hint="Comment on remediation plan if flow is much lower than 400 CFM per ton" />
+        <StringInput label="Comments on Pre-Upgrade Airflow Test" path="comment_pre_upgrade_air_flow_test" hint="Comment on remediation plan if flow is much lower than 400 CFM per ton" />
 
         ## Duct Leakage Testing
         If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and 
@@ -90,7 +90,7 @@
                 Attach the Manual J load calculations showing design conditions, conditioned square footage, 
                 and the heating and cooling load calculations.
         </FileInput>
-        <StringInput label="Manual J Notes or Comments" path="comments_manual_j" />
+        <StringInput label="Manual J Notes or Comments" path="comment_manual_j" />
         
         ## Equipment Performance Tables
          <Collapsible header="Equipment Selection Details">
@@ -99,19 +99,19 @@
             Use the NEEP Heat Pump List as an alternative source for equipment output capacity at the design conditions. 
             Factor in auxiliary heat, or dual fuel into the equipment selection as applicable. 
         </Collapsible>
-        <PhotoInput id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" allowUpload>
-            Upload a photo of the MFG's extended heating performance table
+        <PhotoInput id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" uploadable>
+            Upload a photo of the MFG's extended heating performance table.
         </PhotoInput>
         <NumberInput label="Aux Heat Lockout Above This Temperature (&deg;F)" min={0} path="aux_heat_lockout_temperature" /> 
         <NumberInput label="Compresser Lockout Below This Temperature (&deg;F)" min={0} path="compresser_lockout_temperature" /> 
         <NumberInput label="Dual Fuel Switch Over Temperature (&deg;F)" min={0} path="dual_fuel_switch_over_temperature" /> 
 
-        <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" allowUpload>
-            Upload a photo of the MFG's extended cooling performance table showing sensible, latent, or SHR
+        <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" uploadable>
+            Upload a photo of the MFG's extended cooling performance table showing sensible, latent, or SHR.
         </PhotoInput>
         
         ## Pre-installation Additional Comments
-        <StringInput label="Additional Comments" path="comments_ductwork_concluding_summary"  hint="E.g., Return air filter grille upsizing" />
+        <StringInput label="Additional Comments" path="comment_ductwork_concluding_summary"  hint="E.g., Return air filter grille upsizing" />
     </Tab>
     <Tab eventKey="installation" title="Installation">
         <DateInput label="Installation Date" path="install_date" />
@@ -145,7 +145,7 @@
             Take a photo of the vacuum decay test results. Use a digital micron gauge. The system must be isolated from the vaccum pump. The vaccum must not rise above 500 microns in 15 minutes.
         </PhotoInput>
         ## Refrigerant Adjustments
-        <PhotoInput id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo">
+        <PhotoInput id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo">
             Take a photo of the scale readout and calculations for the refrigerant charge adjustment.
         </PhotoInput>
         | Additional Refrigerant Calculator
@@ -153,7 +153,7 @@
         | <NumberInput label="Feet of line set beyond factory charge" min={0} path="refrigerant_calculator.ft_line_set_beyond_factory_charge" hint=""  /> 
         | <NumberInput label="Ounce of refrigerant per foot of line set" min={0} path="refrigerant_calculator.oz_per_ft_refrigerant" hint="" /> 
         |  Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
-        <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comments_refrigerant_quantity_adjustments_or_weigh_in" />
+        <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comment_refrigerant_quantity_adjustments_or_weigh_in" />
         ## Protection
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
            Take a photo of the line set and line set wall penetration protection.
@@ -172,17 +172,17 @@
             Take a photo of the post-installation airflow test results.
         </PhotoInput>
          ## Post-install Static Pressure Test
-        <PhotoInput id="post_install_static_pressure_test_photo" label="Post-Install Static Pressure Test Setup – Photo">
+        <PhotoInput id="post_install_static_pressure_test_setup_photo" label="Post-Install Static Pressure Test Setup – Photo">
             Take a photo of the static pressure test setup showing the tap placement.
         </PhotoInput>
-        <PhotoInput id="post_install_static_pressure_results_photo" label="Post-Install Static Pressure Test Results – Photo">
+        <PhotoInput id="post_install_static_pressure_test_results_photo" label="Post-Install Static Pressure Test Results – Photo">
             Take a photo of the manometer readout showing the total external static pressure. 
         </PhotoInput>
         ## Thermostat Settings
         <PhotoInput id="thermostat_setting_photo" label="Thermostat Setting – Photo">
             Take a photo of the thermostat showing the temperature value set for the auxillary heat lockout, compressor lockout temperature, and dual fuel switch over temperature as applicable.
         </PhotoInput>
-        <StringInput label="Notes about thermostat settings" path="comments_about_thermostat_settings" />
+        <StringInput label="Notes about thermostat settings" path="comment_about_thermostat_settings" />
         ## Mechanical Ventilation
         If the addition of supply based mechanical ventilation is included in the heat pump upgrade. Use the mechanical 
         ventilation quality installation workflow to document that installation. 
@@ -232,12 +232,12 @@
            
             ## Pre-Upgrade Tests
             
-            <Photo id="existing_duckwork_photo" label="Ductwork – Photo" required>
+            <Photo id="existing_ductwork_photo" label="Ductwork – Photo" required>
                 Photo of existing ductwork condition
             </Photo>        
             {
-                props.data.comments_ductwork
-                ? <p><strong>Ductwork Comments:</strong> {props.data.comments_ductwork}</p> 
+                props.data.comment_ductwork
+                ? <p><strong>Ductwork Comments:</strong> {props.data.comment_ductwork}</p> 
                 : null
             }
             
@@ -251,8 +251,8 @@
                 Photo of the manometer readout or screenshot from digital instrument app
             </Photo>   
             {
-                props.data.comments_pre_upgrade_static_pressure_test
-                ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comments_pre_upgrade_static_pressure_test}</p> 
+                props.data.comment_pre_upgrade_static_pressure_test
+                ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comment_pre_upgrade_static_pressure_test}</p> 
                 : null
             }
             
@@ -267,8 +267,8 @@
                 Photo of the manometer CFM or upload a screenshot of the instrument app
             </Photo>  
             {
-                props.data.comments_pre_upgrade_air_flow_test
-                ? <p><strong>Pre-Upgrade Airflow Test Notes: </strong> {props.data.comments_pre_upgrade_air_flow_test}</p> 
+                props.data.comment_pre_upgrade_air_flow_test
+                ? <p><strong>Pre-Upgrade Airflow Test Notes: </strong> {props.data.comment_pre_upgrade_air_flow_test}</p> 
                 : null
             }
             
@@ -318,14 +318,21 @@
             }
 
             
-            ## Manual J
-            Please see the PDF containing the Manual J report attached.
             {
-                props.data.comments_manual_j
-                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comments_manual_j}</p> 
-                : null
+                props.metadata.attachments['manual_j_file'] || props.data.comment_manual_j ?
+                <>
+                <h2> Manual J </h2>
+                {
+                props.metadata.attachments['manual_j_file'] ? <p>Please see the PDF containing the Manual J report attached.</p> : null
+                }
+                
+                
+                { props.data.comment_manual_j
+                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
+                : null }
+                
+                </> : null
             }
-            
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
             and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs.
@@ -354,8 +361,8 @@
             </Photo>
             
             {
-                props.data.comments_ductwork_concluding_summary
-                ? <p><strong>Ductwork Concluding Comments: </strong> {props.data.comments_ductwork_concluding_summary}</p> 
+                props.data.comment_ductwork_concluding_summary
+                ? <p><strong>Ductwork Concluding Comments: </strong> {props.data.comment_ductwork_concluding_summary}</p> 
                 : null
             }
                        
@@ -387,7 +394,7 @@
                 vacuum hose isolated from the system. This indicates the system contains no moisture and is leak free.
             </Photo>
             ## Refrigerant Adjustments
-            <Photo id="refrigerant_adjustments_if_applicable_photo" label="Refrigerant Adjustments (if applicable) – Photo" required >
+            <Photo id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo" required >
                 Photo of scale readout and calculations for refrigerant charge adjustment
             </Photo>
             | Additional Refrigerant Added
@@ -396,8 +403,8 @@
             | Ounce of refrigerant per foot of line set = {props.data?.refrigerant_calculator?.oz_per_ft_refrigerant? props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             {
-                props.data.comments_refrigerant_quantity_adjustments_or_weigh_in
-                ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comments_refrigerant_quantity_adjustments_or_weigh_in}</p> 
+                props.data.comment_refrigerant_quantity_adjustments_or_weigh_in
+                ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}</p> 
                 : null
             }
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
@@ -428,8 +435,8 @@
             </Photo>
 
             {
-                props.data.comments_about_thermostat_settings
-                ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comments_about_thermostat_settings}</p> 
+                props.data.comment_about_thermostat_settings
+                ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p> 
                 : null
             }
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />

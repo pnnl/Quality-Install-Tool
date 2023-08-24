@@ -18,7 +18,7 @@ import { putNewDoc } from '../utilities/database_utils'
 
 PouchDB.plugin(PouchDBUpsert)
 
-type UpsertAttachment = (blob: Blob, id: string) => void
+type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
 
 type UpsertData = (pathStr: string, data: any) => void
 
@@ -36,7 +36,11 @@ export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | undefined | Record<string, string>,
-    upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
+    upsertAttachment: ((
+        blob: Blob,
+        id: any,
+        fileName?,
+    ) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
 })

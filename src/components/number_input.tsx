@@ -81,7 +81,7 @@ const NumberInput: FC<NumberInputProps> = ({
                     value={localValue}
                     isInvalid={Boolean(error)}
                 />
-                {hint && <Form.Text>Hint: {hint}</Form.Text>}
+                {hint && <Form.Text>{hint}</Form.Text>}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

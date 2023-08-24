@@ -103,7 +103,7 @@
             use the data from the Northeast Energy Efficiency Partnership’s Air Source Heat Pump List.
         </PhotoInput>
 
-        <PhotoInput id="cooling_performance_table_photo" label="Cooling Performance Table – Photo">
+        <PhotoInput id="cooling_performance_table_photo" label="Cooling Performance Table – Photo" uploadable>
             Take a photo or attach a screenshot of the manufacturer’s cooling performance table for the heat pump make
             and model selected showing the sensible versus total cooling capacity at the design conditions.
         </PhotoInput>
@@ -114,7 +114,7 @@
        
         <DateInput label="Installation Date" path="install_date" />
        
-        <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo" uploadable>
+        <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo">
             Take a photo of the outdoor unit name plate.
         </PhotoInput>
         
@@ -241,6 +241,15 @@
             <Photo id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo" required>
                 Photo or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve
             </Photo>
+
+            {
+                props.metadata.attachments['manual_j_file']  ?
+                <>
+                <h2> Manual J </h2>
+                <p>Please see the PDF containing the Manual J report attached.</p>
+                </> : null
+                
+            }
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>

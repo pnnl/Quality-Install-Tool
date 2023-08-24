@@ -8,7 +8,7 @@ import DateTimeStr from './date_time_str'
 interface FileInputProps {
     children: React.ReactNode
     label: string
-    metadata: FileMetadata
+    fileMetadata: FileMetadata
     file: Blob | undefined
     upsertFile: (file: Blob, fileName: string) => void
 }
@@ -25,7 +25,7 @@ const FileInput: FC<FileInputProps> = ({
     children,
     label,
     file,
-    metadata,
+    fileMetadata,
     upsertFile,
 }) => {
     // Create references to the hidden file inputs
@@ -66,14 +66,16 @@ const FileInput: FC<FileInputProps> = ({
                                             href={URL.createObjectURL(file)}
                                             target="_blank"
                                         >
-                                            {metadata?.filename}
+                                            {fileMetadata?.filename}
                                         </a>
                                         <br />
                                         <small>
                                             Timestamp:&nbsp;
-                                            {metadata?.timestamp ? (
+                                            {fileMetadata?.timestamp ? (
                                                 <DateTimeStr
-                                                    date={metadata.timestamp}
+                                                    date={
+                                                        fileMetadata.timestamp
+                                                    }
                                                 />
                                             ) : (
                                                 ''

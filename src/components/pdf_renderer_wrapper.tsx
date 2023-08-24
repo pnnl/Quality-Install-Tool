@@ -29,7 +29,7 @@ const PDFRenderedWrapper: FC<PDFRenderedWrapperProps> = ({
                     <PDFRenderer
                         children={children}
                         label={label}
-                        metadata={attachments[id]?.metadata}
+                        fileMetadata={attachments[id]?.metadata}
                         file={attachments[id]?.blob}
                     />
                 )

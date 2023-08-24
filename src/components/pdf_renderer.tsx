@@ -12,7 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 interface PDFRendererProps {
     children: React.ReactNode
     label: string
-    metadata: FileMetadata
+    fileMetadata: FileMetadata
     file: Blob
 }
 
@@ -28,7 +28,7 @@ const PDFRenderer: FC<PDFRendererProps> = ({
     children,
     label,
     file,
-    metadata,
+    fileMetadata,
 }) => {
     const [numPages, setNumPages] = useState(0)
 

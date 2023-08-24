@@ -29,7 +29,7 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
                 return (
                     <FileInput
                         label={label}
-                        metadata={attachments[id]?.metadata}
+                        fileMetadata={attachments[id]?.metadata}
                         file={attachments[id]?.blob}
                         upsertFile={upsertFile}
                     >
