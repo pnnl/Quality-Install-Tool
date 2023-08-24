@@ -13,6 +13,7 @@ interface PhotoInputProps {
     metadata: PhotoMetaData
     photo: Blob | undefined
     upsertPhoto: (file: Blob) => void
+    uploadable: boolean
 }
 
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -36,6 +37,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     metadata,
     photo,
     upsertPhoto,
+    uploadable,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -108,14 +110,24 @@ const PhotoInput: FC<PhotoInputProps> = ({
             className='photo-input'
             type="file"
           /> */}
-                    <input
-                        accept="image/jpeg"
-                        onChange={handleFileInputChange}
-                        ref={hiddenPhotoUploadInputRef}
-                        className="photo-upload-input"
-                        type="file"
-                        capture="environment"
-                    />
+                    {uploadable ? (
+                        <input
+                            accept="image/jpeg"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoUploadInputRef}
+                            className="photo-upload-input"
+                            type="file"
+                        />
+                    ) : (
+                        <input
+                            accept="image/jpeg"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoUploadInputRef}
+                            className="photo-upload-input"
+                            type="file"
+                            capture="environment"
+                        />
+                    )}
                     {photo && (
                         <>
                             <Image src={URL.createObjectURL(photo)} thumbnail />
@@ -129,13 +141,15 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                 )}
                                 <br />
                                 Geolocation:{' '}
-                                {
+                                {metadata?.geolocation ? (
                                     <span>
                                         <GpsCoordStr
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>
-                                }
+                                ) : (
+                                    <span>Missing</span>
+                                )}
                             </small>
                         </>
                     )}

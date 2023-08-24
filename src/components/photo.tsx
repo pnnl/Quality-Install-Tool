@@ -55,13 +55,15 @@ const Photo: FC<PhotoProps> = ({
                                 )}
                                 <br />
                                 Geolocation:{' '}
-                                {
+                                {metadata?.geolocation ? (
                                     <span>
                                         <GpsCoordStr
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>
-                                }
+                                ) : (
+                                    <span>Missing</span>
+                                )}
                             </small>
                         </>
                     ) : (

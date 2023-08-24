@@ -183,3 +183,9 @@ h3 {
 .tab-content {
   margin-top: 1rem;
 }
+
+/* label styling for the Radio component */
+.custom-label {
+  color: gray;
+  font-size: .9rem;
+}
