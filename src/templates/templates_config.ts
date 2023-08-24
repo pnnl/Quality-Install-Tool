@@ -31,12 +31,12 @@ const templatesConfig: TemplatesConfig = {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
     },
-    doe_workflow_ductless_heat_pump: {
-        title: 'Ductless Heat Pump',
+    beta_doe_workflow_ductless_heat_pump: {
+        title: 'BETA - Ductless Heat Pump',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
-    doe_workflow_central_ducted_split_heat_pump: {
-        title: 'Central Ducted Split Heat Pump',
+    beta_doe_workflow_central_ducted_split_heat_pump: {
+        title: 'BETA - Central Ducted Split Heat Pump',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
     },
 }

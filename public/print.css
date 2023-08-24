@@ -207,3 +207,11 @@ h3 {
   color: gray;
   font-size: .9rem;
 }
+
+
+/* BETA version text styling for new templates */
+.beta-text {
+  color: red;
+  padding-left: .75rem;
+  font-size: 0.9rem;
+}
