@@ -11,6 +11,7 @@ interface StringInputWrapperProps {
     min: number
     max: number
     regexp: RegExp
+    hint: string
 }
 
 /**
@@ -29,6 +30,7 @@ const StringInputWrapper: FC<StringInputWrapperProps> = ({
     min = 0,
     max = 1024,
     regexp = /.*/,
+    hint,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
@@ -45,6 +47,7 @@ const StringInputWrapper: FC<StringInputWrapperProps> = ({
                         min={min}
                         max={max}
                         regexp={regexp}
+                        hint={hint}
                     />
                 )
             }}

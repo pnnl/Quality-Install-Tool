@@ -139,6 +139,7 @@ h3 {
 
 #back-button {
   padding: 1rem;
+  background-color: green;
 }
 
 #back-button-link {
@@ -184,7 +185,15 @@ h3 {
   margin-top: 1rem;
 }
 
-/* custom label style*/
+/* 'hint' styling - the input components */
+.form-text{
+  margin-left:.50rem;
+  margin-top:.25rem;
+  font-size:.875rem;
+  color:var(--bs-secondary-color);
+  font-style: italic;
+
+/* label styling for the Radio component */
 .custom-label {
   color: gray;
   font-size: .9rem;

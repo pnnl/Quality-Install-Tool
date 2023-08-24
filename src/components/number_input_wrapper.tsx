@@ -12,6 +12,7 @@ interface NumberInputWrapperProps {
     suffix: string
     min: number
     max: number
+    hint: string
 }
 
 /**
@@ -35,6 +36,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
     suffix,
     min = Number.NEGATIVE_INFINITY,
     max = Number.POSITIVE_INFINITY,
+    hint,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
@@ -54,6 +56,7 @@ const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
                         value={get(data, path)}
                         min={min}
                         max={max}
+                        hint={hint}
                     />
                 )
             }}
