@@ -72,7 +72,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<Objectish>({})
-  
+
     /**
      * Updates component state based on a database document change
      *
