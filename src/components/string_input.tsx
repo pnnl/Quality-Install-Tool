@@ -1,3 +1,4 @@
+import React from 'react'
 import { FC, useState, useEffect, useRef } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
@@ -24,6 +25,7 @@ interface StringInputProps {
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
  * @param regexp The regular expression pattern to validate the input string.
+ * @param hint Displays hint text for the StringInput component.
  */
 const StringInput: FC<StringInputProps> = ({
     id,

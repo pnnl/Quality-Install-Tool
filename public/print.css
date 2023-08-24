@@ -48,6 +48,9 @@ h2 {
   break-after: avoid-page;
   font-size: 1.25rem;
 }
+h2:not(.accordion-header, h1+h2) {
+  margin-top: 30px;
+}
 h3 {
   font-size: 1rem;
   break-after: avoid-page;
@@ -185,6 +188,11 @@ h3 {
   margin-top: 1rem;
 }
 
+/* styling for PDFRenderer component  */
+.react-pdf__Page__textContent{
+    display: none;
+  }
+
 /* 'hint' styling - the input components */
 .form-text{
   margin-left:.50rem;
@@ -192,9 +200,18 @@ h3 {
   font-size:.875rem;
   color:var(--bs-secondary-color);
   font-style: italic;
+}
 
 /* label styling for the Radio component */
 .custom-label {
   color: gray;
   font-size: .9rem;
+}
+
+
+/* BETA version text - styling for new templates - temperary */
+.beta-text {
+  color: red;
+  padding-left: .75rem;
+  font-size: 0.9rem;
 }

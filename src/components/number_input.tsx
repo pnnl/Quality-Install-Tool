@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
@@ -29,6 +30,7 @@ interface NumberInputProps {
  * @param value The input value
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
+ * @param hint Displays hint text for the component.
  */
 const NumberInput: FC<NumberInputProps> = ({
     id,

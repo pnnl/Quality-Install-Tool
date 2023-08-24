@@ -1,6 +1,6 @@
 import { get } from 'lodash'
 import type { FC } from 'react'
-
+import React from 'react'
 import { StoreContext } from './store'
 import NumberInput from './number_input'
 import { pathToId } from '../utilities/paths_utils'
@@ -27,6 +27,7 @@ interface NumberInputWrapperProps {
  * @param suffix Text to appear as a suffix to the NumberInput (e.g. 'SqFt')
  * @param min The minimum allowed value for the input field, defult to NEGATIVE_INFINITY.
  * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
+ * @param hint Displays hint text for the component.
  */
 
 const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
