@@ -98,6 +98,13 @@ h3 {
   text-align: center;
 }
 
+.string-input-modal{
+  .error{
+    color: red;
+    font-style: italic;
+  }
+}
+
 
 /* root_layout.tsx */
 #root-flex-layout {
@@ -181,30 +188,21 @@ h3 {
   margin-top: 1rem;
 }
 
-/* custom label style */
+/* styling for PDFRenderer component  */
+.react-pdf__Page__textContent{
+    display: none;
+  }
+
+/* 'hint' styling - the input components */
+.form-text{
+  margin-left:.50rem;
+  margin-top:.25rem;
+  font-size:.875rem;
+  color:var(--bs-secondary-color);
+  font-style: italic;
+
+/* label styling for the Radio component */
 .custom-label {
   color: gray;
   font-size: .9rem;
 }
-
-/* custom button  style */
-.custom-button {
-  background-color: gray;
-  font-size: .9rem;
-  border-color: gray;
-}
-.custom-button:hover{
-  background-color: gray;
-  border-color: gray;
-  color: black
-}
-.form-text{
-  margin-left:.50em;
-  margin-top:.25rem;
-  font-size:.875em;
-  color:var(--bs-secondary-color);
-  font-style: italic;
-}
-.react-pdf__Page__textContent{
-    display: none;
-  }

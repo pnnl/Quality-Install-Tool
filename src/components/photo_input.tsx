@@ -111,7 +111,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
             className='photo-input'
             type="file"
           /> */}
-
                     {uploadable ? (
                         <input
                             accept="image/jpeg"
@@ -130,7 +129,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             capture="environment"
                         />
                     )}
-
                     {photo && (
                         <>
                             <Image src={URL.createObjectURL(photo)} thumbnail />

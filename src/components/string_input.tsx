@@ -39,20 +39,8 @@ const StringInput: FC<StringInputProps> = ({
 }) => {
     const [error, setError] = useState<string>('')
 
-    // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<number | null>(null)
-    const ref = useRef<HTMLInputElement>(null)
-
-    // Refresh after the first render and every time the component updates
-    useEffect(() => {
-        const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
-    }, [ref, cursor, value])
-
     const handleChange = (inputValue: string) => {
-        if (typeof inputValue !== 'string') {
-            setError('Input must be a string')
-        } else if (inputValue.length < min) {
+        if (inputValue.length < min) {
             setError('Input must be at least ' + min + ' characters long')
         } else if (inputValue.length > max) {
             setError('Input must be at most ' + max + ' characters long')
@@ -67,16 +55,12 @@ const StringInput: FC<StringInputProps> = ({
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    ref={ref}
-                    onChange={event => {
-                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
-                        handleChange(event.target.value)
-                    }}
+                    onChange={event => handleChange(event.target.value)}
                     type="text"
                     value={value || ''}
                     isInvalid={Boolean(error)}
                 />
-                <Form.Text>{hint}</Form.Text>
+                {hint && <Form.Text>Hint: {hint}</Form.Text>}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}
