@@ -20,7 +20,7 @@ PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
 
-type UpsertData = (pathStr: string, data: any) => void
+type UpsertData = (pathStr: string, value: any) => void
 
 type UpsertMetadata = (pathStr: string, value: any) => void
 
@@ -72,9 +72,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<Objectish>({})
-    const [data, setData] = useState<JSONValue>({})
-    const [metadata, setMetaData] = useState<Metadata | undefined>(undefined)
-
+  
     /**
      * Updates component state based on a database document change
      *
