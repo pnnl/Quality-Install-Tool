@@ -48,6 +48,9 @@ h2 {
   break-after: avoid-page;
   font-size: 1.25rem;
 }
+h2:not(.accordion-header, h1+h2) {
+  margin-top: 30px;
+}
 h3 {
   font-size: 1rem;
   break-after: avoid-page;
@@ -95,6 +98,13 @@ h3 {
   text-align: center;
 }
 
+.string-input-modal{
+  .error{
+    color: red;
+    font-style: italic;
+  }
+}
+
 
 /* root_layout.tsx */
 #root-flex-layout {
@@ -132,6 +142,7 @@ h3 {
 
 #back-button {
   padding: 1rem;
+  background-color: green;
 }
 
 #back-button-link {
@@ -175,4 +186,32 @@ h3 {
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
   margin-top: 1rem;
+}
+
+/* styling for PDFRenderer component  */
+.react-pdf__Page__textContent{
+    display: none;
+  }
+
+/* 'hint' styling - the input components */
+.form-text{
+  margin-left:.50rem;
+  margin-top:.25rem;
+  font-size:.875rem;
+  color:var(--bs-secondary-color);
+  font-style: italic;
+}
+
+/* label styling for the Radio component */
+.custom-label {
+  color: gray;
+  font-size: .9rem;
+}
+
+
+/* BETA version text - styling for new templates - temperary */
+.beta-text {
+  color: red;
+  padding-left: .75rem;
+  font-size: 0.9rem;
 }

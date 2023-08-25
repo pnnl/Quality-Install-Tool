@@ -45,7 +45,7 @@ export async function getMetadataFromCurrentGPSLocation(): Promise<
         // Do NOT get the timestamp from position because getCurrentGeolocation
         // may return a cached GeolocationPosition if the lat, long have not
         // changed sufficiently.
-        timestamp: new Date(Date.now()).toUTCString(),
+        timestamp: new Date(Date.now()).toISOString(),
     }
     return metadata
 }

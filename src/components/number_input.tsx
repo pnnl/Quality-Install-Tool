@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import React from 'react'
 import { useState, useRef, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
@@ -13,6 +14,7 @@ interface NumberInputProps {
     value: number
     min: number
     max: number
+    hint: string
 }
 
 /**
@@ -28,6 +30,7 @@ interface NumberInputProps {
  * @param value The input value
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
+ * @param hint Displays hint text for the component.
  */
 const NumberInput: FC<NumberInputProps> = ({
     id,
@@ -38,31 +41,31 @@ const NumberInput: FC<NumberInputProps> = ({
     value,
     min,
     max,
+    hint,
 }): any => {
-    const [error, setError] = useState<string>('')
+    const validateInput = (inputValue: number): string => {
+        if (inputValue < min) {
+            return 'Input must be at least ' + String(min)
+        } else if (inputValue > max) {
+            return 'Input must be at most ' + String(max)
+        } else {
+            return ''
+        }
+    }
 
-    // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<number | null>(null)
-    const ref = useRef<HTMLInputElement>(null)
-
-    // Refresh after the first render and every time the component updates
-    useEffect(() => {
-        const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
-    }, [ref, cursor, value])
+    const [error, setError] = useState<string>(validateInput(value))
+    const [localValue, setLocalValue] = useState<string>(
+        value as unknown as string,
+    )
 
     const handleChange = (inputValue: string): any => {
-        const inputValueNum: number = parseInt(inputValue)
+        const inputValueNum: number = parseFloat(inputValue)
         if (isNaN(inputValueNum)) {
             setError('Input must be a number')
-        } else if (inputValueNum < min) {
-            setError('Input must be at least ' + String(min))
-        } else if (inputValueNum > max) {
-            setError('Input must be at most ' + String(max))
         } else {
-            setError('')
+            updateValue(inputValue)
+            setError(validateInput(inputValueNum))
         }
-        updateValue(inputValue)
     }
 
     return (
@@ -70,16 +73,15 @@ const NumberInput: FC<NumberInputProps> = ({
             {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    ref={ref}
                     onChange={event => {
-                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
+                        setLocalValue(event.target.value)
                         handleChange(event.target.value)
                     }}
-                    type="text"
-                    inputMode="numeric"
-                    value={value != null ? value : ''}
+                    type="number"
+                    value={localValue}
                     isInvalid={Boolean(error)}
                 />
+                {hint && <Form.Text>{hint}</Form.Text>}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

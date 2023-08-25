@@ -18,9 +18,11 @@ import { putNewDoc } from '../utilities/database_utils'
 
 PouchDB.plugin(PouchDBUpsert)
 
-type UpsertAttachment = (blob: Blob, id: string) => void
+type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
 
-type UpsertData = (pathStr: string, data: any) => void
+type UpsertData = (pathStr: string, value: any) => void
+
+type UpsertMetadata = (pathStr: string, value: any) => void
 
 type UpsertDoc = (pathStr: string, data: any) => void
 
@@ -33,10 +35,14 @@ type Attachments = Record<
 export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
-    metadata: {} satisfies Metadata | undefined,
-    upsertAttachment: ((blob: Blob, id: any) => {}) as UpsertAttachment,
+    metadata: {} satisfies Metadata | undefined | Record<string, string>,
+    upsertAttachment: ((
+        blob: Blob,
+        id: any,
+        fileName?,
+    ) => {}) as UpsertAttachment,
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
-    upsertDoc: ((pathStr: string, data: any) => {}) as UpsertDoc,
+    upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
 })
 
 interface StoreProviderProps {
@@ -66,8 +72,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<Objectish>({})
-    const [data, setData] = useState<JSONValue>({})
-    const [metadata, setMetaData] = useState<Metadata | undefined>(undefined)
 
     /**
      * Updates component state based on a database document change
@@ -84,13 +88,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         delete newDoc._rev
 
         setDoc(newDoc)
-        if (db && Boolean(dbDoc.hasOwnProperty('data_'))) {
-            setData(dbDoc.data_)
-        }
-
-        if (db && dbDoc.hasOwnProperty('metadata_')) {
-            setMetaData(dbDoc.metadata_)
-        }
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
@@ -118,12 +115,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     if (blobOrBuffer instanceof Blob) {
                         const blob = blobOrBuffer
                         const metadata: Record<string, any> =
-                            blob.type === 'image/jpeg'
-                                ? (singleAttachmentMetadata as Record<
-                                      string,
-                                      any
-                                  >)
-                                : {}
+                            singleAttachmentMetadata as Record<string, any>
 
                         newAttachments = {
                             ...newAttachments,
@@ -240,18 +232,16 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 const result = { ...dbDoc, ...newDoc }
                 if (!result.metadata_) {
                     result.metadata_ = {
-                        created_at: new Date(),
-                        last_modified_at: new Date(),
+                        created_at: new Date().toISOString(),
+                        last_modified_at: new Date().toISOString(),
                     }
                 } else {
-                    result.metadata_.last_modified_at = new Date()
+                    result.metadata_.last_modified_at = new Date().toISOString()
                 }
                 return result
             })
                 .then(function (res) {
-                    if (pathStr.includes('metadata_')) {
-                        revisionRef.current = res.rev
-                    }
+                    revisionRef.current = res.rev
                 })
                 .catch(function (err: Error) {
                     console.error('upsert error:', err)
@@ -260,33 +250,57 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     /**
-     * Updates (or inserts) data into the data_ state by invoking updatedDoc function
+     * Updates (or inserts) data into the data_ property of the doc state by invoking updatedDoc function
      *
      * @remarks
      * This function is typically passed to an input wrapper component via the StoreContext.Provider value
      * This function calls updateDoc, with the path to "data_" in dbDoc.
      *
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
-     * @param data The data that is to be updated/inserted at the path location in the data state
+     * @param value The value that is to be updated/inserted
      */
-    const upsertData: UpsertData = (pathStr, data) => {
+    const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
-        upsertDoc(pathStr, data)
+        upsertDoc(pathStr, value)
     }
+
+    /**
+     * Updates (or inserts) metadata into the metadata_ property of the doc state by invoking updatedDoc function
+     *
+     * @remarks
+     * This function is typically passed to an input wrapper component via the StoreContext.Provider value
+     * This function calls updateDoc, with the path to "data_" in dbDoc.
+     *
+     * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
+     * @param value The value that is to be updated/inserted
+     */
+    const upsertMetadata: UpsertMetadata = (pathStr, value) => {
+        pathStr = 'metadata_.' + pathStr
+        upsertDoc(pathStr, value)
+    }
+
     /**
      *
      * @param blob
      * @param id
      */
-    const upsertAttachment: UpsertAttachment = async (blob, id) => {
+    const upsertAttachment: UpsertAttachment = async (
+        blob: Blob,
+        id: string,
+        fileName?: string,
+    ) => {
         // Create the metadata for the blob
+
         const metadata: Attachment['metadata'] =
             blob.type === 'image/jpeg'
                 ? await getMetadataFromCurrentGPSLocation()
-                : {}
+                : {
+                      filename: fileName,
+                      timestamp: new Date(Date.now()).toISOString(),
+                  }
 
         // Storing SingleAttachmentMetaData in the DB
-        upsertDoc('metadata_.attachments.' + id, metadata)
+        upsertMetadata('attachments.' + id, metadata)
 
         // Store the blob in memory
         const newAttachments = {
@@ -334,11 +348,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
-                data,
-                metadata,
+                data: doc.data_,
+                metadata: doc.metadata_,
                 upsertAttachment,
                 upsertData,
-                upsertDoc,
+                upsertMetadata,
             }}
         >
             {children}

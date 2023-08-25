@@ -24,6 +24,7 @@ export async function putNewDoc(
     // Store the new document if it does not exist
     return db.putIfNotExists({
         _id: docName,
+        data_: {},
         metadata_: {
             created_at: now,
             last_modified_at: now,

@@ -2,6 +2,8 @@ import QaHPWHTemplate from './qa_hpwh.mdx'
 import DOEWorkflowHPWHTemplate from './doe_workflow_hpwh.mdx'
 import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
+import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
+import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -28,6 +30,14 @@ const templatesConfig: TemplatesConfig = {
     doe_workflow_attic_insulation: {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
+    },
+    beta_doe_workflow_ductless_heat_pump: {
+        title: 'BETA - Ductless Heat Pump',
+        template: DOEWorkflowDuctlessHeatPumpTemplate,
+    },
+    beta_doe_workflow_central_ducted_split_heat_pump: {
+        title: 'BETA - Central Ducted Split Heat Pump',
+        template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
     },
 }
 /**

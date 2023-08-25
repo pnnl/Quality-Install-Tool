@@ -1,3 +1,4 @@
+import React from 'react'
 import { FC, useState, useEffect, useRef } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
@@ -10,6 +11,7 @@ interface StringInputProps {
     min: number
     max: number
     regexp: RegExp
+    hint: string
 }
 
 /**
@@ -23,6 +25,7 @@ interface StringInputProps {
  * @param min The minimum allowed value for the input field.
  * @param max The maximum allowed value for the input field.
  * @param regexp The regular expression pattern to validate the input string.
+ * @param hint Displays hint text for the StringInput component.
  */
 const StringInput: FC<StringInputProps> = ({
     id,
@@ -32,23 +35,12 @@ const StringInput: FC<StringInputProps> = ({
     min,
     max,
     regexp,
+    hint,
 }) => {
     const [error, setError] = useState<string>('')
 
-    // use the cursor postion when user edits the data in the component
-    const [cursor, setCursor] = useState<number | null>(null)
-    const ref = useRef<HTMLInputElement>(null)
-
-    // Refresh after the first render and every time the component updates
-    useEffect(() => {
-        const input = ref.current
-        if (input) input.setSelectionRange(cursor, cursor)
-    }, [ref, cursor, value])
-
     const handleChange = (inputValue: string) => {
-        if (typeof inputValue !== 'string') {
-            setError('Input must be a string')
-        } else if (inputValue.length < min) {
+        if (inputValue.length < min) {
             setError('Input must be at least ' + min + ' characters long')
         } else if (inputValue.length > max) {
             setError('Input must be at most ' + max + ' characters long')
@@ -63,15 +55,12 @@ const StringInput: FC<StringInputProps> = ({
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
                 <Form.Control
-                    ref={ref}
-                    onChange={event => {
-                        setCursor(event.target.selectionStart) // Set the cursor position as the selectionStart
-                        handleChange(event.target.value)
-                    }}
+                    onChange={event => handleChange(event.target.value)}
                     type="text"
                     value={value || ''}
                     isInvalid={Boolean(error)}
                 />
+                {hint && <Form.Text>{hint}</Form.Text>}
                 {error && (
                     <Form.Control.Feedback type="invalid">
                         {error}

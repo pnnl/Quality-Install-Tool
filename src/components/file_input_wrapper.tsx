@@ -1,0 +1,44 @@
+import React, { FC } from 'react'
+import { StoreContext } from './store'
+import FileInput from './file_input'
+
+interface FileInputWrapperProps {
+    children: React.ReactNode
+    id: string
+    label: string
+}
+
+/**
+ * A component that wraps a FileInput component in order to tie it to the data store
+ *
+ * @param children Content (most commonly markdown text) to be passed on as the FileInput children
+ * @param id An identifier for the store attachment that represents the information of the file
+ * @param label The label of the PhotoInput component
+ */
+const FileInputWrapper: FC<FileInputWrapperProps> = ({
+    children,
+    id,
+    label,
+}) => {
+    return (
+        <StoreContext.Consumer>
+            {({ attachments, upsertAttachment }) => {
+                const upsertFile = (img_file: Blob, fileName: string) => {
+                    upsertAttachment(img_file, id, fileName)
+                }
+                return (
+                    <FileInput
+                        label={label}
+                        fileMetadata={attachments[id]?.metadata}
+                        file={attachments[id]?.blob}
+                        upsertFile={upsertFile}
+                    >
+                        {children}
+                    </FileInput>
+                )
+            }}
+        </StoreContext.Consumer>
+    )
+}
+
+export default FileInputWrapper

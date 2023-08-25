@@ -11,6 +11,7 @@ interface StringInputWrapperProps {
     min: number
     max: number
     regexp: RegExp
+    hint: string
 }
 
 /**
@@ -22,6 +23,7 @@ interface StringInputWrapperProps {
  * @param min The minimum allowed value for the input field, defult to 0.
  * @param max The maximum allowed value for the input field, defult to 1024.
  * @param regexp The regular expression pattern to validate the input string, defult to take anything.
+ * @param hint Displays hint text for the StringInput component.
  */
 const StringInputWrapper: FC<StringInputWrapperProps> = ({
     label,
@@ -29,6 +31,7 @@ const StringInputWrapper: FC<StringInputWrapperProps> = ({
     min = 0,
     max = 1024,
     regexp = /.*/,
+    hint,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
@@ -45,6 +48,7 @@ const StringInputWrapper: FC<StringInputWrapperProps> = ({
                         min={min}
                         max={max}
                         regexp={regexp}
+                        hint={hint}
                     />
                 )
             }}
