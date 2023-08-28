@@ -103,3 +103,10 @@ A select input with the 50 U.S. States preloaded as options
 ```
 <USStateSelect label="INPUT_LABEL" path="DOCUMENT_PATH" />
 ```
+
+### FileInput
+```
+<FileInput id="ATTACHMENT_ID" label="FILE_INPUT_LABEL">
+  PRINTABLE_CONTENT
+</FileInput>
+```
