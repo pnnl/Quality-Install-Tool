@@ -31,10 +31,44 @@ a pull request is made.
 
 The command `yarn lint:fix` can be used to automatically fix any linting or formatting errors that can be fixed.
 
-## Short codes for the MDX templates 
+
+# Worklfow Template Creation
+
+Here's a step-by-step walkthrough on creating new workflow templates:
+This process entails blending Markdown content with reusable React 
+components, resulting in the generating of adaptable reports.
+
+## Creating a new template
+
+Configure new template details in "src/templates/templates_config.ts" file. 
+
+
+```typescript
+template_name: {
+  title: 'TITLE OF THE TEMPLATE',
+  template: 'TEMPLATE FILE IMPORTED',
+}
+
+// For example:
+doe_workflow_hpwh: {
+  title: 'Heat Pump Water Heater',
+  template: DOEWorkflowHPWHTemplate,
+}
+```
+
+
+
+
+
+## Short codes for the MDX templates
+
 To avoid the template writter needing to import React components, a set of 
 components are automatically imported into the templates as *MDX shortcodes*.
 This happens in the `MdxWrapper` component.
+
+
+
+
 
 ### Collapse
 Wrap content to be shown/hidden
