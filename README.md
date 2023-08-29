@@ -86,10 +86,10 @@ EXAMPLE MDX
   .
   .
   .
-  <!-- Report Components: Components to generate the PDF report -->
+  <!-- Report Components: Components to generate the printable report -->
   <Tab eventKey="KEY" title="Report">
     <PrintSection>
-    CONTENT_TO_INLCUDE_IN_PDF_REPORT
+    CONTENT_TO_INLCUDE_IN_PRINTABLE_REPORT
     </PrintSection>
   </Tab>
 </Tabs>
