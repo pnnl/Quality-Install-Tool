@@ -130,7 +130,7 @@ A calendar date input
 ```
 
 ### PhotoInput
-```
+```HTML
 <PhotoInput id="ATTACHMENT_ID" label="PHOTO_LABEL" uploadable>
   PHOTO_DESCRIPTION
 </PhotoInput>
