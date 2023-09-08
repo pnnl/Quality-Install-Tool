@@ -69,9 +69,9 @@ const NumberInput: FC<NumberInputProps> = ({
     }
 
     return (
-        <InputGroup>
+        <InputGroup className="mb-3">
             {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
-            <FloatingLabel className="mb-3" controlId={id} label={label}>
+            <FloatingLabel controlId={id} label={label}>
                 <Form.Control
                     onChange={event => {
                         setLocalValue(event.target.value)
