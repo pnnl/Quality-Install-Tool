@@ -8,17 +8,15 @@ import { pathToId } from '../../utilities/paths_utils';
 
 jest.mock('../../components/store', () => ({
   StoreContext: {
-    Consumer: ({ children }) => children({ data: {}, upsertData: jest.fn() }), // Mock context values
+    Consumer: ({ children }) => children({ data: {}, upsertData: jest.fn() }),
   },
 }));
 
 describe('DateInputWrapper', () => {
   it('renders with correct props and handles value change', () => {
-    // Arrange
     const label = 'Test Label';
     const path = 'test.path';
 
-    // Render the DateInputWrapper component
     const { getByLabelText } = render(<DateInputWrapper label={label} path={path} />);
 
     const inputElement = getByLabelText(label);
