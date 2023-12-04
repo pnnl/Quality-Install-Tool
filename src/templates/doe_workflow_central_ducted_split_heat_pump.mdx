@@ -25,7 +25,7 @@
         <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
             Take a photo of the manometer readout or screenshot from digital instrument app.
         </PhotoInput>   
-        <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c" />
+        <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c, assess whether the static pressure is in the supply or return. If it is in the return, consider recommending upsizing the return filter to accommodate a larger size and a deeper filter." />
        
 
         ## Airflow Test
@@ -97,7 +97,9 @@
             Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J loads, manufactuer's heating and cooling 
             output capacity at the design conditions (often found by looking up the extended performance tables). 
             Use the NEEP Heat Pump List as an alternative source for equipment output capacity at the design conditions. 
-            Factor in auxiliary heat, or dual fuel into the equipment selection as applicable. 
+            Factor in auxiliary heat, or dual fuel into the equipment selection as applicable. If the existing ducts can only accommodate a 
+            heat pump below the size that is needed, discuss with the customer the option of upgrading the ducts versus supplementing the central 
+            heat pump with one or more ductless heat pumps. Please add a comment recording the decision made.
         </Collapsible>
         <PhotoInput id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" uploadable>
             Upload a photo of the MFG's extended heating performance table.
@@ -107,7 +109,7 @@
         <NumberInput label="Dual Fuel Switch Over Temperature (&deg;F)" min={0} path="dual_fuel_switch_over_temperature" /> 
 
         <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="MFG's cooling performance table – Photo" uploadable>
-            Upload a photo of the MFG's extended cooling performance table showing sensible, latent, or SHR.
+            Upload a photo of the MFG's extended cooling performance table showing sensible, latent, or SHR. 
         </PhotoInput>
         
         ## Pre-installation Additional Comments
@@ -151,13 +153,20 @@
         | Additional Refrigerant Calculator
         | ---------------------------------
         | <NumberInput label="Feet of line set beyond factory charge" min={0} path="refrigerant_calculator.ft_line_set_beyond_factory_charge" hint=""  /> 
-        | <NumberInput label="Ounce of refrigerant per foot of line set" min={0} path="refrigerant_calculator.oz_per_ft_refrigerant" hint="" /> 
+        | <NumberInput label="Ounce of refrigerant per foot of line set" min={0} path="refrigerant_calculator.oz_per_ft_refrigerant" hint="Please write the ounces of additional refrigerant added beyond the factory charge behind the service cover." /> 
         |  Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
         <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comment_refrigerant_quantity_adjustments_or_weigh_in" />
         ## Protection
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
            Take a photo of the line set and line set wall penetration protection.
         </PhotoInput>
+        <PhotoInput id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
+           Take a photo of the electrical surge protection device installed.
+        </PhotoInput>
+        <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+           Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
+        </PhotoInput>
+
         ## Plenum connections
          <PhotoInput id="plenum_connections_photo" label="Plenum Connections – Photo">
             Take a photo of the supply and return plenum connections to the air handler cabinet showing they have been sealed, insulated and have a vapor barrier.
@@ -229,6 +238,40 @@
             ## Acronyms
             ODU – Outdoor Unit <br/>
             IDU – Outdoor Unit
+
+            ## ATTENTION CUSTOMER: Heat Pump Cleaning and Maintenance
+            ## Quarterly 
+            ### Air Filter 
+            Check the air filter quarterly and replace as needed. If your system was designed to take a 1" thick 
+            pleated filter, they will get dirty and need to be replaced sooner than if the system was designed to 
+            take a 4" filter. Ask your HVAC installer what filter MERV (minimum efficiency reporting value) rating 
+            your heat pump was designed to take and purchase replacement filters of the same MERV value. Going with a 
+            higher MERV rating can result in many unintended consequences including reduced air flow that results in 
+            comfort problems and higher energy use.
+
+            ## Twice a Year
+            ### Outdoor Unit Condenser Coil 
+            It is a best practice to inspect the outdoor unit at least twice a year for debris build up on the 
+            condenser coil. Leaves, pollen, and fluff from cottonwood trees can build up and block the movement of air
+             through the condenser coil and cause poor performance. You can carefully clean loose debris off the 
+             condenser coil using a vacuum cleaner and a soft brush. Take care to not bend the fins on the condenser 
+             coil. For more stubborn or stickier dust, it is best practice to call an HVAC service tech. They will 
+             spray down your coil with the correct cleaning detergent to not damage the material and disassemble the 
+             outdoor unit enough to spray water from the inside to push out the dust and debris and rinse the coil 
+             free of the cleaning detergent.
+
+            ### Supply Vents
+            It is a best practice to vacuum the supply grilles twice a year. If the supply grilles are located on 
+            the floor it is best practice to remove the supply grill and use the vacuum’s crevice tool to vacuum 
+            the area of the supply duct that can be reached.
+
+            ## Yearly
+            ### Condensate Drain
+            It is a best practice to inspect the end of the condensate drain yearly. If there is a buildup of 
+            goo/slime/mucus/snot at the end of the condensate drain line, it is time to call a HVAC service tech. 
+            They will use the combination of a shop vac, drain snakes, and pressurized water to clean out the 
+            condensate drain line. 
+
            
             ## Pre-Upgrade Tests
             
@@ -335,7 +378,7 @@
             }
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
-            and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs.
+            and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs. Please see comment below if decisions needed to be made regarding whether to size the heat pump to the existing duct capacity or the ducts were replaced to accommodate the heat pump’s air flow requirements.
             <Photo id="mfg_extended_heating_performance_table_photo" label="MFG's Heating Performance Table – Photo" required>
             The selected heat pump's extended heating performance table 
             </Photo>
@@ -362,7 +405,7 @@
             
             {
                 props.data.comment_ductwork_concluding_summary
-                ? <p><strong>Ductwork Concluding Comments: </strong> {props.data.comment_ductwork_concluding_summary}</p> 
+                ? <p><strong>Pre-Installation Comments: </strong> {props.data.comment_ductwork_concluding_summary}</p> 
                 : null
             }
                        
@@ -409,6 +452,12 @@
             }
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
                 The line set and line set to wall penetration should be protected from damage by UV, rain, and pests.  
+            </Photo>
+            <Photo id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
+                Photo of the electrical surge protection device installed
+            </Photo>
+            <Photo id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+                Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
             <Photo id="plenum_connections_photo" label="Plenum Connections – Photo" required >
                 The supply and return plenum connections to the air handler cabinet should be sealed, insulated, and have a vapor barrier.   

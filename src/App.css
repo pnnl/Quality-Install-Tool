@@ -92,11 +92,11 @@ h1 + h2 {
   margin-bottom: 10px;
 }
 
-/* headding */
-h3 {
+/* heading */
+/* h3 {
   font-size: 1.3rem; 
   text-align: center;
-}
+} */
 
 .string-input-modal{
   .error{
