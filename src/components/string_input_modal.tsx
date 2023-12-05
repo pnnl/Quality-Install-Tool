@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useEffect } from 'react'
+import { SetStateAction, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Modal from 'react-bootstrap/Modal'
 import PropTypes from 'prop-types'
