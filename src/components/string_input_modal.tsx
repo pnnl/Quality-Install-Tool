@@ -42,7 +42,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const [isValid, setIsValid] = useState(false)
 
     const handleSubmit = () => {
-        onSubmit(inputValue)
+        onSubmit(inputValue.trim())
         closeModal()
     }
 
@@ -58,19 +58,21 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
      */
     const handleInputChange = (event: { target: { value: string } }) => {
         let input = event.target.value
-        const trimedInputValue = input.trim()
-        setInputValue(trimedInputValue)
+        setInputValue(input)
         setIsValid(
-            validateInput.every(validator =>
-                validator.validator(trimedInputValue),
-            ),
+            validateInput.every(validator => validator.validator(input)),
         )
+    }
 
-        if (isValid) {
-            setErrorMessage('')
-        } else {
+    /**
+     * Determining the specific error message based on the input field's value.
+     * Uses state variables 'isValid' and 'inputValue'.
+     */
+    const evalErrorMessage = () => {
+        setErrorMessage('')
+        if (!isValid) {
             const errorValidator = validateInput.find(
-                validator => !validator.validator(trimedInputValue),
+                validator => !validator.validator(inputValue),
             )
             const errorMessage = errorValidator?.errorMsg || ''
             setErrorMessage(errorMessage)
@@ -95,6 +97,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
+                    onKeyUp={evalErrorMessage}
                     autoFocus
                 />
                 {errorMessage && <div className="error">{errorMessage}</div>}
