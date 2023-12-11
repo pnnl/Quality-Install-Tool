@@ -46,7 +46,7 @@ const JobList: React.FC<JobListProps> = ({ dbName }) => {
         {
             validator: (input: string) => {
                 // Not allow a duplicate with an existing job name
-                return !sortedJobs.includes(input)
+                return !sortedJobs.includes(input.trim())
             },
             errorMsg:
                 'Job name already exists. Please choose a different name.',

@@ -3,11 +3,9 @@ import type { FC } from 'react'
 import type FileMetadata from '../types/file_metadata.types'
 import { Document, Page } from 'react-pdf'
 import { pdfjs } from 'react-pdf'
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry'
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.js',
-    import.meta.url,
-).toString()
+pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
 
 interface PDFRendererProps {
     children: React.ReactNode

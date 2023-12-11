@@ -161,7 +161,7 @@
         | Ounce of refrigerant to add on top of factory charge
         | --------------------------------------------------
         | <NumberInput label="Number of ft of line set beyond factory charge" min={0} path="oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge"  /> 
-        | <NumberInput label="Ounce / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft"  /> 
+        | <NumberInput label="Ounce / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft" hint="Please write the ounces of additional refrigerant added beyond the factory charge behind the service cover."  /> 
         | Ounce(s) to add= { props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft).toFixed(2) : null } 
 
         <PhotoInput id="refrigerant_add_or_trim_photo" label="Refrigerant Add/Trim – Photo">
@@ -176,6 +176,15 @@
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
             Take a photo  of the outdoor section of the refrigerant line set as it enters the building showing the 
             line set insulation has been protected from weather and UV. 
+        </PhotoInput>
+
+        <PhotoInput id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
+           Take a photo of the electrical surge protection device installed.
+        </PhotoInput>
+
+        <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+            Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
+
         </PhotoInput>
 
     </Tab>
@@ -213,6 +222,43 @@
             ## Acronyms
             ODU – Outdoor Unit <br/>
             IDU – Indoor Unit
+
+            ## ATTENTION CUSTOMER: Ductless Heat Pump Cleaning and Maintenance
+            ## Quarterly
+            ### Air Filter
+            Ductless heat pumps have mesh filters that need to be checked and cleaned quarterly. Refer to the owner’s 
+            manual for details on how to do this on your specific unit. The mesh filters can be cleaned using a vacuum. 
+            For stickier dust, wash them gently using soap and water.
+
+            ## Twice a Year
+            ### Outdoor Unit Condenser Coil
+            It is a best practice to inspect the outdoor unit at least twice a year for debris build up on the 
+            condenser coil. Leaves, pollen, and fluff from cottonwood trees can build up and block the movement of air 
+            through the condenser coil and cause poor performance. You can carefully clean loose debris off the 
+            condenser coil using a vacuum cleaner and a soft brush. Take care to not bend the fins on the condenser 
+            coil. For more stubborn or stickier dust, it is best practice to call an HVAC service tech. 
+            They will spray down your coil with the correct cleaning detergent to not damage the material and 
+            disassemble the outdoor unit enough to spray water from the inside to push out the dust and debris and 
+            rinse the coil free of the cleaning detergent.
+
+            ## Yearly
+            ### Deep Cleaning
+            It is good practice to do a deep cleaning of the ductless heat pump indoor unit yearly. A deep 
+            cleaning is not a DIY task, it is a call and have an HVAC service tech do it task. You can check to 
+            see if a cleaning is needed by turning off the ductless heat pump, then gently pulling the louver open 
+            and looking at the blower wheel. If there is a buildup of dust or mold on the blower wheel it is time for 
+            a deep cleaning. The HVAC service tech will disassemble the ductless heat pump head to remove the blower 
+            wheel to thoroughly clean it outside. When the ductless heat pump head is disassembled, they will also 
+            clean the coil, condensate tray, and condensate drain. You can expect this deep cleaning procedure to 
+            take several hours.
+
+            ### Condensate Drain
+            It is a best practice to inspect the end of the condensate drain yearly. If there is a buildup of 
+            goo/slime/mucus/snot at the end of the condensate drain line, it is time to call a HVAC service tech.
+             They will use the combination of a shop vac, drain snakes, and pressurized water to clean out the 
+             condensate drain line.
+
+
 
             ## Pre-Installation
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
@@ -331,6 +377,15 @@
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
                 Photo of the outdoor section of the refrigerant line set as it enters the building showing the 
                 line set insulation has been protected from weather and UV
+            </Photo>
+
+
+            <Photo id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
+                Photo of the electrical surge protection device installed
+            </Photo>
+
+            <Photo id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+                Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
