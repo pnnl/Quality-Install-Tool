@@ -55,9 +55,12 @@ h3 {
   font-size: 1rem;
   break-after: avoid-page;
 }
+/* used in all templates - for report title */
 h1 + h2 {
   text-align: center;
 }
+
+/* used in mdx_template_view.tsx */
 h1 + h3 {
   text-align: center;
 }
