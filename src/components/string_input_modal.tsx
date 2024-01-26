@@ -59,9 +59,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const handleInputChange = (event: { target: { value: string } }) => {
         let input = event.target.value
         setInputValue(input)
-        setIsValid(
-            validateInput.every(validator => validator.validator(input)),
-        )
+        setIsValid(validateInput.every(validator => validator.validator(input)))
     }
 
     /**

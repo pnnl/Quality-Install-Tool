@@ -53,6 +53,7 @@ const components = {
 
 interface MdxWrapperProps {
     Component: React.ComponentType<any>
+    Project: any
 }
 
 /**
@@ -61,7 +62,7 @@ interface MdxWrapperProps {
  *
  * @param Component An MDX component instance
  */
-const MdxWrapper: FC<MdxWrapperProps> = ({ Component }) => {
+const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
     return (
         <StoreContext.Consumer>
             {({ metadata, data }) => {
@@ -73,6 +74,7 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component }) => {
                                 components={components}
                                 metadata={metadata}
                                 data={data}
+                                project={Project}
                             />
                         ) : null}
                     </div>

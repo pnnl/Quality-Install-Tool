@@ -19,8 +19,16 @@ export async function putNewDoc(
     }
     // The workflow name is the database name
     const workflow_name = dbInfo.db_name
+    let workflow_title = dbInfo.db_name
+
     // Get the corresponding workflow title from templates_config
-    const workflow_title = templatesConfig[workflow_name].title
+    if (workflow_name.indexOf('quality_install_tool') > 0) {
+        const template_name = workflow_name
+            .split('_')
+            .slice(1, workflow_name.length)
+            .join('_')
+        workflow_title = templatesConfig[template_name].title
+    }
     // Store the new document if it does not exist
     return db.putIfNotExists({
         _id: docName,
@@ -29,11 +37,175 @@ export async function putNewDoc(
             created_at: now,
             last_modified_at: now,
             attachments: {},
-            workflow_name,
-            workflow_title,
             project_name: docName,
         },
     })
+}
+
+export async function putNewProject(
+    db: PouchDB.Database<{}>,
+    docName: string,
+    docId: string,
+): Promise<unknown> {
+    // Get the current date
+    const now = new Date()
+    // TODO: Handle the error case better
+    const dbInfo = await promisifiedDBInfo(db)
+    if (!dbInfo) {
+        throw new Error('Database info should never be null')
+    }
+    // The workflow name is the database name
+    const workflow_name = dbInfo.db_name
+    let workflow_title = dbInfo.db_name
+    // Store the new document if it does not exist
+    return db.putIfNotExists({
+        _id: docId ? docId : crypto.randomUUID(),
+        data_: {},
+        metadata_: {
+            project_name: docName,
+            created_at: now,
+            last_modified_at: now,
+            attachments: {},
+        },
+        installations_: [],
+    })
+}
+
+export async function putNewWorkFlow(
+    db: PouchDB.Database<{}>,
+    projectID: string,
+    workflowName: string,
+    docId?: string,
+    docName?: string,
+): Promise<unknown> {
+    // Get the current date
+    const now = new Date()
+    // TODO: Handle the error case better
+    const dbInfo = await promisifiedDBInfo(db)
+    if (!dbInfo) {
+        throw new Error('Database info should never be null')
+    }
+
+    const projectDoc = await db.get(projectID)
+
+    // The workflow name is the database name
+    const doc_name = docName
+    const workflow_name = workflowName
+    let workflow_title = templatesConfig[workflowName].title
+
+    const initializeNewWorkflow = {
+        _id: crypto.randomUUID(),
+        data_: {},
+        metadata_: {
+            workflow_title,
+            workflow_name,
+            doc_name,
+            created_at: now,
+            last_modified_at: now,
+            attachments: {},
+        },
+    }
+
+    const specificInstallation = projectDoc.installations_.find(
+        (x: { _id: string | undefined }) => x._id === docId,
+    )
+
+    if (!specificInstallation) {
+        if (projectDoc.installations_?.length == 0) {
+            projectDoc.installations_[0] = initializeNewWorkflow
+        } else {
+            projectDoc.installations_[projectDoc.installations_?.length] =
+                initializeNewWorkflow
+        }
+    }
+    return db.upsert(projectID, function upsertFn(dbDoc: any) {
+        const result = { ...db.get(projectID), ...projectDoc }
+        if (!result.metadata_) {
+            result.metadata_ = {
+                created_at: new Date().toISOString(),
+                last_modified_at: new Date().toISOString(),
+            }
+        } else {
+            result.metadata_.last_modified_at = new Date().toISOString()
+        }
+        return result
+    })
+}
+
+export async function retrieveSingleProject(
+    db: PouchDB.Database<{}>,
+    projectId: string,
+): Promise<any> {
+    try {
+        const result = await db.get(projectId)
+        const project = result.rows.map(row => row.doc)
+        return project
+    } catch (error) {
+        console.error('Error retrieving jobs:', error)
+    }
+}
+
+export async function retrieveProjects(db: PouchDB.Database<{}>): Promise<any> {
+    try {
+        const result = await db.allDocs({ include_docs: true })
+        const projectList = result.rows.map(row => row.doc)
+        return projectList
+    } catch (error) {
+        console.error('Error retrieving jobs:', error)
+    }
+}
+
+export async function retrieveJobs_db(
+    db: PouchDB.Database<{}>,
+    projectID: string,
+    workflowName: string,
+): Promise<any> {
+    try {
+        const projectDoc = await db.get(projectID)
+        let projectList: any[] = []
+        projectDoc.installations_.map((key, value) => {
+            if (key.metadata_.workflow_name == workflowName) {
+                projectList.push(key)
+            }
+        })
+        return projectList
+    } catch (error) {
+        console.error('Error retrieving jobs:', error)
+    }
+}
+
+export async function projectDetails(
+    db: PouchDB.Database<{}>,
+    projectID: string,
+    workflowName: string,
+): Promise<any> {
+    const doc = await db.get(projectID)
+
+    if (doc) {
+        const project_name = doc.metadata_?.project_name
+        const installation_name = templatesConfig[workflowName].title
+        const street_address = doc.data_.location?.street_address
+            ? doc.data_.location?.street_address + ', '
+            : null
+        const city = doc.data_.location?.city
+            ? doc.data_.location?.city + ', '
+            : null
+        const state = doc.data_.location?.state
+            ? doc.data_.location?.state + ' '
+            : null
+        const zip_code = doc.data_.location?.zip_code
+            ? doc.data_.location?.zip_code
+            : null
+        const project_details = {
+            project_name: project_name,
+            installation_name: installation_name,
+            street_address: street_address,
+            city: city,
+            state: state,
+            zip_code: zip_code,
+        }
+        return project_details
+    }
 }
 
 /**

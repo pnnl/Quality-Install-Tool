@@ -6,12 +6,7 @@ import { Button, ListGroup, Modal } from 'react-bootstrap'
 import templatesConfig from '../templates/templates_config'
 import StringInputModal from './string_input_modal'
 import { LinkContainer } from 'react-router-bootstrap'
-import {
-    putNewDoc,
-    putNewWorkFlow,
-    retrieveJobs_db,
-    projectDetails,
-} from '../utilities/database_utils'
+import { putNewDoc, putNewWorkFlow } from '../utilities/database_utils'
 import dbName from './db_details'
 
 PouchDB.plugin(PouchDBUpsert)
@@ -22,10 +17,9 @@ interface JobListProps {
 }
 
 const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
-    const db = new PouchDB(dbName)
+    const db = new PouchDB(projectID + '_' + workflowName)
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
-    const [sortedJobNames, setSortedJobNames] = useState<any[]>([])
-    const [jobsList, setJobsList] = useState<any[]>([])
+    const [, setJobsList] = useState<any[]>([])
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
     const [modalOpenMap, setModalOpenMap] = useState<{
         [jobId: string]: boolean
@@ -34,13 +28,39 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     const [selectedJobToDelete, setSelectedJobToDelete] = useState('')
     const [projectInfo, setProjectInfo] = useState<any>({})
 
-    const project_info = async (): Promise<void> => {
-        projectDetails(db, projectID, workflowName).then(res => {
-            setProjectInfo(res)
-        })
+    const project_info = async (projectID: string, workflowName: string) => {
+        const projectDB = new PouchDB(dbName)
+        const doc = await projectDB.get(projectID)
+
+        if (doc) {
+            const project_name = doc?.project_name
+            const installation_name = templatesConfig[workflowName].title
+            const street_address = doc.data_.location?.street_address
+                ? doc.data_.location?.street_address + ', '
+                : null
+            const city = doc.data_.location?.city
+                ? doc.data_.location?.city + ', '
+                : null
+            const state = doc.data_.location?.state
+                ? doc.data_.location?.state + ' '
+                : null
+            const zip_code = doc.data_.location?.zip_code
+                ? doc.data_.location?.zip_code
+                : null
+            const project_details = {
+                project_name: project_name,
+                installation_name: installation_name,
+                street_address: street_address,
+                city: city,
+                state: state,
+                zip_code: zip_code,
+            }
+            setProjectInfo(project_details)
+            return project_details
+        }
     }
 
-    const installation_name = templatesConfig[workflowName].title
+    project_info(projectID, workflowName)
 
     const openAddModal = (): void => {
         setIsAddModalOpen(true)
@@ -62,8 +82,8 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
         },
         {
             validator: (input: string) => {
-                // Not allow a duplicate with an existing job nam
-                return !sortedJobNames.includes(input.trim())
+                // Not allow a duplicate with an existing job name
+                return !sortedJobs.includes(input.trim())
             },
             errorMsg:
                 'Job name already exists. Please choose a different name.',
@@ -71,15 +91,18 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     ]
 
     const retrieveJobs = async (): Promise<void> => {
-        retrieveJobs_db(db, projectID, workflowName).then(res => {
-            setJobsList(res)
-            sortByEditTime(res)
-        })
+        try {
+            const result = await db.allDocs({ include_docs: true })
+            const jobsList = result.rows.map(row => row.doc)
+            setJobsList(jobsList)
+            sortByEditTime(jobsList)
+        } catch (error) {
+            console.error('Error retrieving jobs:', error)
+        }
     }
 
     useEffect(() => {
         retrieveJobs()
-        project_info()
     }, [])
 
     const sortByEditTime = (jobsList: any[]) => {
@@ -98,10 +121,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                 return 0
             }
         })
-        setSortedJobs(sortedJobsByEditTime)
-        setSortedJobNames(
-            sortedJobsByEditTime.map(doc => doc.metadata_.doc_name),
-        )
+        setSortedJobs(sortedJobsByEditTime.map(doc => doc._id))
     }
 
     const handleDeleteJob = (jobId: string) => {
@@ -111,24 +131,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
 
     const confirmDeleteJob = async () => {
         try {
-            const projectDoc = await db.get(projectID)
-            // Remove the existing document
-            //await db.remove(projectDoc)
-            await db.upsert(projectID, function (projectDoc) {
-                let del_index = -1
-                projectDoc.installations_.map(
-                    async (key: { workflow_name: string }, value: number) => {
-                        if (
-                            key.metadata_.workflow_name == workflowName &&
-                            key._id == selectedJobToDelete
-                        ) {
-                            del_index = value
-                        }
-                    },
-                )
-                projectDoc.installations_.splice(del_index, 1)
-                return projectDoc
-            })
+            const doc = await db.get(selectedJobToDelete)
+            await db.remove(doc)
+            // Refresh the job list after deletion
             await retrieveJobs()
         } catch (error) {
             console.error('Error deleting job:', error)
@@ -147,8 +152,8 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
         // adding a new job here
         const docName = input
         if (docName !== null) {
-            //await putNewDoc(db, docName)
-            await putNewWorkFlow(db, projectID, workflowName, '', docName)
+            await putNewDoc(db, docName)
+            //await putNewWorkFlow(db, projectID, workflowName, docName)
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -156,23 +161,16 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
 
     const handleRenameJob = async (input: string, jobId: string) => {
         try {
-            if (input !== null) {
-                const projectDoc = await db.get(projectID)
-                // Remove the existing document
-                await db.upsert(projectID, function (projectDoc) {
-                    projectDoc.installations_.map(
-                        async (key: { workflow_name: string }) => {
-                            if (
-                                key.metadata_.workflow_name == workflowName &&
-                                key._id == jobId
-                            ) {
-                                key.metadata_.doc_name = input
-                            }
-                        },
-                    )
-                    return projectDoc
-                })
+            const newName = input
+            if (newName !== null) {
+                const doc = await db.get(jobId)
+                await db.remove(doc) // Remove the existing document
+                doc._id = newName // Set the new name as the ID
+                if (doc.metadata_?.project_name)
+                    doc.metadata_.project_name = input
+                await db.putIfNotExists(doc)
             }
+
             // Refresh the job list after renaming
             await retrieveJobs()
         } catch (error) {
@@ -186,7 +184,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
 
             <h3>Installations</h3>
             <center>
-                {installation_name && <h2>{installation_name}</h2>}
+                {projectInfo?.installation_name && (
+                    <h2>{projectInfo?.installation_name}</h2>
+                )}
                 {projectInfo?.project_name && (
                     <>
                         {projectInfo?.project_name}
@@ -230,13 +230,13 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
       </Dropdown> */}
 
             <ListGroup>
-                {sortedJobs.map((jobID, job) => (
+                {sortedJobs.map(job => (
                     <>
                         <LinkContainer
-                            to={`/app/${projectID}/${workflowName}/${jobID._id}`}
+                            to={`/app/${projectID}/${workflowName}/${job}`}
                         >
-                            <ListGroup.Item action={true} key={jobID._id}>
-                                {jobID.metadata_.doc_name}
+                            <ListGroup.Item action={true} key={job}>
+                                {job}
                                 <span className="icon-container">
                                     <Button
                                         onClick={event => {
@@ -255,7 +255,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                                         onClick={event => {
                                             event.stopPropagation()
                                             event.preventDefault()
-                                            handleDeleteJob(jobID._id)
+                                            handleDeleteJob(job)
                                         }}
                                         variant="danger"
                                     >
@@ -272,9 +272,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                                     [job]: false,
                                 }))
                             }}
-                            onSubmit={input =>
-                                handleRenameJob(input, jobID._id)
-                            }
+                            onSubmit={input => handleRenameJob(input, job)}
                             validateInput={validateInput}
                             title="Enter new installation name"
                             okButton="Rename"

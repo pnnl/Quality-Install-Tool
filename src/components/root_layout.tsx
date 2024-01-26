@@ -31,14 +31,24 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
 
     useEffect(() => {
         const regexPatternToHome = /^(.*?)\/app\//
-        const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)$/
+        const regexPatternToWorkFlow = /^.*?\/app\/([^\/]+)\/([^\/]+)$/
+        const regexPatternToTemplate =
+            /^.*?\/app\/([^\/]+)\/([^\/]+)\/([^\/]+)$/
         const toTemplateMatchResult = location.pathname.match(
             regexPatternToTemplate,
         )
-        if (toTemplateMatchResult) {
+        const toWorkFlowMatchResult = location.pathname.match(
+            regexPatternToWorkFlow,
+        )
+        if (toWorkFlowMatchResult) {
             setShowBackButton(true)
-            const [, capturedTemplateName] = toTemplateMatchResult
-            setBackUrl('/app/' + capturedTemplateName)
+            const [, capturedTemplateName, workflowName] = toWorkFlowMatchResult
+            if (workflowName == 'workflows') setBackUrl('/')
+            else setBackUrl('/app/' + capturedTemplateName + '/workflows')
+        } else if (toTemplateMatchResult) {
+            setShowBackButton(true)
+            const [, capturedTemplateName, workflowName] = toTemplateMatchResult
+            setBackUrl('/app/' + capturedTemplateName + '/' + workflowName)
         } else if (regexPatternToHome.test(location.pathname)) {
             setShowBackButton(true)
             setBackUrl('/')
