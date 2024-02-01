@@ -10,7 +10,7 @@ import {
     putNewDoc,
     putNewWorkFlow,
     retrieveJobs_db,
-    projectDetails,
+    retrieveProjectSummary,
 } from '../utilities/database_utils'
 import dbName from './db_details'
 
@@ -32,10 +32,12 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     }>({})
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [selectedJobToDelete, setSelectedJobToDelete] = useState('')
+    const [selectedJobNameToDelete, setSelectedJobNameToDelete] = useState('')
+
     const [projectInfo, setProjectInfo] = useState<any>({})
 
     const project_info = async (): Promise<void> => {
-        projectDetails(db, projectID, workflowName).then(res => {
+        retrieveProjectSummary(db, projectID, workflowName).then(res => {
             setProjectInfo(res)
         })
     }
@@ -109,6 +111,8 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
         setShowDeleteConfirmation(true)
     }
 
+
+
     const confirmDeleteJob = async () => {
         try {
             const projectDoc = await db.get(projectID)
@@ -158,7 +162,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
         try {
             if (input !== null) {
                 const projectDoc = await db.get(projectID)
-                // Remove the existing document
+
                 await db.upsert(projectID, function (projectDoc) {
                     projectDoc.installations_.map(
                         async (key: { workflow_name: string }) => {
@@ -233,6 +237,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                 {sortedJobs.map((jobID, job) => (
                     <>
                         <LinkContainer
+                            key={jobID._id}
                             to={`/app/${projectID}/${workflowName}/${jobID._id}`}
                         >
                             <ListGroup.Item action={true} key={jobID._id}>
@@ -256,6 +261,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                                             event.stopPropagation()
                                             event.preventDefault()
                                             handleDeleteJob(jobID._id)
+                                            setSelectedJobNameToDelete(
+                                                jobID.metadata_.doc_name,
+                                            )
                                         }}
                                         variant="danger"
                                     >
@@ -289,8 +297,8 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                             </Modal.Header>
                             <Modal.Body>
                                 Are you sure you want to permanently delete{' '}
-                                {selectedJobToDelete}? This action cannot be
-                                undone.
+                                <b>{selectedJobNameToDelete}</b>? This action
+                                cannot be undone.
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button

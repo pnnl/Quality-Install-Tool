@@ -102,7 +102,6 @@ export async function putNewWorkFlow(
             doc_name,
             created_at: now,
             last_modified_at: now,
-            attachments: {},
         },
     }
 
@@ -119,7 +118,7 @@ export async function putNewWorkFlow(
         }
     }
     return db.upsert(projectID, function upsertFn(dbDoc: any) {
-        const result = { ...db.get(projectID), ...projectDoc }
+        const result = { ...dbDoc, ...projectDoc }
         if (!result.metadata_) {
             result.metadata_ = {
                 created_at: new Date().toISOString(),
@@ -132,14 +131,13 @@ export async function putNewWorkFlow(
     })
 }
 
-export async function retrieveSingleProject(
+export async function retrieveProjectDetails(
     db: PouchDB.Database<{}>,
     projectId: string,
 ): Promise<any> {
     try {
         const result = await db.get(projectId)
-        const project = result.rows.map(row => row.doc)
-        return project
+        return result
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
@@ -174,7 +172,7 @@ export async function retrieveJobs_db(
     }
 }
 
-export async function projectDetails(
+export async function retrieveProjectSummary(
     db: PouchDB.Database<{}>,
     projectID: string,
     workflowName: string,

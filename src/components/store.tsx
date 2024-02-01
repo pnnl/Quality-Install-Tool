@@ -8,7 +8,7 @@ import React, {
     useState,
 } from 'react'
 
-import { isEmpty, isObject, toPath } from 'lodash'
+import { isEmpty, isObject, toNumber, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
 import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
@@ -41,6 +41,7 @@ export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
+    docId: {} as string,
     upsertAttachment: ((
         blob: Blob,
         id: any,
@@ -87,7 +88,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [doc, setDoc] = useState<Objectish>({})
 
     const [installationDoc, setInstallationDoc] = useState<Objectish>({})
-    const isInstallationUpdate = pathIndex != -1
+
+    const isInstallationUpdate = (pathIndex >= 0)
 
     /**
      * Updates component state based on a database document change
@@ -103,9 +105,23 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         delete newDoc._id
         delete newDoc._rev
 
+
+
+        // let pathIndex = -1
+        // for (const x in newDoc.installations_) {
+        //     if (newDoc.installations_[x]._id == docId)
+        //         pathIndex = toNumber(x)
+        // }
+
+        // console.log("isUpdate", pathIndex)
+
         setDoc(newDoc)
+
         if (isInstallationUpdate)
             setInstallationDoc(newDoc.installations_[pathIndex])
+
+
+
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
@@ -116,8 +132,16 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             let newAttachments: Record<string, Attachment> = {}
             for (const attachmentId in dbDocAttachments) {
                 const docAttachment = dbDocAttachments[attachmentId]
+
+                const installationAttachments =
+                    attachmentId.indexOf('.') > 0 ? attachmentId.split('.') : []
                 const singleAttachmentMetadata =
-                    attachmentsMetadata[attachmentId]
+                    installationAttachments.length > 0
+                        ? attachmentsMetadata[installationAttachments[0]][
+                        installationAttachments[1]
+                        ]
+                        : attachmentsMetadata[attachmentId]
+
                 // digest is a hash of the attachment, so a different digest indicates a modified attachment
                 const digest = docAttachment?.digest
                 if (
@@ -173,6 +197,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
             const db = new PouchDB(dbName, { auto_compaction: true })
             setDB(db)
+
+
 
             // Initialize the DB document as needed
             try {
@@ -311,9 +337,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      */
     const upsertMetadata: UpsertMetadata = (pathStr, value) => {
         pathStr = 'metadata_.' + pathStr
-        pathStr = isInstallationUpdate
-            ? 'installations_[' + pathIndex + '].' + pathStr
-            : pathStr
         upsertDoc(pathStr, value)
     }
 
@@ -348,6 +371,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 metadata,
             },
         }
+
         setAttachments(newAttachments)
 
         // Persist the blob
@@ -382,14 +406,15 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         }
     }
 
+
+
     return (
         <StoreContext.Provider
             value={{
                 attachments,
                 data: isInstallationUpdate ? installationDoc.data_ : doc.data_,
-                metadata: isInstallationUpdate
-                    ? installationDoc.metadata_
-                    : doc.metadata_,
+                metadata: doc.metadata_,
+                docId: isInstallationUpdate ? docId : '',
                 upsertAttachment,
                 upsertData,
                 upsertMetadata,

@@ -54,6 +54,7 @@ const components = {
 interface MdxWrapperProps {
     Component: React.ComponentType<any>
     Project: any
+    DocID?: string
 }
 
 /**
@@ -78,7 +79,7 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
                             />
                         ) : null}
                     </div>
-                )
+                ) 
             }}
         </StoreContext.Consumer>
     )

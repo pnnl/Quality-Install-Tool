@@ -5,10 +5,11 @@ import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import templatesConfig from '../templates/templates_config'
 import {
-    projectDetails,
-    retrieveSingleProject,
+    retrieveProjectSummary,
+    retrieveProjectDetails,
 } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
+import { toNumber } from 'lodash'
 
 interface MdxTemplateViewProps {
     workflowName: string
@@ -32,25 +33,52 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
     const config = templatesConfig[workflowName]
 
     const [projectInfo, setProjectInfo] = useState<any>({})
+    const [installationInfo, setInstallationInfo] = useState<any>({})
 
     const project_info = async (): Promise<void> => {
-        projectDetails(new PouchDB(dbName), project?._id, workflowName).then(
-            res => {
-                setProjectInfo(res)
+        retrieveProjectSummary(
+            new PouchDB(dbName),
+            project?._id,
+            workflowName,
+        ).then((res: any) => {
+            setProjectInfo(res)
+        })
+    }
+
+    const retrieveInstallationsInfo = async (): Promise<void> => {
+        retrieveProjectDetails(new PouchDB(dbName), project?._id).then(
+            (res: any) => {
+                setInstallationInfo(res)
             },
         )
     }
 
     useEffect(() => {
         project_info()
+        retrieveInstallationsInfo()
     }, [])
 
-    const specificInstallation = project.installations_?.find(
-        (x: { _id: string | undefined }) => x._id === docId,
+    let specificInstallation = installationInfo.installations_?.find(
+        (x: { _id: string | undefined }) => x._id == docId,
     )
 
-    const specificInstallationIndex = project.installations_?.findIndex(
-        (x: { _id: string | undefined }) => x._id === docId,
+    if (!specificInstallation) {
+        specificInstallation = project.installations_?.find(
+            (x: { _id: string | undefined }) => x._id == docId,
+        )
+    }
+
+    const doc_name = specificInstallation?.metadata_?.doc_name
+
+    // let specificInstallationIndex = -1
+    // for (const x in installationInfo.installations_) {
+    //     if (installationInfo.installations_[x]._id == docId)
+    //         specificInstallationIndex = toNumber(x)
+    // }
+
+
+    let specificInstallationIndex = project.installations_?.findIndex(
+        (x: { _id: string | undefined }) => x._id == docId,
     )
 
     return (
@@ -60,7 +88,7 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
             dbName={dbName}
             projectId={project._id}
             workflowName={workflowName}
-            docName={specificInstallation.metadata_.doc_name}
+            docName={doc_name}
             docId={docId as string}
             pathIndex={specificInstallationIndex}
         >
@@ -70,7 +98,7 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
                         <h2>{projectInfo?.installation_name} Installation</h2>
                         <h3>
                             {projectInfo?.project_name} :{' '}
-                            {specificInstallation.metadata_.doc_name}
+                            {specificInstallation?.metadata_?.doc_name}
                         </h3>
                         {projectInfo?.street_address}
                         {projectInfo?.city}
@@ -93,5 +121,6 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
         </StoreProvider>
     )
 }
+
 
 export default MdxTemplateView
