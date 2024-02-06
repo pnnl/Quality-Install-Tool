@@ -31,30 +31,30 @@ const routes = [
     },
 ]
     .concat(
-        Projects.flatMap(key => [
+        Projects.flatMap(doc => [
             {
-                path: `/app/${key?._id}/workflows`,
+                path: `/app/${doc?._id}/workflows`,
                 element: (
                     <RootLayout>
-                        <WorkFlowView project={key} />
+                        <WorkFlowView project={doc} />
                     </RootLayout>
                 ),
             },
             {
-                path: `/app/${key?._id}`,
+                path: `/app/${doc?._id}`,
                 element: (
                     <RootLayout>
-                        <MdxProjectView project={key} />
+                        <MdxProjectView project={doc} />
                     </RootLayout>
                 ),
             },
         ]),
     )
     .concat(
-        Projects.flatMap((project, value) =>
+        Projects.flatMap((doc, value) =>
             Object.keys(templatesConfig).flatMap(workflowName => [
                 {
-                    path: `/app/${project?._id}/${workflowName}`,
+                    path: `/app/${doc?._id}/${workflowName}`,
                     // TODO: Create a component that provides the functionality
                     // to manage the documents in this DB
                     element: (
@@ -62,30 +62,30 @@ const routes = [
                             <div>
                                 <JobsView
                                     workflowName={workflowName}
-                                    projectID={project?._id}
+                                    docId={doc?._id}
                                 />
                             </div>
                         </RootLayout>
                     ),
                 },
                 {
-                    path: `/app/${project?._id}/${workflowName}/:docId`,
+                    path: `/app/${doc?._id}/${workflowName}/:jobId`,
                     element: (
                         <RootLayout>
                             <MdxTemplateView
                                 workflowName={workflowName}
-                                project={project}
+                                project={doc}
                             />
                         </RootLayout>
                     ),
                 },
                 {
-                    path: `/app/${project?._id}/${workflowName}/:docId/json`,
+                    path: `/app/${doc?._id}/${workflowName}/:jobId/json`,
                     element: (
                         <RootLayout>
                             <JsonStoreView
                                 dbName={workflowName}
-                                project={project}
+                                project={doc}
                             />
                         </RootLayout>
                     ),

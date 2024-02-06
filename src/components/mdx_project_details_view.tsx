@@ -20,19 +20,18 @@ interface MdxProjectViewProps {
  * @param dbName - The database name associated with an MDX template
  */
 const MdxProjectView: FC<MdxProjectViewProps> = ({ project }) => {
-    const { docId } = useParams()
 
-    const projectId = project._id
+    const projectId = project?._id
 
     return (
         // Note: docId is guaranteed to be a string because this component is only
         // used when the :docId dynamic route segment is set.
         <StoreProvider
             dbName={dbName}
-            projectId={project?._id as string}
+            docId={project?._id as string}
             workflowName=""
             docName={project?.metadata_?.project_name}
-            docId=""
+            jobId=""
             pathIndex={-1}
         >
             <h1>Project Details</h1>

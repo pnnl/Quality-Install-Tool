@@ -33,8 +33,9 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, metadata, upsertAttachment, docId }) => {
-                let id_ref = docId == '' ? id : docId + '.' + id
+            {({ attachments, upsertAttachment, jobId }) => {
+                //  JobId for installation level updates
+                let id_ref = jobId == '' ? id : jobId + '.' + id
 
                 const upsertPhoto = (img_file: Blob) => {
                     // Reduce the image size as needed

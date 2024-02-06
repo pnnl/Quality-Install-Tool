@@ -18,10 +18,10 @@ PouchDB.plugin(PouchDBUpsert)
 
 interface JobListProps {
     workflowName: string
-    projectID: any
+    docId: any
 }
 
-const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
+const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     const db = new PouchDB(dbName)
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
     const [sortedJobNames, setSortedJobNames] = useState<any[]>([])
@@ -37,7 +37,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     const [projectInfo, setProjectInfo] = useState<any>({})
 
     const project_info = async (): Promise<void> => {
-        retrieveProjectSummary(db, projectID, workflowName).then(res => {
+        retrieveProjectSummary(db, docId, workflowName).then(res => {
             setProjectInfo(res)
         })
     }
@@ -73,7 +73,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     ]
 
     const retrieveJobs = async (): Promise<void> => {
-        retrieveJobs_db(db, projectID, workflowName).then(res => {
+        retrieveJobs_db(db, docId, workflowName).then(res => {
             setJobsList(res)
             sortByEditTime(res)
         })
@@ -115,10 +115,10 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
 
     const confirmDeleteJob = async () => {
         try {
-            const projectDoc = await db.get(projectID)
+            const projectDoc = await db.get(docId)
             // Remove the existing document
             //await db.remove(projectDoc)
-            await db.upsert(projectID, function (projectDoc) {
+            await db.upsert(docId, function (projectDoc) {
                 let del_index = -1
                 projectDoc.installations_.map(
                     async (key: { workflow_name: string }, value: number) => {
@@ -152,7 +152,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
         const docName = input
         if (docName !== null) {
             //await putNewDoc(db, docName)
-            await putNewWorkFlow(db, projectID, workflowName, '', docName)
+            await putNewWorkFlow(db, docId, workflowName, '', docName)
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -161,9 +161,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
     const handleRenameJob = async (input: string, jobId: string) => {
         try {
             if (input !== null) {
-                const projectDoc = await db.get(projectID)
+                const projectDoc = await db.get(docId)
 
-                await db.upsert(projectID, function (projectDoc) {
+                await db.upsert(docId, function (projectDoc) {
                     projectDoc.installations_.map(
                         async (key: { workflow_name: string }) => {
                             if (
@@ -238,7 +238,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, projectID }) => {
                     <>
                         <LinkContainer
                             key={jobID._id}
-                            to={`/app/${projectID}/${workflowName}/${jobID._id}`}
+                            to={`/app/${docId}/${workflowName}/${jobID._id}`}
                         >
                             <ListGroup.Item action={true} key={jobID._id}>
                                 {jobID.metadata_.doc_name}

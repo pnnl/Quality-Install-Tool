@@ -20,16 +20,17 @@ interface MdxTemplateViewProps {
  * A component view of an instantiated MDX template
  *
  * @remarks
- * The document Id for the instance is taken from a dynamic segment
+ * The installation ID (jobID) for the instance is taken from a dynamic segment
  * of the route, :docId.
  *
- * @param dbName - The database name associated with an MDX template
+ * @param workflowName - The name associated with an MDX template
+ * @param project - The parent doc that stores the installation information
  */
 const MdxTemplateView: FC<MdxTemplateViewProps> = ({
     workflowName,
     project,
 }) => {
-    const { docId } = useParams()
+    const { jobId } = useParams()
     const config = templatesConfig[workflowName]
 
     const [projectInfo, setProjectInfo] = useState<any>({})
@@ -59,37 +60,30 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
     }, [])
 
     let specificInstallation = installationInfo.installations_?.find(
-        (x: { _id: string | undefined }) => x._id == docId,
+        (x: { _id: string | undefined }) => x._id == jobId,
     )
 
     if (!specificInstallation) {
         specificInstallation = project.installations_?.find(
-            (x: { _id: string | undefined }) => x._id == docId,
+            (x: { _id: string | undefined }) => x._id == jobId,
         )
     }
 
     const doc_name = specificInstallation?.metadata_?.doc_name
 
-    // let specificInstallationIndex = -1
-    // for (const x in installationInfo.installations_) {
-    //     if (installationInfo.installations_[x]._id == docId)
-    //         specificInstallationIndex = toNumber(x)
-    // }
-
-
     let specificInstallationIndex = project.installations_?.findIndex(
-        (x: { _id: string | undefined }) => x._id == docId,
+        (x: { _id: string | undefined }) => x._id == jobId,
     )
 
     return (
-        // Note: docId is guaranteed to be a string because this component is only
-        // used when the :docId dynamic route segment is set.
+        // Note: jobId is guaranteed to be a string because this component is only
+        // used when the :jobId dynamic route segment is set.
         <StoreProvider
             dbName={dbName}
-            projectId={project._id}
+            docId={project._id}
             workflowName={workflowName}
             docName={doc_name}
-            docId={docId as string}
+            jobId={jobId as string}
             pathIndex={specificInstallationIndex}
         >
             <center>

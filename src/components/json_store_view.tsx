@@ -17,11 +17,11 @@ interface JsonStoreViewProps {
  *
  * @param dbName - The database name associated with an MDX template
  */
-const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, projectName }) => {
-    const { docId } = useParams()
+const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, project }) => {
+    const { jobId } = useParams()
 
     return docId != null ? (
-        <StoreProvider dbName={dbName} projectName={projectName} docId={docId}>
+        <StoreProvider dbName={dbName} docId={project?._id} jobId={docId}>
             <StoreContext.Consumer>
                 {({ attachments, data }) => {
                     return (

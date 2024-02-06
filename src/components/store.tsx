@@ -41,7 +41,7 @@ export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
-    docId: {} as string,
+    jobId: {} as string,
     upsertAttachment: ((
         blob: Blob,
         id: any,
@@ -54,10 +54,10 @@ export const StoreContext = React.createContext({
 interface StoreProviderProps {
     children: ReactNode
     dbName: string
-    projectId: string
+    docId: string
     workflowName: string
     docName: string
-    docId: string
+    jobId: string
     pathIndex: number
 }
 
@@ -71,10 +71,10 @@ interface StoreProviderProps {
 export const StoreProvider: FC<StoreProviderProps> = ({
     children,
     dbName,
-    projectId,
+    docId,
     workflowName,
     docName,
-    docId,
+    jobId,
     pathIndex,
 }) => {
     const changesRef = useRef<PouchDB.Core.Changes<{}>>()
@@ -105,23 +105,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         delete newDoc._id
         delete newDoc._rev
 
-
-
-        // let pathIndex = -1
-        // for (const x in newDoc.installations_) {
-        //     if (newDoc.installations_[x]._id == docId)
-        //         pathIndex = toNumber(x)
-        // }
-
-        // console.log("isUpdate", pathIndex)
-
         setDoc(newDoc)
 
         if (isInstallationUpdate)
             setInstallationDoc(newDoc.installations_[pathIndex])
-
-
-
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
@@ -133,8 +120,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             for (const attachmentId in dbDocAttachments) {
                 const docAttachment = dbDocAttachments[attachmentId]
 
+                // Attachment associated with the installations / jobs
                 const installationAttachments =
                     attachmentId.indexOf('.') > 0 ? attachmentId.split('.') : []
+
                 const singleAttachmentMetadata =
                     installationAttachments.length > 0
                         ? attachmentsMetadata[installationAttachments[0]][
@@ -150,7 +139,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                         attachments[attachmentId].digest !== digest)
                 ) {
                     const blobOrBuffer = await db.getAttachment(
-                        projectId,
+                        docId,
                         attachmentId,
                     )
 
@@ -198,20 +187,18 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             const db = new PouchDB(dbName, { auto_compaction: true })
             setDB(db)
 
-
-
             // Initialize the DB document as needed
             try {
                 // It looks like the type def for putIfNotExists does not match its implementation
                 // TODO: Check this over carefully
 
                 const result = !isInstallationUpdate
-                    ? ((await putNewProject(db, docName, projectId)) as unknown)
+                    ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewWorkFlow(
                           db,
-                          projectId,
+                        docId,
                           workflowName,
-                          docId,
+                        jobId,  
                           docName,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
@@ -221,7 +208,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             }
             // Initialize doc and attachments state from the DB document
             try {
-                const dbDoc = await db.get(projectId)
+                const dbDoc = await db.get(docId)
                 processDBDocChange(db, dbDoc)
             } catch (err) {
                 console.error('Unable to initialize state from DB:', err)
@@ -286,7 +273,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
         // Persist the doc
         if (db != null) {
-            db.upsert(projectId, function upsertFn(dbDoc: any) {
+            db.upsert(docId, function upsertFn(dbDoc: any) {
                 const result = { ...dbDoc, ...newDoc }
                 if (!result.metadata_) {
                     result.metadata_ = {
@@ -382,7 +369,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             if (db != null) {
                 try {
                     result = await db.putAttachment(
-                        projectId,
+                        docId,
                         id,
                         rev,
                         blob,
@@ -390,7 +377,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     )
                 } catch (err) {
                     // Try again with the latest rev value
-                    const doc = await db.get(projectId)
+                    const doc = await db.get(docId)
                     result = await upsertBlobDB(doc._rev)
                 } finally {
                     if (result != null) {
@@ -407,14 +394,13 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
 
-
     return (
         <StoreContext.Provider
             value={{
                 attachments,
                 data: isInstallationUpdate ? installationDoc.data_ : doc.data_,
                 metadata: doc.metadata_,
-                docId: isInstallationUpdate ? docId : '',
+                jobId: isInstallationUpdate ? jobId : '',
                 upsertAttachment,
                 upsertData,
                 upsertMetadata,

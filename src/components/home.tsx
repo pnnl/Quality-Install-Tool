@@ -8,6 +8,11 @@ import StringInputModal from './string_input_modal'
 import dbName from './db_details'
 import { retrieveProjects } from '../utilities/database_utils'
 
+/**
+ * Home:  Renders the Home page for the APP
+ * 
+ * @returns ListGroup component displaying the projects created 
+ */
 const Home: FC = () => {
     const db = new PouchDB(dbName)
 
@@ -15,7 +20,7 @@ const Home: FC = () => {
     const [projectList, setProjectList] = useState<any[]>([])
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
     const [modalOpenMap, setModalOpenMap] = useState<{
-        [projectId: string]: boolean
+        [docId: string]: boolean
     }>({})
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [selectedProjectToDelete, setSelectedProjectToDelete] = useState('')
@@ -123,10 +128,10 @@ const Home: FC = () => {
         window.location.replace('/app/' + projectID)
     }
 
-    const handleRenameProject = async (input: string, jobId: string) => {
+    const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
-                await db.upsert(jobId, function (doc) {
+                await db.upsert(docId, function (doc) {
                     doc.metadata_.project_name = input
                     return doc
                 })
