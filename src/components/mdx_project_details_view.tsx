@@ -20,7 +20,6 @@ interface MdxProjectViewProps {
  * @param dbName - The database name associated with an MDX template
  */
 const MdxProjectView: FC<MdxProjectViewProps> = ({ project }) => {
-
     const projectId = project?._id
 
     return (

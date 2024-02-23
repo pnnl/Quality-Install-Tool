@@ -89,7 +89,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
     const [installationDoc, setInstallationDoc] = useState<Objectish>({})
 
-    const isInstallationUpdate = (pathIndex >= 0)
+    const isInstallationUpdate = pathIndex >= 0
 
     /**
      * Updates component state based on a database document change
@@ -127,8 +127,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 const singleAttachmentMetadata =
                     installationAttachments.length > 0
                         ? attachmentsMetadata[installationAttachments[0]][
-                        installationAttachments[1]
-                        ]
+                              installationAttachments[1]
+                          ]
                         : attachmentsMetadata[attachmentId]
 
                 // digest is a hash of the attachment, so a different digest indicates a modified attachment
@@ -196,9 +196,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewWorkFlow(
                           db,
-                        docId,
+                          docId,
                           workflowName,
-                        jobId,  
+                          jobId,
                           docName,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
@@ -392,7 +392,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             upsertBlobDB(revisionRef.current)
         }
     }
-
 
     return (
         <StoreContext.Provider

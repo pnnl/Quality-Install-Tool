@@ -56,7 +56,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
         {
             validator: (input: string) => {
                 // Restrict the character set to [a-zA-Z0-9-_#:>]
-                const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
+                const regex = /^(?![\s-])[a-zA-Z0-9, \-]{1,64}$/
                 return regex.test(input)
             },
             errorMsg:
@@ -110,8 +110,6 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
         setSelectedJobToDelete(jobId)
         setShowDeleteConfirmation(true)
     }
-
-
 
     const confirmDeleteJob = async () => {
         try {
@@ -186,29 +184,29 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
 
     return (
         <div className="container">
-            <h1></h1>
-
-            <h3>Installations</h3>
-            <center>
-                {installation_name && <h2>{installation_name}</h2>}
+            <h1>{installation_name}</h1>
+            <h2>
+                Installations for{' '}
                 {projectInfo?.project_name && (
                     <>
                         {projectInfo?.project_name}
                         <br />
                     </>
                 )}
+            </h2>
+            <h3>
+                {projectInfo && <>Project address: </>}
                 {projectInfo?.street_address && (
-                    <b>{projectInfo?.street_address}</b>
+                    <>{projectInfo?.street_address}</>
                 )}
-                {projectInfo?.city && <b>{projectInfo?.city}</b>}
-                {projectInfo?.state && <b>{projectInfo?.state} </b>}
-                {projectInfo?.zip_code && <b>{projectInfo?.zip_code}</b>}
-            </center>
+                {projectInfo?.city && <>{projectInfo?.city}</>}
+                {projectInfo?.state && <>{projectInfo?.state} </>}
+                {projectInfo?.zip_code && <>{projectInfo?.zip_code}</>}
+            </h3>
+
             <br />
 
-            <Button onClick={openAddModal}>
-                <TfiPlus />
-            </Button>
+            <Button onClick={openAddModal}>Add Installation</Button>
             <StringInputModal
                 isOpen={isAddModalOpen}
                 closeModal={closeAddModal}
@@ -216,6 +214,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                 validateInput={validateInput}
                 title="Enter new installation name"
                 okButton="Add"
+                value=""
             />
             <div className="bottom-margin"></div>
             {/* Sort feature, not used now but will be used in future. */
@@ -286,6 +285,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                             validateInput={validateInput}
                             title="Enter new installation name"
                             okButton="Rename"
+                            value={jobID.metadata_.doc_name}
                         />
 
                         <Modal

@@ -10,8 +10,8 @@ import { retrieveProjects } from '../utilities/database_utils'
 
 /**
  * Home:  Renders the Home page for the APP
- * 
- * @returns ListGroup component displaying the projects created 
+ *
+ * @returns ListGroup component displaying the projects created
  */
 const Home: FC = () => {
     const db = new PouchDB(dbName)
@@ -49,7 +49,8 @@ const Home: FC = () => {
         {
             validator: (input: string) => {
                 // Restrict the character set to [a-zA-Z0-9-_#:>]
-                const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
+                //const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
+                const regex = /^(?![\s-])[a-zA-Z0-9, \-]{1,64}$/
                 return regex.test(input)
             },
             errorMsg:
@@ -159,7 +160,7 @@ const Home: FC = () => {
                         {key.data_.location?.street_address && (
                             <>
                                 <br />
-                                {key.data_.location?.street_address}
+                                {key.data_.location?.street_address},
                             </>
                         )}
                         {key.data_.location?.city && (
@@ -169,7 +170,7 @@ const Home: FC = () => {
                             </>
                         )}
                         {key.data_.location?.state && (
-                            <>{key.data_.location?.state}, </>
+                            <>{key.data_.location?.state} </>
                         )}
                         {key.data_.location?.zip_code && (
                             <>{key.data_.location?.zip_code}</>
@@ -225,6 +226,7 @@ const Home: FC = () => {
                     validateInput={validateInput}
                     title="Enter new project name"
                     okButton="Rename"
+                    value={key.metadata_?.project_name}
                 />
             </>
         ))
@@ -248,6 +250,7 @@ const Home: FC = () => {
                 validateInput={validateInput}
                 title="Enter new project name"
                 okButton="Add"
+                value=""
             />
 
             <Modal show={showDeleteConfirmation} onHide={cancelDeleteJob}>

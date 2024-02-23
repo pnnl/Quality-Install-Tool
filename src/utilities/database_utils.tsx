@@ -69,12 +69,11 @@ export async function putNewProject(
     })
 }
 
-
 /**
  * Adds a new Installation to the existing project document
  * @param db - The PouchDB database instance.
  * @param docId - The project docID that needs to be updated (UUID)
- * @param workflowName  - Installation type 
+ * @param workflowName  - Installation type
  * @param jobId  - The unique installation id or Job ID (UUID)
  * @param docName  - Name provided by the user for the Job or Installation
  * @returns A Promise that resolves to the document if one was added / updated
@@ -141,7 +140,7 @@ export async function putNewWorkFlow(
 /**
  * Retrieves the specific project from the database
  * @param db - The PouchDB database instance.
- * @param docId - The docID to retrieve the project information 
+ * @param docId - The docID to retrieve the project information
  * @returns - Promise that resolves project doc from the database
  */
 export async function retrieveProjectDetails(
@@ -155,7 +154,6 @@ export async function retrieveProjectDetails(
         console.error('Error retrieving jobs:', error)
     }
 }
-
 
 /**
  * Retrieves all the projects from the database
@@ -198,12 +196,11 @@ export async function retrieveJobs_db(
     }
 }
 
-
 /**
  * Retrieves the project summary information which includes project name and installation address
  * @param db -The PouchDB database instance.
  * @param docId - The project docID
- * @param workflowName - The Workflow name 
+ * @param workflowName - The Workflow name
  * @returns Project summary to be displayed in each page.
  */
 export async function retrieveProjectSummary(
@@ -211,32 +208,37 @@ export async function retrieveProjectSummary(
     docId: string,
     workflowName: string,
 ): Promise<any> {
-    const doc = await db.get(docId)
+    try {
+        const doc = await db.get(docId)
 
-    if (doc) {
-        const project_name = doc.metadata_?.project_name
-        const installation_name = templatesConfig[workflowName].title
-        const street_address = doc.data_.location?.street_address
-            ? doc.data_.location?.street_address + ', '
-            : null
-        const city = doc.data_.location?.city
-            ? doc.data_.location?.city + ', '
-            : null
-        const state = doc.data_.location?.state
-            ? doc.data_.location?.state + ' '
-            : null
-        const zip_code = doc.data_.location?.zip_code
-            ? doc.data_.location?.zip_code
-            : null
-        const project_details = {
-            project_name: project_name,
-            installation_name: installation_name,
-            street_address: street_address,
-            city: city,
-            state: state,
-            zip_code: zip_code,
+        if (doc) {
+            const project_name = doc.metadata_?.project_name
+            const installation_name =
+                workflowName != '' ? templatesConfig[workflowName].title : ''
+            const street_address = doc.data_.location?.street_address
+                ? doc.data_.location?.street_address + ', '
+                : null
+            const city = doc.data_.location?.city
+                ? doc.data_.location?.city + ', '
+                : null
+            const state = doc.data_.location?.state
+                ? doc.data_.location?.state + ' '
+                : null
+            const zip_code = doc.data_.location?.zip_code
+                ? doc.data_.location?.zip_code
+                : null
+            const project_details = {
+                project_name: project_name,
+                installation_name: installation_name,
+                street_address: street_address,
+                city: city,
+                state: state,
+                zip_code: zip_code,
+            }
+            return project_details
         }
-        return project_details
+    } catch (error) {
+        console.error('Error retrieving project information:', error)
     }
 }
 

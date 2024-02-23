@@ -78,7 +78,7 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
                             />
                         ) : null}
                     </div>
-                ) 
+                )
             }}
         </StoreContext.Consumer>
     )

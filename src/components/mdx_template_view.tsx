@@ -86,20 +86,16 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
             jobId={jobId as string}
             pathIndex={specificInstallationIndex}
         >
+            <h1>{projectInfo?.installation_name}</h1>
+            <h2>Installation for {projectInfo?.project_name}</h2>
+            <h3>
+                Project address: {projectInfo?.street_address}
+                {projectInfo?.city}
+                {projectInfo?.state}
+                {projectInfo?.zip_code}
+            </h3>
             <center>
-                <b>
-                    <div>
-                        <h2>{projectInfo?.installation_name} Installation</h2>
-                        <h3>
-                            {projectInfo?.project_name} :{' '}
-                            {specificInstallation?.metadata_?.doc_name}
-                        </h3>
-                        {projectInfo?.street_address}
-                        {projectInfo?.city}
-                        {projectInfo?.state}
-                        {projectInfo?.zip_code}
-                    </div>
-                </b>
+                <b>{doc_name}</b>
             </center>
             <br />
 
@@ -115,6 +111,5 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
         </StoreProvider>
     )
 }
-
 
 export default MdxTemplateView
