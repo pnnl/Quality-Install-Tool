@@ -20,11 +20,11 @@ interface MdxTemplateViewProps {
  * A component view of an instantiated MDX template
  *
  * @remarks
- * The installation ID (jobID) for the instance is taken from a dynamic segment
- * of the route, :docId.
+ * The installation ID (or jobID) for the instance is taken from a dynamic segment
+ * of the route, :jobId.
  *
  * @param workflowName - The name associated with an MDX template
- * @param project - The parent doc that stores the installation information
+ * @param project - The parent doc object that holds the installation information
  */
 const MdxTemplateView: FC<MdxTemplateViewProps> = ({
     workflowName,
@@ -89,7 +89,7 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
             <h1>{projectInfo?.installation_name}</h1>
             <h2>Installation for {projectInfo?.project_name}</h2>
             <h3>
-                Project address: {projectInfo?.street_address}
+                {projectInfo?.street_address}
                 {projectInfo?.city}
                 {projectInfo?.state}
                 {projectInfo?.zip_code}

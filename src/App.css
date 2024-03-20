@@ -60,10 +60,12 @@ h1 + h2 {
   text-align: center;
 }
 
-/* used in mdx_template_view.tsx */
+/* used in mdx_project_details_view.tsx */
 h1 + h3 {
   text-align: center;
 }
+
+/* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
 h1 + h2 + h3 {
   text-align: center;
 }

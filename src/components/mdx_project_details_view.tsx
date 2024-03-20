@@ -12,19 +12,14 @@ interface MdxProjectViewProps {
 
 /**
  * A component view of an instantiated MDX template
+ * It serves as a central component for accessing and managing project information.
  *
- * @remarks
- * The document Id for the instance is taken from a dynamic segment
- * of the route, :docId.
- *
- * @param dbName - The database name associated with an MDX template
+ * @param project - doc object from db for the respective project
  */
 const MdxProjectView: FC<MdxProjectViewProps> = ({ project }) => {
+    // Note: 'project?._id' is the docId from the DB.
     const projectId = project?._id
-
     return (
-        // Note: docId is guaranteed to be a string because this component is only
-        // used when the :docId dynamic route segment is set.
         <StoreProvider
             dbName={dbName}
             docId={project?._id as string}

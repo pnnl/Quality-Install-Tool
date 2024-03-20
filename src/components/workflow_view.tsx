@@ -8,18 +8,24 @@ import {
 } from '../utilities/database_utils'
 import dbName from './db_details'
 import PouchDB from 'pouchdb'
-import DropDownMenu from './dropdown_wrapper'
 
 interface WorkflowProps {
     project: any
 }
 
+/**
+ * A component View to lists workflow names, facilitating the selection of workflows
+ * when generating quality installation reports.
+ *
+ * @param project: doc object from db for the respective project
+ */
 const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
     const [workflowJobsCount, setWorkflowJobsCount] = useState<{
         [jobId: string]: number
     }>({})
     const [projectInfo, setProjectInfo] = useState<any>({})
 
+    // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
         const newArray = retrieveJobs_db(
             new PouchDB(dbName),
@@ -33,6 +39,7 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
         })
     }
     const project_info = async (): Promise<void> => {
+        // Retrieves the project information which includes project name and installation address
         retrieveProjectSummary(new PouchDB(dbName), project?._id, '').then(
             (res: any) => {
                 setProjectInfo(res)
@@ -63,7 +70,6 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
             <h1>Choose an Installation Workflow</h1>
             <h2>Installations for {project_name} </h2>
             <h3>
-                Project address:
                 {' ' + street_address}
                 {city}
                 {state} {'   '}

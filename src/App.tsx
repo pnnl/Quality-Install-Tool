@@ -18,22 +18,24 @@ import MdxProjectView from './components/mdx_project_details_view'
 const routes = [
     {
         path: '/',
+        // App Home page : Lists existing projects provides functionality to create new one
         element: (
             <RootLayout>
                 <Home />
             </RootLayout>
         ),
     },
-
-    {
-        path: '/template_editor',
-        element: <TemplateEditor />,
-    },
+    // TODO: This route will be revisited and revised in the future
+    // {
+    //     path: '/template_editor',
+    //     element: <TemplateEditor />,
+    // },
 ]
     .concat(
         Projects.flatMap(doc => [
             {
                 path: `/app/${doc?._id}/workflows`,
+                // Workflow list view:  List the names of workflows available for generating installation report.
                 element: (
                     <RootLayout>
                         <WorkFlowView project={doc} />
@@ -42,6 +44,7 @@ const routes = [
             },
             {
                 path: `/app/${doc?._id}`,
+                // Project details view: Collects information related to the project.
                 element: (
                     <RootLayout>
                         <MdxProjectView project={doc} />
@@ -55,8 +58,8 @@ const routes = [
             Object.keys(templatesConfig).flatMap(workflowName => [
                 {
                     path: `/app/${doc?._id}/${workflowName}`,
-                    // TODO: Create a component that provides the functionality
-                    // to manage the documents in this DB
+                    // Jobs List View: Lists existing installations associated with a particular workflow
+                    // and provides functionality to create new installations
                     element: (
                         <RootLayout>
                             <div>
@@ -69,6 +72,7 @@ const routes = [
                     ),
                 },
                 {
+                    // Jobs View: Gathering and displaying information pertinent to individual installations
                     path: `/app/${doc?._id}/${workflowName}/:jobId`,
                     element: (
                         <RootLayout>
@@ -79,17 +83,18 @@ const routes = [
                         </RootLayout>
                     ),
                 },
-                {
-                    path: `/app/${doc?._id}/${workflowName}/:jobId/json`,
-                    element: (
-                        <RootLayout>
-                            <JsonStoreView
-                                dbName={workflowName}
-                                project={doc}
-                            />
-                        </RootLayout>
-                    ),
-                },
+                // TODO: This route will be revisited and revised in the future
+                // {
+                //     path: `/app/${doc?._id}/${workflowName}/:jobId/json`,
+                //     element: (
+                //         <RootLayout>
+                //             <JsonStoreView
+                //                 dbName={workflowName}
+                //                 project={doc}
+                //             />
+                //         </RootLayout>
+                //     ),
+                // },
             ]),
         ),
     )

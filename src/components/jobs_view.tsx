@@ -21,6 +21,13 @@ interface JobListProps {
     docId: any
 }
 
+/**
+ * A component view to list installations for a Project.
+ *
+ * @param workflowName - The workflow name associated with an MDX template.
+ * @param docId - A projectID (or docId) for respective project doc in pouchDB.
+ *                This ID is used to retrieve data related to the project and its installations.
+ */
 const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     const db = new PouchDB(dbName)
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
@@ -36,6 +43,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
 
     const [projectInfo, setProjectInfo] = useState<any>({})
 
+    // Retrieves the project information which includes project name and installation address
     const project_info = async (): Promise<void> => {
         retrieveProjectSummary(db, docId, workflowName).then(res => {
             setProjectInfo(res)
@@ -119,7 +127,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
             await db.upsert(docId, function (projectDoc) {
                 let del_index = -1
                 projectDoc.installations_.map(
-                    async (key: { workflow_name: string }, value: number) => {
+                    async (key: any, workflow_name: string, value: number) => {
                         if (
                             key.metadata_.workflow_name == workflowName &&
                             key._id == selectedJobToDelete
@@ -163,7 +171,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
 
                 await db.upsert(docId, function (projectDoc) {
                     projectDoc.installations_.map(
-                        async (key: { workflow_name: string }) => {
+                        async (key: any, workflow_name: string) => {
                             if (
                                 key.metadata_.workflow_name == workflowName &&
                                 key._id == jobId
@@ -195,7 +203,6 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                 )}
             </h2>
             <h3>
-                {projectInfo && <>Project address: </>}
                 {projectInfo?.street_address && (
                     <>{projectInfo?.street_address}</>
                 )}
