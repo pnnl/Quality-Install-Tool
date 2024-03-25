@@ -153,7 +153,7 @@ const Home: FC = () => {
         title = 'Welcome to Quality Install Tool'
     } else {
         projects_display = projectList.map((key, value) => (
-            <>
+            <ListGroup key={key}>
                 <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
                     <ListGroup.Item key={key._id} action={true}>
                         <b>{key.metadata_?.project_name}</b>
@@ -228,14 +228,14 @@ const Home: FC = () => {
                     okButton="Rename"
                     value={key.metadata_?.project_name}
                 />
-            </>
+            </ListGroup>
         ))
     }
     return (
         <div>
             <h1>{title}</h1>
 
-            <ListGroup>{projects_display}</ListGroup>
+            {projects_display}
             <br />
             {Object.keys(projectList).length != 0 && (
                 <center>

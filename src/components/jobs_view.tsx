@@ -122,8 +122,6 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     const confirmDeleteJob = async () => {
         try {
             const projectDoc = await db.get(docId)
-            // Remove the existing document
-            //await db.remove(projectDoc)
             await db.upsert(docId, function (projectDoc) {
                 let del_index = -1
                 projectDoc.installations_.map(
@@ -157,7 +155,6 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
         // adding a new job here
         const docName = input
         if (docName !== null) {
-            //await putNewDoc(db, docName)
             await putNewWorkFlow(db, docId, workflowName, '', docName)
         }
         // Refresh the job list after adding the new job
@@ -239,92 +236,85 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
         </Dropdown.Menu>
       </Dropdown> */}
 
-            <ListGroup>
-                {sortedJobs.map((jobID, job) => (
-                    <>
-                        <LinkContainer
-                            key={jobID._id}
-                            to={`/app/${docId}/${workflowName}/${jobID._id}`}
-                        >
-                            <ListGroup.Item action={true} key={jobID._id}>
-                                {jobID.metadata_.doc_name}
-                                <span className="icon-container">
-                                    <Button
-                                        onClick={event => {
-                                            event.stopPropagation()
-                                            event.preventDefault()
-                                            setModalOpenMap(prevState => ({
-                                                ...prevState,
-                                                [job]: true,
-                                            }))
-                                        }}
-                                    >
-                                        Rename
-                                    </Button>
-
-                                    <Button
-                                        onClick={event => {
-                                            event.stopPropagation()
-                                            event.preventDefault()
-                                            handleDeleteJob(jobID._id)
-                                            setSelectedJobNameToDelete(
-                                                jobID.metadata_.doc_name,
-                                            )
-                                        }}
-                                        variant="danger"
-                                    >
-                                        <TfiTrash />
-                                    </Button>
-                                </span>
-                            </ListGroup.Item>
-                        </LinkContainer>
-                        <StringInputModal
-                            isOpen={modalOpenMap[job] || false}
-                            closeModal={() => {
-                                setModalOpenMap(prevState => ({
-                                    ...prevState,
-                                    [job]: false,
-                                }))
-                            }}
-                            onSubmit={input =>
-                                handleRenameJob(input, jobID._id)
-                            }
-                            validateInput={validateInput}
-                            title="Enter new installation name"
-                            okButton="Rename"
-                            value={jobID.metadata_.doc_name}
-                        />
-
-                        <Modal
-                            show={showDeleteConfirmation}
-                            onHide={cancelDeleteJob}
-                        >
-                            <Modal.Header closeButton>
-                                <Modal.Title>Confirm Delete</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                Are you sure you want to permanently delete{' '}
-                                <b>{selectedJobNameToDelete}</b>? This action
-                                cannot be undone.
-                            </Modal.Body>
-                            <Modal.Footer>
+            {sortedJobs.map((jobID, job) => (
+                <ListGroup key={jobID._id}>
+                    <LinkContainer
+                        key={jobID._id}
+                        to={`/app/${docId}/${workflowName}/${jobID._id}`}
+                    >
+                        <ListGroup.Item action={true} key={jobID._id}>
+                            {jobID.metadata_.doc_name}
+                            <span className="icon-container">
                                 <Button
-                                    variant="secondary"
-                                    onClick={cancelDeleteJob}
+                                    onClick={event => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        setModalOpenMap(prevState => ({
+                                            ...prevState,
+                                            [job]: true,
+                                        }))
+                                    }}
                                 >
-                                    Cancel
+                                    Rename
                                 </Button>
+
                                 <Button
+                                    onClick={event => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        handleDeleteJob(jobID._id)
+                                        setSelectedJobNameToDelete(
+                                            jobID.metadata_.doc_name,
+                                        )
+                                    }}
                                     variant="danger"
-                                    onClick={confirmDeleteJob}
                                 >
-                                    Permanently Delete
+                                    <TfiTrash />
                                 </Button>
-                            </Modal.Footer>
-                        </Modal>
-                    </>
-                ))}
-            </ListGroup>
+                            </span>
+                        </ListGroup.Item>
+                    </LinkContainer>
+                    <StringInputModal
+                        isOpen={modalOpenMap[job] || false}
+                        closeModal={() => {
+                            setModalOpenMap(prevState => ({
+                                ...prevState,
+                                [job]: false,
+                            }))
+                        }}
+                        onSubmit={input => handleRenameJob(input, jobID._id)}
+                        validateInput={validateInput}
+                        title="Enter new installation name"
+                        okButton="Rename"
+                        value={jobID.metadata_.doc_name}
+                    />
+
+                    <Modal
+                        show={showDeleteConfirmation}
+                        onHide={cancelDeleteJob}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>Confirm Delete</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Are you sure you want to permanently delete{' '}
+                            <b>{selectedJobNameToDelete}</b>? This action cannot
+                            be undone.
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button
+                                variant="secondary"
+                                onClick={cancelDeleteJob}
+                            >
+                                Cancel
+                            </Button>
+                            <Button variant="danger" onClick={confirmDeleteJob}>
+                                Permanently Delete
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </ListGroup>
+            ))}
         </div>
     )
 }
