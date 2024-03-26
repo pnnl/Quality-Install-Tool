@@ -53,10 +53,14 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
     }, [])
 
     const project_name = projectInfo?.project_name
+        ? projectInfo?.project_name
+        : ''
     const street_address = projectInfo?.street_address
-    const city = projectInfo?.city
-    const state = projectInfo?.state
-    const zip_code = projectInfo?.zip_code
+        ? projectInfo?.street_address
+        : ''
+    const city = projectInfo?.city ? projectInfo?.city : ''
+    const state = projectInfo?.state ? projectInfo?.state : ''
+    const zip_code = projectInfo?.zip_code ? projectInfo?.zip_code : ''
     const templates = Object.keys(templatesConfig).map(key => (
         <LinkContainer key={key} to={`/app/${project._id}/${key}`}>
             <ListGroup.Item key={key} action={true}>
@@ -69,16 +73,14 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
         <div>
             <h1>Choose an Installation Workflow</h1>
             <h2>Installations for {project_name} </h2>
-            <h3>
+            <ListGroup className="address">
                 {' ' + street_address}
                 {city}
                 {state} {'   '}
                 {zip_code}
-            </h3>
+            </ListGroup>
             <br />
-            <div className="container">
-                <ListGroup>{templates}</ListGroup>
-            </div>
+            <ListGroup>{templates}</ListGroup>
         </div>
     )
 }

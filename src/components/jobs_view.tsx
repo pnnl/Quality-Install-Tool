@@ -199,14 +199,14 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                     </>
                 )}
             </h2>
-            <h3>
+            <ListGroup className="address">
                 {projectInfo?.street_address && (
                     <>{projectInfo?.street_address}</>
                 )}
                 {projectInfo?.city && <>{projectInfo?.city}</>}
                 {projectInfo?.state && <>{projectInfo?.state} </>}
                 {projectInfo?.zip_code && <>{projectInfo?.zip_code}</>}
-            </h3>
+            </ListGroup>
 
             <br />
 

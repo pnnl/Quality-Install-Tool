@@ -10,6 +10,7 @@ import {
 } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { toNumber } from 'lodash'
+import { ListGroup } from 'react-bootstrap'
 
 interface MdxTemplateViewProps {
     workflowName: string
@@ -88,12 +89,12 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
         >
             <h1>{projectInfo?.installation_name}</h1>
             <h2>Installation for {projectInfo?.project_name}</h2>
-            <h3>
+            <ListGroup className="address">
                 {projectInfo?.street_address}
                 {projectInfo?.city}
                 {projectInfo?.state}
                 {projectInfo?.zip_code}
-            </h3>
+            </ListGroup>
             <center>
                 <b>{doc_name}</b>
             </center>

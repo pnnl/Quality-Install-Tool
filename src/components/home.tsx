@@ -234,8 +234,7 @@ const Home: FC = () => {
     return (
         <div>
             <h1>{title}</h1>
-
-            {projects_display}
+            <ListGroup>{projects_display}</ListGroup>
             <br />
             {Object.keys(projectList).length != 0 && (
                 <center>
