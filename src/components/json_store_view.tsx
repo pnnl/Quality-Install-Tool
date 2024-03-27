@@ -5,6 +5,7 @@ import { StoreContext, StoreProvider } from './store'
 
 interface JsonStoreViewProps {
     dbName: string
+    project: any
 }
 
 /**
@@ -16,11 +17,17 @@ interface JsonStoreViewProps {
  *
  * @param dbName - The database name associated with an MDX template
  */
-const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName }) => {
-    const { docId } = useParams()
+const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, project }) => {
+    const { jobId } = useParams()
 
-    return docId != null ? (
-        <StoreProvider dbName={dbName} docId={docId}>
+    return jobId != null ? (
+        <StoreProvider
+            dbName={dbName}
+            docId={project?._id}
+            jobId={jobId}
+            workflowName=""
+            docName={''}
+            pathIndex={-1}>
             <StoreContext.Consumer>
                 {({ attachments, data }) => {
                     return (

@@ -32,9 +32,10 @@ const DateStr: FC<DateStrProps> = ({
     options = {},
 }) => {
     const full_options = { ...DEFAULT_OPTIONS, ...options, timeZone: 'UTC' }
+
     const parsedDate = new Date(date)
     const formattedDate = parsedDate.toLocaleDateString(locals, full_options)
-    return <span>{formattedDate}</span>
+    return date ? <span>{formattedDate}</span> : ''
 }
 
 export default DateStr

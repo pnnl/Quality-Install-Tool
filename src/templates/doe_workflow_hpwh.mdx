@@ -1,20 +1,11 @@
 
 
 <Tabs>
-  <Tab eventKey="project" title="Project">
-    The data for this tab should be known prior to the initial site visit.
-    
-    <ProjectInfoInputs {...props} />    
-  </Tab>
+  
 
   <Tab eventKey="assessment" title="Assessment">
     
     The data for this tab should be collected during the initial site visit.
-
-    ## Building
-    <PhotoInput id="building_number_photo" label="Building Number – Photo">
-      Provide a photo of the building that shows the building number.
-    </PhotoInput>
 
     ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
@@ -210,10 +201,6 @@
     ## Photo Report
 
     <ProjectInfoReport {...props} />
-   
-    <Photo id="building_number_photo" label="Building Number" required>
-      A photo of the building showing the building number.
-    </Photo>
 
     ## About the Report
     
@@ -273,18 +260,14 @@
     }
        
 
-    {
-      ( props.metadata?.attachments?.old_nameplate_photo != null )
-      ? <>
-          <h2>Old Hot Water Heater</h2>
-          <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">
-            This photo shows the name plate of the old water heater. It may be used for rebate purposes
-            or to determine the energy savings.
-          </Photo>
-        </>
-      : null 
-    }
-
+  
+    <h2>Old Hot Water Heater</h2>
+    <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">
+      This photo shows the name plate of the old water heater. It may be used for rebate purposes
+      or to determine the energy savings.
+    </Photo>
+        
+   
     ## Installation Day Photos
     <Photo id="completed_installed_photo" label="4. Completed Installation – Photo" required>
       This wide-angle photo shows the completed HPWH installation including the exhaust,

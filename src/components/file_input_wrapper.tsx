@@ -22,15 +22,17 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment }) => {
+            {({ attachments, jobId, upsertAttachment }) => {
+                //  JobId for installation level updates
+                let id_ref = jobId != '' ? jobId + '.' + id : id
                 const upsertFile = (img_file: Blob, fileName: string) => {
-                    upsertAttachment(img_file, id, fileName)
+                    upsertAttachment(img_file, id_ref, fileName)
                 }
                 return (
                     <FileInput
                         label={label}
-                        fileMetadata={attachments[id]?.metadata}
-                        file={attachments[id]?.blob}
+                        fileMetadata={attachments[id_ref]?.metadata}
+                        file={attachments[id_ref]?.blob}
                         upsertFile={upsertFile}
                     >
                         {children}
