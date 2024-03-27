@@ -1,20 +1,10 @@
 <Tabs>
-    <Tab eventKey="project" title="Project">
-        The data for this tab should be known prior to the initial site visit.
 
-        <ProjectInfoInputs {...props} />   
-
-    </Tab>
     <Tab eventKey="installation" title="Installation">
         
         <DateInput label="Installation Date" path="install_date" />
-        
-        ## Building
-        <PhotoInput id="building_number_photo" label="Building Number – Photo">
-         Provide a photo of the building that shows the building number.
-        </PhotoInput>
 
-        Skip photo if feature is N/A to house.
+        Skip any photo that is not applicable.
         
         <PhotoInput id="insulation_measuring_rulers_photo" label="Insulation Measuring Rulers  – Photo">
             Overview of insulation measuring rulers, one installed every 300 sq. ft. visible 
@@ -79,10 +69,6 @@
         ## Photo Report
 
         <ProjectInfoReport {...props} />
-    
-        <Photo id="building_number_photo" label="Building Number" required>
-        A photo of the building showing the building number.
-        </Photo>
 
         ## About the Report:
         This report is intended to show:

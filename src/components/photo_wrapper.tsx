@@ -9,6 +9,7 @@ interface PhotoWrapperProps {
     id: string
     label: string
     required: boolean
+    docId: string
 }
 
 /**
@@ -31,17 +32,22 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, data }) => {
+            {({ attachments, data, jobId }) => {
+                //  JobId for installation level updates
+                let id_ref =
+                    jobId != '' && id != 'building_number_photo'
+                        ? jobId + '.' + id
+                        : id
                 return (
                     <Photo
                         description={children}
-                        id={id}
+                        id={id_ref}
                         label={label}
                         metadata={
-                            attachments[id]
+                            attachments[id_ref]
                                 ?.metadata as unknown as PhotoMetadata
                         }
-                        photo={attachments[id]?.blob}
+                        photo={attachments[id_ref]?.blob}
                         required={required}
                     />
                 )

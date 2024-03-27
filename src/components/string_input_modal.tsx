@@ -16,6 +16,7 @@ interface StringInputModalProps {
     }>
     title: string
     okButton: string
+    value: string
 }
 
 /**
@@ -36,13 +37,15 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     validateInput,
     title,
     okButton,
+    value,
 }) => {
-    const [inputValue, setInputValue] = useState('')
+    const [inputValue, setInputValue] = useState(value)
     const [errorMessage, setErrorMessage] = useState('')
     const [isValid, setIsValid] = useState(false)
 
     const handleSubmit = () => {
         onSubmit(inputValue.trim())
+        refreshPage()
         closeModal()
     }
 
@@ -59,9 +62,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const handleInputChange = (event: { target: { value: string } }) => {
         let input = event.target.value
         setInputValue(input)
-        setIsValid(
-            validateInput.every(validator => validator.validator(input)),
-        )
+        setIsValid(validateInput.every(validator => validator.validator(input)))
     }
 
     /**
@@ -77,6 +78,10 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
             const errorMessage = errorValidator?.errorMsg || ''
             setErrorMessage(errorMessage)
         }
+    }
+
+    function refreshPage() {
+        window.location.reload()
     }
 
     const modalTitle = title || 'Default Title'

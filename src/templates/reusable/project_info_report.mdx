@@ -1,10 +1,16 @@
 **Installer:**<br/>
-{props.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.name}</span> : null} {props.data.installer?.name ? <br/>: null}
-{props.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.company_name}</span> : null}{props.data.installer?.company_name ? <br/>: null}
-{props.data.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.mailing_address}</span> : null}{props.data.installer?.mailing_address ? <br/>: null}
-{props.data.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.phone} </span>: null}{props.data.installer?.phone ? <br/>: null}
-{props.data.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.data.installer?.email}</span>: null} {props.data.installer?.email ? <br/>: null}
 
-**Installation Date:** <DateStr date={props.data.install_date} />
+{props.project.data_.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.name}</span> : null} {props.project.data_.installer?.name ? <br/>: null}
+{props.project.data_.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.company_name}</span> : null}{props.project.data_.installer?.company_name ? <br/>: null}
+{props.project.data_.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.mailing_address}</span> : null}{props.project.data_.installer?.mailing_address ? <br/>: null}
+{props.project.data_.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.phone} </span>: null}{props.project.data_.installer?.phone ? <br/>: null}
+{props.project.data_.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.email}</span>: null} {props.project.data_.installer?.email ? <br/>: null}
 
-**Installation Address:** {props.data.location?.street_address}, {props.data.location?.city}, {props.data.location?.state} {props.data.location?.zip_code}
+ 
+**Installation Date:**  <DateStr date={props.data.install_date}/> 
+
+**Installation Address:** {props.project.data_.location?.street_address}, {props.project.data_.location?.city}, {props.project.data_.location?.state} {props.project.data_.location?.zip_code}
+
+<Photo id="building_number_photo" label="Building Number" required>
+      A photo of the building showing the building number.
+</Photo>
