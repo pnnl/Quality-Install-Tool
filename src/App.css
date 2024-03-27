@@ -222,3 +222,8 @@ h1 + h3 {
   padding-left: .75rem;
   font-size: 0.9rem;
 }
+
+/* used in home.tsx  */
+.padding {
+  padding: 5px 10px 5px 10px;  /* top right bottom left*/
+}

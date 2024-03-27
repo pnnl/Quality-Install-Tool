@@ -80,7 +80,9 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
                 {zip_code}
             </ListGroup>
             <br />
-            <ListGroup>{templates}</ListGroup>
+            <div className="container">
+                <ListGroup>{templates}</ListGroup>
+            </div>
         </div>
     )
 }
