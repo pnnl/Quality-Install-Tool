@@ -60,8 +60,14 @@ h1 + h2 {
   text-align: center;
 }
 
-/* used in mdx_template_view.tsx */
+/* used in mdx_project_details_view.tsx */
 h1 + h3 {
+  text-align: center;
+}
+
+/* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
+.address
+{
   text-align: center;
 }
 
@@ -215,4 +221,9 @@ h1 + h3 {
   color: red;
   padding-left: .75rem;
   font-size: 0.9rem;
+}
+
+/* used in home.tsx  */
+.padding {
+  padding: 5px 10px 5px 10px;  /* top right bottom left*/
 }
