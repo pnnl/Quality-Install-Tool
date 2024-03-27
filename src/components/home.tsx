@@ -16,6 +16,7 @@ import { retrieveProjects } from '../utilities/database_utils'
  */
 const Home: FC = () => {
     const path = window.location.href.split('?')[1]
+    console.log("Path is ",path)
     const navigate = useNavigate()
     const db = new PouchDB(dbName)
 
