@@ -20,8 +20,14 @@ interface JsonStoreViewProps {
 const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, project }) => {
     const { jobId } = useParams()
 
-    return docId != null ? (
-        <StoreProvider dbName={dbName} docId={project?._id} jobId={docId}>
+    return jobId != null ? (
+        <StoreProvider
+            dbName={dbName}
+            docId={project?._id}
+            jobId={jobId}
+            workflowName=""
+            docName={''}
+            pathIndex={-1}>
             <StoreContext.Consumer>
                 {({ attachments, data }) => {
                     return (
