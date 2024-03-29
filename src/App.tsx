@@ -127,9 +127,7 @@ const App: FC = () => {
         )
 
     // React Router
-    const router = createBrowserRouter(routes, {
-        basename: process.env.PUBLIC_URL,
-    })
+    const router = createBrowserRouter(routes)
 
     return <RouterProvider router={router} />
 }
