@@ -50,7 +50,7 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
     useEffect(() => {
         Object.keys(templatesConfig).map(key => retrieveJobs(key))
         project_info()
-    }, [])
+    }, [projectInfo]) // Trigger the effect when project details changes
 
     const project_name = projectInfo?.project_name
         ? projectInfo?.project_name

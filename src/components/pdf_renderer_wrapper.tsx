@@ -24,7 +24,7 @@ const PDFRenderedWrapper: FC<PDFRenderedWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, jobId, upsertAttachment }) => {
+            {({ attachments, jobId, upsertAttachment }: any) => {
                 //  JobId for installation level updates
                 let id_ref = jobId != '' ? jobId + '.' + id : id
                 return (

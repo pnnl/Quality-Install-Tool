@@ -22,7 +22,7 @@ const PrintSectionWrapper: FC<PrintSectionWrapperProps> = ({
     // Generate an id for the input
     return (
         <StoreContext.Consumer>
-            {({ metadata }) => {
+            {({ metadata }: any) => {
                 return (
                     <PrintSection
                         children={children}

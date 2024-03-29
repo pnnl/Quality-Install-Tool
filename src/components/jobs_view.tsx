@@ -122,7 +122,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     const confirmDeleteJob = async () => {
         try {
             const projectDoc = await db.get(docId)
-            await db.upsert(docId, function (projectDoc) {
+            await db.upsert(docId, function (projectDoc: any) {
                 let del_index = -1
                 projectDoc.installations_.map(
                     async (key: any, workflow_name: string, value: number) => {
@@ -166,7 +166,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
             if (input !== null) {
                 const projectDoc = await db.get(docId)
 
-                await db.upsert(docId, function (projectDoc) {
+                await db.upsert(docId, function (projectDoc: any) {
                     projectDoc.installations_.map(
                         async (key: any, workflow_name: string) => {
                             if (

@@ -33,7 +33,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment, jobId }) => {
+            {({ attachments, upsertAttachment, jobId }: any) => {
                 //  JobId for installation level updates
                 let id_ref = jobId == '' ? id : jobId + '.' + id
 

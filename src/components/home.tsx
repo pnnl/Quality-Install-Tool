@@ -5,6 +5,7 @@ import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { TfiPlus, TfiTrash } from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
+import { useNavigate } from 'react-router-dom'
 import dbName from './db_details'
 import { retrieveProjects } from '../utilities/database_utils'
 
@@ -15,7 +16,8 @@ import { retrieveProjects } from '../utilities/database_utils'
  */
 const Home: FC = () => {
     const db = new PouchDB(dbName)
-
+    const navigate = useNavigate()
+    const [path, setPath] = useState<string>(window.location.href.split('?')[1])
     const [sortedProjectList, setSortedProjectList] = useState<any[]>([])
     const [projectList, setProjectList] = useState<any[]>([])
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -34,6 +36,7 @@ const Home: FC = () => {
         setIsAddModalOpen(false)
     }
 
+    //  Retrieve the updated project doc from PouchDB
     const retrieveProjectInfo = async (): Promise<void> => {
         retrieveProjects(db).then(res => {
             setProjectList(res)
@@ -43,7 +46,10 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [])
+        if (path) {
+            navigate(path)
+        }
+    }, [projectList]) // Trigger the effect when projectList changes in DB
 
     const validateInput = [
         {
@@ -61,8 +67,9 @@ const Home: FC = () => {
                 // Not allow a duplicate with an existing job name
                 const projectNames: string[] = []
                 sortedProjectList.map((key, value) => {
-                    projectNames.push(key._id)
+                    projectNames.push(key)
                 })
+
                 return !projectNames.includes(input.trim())
             },
             errorMsg:
@@ -79,7 +86,6 @@ const Home: FC = () => {
 
         // Refresh the job list after adding the new job
         await retrieveProjectInfo()
-        if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
     }
 
     const handleDeleteJob = (jobId: string) => {
@@ -117,7 +123,9 @@ const Home: FC = () => {
                 return 0
             }
         })
-        setSortedProjectList(sortedJobsByEditTime.map(doc => doc._id))
+        setSortedProjectList(
+            sortedJobsByEditTime.map(doc => doc.metadata_.project_name),
+        )
     }
 
     const cancelDeleteJob = () => {
@@ -125,14 +133,14 @@ const Home: FC = () => {
         setSelectedProjectToDelete('')
     }
 
-    const editAddressDetails = (projectID: string) => {
-        window.location.replace('/app/' + projectID)
+    const editAddressDetails = async (projectID: string) => {
+        navigate('app/' + projectID, { replace: true })
     }
 
     const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
-                await db.upsert(docId, function (doc) {
+                await db.upsert(docId, function (doc: any) {
                     doc.metadata_.project_name = input
                     return doc
                 })
