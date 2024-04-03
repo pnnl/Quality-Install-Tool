@@ -68,23 +68,7 @@
         <NumberInput label="ODU Inches Above The Ground (elevated above the snow)" min={0} path="outdoor_unit.odu_inches_above_ground" /> 
        
         <Radio label="Overhead Snow & Ice Protection" options={['Awning/Cover','None']} path="outdoor_unit.snow_ice_protection" />
-       
-        ## Manual J Calculation
-        <Collapsible header="Manual J Calculation Details">
-            Correctly sizing the heat pump for the home’s heating and cooling needs is much more
-            important for a heat pump than for a furnace and AC system. Use ACCA-approved Manual J
-            residential load calculation software. It is recommended that the Manual J calculations be
-            performed with the home occupant present that knows the most about the home to help
-            determine the most accurate values to enter. Ask the home occupant whether any rooms
-            presently get too hot or cold. 
-        </Collapsible>
 
-         <FileInput id="manual_j_file" label="PDF of Manual J - File">
-                Attach the Manual J load calculations showing design conditions, conditioned square footage, 
-                and the heating and cooling load calculations.
-        </FileInput>
-        <StringInput label="Manual J Notes or Comments" path="comment_manual_j" />
-        
         ## Equipment Performance Tables
         <Collapsible header="Equipment Selection Details">
             Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or 
@@ -353,21 +337,6 @@
             }
 
             
-            {
-                props.metadata.attachments['manual_j_file'] || props.data.comment_manual_j ?
-                <>
-                <h2> Manual J </h2>
-                {
-                props.metadata.attachments['manual_j_file'] ? <p>Please see the PDF containing the Manual J report attached.</p> : null
-                }
-                
-                
-                { props.data.comment_manual_j
-                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
-                : null }
-                
-                </> : null
-            }
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
             and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs. Please see comment below if decisions needed to be made regarding whether to size the heat pump to the existing duct capacity or the ducts were replaced to accommodate the heat pump’s air flow requirements.
@@ -480,7 +449,6 @@
                 ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p> 
                 : null
             }
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>
     </Tab>

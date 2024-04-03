@@ -69,23 +69,6 @@
         <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo" uploadable>
             Take a photo or attach a screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve.
         </PhotoInput>
-
-        ## Manual J Calculation
-        <Collapsible header="Manual J Calculation Details">
-            Correctly sizing the heat pump for the home’s heating and cooling needs is much more
-            important for a heat pump than for a furnace and AC system. Use ACCA-approved Manual J
-            residential load calculation software. It is recommended that the Manual J calculations be
-            performed with the home occupant present that knows the most about the home to help
-            determine the most accurate values to enter. Ask the home occupant whether any rooms
-            presently get too hot or cold. 
-        </ Collapsible>   
-
-        
-        <FileInput id="manual_j_file" label="PDF of Manual J - File">
-                Attach the Manual J load calculations showing design conditions, conditioned square footage, 
-                and the heating and cooling load calculations.
-        </FileInput>
-           
         
         ## Equipment Selection
         <Collapsible header="Equipment Selection Details">
@@ -285,14 +268,6 @@
                 Photo or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve
             </Photo>
 
-            {
-                props.metadata.attachments['manual_j_file']  ?
-                <>
-                <h2> Manual J </h2>
-                <p>Please see the PDF containing the Manual J report attached.</p>
-                </> : null
-                
-            }
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
@@ -384,9 +359,6 @@
             <Photo id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
-
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
-
 
 
         </PrintSection>
