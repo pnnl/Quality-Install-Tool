@@ -99,15 +99,6 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
                 <b>{doc_name}</b>
             </center>
             <br />
-
-            {templatesConfig[workflowName].title.includes('BETA') ? (
-                <div className="beta-text">
-                    The template is currently in its BETA version, intended for
-                    testing purposes. Please be aware that any data utilized
-                    within these templates will not be retained once the final
-                    version of the template is released.{' '}
-                </div>
-            ) : null}
             <MdxWrapper Component={config.template} Project={project} />
         </StoreProvider>
     )
