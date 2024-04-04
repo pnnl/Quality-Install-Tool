@@ -15,9 +15,10 @@ interface FigureWrapperProps {
  * @param src The image source passed to an underlying img tag
  */
 const FigureWrapper: FC<FigureWrapperProps> = ({ children, src }) => {
+    const formattedUrl = process.env.PUBLIC_URL + src
     return (
         <Figure>
-            <FigureImage src={src} />
+            <FigureImage src={formattedUrl} />
             <FigureCaption>{children}</FigureCaption>
         </Figure>
     )
