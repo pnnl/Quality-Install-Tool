@@ -34,7 +34,7 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowAtticInsulationTemplate,
     },
     doe_workflow_ductless_heat_pump: {
-        title: 'Ductless HP',
+        title: 'Ductless HP – Best Practices',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump_without_mj: {
@@ -42,11 +42,11 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowDuctlessHeatPumpWithoutMjTemplate,
     },
     doe_workflow_central_ducted_split_heat_pump: {
-        title: 'Central Ducted Split HP',
+        title: 'Ducted Split HP – Best Practices',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
     },
     doe_workflow_central_ducted_split_heat_pump_without_mj: {
-        title: 'Central Ducted Split HP w/o Manual J',
+        title: 'Ducted Split HP w/o Manual J',
         template: DOEWorkflowCentralDuctedSplitHeatPumpWithoutMjTemplate,
     },
 }
