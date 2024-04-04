@@ -4,6 +4,8 @@ import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.md
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
 import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
+import DOEWorkflowDuctlessHeatPumpWithoutMjTemplate from './doe_workflow_ductless_heat_pump_without_mj.mdx'
+import DOEWorkflowCentralDuctedSplitHeatPumpWithoutMjTemplate from './doe_workflow_central_ducted_split_heat_pump_without_mj.mdx'
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -31,13 +33,21 @@ const templatesConfig: TemplatesConfig = {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
     },
-    beta_doe_workflow_ductless_heat_pump: {
-        title: 'BETA - Ductless Heat Pump',
+    doe_workflow_ductless_heat_pump: {
+        title: 'Ductless HP',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
-    beta_doe_workflow_central_ducted_split_heat_pump: {
-        title: 'BETA - Central Ducted Split Heat Pump',
+    doe_workflow_ductless_heat_pump_without_mj: {
+        title: 'Ductless HP w/o Manual J',
+        template: DOEWorkflowDuctlessHeatPumpWithoutMjTemplate,
+    },
+    doe_workflow_central_ducted_split_heat_pump: {
+        title: 'Central Ducted Split HP',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+    },
+    doe_workflow_central_ducted_split_heat_pump_without_mj: {
+        title: 'Central Ducted Split HP w/o Manual J',
+        template: DOEWorkflowCentralDuctedSplitHeatPumpWithoutMjTemplate,
     },
 }
 /**

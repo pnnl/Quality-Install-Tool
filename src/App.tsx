@@ -1,10 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import {
-    createBrowserRouter,
-    Navigate,
-    RouterProvider,
-    useRouteError,
-} from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import TemplateEditor from './components/editor'
 import WorkFlowView from './components/workflow_view'
@@ -105,9 +100,9 @@ const routes = [
     )
 
 // React Router
-const router = createBrowserRouter(routes, { basename: process.env.PUBLIC_URL })
+const router = createBrowserRouter(routes)
 
-function App() {
+function App(): any {
     return <RouterProvider router={router} />
 }
 
