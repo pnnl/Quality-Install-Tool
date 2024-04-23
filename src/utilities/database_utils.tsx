@@ -143,7 +143,7 @@ export async function putNewWorkFlow(
  * @param docId - The docID to retrieve the project information
  * @returns - Promise that resolves project doc from the database
  */
-export async function retrieveProjectDetails(
+export async function retrieveProjectDoc(
     db: PouchDB.Database<{}>,
     docId: string,
 ): Promise<any> {
@@ -153,6 +153,7 @@ export async function retrieveProjectDetails(
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -168,6 +169,7 @@ export async function retrieveProjects(db: PouchDB.Database<{}>): Promise<any> {
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -196,6 +198,7 @@ export async function retrieveJobs_db(
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -242,6 +245,7 @@ export async function retrieveProjectSummary(
     } catch (error) {
         console.error('Error retrieving project information:', error)
     }
+    db.close()
 }
 
 /**

@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect } from 'react'
+import { useState, type FC, useEffect, useRef } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
@@ -8,6 +8,7 @@ import StringInputModal from './string_input_modal'
 import { useNavigate } from 'react-router-dom'
 import dbName from './db_details'
 import { retrieveProjects } from '../utilities/database_utils'
+import ImportDBDocWrapper from './import_db_doc_wrapper'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -28,6 +29,7 @@ const Home: FC = () => {
     const [selectedProjectToDelete, setSelectedProjectToDelete] = useState('')
     const [selectedProjectNameToDelete, setSelectedProjectNameToDelete] =
         useState('')
+    const downloadFileLink = useRef<HTMLAnchorElement>(null)
 
     const openAddModal = (): void => {
         setIsAddModalOpen(true)
@@ -137,6 +139,24 @@ const Home: FC = () => {
         navigate('app/' + projectID, { replace: true })
     }
 
+    const handleExport = async (docID: string, projectName: string) => {
+        const data = await db
+            .get(docID, { attachments: true, revs_info: false })
+            .then(JSON.stringify)
+        // Removing the _id and _rev from the document as it will be created when uploading the document.
+        const convert_data = JSON.parse(data)
+        delete convert_data._id
+        delete convert_data._rev
+        const send_data = JSON.stringify(convert_data)
+
+        const downloadLink = downloadFileLink.current
+        if (downloadLink) {
+            downloadLink.href = URL.createObjectURL(new Blob([send_data]))
+            downloadLink.setAttribute('download', projectName + '.json')
+            downloadLink.click()
+        }
+    }
+
     const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
@@ -219,6 +239,18 @@ const Home: FC = () => {
                             >
                                 <TfiTrash />
                             </Button>
+                            <Button
+                                onClick={event => {
+                                    event.stopPropagation()
+                                    event.preventDefault()
+                                    handleExport(
+                                        key._id,
+                                        key.metadata_?.project_name,
+                                    )
+                                }}
+                            >
+                                Download
+                            </Button>
                         </span>
                     </ListGroup.Item>
                 </LinkContainer>
@@ -244,11 +276,15 @@ const Home: FC = () => {
             <h1>{title}</h1>
             <ListGroup>{projects_display}</ListGroup>
             <br />
-            {Object.keys(projectList).length != 0 && (
-                <center>
+            <center>
+                {Object.keys(projectList).length != 0 && (
                     <Button onClick={openAddModal}>Add a New Project</Button>
-                </center>
-            )}
+                )}
+                <a ref={downloadFileLink} style={{ display: 'none' }} />
+                <ImportDBDocWrapper id="project_json" label="Project JSON">
+                    Attach the JSON
+                </ImportDBDocWrapper>
+            </center>
 
             <StringInputModal
                 isOpen={isAddModalOpen}

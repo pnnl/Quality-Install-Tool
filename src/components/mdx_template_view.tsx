@@ -6,7 +6,7 @@ import MdxWrapper from './mdx_wrapper'
 import templatesConfig from '../templates/templates_config'
 import {
     retrieveProjectSummary,
-    retrieveProjectDetails,
+    retrieveProjectDoc,
 } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { toNumber } from 'lodash'
@@ -38,21 +38,23 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
     const [installationInfo, setInstallationInfo] = useState<any>({})
 
     const project_info = async (): Promise<void> => {
-        retrieveProjectSummary(
-            new PouchDB(dbName),
-            project?._id,
-            workflowName,
-        ).then((res: any) => {
-            setProjectInfo(res)
-        })
+        retrieveProjectSummary(new PouchDB(dbName), project?._id, workflowName)
+            .then((res: any) => {
+                setProjectInfo(res)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     const retrieveInstallationsInfo = async (): Promise<void> => {
-        retrieveProjectDetails(new PouchDB(dbName), project?._id).then(
-            (res: any) => {
+        retrieveProjectDoc(new PouchDB(dbName), project?._id)
+            .then((res: any) => {
                 setInstallationInfo(res)
-            },
-        )
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     useEffect(() => {

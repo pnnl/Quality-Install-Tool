@@ -14,10 +14,19 @@ import Home from './components/home'
 import MdxProjectView from './components/mdx_project_details_view'
 import { retrieveProjects } from './utilities/database_utils'
 import PouchDB from 'pouchdb'
-import { useNavigate } from 'react-router-dom'
 
 import dbName from './components/db_details'
 import { FC, useEffect, useState } from 'react'
+
+/**
+ * Retrieving all docs from the DB to create the dynamic routes with project doc_id
+ * and initializing
+ */
+const db = new PouchDB(dbName)
+const project_list = await db.allDocs({ include_docs: true }).then(result => {
+    const project_list = result.rows.map(row => row.doc)
+    return project_list
+})
 
 /**
  * App: Defines the routes to be used by React Router, which handles all the
@@ -25,12 +34,10 @@ import { FC, useEffect, useState } from 'react'
  *
  */
 const App: FC = () => {
-    const db = new PouchDB(dbName)
-
-    const [projectList, setProjectList] = useState<any[]>([])
+    const [projectList, setProjectList] = useState<any[]>(project_list)
 
     // Function to retrieve the updated project doc from PouchDB
-    const retrieveProjectInfo = async (): Promise<void> => {
+    const retrieveProjectList = async () => {
         //  Retrieving the document and updating the state variable accordingly
         retrieveProjects(db).then(res => {
             setProjectList(res)
@@ -38,10 +45,11 @@ const App: FC = () => {
     }
 
     useEffect(() => {
-        retrieveProjectInfo()
+        retrieveProjectList()
     }, [projectList]) // Trigger the effect when projectList changes
 
     // Generating the possible routes (both static and dynamic)
+
     const routes = [
         {
             path: '/',

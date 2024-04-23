@@ -18,7 +18,7 @@ interface MdxProjectViewProps {
  */
 const MdxProjectView: FC<MdxProjectViewProps> = ({ project }) => {
     // Note: 'project?._id' is the docId from the DB.
-    const projectId = project?._id
+    const { docId } = useParams()
     return (
         <StoreProvider
             dbName={dbName}
