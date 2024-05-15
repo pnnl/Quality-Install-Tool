@@ -21,18 +21,6 @@ interface TemplatesConfig {
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
 const templatesConfig: TemplatesConfig = {
-    doe_workflow_hpwh: {
-        title: 'IRA - Heat Pump Water Heater',
-        template: DOEWorkflowHPWHTemplate,
-    },
-    doe_workflow_ductless_heat_pump: {
-        title: 'IRA - Heat Pump Ductless',
-        template: DOEWorkflowDuctlessHeatPumpTemplate,
-    },
-    doe_workflow_central_ducted_split_heat_pump: {
-        title: 'IRA - Heat Pump Ducted',
-        template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
-    },
     doe_workflow_attic_air_sealing: {
         title: 'Attic Air Sealing',
         template: DOEWorkflowAtticAirSealTemplate,
@@ -40,6 +28,18 @@ const templatesConfig: TemplatesConfig = {
     doe_workflow_attic_insulation: {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
+    },
+    doe_workflow_central_ducted_split_heat_pump: {
+        title: 'IRA - Heat Pump Ducted',
+        template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+    },
+    doe_workflow_ductless_heat_pump: {
+        title: 'IRA - Heat Pump Ductless',
+        template: DOEWorkflowDuctlessHeatPumpTemplate,
+    },
+    doe_workflow_hpwh: {
+        title: 'IRA - Heat Pump Water Heater',
+        template: DOEWorkflowHPWHTemplate,
     },
 }
 /**
