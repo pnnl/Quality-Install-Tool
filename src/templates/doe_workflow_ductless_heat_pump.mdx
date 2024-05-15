@@ -14,37 +14,7 @@
             If a home has ductwork and a central HVAC system, effort should be made to improve and/or
             repair the ductwork and/or replace the ductwork with new ductwork. Ductless heat pumps
             should be considered an appliance to be used only when a ducted option isn’t possible or
-            where adding ductwork would be extremely difficult and cost prohibitive. The reason is because
-            most ductless heat pumps are…
-            1. Difficult and expensive (~$300 every year to few years) to deep clean (i.e. removing the
-            blower wheel for cleaning) and
-            2. Get dirty quickly due to (a) poor air filtration compared to a central system, and (b)
-            the high wall-mounted form factor design locates the blower wheel in the supply air stream
-            and thus, in cooling mode, the blower wheel cools to dew point attracting dust.
-            3. Comfort can be challenging if the air gets blown directly on people (too hot or cold, or
-            dry eyes).
-            4. For high wall-mounted form factor ductless indoor units, the set temperature and the
-            experienced temperature will often be different due to the equipment’s room
-            temperature sensor being located inside the unit which is positioned near the ceiling.
-            Since warm air rises, it will be warmer near the ceiling than at head and chest level.
-            Thus, in the heating season if the temperature on the remote is set to 72 F for example,
-            the room at head and chest level will often be colder than 72 F. And in the cooling
-            season, if the remote is set to 76 F for example, the room at head and chest level will
-            often be colder than that. To compensate for this difference, one might need to set the
-            temperature to 76 F in the heating season to achieve 72 F at head and chest level.
-            There are a growing number of ductless heat pump models with features and designs that
-            mitigate some or all these problems such as the ability to use a wall thermostat, or remotes
-            with a temperature sensor built into the remote to mitigate the temperature sensor location
-            issue of high wall-mounted form factor ductless indoor units.
-            
-            ## About Ductless Heat Pump Sizing
-            While each room in a house has heating and cooling loads, ductless heat pump units are only
-            available in sizes as small as 6000 BTU/h. Therefore, very small rooms such as bathrooms
-            should not have a dedicated ductless indoor unit but rather receive heated/cooled air from a
-            ductless heat pump unit nearby. A thru wall room to room transfer fan can be installed to help
-            ensure even temperature. Some ductless indoor units have a side port designed for ducting
-            some conditioned air to an adjacent room that is too small to have a dedicated indoor unit.
-            
+            where adding ductwork would be extremely difficult and cost prohibitive.
         </Collapsible>
 
       
@@ -286,10 +256,10 @@
             </Photo>
 
             {
-                props.metadata.attachments['manual_j_file']  ?
+                props.metadata.attachments[props.jobId]?.manual_j_file  ?
                 <>
                 <h2> Manual J </h2>
-                <p>Please see the PDF containing the Manual J report attached.</p>
+                <p>Please see the attached PDF containing the Manual J report.</p>
                 </> : null
                 
             }

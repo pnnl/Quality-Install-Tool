@@ -354,11 +354,11 @@
 
             
             {
-                props.metadata.attachments['manual_j_file'] || props.data.comment_manual_j ?
+                props.metadata.attachments[props.jobId]?.manual_j_file || props.data.comment_manual_j ?
                 <>
                 <h2> Manual J </h2>
                 {
-                props.metadata.attachments['manual_j_file'] ? <p>Please see the PDF containing the Manual J report attached.</p> : null
+                 props.metadata.attachments[props.jobId]?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
                 }
                 
                 
