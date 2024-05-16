@@ -12,7 +12,7 @@ import { isEmpty, isObject, toNumber, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
 import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
-import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
+import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import {
     putNewDoc,
@@ -85,9 +85,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     )
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
-    const [doc, setDoc] = useState<Objectish>({})
+    const [doc, setDoc] = useState<any>({})
 
-    const [installationDoc, setInstallationDoc] = useState<Objectish>({})
+    const [installationDoc, setInstallationDoc] = useState<any>({})
 
     const isInstallationUpdate = pathIndex >= 0
 
@@ -418,12 +418,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
  * @returns A shallow copy of recipient that additionally has the value at path set to target
  */
 export function immutableUpsert(
-    recipient: Objectish,
+    recipient: any,
     path: NonEmptyArray<string>,
     target: any,
-): Objectish {
+): any {
     const [propName, ...newPath] = path
-    const newRecipient = isObject(recipient)
+    const newRecipient: any = isObject(recipient)
         ? Array.isArray(recipient)
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)

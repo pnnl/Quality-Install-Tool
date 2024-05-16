@@ -93,7 +93,7 @@ export async function putNewWorkFlow(
         throw new Error('Database info should never be null')
     }
 
-    const projectDoc = await db.get(docId)
+    const projectDoc: any = await db.get(docId)
 
     const doc_name = docName
     const workflow_name = workflowName
@@ -183,9 +183,9 @@ export async function retrieveJobs_db(
     workflowName: string,
 ): Promise<any> {
     try {
-        const projectDoc = await db.get(docId)
+        const projectDoc: any = await db.get(docId)
         let jobList: any[] = []
-        projectDoc.installations_.map((key, value) => {
+        projectDoc.installations_.map((key: any, value: any) => {
             if (key.metadata_.workflow_name == workflowName) {
                 jobList.push(key)
             }
@@ -209,7 +209,7 @@ export async function retrieveProjectSummary(
     workflowName: string,
 ): Promise<any> {
     try {
-        const doc = await db.get(docId)
+        const doc: any = await db.get(docId)
 
         if (doc) {
             const project_name = doc.metadata_?.project_name

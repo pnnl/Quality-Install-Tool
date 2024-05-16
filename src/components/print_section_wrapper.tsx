@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import type Metadata from '../types/metadata.type'
 import { StoreContext } from './store'
 import PrintSection from './print_section'
 
@@ -27,8 +28,14 @@ const PrintSectionWrapper: FC<PrintSectionWrapperProps> = ({
                     <PrintSection
                         children={children}
                         label={label}
-                        project_name={metadata.project_name}
-                        workflow_name={metadata.workflow_name}
+                        project_name={
+                            (metadata as Metadata | Record<string, string>)
+                                .project_name
+                        }
+                        workflow_name={
+                            (metadata as Metadata | Record<string, string>)
+                                .workflow_name
+                        }
                     />
                 )
             }}

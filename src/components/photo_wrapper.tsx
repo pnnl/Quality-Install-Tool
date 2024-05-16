@@ -34,20 +34,22 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
         <StoreContext.Consumer>
             {({ attachments, data, jobId }) => {
                 //  JobId for installation level updates
-                let id_ref =
-                    jobId != '' && id != 'building_number_photo'
-                        ? jobId + '.' + id
-                        : id
+                const id_ref = `${
+                    jobId === '' || jobId === 'building_number_photo'
+                        ? ''
+                        : `${jobId}.`
+                }${id}`
+                const attachment = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    id_ref,
+                )?.value
                 return (
                     <Photo
                         description={children}
                         id={id_ref}
                         label={label}
-                        metadata={
-                            attachments[id_ref]
-                                ?.metadata as unknown as PhotoMetadata
-                        }
-                        photo={attachments[id_ref]?.blob}
+                        metadata={attachment?.metadata as PhotoMetadata}
+                        photo={attachment?.blob}
                         required={required}
                     />
                 )

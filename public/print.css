@@ -55,7 +55,19 @@ h3 {
   font-size: 1rem;
   break-after: avoid-page;
 }
+/* used in all templates - for report title */
 h1 + h2 {
+  text-align: center;
+}
+
+/* used in mdx_project_details_view.tsx */
+h1 + h3 {
+  text-align: center;
+}
+
+/* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
+.address
+{
   text-align: center;
 }
 
@@ -92,11 +104,6 @@ h1 + h2 {
   margin-bottom: 10px;
 }
 
-/* headding */
-h3 {
-  font-size: 1.3rem; 
-  text-align: center;
-}
 
 .string-input-modal{
   .error{
@@ -214,4 +221,9 @@ h3 {
   color: red;
   padding-left: .75rem;
   font-size: 0.9rem;
+}
+
+/* used in home.tsx  */
+.padding {
+  padding: 5px 10px 5px 10px;  /* top right bottom left*/
 }

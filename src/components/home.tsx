@@ -132,7 +132,7 @@ const Home: FC = () => {
     const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
-                await db.upsert(docId, function (doc) {
+                await db.upsert(docId, function (doc: any) {
                     doc.metadata_.project_name = input
                     return doc
                 })

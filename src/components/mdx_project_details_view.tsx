@@ -32,6 +32,7 @@ const MdxProjectView: FC<MdxProjectViewProps> = ({ project }) => {
             <h3>{project?.metadata_?.project_name}</h3>
             <MdxWrapper
                 Component={DOEProjectDetailsTemplate}
+                JobId=""
                 Project={project}
             />
         </StoreProvider>
