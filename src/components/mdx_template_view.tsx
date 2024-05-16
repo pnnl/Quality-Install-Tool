@@ -101,7 +101,11 @@ const MdxTemplateView: FC<MdxTemplateViewProps> = ({
                 <b>{doc_name}</b>
             </center>
             <br />
-            <MdxWrapper Component={config.template} Project={project} />
+            <MdxWrapper
+                Component={config.template}
+                Project={project}
+                JobId={jobId}
+            />
         </StoreProvider>
     )
 }
