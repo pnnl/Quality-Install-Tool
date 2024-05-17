@@ -3,7 +3,7 @@ import { TfiAngleLeft } from 'react-icons/tfi'
 
 import Container from 'react-bootstrap/Container'
 import Image from 'react-bootstrap/Image'
-import NavBar from 'react-bootstrap/NavBar'
+import Navbar from 'react-bootstrap/Navbar'
 import { useLocation, Link } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 
@@ -59,7 +59,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
 
     return (
         <div id="root-background">
-            <NavBar id="root-banner">
+            <Navbar id="root-banner">
                 {/* Conditional rendering of a back button */}
                 {showBackButton && (
                     <div id="back-button-container">
@@ -71,11 +71,11 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
                     </div>
                 )}
                 <Container id="root-flex-layout">
-                    <NavBar.Brand>
+                    <Navbar.Brand>
                         <span id="root-title">Quality Install Tool</span>
-                    </NavBar.Brand>
+                    </Navbar.Brand>
                 </Container>
-            </NavBar>
+            </Navbar>
             <div id="root-body">{children}</div>
         </div>
     )
