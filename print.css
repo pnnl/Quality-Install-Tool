@@ -227,3 +227,11 @@ h1 + h3 {
 .padding {
   padding: 5px 10px 5px 10px;  /* top right bottom left*/
 }
+
+/* disclaimer text */
+.disclaimer-text {
+  padding-left: .75rem;
+  padding-right: .75rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
