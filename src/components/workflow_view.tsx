@@ -80,6 +80,16 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
                 {zip_code}
             </ListGroup>
             <br />
+            <p className="padding">
+                <b>
+                    The workflows for measures shown below are industry
+                    recommended practices for quality installation of the said
+                    measures. Workflows that are specific for qualified products
+                    within the IRA Home Rebates Program are under development
+                    and will be made available shortly.
+                </b>
+            </p>
+
             <div className="container">
                 <ListGroup>{templates}</ListGroup>
             </div>
