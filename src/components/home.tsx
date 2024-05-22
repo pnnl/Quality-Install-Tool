@@ -6,6 +6,7 @@ import PouchDB from 'pouchdb'
 import { TfiPlus, TfiTrash } from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
 import dbName from './db_details'
+import { useNavigate } from 'react-router-dom'
 import { retrieveProjects } from '../utilities/database_utils'
 
 /**
@@ -14,6 +15,8 @@ import { retrieveProjects } from '../utilities/database_utils'
  * @returns ListGroup component displaying the projects created
  */
 const Home: FC = () => {
+    const path = window.location.href.split('?')[1]
+    const navigate = useNavigate()
     const db = new PouchDB(dbName)
 
     const [sortedProjectList, setSortedProjectList] = useState<any[]>([])
@@ -43,6 +46,9 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
+        if (path) {
+            navigate(path)
+        }
     }, [])
 
     const validateInput = [

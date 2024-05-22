@@ -104,12 +104,16 @@
     "workbox-routing": "^6.4.2",
     "workbox-strategies": "^6.4.2",
     "workbox-streams": "^6.4.2",
-    "workbox-webpack-plugin": "^6.4.1"
+    "workbox-webpack-plugin": "^6.4.1",
+    "gh-pages": "^5.0.0",
+    "http-server": "^14.1.1"
   },
   "scripts": {
     "start": "HTTPS=true node scripts/start.js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
     "test": "node scripts/test.js",
+    "predeploy": "yarn build && cp ./404.html ./build",
+    "deploy": "gh-pages -d build",
     "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
