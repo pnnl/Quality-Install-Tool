@@ -6,7 +6,7 @@ import PouchDB from 'pouchdb'
 import { TfiPlus, TfiTrash } from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
 import dbName from './db_details'
-import { retrieveProjects } from '../utilities/database_utils'
+import { retrieveProjectDocs } from '../utilities/database_utils'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -35,7 +35,7 @@ const Home: FC = () => {
     }
 
     const retrieveProjectInfo = async (): Promise<void> => {
-        retrieveProjects(db).then(res => {
+        retrieveProjectDocs(db).then(res => {
             setProjectList(res)
             sortByEditTime(res)
         })
@@ -61,7 +61,7 @@ const Home: FC = () => {
                 // Not allow a duplicate with an existing job name
                 const projectNames: string[] = []
                 sortedProjectList.map((key, value) => {
-                    projectNames.push(key._id)
+                    projectNames.push(key)
                 })
                 return !projectNames.includes(input.trim())
             },
@@ -79,11 +79,11 @@ const Home: FC = () => {
 
         // Refresh the job list after adding the new job
         await retrieveProjectInfo()
-        if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
+        //if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
     }
 
-    const handleDeleteJob = (jobId: string) => {
-        setSelectedProjectToDelete(jobId)
+    const handleDeleteJob = (docId: string) => {
+        setSelectedProjectToDelete(docId)
         setShowDeleteConfirmation(true)
     }
 
@@ -117,7 +117,9 @@ const Home: FC = () => {
                 return 0
             }
         })
-        setSortedProjectList(sortedJobsByEditTime.map(doc => doc._id))
+        setSortedProjectList(
+            sortedJobsByEditTime.map(doc => doc.metadata_.doc_name),
+        )
     }
 
     const cancelDeleteJob = () => {
@@ -132,8 +134,8 @@ const Home: FC = () => {
     const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
-                await db.upsert(docId, function (doc) {
-                    doc.metadata_.project_name = input
+                await db.upsert(docId, function (doc: any) {
+                    doc.metadata_.doc_name = input
                     return doc
                 })
             }
@@ -156,24 +158,24 @@ const Home: FC = () => {
             <ListGroup key={key._id} className="padding">
                 <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
                     <ListGroup.Item key={key._id} action={true}>
-                        <b>{key.metadata_?.project_name}</b>
-                        {key.data_.location?.street_address && (
+                        <b>{key.metadata_?.doc_name}</b>
+                        {key.data_?.location?.street_address && (
                             <>
                                 <br />
-                                {key.data_.location?.street_address},
+                                {key.data_?.location?.street_address},
                             </>
                         )}
-                        {key.data_.location?.city && (
+                        {key.data_?.location?.city && (
                             <>
                                 <br />
-                                {key.data_.location?.city},{' '}
+                                {key.data_?.location?.city},{' '}
                             </>
                         )}
                         {key.data_.location?.state && (
-                            <>{key.data_.location?.state} </>
+                            <>{key.data_?.location?.state} </>
                         )}
                         {key.data_.location?.zip_code && (
-                            <>{key.data_.location?.zip_code}</>
+                            <>{key.data_?.location?.zip_code}</>
                         )}
 
                         <span className="icon-container">
@@ -204,7 +206,7 @@ const Home: FC = () => {
                                     event.preventDefault()
                                     handleDeleteJob(key._id)
                                     setSelectedProjectNameToDelete(
-                                        key.metadata_?.project_name,
+                                        key.metadata_?.doc_name,
                                     )
                                 }}
                                 variant="danger"
@@ -226,7 +228,7 @@ const Home: FC = () => {
                     validateInput={validateInput}
                     title="Enter new project name"
                     okButton="Rename"
-                    value={key.metadata_?.project_name}
+                    value={key.metadata_?.doc_name}
                 />
             </ListGroup>
         ))

@@ -24,15 +24,18 @@ const PDFRenderedWrapper: FC<PDFRenderedWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, jobId, upsertAttachment }) => {
-                //  JobId for installation level updates
-                let id_ref = jobId != '' ? jobId + '.' + id : id
+            {({ attachments, upsertAttachment }) => {
+                const attachment = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    id,
+                )?.value
+
                 return (
                     <PDFRenderer
                         children={children}
                         label={label}
-                        fileMetadata={attachments[id_ref]?.metadata}
-                        file={attachments[id_ref]?.blob}
+                        fileMetadata={attachment?.metadata}
+                        file={attachment?.blob}
                     />
                 )
             }}

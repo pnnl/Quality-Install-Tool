@@ -14,11 +14,7 @@ import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
-import {
-    putNewDoc,
-    putNewProject,
-    putNewWorkFlow,
-} from '../utilities/database_utils'
+import { putNewProject, putNewInstallation } from '../utilities/database_utils'
 import templatesConfig from '../templates/templates_config'
 
 PouchDB.plugin(PouchDBUpsert)
@@ -41,7 +37,6 @@ export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
-    jobId: {} as string,
     upsertAttachment: ((
         blob: Blob,
         id: any,
@@ -57,8 +52,8 @@ interface StoreProviderProps {
     docId: string
     workflowName: string
     docName: string
-    jobId: string
-    pathIndex: number
+    type: string
+    parentId?: string
 }
 
 /**
@@ -74,8 +69,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     docId,
     workflowName,
     docName,
-    jobId,
-    pathIndex,
+    type,
+    parentId,
 }) => {
     const changesRef = useRef<PouchDB.Core.Changes<{}>>()
     const revisionRef = useRef<string>()
@@ -85,11 +80,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     )
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
-    const [doc, setDoc] = useState<Objectish>({})
+    const [doc, setDoc] = useState<any>({})
 
-    const [installationDoc, setInstallationDoc] = useState<Objectish>({})
-
-    const isInstallationUpdate = pathIndex >= 0
+    const isInstallationDoc = type === 'installation'
 
     /**
      * Updates component state based on a database document change
@@ -106,9 +99,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         delete newDoc._rev
 
         setDoc(newDoc)
-
-        if (isInstallationUpdate)
-            setInstallationDoc(newDoc.installations_[pathIndex])
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
@@ -192,14 +182,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 // It looks like the type def for putIfNotExists does not match its implementation
                 // TODO: Check this over carefully
 
-                const result = !isInstallationUpdate
+                const result = !isInstallationDoc
                     ? ((await putNewProject(db, docName, docId)) as unknown)
-                    : ((await putNewWorkFlow(
+                    : ((await putNewInstallation(
                           db,
                           docId,
                           workflowName,
-                          jobId,
                           docName,
+                          parentId,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {
@@ -267,10 +257,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         )
         setDoc(newDoc)
 
-        if (isInstallationUpdate) {
-            setInstallationDoc(newDoc.installations_[pathIndex])
-        }
-
         // Persist the doc
         if (db != null) {
             db.upsert(docId, function upsertFn(dbDoc: any) {
@@ -306,9 +292,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      */
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
-        pathStr = isInstallationUpdate
-            ? 'installations_[' + pathIndex + '].' + pathStr
-            : pathStr
         upsertDoc(pathStr, value)
     }
 
@@ -397,9 +380,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
-                data: isInstallationUpdate ? installationDoc.data_ : doc.data_,
+                data: doc.data_,
                 metadata: doc.metadata_,
-                jobId: isInstallationUpdate ? jobId : '',
                 upsertAttachment,
                 upsertData,
                 upsertMetadata,
@@ -418,12 +400,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
  * @returns A shallow copy of recipient that additionally has the value at path set to target
  */
 export function immutableUpsert(
-    recipient: Objectish,
+    recipient: any,
     path: NonEmptyArray<string>,
     target: any,
-): Objectish {
+): any {
     const [propName, ...newPath] = path
-    const newRecipient = isObject(recipient)
+    const newRecipient: any = isObject(recipient)
         ? Array.isArray(recipient)
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)

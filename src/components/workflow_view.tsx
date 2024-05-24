@@ -3,15 +3,12 @@ import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig from '../templates/templates_config'
 import {
-    retrieveJobs_db,
+    retrieveInstallationDocs,
     retrieveProjectSummary,
 } from '../utilities/database_utils'
 import dbName from './db_details'
 import PouchDB from 'pouchdb'
-
-interface WorkflowProps {
-    project: any
-}
+import { useParams } from 'react-router-dom'
 
 /**
  * A component View to lists workflow names, facilitating the selection of workflows
@@ -19,17 +16,19 @@ interface WorkflowProps {
  *
  * @param project: doc object from db for the respective project
  */
-const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
+const WorkFlowView: FC = () => {
     const [workflowJobsCount, setWorkflowJobsCount] = useState<{
         [jobId: string]: number
     }>({})
+
+    const { projectId } = useParams()
     const [projectInfo, setProjectInfo] = useState<any>({})
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
-        const newArray = retrieveJobs_db(
+        retrieveInstallationDocs(
             new PouchDB(dbName),
-            project?._id,
+            projectId as string,
             workflowName,
         ).then(res => {
             setWorkflowJobsCount(prevArray => ({
@@ -40,11 +39,13 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
     }
     const project_info = async (): Promise<void> => {
         // Retrieves the project information which includes project name and installation address
-        retrieveProjectSummary(new PouchDB(dbName), project?._id, '').then(
-            (res: any) => {
-                setProjectInfo(res)
-            },
-        )
+        retrieveProjectSummary(
+            new PouchDB(dbName),
+            projectId as string,
+            '',
+        ).then((res: any) => {
+            setProjectInfo(res)
+        })
     }
 
     useEffect(() => {
@@ -62,7 +63,7 @@ const WorkFlowView: FC<WorkflowProps> = ({ project }) => {
     const state = projectInfo?.state ? projectInfo?.state : ''
     const zip_code = projectInfo?.zip_code ? projectInfo?.zip_code : ''
     const templates = Object.keys(templatesConfig).map(key => (
-        <LinkContainer key={key} to={`/app/${project._id}/${key}`}>
+        <LinkContainer key={key} to={`/app/${projectId}/${key}`}>
             <ListGroup.Item key={key} action={true}>
                 {templatesConfig[key as keyof typeof templatesConfig].title} (
                 {workflowJobsCount[key]})

@@ -1,8 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
+import dbName from './db_details'
+import { retrieveDocFromDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -10,6 +13,7 @@ interface PhotoWrapperProps {
     label: string
     required: boolean
     docId: string
+    project?: any
 }
 
 /**
@@ -29,25 +33,45 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     id,
     label,
     required,
+    project,
 }) => {
+    const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
+
+    if (id === 'building_number_photo') {
+        new PouchDB(dbName)
+            .getAttachment(project?._id, id)
+            .then(res => {
+                setBuildingPhotoBlob(res)
+            })
+            .catch(err => {
+                /* Building number photo not present */
+            })
+    }
+
     return (
         <StoreContext.Consumer>
-            {({ attachments, data, jobId }) => {
-                //  JobId for installation level updates
-                let id_ref =
-                    jobId != '' && id != 'building_number_photo'
-                        ? jobId + '.' + id
-                        : id
+            {({ attachments, data }) => {
+                const attachment = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    id,
+                )?.value
+
+                const photo =
+                    id === 'building_number_photo'
+                        ? buildingPhotoBlob
+                        : attachment?.blob
+                const metadata =
+                    id === 'building_number_photo'
+                        ? project?.metadata_?.attachments[id]
+                        : attachment?.metadata
+
                 return (
                     <Photo
                         description={children}
-                        id={id_ref}
+                        id={id}
                         label={label}
-                        metadata={
-                            attachments[id_ref]
-                                ?.metadata as unknown as PhotoMetadata
-                        }
-                        photo={attachments[id_ref]?.blob}
+                        metadata={metadata}
+                        photo={photo}
                         required={required}
                     />
                 )
@@ -57,3 +81,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }
 
 export default PhotoWrapper
+function res(value: Blob | Buffer): Blob | Buffer | PromiseLike<Blob | Buffer> {
+    throw new Error('Function not implemented.')
+}

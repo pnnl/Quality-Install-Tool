@@ -22,17 +22,20 @@ const FileInputWrapper: FC<FileInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, jobId, upsertAttachment }) => {
-                //  JobId for installation level updates
-                let id_ref = jobId != '' ? jobId + '.' + id : id
+            {({ attachments, upsertAttachment }) => {
+                const attachment = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    id,
+                )?.value
+
                 const upsertFile = (img_file: Blob, fileName: string) => {
-                    upsertAttachment(img_file, id_ref, fileName)
+                    upsertAttachment(img_file, id, fileName)
                 }
                 return (
                     <FileInput
                         label={label}
-                        fileMetadata={attachments[id_ref]?.metadata}
-                        file={attachments[id_ref]?.blob}
+                        fileMetadata={attachment?.metadata}
+                        file={attachment?.blob}
                         upsertFile={upsertFile}
                     >
                         {children}

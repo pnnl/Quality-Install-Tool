@@ -7,19 +7,14 @@ import templatesConfig from '../templates/templates_config'
 import StringInputModal from './string_input_modal'
 import { LinkContainer } from 'react-router-bootstrap'
 import {
-    putNewDoc,
-    putNewWorkFlow,
-    retrieveJobs_db,
+    putNewInstallation,
+    retrieveInstallationDocs,
     retrieveProjectSummary,
 } from '../utilities/database_utils'
 import dbName from './db_details'
+import { useParams } from 'react-router-dom'
 
 PouchDB.plugin(PouchDBUpsert)
-
-interface JobListProps {
-    workflowName: string
-    docId: any
-}
 
 /**
  * A component view to list installations for a Project.
@@ -28,8 +23,9 @@ interface JobListProps {
  * @param docId - A projectID (or docId) for respective project doc in pouchDB.
  *                This ID is used to retrieve data related to the project and its installations.
  */
-const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
+const JobList: React.FC = () => {
     const db = new PouchDB(dbName)
+    const { projectId, workflowName } = useParams()
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
     const [sortedJobNames, setSortedJobNames] = useState<any[]>([])
     const [jobsList, setJobsList] = useState<any[]>([])
@@ -45,12 +41,16 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
 
     // Retrieves the project information which includes project name and installation address
     const project_info = async (): Promise<void> => {
-        retrieveProjectSummary(db, docId, workflowName).then(res => {
+        retrieveProjectSummary(
+            db,
+            projectId as string,
+            workflowName as string,
+        ).then(res => {
             setProjectInfo(res)
         })
     }
 
-    const installation_name = templatesConfig[workflowName].title
+    const installation_name = templatesConfig[workflowName as string].title
 
     const openAddModal = (): void => {
         setIsAddModalOpen(true)
@@ -68,7 +68,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                 return regex.test(input)
             },
             errorMsg:
-                'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
+                'The job or task name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
         },
         {
             validator: (input: string) => {
@@ -81,7 +81,11 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     ]
 
     const retrieveJobs = async (): Promise<void> => {
-        retrieveJobs_db(db, docId, workflowName).then(res => {
+        retrieveInstallationDocs(
+            db,
+            projectId as string,
+            workflowName as string,
+        ).then(res => {
             setJobsList(res)
             sortByEditTime(res)
         })
@@ -121,22 +125,8 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
 
     const confirmDeleteJob = async () => {
         try {
-            const projectDoc = await db.get(docId)
-            await db.upsert(docId, function (projectDoc) {
-                let del_index = -1
-                projectDoc.installations_.map(
-                    async (key: any, workflow_name: string, value: number) => {
-                        if (
-                            key.metadata_.workflow_name == workflowName &&
-                            key._id == selectedJobToDelete
-                        ) {
-                            del_index = value
-                        }
-                    },
-                )
-                projectDoc.installations_.splice(del_index, 1)
-                return projectDoc
-            })
+            const projectDoc = await db.get(selectedJobToDelete)
+            await db.remove(projectDoc)
             await retrieveJobs()
         } catch (error) {
             console.error('Error deleting job:', error)
@@ -155,7 +145,13 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
         // adding a new job here
         const docName = input
         if (docName !== null) {
-            await putNewWorkFlow(db, docId, workflowName, '', docName)
+            await putNewInstallation(
+                db,
+                '',
+                workflowName as string,
+                docName,
+                projectId as string,
+            )
         }
         // Refresh the job list after adding the new job
         await retrieveJobs()
@@ -164,20 +160,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
     const handleRenameJob = async (input: string, jobId: string) => {
         try {
             if (input !== null) {
-                const projectDoc = await db.get(docId)
-
-                await db.upsert(docId, function (projectDoc) {
-                    projectDoc.installations_.map(
-                        async (key: any, workflow_name: string) => {
-                            if (
-                                key.metadata_.workflow_name == workflowName &&
-                                key._id == jobId
-                            ) {
-                                key.metadata_.doc_name = input
-                            }
-                        },
-                    )
-                    return projectDoc
+                await db.upsert(jobId, function (doc: any) {
+                    doc.metadata_.doc_name = input
+                    return doc
                 })
             }
             // Refresh the job list after renaming
@@ -240,7 +225,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName, docId }) => {
                 <ListGroup key={jobID._id}>
                     <LinkContainer
                         key={jobID._id}
-                        to={`/app/${docId}/${workflowName}/${jobID._id}`}
+                        to={`/app/${projectId}/${workflowName}/${jobID._id}`}
                     >
                         <ListGroup.Item action={true} key={jobID._id}>
                             {jobID.metadata_.doc_name}

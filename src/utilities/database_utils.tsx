@@ -37,11 +37,18 @@ export async function putNewDoc(
             created_at: now,
             last_modified_at: now,
             attachments: {},
-            project_name: docName,
+            doc_name: docName,
         },
     })
 }
 
+/**
+ * Adds a new project document to the PouchDB database with the provided name and date.
+ * @param {PouchDB.Database<{}>} db - The PouchDB database instance.
+ * @param {string} docName - The name of the document to be added.
+ * @param {docId} docID - The _id of the document, if already exists
+ * @returns A Promise that resolves to the new document if one was added.
+ */
 export async function putNewProject(
     db: PouchDB.Database<{}>,
     docName: string,
@@ -58,32 +65,32 @@ export async function putNewProject(
     // Store the new document if it does not exist
     return db.putIfNotExists({
         _id: docId ? docId : crypto.randomUUID(),
+        type: 'project',
         data_: {},
         metadata_: {
-            project_name: docName,
+            doc_name: docName,
             created_at: now,
             last_modified_at: now,
             attachments: {},
         },
-        installations_: [],
     })
 }
 
 /**
- * Adds a new Installation to the existing project document
+ * Adds a new job or installation document in PouchDB
  * @param db - The PouchDB database instance.
- * @param docId - The project docID that needs to be updated (UUID)
+ * @param docId - The _id of the document if already exist in the db
  * @param workflowName  - Installation type
- * @param jobId  - The unique installation id or Job ID (UUID)
- * @param docName  - Name provided by the user for the Job or Installation
+ * @param docName  - Name provided by the user for the job or installation
+ * @param parentId  - The _id of the parent or project document that this job is linked.
  * @returns A Promise that resolves to the document if one was added / updated
  */
-export async function putNewWorkFlow(
+export async function putNewInstallation(
     db: PouchDB.Database<{}>,
     docId: string,
     workflowName: string,
-    jobId?: string,
     docName?: string,
+    parentId?: string,
 ): Promise<unknown> {
     // Get the current date
     const now = new Date()
@@ -92,58 +99,32 @@ export async function putNewWorkFlow(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
-
-    const projectDoc = await db.get(docId)
-
-    const doc_name = docName
     const workflow_name = workflowName
     let workflow_title = templatesConfig[workflowName].title
 
-    const initializeNewWorkflow = {
-        _id: crypto.randomUUID(),
+    return db.putIfNotExists({
+        _id: docId ? docId : crypto.randomUUID(),
+        type: 'installation',
+        project_id: parentId,
+        workflow_name: workflow_name,
         data_: {},
         metadata_: {
             workflow_title,
-            workflow_name,
-            doc_name,
+            doc_name: docName,
             created_at: now,
             last_modified_at: now,
+            attachments: {},
         },
-    }
-
-    const specificInstallation = projectDoc.installations_.find(
-        (x: { _id: string | undefined }) => x._id === jobId,
-    )
-
-    if (!specificInstallation) {
-        if (projectDoc.installations_?.length == 0) {
-            projectDoc.installations_[0] = initializeNewWorkflow
-        } else {
-            projectDoc.installations_[projectDoc.installations_?.length] =
-                initializeNewWorkflow
-        }
-    }
-    return db.upsert(docId, function upsertFn(dbDoc: any) {
-        const result = { ...dbDoc, ...projectDoc }
-        if (!result.metadata_) {
-            result.metadata_ = {
-                created_at: new Date().toISOString(),
-                last_modified_at: new Date().toISOString(),
-            }
-        } else {
-            result.metadata_.last_modified_at = new Date().toISOString()
-        }
-        return result
     })
 }
 
 /**
- * Retrieves the specific project from the database
+ * Retrieves the document for give docId from the database
  * @param db - The PouchDB database instance.
- * @param docId - The docID to retrieve the project information
- * @returns - Promise that resolves project doc from the database
+ * @param docId - The docID to retrieve the doc
+ * @returns - Promise that resolves doc from the database
  */
-export async function retrieveProjectDetails(
+export async function retrieveDocFromDB(
     db: PouchDB.Database<{}>,
     docId: string,
 ): Promise<any> {
@@ -156,17 +137,21 @@ export async function retrieveProjectDetails(
 }
 
 /**
- * Retrieves all the projects from the database
+ * Retrieves all the project docs from the database
  * @param db  - The PouchDB database instance.
  * @returns Promise that resolves list of projects from the database
  */
-export async function retrieveProjects(db: PouchDB.Database<{}>): Promise<any> {
+export async function retrieveProjectDocs(
+    db: PouchDB.Database<{}>,
+): Promise<any> {
     try {
-        const result = await db.allDocs({ include_docs: true })
-        const projectList = result.rows.map(row => row.doc)
-        return projectList
+        const allDocs = await db.allDocs({ include_docs: true })
+        const projects = allDocs.rows
+            .map(row => row.doc as any)
+            .filter(doc => doc.type === 'project')
+        return projects
     } catch (error) {
-        console.error('Error retrieving jobs:', error)
+        console.error('Error retrieving projects:', error)
     }
 }
 
@@ -177,20 +162,23 @@ export async function retrieveProjects(db: PouchDB.Database<{}>): Promise<any> {
  * @param workflowName - The Workflow name to retrieve list of jobs under the same workflow
  * @returns  -  returns list of jobs/installation details under the same workflow
  */
-export async function retrieveJobs_db(
+
+export async function retrieveInstallationDocs(
     db: PouchDB.Database<{}>,
     docId: string,
     workflowName: string,
 ): Promise<any> {
     try {
-        const projectDoc = await db.get(docId)
-        let jobList: any[] = []
-        projectDoc.installations_.map((key, value) => {
-            if (key.metadata_.workflow_name == workflowName) {
-                jobList.push(key)
-            }
-        })
-        return jobList
+        const allDocs = await db.allDocs({ include_docs: true })
+        const jobs = allDocs.rows
+            .map(row => row.doc as any)
+            .filter(
+                doc =>
+                    doc.type === 'installation' &&
+                    doc.project_id === docId &&
+                    doc.workflow_name === workflowName,
+            )
+        return jobs
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
@@ -209,10 +197,10 @@ export async function retrieveProjectSummary(
     workflowName: string,
 ): Promise<any> {
     try {
-        const doc = await db.get(docId)
+        const doc: any = await db.get(docId)
 
         if (doc) {
-            const project_name = doc.metadata_?.project_name
+            const project_name = doc.metadata_?.doc_name
             const installation_name =
                 workflowName != '' ? templatesConfig[workflowName].title : ''
             const street_address = doc.data_.location?.street_address
