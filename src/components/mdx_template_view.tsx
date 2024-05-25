@@ -16,11 +16,9 @@ import { ListGroup } from 'react-bootstrap'
  * A component view of an instantiated MDX template
  *
  * @remarks
- * The installation ID (or jobID) for the instance is taken from a dynamic segment
- * of the route, :jobId.
+ * The installation ID (or jobId), parent doc id and workflow name
+ * for the instance is taken from a dynamic segment of the route, :jobId, :projectId, workflowName.
  *
- * @param workflowName - The name associated with an MDX template
- * @param project - The parent doc object that holds the installation information
  */
 const MdxTemplateView: FC = () => {
     const { jobId, projectId, workflowName } = useParams()

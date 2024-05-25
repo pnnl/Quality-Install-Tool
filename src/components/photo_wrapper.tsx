@@ -25,8 +25,9 @@ interface PhotoWrapperProps {
  * the Photo component
  * @param label The label of the Photo component
  * @param required When unset, the Photo component will only show if there is a
- * photo attachement in the data store with the given id. When set, the Photo component
+ * photo attachment in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
+ * @param project Optional field. Project doc, for Building number photo
  */
 const PhotoWrapper: FC<PhotoWrapperProps> = ({
     children,
@@ -81,6 +82,3 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }
 
 export default PhotoWrapper
-function res(value: Blob | Buffer): Blob | Buffer | PromiseLike<Blob | Buffer> {
-    throw new Error('Function not implemented.')
-}

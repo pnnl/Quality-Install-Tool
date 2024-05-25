@@ -14,7 +14,6 @@ import { useParams } from 'react-router-dom'
  * A component View to lists workflow names, facilitating the selection of workflows
  * when generating quality installation reports.
  *
- * @param project: doc object from db for the respective project
  */
 const WorkFlowView: FC = () => {
     const [workflowJobsCount, setWorkflowJobsCount] = useState<{

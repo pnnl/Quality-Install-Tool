@@ -7,6 +7,7 @@ import { TfiPlus, TfiTrash } from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
+import { useNavigate } from 'react-router-dom'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -15,7 +16,8 @@ import { retrieveProjectDocs } from '../utilities/database_utils'
  */
 const Home: FC = () => {
     const db = new PouchDB(dbName)
-
+    const navigate = useNavigate()
+    const [path, setPath] = useState<string>(window.location.href.split('?')[1])
     const [sortedProjectList, setSortedProjectList] = useState<any[]>([])
     const [projectList, setProjectList] = useState<any[]>([])
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -58,7 +60,7 @@ const Home: FC = () => {
         },
         {
             validator: (input: string) => {
-                // Not allow a duplicate with an existing job name
+                // Not allow a duplicate with an existing project name
                 const projectNames: string[] = []
                 sortedProjectList.map((key, value) => {
                     projectNames.push(key)
@@ -71,15 +73,14 @@ const Home: FC = () => {
     ]
 
     const handleAddJob = async (input: string) => {
-        // adding a new job here
+        // adding a new project doc here
         const docName = input
-
         const updatedDBDoc: any =
             docName !== null ? await putNewProject(db, docName, '') : ''
 
-        // Refresh the job list after adding the new job
+        // Refresh the project list after adding the new project
         await retrieveProjectInfo()
-        //if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
+        if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
     }
 
     const handleDeleteJob = (docId: string) => {
@@ -91,18 +92,18 @@ const Home: FC = () => {
         try {
             const doc = await db.get(selectedProjectToDelete)
             await db.remove(doc)
-            // Refresh the job list after deletion
+            // Refresh the project list after deletion
             await retrieveProjectInfo()
         } catch (error) {
-            console.error('Error deleting job:', error)
+            console.error('Error deleting project doc:', error)
         } finally {
             setShowDeleteConfirmation(false)
             setSelectedProjectToDelete('')
         }
     }
 
-    const sortByEditTime = (jobsList: any[]) => {
-        const sortedJobsByEditTime = jobsList.sort((a, b) => {
+    const sortByEditTime = (projectsList: any[]) => {
+        const sortedJobsByEditTime = projectsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
                 b.metadata_.last_modified_at.toString()
@@ -128,7 +129,7 @@ const Home: FC = () => {
     }
 
     const editAddressDetails = (projectID: string) => {
-        window.location.replace('/app/' + projectID)
+        navigate('app/' + projectID, { replace: true })
     }
 
     const handleRenameProject = async (input: string, docId: string) => {
@@ -139,10 +140,10 @@ const Home: FC = () => {
                     return doc
                 })
             }
-            // Refresh the job list after renaming
+            // Refresh the project list after renaming
             await retrieveProjectInfo()
         } catch (error) {
-            console.error('Error renaming job:', error)
+            console.error('Error renaming project doc:', error)
         }
     }
 

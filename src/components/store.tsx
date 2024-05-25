@@ -82,6 +82,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
+    // Determining the doc type for updating it accordingly
     const isInstallationDoc = type === 'installation'
 
     /**
@@ -241,7 +242,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * Updates (or inserts) data into the doc state and persists the new doc
      *
      * @remarks
-     * The given path is gauranteed to exist after the update/insertion.
+     * The given path is guaranteed to exist after the update/insertion.
      * This function is called internally from upsertData and upsertAttachments function to update the doc with respective information.
      *
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state

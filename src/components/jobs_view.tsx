@@ -18,10 +18,7 @@ PouchDB.plugin(PouchDBUpsert)
 
 /**
  * A component view to list installations for a Project.
- *
- * @param workflowName - The workflow name associated with an MDX template.
- * @param docId - A projectID (or docId) for respective project doc in pouchDB.
- *                This ID is used to retrieve data related to the project and its installations.
+ * @returns ListGroup component displaying the jobs or installations associated with the project
  */
 const JobList: React.FC = () => {
     const db = new PouchDB(dbName)

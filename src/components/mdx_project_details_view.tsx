@@ -11,7 +11,6 @@ import { retrieveDocFromDB } from '../utilities/database_utils'
  * A component view of an instantiated MDX template
  * It serves as a central component for accessing and managing project information.
  *
- * @param project - doc object from db for the respective project
  */
 const MdxProjectView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.

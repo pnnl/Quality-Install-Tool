@@ -46,7 +46,7 @@ export async function putNewDoc(
  * Adds a new project document to the PouchDB database with the provided name and date.
  * @param {PouchDB.Database<{}>} db - The PouchDB database instance.
  * @param {string} docName - The name of the document to be added.
- * @param {docId} docID - The _id of the document, if already exists
+ * @param {docId} docId - The _id of the document, if already exists
  * @returns A Promise that resolves to the new document if one was added.
  */
 export async function putNewProject(
@@ -82,7 +82,7 @@ export async function putNewProject(
  * @param docId - The _id of the document if already exist in the db
  * @param workflowName  - Installation type
  * @param docName  - Name provided by the user for the job or installation
- * @param parentId  - The _id of the parent or project document that this job is linked.
+ * @param parentId  - The _id of the parent or project document that the job is linked.
  * @returns A Promise that resolves to the document if one was added / updated
  */
 export async function putNewInstallation(
