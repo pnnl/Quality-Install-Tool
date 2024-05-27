@@ -1,6 +1,6 @@
-import { useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
-
+import PouchDB from 'pouchdb'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import DOEProjectDetailsTemplate from '../templates/doe_project_details.mdx'
@@ -24,6 +24,10 @@ const MdxProjectView: FC = () => {
             },
         )
     }
+
+    useEffect(() => {
+        project_info()
+    }, [])
 
     return (
         <StoreProvider

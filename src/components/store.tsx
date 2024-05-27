@@ -16,6 +16,7 @@ import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import { putNewProject, putNewInstallation } from '../utilities/database_utils'
 import templatesConfig from '../templates/templates_config'
+import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -85,6 +86,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     // Determining the doc type for updating it accordingly
     const isInstallationDoc = type === 'installation'
 
+    // Increase the maximum number of listeners for all EventEmitters
+    EventEmitter.defaultMaxListeners = 20
+
     /**
      * Updates component state based on a database document change
      *
@@ -103,7 +107,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
-        if (db && dbDoc.hasOwnProperty('_attachments')) {
+        if (db && dbDoc.hasOwnProperty('_attachments') && dbDoc._id == docId) {
             // Collect all the new or modified attachments
             const dbDocAttachments = dbDoc._attachments
             const attachmentsMetadata = dbDoc.metadata_.attachments
@@ -111,16 +115,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             for (const attachmentId in dbDocAttachments) {
                 const docAttachment = dbDocAttachments[attachmentId]
 
-                // Attachment associated with the installations / jobs
-                const installationAttachments =
-                    attachmentId.indexOf('.') > 0 ? attachmentId.split('.') : []
-
                 const singleAttachmentMetadata =
-                    installationAttachments.length > 0
-                        ? attachmentsMetadata[installationAttachments[0]][
-                              installationAttachments[1]
-                          ]
-                        : attachmentsMetadata[attachmentId]
+                    attachmentsMetadata[attachmentId]
 
                 // digest is a hash of the attachment, so a different digest indicates a modified attachment
                 const digest = docAttachment?.digest
@@ -226,14 +222,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     // It's hard to imagine what would cause this since our DB is local
                     console.error('DB subscription connection failed')
                 })
-        })()
 
-        // Cancel the DB subscription just before the component unmounts
-        return () => {
-            if (changesRef.current != null) {
-                changesRef.current.cancel()
+            // Cancel the DB subscription just before the component unmounts
+            return () => {
+                if (changesRef.current != null) {
+                    changesRef.current.cancel()
+                }
             }
-        }
+        })()
 
         // Run this effect after the first render and whenever the dbName prop changes
     }, [dbName])
