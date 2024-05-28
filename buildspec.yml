@@ -7,6 +7,6 @@ phases:
       - npm install yarn
       - yarn install --frozen-lockfile
       - yarn run build
-      - if [ "$CODEBUILD_WEBHOOK_EVENT" == "RELEASED" ]; then TOPDIR=prod && CFID=$PRODID; fi
+      - if [ "$TOPDIR" == "prod" ]; then CFID=$PRODID; fi
       - aws s3 sync build $DEPLOY_BUCKET/$TOPDIR
       - aws cloudfront create-invalidation --distribution-id $CFID --paths '/*'
