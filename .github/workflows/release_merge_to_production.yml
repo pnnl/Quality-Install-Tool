@@ -10,24 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step to retrieve the latest release version
-      - name: Get latest release version
-        id: get_release
-        run: |
-          echo "name=version::$(curl -sSL https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')" >> $GITHUB_OUTPUT
-          
       # Step to checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step to create a pull request
-      - name: Create a pull request
-        uses: peter-evans/create-pull-request@v3
+      - name: create-pull-request
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: "master"
+          PULL_REQUEST_BRANCH: "production"
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Merge latest release into production branch'
           title: 'Merge Latest Release: ${{ steps.get_release.outputs.version }}'
           body: 'This pull request merges the latest release into the production branch.'
-          branch: production 
-          base: master
-          head: ${{ steps.get_release.outputs.version }} # Checkout the latest release tag from the main branch
+         
