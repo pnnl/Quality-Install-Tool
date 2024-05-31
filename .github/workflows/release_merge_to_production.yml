@@ -22,8 +22,10 @@ jobs:
         uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PULL_REQUEST_TO_BRANCH: "production"
-          PULL_REQUEST_FROM_BRANCH: "main"
+          BRANCH: "master"
+          PULL_REQUEST_BRANCH: "production"
+          PULL_REQUEST_FROM_BRANCH: "master"
+          PULL_REQUEST_REVIEWERS: sudhacheran
         with:
           title: "${{ env.PULL_REQUEST_TITLE }}"
           body: "${{ env.PULL_REQUEST_BODY }}"
