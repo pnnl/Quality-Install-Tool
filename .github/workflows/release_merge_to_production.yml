@@ -1,7 +1,6 @@
-name: Merge latest release from main to production Branch
+name: Merge latest release from main to production branch
 
 on:
-  # workflow_dispatch:   #Manual trigger for testing
   release:
     types: [published]  #Triggers when a release is published
 
@@ -14,13 +13,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set environment variables
+        run: |
+          echo "PULL_REQUEST_TITLE=Release Merge to Production" >> $GITHUB_ENV
+          echo "PULL_REQUEST_BODY='This pull request merges the latest release into production branch" >> $GITHUB_ENV
+
       - name: create-pull-request
         uses: vsoch/pull-request-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: "master"
           PULL_REQUEST_BRANCH: "production"
+          PULL_REQUEST_FROM_BRANCH: "master"
         with:
-          title: 'Merge Latest Release: ${{ steps.get_release.outputs.version }}'
-          body: 'This pull request merges the latest release into the production branch.'
+          title: "${{ env.PULL_REQUEST_TITLE }}"
+          body: "${{ env.PULL_REQUEST_BODY }}"
+      
          
