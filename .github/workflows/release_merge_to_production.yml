@@ -3,6 +3,8 @@ name: Merge latest release from main to production branch
 on:
   release:
     types: [published]  #Triggers when a release is published
+    branches:
+      - main
 
 jobs:
   release-merge-to-production:
@@ -25,7 +27,7 @@ jobs:
           BRANCH: "main"
           PULL_REQUEST_BRANCH: "production"
           PULL_REQUEST_FROM_BRANCH: "main"
-          PULL_REQUEST_REVIEWERS: sudhacheran
+          PULL_REQUEST_REVIEWERS: sudhacheran, charliepnnl, mvgeorgescu
         with:
           title: "${{ env.PULL_REQUEST_TITLE }}"
           body: "${{ env.PULL_REQUEST_BODY }}"
