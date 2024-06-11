@@ -91,25 +91,28 @@ const Home: FC = () => {
     const confirmDeleteJob = async () => {
         try {
             // delete the selected project
-            const doc = await db.get(selectedProjectToDelete)
-            //await db.remove(doc)
+            const projectDoc: any = await db.get(selectedProjectToDelete)
 
-            // Fetch all documents
-            const result = await db.allDocs({ include_docs: true })
-            // Filter tasks or jobs linked to the projects
-            const docsToDelete = result.rows
-                .map(row => row.doc as any)
-                .filter(
-                    install_doc =>
-                        install_doc.type === 'installation' &&
-                        install_doc.project_id === selectedProjectToDelete,
-                )
-                .map(install_doc => ({ ...install_doc, _deleted: true }))
-            // performing bulk delete of jobs
+            const installDocs: any = await db.allDocs({
+                keys: projectDoc.children,
+                include_docs: true,
+            })
+
+            // Filter jobs/installations linked to the projects and mark for deletion
+            const docsToDelete: any = installDocs.rows
+                .filter((row: { doc: any }) => !!row.doc) // Filter out rows without a document
+                .map((row: { doc: { _id: any; _rev: any } }) => ({
+                    _deleted: true,
+                    _id: row.doc?._id,
+                    _rev: row.doc?._rev,
+                }))
+
+            // performing bulk delete of jobs/installation doc
             if (docsToDelete.length > 0) {
                 const deleteResult = await db.bulkDocs(docsToDelete)
             }
-            await db.remove(doc)
+            // Deleting the project document
+            await db.remove(projectDoc)
 
             //Refresh the project list after deletion
             await retrieveProjectInfo()

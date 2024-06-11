@@ -1,6 +1,24 @@
 import templatesConfig from '../templates/templates_config'
 
 /**
+ * Represents a document structure in a database with metadata and workflow information.
+ */
+interface DBDocType {
+    id: string
+    type: string
+    data_: {}
+    metadata_: {
+        doc_name: string
+        created_at: Date
+        last_modified_at: Date
+        attachments: {}
+        workflow_title?: string
+        workflow_name?: string
+    }
+    children: []
+}
+
+/**
  * Adds a new document to the PouchDB database with the provided name and date.
  * @param {PouchDB.Database<{}>} db - The PouchDB database instance.
  * @param {string} name - The name of the document to be added.
@@ -9,7 +27,9 @@ import templatesConfig from '../templates/templates_config'
 export async function putNewDoc(
     db: PouchDB.Database<{}>,
     docName: string,
-): Promise<unknown> {
+    docId: string,
+    type: string,
+): Promise<any> {
     // Get the current date
     const now = new Date()
     // TODO: Handle the error case better
@@ -17,28 +37,19 @@ export async function putNewDoc(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
-    // The workflow name is the database name
-    const workflow_name = dbInfo.db_name
-    let workflow_title = dbInfo.db_name
 
-    // Get the corresponding workflow title from templates_config
-    if (workflow_name.indexOf('quality_install_tool') > 0) {
-        const template_name = workflow_name
-            .split('_')
-            .slice(1, workflow_name.length)
-            .join('_')
-        workflow_title = templatesConfig[template_name].title
-    }
     // Store the new document if it does not exist
     return db.putIfNotExists({
-        _id: docName,
+        _id: docId ? docId : crypto.randomUUID(),
+        type: type,
         data_: {},
         metadata_: {
+            doc_name: docName,
             created_at: now,
             last_modified_at: now,
             attachments: {},
-            doc_name: docName,
         },
+        children: [],
     })
 }
 
@@ -53,27 +64,9 @@ export async function putNewProject(
     db: PouchDB.Database<{}>,
     docName: string,
     docId: string,
-): Promise<unknown> {
-    // Get the current date
-    const now = new Date()
-    // TODO: Handle the error case better
-    const dbInfo = await promisifiedDBInfo(db)
-    if (!dbInfo) {
-        throw new Error('Database info should never be null')
-    }
-
+): Promise<DBDocType> {
     // Store the new document if it does not exist
-    return db.putIfNotExists({
-        _id: docId ? docId : crypto.randomUUID(),
-        type: 'project',
-        data_: {},
-        metadata_: {
-            doc_name: docName,
-            created_at: now,
-            last_modified_at: now,
-            attachments: {},
-        },
-    })
+    return putNewDoc(db, docName, docId, 'project')
 }
 
 /**
@@ -89,9 +82,9 @@ export async function putNewInstallation(
     db: PouchDB.Database<{}>,
     docId: string,
     workflowName: string,
-    docName?: string,
-    parentId?: string,
-): Promise<unknown> {
+    docName: string,
+    parentId: string,
+): Promise<PouchDB.UpsertResponse> {
     // Get the current date
     const now = new Date()
     // TODO: Handle the error case better
@@ -99,22 +92,19 @@ export async function putNewInstallation(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
+    const installation_doc = putNewDoc(db, docName, docId, 'installation')
+
+    // append the installation.id in the project doc
+    appendChildToProject(db, parentId, (await installation_doc).id)
+
     const workflow_name = workflowName
     let workflow_title = templatesConfig[workflowName].title
 
-    return db.putIfNotExists({
-        _id: docId ? docId : crypto.randomUUID(),
-        type: 'installation',
-        project_id: parentId,
-        workflow_name: workflow_name,
-        data_: {},
-        metadata_: {
-            workflow_title,
-            doc_name: docName,
-            created_at: now,
-            last_modified_at: now,
-            attachments: {},
-        },
+    // update installation doc to include workflow_name and workflow_title
+    return db.upsert((await installation_doc).id, function (doc: any) {
+        doc.metadata_.workflow_title = workflow_title
+        doc.metadata_.workflow_name = workflow_name
+        return doc
     })
 }
 
@@ -165,18 +155,23 @@ export async function retrieveProjectDocs(
 
 export async function retrieveInstallationDocs(
     db: PouchDB.Database<{}>,
-    docId: string,
+    parentId: string,
     workflowName: string,
 ): Promise<any> {
     try {
         const allDocs = await db.allDocs({ include_docs: true })
+        const installation_ids = allDocs.rows
+            .map(row => row.doc as any)
+            .filter(doc => doc.type === 'project' && doc._id === parentId)
+            .flatMap(doc => doc.children || [])
+
         const jobs = allDocs.rows
             .map(row => row.doc as any)
             .filter(
                 doc =>
                     doc.type === 'installation' &&
-                    doc.project_id === docId &&
-                    doc.workflow_name === workflowName,
+                    installation_ids.includes(doc._id) &&
+                    doc.metadata_.workflow_name === workflowName,
             )
         return jobs
     } catch (error) {
@@ -248,4 +243,28 @@ function promisifiedDBInfo(
             }
         }),
     )
+}
+
+/**
+ *
+ */
+export async function appendChildToProject(
+    db: PouchDB.Database<{}>,
+    docId: string,
+    childDocId: string,
+): Promise<unknown> {
+    try {
+        // Fetch the document, update the children array, and put it back in one go
+        return await db.upsert<any>(docId, doc => {
+            doc.children = doc.children || [] // Ensure the children array exists
+            if (!doc.children.includes(childDocId)) {
+                // Check if childDocId is not already in the array
+                doc.children.push(childDocId) // Append the new child
+            }
+            return doc // Return the modified document
+        })
+    } catch (err) {
+        console.error('Error appending child to project:', err)
+        throw err
+    }
 }

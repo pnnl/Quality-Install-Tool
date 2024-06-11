@@ -54,7 +54,7 @@ interface StoreProviderProps {
     workflowName: string
     docName: string
     type: string
-    parentId?: string
+    parentId?: string | undefined
 }
 
 /**
@@ -186,7 +186,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                           docId,
                           workflowName,
                           docName,
-                          parentId,
+                          parentId as string,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {
