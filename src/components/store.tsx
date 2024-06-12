@@ -85,9 +85,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     )
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
-    const [doc, setDoc] = useState<Objectish>({})
+    const [doc, setDoc] = useState<any>({})
 
-    const [installationDoc, setInstallationDoc] = useState<Objectish>({})
+    const [installationDoc, setInstallationDoc] = useState<any>({})
 
     const isInstallationUpdate = pathIndex >= 0
 
@@ -260,7 +260,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertDoc: UpsertDoc = (pathStr, data) => {
         // Update doc state
 
-        const newDoc = immutableUpsert(
+        const newDoc: any = immutableUpsert(
             doc,
             toPath(pathStr) as NonEmptyArray<string>,
             data,
@@ -423,7 +423,7 @@ export function immutableUpsert(
     target: any,
 ): Objectish {
     const [propName, ...newPath] = path
-    const newRecipient = isObject(recipient)
+    const newRecipient: any = isObject(recipient)
         ? Array.isArray(recipient)
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)

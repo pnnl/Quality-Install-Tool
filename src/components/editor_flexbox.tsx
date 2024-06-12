@@ -135,7 +135,8 @@ const EditorFlexBox: FC = () => {
             workflowName=""
             docName={''}
             jobId=""
-            pathIndex={-1}>
+            pathIndex={-1}
+        >
             <StoreContext.Consumer>
                 {({ data }) => {
                     return (
@@ -161,11 +162,13 @@ const EditorFlexBox: FC = () => {
                                 <div className="flex-child">
                                     <div className="flex-child">
                                         <DisplayErrorErrorBoundary>
-                                            {// @TODO This code will be revisited and revised in future
-                                            /* <MDXComponent
+                                            {
+                                                // @TODO This code will be revisited and revised in future
+                                                /* <MDXComponent
                                                 components={components}
                                                 doc={data}
-                                            /> */}
+                                            /> */
+                                            }
                                         </DisplayErrorErrorBoundary>
                                     </div>
                                 </div>

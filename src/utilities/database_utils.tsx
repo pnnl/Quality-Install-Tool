@@ -93,7 +93,7 @@ export async function putNewWorkFlow(
         throw new Error('Database info should never be null')
     }
 
-    const projectDoc = await db.get(docId)
+    const projectDoc: any = await db.get(docId)
 
     const doc_name = docName
     const workflow_name = workflowName
@@ -143,7 +143,7 @@ export async function putNewWorkFlow(
  * @param docId - The docID to retrieve the project information
  * @returns - Promise that resolves project doc from the database
  */
-export async function retrieveProjectDetails(
+export async function retrieveProjectDoc(
     db: PouchDB.Database<{}>,
     docId: string,
 ): Promise<any> {
@@ -153,6 +153,7 @@ export async function retrieveProjectDetails(
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -168,6 +169,7 @@ export async function retrieveProjects(db: PouchDB.Database<{}>): Promise<any> {
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -183,17 +185,20 @@ export async function retrieveJobs_db(
     workflowName: string,
 ): Promise<any> {
     try {
-        const projectDoc = await db.get(docId)
+        const projectDoc: any = await db.get(docId)
         let jobList: any[] = []
-        projectDoc.installations_.map((key, value) => {
-            if (key.metadata_.workflow_name == workflowName) {
-                jobList.push(key)
-            }
-        })
+        projectDoc.installations_.map(
+            (key: { metadata_: { workflow_name: string } }, value: any) => {
+                if (key.metadata_.workflow_name == workflowName) {
+                    jobList.push(key)
+                }
+            },
+        )
         return jobList
     } catch (error) {
         console.error('Error retrieving jobs:', error)
     }
+    db.close()
 }
 
 /**
@@ -209,7 +214,7 @@ export async function retrieveProjectSummary(
     workflowName: string,
 ): Promise<any> {
     try {
-        const doc = await db.get(docId)
+        const doc: any = await db.get(docId)
 
         if (doc) {
             const project_name = doc.metadata_?.project_name
@@ -240,6 +245,7 @@ export async function retrieveProjectSummary(
     } catch (error) {
         console.error('Error retrieving project information:', error)
     }
+    db.close()
 }
 
 /**

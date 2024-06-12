@@ -32,7 +32,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, data, jobId }) => {
+            {({ attachments, data, jobId }: any) => {
                 //  JobId for installation level updates
                 let id_ref =
                     jobId != '' && id != 'building_number_photo'
