@@ -283,6 +283,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 } else {
                     result.metadata_.last_modified_at = new Date().toISOString()
                 }
+                setMetaData(result.metadata_)
                 return result
             })
                 .then(function (res) {
