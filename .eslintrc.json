@@ -22,7 +22,10 @@
         "typescript"
     ],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "require-await": "error",
+        "no-return-await": "error",
+        "no-await-in-loop": "error"
     },
     "parser": "@babel/eslint-parser"
 }
