@@ -25,6 +25,7 @@ import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 import PrintSectionWrapper from './print_section wrapper'
 import FileInputWrapper from './file_input_wrapper'
 import PDFRendererWrapper from './pdf_renderer_wrapper'
+import Conditional from './conditional'
 
 const components = {
     Collapsible,
@@ -49,6 +50,7 @@ const components = {
     ProjectInfoReport: ProjectInfoReport,
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
+    Conditional: Conditional,
 }
 
 interface MdxWrapperProps {
