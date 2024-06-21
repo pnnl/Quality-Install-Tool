@@ -6,7 +6,8 @@ import PouchDB from 'pouchdb'
 import { TfiPlus, TfiTrash } from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
 import dbName from './db_details'
-import { retrieveProjects } from '../utilities/database_utils'
+import { retrieveProjectDocs } from '../utilities/database_utils'
+import { useNavigate } from 'react-router-dom'
 import ImportDBDocWrapper from './import_db_doc_wrapper'
 
 /**
@@ -16,7 +17,8 @@ import ImportDBDocWrapper from './import_db_doc_wrapper'
  */
 const Home: FC = () => {
     const db = new PouchDB(dbName)
-
+    const navigate = useNavigate()
+    const [path, setPath] = useState<string>(window.location.href.split('?')[1])
     const [sortedProjectList, setSortedProjectList] = useState<any[]>([])
     const [projectList, setProjectList] = useState<any[]>([])
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -37,7 +39,7 @@ const Home: FC = () => {
     }
 
     const retrieveProjectInfo = async (): Promise<void> => {
-        retrieveProjects(db).then(res => {
+        retrieveProjectDocs(db).then(res => {
             setProjectList(res)
             sortByEditTime(res)
         })
@@ -60,10 +62,10 @@ const Home: FC = () => {
         },
         {
             validator: (input: string) => {
-                // Not allow a duplicate with an existing job name
+                // Not allow a duplicate with an existing project name
                 const projectNames: string[] = []
                 sortedProjectList.map((key, value) => {
-                    projectNames.push(key._id)
+                    projectNames.push(key)
                 })
                 return !projectNames.includes(input.trim())
             },
@@ -73,30 +75,51 @@ const Home: FC = () => {
     ]
 
     const handleAddJob = async (input: string) => {
-        // adding a new job here
+        // adding a new project doc here
         const docName = input
-
         const updatedDBDoc: any =
             docName !== null ? await putNewProject(db, docName, '') : ''
 
-        // Refresh the job list after adding the new job
+        // Refresh the project list after adding the new project
         await retrieveProjectInfo()
         if (updatedDBDoc) editAddressDetails(updatedDBDoc.id)
     }
 
-    const handleDeleteJob = (jobId: string) => {
-        setSelectedProjectToDelete(jobId)
+    const handleDeleteJob = (docId: string) => {
+        setSelectedProjectToDelete(docId)
         setShowDeleteConfirmation(true)
     }
 
     const confirmDeleteJob = async () => {
         try {
-            const doc = await db.get(selectedProjectToDelete)
-            await db.remove(doc)
-            // Refresh the job list after deletion
+            // delete the selected project
+            const projectDoc: any = await db.get(selectedProjectToDelete)
+
+            const installDocs: any = await db.allDocs({
+                keys: projectDoc.children,
+                include_docs: true,
+            })
+
+            // Filter jobs/installations linked to the projects and mark for deletion
+            const docsToDelete: any = installDocs.rows
+                .filter((row: { doc: any }) => !!row.doc) // Filter out rows without a document
+                .map((row: { doc: { _id: any; _rev: any } }) => ({
+                    _deleted: true,
+                    _id: row.doc?._id,
+                    _rev: row.doc?._rev,
+                }))
+
+            // performing bulk delete of jobs/installation doc
+            if (docsToDelete.length > 0) {
+                const deleteResult = await db.bulkDocs(docsToDelete)
+            }
+            // Deleting the project document
+            await db.remove(projectDoc)
+
+            //Refresh the project list after deletion
             await retrieveProjectInfo()
         } catch (error) {
-            console.error('Error deleting job:', error)
+            console.error('Error deleting project doc:', error)
         } finally {
             setShowDeleteConfirmation(false)
             setSelectedProjectToDelete('')
@@ -137,7 +160,9 @@ const Home: FC = () => {
                 return 0
             }
         })
-        setSortedProjectList(sortedJobsByEditTime.map(doc => doc._id))
+        setSortedProjectList(
+            sortedJobsByEditTime.map(doc => doc.metadata_.doc_name),
+        )
     }
 
     const cancelDeleteJob = () => {
@@ -146,21 +171,21 @@ const Home: FC = () => {
     }
 
     const editAddressDetails = (projectID: string) => {
-        window.location.replace('/app/' + projectID)
+        navigate('app/' + projectID, { replace: true })
     }
 
     const handleRenameProject = async (input: string, docId: string) => {
         try {
             if (input !== null) {
-                await db.upsert(docId, function (doc) {
-                    doc.metadata_.project_name = input
+                await db.upsert(docId, function (doc: any) {
+                    doc.metadata_.doc_name = input
                     return doc
                 })
             }
-            // Refresh the job list after renaming
+            // Refresh the project list after renaming
             await retrieveProjectInfo()
         } catch (error) {
-            console.error('Error renaming job:', error)
+            console.error('Error renaming project doc:', error)
         }
     }
 
@@ -176,24 +201,24 @@ const Home: FC = () => {
             <ListGroup key={key._id} className="padding">
                 <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
                     <ListGroup.Item key={key._id} action={true}>
-                        <b>{key.metadata_?.project_name}</b>
-                        {key.data_.location?.street_address && (
+                        <b>{key.metadata_?.doc_name}</b>
+                        {key.data_?.location?.street_address && (
                             <>
                                 <br />
-                                {key.data_.location?.street_address},
+                                {key.data_?.location?.street_address},
                             </>
                         )}
-                        {key.data_.location?.city && (
+                        {key.data_?.location?.city && (
                             <>
                                 <br />
-                                {key.data_.location?.city},{' '}
+                                {key.data_?.location?.city},{' '}
                             </>
                         )}
                         {key.data_.location?.state && (
-                            <>{key.data_.location?.state} </>
+                            <>{key.data_?.location?.state} </>
                         )}
                         {key.data_.location?.zip_code && (
-                            <>{key.data_.location?.zip_code}</>
+                            <>{key.data_?.location?.zip_code}</>
                         )}
 
                         <span className="icon-container">
@@ -224,7 +249,7 @@ const Home: FC = () => {
                                     event.preventDefault()
                                     handleDeleteJob(key._id)
                                     setSelectedProjectNameToDelete(
-                                        key.metadata_?.project_name,
+                                        key.metadata_?.doc_name,
                                     )
                                 }}
                                 variant="danger"
@@ -258,7 +283,7 @@ const Home: FC = () => {
                     validateInput={validateInput}
                     title="Enter new project name"
                     okButton="Rename"
-                    value={key.metadata_?.project_name}
+                    value={key.metadata_?.doc_name}
                 />
             </ListGroup>
         ))

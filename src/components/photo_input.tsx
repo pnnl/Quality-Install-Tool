@@ -27,7 +27,7 @@ interface PhotoInputProps {
  *
  * @param children Content (most commonly markdown text) describing the photo requirement
  * @param label Label for the photo requirement
- * @param metadata Abreviated photo metadata including timestamp and geolocation
+ * @param metadata Abbreviated photo metadata including timestamp and geolocation
  * @param photo Blob containing the photo itself
  * @param upsertPhoto Function used to update/insert a photo into the store
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
