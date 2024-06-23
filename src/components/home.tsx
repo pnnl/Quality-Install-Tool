@@ -9,6 +9,7 @@ import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
 import ImportDBDocWrapper from './import_db_doc_wrapper'
+import { exportAsJSONObject } from '../utilities/export_doc_as_json'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -47,7 +48,7 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [])
+    }, [projectList])
 
     const validateInput = [
         {
@@ -127,21 +128,7 @@ const Home: FC = () => {
     }
 
     const handleExport = async (docID: string, projectName: string) => {
-        const data = await db
-            .get(docID, { attachments: true, revs_info: false })
-            .then(JSON.stringify)
-        // Removing the _id and _rev from the document as it will be created when uploading the document.
-        const convert_data = JSON.parse(data)
-        delete convert_data._id
-        delete convert_data._rev
-        const send_data = JSON.stringify(convert_data)
-
-        const downloadLink = downloadFileLink.current
-        if (downloadLink) {
-            downloadLink.href = URL.createObjectURL(new Blob([send_data]))
-            downloadLink.setAttribute('download', projectName + '.json')
-            downloadLink.click()
-        }
+        exportAsJSONObject(db, docID, projectName, downloadFileLink)
     }
 
     const sortByEditTime = (jobsList: any[]) => {
@@ -262,7 +249,7 @@ const Home: FC = () => {
                                     event.preventDefault()
                                     handleExport(
                                         key._id,
-                                        key.metadata_?.project_name,
+                                        key.metadata_?.doc_name,
                                     )
                                 }}
                             >
@@ -298,9 +285,7 @@ const Home: FC = () => {
                     <Button onClick={openAddModal}>Add a New Project</Button>
                 )}
                 <a ref={downloadFileLink} style={{ display: 'none' }} />
-                <ImportDBDocWrapper id="project_json" label="Project JSON">
-                    Attach the JSON
-                </ImportDBDocWrapper>
+                <ImportDBDocWrapper id="project_json" label="Import Project" />
             </center>
 
             <StringInputModal

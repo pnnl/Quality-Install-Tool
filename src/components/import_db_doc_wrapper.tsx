@@ -1,39 +1,27 @@
-import React, { FC } from 'react'
-import { StoreContext } from './store'
+import { FC } from 'react'
 import ImportDBDoc from './import_db_doc'
 
+// Define the props interface for ImportDBDocWrapper
 interface ImportDBDocWrapperProps {
-    children: React.ReactNode
     id: string
     label: string
 }
 
 /**
- * A component that wraps a FileInput component in order to tie it to the data store
+ * ImportDBDocWrapper component.
  *
- * @param children Content (most commonly markdown text) to be passed on as the FileInput children
- * @param id An identifier for the store attachment that represents the information of the file
- * @param label The label of the PhotoInput component
+ * This component wraps the `ImportDBDoc` component, retrieves attachments and job ID from the context, constructs
+ * a reference ID, and passes the appropriate file blob and label to `ImportDBDoc`.
+ *
+ * @param {string} label - The label to be displayed for the import operation.
+ *
+ * @returns {JSX.Element} The rendered ImportDBDoc component with context-provided props.
  */
 const ImportDBDocWrapper: FC<ImportDBDocWrapperProps> = ({
-    children,
     id,
     label,
-}) => {
-    return (
-        <StoreContext.Consumer>
-            {({ attachments, jobId, upsertAttachment }: any) => {
-                //  JobId for installation level updates
-                let id_ref = jobId != '' ? jobId + '.' + id : id
-
-                return (
-                    <ImportDBDoc label={label} file={attachments[id_ref]?.blob}>
-                        {children}
-                    </ImportDBDoc>
-                )
-            }}
-        </StoreContext.Consumer>
-    )
+}: ImportDBDocWrapperProps): JSX.Element => {
+    return <ImportDBDoc id={id} label={label} />
 }
 
 export default ImportDBDocWrapper
