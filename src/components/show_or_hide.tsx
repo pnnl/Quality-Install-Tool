@@ -9,7 +9,6 @@ interface ShowOrHideProps {
 /**
  * A component that conditionally shows or hides its children based on the 'visible' prop.
  * If 'visible' is true, it renders the 'children'; otherwise, it renders nothing.
- * @param props The component props containing 'children', 'label', and 'visible'.
  */
 const ShowOrHide: FC<ShowOrHideProps> = ({ children, label, visible }) => {
     /* Conditionally render children based on 'visible' */
