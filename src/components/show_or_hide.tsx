@@ -12,12 +12,10 @@ interface ShowOrHideProps {
  * @param props The component props containing 'children', 'label', and 'visible'.
  */
 const ShowOrHide: FC<ShowOrHideProps> = ({ children, label, visible }) => {
-    // Use ternary operator to conditionally render children based on 'visible'
-    const contentToBeShown = visible ? children : "";
-
+    /* Conditionally render children based on 'visible' */
     return (
         <>
-            {contentToBeShown}
+            {visible && children}
         </>
     );
 }
