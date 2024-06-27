@@ -30,15 +30,15 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowAtticInsulationTemplate,
     },
     doe_workflow_central_ducted_split_heat_pump: {
-        title: 'IRA - Heat Pump Ducted',
+        title: 'Heat Pump Ducted',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
-        title: 'IRA - Heat Pump Ductless',
+        title: 'Heat Pump Ductless',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
     doe_workflow_hpwh: {
-        title: 'IRA - Heat Pump Water Heater',
+        title: 'Heat Pump Water Heater',
         template: DOEWorkflowHPWHTemplate,
     },
 }
