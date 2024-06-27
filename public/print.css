@@ -89,11 +89,28 @@ h1 + h3 {
 /* used in jobs_view.tsx */
 .icon-container {
   float: right;
+  vertical-align: top;
 }
 
-.icon-container > * {
-  margin-left: 5px;
+.button-container-right {
+  float: right;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
+.button-container-center {
+  float: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+
+
+.menu-container {
+  float: right;
+  vertical-align: top;
+}
+
+
 .img-thumbnail {
   object-fit: contain;
   max-height: 500px;
@@ -129,7 +146,7 @@ h1 + h3 {
 }
 
 #root-banner {
-  background-color: green;
+  background-color: #006100;
 }
 
 #root-title {
@@ -149,7 +166,7 @@ h1 + h3 {
 
 #back-button {
   padding: 1rem;
-  background-color: green;
+  background-color: #006100;
 }
 
 #back-button-link {
@@ -234,4 +251,73 @@ h1 + h3 {
   padding-right: .75rem;
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+.submit-button {
+  background-color: #006100;
+  border-color: #006100;
+  font-weight: bold;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+}
+
+.welcome-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #006100;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.welcome-content {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  color: #000000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .welcome-content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    color: #000000;
+    font-size: 12px;
+    font-weight: bold;
+  }
+}
+
+.transparent-button {
+  background-color: transparent;
+  border-color: transparent;
+  color: #000000;
+}
+.transparent-button:hover {
+  background-color: white;
+  border-color: white;
+  color: #000000;
+
+}
+.transparent-button:active {
+  box-shadow: none;
+}
+
+.threedots:after {
+  content: "\2807";
+  font-size: 30px;
+}
+
+.popup-more {
+  /* base styles for the popup menu */
+}
+
+.expand {
+  display: block;
+  /* additional styles for expanded state */
+}
+
+.collapse {
+  display: none;
+  /* additional styles for collapsed state */
 }

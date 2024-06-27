@@ -1,15 +1,23 @@
-import { useState, type FC, useEffect, useRef } from 'react'
+import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
-import { TfiPlus, TfiTrash } from 'react-icons/tfi'
+import { Tooltip } from 'react-tooltip'
+import {
+    TfiPlus,
+    TfiTrash,
+    TfiPencil,
+    TfiDownload,
+    TfiUpload,
+} from 'react-icons/tfi'
 import StringInputModal from './string_input_modal'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
 import ImportDBDocWrapper from './import_db_doc_wrapper'
 import { exportAsJSONObject } from '../utilities/export_doc_as_json'
+import Menu from './more_menu'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -75,11 +83,9 @@ const Home: FC = () => {
         },
     ]
 
-    const handleAddJob = async (input: string) => {
+    const handleAddJob = async () => {
         // adding a new project doc here
-        const docName = input
-        const updatedDBDoc: any =
-            docName !== null ? await putNewProject(db, docName, '') : ''
+        const updatedDBDoc: any = await putNewProject(db, '', '')
 
         // Refresh the project list after adding the new project
         await retrieveProjectInfo()
@@ -125,6 +131,16 @@ const Home: FC = () => {
             setShowDeleteConfirmation(false)
             setSelectedProjectToDelete('')
         }
+    }
+
+    const handleDelete = (
+        event: React.MouseEvent,
+        key: { _id: string; metadata_: { doc_name: SetStateAction<string> } },
+    ) => {
+        event.stopPropagation()
+        event.preventDefault()
+        handleDeleteJob(key._id)
+        setSelectedProjectNameToDelete(key.metadata_?.doc_name)
     }
 
     const handleExport = async (docID: string, projectName: string) => {
@@ -176,118 +192,179 @@ const Home: FC = () => {
         }
     }
 
+    const options = [
+        { url: 'https://example.com/image1.jpg', name: 'Delete' },
+        { url: 'https://example.com/image2.jpg', name: 'Download' },
+    ]
     let title = 'Projects List'
     let projects_display: any = ''
     if (Object.keys(projectList).length == 0) {
         projects_display = (
-            <Button onClick={openAddModal}>Create a project</Button>
+            <center>
+                <br />
+                <p className="welcome-header">
+                    Welcome to the Quality Install Tool
+                </p>
+                <br />
+                <p className="welcome-content">
+                    With this tool you will be able <br /> to easily take photos
+                    and document <br />
+                    your entire installation project. <br />
+                    <br />
+                    <br />
+                    For your record
+                    <br />
+                    For your clients
+                    <br />
+                    For reporting to the state
+                </p>
+                <div className="button-container-center">
+                    <a ref={downloadFileLink} style={{ display: 'none' }} />
+                    <ImportDBDocWrapper
+                        id="project_json"
+                        label="Import a Project"
+                    />
+                    &nbsp;
+                    <Button
+                        className="add-project submit-button"
+                        onClick={handleAddJob}
+                        alt-text="Add a New Project"
+                    >
+                        Add a New Project
+                    </Button>
+                    <Tooltip anchorSelect=".add-project" place="top">
+                        Add a New Project
+                    </Tooltip>
+                </div>
+            </center>
         )
-        title = 'Welcome to Quality Install Tool'
     } else {
         projects_display = projectList.map((key, value) => (
-            <ListGroup key={key._id} className="padding">
-                <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
-                    <ListGroup.Item key={key._id} action={true}>
-                        <b>{key.metadata_?.doc_name}</b>
-                        {key.data_?.location?.street_address && (
-                            <>
-                                <br />
-                                {key.data_?.location?.street_address},
-                            </>
-                        )}
-                        {key.data_?.location?.city && (
-                            <>
-                                <br />
-                                {key.data_?.location?.city},{' '}
-                            </>
-                        )}
-                        {key.data_.location?.state && (
-                            <>{key.data_?.location?.state} </>
-                        )}
-                        {key.data_.location?.zip_code && (
-                            <>{key.data_?.location?.zip_code}</>
-                        )}
+            <div>
+                <div className="button-container-right">
+                    <a ref={downloadFileLink} style={{ display: 'none' }} />
+                    <ImportDBDocWrapper
+                        id="project_json"
+                        label="Import a Project"
+                    />
+                    &nbsp;
+                    <Button
+                        className="add-project submit-button"
+                        onClick={handleAddJob}
+                        alt-text="Add a New Project"
+                    >
+                        Add a New Project
+                    </Button>
+                    {/* <Tooltip anchorSelect=".add-project" place="top">
+                        Add a New Project
+                    </Tooltip> */}
+                </div>{' '}
+                <br />
+                <br />
+                <ListGroup key={key._id} className="padding">
+                    <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
+                        <ListGroup.Item key={key._id} action={true}>
+                            <span className="icon-container">
+                                {/* <Menu options={options} /> */}
 
-                        <span className="icon-container">
-                            <Button
-                                onClick={event => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    setModalOpenMap(prevState => ({
-                                        ...prevState,
-                                        [key._id]: true,
-                                    }))
-                                }}
-                            >
-                                Rename
-                            </Button>
-                            <Button
-                                onClick={event => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    editAddressDetails(key._id)
-                                }}
-                            >
-                                Add / Edit Address
-                            </Button>
-                            <Button
-                                onClick={event => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    handleDeleteJob(key._id)
-                                    setSelectedProjectNameToDelete(
-                                        key.metadata_?.doc_name,
-                                    )
-                                }}
-                                variant="danger"
-                            >
-                                <TfiTrash />
-                            </Button>
-                            <Button
-                                onClick={event => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    handleExport(
-                                        key._id,
-                                        key.metadata_?.doc_name,
-                                    )
-                                }}
-                            >
-                                Download
-                            </Button>
-                        </span>
-                    </ListGroup.Item>
-                </LinkContainer>
-                <StringInputModal
-                    isOpen={modalOpenMap[key._id] || false}
-                    closeModal={() => {
-                        setModalOpenMap(prevState => ({
-                            ...prevState,
-                            [key._id]: false,
-                        }))
-                    }}
-                    onSubmit={input => handleRenameProject(input, key._id)}
-                    validateInput={validateInput}
-                    title="Enter new project name"
-                    okButton="Rename"
-                    value={key.metadata_?.doc_name}
-                />
-            </ListGroup>
+                                <Button
+                                    className="edit transparent-button"
+                                    onClick={event => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        editAddressDetails(key._id)
+                                    }}
+                                >
+                                    <TfiPencil />
+                                </Button>
+                                <Tooltip anchorSelect=".edit" place="bottom">
+                                    Edit
+                                </Tooltip>
+                                <Button
+                                    className="delete transparent-button"
+                                    onClick={event => handleDelete(event, key)}
+                                    variant="danger"
+                                >
+                                    <TfiTrash />
+                                </Button>
+                                <Tooltip anchorSelect=".delete" place="bottom">
+                                    Delete
+                                </Tooltip>
+                                <Button
+                                    className="download transparent-button"
+                                    onClick={event => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        handleExport(
+                                            key._id,
+                                            key.metadata_?.doc_name,
+                                        )
+                                    }}
+                                >
+                                    <TfiDownload />
+                                </Button>
+                                <Tooltip
+                                    anchorSelect=".download"
+                                    place="bottom"
+                                >
+                                    Download
+                                </Tooltip>
+                            </span>
+                            <b>{key.metadata_?.doc_name}</b>
+                            {key.data_?.location?.street_address && (
+                                <>
+                                    <br />
+                                    {key.data_?.location?.street_address},
+                                </>
+                            )}
+                            {key.data_?.location?.city && (
+                                <>
+                                    <br />
+                                    {key.data_?.location?.city},{' '}
+                                </>
+                            )}
+                            {key.data_.location?.state && (
+                                <>{key.data_?.location?.state} </>
+                            )}
+                            {key.data_.location?.zip_code && (
+                                <>{key.data_?.location?.zip_code}</>
+                            )}
+                        </ListGroup.Item>
+                    </LinkContainer>
+                    <StringInputModal
+                        isOpen={modalOpenMap[key._id] || false}
+                        closeModal={() => {
+                            setModalOpenMap(prevState => ({
+                                ...prevState,
+                                [key._id]: false,
+                            }))
+                        }}
+                        onSubmit={input => handleRenameProject(input, key._id)}
+                        validateInput={validateInput}
+                        title="Enter new project name"
+                        okButton="Rename"
+                        value={key.metadata_?.doc_name}
+                    />
+                </ListGroup>
+            </div>
         ))
     }
     return (
         <div>
-            <h1>{title}</h1>
             <ListGroup>{projects_display}</ListGroup>
             <br />
             <center>
-                {Object.keys(projectList).length != 0 && (
-                    <Button onClick={openAddModal}>Add a New Project</Button>
-                )}
-                <a ref={downloadFileLink} style={{ display: 'none' }} />
-                <ImportDBDocWrapper id="project_json" label="Import Project" />
+                <p className="welcome-content">
+                    <br />
+                    Click here to learn more about the{' '}
+                    <a
+                        href="https://www.pnnl.gov/projects/quality-install-tool"
+                        target="_blank"
+                    >
+                        Quality Install Tool
+                    </a>
+                </p>
             </center>
-
             <StringInputModal
                 isOpen={isAddModalOpen}
                 closeModal={closeAddModal}
@@ -297,7 +374,6 @@ const Home: FC = () => {
                 okButton="Add"
                 value=""
             />
-
             <Modal show={showDeleteConfirmation} onHide={cancelDeleteJob}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Delete</Modal.Title>

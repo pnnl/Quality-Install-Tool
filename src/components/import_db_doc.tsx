@@ -6,6 +6,8 @@ import type FileMetadata from '../types/file_metadata.types'
 import DateTimeStr from './date_time_str'
 import dbName from './db_details'
 import PouchDB from 'pouchdb'
+import { Tooltip } from 'react-tooltip'
+import { TfiUpload } from 'react-icons/tfi'
 
 interface ImportDBDocProps {
     id: string
@@ -159,7 +161,15 @@ const ImportDBDoc: FC<ImportDBDocProps> = ({ id, label }) => {
         <>
             {' '}
             &nbsp;
-            <Button onClick={handleFileInputButtonClick}>{buttonText}</Button>
+            <Button
+                className="import-project submit-button"
+                onClick={handleFileInputButtonClick}
+            >
+                Import a Project
+            </Button>
+            {/* <Tooltip anchorSelect=".import-project" place="top">
+                {label}
+            </Tooltip> */}
             <input
                 accept="application/json"
                 onChange={handleFileInputChange}
