@@ -316,47 +316,23 @@
              In existing construction it is highly recommended that action be taken to reduce duct leakage if 
              the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area. 
 
-            
-            <p><strong>Test method used: </strong> {props.data?.duct_leakage_test_method}</p> 
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}> 
-                <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
-                    Photo of duct test setup showing ring size and how it is attached to the duct system.
-                </Photo>   
-                <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
-                    Photo of duct leakage test manometer, CFM at 25 Pa
-                </Photo>  
+            <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+                Photo of duct test setup showing ring size and how it is attached to the duct system.
+            </Photo>   
+            <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+                Photo of duct leakage test manometer, CFM at 25 Pa
+            </Photo>  
 
-                {
-                    props.data.type_of_duct_leakage_radio
-                    ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p> 
-                    : null
-                } 
-                
-                <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
-                <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
-                <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
-            </ShowOrHide>
+            {
+                props.data.type_of_duct_leakage_radio
+                ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p> 
+                : null
+            } 
             
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}> 
-                <Photo id="pressure_pan_setup_photo" label="Pressure Pan Setup – Photo">
-                    Photo of the pressure pan and manometer measuring one supply register
-                </Photo>   
-                <Photo id="pressure_pan_results_photo" label="Pressure Pan Results – Photo">
-                    Photo of the document showing the readings from all the supply registers
-                </Photo>        
-            </ShowOrHide>
-            
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Airflow hood (capture hood, balometer)'}> 
-                <Photo id="airflow_hood_setup_photo" label="Airflow Hood Setup  – Photo">
-                    Photo of the airflow hood measuring one supply register
-                </Photo>   
-                <Photo id="airflow_hood_results_photo" label="Airflow Hood Results  – Photo">
-                    Photo of the document showing the readings from all the supply registers
-                </Photo>        
-            </ShowOrHide>
-
-        
-                       
+            <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
+            <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
+            <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
+                 
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
