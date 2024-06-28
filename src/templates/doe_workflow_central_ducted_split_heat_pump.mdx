@@ -208,6 +208,12 @@
             Take a photo of the thermostat showing the temperature value set for the auxillary heat lockout, compressor lockout temperature, and dual fuel switch over temperature as applicable.
         </PhotoInput>
         <StringInput label="Notes about thermostat settings" path="comment_about_thermostat_settings" />
+
+        ## Project Invoice
+        <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+            Take a photo of the project invoice.
+        </PhotoInput>
+
         ## Mechanical Ventilation
         If the addition of supply based mechanical ventilation is included in the heat pump upgrade. Use the mechanical 
         ventilation quality installation workflow to document that installation. 
@@ -525,6 +531,12 @@
                 ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p> 
                 : null
             }
+
+            ## Project Invoice
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+            </Photo>
+            
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>
