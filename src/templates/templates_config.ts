@@ -6,6 +6,9 @@ import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pu
 import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
 import DOEWorkflowDuctlessHeatPumpWithoutMjTemplate from './doe_workflow_ductless_heat_pump_without_mj.mdx'
 import DOEWorkflowCentralDuctedSplitHeatPumpWithoutMjTemplate from './doe_workflow_central_ducted_split_heat_pump_without_mj.mdx'
+import IRADOEWorkflowHPWHTemplate from './ira_doe_workflow_hpwh.mdx'
+import IRADOEWorkflowDuctlessHeatPumpTemplate from './ira_doe_workflow_ductless_heat_pump.mdx'
+import IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate from './ira_doe_workflow_central_ducted_split_heat_pump.mdx'
 
 import OldQaHPWHTemplate from './old-qa_hpwh.mdx'
 import MdxPlayground from './playground.mdx'
@@ -30,16 +33,28 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowAtticInsulationTemplate,
     },
     doe_workflow_central_ducted_split_heat_pump: {
-        title: 'IRA - Heat Pump Ducted',
+        title: 'Heat Pump Ducted',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
-        title: 'IRA - Heat Pump Ductless',
+        title: 'Heat Pump Ductless',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
     doe_workflow_hpwh: {
-        title: 'IRA - Heat Pump Water Heater',
+        title: 'Heat Pump Water Heater',
         template: DOEWorkflowHPWHTemplate,
+    },
+    ira_doe_workflow_central_ducted_split_heat_pump: {
+        title: 'IRA - Heat Pump Ducted',
+        template: IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+    },
+    ira_doe_workflow_ductless_heat_pump: {
+        title: 'IRA - Heat Pump Ductless',
+        template: IRADOEWorkflowDuctlessHeatPumpTemplate,
+    },
+    ira_doe_workflow_hpwh: {
+        title: 'IRA - Heat Pump Water Heater',
+        template: IRADOEWorkflowHPWHTemplate,
     },
 }
 /**
