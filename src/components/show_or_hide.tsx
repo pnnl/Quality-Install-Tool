@@ -1,8 +1,8 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react'
 
 interface ShowOrHideProps {
-    children: ReactNode;
-    visible: boolean;
+    children: ReactNode
+    visible: boolean
 }
 
 /**
@@ -11,11 +11,7 @@ interface ShowOrHideProps {
  */
 const ShowOrHide: FC<ShowOrHideProps> = ({ children, visible }) => {
     /* Conditionally render children based on 'visible' */
-    return (
-        <>
-            {visible && children}
-        </>
-    );
+    return <>{visible && children}</>
 }
 
-export default ShowOrHide;
+export default ShowOrHide
