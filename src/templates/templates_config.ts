@@ -18,8 +18,8 @@ interface TemplatesConfig {
 
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
-// Add workflow templates for 'ira-quality-install-tool' 
-const GENERAL_WORKFLOW_TEMPLATES =  {
+// Add workflow templates for 'ira-quality-install-tool'
+const GENERAL_WORKFLOW_TEMPLATES = {
     doe_workflow_attic_air_sealing: {
         title: 'Attic Air Sealing',
         template: DOEWorkflowAtticAirSealTemplate,
@@ -39,11 +39,10 @@ const GENERAL_WORKFLOW_TEMPLATES =  {
     doe_workflow_hpwh: {
         title: 'Heat Pump Water Heater',
         template: DOEWorkflowHPWHTemplate,
-    }
+    },
 }
 
-
-// Add workflow templates for 'ira-quality-install-tool' 
+// Add workflow templates for 'ira-quality-install-tool'
 const IRA_WORKFLOW_TEMPLATES = {
     ira_doe_workflow_central_ducted_split_heat_pump: {
         title: 'IRA - Heat Pump Ducted',
@@ -56,12 +55,15 @@ const IRA_WORKFLOW_TEMPLATES = {
     ira_doe_workflow_hpwh: {
         title: 'IRA - Heat Pump Water Heater',
         template: IRADOEWorkflowHPWHTemplate,
-    }
+    },
 }
 
 // Configure the templatesConfig based on the deployed environment's specifications.
-const templatesConfig: TemplatesConfig = process.env.REACT_APP_ENV === 'quality-install-tool' ? GENERAL_WORKFLOW_TEMPLATES: IRA_WORKFLOW_TEMPLATES
-    
+const templatesConfig: TemplatesConfig =
+    process.env.REACT_APP_ENV === 'quality-install-tool'
+        ? GENERAL_WORKFLOW_TEMPLATES
+        : IRA_WORKFLOW_TEMPLATES
+
 // Assuming TemplatesConfig is defined somewhere as a type or interface
 
 /**
