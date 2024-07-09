@@ -14,9 +14,7 @@ module.exports.copyAndRenameCss = function() {
 
     const bootstrapCssSource = path.join(paths.appNodeModules, 'bootstrap/dist/css/bootstrap.min.css');
     const bootstrapCssDest = path.join(paths.appPublic, 'bootstrap.min.css');
-
     try {
-      
       // Copy and rename the 'app.css' file to 'print.css' in the build directory
       fs.copySync(appCssSource, printCssDest);
       fs.copySync(bootstrapCssSource, bootstrapCssDest);
