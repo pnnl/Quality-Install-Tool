@@ -12,8 +12,8 @@ interface DBDocType {
         created_at: Date
         last_modified_at: Date
         attachments: {}
-        workflow_title?: string
-        workflow_name?: string
+        template_title?: string
+        template_name?: string
     }
     children: []
 }
@@ -97,13 +97,13 @@ export async function putNewInstallation(
     // append the installation.id in the project doc
     appendChildToProject(db, parentId, (await installation_doc).id)
 
-    const workflow_name = workflowName
-    let workflow_title = templatesConfig[workflowName].title
+    const template_name = workflowName
+    let template_title = templatesConfig[workflowName].title
 
-    // update installation doc to include workflow_name and workflow_title
+    // update installation doc to include template_name and template_title
     return db.upsert((await installation_doc).id, function (doc: any) {
-        doc.metadata_.workflow_title = workflow_title
-        doc.metadata_.workflow_name = workflow_name
+        doc.metadata_.template_title = template_title
+        doc.metadata_.template_name = template_name
         return doc
     })
 }
@@ -171,7 +171,7 @@ export async function retrieveInstallationDocs(
                 doc =>
                     doc.type === 'installation' &&
                     installation_ids.includes(doc._id) &&
-                    doc.metadata_.workflow_name === workflowName,
+                    doc.metadata_.template_name === workflowName,
             )
         return jobs
     } catch (error) {

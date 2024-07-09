@@ -7,6 +7,6 @@ interface Metadata {
     last_modified_at: Date
     attachments: Record<string, JSONValue>
     doc_name: string
-    workflow_title: string
+    template_title: string
 }
 export default Metadata
