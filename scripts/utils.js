@@ -14,24 +14,7 @@ module.exports.copyAndRenameCss = function() {
 
     const bootstrapCssSource = path.join(paths.appNodeModules, 'bootstrap/dist/css/bootstrap.min.css');
     const bootstrapCssDest = path.join(paths.appPublic, 'bootstrap.min.css');
-
-    console.log("utils.js", process.env.REACT_APP_ENV)
     try {
-      if (process.env.REACT_APP_ENV === "quality-install-tool")
-      {
-        const appTemplateSource = path.join(paths.appSrc, 'templates/templates_config_qit.ts');
-        const appTemplateDest = path.join(paths.appSrc, 'templates/templates_config.ts');
-        fs.copySync(appTemplateSource, appTemplateDest);
-      }
-      else
-      {
-        const appTemplateSource = path.join(paths.appSrc, 'templates/templates_config_ira.ts');
-        const appTemplateDest = path.join(paths.appSrc, 'templates/templates_config.ts');
-        fs.copySync(appTemplateSource, appTemplateDest);
-      }
-     
-
-
       // Copy and rename the 'app.css' file to 'print.css' in the build directory
       fs.copySync(appCssSource, printCssDest);
       fs.copySync(bootstrapCssSource, bootstrapCssDest);

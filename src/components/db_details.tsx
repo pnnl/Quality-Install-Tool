@@ -1,3 +1,3 @@
 // defining the db name
-const DBName = 'quality_install_tool'
+const DBName = process.env.REACT_APP_ENV
 export default DBName
