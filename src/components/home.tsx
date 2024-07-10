@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect } from 'react'
+import { useState, type FC, useEffect, useRef } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
@@ -8,6 +8,8 @@ import StringInputModal from './string_input_modal'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
+import ImportDBDocWrapper from './import_db_doc_wrapper'
+import { exportAsJSONObject } from '../utilities/export_doc_as_json'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -28,6 +30,7 @@ const Home: FC = () => {
     const [selectedProjectToDelete, setSelectedProjectToDelete] = useState('')
     const [selectedProjectNameToDelete, setSelectedProjectNameToDelete] =
         useState('')
+    const downloadFileLink = useRef<HTMLAnchorElement>(null)
 
     const openAddModal = (): void => {
         setIsAddModalOpen(true)
@@ -45,7 +48,7 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [])
+    }, [projectList])
 
     const validateInput = [
         {
@@ -124,8 +127,12 @@ const Home: FC = () => {
         }
     }
 
-    const sortByEditTime = (projectsList: any[]) => {
-        const sortedJobsByEditTime = projectsList.sort((a, b) => {
+    const handleExport = async (docID: string, projectName: string) => {
+        exportAsJSONObject(db, docID, projectName, downloadFileLink)
+    }
+
+    const sortByEditTime = (jobsList: any[]) => {
+        const sortedJobsByEditTime = jobsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
                 b.metadata_.last_modified_at.toString()
@@ -236,6 +243,18 @@ const Home: FC = () => {
                             >
                                 <TfiTrash />
                             </Button>
+                            <Button
+                                onClick={event => {
+                                    event.stopPropagation()
+                                    event.preventDefault()
+                                    handleExport(
+                                        key._id,
+                                        key.metadata_?.doc_name,
+                                    )
+                                }}
+                            >
+                                Download
+                            </Button>
                         </span>
                     </ListGroup.Item>
                 </LinkContainer>
@@ -261,11 +280,13 @@ const Home: FC = () => {
             <h1>{title}</h1>
             <ListGroup>{projects_display}</ListGroup>
             <br />
-            {Object.keys(projectList).length != 0 && (
-                <center>
+            <center>
+                {Object.keys(projectList).length != 0 && (
                     <Button onClick={openAddModal}>Add a New Project</Button>
-                </center>
-            )}
+                )}
+                <a ref={downloadFileLink} style={{ display: 'none' }} />
+                <ImportDBDocWrapper id="project_json" label="Import Project" />
+            </center>
 
             <StringInputModal
                 isOpen={isAddModalOpen}
