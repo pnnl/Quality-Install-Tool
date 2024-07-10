@@ -58,7 +58,6 @@ const components = {
 interface MdxWrapperProps {
     Component: React.ComponentType<any>
     Project: any
-    JobId: string | undefined
 }
 
 /**
@@ -67,7 +66,7 @@ interface MdxWrapperProps {
  *
  * @param Component An MDX component instance
  */
-const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project, JobId }) => {
+const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
     return (
         <StoreContext.Consumer>
             {({ metadata, data }) => {
@@ -80,7 +79,6 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project, JobId }) => {
                                 metadata={metadata}
                                 data={data}
                                 project={Project}
-                                jobId={JobId}
                             />
                         ) : null}
                     </div>

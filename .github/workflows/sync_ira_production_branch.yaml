@@ -1,0 +1,24 @@
+name: Update IRA Production Branche
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  sync_ira_production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Update ira-production Branch
+        run: |
+          git checkout ira-production
+          git pull origin ira-production
+          git merge origin/production --no-edit
+          git push origin ira-production
+
+  

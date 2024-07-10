@@ -14,12 +14,9 @@ import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
-import {
-    putNewDoc,
-    putNewProject,
-    putNewWorkFlow,
-} from '../utilities/database_utils'
+import { putNewProject, putNewInstallation } from '../utilities/database_utils'
 import templatesConfig from '../templates/templates_config'
+import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -41,7 +38,6 @@ export const StoreContext = React.createContext({
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
-    jobId: {} as string,
     upsertAttachment: ((
         blob: Blob,
         id: any,
@@ -53,12 +49,12 @@ export const StoreContext = React.createContext({
 
 interface StoreProviderProps {
     children: ReactNode
-    dbName: string
+    dbName: string | undefined
     docId: string
     workflowName: string
     docName: string
-    jobId: string
-    pathIndex: number
+    type: string
+    parentId?: string | undefined
 }
 
 /**
@@ -74,8 +70,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     docId,
     workflowName,
     docName,
-    jobId,
-    pathIndex,
+    type,
+    parentId,
 }) => {
     const changesRef = useRef<PouchDB.Core.Changes<{}>>()
     const revisionRef = useRef<string>()
@@ -85,11 +81,13 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     )
     const [db, setDB] = useState<PouchDB.Database>()
     // The doc state could be anything that is JSON-compatible
-    const [doc, setDoc] = useState<Objectish>({})
+    const [doc, setDoc] = useState<any>({})
 
-    const [installationDoc, setInstallationDoc] = useState<Objectish>({})
+    // Determining the doc type for updating it accordingly
+    const isInstallationDoc = type === 'installation'
 
-    const isInstallationUpdate = pathIndex >= 0
+    // Increase the maximum number of listeners for all EventEmitters
+    EventEmitter.defaultMaxListeners = 20
 
     /**
      * Updates component state based on a database document change
@@ -107,12 +105,9 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
         setDoc(newDoc)
 
-        if (isInstallationUpdate)
-            setInstallationDoc(newDoc.installations_[pathIndex])
-
         // Update the attachments state as needed
         // Note: dbDoc will not have a _attachments field if the document has no attachments
-        if (db && dbDoc.hasOwnProperty('_attachments')) {
+        if (db && dbDoc.hasOwnProperty('_attachments') && dbDoc._id == docId) {
             // Collect all the new or modified attachments
             const dbDocAttachments = dbDoc._attachments
             const attachmentsMetadata = dbDoc.metadata_.attachments
@@ -120,16 +115,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             for (const attachmentId in dbDocAttachments) {
                 const docAttachment = dbDocAttachments[attachmentId]
 
-                // Attachment associated with the installations / jobs
-                const installationAttachments =
-                    attachmentId.indexOf('.') > 0 ? attachmentId.split('.') : []
-
                 const singleAttachmentMetadata =
-                    installationAttachments.length > 0
-                        ? attachmentsMetadata[installationAttachments[0]][
-                              installationAttachments[1]
-                          ]
-                        : attachmentsMetadata[attachmentId]
+                    attachmentsMetadata[attachmentId]
 
                 // digest is a hash of the attachment, so a different digest indicates a modified attachment
                 const digest = docAttachment?.digest
@@ -192,14 +179,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 // It looks like the type def for putIfNotExists does not match its implementation
                 // TODO: Check this over carefully
 
-                const result = !isInstallationUpdate
+                const result = !isInstallationDoc
                     ? ((await putNewProject(db, docName, docId)) as unknown)
-                    : ((await putNewWorkFlow(
+                    : ((await putNewInstallation(
                           db,
                           docId,
                           workflowName,
-                          jobId,
                           docName,
+                          parentId as string,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {
@@ -235,14 +222,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     // It's hard to imagine what would cause this since our DB is local
                     console.error('DB subscription connection failed')
                 })
-        })()
 
-        // Cancel the DB subscription just before the component unmounts
-        return () => {
-            if (changesRef.current != null) {
-                changesRef.current.cancel()
+            // Cancel the DB subscription just before the component unmounts
+            return () => {
+                if (changesRef.current != null) {
+                    changesRef.current.cancel()
+                }
             }
-        }
+        })()
 
         // Run this effect after the first render and whenever the dbName prop changes
     }, [dbName])
@@ -251,7 +238,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * Updates (or inserts) data into the doc state and persists the new doc
      *
      * @remarks
-     * The given path is gauranteed to exist after the update/insertion.
+     * The given path is guaranteed to exist after the update/insertion.
      * This function is called internally from upsertData and upsertAttachments function to update the doc with respective information.
      *
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
@@ -266,10 +253,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             data,
         )
         setDoc(newDoc)
-
-        if (isInstallationUpdate) {
-            setInstallationDoc(newDoc.installations_[pathIndex])
-        }
 
         // Persist the doc
         if (db != null) {
@@ -306,9 +289,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      */
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
-        pathStr = isInstallationUpdate
-            ? 'installations_[' + pathIndex + '].' + pathStr
-            : pathStr
         upsertDoc(pathStr, value)
     }
 
@@ -397,9 +377,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
-                data: isInstallationUpdate ? installationDoc.data_ : doc.data_,
+                data: doc.data_,
                 metadata: doc.metadata_,
-                jobId: isInstallationUpdate ? jobId : '',
                 upsertAttachment,
                 upsertData,
                 upsertMetadata,
@@ -418,12 +397,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
  * @returns A shallow copy of recipient that additionally has the value at path set to target
  */
 export function immutableUpsert(
-    recipient: Objectish,
+    recipient: any,
     path: NonEmptyArray<string>,
     target: any,
-): Objectish {
+): any {
     const [propName, ...newPath] = path
-    const newRecipient = isObject(recipient)
+    const newRecipient: any = isObject(recipient)
         ? Array.isArray(recipient)
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)
