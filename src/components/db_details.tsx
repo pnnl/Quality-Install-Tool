@@ -25,5 +25,5 @@
  * Respective DBName exported are ('quality-install-tool' or 'ira-quality-install-tool').
  */
 
-const DBName = process.env.REACT_APP_ENV
+const DBName = "test_db"
 export default DBName
