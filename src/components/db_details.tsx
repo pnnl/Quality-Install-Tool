@@ -26,5 +26,5 @@
  */
 
 console.log(process.env.REACT_APP_ENV)
-const DBName = 'test_db'
+const DBName = process.env.REACT_APP_ENV
 export default DBName
