@@ -45,7 +45,6 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
 
     const handleSubmit = () => {
         onSubmit(inputValue.trim())
-        refreshPage()
         closeModal()
     }
 
@@ -78,10 +77,6 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
             const errorMessage = errorValidator?.errorMsg || ''
             setErrorMessage(errorMessage)
         }
-    }
-
-    function refreshPage() {
-        window.location.reload()
     }
 
     const modalTitle = title || 'Default Title'

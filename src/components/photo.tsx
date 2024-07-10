@@ -24,7 +24,7 @@ interface PhotoProps {
  * @param notes User notes associated with the photo
  * @param photo A Blob for the photo image
  * @param required When unset, the Photo component will only show if there is a
- * photo attachement in the data store with the given id. When set, the Photo component
+ * photo attachment in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
  */
 const Photo: FC<PhotoProps> = ({
