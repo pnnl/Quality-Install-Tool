@@ -42,7 +42,6 @@ export async function putNewDoc(
     })
 }
 
-
 export async function putNewProject(
     db: PouchDB.Database<{}>,
     docName: string,
