@@ -33,26 +33,26 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment, jobId }) => {
-                //  JobId for installation level updates
-                let id_ref = jobId == '' ? id : jobId + '.' + id
-
+            {({ attachments, upsertAttachment }) => {
                 const upsertPhoto = (img_file: Blob) => {
                     // Reduce the image size as needed
                     ImageBlobReduce()
                         .toBlob(img_file, { max: MAX_IMAGE_DIM })
                         .then(blob => {
-                            upsertAttachment(blob, id_ref)
+                            upsertAttachment(blob, id)
                         })
                 }
+                const attachment = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    id,
+                )?.value
                 return (
                     <PhotoInput
                         label={label}
                         metadata={
-                            attachments[id_ref]
-                                ?.metadata as unknown as PhotoMetadata
+                            attachment?.metadata as unknown as PhotoMetadata
                         }
-                        photo={attachments[id_ref]?.blob}
+                        photo={attachment?.blob}
                         upsertPhoto={upsertPhoto}
                         uploadable={uploadable}
                     >

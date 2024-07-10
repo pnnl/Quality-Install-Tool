@@ -24,10 +24,9 @@ const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, project }) => {
         <StoreProvider
             dbName={dbName}
             docId={project?._id}
-            jobId={jobId}
             workflowName=""
             docName={''}
-            pathIndex={-1}
+            type={''}
         >
             <StoreContext.Consumer>
                 {({ attachments, data }) => {

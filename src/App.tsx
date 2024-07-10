@@ -7,9 +7,7 @@ import JobsView from './components/jobs_view'
 import JsonStoreView from './components/json_store_view'
 import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
-import templatesConfig from './templates/templates_config'
 import Home from './components/home'
-import Projects from './templates/projects_config'
 import MdxProjectView from './components/mdx_project_details_view'
 
 // Routes to be used by React Router, which handles all the
@@ -30,74 +28,56 @@ const routes = [
     //     path: '/template_editor',
     //     element: <TemplateEditor />,
     // },
-]
-    .concat(
-        Projects.flatMap(doc => [
-            {
-                path: `/app/${doc?._id}/workflows`,
-                // Workflow list view:  List the names of workflows available for generating installation report.
-                element: (
-                    <RootLayout>
-                        <WorkFlowView project={doc} />
-                    </RootLayout>
-                ),
-            },
-            {
-                path: `/app/${doc?._id}`,
-                // Project details view: Collects information related to the project.
-                element: (
-                    <RootLayout>
-                        <MdxProjectView project={doc} />
-                    </RootLayout>
-                ),
-            },
-        ]),
-    )
-    .concat(
-        Projects.flatMap((doc, value) =>
-            Object.keys(templatesConfig).flatMap(workflowName => [
-                {
-                    path: `/app/${doc?._id}/${workflowName}`,
-                    // Jobs List View: Lists existing installations associated with a particular workflow
-                    // and provides functionality to create new installations
-                    element: (
-                        <RootLayout>
-                            <div>
-                                <JobsView
-                                    workflowName={workflowName}
-                                    docId={doc?._id}
-                                />
-                            </div>
-                        </RootLayout>
-                    ),
-                },
-                {
-                    // Jobs View: Gathering and displaying information pertinent to individual installations
-                    path: `/app/${doc?._id}/${workflowName}/:jobId`,
-                    element: (
-                        <RootLayout>
-                            <MdxTemplateView
-                                workflowName={workflowName}
-                                project={doc}
-                            />
-                        </RootLayout>
-                    ),
-                },
-                // TODO: This route will be revisited and revised in the future
-                // {
-                //     path: `/app/${doc?._id}/${workflowName}/:jobId/json`,
-                //     element: (
-                //         <RootLayout>
-                //             <JsonStoreView
-                //                 dbName={workflowName}
-                //                 project={doc}
-                //             />
-                //         </RootLayout>
-                //     ),
-                // },
-            ]),
+
+    {
+        path: `/app/:projectId/workflows`,
+        // Workflow list view:  List the names of workflows available for generating installation report.
+        element: (
+            <RootLayout>
+                <WorkFlowView />
+            </RootLayout>
         ),
-    )
+    },
+    {
+        path: `/app/:projectId`,
+        // Project details view: Collects information related to the project.
+        element: (
+            <RootLayout>
+                <MdxProjectView />
+            </RootLayout>
+        ),
+    },
+    {
+        path: `/app/:projectId/:workflowName`,
+        // Jobs List View: Lists existing installations associated with a particular workflow
+        // and provides functionality to create new installations
+        element: (
+            <RootLayout>
+                <div>
+                    <JobsView />
+                </div>
+            </RootLayout>
+        ),
+    },
+    {
+        path: `/app/:projectId/:workflowName/:jobId`,
+        // Jobs View: Gathering and displaying information pertinent to individual installations
+        element: (
+            <RootLayout>
+                <MdxTemplateView />
+            </RootLayout>
+        ),
+    },
+    // TODO: This route will be revisited and revised in the future
+    // {
+    //     path: `/app/:projectId/:workflowName/:jobId/json`,
+    //     element: (
+    //         <RootLayout>
+    //             <JsonStoreView />
+    //         </RootLayout>
+    //     ),
+    // },
+]
 
 // React Router
 const router = createBrowserRouter(routes)
