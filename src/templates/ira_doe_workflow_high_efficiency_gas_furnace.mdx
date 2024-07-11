@@ -1,0 +1,145 @@
+<Tabs>
+  <Tab eventKey="assessment" title="Installation">
+
+    ## Manual J load Calculation
+    <FileInput id="manual_j_file" label="PDF of Manual J Load Calculation - File">
+        Attach a PDF of the Manual J load calculation
+    </FileInput>
+    
+    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
+      Take a photo of the nameplate.
+    </PhotoInput>
+
+    <PhotoInput id="co2_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo">
+      Take a photo of the carbon monoxide alarm installed
+    </PhotoInput>
+
+    <PhotoInput id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo">
+      Take a wide-angle photo of the exhaust vent termination.
+        -	To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANZI Z21 .10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA 8149.1 National Gas and Propane Installation Code.
+        -	To show that the wall penetration for the vent has been flashed correctly.
+        -	Install the termination high enough so that snow drifts won’t block the vent.
+        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake. 
+        -	The installation of bird screens are recommended
+    </PhotoInput>
+
+    <PhotoInput id="intake_vent_location_photo" label="Intake Vent Location – Photo">
+      Take a wide-angle photo of the intake vent location if different/not shown in the previous image.
+      Example: If the intake is in an unconditioned attic, this photo would show that it is sufficiently above or away from attic insulation.
+    </PhotoInput>
+
+    <PhotoInput id="condensate_management_piping_photo" label="Condensate management Piping – Photo">
+      Take a photo of the condensate management piping. Photo must include the connections to the combustion air inlet moisture trap, AC coil, acid neutralizer, secondary drain pan, and condensate pump if used.
+    </PhotoInput>
+
+    <PhotoInput id="manometer_external_static_pressure_photo" label="Monometer Showing External Static Pressure – Photo">
+      Take a photo of the manometer showing the total external static pressure measurement. Or if digital probes are used, attached a screenshot from a manometer app.
+      The total external static pressure should ideally be less than 0.5 i.w.c, action should be taken if it is above 0.8 i.w.c. such as increasing the return air filter size, increasing the duct size, and/or reducing the duct equivalent length.
+    </PhotoInput>
+
+    <PhotoInput id="air_flow_measurement_photo" label="Airflow Measurement – Photo">
+      Take a photo of the airflow measurement. Measurements obtained by a TrueFlow grid, air flow capture hood, or balometer are valid. Make adjustments to the fan setting as needed to achieve target airflow. 
+    </PhotoInput>
+
+    <PhotoInput id="air_filter_photo" label="Air Filter – Photo">
+      Take a photo of the air filter. If the system has an air filter slot, to show that the front has a gasketed door, if the system has an air filter grille, to show that the perimeter is sealed to minimize air bypassing the filter.
+    </PhotoInput>
+
+    <PhotoInput id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo">
+      Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
+    </PhotoInput>
+
+    <PhotoInput id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo">
+      Take a wide-angle photo of the installation location at completion. To show that there are no adjacent hazards, if installed in a garage this photo would show that the installation is at least 18 in. above the floor and protected from vehicle damage.
+    </PhotoInput>
+
+    <PhotoInput id="inlet_gas_pressure_monometer_photo" label="Monometer Showing Inlet Gas pressure – Photo">
+      Take a photo of the manometer measuring the inlet gas pressure.
+    </PhotoInput>
+
+    <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
+      Take a photo of the combustion analysis results. Refer to local regulations on how to do this tests, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
+    </PhotoInput>
+
+    <PhotoInput id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Optional: Take a photo of venting modifications for the remaining natural draft combustion appliance(s). Provide this photo if this high efficiency gas furnace installation results in any natural draft combustion appliances remaining such as a water heater.
+    </PhotoInput>
+  </Tab>
+  <Tab eventKey="report" title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # High Efficiency Gas Furnace Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## About the Report
+    
+    The photos in this report are intended to document the critical details of upgrading to a high efficiency gas furnace installation.
+   
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+      Photo of the nameplate
+    </Photo>
+
+    <Photo id="co2_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo" required>
+      Photo of the carbon monoxide alarm installed
+    </Photo>
+
+    <Photo id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo" required>
+      Photo of the exhaust vent termination
+    </Photo>
+
+    <Photo id="intake_vent_location_photo" label="Intake Vent Location – Photo" required>
+      Photo of the intake vent location
+    </Photo>
+
+    <Photo id="condensate_management_piping_photo" label="Condensate management Piping – Photo" required>
+      Photo of the condensate management piping
+    </Photo>
+
+    <Photo id="manometer_external_static_pressure_photo" label="Monometer Showing External Static Pressure – Photo" required>
+      Photo of the manometer showing the total external static pressure measurement
+    </Photo>
+
+    <Photo id="air_flow_measurement_photo" label="Airflow Measurement – Photo" required>
+      Photo of the airflow measurement
+    </Photo>
+ 
+    <Photo id="air_filter_photo" label="Air Filter – Photo" required>
+      Photo of the air filter
+    </Photo>
+
+    <Photo id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo" required>
+      Photo of the electronic methane leak detector while it is testing a gas connection
+    </Photo>
+
+    <Photo id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo" required>
+      Photo of the installation location at completion
+    </Photo>
+
+    <Photo id="inlet_gas_pressure_monometer_photo" label="Monometer Showing Inlet Gas pressure – Photo" required>
+      Photo of the manometer measuring the inlet gas pressure
+    </Photo>
+
+    <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" required>
+      Photo of the combustion analysis results
+    </Photo>
+
+    <Photo id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Photo of venting modifications for the remaining natural draft combustion appliance(s)
+    </Photo>
+
+    {
+        props.metadata.attachments?.manual_j_file ?
+          <>
+          <h2> Manual J Load Calculation</h2>
+          {
+            props.metadata.attachments?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
+          }
+          </>: null
+    }
+    <PDFRenderer id="manual_j_file" label="" />
+
+    </PrintSection>
+  </Tab>
+</Tabs>
