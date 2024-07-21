@@ -77,10 +77,10 @@ const IRA_WORKFLOW_TEMPLATES = {
         title: 'IRA - Full Frame Replacement Windows',
         template: IRADOEWorkflowFullFrameReplacementWindows,
     },
-    ira_doe_workflow_insert_replacement_windows: {
-        title: 'IRA - Insert Replacement Windows',
-        template: IRADOEWorkflowInsertReplacementWindows,
-    },
+    // ira_doe_workflow_insert_replacement_windows: {
+    //     title: 'IRA - Insert Replacement Windows',
+    //     template: IRADOEWorkflowInsertReplacementWindows,
+    // },
 }
 
 /**
