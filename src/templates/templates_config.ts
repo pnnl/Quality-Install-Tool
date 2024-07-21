@@ -6,6 +6,11 @@ import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_centra
 import IRADOEWorkflowHPWHTemplate from './ira_doe_workflow_hpwh.mdx'
 import IRADOEWorkflowDuctlessHeatPumpTemplate from './ira_doe_workflow_ductless_heat_pump.mdx'
 import IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate from './ira_doe_workflow_central_ducted_split_heat_pump.mdx'
+import IRADOEWorkflowHighEfficiencyGasFurnace from './ira_doe_workflow_high_efficiency_gas_furnace.mdx'
+import IRADOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_efficiency_water_heater.mdx'
+import IRADOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
+import IRADOEWorkflowFullFrameReplacementWindows from './ira_doe_workflow_full_frame_replacement_windows.mdx'
+import IRADOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
 
 import { MDXProps } from 'mdx/types'
 
@@ -56,6 +61,26 @@ const IRA_WORKFLOW_TEMPLATES = {
         title: 'IRA - Heat Pump Water Heater',
         template: IRADOEWorkflowHPWHTemplate,
     },
+    ira_doe_workflow_high_efficiency_gas_furnace: {
+        title: 'IRA - High Efficiency Gas Furnace',
+        template: IRADOEWorkflowHighEfficiencyGasFurnace,
+    },
+    ira_doe_workflow_high_efficiency_water_heater: {
+        title: 'IRA - High Efficiency Water Heater',
+        template: IRADOEWorkflowHighEfficiencyWaterHeater,
+    },
+    ira_doe_workflow_high_efficiency_modulating_boiler: {
+        title: 'IRA - High Efficiency Modulating Boiler',
+        template: IRADOEWorkflowHighEfficiencyModulatingBoiler,
+    },
+    ira_doe_workflow_full_frame_replacement_windows: {
+        title: 'IRA - Full Frame Replacement Windows',
+        template: IRADOEWorkflowFullFrameReplacementWindows,
+    },
+    // ira_doe_workflow_insert_replacement_windows: {
+    //     title: 'IRA - Insert Replacement Windows',
+    //     template: IRADOEWorkflowInsertReplacementWindows,
+    // },
 }
 
 /**
