@@ -107,8 +107,7 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "HTTPS=true REACT_APP_ENV=quality-install-tool node scripts/start.js",
-    "start-ira": "HTTPS=true REACT_APP_ENV=ira-quality-install-tool node scripts/start.js",
+    "start": "HTTPS=true node scripts/start.js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,ts,tsx}'",
