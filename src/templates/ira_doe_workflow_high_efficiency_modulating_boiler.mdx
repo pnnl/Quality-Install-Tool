@@ -1,0 +1,188 @@
+<Tabs>
+  <Tab eventKey="installation" title="Installation">
+    This workflow is for Category IV gas appliances, which are served by positive static pressure vents that are airtight, 
+    corrosion-resistant, and include a method of condensate disposal.
+
+    ## General
+    <FileInput id="manual_j_file" label="PDF of Manual J Load Calculation - File">
+        Attach a PDF of the Manual J load calculation
+    </FileInput>
+    
+    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
+      Take a photo of the nameplate.
+    </PhotoInput>
+
+    <PhotoInput id="outdoor_temperature_sensor_photo" label="Outdoor Temperature Sensor – Photo">
+      Take a photo of the outdoor temperature sensor. The sensor should be mounted on the wall as recommended by the manufacturer and located on the north wall.
+    </PhotoInput>
+
+    <PhotoInput id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo">
+      Take a wide-angle photo of the installation location at completion.
+      - To show that there are no adjacent hazards, if installed in a garage this photo would show that the installation is at least 18 in. above the floor and protected from vehicle damage.
+      -	To show all pipes have been clearly labeled and flow direction indicated
+      -	To show the water pipes have been insulated especially the hot water pipe and recirculation lines if present.
+      -	To show the air inlet air filter has been clearly labeled for periodic inspection
+      - To show the condensate neutralizer (if used) has been clearly labeled for periodic inspection
+      -	To show the temperature and pressure relief valve has been installed and correctly terminated
+    </PhotoInput>
+
+    <PhotoInput id="system_layout_diagram_photo" label="System Layout Diagram – Photo">
+      Take a photo of the system layout diagram. This can be a photo of a sketch, CAD drawing, or the diagram in the installation that matches the field installation setup 
+    </PhotoInput>
+
+    ## Venting
+    <PhotoInput id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo">
+      Take a wide-angle photo of the exhaust vent termination.
+        -	To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANZI Z21 .10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA 8149.1 National Gas and Propane Installation Code.
+        -	To show that the wall penetration for the vent has been flashed correctly.
+        -	Install the termination high enough so that snow drifts won’t block the vent.
+        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake. 
+        -	The installation of bird screens are recommended
+    </PhotoInput>
+
+    <PhotoInput id="intake_vent_location_photo" label="Intake Vent Location – Photo">
+      Take a wide-angle photo of the intake vent location if different/not shown in the previous image.
+      Example: If the intake is in an unconditioned attic, this photo would show that it is sufficiently above or away from attic insulation.
+    </PhotoInput>
+
+    <PhotoInput id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Optional: Take a photo of venting modifications for the remaining natural draft combustion appliance(s). Provide this photo if this high efficiency gas furnace installation results in any natural draft combustion appliances remaining such as a water heater.
+    </PhotoInput>
+
+    ## Gas
+    <PhotoInput id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo">
+      Take a photo of the carbon monoxide alarm installed
+    </PhotoInput>
+
+    <PhotoInput id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo">
+      Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
+    </PhotoInput>
+
+    <PhotoInput id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo">
+      Take a photo of the manometer measuring the inlet gas pressure.
+    </PhotoInput>
+
+    <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
+      Take a photo of the combustion analysis results. Refer to local regulations on how to do this tests, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
+    </PhotoInput>
+    
+    ## Condensate
+    <PhotoInput id="condensate_management_piping_photo" label="Condensate management Piping – Photo">
+      Take a photo of the condensate management piping. 
+      - Photo must include the connections to the combustion air inlet moisture trap, acid neutralizer, secondary drain pan, and condensate pump if used.
+      -	Note, some units have built in traps while others require an external trap. Systems with a built in trap may need the trap to be filled with water prior to start up to prevent the escape of combustion gases. 
+    </PhotoInput>
+
+    ## Hydronics and Controls
+    <PhotoInput id="boiler_system_fluid_chemistry_results_photo" label="Boiler System Fluid Chemistry Test Results – Photo">
+      Take a photo of the boiler system fluid chemistry test results (pH and water hardness).
+    </PhotoInput>
+
+    <PhotoInput id="heating_curve_coldest_outdoor_photo" label="Heating Curve Selected Setting for the Coldest Outdoor Temperature Day – Photo">
+      Take a photo of the heating curve selected setting for the coldest outdoor temperature day. 
+    </PhotoInput>
+
+    <PhotoInput id="heating_curve_warmest_outdoor_photo" label="Heating Curve Selected Setting for the Warmest Outdoor Temperature Day – Photo">
+      Take a photo of the heating curve selected setting for the warmest outdoor temperature day.  
+    </PhotoInput>
+
+    <NumberInput  label="Hydronic loop’s pressure loss (feet of head)" min={0} path="hydronic_loop_pressure_loss" />
+
+    <NumberInput  label="Setting percent maximum pump speed" min={0} path="max_pump_speed_percent" />
+  </Tab>
+  <Tab eventKey="report" title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # High Efficiency Modulating Boiler Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## About the Report
+    
+    The photos in this report are intended to document the critical details of upgrading to a high efficiency modulating boiler installation.
+   
+    ### General
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+      Photo of the nameplate of the new system
+    </Photo>
+
+    <Photo id="outdoor_temperature_sensor_photo" label="Outdoor Temperature Sensor – Photo" required>
+      Photo of the outdoor temperature sensor
+    </Photo>
+
+    <Photo id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo" required>
+      Photo of the installation location at completion
+    </Photo>
+
+    <Photo id="system_layout_diagram_photo" label="System Layout Diagram – Photo">
+      Photo of the system layout diagram
+    </Photo>
+
+    ### Venting
+    <Photo id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo" required>
+      Photo of the exhaust vent termination
+    </Photo>
+
+    <Photo id="intake_vent_location_photo" label="Intake Vent Location – Photo" required>
+      Photo of the intake vent location
+    </Photo>
+
+    <Photo id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Photo of venting modifications for the remaining natural draft combustion appliance(s)
+    </Photo>
+
+    ### Gas
+
+    <Photo id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo" required>
+      Photo of the carbon monoxide alarm installed
+    </Photo>
+
+     <Photo id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo" required>
+      Photo of the electronic methane leak detector
+    </Photo>
+
+    <Photo id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo" required>
+      Photo of the manometer measuring the inlet gas pressure
+    </Photo>
+
+    <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" required>
+      Photo of the combustion analysis results
+    </Photo>
+
+    ### Condensate
+    <Photo id="condensate_management_piping_photo" label="Condensate management Piping – Photo" required>
+      Photo of the condensate management piping 
+    </Photo>
+
+    ### Hydronics and Controls
+    <Photo id="boiler_system_fluid_chemistry_results_photo" label="Boiler System Fluid Chemistry Test Results – Photo" required>
+      Photo of the boiler system fluid chemistry test results (pH and water hardness)
+    </Photo>
+
+    <Photo id="heating_curve_coldest_outdoor_photo" label="Heating Curve Selected Setting for the Coldest Outdoor Temperature Day – Photo" required>
+      Photo of the heating curve selected setting for the coldest outdoor temperature day    
+    </Photo>
+
+    <Photo id="heating_curve_warmest_outdoor_photo" label="Heating Curve Selected Setting for the Warmest Outdoor Temperature Day – Photo" required>
+      Photo of the heating curve selected setting for the warmest outdoor temperature day    
+    </Photo>
+
+    Hydronic loop’s pressure loss (feet of head): { props.data?.hydronic_loop_pressure_loss ? props.data?.hydronic_loop_pressure_loss : null } ft
+    
+    For the integrated/primary circulation pump, percent of the maximum pump speed was set to { props.data?.max_pump_speed_percent ? props.data?.max_pump_speed_percent : null }%
+
+    {
+        props.metadata.attachments?.manual_j_file ?
+          <>
+          <h2> Manual J Load Calculation</h2>
+          {
+            props.metadata.attachments?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
+          }
+          </>: null
+    }
+    <PDFRenderer id="manual_j_file" label="" />
+
+    </PrintSection>
+  </Tab>
+</Tabs>

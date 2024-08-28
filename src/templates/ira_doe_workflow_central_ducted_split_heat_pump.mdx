@@ -37,41 +37,21 @@
         - Make notes and skip performing a duct leakage test at the initial phase
         - Perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight
 
-        <SelectWrapper label="Select the test method used:" options={["Duct leakage tester", "Pressure pan","Airflow hood (capture hood, balometer)"]} path="duct_leakage_test_method" />
-
-        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}> 
-            <PhotoInput id="duct_test_setup_photo" label="Duct Test Setup – Photo">
-                Take a photo of the duct test setup showing ring size and how it is attached to the duct system.
-            </PhotoInput>   
-            <PhotoInput id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
-                Take a photo of the duct leakage test manometer, CFM at 25 Pa.
-            </PhotoInput>   
-            
-            | CFM25 per 100 ft<sup>2</sup> Calculator
-            | ---------------------------------------
-            | <NumberInput label="CFM25" min={0} path="cfm25_calculator.cfm25"  /> 
-            | <NumberInput label="Conditioned Floor Area (ft&#178;)" min={0} path="cfm25_calculator.conditioned_floor_area"  /> 
-            | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } 
-            
-            ## Type Of Test
-            <Radio label="Type of duct leakage test performed" options={['Total Leakage','Leakage to Outside']} path="type_of_duct_leakage_radio" />        
-        </ShowOrHide>
-        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}> 
-            <PhotoInput id="pressure_pan_setup_photo" label="Pressure Pan Setup – Photo">
-                Take a photo of the pressure pan and manometer measuring one supply register.
-            </PhotoInput>   
-            <PhotoInput id="pressure_pan_results_photo" label="Pressure Pan Results – Photo">
-                Take a photo of the document showing the readings from all the supply registers.
-            </PhotoInput>        
-        </ShowOrHide>
-        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Airflow hood (capture hood, balometer)'}> 
-            <PhotoInput id="airflow_hood_setup_photo" label="Airflow Hood Setup  – Photo">
-                Take a photo of the airflow hood measuring one supply register.
-            </PhotoInput>   
-            <PhotoInput id="airflow_hood_results_photo" label="Airflow Hood Results  – Photo">
-                Take a photo of the document showing the readings from all the supply registers.
-            </PhotoInput>        
-        </ShowOrHide>
+        <PhotoInput id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+            Take a photo of the duct test setup showing ring size and how it is attached to the duct system.
+        </PhotoInput>   
+        <PhotoInput id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+            Take a photo of the duct leakage test manometer, CFM at 25 Pa.
+        </PhotoInput>   
+        
+        | CFM25 per 100 ft<sup>2</sup> Calculator
+        | ---------------------------------------
+        | <NumberInput label="CFM25" min={0} path="cfm25_calculator.cfm25"  /> 
+        | <NumberInput label="Conditioned Floor Area (ft&#178;)" min={0} path="cfm25_calculator.conditioned_floor_area"  /> 
+        | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } 
+        
+        ## Type Of Test
+        <Radio label="Type of duct leakage test performed" options={['Total Leakage','Leakage to Outside']} path="type_of_duct_leakage_radio" />        
 
         ## Combustion Safety Testing
         If an atmospherically vented appliance will remain in the home after this heat pump installation work has been completed,
@@ -208,12 +188,6 @@
             Take a photo of the thermostat showing the temperature value set for the auxillary heat lockout, compressor lockout temperature, and dual fuel switch over temperature as applicable.
         </PhotoInput>
         <StringInput label="Notes about thermostat settings" path="comment_about_thermostat_settings" />
-
-        ## Project Invoice
-        <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-            Take a photo of the project invoice.
-        </PhotoInput>
-
         ## Mechanical Ventilation
         If the addition of supply based mechanical ventilation is included in the heat pump upgrade. Use the mechanical 
         ventilation quality installation workflow to document that installation. 
@@ -342,47 +316,23 @@
              In existing construction it is highly recommended that action be taken to reduce duct leakage if 
              the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area. 
 
-            
-            <p><strong>Test method used: </strong> {props.data?.duct_leakage_test_method}</p> 
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}> 
-                <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
-                    Photo of duct test setup showing ring size and how it is attached to the duct system
-                </Photo>   
-                <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
-                    Photo of duct leakage test manometer, CFM at 25 Pa
-                </Photo>  
+            <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+                Photo of duct test setup showing ring size and how it is attached to the duct system.
+            </Photo>   
+            <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+                Photo of duct leakage test manometer, CFM at 25 Pa
+            </Photo>  
 
-                {
-                    props.data.type_of_duct_leakage_radio
-                    ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p> 
-                    : null
-                } 
-                
-                <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
-                <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
-                <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
-            </ShowOrHide>
+            {
+                props.data.type_of_duct_leakage_radio
+                ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p> 
+                : null
+            } 
             
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}> 
-                <Photo id="pressure_pan_setup_photo" label="Pressure Pan Setup – Photo">
-                    Photo of the pressure pan and manometer measuring one supply register
-                </Photo>   
-                <Photo id="pressure_pan_results_photo" label="Pressure Pan Results – Photo">
-                    Photo of the document showing the readings from all the supply registers
-                </Photo>        
-            </ShowOrHide>
-            
-            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Airflow hood (capture hood, balometer)'}> 
-                <Photo id="airflow_hood_setup_photo" label="Airflow Hood Setup  – Photo">
-                    Photo of the airflow hood measuring one supply register
-                </Photo>   
-                <Photo id="airflow_hood_results_photo" label="Airflow Hood Results  – Photo">
-                    Photo of the document showing the readings from all the supply registers
-                </Photo>        
-            </ShowOrHide>
-
-        
-                       
+            <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
+            <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
+            <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
+                 
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
@@ -405,11 +355,11 @@
 
             
             {
-                props.metadata.attachments?.manual_j_file || props.data.comment_manual_j ?
+                props.metadata.attachments[props.jobId]?.manual_j_file || props.data.comment_manual_j ?
                 <>
                 <h2> Manual J </h2>
                 {
-                 props.metadata.attachments?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
+                 props.metadata.attachments[props.jobId]?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
                 }
                 
                 
@@ -531,12 +481,6 @@
                 ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p> 
                 : null
             }
-
-            ## Project Invoice
-            <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
-                Photo of the project invoice
-            </Photo>
-            
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>

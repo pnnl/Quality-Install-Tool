@@ -1,0 +1,127 @@
+<Tabs>
+  <Tab eventKey="installation" title="Installation">
+    This workflow is for Category IV gas appliances, which are served by positive static pressure vents that are airtight, 
+    corrosion-resistant, and include a method of condensate disposal.
+
+    ## General
+    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
+      Take a photo of the nameplate for the new system.
+    </PhotoInput>
+
+    <PhotoInput id="water_supply_pressure_measurement_photo" label="Water Supply Pressure Measurement – Photo">
+      Take a photo of the water supply pressure measurement to show that it is above 40 PSI but below 80 PSI.
+    </PhotoInput>
+
+    <PhotoInput id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo">
+      Take a wide-angle photo of the installation location at completion. 
+      -	To show that there are no adjacent hazards, if installed in a garage this photo would show that the installation is at least 18 in. above the floor and protected from vehicle damage.
+      -	To show the water pipes have been insulated, especially the hot water pipe and recirculation lines if present.
+      -	To show the air inlet air filter has been clearly labeled for periodic inspection
+      -	To show the condensate neutralizer (if used) has been clearly labeled for periodic inspection
+      -	To show the temperature and pressure relief valve has been installed and correctly terminated
+    </PhotoInput>
+
+    ## Venting
+    <PhotoInput id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo">
+      Take a wide-angle photo of the exhaust vent termination from the exterior.
+        -	To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANZI Z21 .10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA 8149.1 National Gas and Propane Installation Code.
+        -	To show that the wall penetration for the vent has been flashed correctly.
+        -	Install the termination high enough so that snow drifts won’t block the vent.
+        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake. 
+        -	The installation of bird screens are recommended
+    </PhotoInput>
+
+    <PhotoInput id="intake_vent_location_photo" label="Intake Vent Location – Photo">
+      Take a wide-angle photo of the intake vent location if different/not shown in the previous image.
+      Example: If the intake is in an unconditioned attic, this photo would show that it is sufficiently above or away from attic insulation.
+    </PhotoInput>
+
+    <PhotoInput id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Optional: Take a photo of venting modifications for the remaining natural draft combustion appliance(s). Provide this photo if this high efficiency gas water heater installation results in any natural draft combustion appliances remaining.
+    </PhotoInput>
+
+    ## Condensate
+    <PhotoInput id="condensate_management_piping_photo" label="Condensate management Piping – Photo">
+      Take a photo of the condensate management piping. Photo must include the connections to the combustion air inlet moisture trap, AC coil, acid neutralizer, secondary drain pan, and condensate pump if used.
+    </PhotoInput>
+
+    ## Gas
+    <PhotoInput id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo">
+      Take a photo of the carbon monoxide alarm installed
+    </PhotoInput>
+
+    <PhotoInput id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo">
+      Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
+    </PhotoInput>
+
+    <PhotoInput id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo">
+      Take a photo of the manometer measuring the inlet gas pressure.
+    </PhotoInput>
+
+    <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
+      Take a photo of the combustion analysis results. Refer to local regulations on how to do this tests, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
+    </PhotoInput>
+  </Tab>
+  <Tab eventKey="report" title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # High Efficiency Water Heater Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## About the Report
+    
+    The photos in this report are intended to document the critical details of upgrading to a high efficiency tankless water heater installation.
+   
+    ### General
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+      Photo of the nameplate of the new system
+    </Photo>
+
+    <Photo id="water_supply_pressure_measurement_photo" label="Water Supply Pressure Measurement – Photo">
+      Photo of the water supply pressure measurement. The pressure should be between 40 and 80 psi.
+    </Photo>
+
+    <Photo id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo" required>
+      Photo of the installation location at completion. Look for insulated hot water pipes, a pressure relief valve, and clearly labeled inlet air filter.
+    </Photo>
+
+    ### Venting
+    <Photo id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo" required>
+      Photo of the exhaust vent termination
+    </Photo>
+
+    <Photo id="intake_vent_location_photo" label="Intake Vent Location – Photo" required>
+      Photo of the intake vent location
+    </Photo>
+
+    <Photo id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+      Photo of venting modifications for the remaining natural draft combustion appliance(s)
+    </Photo>
+
+    ### Condensate
+    <Photo id="condensate_management_piping_photo" label="Condensate management Piping – Photo" required>
+      Photo of the condensate management piping
+    </Photo>
+
+    ### Gas
+    <Photo id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo" required>
+      Photo of the carbon monoxide alarm installed
+    </Photo>
+
+    <Photo id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo" required>
+      Photo of the electronic methane leak detector while it is testing a gas connection
+    </Photo>
+
+    <Photo id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo" required>
+      Photo of the manometer measuring the inlet gas pressure
+    </Photo>
+
+    <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" required>
+      Photo of the combustion analysis results
+    </Photo>
+
+    </PrintSection>
+  </Tab>
+</Tabs>

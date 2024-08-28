@@ -3,11 +3,8 @@ version: 0.2
 phases:
   build:
     commands:
-      - npm --version
-      - node --version
       - npm install yarn
       - yarn install --frozen-lockfile
       - yarn run build
-      - [ "$CODEBUILD_WEBHOOK_EVENT" == "RELEASED" ] && TOPDIR=prod
       - aws s3 sync build $DEPLOY_BUCKET/$TOPDIR
       - aws cloudfront create-invalidation --distribution-id $CFID --paths '/*'

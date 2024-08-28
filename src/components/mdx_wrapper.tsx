@@ -25,6 +25,8 @@ import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 import PrintSectionWrapper from './print_section wrapper'
 import FileInputWrapper from './file_input_wrapper'
 import PDFRendererWrapper from './pdf_renderer_wrapper'
+import ShowOrHide from './show_or_hide'
+import Select from './select_wrapper'
 
 const components = {
     Collapsible,
@@ -42,6 +44,7 @@ const components = {
     TextInput: TextInputWrapper,
     USStateSelect: USStateSelectWrapper,
     DateStr: DateStr,
+    SelectWrapper: Select,
     Tab: Tab,
     Tabs: Tabs,
     PageBreak: PageBreak,
@@ -49,6 +52,7 @@ const components = {
     ProjectInfoReport: ProjectInfoReport,
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
+    ShowOrHide: ShowOrHide,
 }
 
 interface MdxWrapperProps {

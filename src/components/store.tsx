@@ -49,7 +49,7 @@ export const StoreContext = React.createContext({
 
 interface StoreProviderProps {
     children: ReactNode
-    dbName: string
+    dbName: string | undefined
     docId: string
     workflowName: string
     docName: string
