@@ -27,6 +27,8 @@ import FileInputWrapper from './file_input_wrapper'
 import PDFRendererWrapper from './pdf_renderer_wrapper'
 import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
+import DocNameInputWrapper from './doc_name_input_wrapper'
+import DocNameInput from './doc_name_input'
 
 const components = {
     Collapsible,
@@ -53,6 +55,7 @@ const components = {
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
+    DocNameInput: DocNameInputWrapper,
 }
 
 interface MdxWrapperProps {

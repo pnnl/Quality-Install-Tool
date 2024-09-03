@@ -1,7 +1,7 @@
 import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { putNewProject } from '../utilities/database_utils'
+import { deleteEmptyProject, putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { Tooltip } from 'react-tooltip'
 import {
@@ -219,12 +219,6 @@ const Home: FC = () => {
                     For reporting to the state
                 </p>
                 <div className="button-container-center">
-                    <a ref={downloadFileLink} style={{ display: 'none' }} />
-                    <ImportDBDocWrapper
-                        id="project_json"
-                        label="Import a Project"
-                    />
-                    &nbsp;
                     <Button
                         className="add-project submit-button"
                         onClick={handleAddJob}
@@ -239,15 +233,9 @@ const Home: FC = () => {
             </center>
         )
     } else {
-        projects_display = projectList.map((key, value) => (
+        projects_display = [
             <div>
                 <div className="button-container-right">
-                    <a ref={downloadFileLink} style={{ display: 'none' }} />
-                    <ImportDBDocWrapper
-                        id="project_json"
-                        label="Import a Project"
-                    />
-                    &nbsp;
                     <Button
                         className="add-project submit-button"
                         onClick={handleAddJob}
@@ -258,96 +246,113 @@ const Home: FC = () => {
                     {/* <Tooltip anchorSelect=".add-project" place="top">
                         Add a New Project
                     </Tooltip> */}
-                </div>{' '}
+                </div>
                 <br />
                 <br />
-                <ListGroup key={key._id} className="padding">
-                    <LinkContainer key={key} to={`/app/${key._id}/workflows`}>
-                        <ListGroup.Item key={key._id} action={true}>
-                            <span className="icon-container">
-                                {/* <Menu options={options} /> */}
+            </div>,
+            projectList.map((key, value) => (
+                <div>
+                    <ListGroup key={key._id} className="padding">
+                        <LinkContainer
+                            key={key}
+                            to={`/app/${key._id}/workflows`}
+                        >
+                            <ListGroup.Item key={key._id} action={true}>
+                                <span className="icon-container">
+                                    {/* <Menu options={options} /> */}
 
-                                <Button
-                                    className="edit transparent-button"
-                                    onClick={event => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        editAddressDetails(key._id)
-                                    }}
-                                >
-                                    <TfiPencil />
-                                </Button>
-                                <Tooltip anchorSelect=".edit" place="bottom">
-                                    Edit
-                                </Tooltip>
-                                <Button
-                                    className="delete transparent-button"
-                                    onClick={event => handleDelete(event, key)}
-                                    variant="danger"
-                                >
-                                    <TfiTrash />
-                                </Button>
-                                <Tooltip anchorSelect=".delete" place="bottom">
-                                    Delete
-                                </Tooltip>
-                                <Button
-                                    className="download transparent-button"
-                                    onClick={event => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        handleExport(
-                                            key._id,
-                                            key.metadata_?.doc_name,
-                                        )
-                                    }}
-                                >
-                                    <TfiDownload />
-                                </Button>
-                                <Tooltip
-                                    anchorSelect=".download"
-                                    place="bottom"
-                                >
-                                    Download
-                                </Tooltip>
-                            </span>
-                            <b>{key.metadata_?.doc_name}</b>
-                            {key.data_?.location?.street_address && (
-                                <>
-                                    <br />
-                                    {key.data_?.location?.street_address},
-                                </>
-                            )}
-                            {key.data_?.location?.city && (
-                                <>
-                                    <br />
-                                    {key.data_?.location?.city},{' '}
-                                </>
-                            )}
-                            {key.data_.location?.state && (
-                                <>{key.data_?.location?.state} </>
-                            )}
-                            {key.data_.location?.zip_code && (
-                                <>{key.data_?.location?.zip_code}</>
-                            )}
-                        </ListGroup.Item>
-                    </LinkContainer>
-                    <StringInputModal
-                        isOpen={modalOpenMap[key._id] || false}
-                        closeModal={() => {
-                            setModalOpenMap(prevState => ({
-                                ...prevState,
-                                [key._id]: false,
-                            }))
-                        }}
-                        onSubmit={input => handleRenameProject(input, key._id)}
-                        validateInput={validateInput}
-                        title="Enter new project name"
-                        okButton="Rename"
-                        value={key.metadata_?.doc_name}
-                    />
-                </ListGroup>
-            </div>
-        ))
+                                    <Button
+                                        className="edit transparent-button"
+                                        onClick={event => {
+                                            event.stopPropagation()
+                                            event.preventDefault()
+                                            editAddressDetails(key._id)
+                                        }}
+                                    >
+                                        <TfiPencil />
+                                    </Button>
+                                    <Tooltip
+                                        anchorSelect=".edit"
+                                        place="bottom"
+                                    >
+                                        Edit
+                                    </Tooltip>
+                                    <Button
+                                        className="delete transparent-button"
+                                        onClick={event =>
+                                            handleDelete(event, key)
+                                        }
+                                        variant="danger"
+                                    >
+                                        <TfiTrash />
+                                    </Button>
+                                    <Tooltip
+                                        anchorSelect=".delete"
+                                        place="bottom"
+                                    >
+                                        Delete
+                                    </Tooltip>
+                                    <Button
+                                        className="download transparent-button"
+                                        onClick={event => {
+                                            event.stopPropagation()
+                                            event.preventDefault()
+                                            handleExport(
+                                                key._id,
+                                                key.metadata_?.doc_name,
+                                            )
+                                        }}
+                                    >
+                                        <TfiDownload />
+                                    </Button>
+                                    <Tooltip
+                                        anchorSelect=".download"
+                                        place="bottom"
+                                    >
+                                        Download
+                                    </Tooltip>
+                                </span>
+                                <b>{key.metadata_?.doc_name}</b>
+                                {key.data_?.location?.street_address && (
+                                    <>
+                                        <br />
+                                        {key.data_?.location?.street_address},
+                                    </>
+                                )}
+                                {key.data_?.location?.city && (
+                                    <>
+                                        <br />
+                                        {key.data_?.location?.city},{' '}
+                                    </>
+                                )}
+                                {key.data_.location?.state && (
+                                    <>{key.data_?.location?.state} </>
+                                )}
+                                {key.data_.location?.zip_code && (
+                                    <>{key.data_?.location?.zip_code}</>
+                                )}
+                            </ListGroup.Item>
+                        </LinkContainer>
+                        <StringInputModal
+                            isOpen={modalOpenMap[key._id] || false}
+                            closeModal={() => {
+                                setModalOpenMap(prevState => ({
+                                    ...prevState,
+                                    [key._id]: false,
+                                }))
+                            }}
+                            onSubmit={input =>
+                                handleRenameProject(input, key._id)
+                            }
+                            validateInput={validateInput}
+                            title="Enter new project name"
+                            okButton="Rename"
+                            value={key.metadata_?.doc_name}
+                        />
+                    </ListGroup>
+                </div>
+            )),
+        ]
     }
     return (
         <div>

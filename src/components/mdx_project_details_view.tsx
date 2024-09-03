@@ -37,7 +37,6 @@ const MdxProjectView: FC = () => {
             docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <h1>Project Details</h1>
             <MdxWrapper
                 Component={DOEProjectDetailsTemplate}
                 Project={projectDoc}

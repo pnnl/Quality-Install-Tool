@@ -307,17 +307,3 @@ h1 + h3 {
   content: "\2807";
   font-size: 30px;
 }
-
-.popup-more {
-  /* base styles for the popup menu */
-}
-
-.expand {
-  display: block;
-  /* additional styles for expanded state */
-}
-
-.collapse {
-  display: none;
-  /* additional styles for collapsed state */
-}
