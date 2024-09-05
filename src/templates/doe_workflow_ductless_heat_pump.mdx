@@ -79,11 +79,30 @@
             and model selected showing the sensible versus total cooling capacity at the design conditions.
         </PhotoInput>
 
+        ## Combustion Appliance Safety Testing
+        If the home upgrades will result in a barometric draft controlled or Category I appliances equipped with a draft 
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
+        safety checks are required to be performed at the completion of the project. Please perform and document these 
+        tests using the <a href={`/app/${props.project._id}/combustion_safety`}>Combustion Appliance Safety Workflow</a>. 
+        The results from that workflow will automatically append to this workflow.
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
        
         <DateInput label="Installation Date" path="install_date" />
+        <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
+        <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
+        ## Refrigerant Recovery
+        <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
+            Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+        </PhotoInput> 
+        <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
+            Take a photo of the refrigerant recovery setup. 
+        </PhotoInput> 
+        <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
+            Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+        </PhotoInput> 
+       </ShowOrHide>
        
         <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo">
             Take a photo of the outdoor unit name plate.

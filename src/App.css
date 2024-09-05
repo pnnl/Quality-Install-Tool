@@ -235,3 +235,13 @@ h1 + h3 {
   font-size: 0.9rem;
   font-weight: bold;
 }
+
+.combustion_tests {
+  padding: 5px 10px 5px 10px; 
+  background-color: white;
+}
+
+.align_justify {
+  justify-content: center;
+  text-align: justify;
+}

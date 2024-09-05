@@ -37,7 +37,7 @@
         - Make notes and skip performing a duct leakage test at the initial phase
         - Perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight
 
-        <SelectWrapper label="Select the test method used:" options={["Duct leakage tester", "Pressure pan","Airflow hood (capture hood, balometer)"]} path="duct_leakage_test_method" />
+        <Select label="Select the test method used:" options={["Duct leakage tester", "Pressure pan","Airflow hood (capture hood, balometer)"]} path="duct_leakage_test_method" />
 
         <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}> 
             <PhotoInput id="duct_test_setup_photo" label="Duct Test Setup – Photo">
@@ -133,6 +133,19 @@
     </Tab>
     <Tab eventKey="installation" title="Installation">
         <DateInput label="Installation Date" path="install_date" />
+        <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
+        <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
+        ## Refrigerant Recovery
+        <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
+            Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+        </PhotoInput> 
+        <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
+            Take a photo of the refrigerant recovery setup. 
+        </PhotoInput> 
+        <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
+            Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+        </PhotoInput> 
+       </ShowOrHide>
         ## Equipment
         <PhotoInput id="odu_nameplate_photo" label="ODU nameplate – Photo" >
             Take a photo of the Outdoor Unit (ODU) nameplate.

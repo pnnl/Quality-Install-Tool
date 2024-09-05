@@ -27,10 +27,13 @@ import FileInputWrapper from './file_input_wrapper'
 import PDFRendererWrapper from './pdf_renderer_wrapper'
 import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
+import CheckBoxWrapper from './checkbox_wrapper'
+import CombustionApplianceSafetyTests from './combustion_appliance_safety_tests'
 
 const components = {
     Collapsible,
     ClimateZoneSelect: ClimateZoneSelectWrapper,
+    CheckBox: CheckBoxWrapper,
     DateInput: DateInputWrapper,
     Figure: FigureWrapper,
     NumberInput: NumberInputWrapper,
@@ -44,7 +47,6 @@ const components = {
     TextInput: TextInputWrapper,
     USStateSelect: USStateSelectWrapper,
     DateStr: DateStr,
-    SelectWrapper: Select,
     Tab: Tab,
     Tabs: Tabs,
     PageBreak: PageBreak,
@@ -53,6 +55,7 @@ const components = {
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
+    CombustionApplianceSafetyTests: CombustionApplianceSafetyTests,
 }
 
 interface MdxWrapperProps {

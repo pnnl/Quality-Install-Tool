@@ -9,6 +9,7 @@ import MdxTemplateView from './components/mdx_template_view'
 import RootLayout from './components/root_layout'
 import Home from './components/home'
 import MdxProjectView from './components/mdx_project_details_view'
+import MdxCombustionSafetyView from './components/mdx_combustion_appliance_safety_view'
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
@@ -35,6 +36,15 @@ const routes = [
         element: (
             <RootLayout>
                 <WorkFlowView />
+            </RootLayout>
+        ),
+    },
+    {
+        path: `/app/:projectId/combustion_safety`,
+        // Workflow list view:  List the names of workflows available for generating installation report.
+        element: (
+            <RootLayout>
+                <MdxCombustionSafetyView />
             </RootLayout>
         ),
     },
