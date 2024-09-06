@@ -1,7 +1,7 @@
 import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { deleteEmptyProject, putNewProject } from '../utilities/database_utils'
+import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { Tooltip } from 'react-tooltip'
 import {
@@ -143,9 +143,9 @@ const Home: FC = () => {
         setSelectedProjectNameToDelete(key.metadata_?.doc_name)
     }
 
-    const handleExport = async (docID: string, projectName: string) => {
-        exportAsJSONObject(db, docID, projectName, downloadFileLink)
-    }
+    // const handleExport = async (docID: string, projectName: string) => {
+    //     exportAsJSONObject(db, docID, projectName, downloadFileLink)
+    // }
 
     const sortByEditTime = (jobsList: any[]) => {
         const sortedJobsByEditTime = jobsList.sort((a, b) => {
@@ -218,7 +218,7 @@ const Home: FC = () => {
                     <br />
                     For reporting to the state
                 </p>
-                <div className="button-container-center">
+                <div className="button-container-center" key={0}>
                     <Button
                         className="add-project submit-button"
                         onClick={handleAddJob}
@@ -234,7 +234,7 @@ const Home: FC = () => {
         )
     } else {
         projects_display = [
-            <div>
+            <div key={0}>
                 <div className="button-container-right">
                     <Button
                         className="add-project submit-button"
@@ -292,7 +292,7 @@ const Home: FC = () => {
                                     >
                                         Delete
                                     </Tooltip>
-                                    <Button
+                                    {/* <Button
                                         className="download transparent-button"
                                         onClick={event => {
                                             event.stopPropagation()
@@ -310,7 +310,7 @@ const Home: FC = () => {
                                         place="bottom"
                                     >
                                         Download
-                                    </Tooltip>
+                                    </Tooltip> */}
                                 </span>
                                 <b>{key.metadata_?.doc_name}</b>
                                 {key.data_?.location?.street_address && (
@@ -355,8 +355,8 @@ const Home: FC = () => {
         ]
     }
     return (
-        <div>
-            <ListGroup>{projects_display}</ListGroup>
+        <>
+            {projects_display}
             <br />
             <center>
                 <p className="welcome-content">
@@ -397,7 +397,7 @@ const Home: FC = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </div>
+        </>
     )
 }
 

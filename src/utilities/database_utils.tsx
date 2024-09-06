@@ -48,7 +48,9 @@ export async function putNewDoc(
             created_at: now,
             last_modified_at: now,
             attachments: {},
+            status: 'new',
         },
+
         children: [],
     })
 }
@@ -267,39 +269,6 @@ export async function appendChildToProject(
         })
     } catch (err) {
         console.error('Error appending child to project:', err)
-        throw err
-    }
-}
-
-export async function deleteEmptyProject(
-    db: PouchDB.Database<{}>,
-): Promise<void> {
-    try {
-        const allDocs = await db.allDocs({ include_docs: true })
-
-        // Map and filter documents based on specified criteria
-        const jobs = allDocs.rows
-            .map(row => row.doc as any)
-            .filter(
-                doc =>
-                    (!doc.metadata_ || doc.metadata_.doc_name === '') &&
-                    !doc.data_.location &&
-                    !doc.data_.installer,
-            )
-
-        console.log(jobs)
-
-        // Remove documents if any are found
-        if (jobs.length > 0) {
-            try {
-                // Remove each document individually
-                await Promise.all(jobs.map(doc => db.remove(doc._id, doc._rev)))
-            } catch (error) {
-                console.error('Error removing documents:', error)
-            }
-        }
-    } catch (err) {
-        console.error('Error in deleting empty projects:', err)
         throw err
     }
 }

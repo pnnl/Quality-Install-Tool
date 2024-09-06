@@ -35,6 +35,7 @@ type Attachments = Record<
 >
 
 export const StoreContext = React.createContext({
+    docId: '' satisfies string,
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
@@ -255,7 +256,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         if (pathStr === 'data_.doc_name') newDoc.metadata_.doc_name = data
         setDoc(newDoc)
 
-        console.log(newDoc)
         // Persist the doc
         if (db != null) {
             db.upsert(docId, function upsertFn(dbDoc: any) {
@@ -379,6 +379,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
+                docId: docId,
                 data: doc.data_,
                 metadata: doc.metadata_,
                 upsertAttachment,

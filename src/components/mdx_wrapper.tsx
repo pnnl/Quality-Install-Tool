@@ -29,6 +29,7 @@ import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
 import DocNameInputWrapper from './doc_name_input_wrapper'
 import DocNameInput from './doc_name_input'
+import SaveCancelButtonWrapper from './save_cancel_button_wrapper'
 
 const components = {
     Collapsible,
@@ -56,6 +57,7 @@ const components = {
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
     DocNameInput: DocNameInputWrapper,
+    SaveCancelButton: SaveCancelButtonWrapper,
 }
 
 interface MdxWrapperProps {

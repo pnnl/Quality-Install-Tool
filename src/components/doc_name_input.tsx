@@ -23,6 +23,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
     hint,
 }) => {
     const [inputValue, setInputValue] = useState(value)
+    const [initialValue] = useState(value)
     const [errorMessage, setErrorMessage] = useState('')
     const [isValid, setIsValid] = useState(false)
     const [projectList, setProjectList] = useState<any[]>([])
@@ -44,11 +45,18 @@ const DocNameInput: FC<DocNameInputProps> = ({
 
     useEffect(() => {
         const projectNames = projectList.map(doc => doc.metadata_.doc_name)
-        setIsValid(
-            validateInput.every(validator =>
-                validator.validator(inputValue, projectNames),
-            ),
+        console.log(initialValue, inputValue)
+        if (
+            (value === undefined && projectNames.length === 0) ||
+            initialValue === inputValue
         )
+            setIsValid(true)
+        else
+            setIsValid(
+                validateInput.every(validator =>
+                    validator.validator(inputValue, projectNames),
+                ),
+            )
     }, [inputValue, projectList])
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +83,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
     const validateInput = [
         {
             validator: (input: string, projectNames: string[]) => {
-                return (
-                    regexp.test(input) &&
-                    input &&
-                    !projectNames.includes(input.trim())
-                )
+                return regexp.test(input) && input
             },
             errorMsg:
                 'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
@@ -99,6 +103,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
                 type="text"
                 value={inputValue}
                 onBlur={evalErrorMessage}
+                onClick={evalErrorMessage}
                 isInvalid={!isValid}
             />
             {hint && <Form.Text>{hint}</Form.Text>}
