@@ -29,6 +29,7 @@ import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
 import CheckBoxWrapper from './checkbox_wrapper'
 import CombustionApplianceSafetyTests from './combustion_appliance_safety_tests'
+import ButtonLinkWrapper from './buttonlink_wrapper'
 
 const components = {
     Collapsible,
@@ -56,6 +57,7 @@ const components = {
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
     CombustionApplianceSafetyTests: CombustionApplianceSafetyTests,
+    ButtonLink: ButtonLinkWrapper,
 }
 
 interface MdxWrapperProps {

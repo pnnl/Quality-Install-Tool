@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, Key, useEffect, useState } from 'react'
 import RadioWrapper from './radio_wrapper'
 import { Button } from 'react-bootstrap'
 import PhotoInputWrapper from './photo_input_wrapper'
@@ -6,25 +6,31 @@ import dbName from './db_details'
 import { useParams } from 'react-router-dom'
 import PouchDB from 'pouchdb'
 import ShowOrHide from './show_or_hide'
+import Collapsible from './collapsible'
 
 interface ApplianceSafetyTestProps {
-    index: number
+    appliance_key: string
     path: string
+    index?: number
 }
 
 // Single appliance component
-const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({ index, path }) => {
+const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({
+    appliance_key,
+    path,
+    index,
+}) => {
+
+    console.log('Here', path, appliance_key)
     return (
         <>
             <RadioWrapper
-                label={`Appliance ${index + 1}:`}
+                label={`Appliance Type:`}
                 options={['Gas/Oil Water Heater', 'Gas/Oil Furnace/Boiler']}
-                path={`${path}.appliance${index + 1}.name`}
+                path={`${path}.${appliance_key}.name`}
             />
             <PhotoInputWrapper
-                id={`${path}.appliance${
-                    index + 1
-                }.indoor_ambient_air_co_level_photo`}
+                id={`${path}.${appliance_key}.indoor_ambient_air_co_level_photo`}
                 label="Indoor ambient air CO level - Photo"
                 uploadable={false}
             >
@@ -34,7 +40,7 @@ const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({ index, path }) => {
             <RadioWrapper
                 label="Does the ambient CO test pass?"
                 options={['Passed', 'Failed', 'Warning', 'N/A']}
-                path={`${path}.appliance${index + 1}.ambient_CO_test`}
+                path={`${path}.${appliance_key}.ambient_CO_test`}
             />
         </>
     )
@@ -42,12 +48,14 @@ const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({ index, path }) => {
 
 // Gas/Oil Furnace/Boiler - Photo prompts and test status questions
 const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
-    index,
+    appliance_key,
     path,
-}) => (
+}) => {
+    console.log('ApplianceSafetyTestFurnaceBoiler', path, appliance_key)
+    return (
     <>
         <PhotoInputWrapper
-            id={`${path}.appliance${index + 1}.space_heating_appliance_photo`}
+                id={`${path}.${appliance_key}.space_heating_appliance_photo`}
             label="Space Heating Appliance - Photo "
             uploadable={false}
         >
@@ -55,9 +63,7 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
             evidence of unsafe conditions.
         </PhotoInputWrapper>
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.space_heating_pipe_connection_leak_check_photo`}
+                id={`${path}.${appliance_key}.space_heating_pipe_connection_leak_check_photo`}
             label="Pipe Connection Leak Check - Photo"
             uploadable={false}
         >
@@ -70,14 +76,10 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the gas leak detection test pass?"
             options={['Passed', 'Failed', 'Warning', 'N/A']}
-            path={`${path}.appliance${
-                index + 1
-            }.space_heating_gas_leak_detection_test`}
+                path={`${path}.${appliance_key}.space_heating_gas_leak_detection_test`}
         />
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.space_heating_appliance_vent_photo`}
+                id={`${path}.${appliance_key}.space_heating_appliance_vent_photo`}
             label="Space heating Appliance Vent - Photo"
             uploadable={false}
         >
@@ -85,9 +87,7 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
             configuration
         </PhotoInputWrapper>
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.space_heating_appliance_draft_photo`}
+                id={`${path}.${appliance_key}.space_heating_appliance_draft_photo`}
             label="Space heating Appliance Draft – Photo"
             uploadable={false}
         >
@@ -97,12 +97,10 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the spillage test(s) pass?"
             options={['Passed', 'Warning', 'N/A']}
-            path={`${path}.appliance${index + 1}.space_heating_spillage_test`}
+                path={`${path}.${appliance_key}.space_heating_spillage_test`}
         />
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.space_heating_appliance_co_measurement_photo`}
+                id={`${path}.${appliance_key}.space_heating_appliance_co_measurement_photo`}
             label="Space heating Appliance CO measurement – Photo "
             uploadable={false}
         >
@@ -114,21 +112,20 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the undiluted CO test pass?"
             options={['Passed', 'Failed', 'Warning', 'N/A']}
-            path={`${path}.appliance${
-                index + 1
-            }.space_heating_undiluted_CO_test`}
+                path={`${path}.${appliance_key}.space_heating_undiluted_CO_test`}
         />{' '}
     </>
 )
+}
 
 // Gas/Oil Water Heater - Photo prompts and test status questions
 const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
-    index,
+    appliance_key,
     path,
 }) => (
     <>
         <PhotoInputWrapper
-            id={`${path}.appliance${index + 1}.water_heater_photo`}
+            id={`${path}.${appliance_key}.water_heater_photo`}
             label="Water heater - Photo"
             uploadable={false}
         >
@@ -138,9 +135,7 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
             strapping.
         </PhotoInputWrapper>
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.water_heater_pipe_connection_leak_check_photo`}
+            id={`${path}.${appliance_key}.water_heater_pipe_connection_leak_check_photo`}
             label="Pipe Connection Leak Check - Photo"
             uploadable={false}
         >
@@ -153,12 +148,10 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the gas leak detection test pass?"
             options={['Passed', 'Failed', 'Warning', 'N/A']}
-            path={`${path}.appliance${
-                index + 1
-            }.water_heater_gas_leak_detection_test`}
+            path={`${path}.${appliance_key}.water_heater_gas_leak_detection_test`}
         />
         <PhotoInputWrapper
-            id={`${path}.appliance${index + 1}.water_heater_vent_photo`}
+            id={`${path}.${appliance_key}.water_heater_vent_photo`}
             label="Water Heater Vent - Photo"
             uploadable={false}
         >
@@ -166,7 +159,7 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
             configuration
         </PhotoInputWrapper>
         <PhotoInputWrapper
-            id={`${path}.appliance${index + 1}.water_heater_draft_photo`}
+            id={`${path}.${appliance_key}.water_heater_draft_photo`}
             label="Water Heater Draft – Photo"
             uploadable={false}
         >
@@ -176,12 +169,10 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the spillage test(s) pass?"
             options={['Passed', 'Warning', 'N/A']}
-            path={`${path}.appliance${index + 1}.water_heater_spillage_test`}
+            path={`${path}.${appliance_key}.water_heater_spillage_test`}
         />
         <PhotoInputWrapper
-            id={`${path}.appliance${
-                index + 1
-            }.water_heater_co_measurement_photo`}
+            id={`${path}.${appliance_key}.water_heater_co_measurement_photo`}
             label="Water heater CO measurement – Photo "
             uploadable={false}
         >
@@ -193,38 +184,37 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
         <RadioWrapper
             label="Does the undiluted CO test pass?"
             options={['Passed', 'Failed', 'Warning', 'N/A']}
-            path={`${path}.appliance${
-                index + 1
-            }.water_heater_undiluted_CO_test`}
+            path={`${path}.${appliance_key}.water_heater_undiluted_CO_test`}
         />{' '}
     </>
 )
 
 const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
-    const [appliances, setAppliances] = useState<any[]>([0])
-    const { projectId } = useParams<{ projectId: string }>()
+    const [appliances, setAppliances] = useState<any>({})
+    const [appliancesKey, setAppliancesKey] = useState<any[]>(
+        Object.keys(appliances),
+    )
+    const { projectId } = useParams()
+    const db = new PouchDB(dbName)
+
+    const fetchAppliances = async () => {
+        if (!projectId) {
+            console.error('projectId is undefined')
+            return
+        }
+        try {
+            const res: any = await db.get(projectId)
+            const appliances_data = res.data_[path] || []
+            setAppliances(appliances_data)
+            setAppliancesKey(Object.keys(appliances_data))
+        } catch (err) {
+            console.error('Failed to fetch appliances:', err)
+        }
+    }
 
     // Fetch appliances from the database when component mounts
     useEffect(() => {
-        const db = new PouchDB(dbName)
-        const fetchAppliances = async () => {
-            if (!projectId) {
-                console.error('projectId is undefined')
-                return
-            }
-            try {
-                const res: any = await db.get(projectId)
-                const appliances_data = res.data_[path] || []
-                console.log(
-                    Object.values(appliances_data).length,
-                    appliances.length,
-                )
-                setAppliances(Object.values(appliances_data))
-            } catch (err) {
-                console.error('Failed to fetch appliances:', err)
-            }
-        }
-        // DB change listener
+        fetchAppliances()
         const changes = db
             .changes({
                 live: true,
@@ -243,18 +233,28 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
         return () => {
             changes.cancel()
         }
-
-        fetchAppliances()
     }, [])
 
     // Handler to add a new appliance form
     const addAppliance = () => {
-        setAppliances(prev => [...prev, { id: prev.length }])
+        const index = appliancesKey.length + 1
+        setAppliances((prev: any) => ({
+            ...prev,
+            [index]: {},
+        }))
+        setAppliancesKey(Object.keys(appliances))
+        console.log(appliances, index)
     }
 
     // Handler to remove an appliance form
-    const removeAppliance = async (index: number) => {
-        const updatedAppliances = appliances.filter((_, i) => i !== index)
+    const removeAppliance = async (appliance_key: string) => {
+        const updatedAppliances = Object.fromEntries(
+            Object.entries(appliances).filter(
+                ([key, appliance]) => key !== appliance_key,
+            ),
+        )
+
+        console.log(appliance_key, updatedAppliances)
         if (!projectId) {
             console.error('projectId is undefined')
             return
@@ -273,7 +273,7 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
 
             // Save the updated document back to the database
             await db.put(updatedDoc)
-            setAppliances(updatedAppliances) // Update state after successful removal
+            fetchAppliances() // Update state after successful removal
         } catch (err) {
             console.error('Failed to remove appliance:', err)
         }
@@ -281,39 +281,52 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
 
     return (
         <div>
-            {appliances.map((appliance, index) => (
-                <div key={index}>
-                    <div className="combustion_tests">
-                        {/* <Button
-                            onClick={() => removeAppliance(index)}
-                            className="remove-button"
-                        >
-                            X
-                        </Button> */}
-                        <ApplianceSafetyTest index={index} path={path} />
-                        <ShowOrHide
-                            visible={appliance.name === 'Gas/Oil Water Heater'}
-                        >
-                            <ApplianceSafetyTestWaterHeater
-                                index={index}
+            {appliancesKey.map((appliance_key: string, index: number) => (
+                <div key={appliance_key}>
+                    <Collapsible header={index}>
+                        <div className="combustion_tests">
+                            <ApplianceSafetyTest
+                                appliance_key={appliance_key}
                                 path={path}
                             />
-                        </ShowOrHide>
-                        <ShowOrHide
-                            visible={
-                                appliance.name === 'Gas/Oil Furnace/Boiler'
-                            }
-                        >
-                            <ApplianceSafetyTestFurnaceBoiler
-                                index={index}
-                                path={path}
-                            />
-                        </ShowOrHide>
-                    </div>
-                    <div>&nbsp;</div>
+                            <ShowOrHide
+                                visible={
+                                    appliances[appliance_key]?.name ===
+                                    'Gas/Oil Water Heater'
+                                }
+                            >
+                                <ApplianceSafetyTestWaterHeater
+                                    appliance_key={appliance_key}
+                                    path={path}
+                                />
+                            </ShowOrHide>
+                            <ShowOrHide
+                                visible={
+                                    appliances[appliance_key]?.name ===
+                                    'Gas/Oil Furnace/Boiler'
+                                }
+                            >
+                                <ApplianceSafetyTestFurnaceBoiler
+                                    appliance_key={appliance_key}
+                                    path={path}
+                                />
+                            </ShowOrHide>
+                        </div>
+
+                        <div>
+                            <Button
+                                onClick={() => removeAppliance(appliance_key)}
+                                className="remove-button"
+                            >
+                                Remove Appliance
+                            </Button>
+                        </div>
+                        <div>&nbsp;</div>
+                    </Collapsible>                    
                 </div>
+
             ))}
-            <Button onClick={addAppliance} className="padding">
+            <Button onClick={() => addAppliance()} className="padding">
                 Add more Appliance
             </Button>
         </div>
