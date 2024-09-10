@@ -65,15 +65,9 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     }, [location.pathname])
 
     /**
-     * When deploying the application to AWS S3, the environment variable 'REACT_APP_ENV'
-     * is set to 'quality-install-tool' or 'ira-quality-install-tool' for the respective applications.
-     *
-     * The title of the application is set accordingly
+     * The title of the application
      */
-    const app_title =
-        process.env.REACT_APP_ENV === 'quality-install-tool'
-            ? 'Quality Install Tool'
-            : 'IRA - Quality Install Tool'
+    const app_title = 'Quality Install Tool'
 
     return (
         <div id="root-background">
