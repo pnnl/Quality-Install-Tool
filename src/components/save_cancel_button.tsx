@@ -7,17 +7,28 @@ import dbName from './db_details'
 
 interface SaveCancelButtonProps {
     id: string
-    label: string
-    updateValue: (inputValue: string) => void
     value: string
+    updateValue: (inputValue: string) => void
     doc_status: string
 }
 
+/**
+ * A component that provides "Save" and "Cancel" buttons for managing project doc in DB.
+ *
+ * The component handles saving the project, showing a confirmation dialog for
+ * canceling unsaved changes, and deleting an empty project if necessary.
+ * It also manages the button states based on the document status and updates
+ * the UI accordingly.
+ *
+ * @param id - The unique identifier for the project document.
+ * @param updateValue - Function to update the document status.
+ * @param doc_status - Current status of the document.
+ * @returns The rendered component.
+ */
 const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     id,
-    label,
-    updateValue,
     value,
+    updateValue,
     doc_status,
 }) => {
     const navigate = useNavigate()
@@ -25,6 +36,7 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     const [disableSave, setDisableSave] = useState<boolean>(true)
     const [docStatus, setDocStatus] = useState<string>(doc_status)
     const [docName, setDocName] = useState<string>()
+    const [buttonLabel, setButtonLabel] = useState<String>('Save Project')
     const db = new PouchDB(dbName)
 
     const handleSaveButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -65,9 +77,9 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
         try {
             if (docStatus !== 'deleted') {
                 const projectDoc: any = await db.get(id)
-                if (projectDoc && projectDoc.data_?.doc_name) {
+                if (projectDoc && projectDoc.metadata_?.doc_name) {
                     setDisableSave(false)
-                    if (!docName) setDocName(projectDoc.data_?.doc_name)
+                    if (!docName) setDocName(projectDoc.metadata_?.doc_name)
                 }
             }
         } catch (error) {}
@@ -92,9 +104,16 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     return (
         <center>
             <div>
-                <Button onClick={handleCancelButtonClick}>Cancel</Button> &nbsp;
-                <Button onClick={handleSaveButtonClick} disabled={disableSave}>
-                    Save
+                <Button variant="secondary" onClick={handleCancelButtonClick}>
+                    Cancel
+                </Button>{' '}
+                &nbsp;
+                <Button
+                    variant="primary"
+                    onClick={handleSaveButtonClick}
+                    disabled={disableSave}
+                >
+                    {buttonLabel}
                 </Button>
                 <Modal show={showCancelConfirmation} onHide={cancelAction}>
                     <Modal.Header closeButton>
@@ -105,8 +124,15 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
                         Data entered will be lost.
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={saveProject}>Save</Button>
-                        <Button onClick={deleteEmptyProject}>Discard</Button>
+                        <Button variant="primary" onClick={saveProject}>
+                            Save
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={deleteEmptyProject}
+                        >
+                            Discard
+                        </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

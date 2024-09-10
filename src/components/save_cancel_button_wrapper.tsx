@@ -7,12 +7,10 @@ import { pathToId } from '../utilities/paths_utils'
 import SaveCancelButton from './save_cancel_button'
 
 interface SaveCancelButtonWrapperProps {
-    label: string
     path: string
 }
 
 const SaveCancelButtonWrapper: FC<SaveCancelButtonWrapperProps> = ({
-    label,
     path,
 }) => {
     // Generate an id for the input
@@ -25,7 +23,6 @@ const SaveCancelButtonWrapper: FC<SaveCancelButtonWrapperProps> = ({
                 return (
                     <SaveCancelButton
                         id={docId}
-                        label={label}
                         updateValue={(value: any) =>
                             upsertMetadata(path, value)
                         }

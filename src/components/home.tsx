@@ -4,20 +4,10 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { Tooltip } from 'react-tooltip'
-import {
-    TfiPlus,
-    TfiTrash,
-    TfiPencil,
-    TfiDownload,
-    TfiUpload,
-} from 'react-icons/tfi'
-import StringInputModal from './string_input_modal'
+import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
-import ImportDBDocWrapper from './import_db_doc_wrapper'
-import { exportAsJSONObject } from '../utilities/export_doc_as_json'
-import Menu from './more_menu'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -27,25 +17,11 @@ import Menu from './more_menu'
 const Home: FC = () => {
     const db = new PouchDB(dbName)
     const navigate = useNavigate()
-    const [path, setPath] = useState<string>(window.location.href.split('?')[1])
-    const [sortedProjectList, setSortedProjectList] = useState<any[]>([])
     const [projectList, setProjectList] = useState<any[]>([])
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-    const [modalOpenMap, setModalOpenMap] = useState<{
-        [docId: string]: boolean
-    }>({})
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [selectedProjectToDelete, setSelectedProjectToDelete] = useState('')
     const [selectedProjectNameToDelete, setSelectedProjectNameToDelete] =
         useState('')
-    const downloadFileLink = useRef<HTMLAnchorElement>(null)
-
-    const openAddModal = (): void => {
-        setIsAddModalOpen(true)
-    }
-    const closeAddModal = (): void => {
-        setIsAddModalOpen(false)
-    }
 
     const retrieveProjectInfo = async (): Promise<void> => {
         retrieveProjectDocs(db).then(res => {
@@ -54,34 +30,36 @@ const Home: FC = () => {
         })
     }
 
+    const deleteEmptyProjects = async () => {
+        try {
+            const allDocs: any = await db.allDocs({ include_docs: true })
+
+            const projectDocs: any = allDocs.rows
+                .map((row: { doc: any }) => row.doc)
+                .filter(
+                    (doc: { metadata_: any; type: string }) =>
+                        doc?.type === 'project' &&
+                        doc?.metadata_?.doc_name === '' &&
+                        doc?.metadata_?.status === 'new',
+                )
+
+            for (const doc of projectDocs) {
+                // Remove the empty project document from the database
+                await db.remove(doc)
+            }
+        } catch (error) {
+            // Log any errors that occur during the process
+            //console.error('', error)
+        }
+    }
+
+    useEffect(() => {
+        deleteEmptyProjects()
+    }, [])
+
     useEffect(() => {
         retrieveProjectInfo()
     }, [projectList])
-
-    const validateInput = [
-        {
-            validator: (input: string) => {
-                // Restrict the character set to [a-zA-Z0-9-_#:>]
-                //const regex = /^(?!.*\s\s)[a-zA-Z0-9, \-]{1,64}$/
-                const regex = /^(?![\s-])[a-zA-Z0-9, \-]{1,64}$/
-                return regex.test(input)
-            },
-            errorMsg:
-                'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
-        },
-        {
-            validator: (input: string) => {
-                // Not allow a duplicate with an existing project name
-                const projectNames: string[] = []
-                sortedProjectList.map((key, value) => {
-                    projectNames.push(key)
-                })
-                return !projectNames.includes(input.trim())
-            },
-            errorMsg:
-                'Project name already exists. Please choose a different name.',
-        },
-    ]
 
     const handleAddJob = async () => {
         // adding a new project doc here
@@ -143,10 +121,6 @@ const Home: FC = () => {
         setSelectedProjectNameToDelete(key.metadata_?.doc_name)
     }
 
-    // const handleExport = async (docID: string, projectName: string) => {
-    //     exportAsJSONObject(db, docID, projectName, downloadFileLink)
-    // }
-
     const sortByEditTime = (jobsList: any[]) => {
         const sortedJobsByEditTime = jobsList.sort((a, b) => {
             if (
@@ -163,9 +137,6 @@ const Home: FC = () => {
                 return 0
             }
         })
-        setSortedProjectList(
-            sortedJobsByEditTime.map(doc => doc.metadata_.doc_name),
-        )
     }
 
     const cancelDeleteJob = () => {
@@ -176,27 +147,6 @@ const Home: FC = () => {
     const editAddressDetails = (projectID: string) => {
         navigate('app/' + projectID, { replace: true })
     }
-
-    const handleRenameProject = async (input: string, docId: string) => {
-        try {
-            if (input !== null) {
-                await db.upsert(docId, function (doc: any) {
-                    doc.metadata_.doc_name = input
-                    return doc
-                })
-            }
-            // Refresh the project list after renaming
-            await retrieveProjectInfo()
-        } catch (error) {
-            console.error('Error renaming project doc:', error)
-        }
-    }
-
-    const options = [
-        { url: 'https://example.com/image1.jpg', name: 'Delete' },
-        { url: 'https://example.com/image2.jpg', name: 'Download' },
-    ]
-    let title = 'Projects List'
     let projects_display: any = ''
     if (Object.keys(projectList).length == 0) {
         projects_display = (
@@ -219,11 +169,7 @@ const Home: FC = () => {
                     For reporting to the state
                 </p>
                 <div className="button-container-center" key={0}>
-                    <Button
-                        className="add-project submit-button"
-                        onClick={handleAddJob}
-                        alt-text="Add a New Project"
-                    >
+                    <Button onClick={handleAddJob} alt-text="Add a New Project">
                         Add a New Project
                     </Button>
                     <Tooltip anchorSelect=".add-project" place="top">
@@ -236,22 +182,15 @@ const Home: FC = () => {
         projects_display = [
             <div key={0}>
                 <div className="button-container-right">
-                    <Button
-                        className="add-project submit-button"
-                        onClick={handleAddJob}
-                        alt-text="Add a New Project"
-                    >
+                    <Button onClick={handleAddJob} alt-text="Add a New Project">
                         Add a New Project
                     </Button>
-                    {/* <Tooltip anchorSelect=".add-project" place="top">
-                        Add a New Project
-                    </Tooltip> */}
                 </div>
                 <br />
                 <br />
             </div>,
             projectList.map((key, value) => (
-                <div>
+                <div key={key._id}>
                     <ListGroup key={key._id} className="padding">
                         <LinkContainer
                             key={key}
@@ -262,7 +201,7 @@ const Home: FC = () => {
                                     {/* <Menu options={options} /> */}
 
                                     <Button
-                                        className="edit transparent-button"
+                                        variant="light"
                                         onClick={event => {
                                             event.stopPropagation()
                                             event.preventDefault()
@@ -278,11 +217,10 @@ const Home: FC = () => {
                                         Edit
                                     </Tooltip>
                                     <Button
-                                        className="delete transparent-button"
+                                        variant="light"
                                         onClick={event =>
                                             handleDelete(event, key)
                                         }
-                                        variant="danger"
                                     >
                                         <TfiTrash />
                                     </Button>
@@ -292,25 +230,6 @@ const Home: FC = () => {
                                     >
                                         Delete
                                     </Tooltip>
-                                    {/* <Button
-                                        className="download transparent-button"
-                                        onClick={event => {
-                                            event.stopPropagation()
-                                            event.preventDefault()
-                                            handleExport(
-                                                key._id,
-                                                key.metadata_?.doc_name,
-                                            )
-                                        }}
-                                    >
-                                        <TfiDownload />
-                                    </Button>
-                                    <Tooltip
-                                        anchorSelect=".download"
-                                        place="bottom"
-                                    >
-                                        Download
-                                    </Tooltip> */}
                                 </span>
                                 <b>{key.metadata_?.doc_name}</b>
                                 {key.data_?.location?.street_address && (
@@ -333,22 +252,6 @@ const Home: FC = () => {
                                 )}
                             </ListGroup.Item>
                         </LinkContainer>
-                        <StringInputModal
-                            isOpen={modalOpenMap[key._id] || false}
-                            closeModal={() => {
-                                setModalOpenMap(prevState => ({
-                                    ...prevState,
-                                    [key._id]: false,
-                                }))
-                            }}
-                            onSubmit={input =>
-                                handleRenameProject(input, key._id)
-                            }
-                            validateInput={validateInput}
-                            title="Enter new project name"
-                            okButton="Rename"
-                            value={key.metadata_?.doc_name}
-                        />
                     </ListGroup>
                 </div>
             )),
@@ -370,15 +273,6 @@ const Home: FC = () => {
                     </a>
                 </p>
             </center>
-            <StringInputModal
-                isOpen={isAddModalOpen}
-                closeModal={closeAddModal}
-                onSubmit={handleAddJob}
-                validateInput={validateInput}
-                title="Enter new project name"
-                okButton="Add"
-                value=""
-            />
             <Modal show={showDeleteConfirmation} onHide={cancelDeleteJob}>
                 <Modal.Header closeButton>
                     <Modal.Title>Confirm Delete</Modal.Title>
