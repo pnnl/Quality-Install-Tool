@@ -24,6 +24,7 @@ interface TemplatesConfig {
 
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
+// Add workflow templates for 'quality-install-tool'
 const templatesConfig: TemplatesConfig = {
     doe_workflow_attic_air_sealing: {
         title: 'Attic Air Sealing',
@@ -49,6 +50,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'Electric Load Service Center',
         template: DOEWorkflowElectricLoadServiceTemplate,
     },
+    doe_workflow_full_frame_replacement_windows: {
+        title: 'Full Frame Replacement Windows',
+        template: DOEWorkflowFullFrameReplacementWindows,
+    },
     doe_workflow_central_ducted_split_heat_pump: {
         title: 'Heat Pump Ducted',
         template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
@@ -65,17 +70,13 @@ const templatesConfig: TemplatesConfig = {
         title: 'High Efficiency Gas Furnace',
         template: DOEWorkflowHighEfficiencyGasFurnace,
     },
-    doe_workflow_high_efficiency_water_heater: {
-        title: 'High Efficiency Water Heater',
-        template: DOEWorkflowHighEfficiencyWaterHeater,
-    },
     doe_workflow_high_efficiency_modulating_boiler: {
         title: 'High Efficiency Modulating Boiler',
         template: DOEWorkflowHighEfficiencyModulatingBoiler,
     },
-    doe_workflow_full_frame_replacement_windows: {
-        title: 'Full Frame Replacement Windows',
-        template: DOEWorkflowFullFrameReplacementWindows,
+    doe_workflow_high_efficiency_water_heater: {
+        title: 'High Efficiency Water Heater',
+        template: DOEWorkflowHighEfficiencyWaterHeater,
     },
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
