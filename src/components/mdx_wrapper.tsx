@@ -28,7 +28,6 @@ import PDFRendererWrapper from './pdf_renderer_wrapper'
 import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
 import DocNameInputWrapper from './doc_name_input_wrapper'
-import DocNameInput from './doc_name_input'
 import SaveCancelButtonWrapper from './save_cancel_button_wrapper'
 
 const components = {

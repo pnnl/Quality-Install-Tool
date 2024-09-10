@@ -254,36 +254,7 @@ h1 + h3 {
 }
 
 
-/* Primary Button */
-.btn-primary {
-  color: #fff; /* Text color */
-  background-color: #006100; /* Base background color */
-  border: 2px solid #006100; /* Base border color */
-  cursor: pointer; /* Pointer cursor on hover */
-  text-align: center; /* Centered text */
-  text-decoration: none; /* Remove underline */
-  display: inline-block; /* Inline block for alignment */
-  transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-  outline: none; /* Remove default outline */
-}
-
-.btn-primary:hover, 
-.btn-primary:active, 
-.btn-primary:focus, 
-.btn-primary:focus-visible, 
-.btn-primary:focus-within {
-  background-color: #004d00; /* Darker background on hover and focus */
-  border-color: #004d00; /* Darker border on hover and focus */
-}
-
-.btn-primary:disabled {
-  background-color: #4caf50; /* Disabled background color */
-  border-color: #4caf50; /* Disabled border color */
-  cursor: not-allowed; /* Not-allowed cursor on disabled */
-  opacity: 0.6; /* Optional: visually indicate disabled state */
-}
-
-/* Primary Button */
+/* Primary Button - with background color */
 .btn-primary {
   color: #fff; /* Text color */
   background-color: #006100; /* Base background color */
@@ -312,7 +283,8 @@ h1 + h3 {
   opacity: 0.6; 
 }
 
-.btn-primary:not(:disabled):not(.disabled):active,
+/* Outline Primary Button - only outline */
+.btn-outline-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff; 
@@ -320,11 +292,39 @@ h1 + h3 {
   border-color:  #005f00; 
 }
 
-.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
 .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
   box-shadow: none
 }
+
+.btn-outline-primary{
+  background-color: transparent;
+  cursor: pointer; 
+  border: 2px solid #006100;
+  color: #006100; 
+
+}
+
+.btn-outline-primary:hover{
+  background-color: transparent; 
+  color: #006100; 
+  border-color: #006100;
+}
+
+
+/* Light Button - for Icons */
+.btn-light {
+  background-color: transparent;
+  border-color: transparent;
+  color: #000000;
+}
+btn-light:active,
+btn-light:hover {
+  box-shadow: none;
+}
+
+
 .welcome-header {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -332,6 +332,7 @@ h1 + h3 {
   font-size: 28px;
   font-weight: bold;
 }
+
 
 .welcome-content {
   padding-left: 1.5rem;
@@ -349,21 +350,4 @@ h1 + h3 {
     font-size: 12px;
     font-weight: bold;
   }
-}
-
-
-
-.btn-light {
-  background-color: transparent;
-  border-color: transparent;
-  color: #000000;
-}
-btn-light:active,
-btn-light:hover {
-  box-shadow: none;
-}
-
-.three-dots:after {
-  content: "\2807";
-  font-size: 30px;
 }

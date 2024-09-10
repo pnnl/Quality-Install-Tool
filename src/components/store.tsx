@@ -253,7 +253,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             toPath(pathStr) as NonEmptyArray<string>,
             data,
         )
-        if (pathStr === 'data_.doc_name') newDoc.metadata_.doc_name = data
         setDoc(newDoc)
 
         // Persist the doc
