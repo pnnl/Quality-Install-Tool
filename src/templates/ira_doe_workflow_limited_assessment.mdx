@@ -1,0 +1,42 @@
+<Tabs>
+<Tab eventKey="assessment" title="Assessment">
+
+<StringInput label="Assessment date" path="assessment_date" />
+
+<StringInput label="Year building was built" path="year_built" />
+
+<NumberInput label="Conditioned floor area" path="conditioned_floor_area_sq_ft" />
+
+<NumberInput label="Electrical panel max amps" path="electrical_panel_max_amps" min="30" hint="Only required if adding electrical load."/>
+
+<Select label="Envelope is professionally air sealed" path="envelope_professionally_air_sealed" options={["DO_NOT_KNOW", "NO", "YES"]} />
+
+<Select label="Ceiling insulation type" path="ceiling_insulation_type" options={["BATT", "BLOWN_IN", "CLOSED_CELL_SPRAY_FOAM", "DO_NOT_KNOW", "NONE", "RIGID_BOARD"]} />
+
+<Select label="Is ceiling insulation R-value knwon?" path="is_ceiling_insulation_r_value_known" options={["NO", "YES"]} />
+
+{props.data.is_ceiling_insulation_r_value_known === "YES"
+  ? <NumberInput label="Ceiling insulation R-value" path="ceiling_insulation_r_value" />
+  : null
+}
+
+<Select label="Ducts are sealed" path="ducts_are_sealed" options={["DO_NOT_KNOW", "NA", "NO", "YES"]} />
+
+<Select label="Ducts are insulated" path="ducts_are_insulated" options={["DO_NOT_KNOW", "NA", "NO", "YES"]} />
+
+<Select label="Whole home ventilation system type" path="whole_home_ventilation_system_type" options={["BALANCED", "CFIS", "ERV", "EXHAUST", "HRV", "NONE", "SUPPLY"]} />
+
+<Select label="Is whole home ventilation system rated flow CFM known?" path="is_whole_home_ventilation_system_rated_flow_cfm_known" options={["NO", "YES"]} />
+
+{props.data.is_whole_home_ventilation_system_rated_flow_cfm_known === "YES"
+  ? <NumberInput label="Whole home ventilation system rated flow (CFM)" path="whole_home_ventilation_system_rated_flow_cfm" min="0" />
+  : null
+}
+
+</Tab>
+
+<Tab eventKey="report" title="Report">
+A Report Goes Here
+</Tab>
+
+</Tabs>
