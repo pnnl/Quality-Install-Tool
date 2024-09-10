@@ -69,7 +69,6 @@ const DocNameInput: FC<DocNameInputProps> = ({
 
     useEffect(() => {
         const projectNames = projectList.map(doc => doc.metadata_.doc_name)
-        console.log(initialValue, inputValue)
         if (
             (value === undefined && projectNames.length === 0) ||
             initialValue === inputValue
@@ -91,7 +90,6 @@ const DocNameInput: FC<DocNameInputProps> = ({
         const isValid_result = validateInput.every(validator =>
             validator.validator(input, projectNames),
         )
-        console.log(input, isValid_result)
         setIsValid(isValid_result)
         if (isValid_result) {
             updateValue(input)
