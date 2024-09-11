@@ -3,14 +3,15 @@ import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.md
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
 import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
-import IRADOEWorkflowHPWHTemplate from './ira_doe_workflow_hpwh.mdx'
-import IRADOEWorkflowDuctlessHeatPumpTemplate from './ira_doe_workflow_ductless_heat_pump.mdx'
-import IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate from './ira_doe_workflow_central_ducted_split_heat_pump.mdx'
-import IRADOEWorkflowHighEfficiencyGasFurnace from './ira_doe_workflow_high_efficiency_gas_furnace.mdx'
-import IRADOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_efficiency_water_heater.mdx'
-import IRADOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
-import IRADOEWorkflowFullFrameReplacementWindows from './ira_doe_workflow_full_frame_replacement_windows.mdx'
-import IRADOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
+import DOEWorkflowDuctAirSealTemplate from './ira_doe_workflow_duct_air_sealing_and_insulation.mdx'
+import DOEWorkflowElectricCookTemplate from './ira_doe_workflow_electric_cooking_appliance.mdx'
+import DOEWorkflowElectricWiringTemplate from './ira_doe_workflow_electric_wiring.mdx'
+import DOEWorkflowElectricLoadServiceTemplate from './ira_doe_workflow_electric_load_service_center.mdx'
+import DOEWorkflowHighEfficiencyGasFurnace from './ira_doe_workflow_high_efficiency_gas_furnace.mdx'
+import DOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_efficiency_water_heater.mdx'
+import DOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
+import DOEWorkflowFullFrameReplacementWindows from './ira_doe_workflow_full_frame_replacement_windows.mdx'
+import DOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
 
 import { MDXProps } from 'mdx/types'
 
@@ -24,7 +25,7 @@ interface TemplatesConfig {
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
 // Add workflow templates for 'quality-install-tool'
-const GENERAL_WORKFLOW_TEMPLATES = {
+const templatesConfig: TemplatesConfig = {
     doe_workflow_attic_air_sealing: {
         title: 'Attic Air Sealing',
         template: DOEWorkflowAtticAirSealTemplate,
@@ -32,6 +33,26 @@ const GENERAL_WORKFLOW_TEMPLATES = {
     doe_workflow_attic_insulation: {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
+    },
+    doe_workflow_duct_air_sealing: {
+        title: 'Duct Air Sealing and Insulation',
+        template: DOEWorkflowDuctAirSealTemplate,
+    },
+    doe_workflow_electric_cooking_appliances: {
+        title: 'Electric Cooking Appliances',
+        template: DOEWorkflowElectricCookTemplate,
+    },
+    doe_workflow_electric_wiring: {
+        title: 'Electric Wiring',
+        template: DOEWorkflowElectricWiringTemplate,
+    },
+    doe_workflow_electric_load_service_center: {
+        title: 'Electric Load Service Center',
+        template: DOEWorkflowElectricLoadServiceTemplate,
+    },
+    doe_workflow_full_frame_replacement_windows: {
+        title: 'Full Frame Replacement Windows',
+        template: DOEWorkflowFullFrameReplacementWindows,
     },
     doe_workflow_central_ducted_split_heat_pump: {
         title: 'Heat Pump Ducted',
@@ -45,74 +66,23 @@ const GENERAL_WORKFLOW_TEMPLATES = {
         title: 'Heat Pump Water Heater',
         template: DOEWorkflowHPWHTemplate,
     },
-}
-
-// Add workflow templates for 'ira-quality-install-tool'
-const IRA_WORKFLOW_TEMPLATES = {
-    ira_doe_workflow_central_ducted_split_heat_pump: {
-        title: 'IRA - Heat Pump Ducted',
-        template: IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+    doe_workflow_high_efficiency_gas_furnace: {
+        title: 'High Efficiency Gas Furnace',
+        template: DOEWorkflowHighEfficiencyGasFurnace,
     },
-    ira_doe_workflow_ductless_heat_pump: {
-        title: 'IRA - Heat Pump Ductless',
-        template: IRADOEWorkflowDuctlessHeatPumpTemplate,
+    doe_workflow_high_efficiency_modulating_boiler: {
+        title: 'High Efficiency Modulating Boiler',
+        template: DOEWorkflowHighEfficiencyModulatingBoiler,
     },
-    ira_doe_workflow_hpwh: {
-        title: 'IRA - Heat Pump Water Heater',
-        template: IRADOEWorkflowHPWHTemplate,
+    doe_workflow_high_efficiency_water_heater: {
+        title: 'High Efficiency Water Heater',
+        template: DOEWorkflowHighEfficiencyWaterHeater,
     },
-    ira_doe_workflow_high_efficiency_gas_furnace: {
-        title: 'IRA - High Efficiency Gas Furnace',
-        template: IRADOEWorkflowHighEfficiencyGasFurnace,
-    },
-    ira_doe_workflow_high_efficiency_water_heater: {
-        title: 'IRA - High Efficiency Water Heater',
-        template: IRADOEWorkflowHighEfficiencyWaterHeater,
-    },
-    ira_doe_workflow_high_efficiency_modulating_boiler: {
-        title: 'IRA - High Efficiency Modulating Boiler',
-        template: IRADOEWorkflowHighEfficiencyModulatingBoiler,
-    },
-    ira_doe_workflow_full_frame_replacement_windows: {
-        title: 'IRA - Full Frame Replacement Windows',
-        template: IRADOEWorkflowFullFrameReplacementWindows,
-    },
-    ira_doe_workflow_insert_replacement_windows: {
-        title: 'IRA - Insert Replacement Windows',
-        template: IRADOEWorkflowInsertReplacementWindows,
+    doe_workflow_insert_replacement_windows: {
+        title: 'Insert Replacement Windows',
+        template: DOEWorkflowInsertReplacementWindows,
     },
 }
-
-/**
- * Configure and render workflow templates based on the deployment environment configured in AWS S3 or local development.
- *
- * When deploying the application to AWS S3, the environment variable 'REACT_APP_ENV'
- * is set to 'quality-install-tool' or 'ira-quality-install-tool' for the respective applications.
- *
- * In local development, the 'REACT_APP_ENV' environment variable can be set directly in the 'package.json'
- * under the start script, as shown below:
- *
- * ```
- * "scripts": {
- *   "start": "HTTPS=true REACT_APP_ENV=ira-quality-install-tool node scripts/start.js",
- *   ...
- * }
- * ```
- *
- * The environment variable 'REACT_APP_ENV' is accessed in code using the `process.env` object,
- * which will be populated with the specified value ('quality-install-tool' or 'ira-quality-install-tool')
- * during the build process or local development startup.
- *
- * The `templatesConfig` constant determines which set of workflow templates (`GENERAL_WORKFLOW_TEMPLATES`
- * or `IRA_WORKFLOW_TEMPLATES`) to use based on the value of `process.env.REACT_APP_ENV`.
- *
- * The respective environments ('quality-install-tool' or 'ira-quality-install-tool').
- */
-
-const templatesConfig: TemplatesConfig =
-    process.env.REACT_APP_ENV === 'quality-install-tool'
-        ? GENERAL_WORKFLOW_TEMPLATES
-        : IRA_WORKFLOW_TEMPLATES
 
 // Assuming TemplatesConfig is defined somewhere as a type or interface
 

@@ -14,6 +14,7 @@ interface PhotoWrapperProps {
     required: boolean
     docId: string
     project?: any
+    fromParent?: boolean
 }
 
 /**
@@ -34,18 +35,25 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     id,
     label,
     required,
+    docId,
     project,
+    fromParent,
 }) => {
-    const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
+    const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
+    const [projectDoc, setProjectDoc] = useState<any>(project)
 
-    if (id === 'building_number_photo') {
+    if (fromParent) {
+        const projectDocId = project?._id ? project?._id : docId
+        new PouchDB(dbName).get(projectDocId).then(res => {
+            setProjectDoc(res)
+        })
         new PouchDB(dbName)
-            .getAttachment(project?._id, id)
+            .getAttachment(docId, id)
             .then(res => {
-                setBuildingPhotoBlob(res)
+                setPhotoBlob(res)
             })
             .catch(err => {
-                /* Building number photo not present */
+                /* Error occurs when photo not found */
             })
     }
 
@@ -57,14 +65,26 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                     id,
                 )?.value
 
-                const photo =
-                    id === 'building_number_photo'
-                        ? buildingPhotoBlob
-                        : attachment?.blob
-                const metadata =
-                    id === 'building_number_photo'
-                        ? project?.metadata_?.attachments[id]
-                        : attachment?.metadata
+                const photo = fromParent ? photoBlob : attachment?.blob
+
+                let metadata = attachment?.metadata
+
+                if (fromParent) {
+                    const attachmentIdParts = id.split('.')
+
+                    if (attachmentIdParts.length > 1) {
+                        // Access nested attachment metadata using the split parts
+                        const [firstPart, secondPart, thirdPart] =
+                            attachmentIdParts
+                        metadata =
+                            projectDoc?.metadata_?.attachments[firstPart]?.[
+                                secondPart
+                            ]?.[thirdPart]
+                    } else {
+                        // Directly access attachment metadata if there's no nesting
+                        metadata = projectDoc?.metadata_?.attachments[id]
+                    }
+                }
 
                 return (
                     <Photo
