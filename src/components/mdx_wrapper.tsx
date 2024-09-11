@@ -1,6 +1,6 @@
 import React from 'react'
 import type { FC } from 'react'
-
+import Button from 'react-bootstrap/Button'
 import Collapsible from './collapsible'
 import DateInputWrapper from './date_input_wrapper'
 import FigureWrapper from './figure_wrapper'
@@ -28,13 +28,15 @@ import PDFRendererWrapper from './pdf_renderer_wrapper'
 import ShowOrHide from './show_or_hide'
 import Select from './select_wrapper'
 import CheckBoxWrapper from './checkbox_wrapper'
-import CombustionApplianceSafetyTests from './combustion_appliance_safety_tests'
-import ButtonLinkWrapper from './buttonlink_wrapper'
+import CombustionSafetyChecks from './combustion_safety_checks'
+import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
+import Repeatable from './repeatable'
 
 const components = {
     Collapsible,
     ClimateZoneSelect: ClimateZoneSelectWrapper,
     CheckBox: CheckBoxWrapper,
+    Button: Button,
     DateInput: DateInputWrapper,
     Figure: FigureWrapper,
     NumberInput: NumberInputWrapper,
@@ -56,8 +58,9 @@ const components = {
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
-    CombustionApplianceSafetyTests: CombustionApplianceSafetyTests,
-    ButtonLink: ButtonLinkWrapper,
+    CombustionSafetyChecks: CombustionSafetyChecks,
+    CombustionSafetyChecksLink: CombustionSafetyChecksLink,
+    Repeatable: Repeatable,
 }
 
 interface MdxWrapperProps {

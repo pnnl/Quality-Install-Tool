@@ -20,8 +20,6 @@ const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({
     path,
     index,
 }) => {
-
-    console.log('Here', path, appliance_key)
     return (
         <>
             <RadioWrapper
@@ -53,69 +51,69 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
 }) => {
     console.log('ApplianceSafetyTestFurnaceBoiler', path, appliance_key)
     return (
-    <>
-        <PhotoInputWrapper
+        <>
+            <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_appliance_photo`}
-            label="Space Heating Appliance - Photo "
-            uploadable={false}
-        >
-            Visually inspect the combustion heating appliance, comment on any
-            evidence of unsafe conditions.
-        </PhotoInputWrapper>
-        <PhotoInputWrapper
+                label="Space Heating Appliance - Photo "
+                uploadable={false}
+            >
+                Visually inspect the combustion heating appliance, comment on
+                any evidence of unsafe conditions.
+            </PhotoInputWrapper>
+            <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_pipe_connection_leak_check_photo`}
-            label="Pipe Connection Leak Check - Photo"
-            uploadable={false}
-        >
-            * Inspect the accessible section of gas piping, check all accessible
-            joints with combustion gas detector, confirm leaks with bubble
-            solution, comment if any found * Inspect oil supply system, check
-            all accessible tank and line components, comment on any leaks or
-            safety issues
-        </PhotoInputWrapper>
-        <RadioWrapper
-            label="Does the gas leak detection test pass?"
-            options={['Passed', 'Failed', 'Warning', 'N/A']}
+                label="Pipe Connection Leak Check - Photo"
+                uploadable={false}
+            >
+                * Inspect the accessible section of gas piping, check all
+                accessible joints with combustion gas detector, confirm leaks
+                with bubble solution, comment if any found * Inspect oil supply
+                system, check all accessible tank and line components, comment
+                on any leaks or safety issues
+            </PhotoInputWrapper>
+            <RadioWrapper
+                label="Does the gas leak detection test pass?"
+                options={['Passed', 'Failed', 'Warning', 'N/A']}
                 path={`${path}.${appliance_key}.space_heating_gas_leak_detection_test`}
-        />
-        <PhotoInputWrapper
+            />
+            <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_appliance_vent_photo`}
-            label="Space heating Appliance Vent - Photo"
-            uploadable={false}
-        >
-            Visually inspect the venting system, comment if there is an unsafe
-            configuration
-        </PhotoInputWrapper>
-        <PhotoInputWrapper
+                label="Space heating Appliance Vent - Photo"
+                uploadable={false}
+            >
+                Visually inspect the venting system, comment if there is an
+                unsafe configuration
+            </PhotoInputWrapper>
+            <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_appliance_draft_photo`}
-            label="Space heating Appliance Draft – Photo"
-            uploadable={false}
-        >
-            Perform test under ANSI/BPI-1200-S-2017 depressurization conditions
-            if the appliance is inside the pressure boundary.
-        </PhotoInputWrapper>
-        <RadioWrapper
-            label="Does the spillage test(s) pass?"
-            options={['Passed', 'Warning', 'N/A']}
+                label="Space heating Appliance Draft – Photo"
+                uploadable={false}
+            >
+                Perform test under ANSI/BPI-1200-S-2017 depressurization
+                conditions if the appliance is inside the pressure boundary.
+            </PhotoInputWrapper>
+            <RadioWrapper
+                label="Does the spillage test(s) pass?"
+                options={['Passed', 'Warning', 'N/A']}
                 path={`${path}.${appliance_key}.space_heating_spillage_test`}
-        />
-        <PhotoInputWrapper
+            />
+            <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_appliance_co_measurement_photo`}
-            label="Space heating Appliance CO measurement – Photo "
-            uploadable={false}
-        >
-            * Perform test under ANSI/BPI-1200-S-2017 depressurization
-            conditions if the appliance is inside the pressure boundary. *
-            Comment if CO levels are above the 200 PPM air free threshold limit.
-            * Provide a combustion analyzer readout photo.
-        </PhotoInputWrapper>
-        <RadioWrapper
-            label="Does the undiluted CO test pass?"
-            options={['Passed', 'Failed', 'Warning', 'N/A']}
+                label="Space heating Appliance CO measurement – Photo "
+                uploadable={false}
+            >
+                * Perform test under ANSI/BPI-1200-S-2017 depressurization
+                conditions if the appliance is inside the pressure boundary. *
+                Comment if CO levels are above the 200 PPM air free threshold
+                limit. * Provide a combustion analyzer readout photo.
+            </PhotoInputWrapper>
+            <RadioWrapper
+                label="Does the undiluted CO test pass?"
+                options={['Passed', 'Failed', 'Warning', 'N/A']}
                 path={`${path}.${appliance_key}.space_heating_undiluted_CO_test`}
-        />{' '}
-    </>
-)
+            />{' '}
+        </>
+    )
 }
 
 // Gas/Oil Water Heater - Photo prompts and test status questions
@@ -189,11 +187,12 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
     </>
 )
 
-const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
-    const [appliances, setAppliances] = useState<any>({})
+const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
+    const [appliances, setAppliances] = useState<any>({ ['A1']: {} })
     const [appliancesKey, setAppliancesKey] = useState<any[]>(
         Object.keys(appliances),
     )
+    const allowedApplianceKeys = ['A1', 'A2', 'A3', 'A4']
     const { projectId } = useParams()
     const db = new PouchDB(dbName)
 
@@ -204,9 +203,11 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
         }
         try {
             const res: any = await db.get(projectId)
-            const appliances_data = res.data_[path] || []
-            setAppliances(appliances_data)
-            setAppliancesKey(Object.keys(appliances_data))
+            const appliances_data = res.data_[path]
+            if (appliances_data && Object.keys(appliances_data).length > 0) {
+                setAppliances(appliances_data)
+                setAppliancesKey(Object.keys(appliances_data))
+            }
         } catch (err) {
             console.error('Failed to fetch appliances:', err)
         }
@@ -237,24 +238,28 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
 
     // Handler to add a new appliance form
     const addAppliance = () => {
-        const index = appliancesKey.length + 1
+        const key_index = allowedApplianceKeys.find(
+            key => !appliancesKey.includes(key),
+        )
+        if (!key_index) {
+            console.error('No available key index found.')
+            return
+        }
         setAppliances((prev: any) => ({
             ...prev,
-            [index]: {},
+            [key_index]: {},
         }))
-        setAppliancesKey(Object.keys(appliances))
-        console.log(appliances, index)
+        setAppliancesKey((prev: any) => [...prev, key_index])
     }
 
     // Handler to remove an appliance form
     const removeAppliance = async (appliance_key: string) => {
         const updatedAppliances = Object.fromEntries(
             Object.entries(appliances).filter(
-                ([key, appliance]) => key !== appliance_key,
+                ([key, _]) => key !== appliance_key,
             ),
         )
 
-        console.log(appliance_key, updatedAppliances)
         if (!projectId) {
             console.error('projectId is undefined')
             return
@@ -264,6 +269,8 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
             const doc: any = await db.get(projectId)
             const updatedData = { ...doc.data_, [path]: updatedAppliances }
 
+            const attachments = doc._attachments
+
             // Prepare the updated document
             const updatedDoc = {
                 ...doc,
@@ -271,8 +278,19 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
                 _rev: doc._rev, // Ensure you include the latest revision
             }
 
-            // Save the updated document back to the database
-            await db.put(updatedDoc)
+            // Remove the attachments, if any
+            Object.keys(attachments).map(attachmentId => {
+                if (
+                    attachmentId.includes(path + '.' + appliance_key) &&
+                    doc._attachments[attachmentId]
+                ) {
+                    delete doc._attachments[attachmentId]
+                }
+            })
+            if (updatedDoc)
+                // Save the updated document back to the database
+                await db.put(updatedDoc)
+
             fetchAppliances() // Update state after successful removal
         } catch (err) {
             console.error('Failed to remove appliance:', err)
@@ -281,56 +299,70 @@ const CombustionApplianceSafetyTests: FC<{ path: string }> = ({ path }) => {
 
     return (
         <div>
-            {appliancesKey.map((appliance_key: string, index: number) => (
-                <div key={appliance_key}>
-                    <Collapsible header={index}>
-                        <div className="combustion_tests">
-                            <ApplianceSafetyTest
-                                appliance_key={appliance_key}
-                                path={path}
-                            />
-                            <ShowOrHide
-                                visible={
-                                    appliances[appliance_key]?.name ===
-                                    'Gas/Oil Water Heater'
-                                }
-                            >
-                                <ApplianceSafetyTestWaterHeater
+            {appliancesKey &&
+                appliancesKey.map((appliance_key: string, index: number) => (
+                    <div key={appliance_key}>
+                        <Collapsible
+                            header={`Appliance: ${
+                                appliances[appliance_key]?.name
+                                    ? appliances[appliance_key]?.name
+                                    : ''
+                            }`}
+                        >
+                            <div className="combustion_tests">
+                                <ApplianceSafetyTest
                                     appliance_key={appliance_key}
                                     path={path}
                                 />
-                            </ShowOrHide>
-                            <ShowOrHide
-                                visible={
-                                    appliances[appliance_key]?.name ===
-                                    'Gas/Oil Furnace/Boiler'
-                                }
-                            >
-                                <ApplianceSafetyTestFurnaceBoiler
-                                    appliance_key={appliance_key}
-                                    path={path}
-                                />
-                            </ShowOrHide>
-                        </div>
+                                <ShowOrHide
+                                    visible={
+                                        appliances[appliance_key]?.name ===
+                                        'Gas/Oil Water Heater'
+                                    }
+                                >
+                                    <ApplianceSafetyTestWaterHeater
+                                        appliance_key={appliance_key}
+                                        path={path}
+                                    />
+                                </ShowOrHide>
+                                <ShowOrHide
+                                    visible={
+                                        appliances[appliance_key]?.name ===
+                                        'Gas/Oil Furnace/Boiler'
+                                    }
+                                >
+                                    <ApplianceSafetyTestFurnaceBoiler
+                                        appliance_key={appliance_key}
+                                        path={path}
+                                    />
+                                </ShowOrHide>
+                            </div>
 
-                        <div>
-                            <Button
-                                onClick={() => removeAppliance(appliance_key)}
-                                className="remove-button"
-                            >
-                                Remove Appliance
-                            </Button>
-                        </div>
-                        <div>&nbsp;</div>
-                    </Collapsible>                    
-                </div>
-
-            ))}
-            <Button onClick={() => addAppliance()} className="padding">
-                Add more Appliance
-            </Button>
+                            <div>
+                                <Button
+                                    onClick={() =>
+                                        removeAppliance(appliance_key)
+                                    }
+                                    className="remove-button"
+                                >
+                                    Remove Appliance
+                                </Button>
+                            </div>
+                            <div>&nbsp;</div>
+                        </Collapsible>
+                    </div>
+                ))}
+            {appliancesKey.length < 4 && (
+                <Button
+                    variant="primary"
+                    onClick={() => addAppliance()}
+                    className="padding"
+                >
+                    Add more Appliance
+                </Button>
+            )}
         </div>
     )
 }
 
-export default CombustionApplianceSafetyTests
+export default CombustionSafetyChecks

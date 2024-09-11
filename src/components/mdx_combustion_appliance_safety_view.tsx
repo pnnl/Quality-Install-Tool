@@ -34,18 +34,18 @@ const MdxCombustionSafetyView: FC = () => {
             dbName={dbName}
             docId={projectId as string}
             workflowName=""
-            docName={projectDoc.metadata_?.doc_name}
+            docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <h1>{projectDoc.metadata_?.doc_name}</h1>
+            <h1>{projectDoc?.metadata_?.doc_name}</h1>
             <h3>
-                {projectDoc.data_?.location?.street_address}&nbsp;
-                {projectDoc.data_?.location?.city}
+                {projectDoc?.data_?.location?.street_address}&nbsp;
+                {projectDoc?.data_?.location?.city}
             </h3>
             <center>
                 <h3>
-                    {projectDoc.data_?.location?.state}&nbsp;
-                    {projectDoc.data_?.location?.zip_code}
+                    {projectDoc?.data_?.location?.state}&nbsp;
+                    {projectDoc?.data_?.location?.zip_code}
                 </h3>
             </center>
             <MdxWrapper

@@ -61,11 +61,7 @@
 
         <StringInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
         
-        ## Combustion Appliance Safety Testing
-        If the home upgrades will result in a barometric draft controlled or Category I appliances equipped with a draft 
-        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
-        safety checks are required to be performed at the completion of the project. 
-        <ButtonLink href={`/app/${props.project._id}/combustion_safety`} label='Document Tests'/>
+        <CombustionSafetyChecksLink {...props} />
         
         <StringInput  label="Summary Comment" path="comment_summary" />
     </Tab>
