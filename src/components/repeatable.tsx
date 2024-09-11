@@ -44,6 +44,16 @@ function generateKeys(n: number) {
  * @param {boolean} [fixed=true] - If true, prevents adding or removing items.
  *
  * @returns {JSX.Element} The rendered component.
+ * 
+ * 
+ * Example usage; Repeats the components fixed {count} number of times
+ * 
+ *  <Repeatable label='cc_test' max="3" count="3" path="user_information" fixed>  
+ *       <div>Enter your Information</div>
+ *       <StringInput path="name" label="Please enter a name"/>
+ *       <Radio path="work_location" label="Please Choose" options={['Home', 'Office']} />
+ *  </Repeatable>
+ * 
  */
 
 /** */
@@ -216,7 +226,7 @@ const Repeatable: FC<RepeatableProps> = ({
                                         onClick={() => removeAnItem(item_key)}
                                         className="remove-button"
                                     >
-                                        Remove Appliance
+                                        Remove Item
                                     </Button>
                                 )}
                             </div>
@@ -230,7 +240,7 @@ const Repeatable: FC<RepeatableProps> = ({
                     onClick={() => addNewItem()}
                     className="padding"
                 >
-                    Add more Appliance
+                    Add more Item
                 </Button>
             )}
         </div>

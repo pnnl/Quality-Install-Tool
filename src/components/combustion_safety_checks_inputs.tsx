@@ -290,12 +290,16 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
                 // Save the updated document back to the database
                 await db.put(updatedDoc)
 
-            fetchAppliances() // Update state after successful removal
+            if (updatedAppliances)
+                setAppliances(updatedAppliances)
+            else
+                setAppliances({ ['A1']: {} })
+            setAppliancesKey(Object.keys(updatedAppliances))
+
         } catch (err) {
             console.error('Failed to remove appliance:', err)
         }
     }
-
     return (
         <div>
             {appliancesKey &&
