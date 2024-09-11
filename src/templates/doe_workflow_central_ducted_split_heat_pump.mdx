@@ -106,15 +106,21 @@
         <StringInput label="Manual J Notes or Comments" path="comment_manual_j" />
         
         ## Equipment Performance Tables
+        You are encouraged to use the <a href="#" target="__new__">Cold Climate Heat Pump Decision Tool</a> which 
+        can help assist in selecting the right heat pump for this home. The Cold Climate Heat Pump Decision Tool will 
+        make use of the Manual J load values and the duct air flow capability test result data.  
+
         <Collapsible header="Equipment Selection Details">
             Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or 
-            alternate load sizing method, and the decided percent load which the heat pump will cover.
- 
-            These decisions depend on knowing the equipment’s performance at specific temperatures. Reference the manufacturer’s 
-            extended performance tables and/or the NEEP Cold Climate Air Source Heat Pump List. Factor in auxiliary heat, 
-            or dual fuel into the equipment selection as applicable. If the existing ducts can only accommodate a heat pump 
-            below the size that is needed, discuss with the customer the option of upgrading the ducts versus supplementing 
-            the central heat pump with one or more ductless heat pumps. Please add a comment recording the decisions made.
+            alternate load sizing method such as sizing the equipment to the air flow capability of the ducts if it is less 
+            than the Manual J loads. The Cold Climate Heat Pump Decision Tool will recommend equipment sized to the capability of the ducts.
+            
+            Equipment selection also depends on knowing the equipment’s performance at specific temperatures. Reference 
+            the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List. 
+            Factor in auxiliary heat, or dual fuel into the equipment selection as applicable. If the existing ducts can only 
+            accommodate a heat pump below the size that is needed, discuss with the customer the option of upgrading the 
+            ducts versus supplementing the central heat pump with one or more ductless heat pumps. Please add a comment 
+            recording the decisions made.
         </Collapsible>
         <PhotoInput id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" uploadable>
             Upload a photo of the manufacturer's extended heating performance table.
@@ -132,9 +138,9 @@
     </Tab>
     <Tab eventKey="installation" title="Installation">
         <DateInput label="Installation Date" path="install_date" />
+        ## Refrigerant Recovery
         <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
         <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
-        ## Refrigerant Recovery
         <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
             Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
         </PhotoInput> 
@@ -170,6 +176,13 @@
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
             Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
+
+            Valve Cores are not to be reused under any circumstances after removal from the Valve Body. 
+            The external sealing element of the core will take a “compression set”, conforming to the 
+            mating port surface after installation. This is a common phenomenon for rubber, and contributes 
+            to the robustness of rubber seals. But after the core has been removed and reinstalled the 
+            seal may experience difficulty sealing to another position with different surface conditions. 
+            Therefore, it is recommended that service personnel always install a new core when servicing the system.
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
             Take a photo of the vacuum decay test results. Use a digital micron gauge. The system must be isolated from the vaccum pump. The vaccum must not rise above 500 microns in 15 minutes.
@@ -193,6 +206,8 @@
         </PhotoInput>
         <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
            Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
+
+           Install service caps that have o-ring seals or use a flare gasket to help seal a brass-on-brass mating surface.
         </PhotoInput>
 
         ## Plenum connections
