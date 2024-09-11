@@ -365,7 +365,6 @@
              In existing construction it is highly recommended that action be taken to reduce duct leakage if 
              the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area. 
 
-            
             <p><strong>Test method used: </strong> {props.data?.duct_leakage_test_method}</p> 
             <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}> 
                 <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
@@ -404,7 +403,7 @@
                 </Photo>        
             </ShowOrHide>
 
-        
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
                        
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>

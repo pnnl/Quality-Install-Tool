@@ -49,7 +49,6 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
     appliance_key,
     path,
 }) => {
-    console.log('ApplianceSafetyTestFurnaceBoiler', path, appliance_key)
     return (
         <>
             <PhotoInputWrapper
