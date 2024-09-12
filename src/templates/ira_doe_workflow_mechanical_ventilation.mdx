@@ -1,0 +1,103 @@
+<Tabs>
+  <Tab eventKey="pre_installation" title="Pre-Installation">
+    ## Existing Condition
+    <Collapsible header="Existing Condition Details">
+    The existing conditions of the home must be evaluated prior to installing mechanical ventilation. This includes evaluating:
+        1.	Unavoidable point sources of indoor air pollution (e.g. showers, cooktop)
+        2.	Avoidable point sources of indoor air pollution (e.g. back drafting combustion appliances)
+        3.	Natural non-point sources of indoor air pollution (e.g. envelope air leakages)
+        4.	Occupant caused non-point sources of indoor air pollution (e.g. smoking, pets, air fresheners, incense) 
+        5.	Outdoor air pollution levels (e.g. proximity to a busy street, neighbor’s smoking, wildfire smoke). 
+
+    The type of mechanical ventilation equipment and strategy should:
+        1.	Capture unavoidable point sources of indoor air pollution near the source of emission, e.g. a exhaust fan should be in each full bath, and a range hood that exhaust to outdoors installed over the cooktop. 
+        2.	Not cause naturally drafting appliances to backdraft even under worse case conditions. See the Combustion Appliance Safety section in the Post-Installation tab for recording the combustion safety test results. Combustion appliance safety testing is only required if the home has one or more natural draft combustion appliances post-retrofit.
+        3.	Effort to air seal the envelope to minimize natural non-point sources of indoor air pollution coming from an attached garage, unconditioned crawlspace, unconditioned attic, dusty walls.
+        4.	Take into consideration ASHRAE 62.2 calculation as well as occupant caused non-point sources of indoor air pollution.
+        5.	Take the level of chronic and intermittent outdoor air pollution levels into account.
+    </Collapsible>
+    <Radio label="Is there an existing whole-house ventilation system?" options={["Yes","No"]} path="whole_house_ventilation" />
+
+    ## Equipment Selection and Installation Considerations
+    <Select label="Equipment selection:" options={["Continuous exhaust", "Supply only", "Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"]} path="ventilation_equipemnt_selection" />
+
+    <GeneralSafetyInput {...props} />
+  </Tab>
+  <Tab eventKey="installation" title="Installation">
+    <PhotoInput id="nameplate_photo" label="Nameplate – Photo" />
+    <PhotoInput id="intake_photo" label="Intake – Photo" >
+    * The intake should be located where it is serviceable for cleaning
+    * The purpose of the intake should be labeled
+    </PhotoInput>
+    <PhotoInput id="exhaust_photo" label="Exhaust – Photo" />
+    <PhotoInput id="air_flow_measurement_photo" label="Air Flow Measurement – Photo" >
+    Use an exhaust fan flow meter, balometer, powered capture flow hood, or bag inflation device to measure the air flow.
+    </PhotoInput>
+    <PhotoInput id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" >
+    The photo should be taken from far enough away to show how the mechanical ventilation equipment will be accessed for maintenance and cleaning.
+    </PhotoInput>     
+  </Tab>
+  <Tab eventKey="post_installation" title="Post-Installation">
+  ## Ventilation
+  ## Ventilation
+  <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
+  *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
+  *	Consider infiltration credits.
+  * The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  </Collapsible>
+  <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
+  <StringInput label="What is the CFM flow rate of the new whole house ventilation system?" path="post_install_cfm_flow_rate" />
+  
+  <CombustionSafetyChecksLink {...props} />
+
+  ## Project Invoice 
+  <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+    Take a photo of the project invoice. 
+  </PhotoInput>
+
+  </Tab>
+  <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ----
+    # Mechanical Ventilation Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## Existing Condition
+    <p>Is there an existing whole-house ventilation system? <strong>{props.data?.whole_house_ventilation}</strong></p>
+    <p>Equipment selection: <strong>{props.data?.ventilation_equipemnt_selection}</strong></p>
+
+    <GeneralSafetyReport {...props} />
+
+    ## Installation
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required />
+    <ShowOrHide visible={props.data?.ventilation_equipemnt_selection === 'Supply only'}>
+        <Photo id="intake_photo" label="Intake – Photo" required>
+         Photo of the intake
+        </Photo>
+    </ShowOrHide>
+    <ShowOrHide visible={props.data?.ventilation_equipemnt_selection === 'Continuous exhaust'} >
+        <Photo id="exhaust_photo" label="Exhaust – Photo" required/>
+    </ShowOrHide>
+
+    <Photo id="air_flow_measurement_photo" label="Air Flow Measurement – Photo" required >
+        Photo of the air flow measurement    
+    </Photo>
+    <Photo id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" required >
+        Photo of the mechanical ventilation equipment
+    </Photo>  
+
+    ## Post-Installation
+    
+    ## Ventilation
+    <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
+
+    ## Project Invoice
+    <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
+      Photo of the project invoice
+    </Photo>
+
+    </PrintSection>
+  </Tab>
+</Tabs>

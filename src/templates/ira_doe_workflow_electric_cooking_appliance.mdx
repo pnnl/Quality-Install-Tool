@@ -27,7 +27,7 @@
 
     ## Existing Conditions
 
-    <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data.existing_cooking_appliance_type ? props.data.existing_cooking_appliance_type : null } </strong> </p>
+    <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data?.existing_cooking_appliance_type} </strong> </p>
 
 
     ## Installation
@@ -43,7 +43,7 @@
 
     ## Post Installation
 
-    <p> What is the fuel type of the new stovetop/oven/range?   <strong> { props.data.postinstall_cooking_appliance_type ? props.data.postinstall_cooking_appliance_type : null } </strong> </p>
+    <p> What is the fuel type of the new stovetop/oven/range?   <strong> { props.data?.postinstall_cooking_appliance_type } </strong> </p>
 
     </PrintSection>
   </Tab>

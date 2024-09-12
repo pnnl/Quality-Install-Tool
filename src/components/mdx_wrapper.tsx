@@ -32,6 +32,9 @@ import CombustionSafetyChecks from './combustion_safety_checks_inputs'
 import CombustionSafetyChecksReport from './combustion_safety_checks_report'
 import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
 import Repeatable from './repeatable'
+import GeneralSafetyInput from '../templates/reusable/general_safety_input.mdx'
+import GeneralSafetyReport from '../templates/reusable/general_safety_report.mdx'
+import IntegerInputWrapper from './integer_input_wrapper'
 
 const components = {
     Collapsible,
@@ -63,6 +66,9 @@ const components = {
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
     Repeatable: Repeatable,
+    GeneralSafetyInput: GeneralSafetyInput,
+    GeneralSafetyReport: GeneralSafetyReport,
+    IntegerInput: IntegerInputWrapper,
 }
 
 interface MdxWrapperProps {

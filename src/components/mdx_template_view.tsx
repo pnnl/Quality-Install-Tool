@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect } from 'react'
+import { useState, type FC, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import dbName from './db_details'
 import { StoreProvider } from './store'
@@ -27,10 +27,11 @@ const MdxTemplateView: FC = () => {
     const [project, setProject] = useState<any>({})
     const [projectSummary, setProjectSummary] = useState<any>({})
     const [installationInfo, setInstallationInfo] = useState<any>({})
+    const db = useMemo(() => new PouchDB(dbName), [])
 
     const project_info = async (): Promise<void> => {
         retrieveProjectSummary(
-            new PouchDB(dbName),
+            db,
             projectId as string,
             workflowName as string,
         ).then((res: any) => {
@@ -39,16 +40,12 @@ const MdxTemplateView: FC = () => {
     }
 
     const retrieveInstallationsInfo = async (): Promise<void> => {
-        retrieveDocFromDB(new PouchDB(dbName), jobId as string).then(
-            (res: any) => {
-                setInstallationInfo(res)
-            },
-        )
-        retrieveDocFromDB(new PouchDB(dbName), projectId as string).then(
-            (res: any) => {
-                setProject(res)
-            },
-        )
+        retrieveDocFromDB(db, jobId as string).then((res: any) => {
+            setInstallationInfo(res)
+        })
+        retrieveDocFromDB(db, projectId as string).then((res: any) => {
+            setProject(res)
+        })
     }
 
     useEffect(() => {

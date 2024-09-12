@@ -1,11 +1,10 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
 import dbName from './db_details'
-import { retrieveDocFromDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -41,21 +40,24 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
     const [projectDoc, setProjectDoc] = useState<any>(project)
+    const db = useMemo(() => new PouchDB(dbName), [])
 
-    if (fromParent) {
-        const projectDocId = project?._id ? project?._id : docId
-        new PouchDB(dbName).get(projectDocId).then(res => {
-            setProjectDoc(res)
-        })
-        new PouchDB(dbName)
-            .getAttachment(docId, id)
-            .then(res => {
-                setPhotoBlob(res)
-            })
-            .catch(err => {
-                /* Error occurs when photo not found */
-            })
-    }
+    useEffect(() => {
+        if (fromParent) {
+            const projectDocId = project?._id || docId
+            db.get(projectDocId)
+                .then(res => {
+                    setProjectDoc(res)
+                })
+                .catch(err => {})
+
+            db.getAttachment(projectDocId, id)
+                .then(res => {
+                    setPhotoBlob(res)
+                })
+                .catch(err => {})
+        }
+    }, [fromParent])
 
     return (
         <StoreContext.Consumer>
@@ -66,7 +68,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                 )?.value
 
                 const photo = fromParent ? photoBlob : attachment?.blob
-
                 let metadata = attachment?.metadata
 
                 if (fromParent) {

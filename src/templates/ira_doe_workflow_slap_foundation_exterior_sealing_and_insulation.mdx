@@ -1,0 +1,167 @@
+<Tabs>
+  <Tab eventKey="pre-installation" title="Pre-Installation">
+    <Collapsible header="Insulating an existing slab foundation from the exterior">
+      <Figure src="/images/foundation_exterior/foundation_exterior.png">
+        This workflow covers the scenario of insulating an existing slab foundation from the exterior.
+      </Figure>
+    </Collapsible>
+    
+    ## Existing Conditions
+    
+    <StringInput label="What is the foundation type?" path="slab_foundation_type" />
+
+    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" />
+
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="air_leakage_rate" />
+    
+    <ShowOrHide visible={props.data?.air_leakage_rate === 'CFM at 50Pa'}> 
+      <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+      <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+          Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <GeneralSafetyInput {...props} />
+    
+  </Tab>
+  
+  <Tab eventKey="installation" title="Installation">
+
+    <PhotoInput id="exisitng_condition_photo" label="Existing Condition – Photo" >
+     * Representative photo of a section of the foundation slab edge
+     * Look for major cracks in concrete, signs of water damage, pest damage,
+    </PhotoInput> 
+
+    <PhotoInput id="moisture_test_photo" label="Mousture Test – Photo" >
+     * Photo showing the moisture sensor reading of the wall sill plate.
+     * If the home’s walls were built on top of the concrete slab foundation without a sill gasket 
+     to break the capillary action, the walls could have moisture problems. Probing the sill plate 
+     with a pin type moisture sensor can determine of there is a moisture problem that should be 
+     addressed prior to air sealing and insulation.
+     * If the sill plates are indeed wet due to the lack of a sill gasket, the walls can be lifted 
+     with jacks just enough to retrofit a sill gasket. This work is invasive and will damage air 
+     sealing and insulation work, thus it should be done prior.
+    </PhotoInput> 
+
+    <PhotoInput id="foundation_wall_insulation_photo" label="Foundation Wall Insulation – Photo" >
+       * Photo showing the insulation and protective details prior to backfilling
+       * The top of the exterior insulation should be flashed and detailed in a manner to promote positive drainage
+    </PhotoInput> 
+
+    <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " >
+      Photo showing the backfill and gutter downspouts reinstalled
+    </PhotoInput> 
+
+    <PhotoInput id="interior_still_air_sealing_photo" label="Interior Sill Plate Air Sealing – Photo" >
+      Photo showing the interior slab to sill plate connection has been air sealed
+    </PhotoInput> 
+
+  </Tab>  
+  <Tab eventKey="post_installation"  title="Post-Installation">
+  
+  ## Final Conditions
+
+  <Select label="What percent of the foundation perimeter was insulated?" options={["10%","25%","50%","75%","100%"]} path="postinstall_foundation_perimeter_percent" />
+
+  <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
+
+  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
+  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
+    <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
+    <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
+        Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+    </PhotoInput>
+  </ShowOrHide>
+  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
+  
+  <CombustionSafetyChecksLink {...props} />
+  
+  ## Ventilation
+  <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
+  *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
+  *	Consider infiltration credits.
+  * The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  </Collapsible>
+  <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
+  ## Project Invoice 
+  <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+    Take a photo of the project invoice. 
+  </PhotoInput>
+  </Tab>
+ <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Slab Foundation Exterior Perimeter Sealing and Insulation Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## Existing Conditions
+
+    <p> What is the foundation type?  <strong> { props.data?.slab_foundation_type} </strong> </p>
+
+    <p> What part of the home are you air sealing?  <strong> { props.data?.airsealing_location ? ( Array.isArray(props.data.airsealing_location) > 0 ? props.data.airsealing_location.join(',') :  props.data?.airsealing_location) : null } </strong> </p>
+    
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.air_leakage_rate} { props.data?.air_leakage_rate == 'CFM at 50Pa' ? ":" + props.data?.air_leakage_cfm50  : null } </strong></p>
+    <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </Photo>
+
+    <GeneralSafetyReport {...props} />
+
+    ## Installation
+
+     <Photo id="exisitng_condition_photo" label="Existing Condition – Photo" required>
+      Representative photo of a section of the foundation slab edge
+    </Photo> 
+
+    <Photo id="moisture_test_photo" label="Mousture Test – Photo" required>
+     Photo showing the moisture sensor reading of the wall sill plate.
+    </Photo> 
+
+    <Photo id="foundation_wall_insulation_photo" label="Foundation Wall Insulation – Photo" required>
+       Photo showing the insulation and protective details prior to backfilling
+    </Photo> 
+
+    <Photo id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " required>
+      Photo showing the backfill and gutter downspouts reinstalled
+    </Photo> 
+
+    <Photo id="interior_still_air_sealing_photo" label="Interior Sill Plate Air Sealing – Photo" required>
+      Photo showing the interior slab to sill plate connection has been air sealed
+    </Photo>  
+
+    ## Final Conditions
+
+    <p> What percent of the foundation perimeter was insulated? <strong>{props.data?.postinstall_foundation_perimeter_percent}</strong> </p>
+
+    <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
+
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
+    {
+    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? 
+    <p> CFM at 50Pa: <strong>{props.data?.postinstall_foundation_air_leakage_cfm50}</strong> </p> : null
+    }
+
+    { props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' && (
+    <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>
+        Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+    </Photo>
+    )}
+
+    <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
+
+    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
+    ## Ventilation
+    <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
+
+    ## Project Invoice
+    <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
+      Photo of the project invoice
+    </Photo>
+
+
+    </PrintSection>
+  </Tab>
+</Tabs>

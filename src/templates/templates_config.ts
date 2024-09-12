@@ -1,8 +1,8 @@
-import DOEWorkflowHPWHTemplate from './doe_workflow_hpwh.mdx'
+import DOEWorkflowHeatPumpWaterHeaterTemplate from './doe_workflow_heat_pump_water_heater.mdx'
 import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
 import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
-import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_ductless_heat_pump.mdx'
-import DOEWorkflowCentralDuctedSplitHeatPumpTemplate from './doe_workflow_central_ducted_split_heat_pump.mdx'
+import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_heat_pump_ductless.mdx'
+import DOEWorkflowDuctedHeatPumpTemplate from './doe_workflow_heat_pump_ducted.mdx'
 import DOEWorkflowDuctAirSealTemplate from './ira_doe_workflow_duct_air_sealing_and_insulation.mdx'
 import DOEWorkflowElectricCookTemplate from './ira_doe_workflow_electric_cooking_appliance.mdx'
 import DOEWorkflowElectricWiringTemplate from './ira_doe_workflow_electric_wiring.mdx'
@@ -12,6 +12,12 @@ import DOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_effici
 import DOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
 import DOEWorkflowFullFrameReplacementWindows from './ira_doe_workflow_full_frame_replacement_windows.mdx'
 import DOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
+import DOEWorkflowFloorAirSealingAndInsulation from './ira_doe_workflow_floor_air_sealing_and_insulation.mdx'
+import DOEWorkflowFoundationAirSealingAndInsulation from './ira_doe_workflow_foundation_wall_air_sealing_and_insulation.mdx'
+import DOEWorkflowHPClothDyer from './ira_doe_workflow_heat_pump_cloth_dryer.mdx'
+import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_ventilation.mdx'
+import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
+import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 
 import { MDXProps } from 'mdx/types'
 
@@ -50,21 +56,33 @@ const templatesConfig: TemplatesConfig = {
         title: 'Electric Load Service Center',
         template: DOEWorkflowElectricLoadServiceTemplate,
     },
+    doe_workflow_floor_airsealing_and_insulation: {
+        title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
+        template: DOEWorkflowFloorAirSealingAndInsulation,
+    },
+    doe_workflow_foundation_airsealing_and_insulation: {
+        title: 'Foundation Wall Air Sealing and Insulation',
+        template: DOEWorkflowFoundationAirSealingAndInsulation,
+    },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
         template: DOEWorkflowFullFrameReplacementWindows,
     },
+    doe_workflow_heat_pump_cloth_dryer: {
+        title: 'Heat Pump Clothes Dryer ',
+        template: DOEWorkflowHPClothDyer,
+    },
     doe_workflow_central_ducted_split_heat_pump: {
         title: 'Heat Pump Ducted',
-        template: DOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+        template: DOEWorkflowDuctedHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
         title: 'Heat Pump Ductless',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
-    doe_workflow_hpwh: {
+    doe_workflow_heat_pump_water_heater: {
         title: 'Heat Pump Water Heater',
-        template: DOEWorkflowHPWHTemplate,
+        template: DOEWorkflowHeatPumpWaterHeaterTemplate,
     },
     doe_workflow_high_efficiency_gas_furnace: {
         title: 'High Efficiency Gas Furnace',
@@ -81,6 +99,18 @@ const templatesConfig: TemplatesConfig = {
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
         template: DOEWorkflowInsertReplacementWindows,
+    },
+    doe_workflow_mechanical_ventilation: {
+        title: 'Mechanical Ventilation',
+        template: DOEWorkflowMechanicalVentilation,
+    },
+    doe_workflow_slab_foundation_exterior: {
+        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
+        template: DOEWorkflowSlapFoundationExterior,
+    },
+    doe_workflow_wall_air_sealing_and_insulation_exterior: {
+        title: 'Wall Air Sealing and Insulation (Drill and Fill)',
+        template: DOEWorkflowWallAirSealingAndInsulation,
     },
 }
 

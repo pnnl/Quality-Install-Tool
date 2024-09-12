@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect } from 'react'
+import { useState, type FC, useEffect, useMemo } from 'react'
 import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig from '../templates/templates_config'
@@ -22,27 +22,22 @@ const WorkFlowView: FC = () => {
 
     const { projectId } = useParams()
     const [projectInfo, setProjectInfo] = useState<any>({})
+    const db = useMemo(() => new PouchDB(dbName), [])
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
-        retrieveInstallationDocs(
-            new PouchDB(dbName),
-            projectId as string,
-            workflowName,
-        ).then(res => {
-            setWorkflowJobsCount(prevArray => ({
-                ...prevArray,
-                [workflowName]: res.length,
-            }))
-        })
+        retrieveInstallationDocs(db, projectId as string, workflowName).then(
+            res => {
+                setWorkflowJobsCount(prevArray => ({
+                    ...prevArray,
+                    [workflowName]: res.length,
+                }))
+            },
+        )
     }
     const project_info = async (): Promise<void> => {
         // Retrieves the project information which includes project name and installation address
-        retrieveProjectSummary(
-            new PouchDB(dbName),
-            projectId as string,
-            '',
-        ).then((res: any) => {
+        retrieveProjectSummary(db, projectId as string, '').then((res: any) => {
             setProjectInfo(res)
         })
     }

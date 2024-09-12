@@ -1,18 +1,8 @@
-import { FC, Key, useEffect, useState } from 'react'
-import RadioWrapper from './radio_wrapper'
-import { Button } from 'react-bootstrap'
+import { FC, useEffect, useMemo, useState } from 'react'
 import dbName from './db_details'
 import { useParams } from 'react-router-dom'
 import PouchDB from 'pouchdb'
-import ShowOrHide from './show_or_hide'
-import Collapsible from './collapsible'
 import PhotoWrapper from './photo_wrapper'
-
-interface ApplianceSafetyTestProps {
-    appliance_key: string
-    path: string
-    index?: number
-}
 
 const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
     const [appliances, setAppliances] = useState<any>({})
@@ -20,7 +10,7 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
         Object.keys(appliances),
     )
     const { projectId } = useParams()
-    const db = new PouchDB(dbName)
+    const db = useMemo(() => new PouchDB(dbName), [])
 
     const fetchAppliances = async () => {
         if (!projectId) {
@@ -64,14 +54,20 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
 
     return (
         <div>
-            <h2>Combustion Appliance Safety Testing</h2>
+            {appliances && Object.values(appliances)[0] && (
+                <h2>Combustion Appliance Safety Testing</h2>
+            )}
             {appliancesKey &&
                 appliancesKey.map((appliance_key: string, index: number) => (
                     <div key={appliance_key}>
                         <div>
                             <div className="top-bottom-padding">
                                 <strong>Appliance Type:</strong>{' '}
-                                {`${appliances[appliance_key].name}`}
+                                {`${
+                                    appliances[appliance_key]?.name
+                                        ? appliances[appliance_key]?.name
+                                        : ''
+                                }`}
                             </div>
                             <PhotoWrapper
                                 id={`${path}.${appliance_key}.indoor_ambient_air_co_level_photo`}
@@ -83,8 +79,17 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                 Indoor ambient air CO level readout photo
                             </PhotoWrapper>
                             <div className="top-bottom-padding">
-                                <strong>Does the ambient CO test pass? </strong>{' '}
-                                {`${appliances[appliance_key]?.ambient_CO_test}`}
+                                Does the ambient CO test pass?
+                                <strong>
+                                    {' '}
+                                    {`${
+                                        appliances[appliance_key]
+                                            ?.ambient_CO_test
+                                            ? appliances[appliance_key]
+                                                  ?.ambient_CO_test
+                                            : ''
+                                    }`}{' '}
+                                </strong>{' '}
                             </div>
 
                             {appliances[appliance_key]?.name ===
@@ -110,17 +115,17 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                         Gas Piping
                                     </PhotoWrapper>
                                     <div className="top-bottom-padding">
+                                        Does the gas leak detection test pass?{' '}
                                         <strong>
-                                            Does the gas leak detection test
-                                            pass?{' '}
+                                            {' '}
+                                            {`${
+                                                appliances[appliance_key]
+                                                    ?.water_heater_gas_leak_detection_test
+                                                    ? appliances[appliance_key]
+                                                          ?.water_heater_gas_leak_detection_test
+                                                    : ''
+                                            }`}
                                         </strong>
-                                        {`${
-                                            appliances[appliance_key]
-                                                ?.water_heater_gas_leak_detection_test
-                                                ? appliances[appliance_key]
-                                                      ?.water_heater_gas_leak_detection_test
-                                                : ''
-                                        }`}
                                     </div>
                                     <PhotoWrapper
                                         id={`${path}.${appliance_key}.water_heater_vent_photo`}
@@ -142,16 +147,16 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                     </PhotoWrapper>
 
                                     <div className="top-bottom-padding">
+                                        Does the spillage test(s) pass?{' '}
                                         <strong>
-                                            Does the spillage test(s) pass?{' '}
+                                            {`${
+                                                appliances[appliance_key]
+                                                    ?.water_heater_spillage_test
+                                                    ? appliances[appliance_key]
+                                                          ?.water_heater_spillage_test
+                                                    : ''
+                                            }`}
                                         </strong>
-                                        {`${
-                                            appliances[appliance_key]
-                                                ?.water_heater_spillage_test
-                                                ? appliances[appliance_key]
-                                                      ?.water_heater_spillage_test
-                                                : ''
-                                        }`}
                                     </div>
 
                                     <PhotoWrapper
@@ -165,16 +170,16 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                     </PhotoWrapper>
 
                                     <div className="top-bottom-padding">
+                                        Does the undiluted CO test pass?{' '}
                                         <strong>
-                                            Does the undiluted CO test pass?{' '}
+                                            {`${
+                                                appliances[appliance_key]
+                                                    ?.water_heater_undiluted_CO_test
+                                                    ? appliances[appliance_key]
+                                                          ?.water_heater_undiluted_CO_test
+                                                    : ''
+                                            }`}
                                         </strong>
-                                        {`${
-                                            appliances[appliance_key]
-                                                ?.water_heater_undiluted_CO_test
-                                                ? appliances[appliance_key]
-                                                      ?.water_heater_undiluted_CO_test
-                                                : ''
-                                        }`}
                                     </div>
                                 </div>
                             )}
@@ -202,17 +207,14 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                         Piping
                                     </PhotoWrapper>
                                     <div className="top-bottom-padding">
-                                        <strong>
-                                            Does the gas leak detection test
-                                            pass?{' '}
-                                        </strong>
-                                        {`${
+                                        Does the gas leak detection test pass?{' '}
+                                        <strong>{`${
                                             appliances[appliance_key]
                                                 ?.space_heating_gas_leak_detection_test
                                                 ? appliances[appliance_key]
                                                       ?.space_heating_gas_leak_detection_test
                                                 : ''
-                                        }`}
+                                        }`}</strong>
                                     </div>
                                     <PhotoWrapper
                                         id={`${path}.${appliance_key}.space_heating_appliance_vent_photo`}
@@ -235,16 +237,16 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                         Draft
                                     </PhotoWrapper>
                                     <div className="top-bottom-padding">
+                                        Does the spillage test(s) pass?{' '}
                                         <strong>
-                                            Does the spillage test(s) pass?{' '}
+                                            {`${
+                                                appliances[appliance_key]
+                                                    ?.space_heating_spillage_test
+                                                    ? appliances[appliance_key]
+                                                          ?.space_heating_spillage_test
+                                                    : ''
+                                            }`}
                                         </strong>
-                                        {`${
-                                            appliances[appliance_key]
-                                                ?.space_heating_spillage_test
-                                                ? appliances[appliance_key]
-                                                      ?.space_heating_spillage_test
-                                                : ''
-                                        }`}
                                     </div>
                                     <PhotoWrapper
                                         id={`${path}.${appliance_key}.space_heating_appliance_co_measurement_photo`}
@@ -256,16 +258,16 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                         Photo of the combustion analyzer readout
                                     </PhotoWrapper>
                                     <div className="top-bottom-padding">
+                                        Does the undiluted CO test pass?{' '}
                                         <strong>
-                                            Does the undiluted CO test pass?{' '}
+                                            {`${
+                                                appliances[appliance_key]
+                                                    ?.space_heating_undiluted_CO_test
+                                                    ? appliances[appliance_key]
+                                                          ?.space_heating_undiluted_CO_test
+                                                    : ''
+                                            }`}{' '}
                                         </strong>
-                                        {`${
-                                            appliances[appliance_key]
-                                                ?.space_heating_undiluted_CO_test
-                                                ? appliances[appliance_key]
-                                                      ?.space_heating_undiluted_CO_test
-                                                : ''
-                                        }`}
                                     </div>
                                 </div>
                             )}

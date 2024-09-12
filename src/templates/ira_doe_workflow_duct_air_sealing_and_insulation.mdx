@@ -100,7 +100,7 @@
 
     ## Existing Conditions
 
-    <p> Existing ducts run primarily through conditioned or unconditioned space:   <strong> { props.data.existing_duct_condition ? props.data.existing_duct_condition : null } </strong> </p>
+    <p> Existing ducts run primarily through conditioned or unconditioned space:   <strong> { props.data?.existing_duct_condition } </strong> </p>
 
     <Photo id="existing_duct_photo" label="Condition of the inside of the ducts – Photo" required>
         Photo showing the condition of the inside of the ducts. Look for mold or high levels of dust
@@ -114,7 +114,7 @@
        Photo the total static pressure read out, existing condition
     </Photo>
 
-    <p> Total duct leakage before air sealing:  <strong> { props.data.existing_duct_leakage_rate_radio ? props.data.existing_duct_leakage_rate_radio + ': ' : null } { props.data.existing_duct_leakage_rate_radio == 'CFM at 50Pa' ? props.data.duct_leakage_cfm50  : null } </strong></p>
+    <p> Total duct leakage before air sealing:  <strong> { props.data?.existing_duct_leakage_rate_radio} { props.data?.existing_duct_leakage_rate_radio == 'CFM at 50Pa' ? ": " + props.data?.duct_leakage_cfm50  : null } </strong></p>
 
     <Photo id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo" required>
         Photo of the duct leakage
@@ -156,7 +156,7 @@
 
     ## Post Installation
 
-    <p>  Percentage of the duct system received additional insulation:  <strong> { props.data.postinstall_duct_insulation_percentage ? props.data.postinstall_duct_insulation_percentage : null } </strong> </p>
+    <p>  Percentage of the duct system received additional insulation:  <strong> { props.data?.postinstall_duct_insulation_percentage} </strong> </p>
 
     <Photo id="postinstall_static_pressure_test_setup_photo" label="Post-installation total static pressure test setup – Photo" required>
        Photo the total static pressure test setup
@@ -165,7 +165,7 @@
     <Photo id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo" required>
         Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
     </Photo>
-    <p> Total duct leakage after air sealing:  <strong> { props.data.postinstall_duct_leakage_rate ? props.data.postinstall_duct_leakage_rate : null } </strong> </p>
+    <p> Total duct leakage after air sealing:  <strong> { props.data?.postinstall_duct_leakage_rate} </strong> </p>
     <Photo id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo" required>
         Photo of floor plan sketch with the numbers
     </Photo>

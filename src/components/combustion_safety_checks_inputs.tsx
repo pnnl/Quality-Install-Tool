@@ -1,4 +1,4 @@
-import { FC, Key, useEffect, useState } from 'react'
+import { FC, Key, useEffect, useMemo, useState } from 'react'
 import RadioWrapper from './radio_wrapper'
 import { Button } from 'react-bootstrap'
 import PhotoInputWrapper from './photo_input_wrapper'
@@ -193,7 +193,7 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
     )
     const allowedApplianceKeys = ['A1', 'A2', 'A3', 'A4']
     const { projectId } = useParams()
-    const db = new PouchDB(dbName)
+    const db = useMemo(() => new PouchDB(dbName), [])
 
     const fetchAppliances = async () => {
         if (!projectId) {
@@ -264,7 +264,6 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
             return
         }
         try {
-            const db = new PouchDB(dbName)
             const doc: any = await db.get(projectId)
             const updatedData = { ...doc.data_, [path]: updatedAppliances }
 
@@ -290,12 +289,9 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
                 // Save the updated document back to the database
                 await db.put(updatedDoc)
 
-            if (updatedAppliances)
-                setAppliances(updatedAppliances)
-            else
-                setAppliances({ ['A1']: {} })
+            if (updatedAppliances) setAppliances(updatedAppliances)
+            else setAppliances({ ['A1']: {} })
             setAppliancesKey(Object.keys(updatedAppliances))
-
         } catch (err) {
             console.error('Failed to remove appliance:', err)
         }

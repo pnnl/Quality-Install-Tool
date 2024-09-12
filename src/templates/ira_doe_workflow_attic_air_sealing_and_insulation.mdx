@@ -17,9 +17,9 @@
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic']} default_value={['Attic']} path="airsealing_location" />
 
-    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="air_leakage_rate_radio" />
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="attic_air_leakage_rate" />
     
-    <ShowOrHide visible={props.data?.air_leakage_rate_radio === 'CFM at 50Pa'}> 
+    <ShowOrHide visible={props.data?.attic_air_leakage_rate === 'CFM at 50Pa'}> 
     <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
@@ -30,44 +30,7 @@
 
     <NumberInput label="What is the existing insulation R-value in the ceiling?" min={0} path="airsealing_r_value"  />
     
-    ## General Safety
-    <Collapsible header="General Safety">
-      Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
-    </Collapsible>
-    
-    <Collapsible header="Roof condition">   
-    * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
-    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
-   </Collapsible>
-    <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="insulation_roof_condition" />
-
-    <Collapsible header="Drainage condition"> 
-    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
-    basement floor, check the gutters and downspouts are in good condition. Once the attic has been air sealed and 
-    insulated there is less heat escaping to dry the roof/attic thus water damage caused by clogged gutter will be 
-    much worse. Once the attic has been air sealed and insulated the amount of air exfiltrating through the attic 
-    is reduced and therefore the amount of air infiltrating into the crawlspace/basement is also reduced. 
-    Thus, even though attic air sealing and insulation of the attic is being performed, it can reduce the drying 
-    force of the crawlspace/basement, thus pre-existing moisture problems in the crawlspace/basement can be made 
-    worse by this action. Thus, it is a good practice to check and document pre-existing problems.
-    </Collapsible>
-    <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="insulation_drainage_condition" />
-   
-    <Collapsible header="Mold or Moisture in or Outside the Home"> 
-    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
-    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
-    thus it is important to check for the safety of the customer.
-    </Collapsible>
-    <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="pre_existing_mold_or_moisture" />
-
-    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
-    *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
-    *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
-    </Collapsible>
-    <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="ashrae_62_2_calculation" />
-
-    <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
+    <GeneralSafetyInput {...props} />
 
   </Tab>
   
@@ -178,8 +141,8 @@
   </Tab>  
   <Tab eventKey="post_installation"  title="Post-Installation">
   ## Final Conditions
-  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_air_leakage_rate_radio" />  
-  <ShowOrHide visible={props.data?.postinstall_air_leakage_rate_radio === 'CFM at 50Pa'}> 
+  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />  
+  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}> 
   <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
   <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
       Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
@@ -223,20 +186,14 @@
     ## Existing Conditions
 
     <p> What part of the home are you air sealing?  <strong> { props.data.airsealing_location ? props.data.airsealing_location : null } </strong> </p>
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data.air_leakage_rate_radio ? props.data.air_leakage_rate_radio + ': ' : null } { props.data.air_leakage_rate_radio == 'CFM at 50Pa' ? props.data.air_leakage_cfm50  : null } </strong></p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data.attic_air_leakage_rate ? props.data.attic_air_leakage_rate + ': ' : null } { props.data.attic_air_leakage_rate == 'CFM at 50Pa' ? props.data.air_leakage_cfm50  : null } </strong></p>
     <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </Photo>
     <p> What is the existing insulation in the ceiling?  <strong> { props.data.existing_insulation_type ? props.data.existing_insulation_type : null } </strong></p>
     <p> What is the existing insulation R-value in the ceiling?  <strong>{ props.data.airsealing_r_value ? props.data.airsealing_r_value : null } </strong></p>    
 
-
-    ## General Safety
-    <p> What is the roof condition?   <strong>{ props.data.insulation_roof_condition ? props.data.insulation_roof_condition : null } </strong></p>
-    <p> What is the drainage system condition?   <strong> { props.data.insulation_drainage_condition ? props.data.insulation_drainage_condition : null } </strong></p>
-    <p> Are there signs of mold or moisture in or outside the home?  <strong> { props.data.pre_existing_mold_or_moisture ? props.data.pre_existing_mold_or_moisture : null } </strong></p>
-    <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data.ashrae_62_2_calculation ? props.data.ashrae_62_2_calculation : null } </strong></p>
-    <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data.safety_questions_to_homeowner ? props.data.safety_questions_to_homeowner : null }</strong></p>
+    <GeneralSafetyReport {...props} />
 
     ## Installation - Air Sealing Details
 
@@ -339,9 +296,9 @@
     </Photo>
 
     ## Final Conditions
-    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_air_leakage_rate_radio ? props.data?.postinstall_air_leakage_rate_radio : null}</strong> </p>
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate ? props.data?.postinstall_attic_air_leakage_rate : null}</strong> </p>
     {
-    props.data?.postinstall_air_leakage_rate_radio === 'CFM at 50Pa' ? 
+    props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa' ? 
     <p> CFM at 50Pa: <strong>{props.data.postinstall_air_leakage_cfm50 ? props.data.postinstall_air_leakage_cfm50 : null}</strong> </p> : null
     }
 

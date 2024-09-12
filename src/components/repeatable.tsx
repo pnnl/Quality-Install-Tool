@@ -33,7 +33,7 @@ function generateKeys(n: number) {
 
 /**
  * A React component that renders a list of repeatable sections based on dynamic data.
- * Each section can be expanded or collapsed and includes form fields or other child components.
+ * Each section can be expanded or collapsed and includes child components.
  * The component allows users to add or remove sections dynamically.
  *
  * @param {string} label - The label to be displayed for each repeatable section.
@@ -44,16 +44,16 @@ function generateKeys(n: number) {
  * @param {boolean} [fixed=true] - If true, prevents adding or removing items.
  *
  * @returns {JSX.Element} The rendered component.
- * 
- * 
+ *
+ *
  * Example usage; Repeats the components fixed {count} number of times
- * 
- *  <Repeatable label='cc_test' max="3" count="3" path="user_information" fixed>  
+ *
+ *  <Repeatable label='cc_test' max="3" count="3" path="user_information" fixed>
  *       <div>Enter your Information</div>
  *       <StringInput path="name" label="Please enter a name"/>
  *       <Radio path="work_location" label="Please Choose" options={['Home', 'Office']} />
  *  </Repeatable>
- * 
+ *
  */
 
 /** */
@@ -87,7 +87,7 @@ const Repeatable: FC<RepeatableProps> = ({
     const { jobId } = useParams()
 
     const docId = jobId ? jobId : projectId // docId
-    const db = new PouchDB(dbName)
+    const db = useMemo(() => new PouchDB(dbName), [])
 
     const fetchItems = async () => {
         if (!docId) {
@@ -99,11 +99,11 @@ const Repeatable: FC<RepeatableProps> = ({
             const dataFromDB = res.data_[path]
             if (dataFromDB && Object.keys(dataFromDB).length > 0) {
                 if (!fixed) {
-                    // When fixed is true, directly set items from the database
+                    // When fixed is false, directly set items from the database
                     setItems(dataFromDB)
                     setItemKeys(Object.keys(dataFromDB))
                 } else {
-                    // For non-fixed state, merge with current items
+                    // For fixed state, merge with current items
                     setItems((prev: any) => ({ ...prev, ...dataFromDB }))
                     setItemKeys(prev =>
                         Array.from(
@@ -165,7 +165,6 @@ const Repeatable: FC<RepeatableProps> = ({
             return
         }
         try {
-            const db = new PouchDB(dbName)
             const doc: any = await db.get(docId)
             const updatedData = { ...doc.data_, [path]: updatedItems }
 
@@ -175,7 +174,7 @@ const Repeatable: FC<RepeatableProps> = ({
             const updatedDoc = {
                 ...doc,
                 data_: updatedData,
-                _rev: doc._rev, // Ensure you include the latest revision
+                _rev: doc._rev,
             }
 
             // Remove the attachments, if any
