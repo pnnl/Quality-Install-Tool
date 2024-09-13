@@ -15,7 +15,7 @@
     Replacing these appliances in the attic afterwards can significantly damage or disturb air sealing and insulation.
     </Collapsible>
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic']} default_value={['Attic']} path="airsealing_location" />
+    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} default_value={['Attic']} path="airsealing_location" />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="attic_air_leakage_rate" />
     
@@ -151,17 +151,8 @@
   <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_safety_briefing_to_homeowner" />
   <Select label="What R-value was added to the ceiling?" options={["Less than R-30", "R-30","R-49", "R-60","more than R-60"]} path="postinstall_ceiling_r_value" />
   <Select label="What percentage of ceiling area received additional insulation (choose the closest)? " options={["10%","25%","50%","75%","100%"]} path="postinstall_insulated_ceiling_area" />
- 
-  ## Combustion Appliance Safety Testing
-  If the home upgrades will result in a barometric draft controlled or Category I appliances equipped with a draft hood or connected 
-  to a natural draft venting system remaining in the conditioned envelope of the home, combustion safety checks are required to be 
-  performed at the completion of the project. 
-  
-  If the tests fail, a combustion air opening connecting the combustion appliance area to the outdoors may need to be added or some other 
-  remediation may be required. The combustion safety tests performed and documented in this report follows the ANSI/BPI-1200-S-2017
-  Standard Practice for Basic Analysis of Buildings Technical Standard.
 
-  <CombustionApplianceSafetyTests path="postinstall_combustion_safety" />
+  <CombustionSafetyChecksLink {...props} />
   
   ## Ventilation
   <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
@@ -309,30 +300,7 @@
     <p> What R-value was added to the ceiling? <strong>{props.data.postinstall_ceiling_r_value ? props.data.postinstall_ceiling_r_value : null}</strong> </p>
     <p> What percentage of ceiling area received additional insulation? <strong>{props.data.postinstall_insulated_ceiling_area ? props.data.postinstall_insulated_ceiling_area : null}</strong> </p>
 
-    ## Combustion Appliance Safety 
-    {
-    props.data?.combustion_safety_for_appliance1 ?
-    <p>
-    <strong>{props.data?.combustion_safety_for_appliance1}</strong><br />
-    Does the spillage test(s) pass? <strong> {props.data.postinstall_appliance1_spillage_test ? props.data.postinstall_appliance1_spillage_test : null} </strong><br/>
-    Does the gas leak detection test pass? <strong> {props.data.postinstall_appliance1_gasleak_detection_test ? props.data.postinstall_appliance1_gasleak_detection_test : null} </strong><br/>
-    Does the ambient CO test pass? <strong> {props.data.postinstall_appliance1_ambient_CO_test ? props.data.postinstall_appliance1_ambient_CO_test : null} </strong><br/>
-    Does the undiluted CO test pass? <strong> {props.data.postinstall_appliance1_undiluted_CO_test ? props.data.postinstall_appliance1_undiluted_CO_test : null} </strong><br/>
-    </p> 
-    : null 
-    }
-
-    {
-    props.data?.combustion_safety_for_appliance2 ?
-    <p>
-    <strong>{props.data?.combustion_safety_for_appliance2}</strong><br />
-    Does the spillage test(s) pass? <strong> {props.data.postinstall_appliance2_spillage_test ? props.data.postinstall_appliance2_spillage_test : null} </strong><br/>
-    Does the gas leak detection test pass? <strong> {props.data.postinstall_appliance2_gasleak_detection_test ? props.data.postinstall_appliance2_gasleak_detection_test : null} </strong><br/>
-    Does the ambient CO test pass? <strong> {props.data.postinstall_appliance2_ambient_CO_test ? props.data.postinstall_appliance2_ambient_CO_test : null} </strong><br/>
-    Does the undiluted CO test pass? <strong> {props.data.postinstall_appliance2_undiluted_CO_test ? props.data.postinstall_appliance2_undiluted_CO_test : null} </strong><br/>
-    </p> 
-    : null 
-    }
+    <CombustionSafetyChecksReport {...props} />
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data.post_retrofit_ashrae_62_2_calculation ? props.data.post_retrofit_ashrae_62_2_calculation : null } </p>

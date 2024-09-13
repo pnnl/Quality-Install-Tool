@@ -18,6 +18,7 @@ import DOEWorkflowHPClothDyer from './ira_doe_workflow_heat_pump_cloth_dryer.mdx
 import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_ventilation.mdx'
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
+import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
 
 import { MDXProps } from 'mdx/types'
 
@@ -39,6 +40,10 @@ const templatesConfig: TemplatesConfig = {
     doe_workflow_attic_insulation: {
         title: 'Attic Insulation',
         template: DOEWorkflowAtticInsulationTemplate,
+    },
+    doe_workflow_attic_air_sealing_and_insulation: {
+        title: 'Attic Air Sealing and Insulation',
+        template: DOEWorkflowAtticAirSealingAndInsulation,
     },
     doe_workflow_duct_air_sealing: {
         title: 'Duct Air Sealing and Insulation',
