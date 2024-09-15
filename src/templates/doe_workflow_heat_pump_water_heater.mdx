@@ -3,11 +3,6 @@
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
     
-    ## Existing Conditions
-    <Radio label="What is the fuel type of your existing water heater?" options={["Gas", "Electric", "Oil", "None"]} path="existing_water_heater_fuel_type" />
-    <Radio label="What is the type of your water heating system before upgrading to a heat pump water heater?" options={["Water heater with storage tank", "Tankless water heater", "Don’t know"]} path="existing_water_heater_type" />
-    <Radio label="What is the storage capacity before and after? " options={["Less than 45 gal", "45 gal", "50 gal", "60 gal", "80 gal", "More than 80 gal"]} path="water_heater_storage_capacity" />
-
     ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
@@ -18,6 +13,7 @@
     </PhotoInput>
 
     ## HPWH Space Evaluation
+    Consider using the <a href="https://basc.pnnl.gov/hpwh_installation_tool" target="__new__">Heat Pump Water Heater Selection Tool </a> to help choose the optimal HPWH for the home.
     <Collapsible header="HPWH Space Evaluation — Instructions">
       The successful installation of a heat pump water heater (HPWH) begins in the planning
       stage by assessing whether the location where the HPWH will be installed is suitable.
@@ -184,14 +180,6 @@
       to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
       one is present, and reopen the cold water main shutoff valve.
     </Collapsible>
-
-    <Collapsible header="Post-Installation Combustion Safety Testing">
-      Post installation combustion safety testing is required for a HPWH that is replacing a 
-      combustion water heater that draws air from the conditioned space and the zone will have 
-      a naturally drafted combustion appliance remaining after the HPWH is installed. Please 
-      use the combustion safety testing documentation workflow to document the combustion 
-      safety testing.
-    </Collapsible>
     
     <CombustionSafetyChecksLink {...props} />
 
@@ -249,7 +237,7 @@
     ## Existing Condition
     <p>What is the fuel type of your existing water heater? <strong>{props.data?.existing_water_heater_fuel_type}</strong> </p>
     <p>What is the type of your water heating system before upgrading to a heat pump water heater? <strong>{props.data?.existing_water_heater_type}</strong> </p>
-    <p>What is the storage capacity before and after? <strong>{props.data?.water_heater_storage_capacity}</strong> </p>
+    <p>What is the storage capacity of the existing system? <strong>{props.data?.water_heater_storage_capacity}</strong> </p>
     
     <Photo id="hpwh_location_photo" label="HPWH Location – Photo" required>
       This wide-angle photo helps document that the HPWH Space Evaluation conditions 1-8 have been met.

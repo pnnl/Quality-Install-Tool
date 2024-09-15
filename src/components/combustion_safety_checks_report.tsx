@@ -67,7 +67,7 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                     appliances[appliance_key]?.name
                                         ? appliances[appliance_key]?.name
                                         : ''
-                                    }`}</strong>
+                                }`}</strong>
                             </div>
                             <PhotoWrapper
                                 id={`${path}.${appliance_key}.indoor_ambient_air_co_level_photo`}

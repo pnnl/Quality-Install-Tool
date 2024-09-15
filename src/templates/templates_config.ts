@@ -33,14 +33,6 @@ const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
 // Add workflow templates for 'quality-install-tool'
 const templatesConfig: TemplatesConfig = {
-    doe_workflow_attic_air_sealing: {
-        title: 'Attic Air Sealing',
-        template: DOEWorkflowAtticAirSealTemplate,
-    },
-    doe_workflow_attic_insulation: {
-        title: 'Attic Insulation',
-        template: DOEWorkflowAtticInsulationTemplate,
-    },
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
