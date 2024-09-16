@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useMemo } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import { retrieveProjectDocs } from '../utilities/database_utils'
@@ -49,7 +49,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
     const [projectList, setProjectList] = useState<any[]>([])
     const [projectNames, setProjectNames] = useState<any[]>([])
 
-    const db = useMemo(() => new PouchDB(dbName), [dbName])
+    const db = new PouchDB(dbName)
 
     /*
      * Retrieves project information from the database and updates the component state.

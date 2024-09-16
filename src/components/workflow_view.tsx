@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect, useMemo } from 'react'
+import { useState, type FC, useEffect } from 'react'
 import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig from '../templates/templates_config'
@@ -22,7 +22,7 @@ const WorkFlowView: FC = () => {
 
     const { projectId } = useParams()
     const [projectInfo, setProjectInfo] = useState<any>({})
-    const db = useMemo(() => new PouchDB(dbName), [dbName])
+    const db = new PouchDB(dbName)
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {

@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
@@ -36,7 +36,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     project,
 }) => {
     const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
-    const db = useMemo(() => new PouchDB(dbName), [dbName])
+    const db = new PouchDB(dbName)
 
     if (id === 'building_number_photo') {
         db.getAttachment(project?._id, id)
