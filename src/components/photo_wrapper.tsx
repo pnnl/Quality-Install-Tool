@@ -1,11 +1,10 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
 import dbName from './db_details'
-import { retrieveDocFromDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -37,10 +36,10 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     project,
 }) => {
     const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
+    const db = useMemo(() => new PouchDB(dbName), [dbName])
 
     if (id === 'building_number_photo') {
-        new PouchDB(dbName)
-            .getAttachment(project?._id, id)
+        db.getAttachment(project?._id, id)
             .then(res => {
                 setBuildingPhotoBlob(res)
             })

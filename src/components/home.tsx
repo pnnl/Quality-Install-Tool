@@ -1,4 +1,11 @@
-import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
+import {
+    useState,
+    type FC,
+    useEffect,
+    useRef,
+    SetStateAction,
+    useMemo,
+} from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
@@ -15,7 +22,7 @@ import { useNavigate } from 'react-router-dom'
  * @returns ListGroup component displaying the projects created
  */
 const Home: FC = () => {
-    const db = new PouchDB(dbName)
+    const db = useMemo(() => new PouchDB(dbName), [dbName])
     const navigate = useNavigate()
     const [projectList, setProjectList] = useState<any[]>([])
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
@@ -45,11 +52,11 @@ const Home: FC = () => {
 
             for (const doc of projectDocs) {
                 // Remove the empty project document from the database
-                await db.remove(doc)
+                if (doc) await db.remove(doc)
             }
         } catch (error) {
-            // Log any errors that occur during the process
-            //console.error('', error)
+            //Log any errors that occur during the process
+            console.error('Error in removing the project', error)
         }
     }
 
@@ -162,11 +169,11 @@ const Home: FC = () => {
                     your entire installation project. <br />
                     <br />
                     <br />
-                    For your record
+                    For your records
                     <br />
                     For your clients
                     <br />
-                    For reporting to the state
+                    For quality assurance reporting
                 </p>
                 <div className="button-container-center" key={0}>
                     <Button onClick={handleAddJob} alt-text="Add a New Project">
