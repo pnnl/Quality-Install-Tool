@@ -215,7 +215,7 @@ const Home: FC = () => {
                                             editAddressDetails(key._id)
                                         }}
                                     >
-                                        <TfiPencil />
+                                        <TfiPencil size={22} />
                                     </Button>
                                     <Tooltip
                                         anchorSelect=".edit"
@@ -229,7 +229,7 @@ const Home: FC = () => {
                                             handleDelete(event, key)
                                         }
                                     >
-                                        <TfiTrash />
+                                        <TfiTrash size={22} />
                                     </Button>
                                     <Tooltip
                                         anchorSelect=".delete"

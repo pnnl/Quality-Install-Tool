@@ -240,7 +240,7 @@ const JobList: React.FC = () => {
                                         }))
                                     }}
                                 >
-                                    <TfiPencil />
+                                    <TfiPencil size={22} />
                                 </Button>
 
                                 <Button
@@ -254,7 +254,7 @@ const JobList: React.FC = () => {
                                         )
                                     }}
                                 >
-                                    <TfiTrash />
+                                    <TfiTrash size={22} />
                                 </Button>
                             </span>
                         </ListGroup.Item>
