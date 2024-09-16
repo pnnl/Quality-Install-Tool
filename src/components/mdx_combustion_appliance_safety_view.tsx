@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FC } from 'react'
+import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 import PouchDB from 'pouchdb'
 import { StoreProvider } from './store'
@@ -16,7 +16,7 @@ const MdxCombustionSafetyView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.
     const { projectId } = useParams()
     const [projectDoc, setProjectDoc] = useState<any>({})
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     const project_info = async (): Promise<void> => {
         retrieveDocFromDB(db, projectId as string).then((res: any) => {
@@ -36,7 +36,8 @@ const MdxCombustionSafetyView: FC = () => {
             docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <h1>{projectDoc?.metadata_?.doc_name}</h1>
+            <h1>Combustion Appliance Safety Testing</h1>
+            <h2>Installation for {projectDoc?.metadata_?.doc_name}</h2>
             <h3>
                 {projectDoc?.data_?.location?.street_address}&nbsp;
                 {projectDoc?.data_?.location?.city}

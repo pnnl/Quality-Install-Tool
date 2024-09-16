@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
@@ -40,7 +40,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
     const [projectDoc, setProjectDoc] = useState<any>(project)
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     useEffect(() => {
         if (fromParent) {

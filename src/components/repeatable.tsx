@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import dbName from './db_details'
 import { useParams } from 'react-router-dom'
@@ -87,7 +87,7 @@ const Repeatable: FC<RepeatableProps> = ({
     const { jobId } = useParams()
 
     const docId = jobId ? jobId : projectId // docId
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     const fetchItems = async () => {
         if (!docId) {

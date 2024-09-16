@@ -1,4 +1,4 @@
-import { FC, Key, useEffect, useMemo, useState } from 'react'
+import { FC, Key, useEffect, useState } from 'react'
 import RadioWrapper from './radio_wrapper'
 import { Button } from 'react-bootstrap'
 import PhotoInputWrapper from './photo_input_wrapper'
@@ -193,7 +193,7 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
     )
     const allowedApplianceKeys = ['A1', 'A2', 'A3', 'A4']
     const { projectId } = useParams()
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     const fetchAppliances = async () => {
         if (!projectId) {
@@ -267,31 +267,38 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
             const doc: any = await db.get(projectId)
             const updatedData = { ...doc.data_, [path]: updatedAppliances }
 
-            const attachments = doc._attachments
+            if (doc && updatedData) {
+                const attachments = doc._attachments
 
-            // Prepare the updated document
-            const updatedDoc = {
-                ...doc,
-                data_: updatedData,
-                _rev: doc._rev, // Ensure you include the latest revision
-            }
-
-            // Remove the attachments, if any
-            Object.keys(attachments).map(attachmentId => {
-                if (
-                    attachmentId.includes(path + '.' + appliance_key) &&
-                    doc._attachments[attachmentId]
-                ) {
-                    delete doc._attachments[attachmentId]
+                // Prepare the updated document
+                const updatedDoc = {
+                    ...doc,
+                    data_: updatedData,
+                    _rev: doc._rev, // Ensure you include the latest revision
                 }
-            })
-            if (updatedDoc)
-                // Save the updated document back to the database
-                await db.put(updatedDoc)
+                console.log('Here', updatedData, attachments)
 
-            if (updatedAppliances) setAppliances(updatedAppliances)
-            else setAppliances({ ['A1']: {} })
-            setAppliancesKey(Object.keys(updatedAppliances))
+                // Remove the attachments, if any
+                attachments &&
+                    Object.keys(attachments).map(attachmentId => {
+                        if (
+                            attachmentId &&
+                            attachmentId.includes(path + '.' + appliance_key) &&
+                            doc._attachments[attachmentId]
+                        ) {
+                            delete doc._attachments[attachmentId]
+                        }
+                    })
+
+                console.log('Here2', updatedData)
+                if (updatedDoc)
+                    // Save the updated document back to the database
+                    await db.put(updatedDoc)
+
+                if (updatedAppliances) setAppliances(updatedAppliances)
+                else setAppliances({ ['A1']: {} })
+                setAppliancesKey(Object.keys(updatedAppliances))
+            }
         } catch (err) {
             console.error('Failed to remove appliance:', err)
         }

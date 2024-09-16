@@ -1,4 +1,4 @@
-import { useState, type FC, useEffect, useMemo } from 'react'
+import { useState, type FC, useEffect } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
  * @returns ListGroup component displaying the projects created
  */
 const Home: FC = () => {
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
     const navigate = useNavigate()
     const [path, setPath] = useState<string>(window.location.href.split('?')[1])
     const [sortedProjectList, setSortedProjectList] = useState<any[]>([])

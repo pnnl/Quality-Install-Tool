@@ -21,7 +21,44 @@
     ## Equipment Selection and Installation Considerations
     <Select label="Equipment selection:" options={["Continuous exhaust", "Supply only", "Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"]} path="ventilation_equipemnt_selection" />
 
-    <GeneralSafetyInput {...props} />
+    ## General Safety
+    <Collapsible header="General Safety">
+        Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
+    </Collapsible>
+
+    <Collapsible header="Roof condition">   
+    * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
+    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
+    </Collapsible>
+    <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="roof_condition" />
+
+    <Collapsible header="Drainage condition"> 
+    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
+    basement floor, check the gutters and downspouts are in good condition. Once the attic has been air sealed and 
+    insulated there is less heat escaping to dry the roof/attic thus water damage caused by clogged gutter will be 
+    much worse. Once the attic has been air sealed and insulated the amount of air exfiltrating through the attic 
+    is reduced and therefore the amount of air infiltrating into the crawlspace/basement is also reduced. 
+    Thus, even though attic air sealing and insulation of the attic is being performed, it can reduce the drying 
+    force of the crawlspace/basement, thus pre-existing moisture problems in the crawlspace/basement can be made 
+    worse by this action. Thus, it is a good practice to check and document pre-existing problems.
+    </Collapsible>
+    <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
+
+    <Collapsible header="Mold or Moisture in or Outside the Home"> 
+    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
+    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
+    thus it is important to check for the safety of the customer.
+    </Collapsible>
+    <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
+
+    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
+    *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+    </Collapsible>
+    <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
+
+    <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
   </Tab>
   <Tab eventKey="installation" title="Installation">
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo" />
@@ -68,7 +105,12 @@
     <p>Is there an existing whole-house ventilation system? <strong>{props.data?.whole_house_ventilation}</strong></p>
     <p>Equipment selection: <strong>{props.data?.ventilation_equipemnt_selection}</strong></p>
 
-    <GeneralSafetyReport {...props} />
+    ## General Safety
+    <p> What is the roof condition?   <strong>{ props.data?.roof_condition} </strong></p>
+    <p> What is the drainage system condition?   <strong> { props.data?.drainage_condition } </strong></p>
+    <p> Are there signs of mold or moisture in or outside the home?  <strong> { props.data?.signs_of_mold_or_moisture} </strong></p>
+    <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
+    <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
 
     ## Installation
     <Photo id="nameplate_photo" label="Nameplate – Photo" required />

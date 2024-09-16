@@ -19,7 +19,7 @@ import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_vent
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
-
+import DOEWorkflowCombustionSafetyTesting from './doe_workflow_combustion_appliance_safety_tests.mdx'
 import { MDXProps } from 'mdx/types'
 
 interface TemplatesConfig {
@@ -37,6 +37,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'Attic Air Sealing and Insulation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
     },
+    // doe_workflow_combustion_safety_testing: {
+    //     title: 'Combustion Appliance Safety Testing',
+    //     template: DOEWorkflowCombustionSafetyTesting,
+    // },
     doe_workflow_duct_air_sealing: {
         title: 'Duct Air Sealing and Insulation',
         template: DOEWorkflowDuctAirSealTemplate,

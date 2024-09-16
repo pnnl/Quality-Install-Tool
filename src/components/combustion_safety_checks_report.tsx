@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import dbName from './db_details'
 import { useParams } from 'react-router-dom'
 import PouchDB from 'pouchdb'
@@ -10,13 +10,14 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
         Object.keys(appliances),
     )
     const { projectId } = useParams()
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     const fetchAppliances = async () => {
         if (!projectId) {
             console.error('projectId is undefined')
             return
         }
+        console.log(projectId)
         try {
             const res: any = await db.get(projectId)
             const appliances_data = res.data_[path]
@@ -51,7 +52,7 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
             changes.cancel()
         }
     }, [])
-
+    console.log(appliances)
     return (
         <div>
             {appliances && Object.values(appliances)[0] && (

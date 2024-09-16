@@ -40,7 +40,7 @@ const routes = [
         ),
     },
     {
-        path: `/app/:projectId/combustion_safety`,
+        path: `/app/:projectId/doe_workflow_combustion_safety_testing`,
         // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
             <RootLayout>

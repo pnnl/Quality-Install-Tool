@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TfiTrash, TfiPlus } from 'react-icons/tfi'
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
@@ -21,7 +21,7 @@ PouchDB.plugin(PouchDBUpsert)
  * @returns ListGroup component displaying the jobs or installations associated with the project
  */
 const JobList: React.FC = () => {
-    const db = useMemo(() => new PouchDB(dbName), [])
+    const db = new PouchDB(dbName)
 
     const { projectId, workflowName } = useParams()
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
