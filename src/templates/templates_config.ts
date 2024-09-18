@@ -67,7 +67,7 @@ const templatesConfig: TemplatesConfig = {
         template: IRADOEWorkflowInsertReplacementWindows,
     },
     ira_doe_workflow_limited_assessment: {
-        title: 'IRA Limited Assessent',
+        title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,
     },
 }
