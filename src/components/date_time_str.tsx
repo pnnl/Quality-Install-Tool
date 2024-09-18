@@ -41,7 +41,12 @@ const DateStr: FC<DateTimeStrProps> = ({
     const parsedDate = new Date(date)
     const formattedDate = parsedDate.toLocaleString(locals, fullOptions)
 
-    return <span>{formattedDate}</span>
+    return (
+        <span>
+            {formattedDate}
+            {source ? `(source: ${source})` : null}
+        </span>
+    )
 }
 
 export default DateStr

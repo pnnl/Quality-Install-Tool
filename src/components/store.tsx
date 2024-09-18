@@ -11,6 +11,7 @@ import React, {
 import { isEmpty, isObject, toNumber, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
 import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
+import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
@@ -48,9 +49,9 @@ export const StoreContext = React.createContext({
         blob: Blob,
         id: any,
         fileName?,
-    ) => {}) as UpsertAttachment,
-    upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
-    upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
+    ) => { }) as UpsertAttachment,
+    upsertData: ((pathStr: string, data: any) => { }) as UpsertData,
+    upsertMetadata: ((pathStr: string, data: any) => { }) as UpsertMetadata,
 })
 
 interface StoreProviderProps {
@@ -174,7 +175,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
          * (4) Subscribes to future changes to the database document — it ignores changes that
          *     originated from this component
          */
-        ;(async function connectStoreToDB() {
+        ; (async function connectStoreToDB() {
             // Establish a database connection
 
             const db = new PouchDB(dbName, { auto_compaction: true })
@@ -188,12 +189,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 const result = !isInstallationDoc
                     ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewInstallation(
-                          db,
-                          docId,
-                          workflowName,
-                          docName,
-                          parentId as string,
-                      )) as unknown)
+                        db,
+                        docId,
+                        workflowName,
+                        docName,
+                        parentId as string,
+                    )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {
                 console.error('DB initialization error:', err)
@@ -322,16 +323,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
-        photoMetadata?: Attachment['metadata'],
     ) => {
-        const metadata: Attachment['metadata'] = photoMetadata
-            ? photoMetadata
-            : isPhoto(blob)
+        // Create the metadata for the blob
+        const metadata: Attachment['metadata'] = isPhoto(blob)
             ? await getMetadataFromPhoto(blob)
             : {
-                  filename: fileName,
-                  timestamp: new Date(Date.now()).toISOString(),
-              }
+                filename: fileName,
+                timestamp: new Date(Date.now()).toISOString(),
+            }
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)
@@ -414,8 +413,8 @@ export function immutableUpsert(
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)
         : isNaN(parseInt(propName))
-        ? {}
-        : []
+            ? {}
+            : []
 
     if (newPath.length === 0) {
         newRecipient[propName] = target
