@@ -22,6 +22,7 @@ PouchDB.plugin(PouchDBUpsert)
  */
 const JobList: React.FC = () => {
     const db = new PouchDB(dbName)
+
     const { projectId, workflowName } = useParams()
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
     const [sortedJobNames, setSortedJobNames] = useState<any[]>([])

@@ -1,6 +1,6 @@
 <Tabs>
 
-    <Tab eventKey="pre_installation" title="Pre-Installation">
+    <Tab eventKey="planning" title="Planning">
         The data for this tab should be collected during the initial site visit.
 
         ## Proposed Outdoor Unit
@@ -58,15 +58,19 @@
            
         
         ## Equipment Selection
+        You are encouraged to use the Cold Climate Heat Pump Decision Tool which can help assist in selecting the right 
+        heat pump for this home. The <a href="#" target="__new__">Cold Climate Heat Pump Decision Tool</a> will make use of the Manual J load values and 
+        the duct air flow capability test result data.  
+
         <Collapsible header="Equipment Selection Details">
-            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or 
-            alternate load sizing method, and the decided percent load which the heat pump will cover.
- 
-            These decisions depend on knowing the equipment’s performance at specific temperatures. Reference the manufacturer’s 
-            extended performance tables and/or the NEEP Cold Climate Air Source Heat Pump List. Factor in auxiliary heat, 
-            or dual fuel into the equipment selection as applicable. If the existing ducts can only accommodate a heat pump 
-            below the size that is needed, discuss with the customer the option of upgrading the ducts versus supplementing 
-            the central heat pump with one or more ductless heat pumps. Please add a comment recording the decisions made.
+            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation 
+            or alternate load sizing method. For example, if the ductless equipment is providing only supplemental 
+            heating or cooling to a home with a central ducted system, sizing to loads smaller than those from 
+            Manual J would make sense. 
+            
+            Equipment selection also depends on knowing the equipment’s performance at specific temperatures. 
+            Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate 
+            Air Source Heat Pump List. Factor in supplemental heating or cooling from other equipment if applicable.
         </Collapsible>
         <PhotoInput id="heating_performance_table_photo" label="Heating Performance Table – Photo" uploadable>
             Take a photo or attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model 
@@ -79,22 +83,38 @@
             and model selected showing the sensible versus total cooling capacity at the design conditions.
         </PhotoInput>
 
+        <StringInput  label="Comment" path="comment_equipment_selection" hint="Comment if there will be backup or auxiliary heat sources, e.g. electric resistance baseboard heaters will be left in place as a backup or auxiliary heat source." />
+
+        <CombustionSafetyChecksLink {...props} />
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
        
         <DateInput label="Installation Date" path="install_date" />
+        ## Refrigerant Recovery
+        <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
+        <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
+            <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
+                Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+            </PhotoInput> 
+            <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
+                Take a photo of the refrigerant recovery setup. 
+            </PhotoInput> 
+            <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
+                Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+            </PhotoInput> 
+       </ShowOrHide>
        
-        <PhotoInput id="odu_name_plate_photo" label="ODU Name Plate – Photo">
-            Take a photo of the outdoor unit name plate.
+        <PhotoInput id="odu_name_plate_photo" label="ODU Nameplate – Photo">
+            Take a photo of the Outdoor Unit (ODU) nameplate.
         </PhotoInput>
         
-        <PhotoInput id="idu_name_plate_photo" label="IDU Name Plate – Photo">
-            Take a photo  of the indoor unit name plate.
+        <PhotoInput id="idu_name_plate_photo" label="IDU Nameplate – Photo">
+            Take a photo  of the Indoor Unit (IDU) nameplate.
         </PhotoInput>
 
         <PhotoInput id="circuit_breaker_amperage_photo" label="Circuit Breaker Amperage – Photo">
-            Take a photo  of the circuit breaker amperage serving the ductless heat pump.
+            Take a photo of the circuit breaker amperage serving the ductless heat pump.
         </PhotoInput>
 
         <PhotoInput id="flare_tested_in_a_flare_guage_photo" label="Flare Tested In A Flare Gauge – Photo">
@@ -111,11 +131,18 @@
 
         <PhotoInput id="pressure_test_result_photo" label="Nitrogen Pressure Test Results – Photo">
              Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. 
-             Please use a digital pressure gauge.
+             Please use a digital pressure gauge while the system is pressurized with nitrogen, check all the field made connections using non-corrosive bubble solution and/or an ultrasonic leak detector.
         </PhotoInput>
 
         <PhotoInput id="vacuum_setup_photo" label="Vacuum Setup – Photo">
             Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
+            
+            Valve Cores are not to be reused under any circumstances after removal from the Valve Body. 
+            The external sealing element of the core will take a “compression set”, conforming to the 
+            mating port surface after installation. This is a common phenomenon for rubber, and contributes 
+            to the robustness of rubber seals. But after the core has been removed and reinstalled the 
+            seal may experience difficulty sealing to another position with different surface conditions. 
+            Therefore, it is recommended that service personnel always install a new core when servicing the system.
         </PhotoInput>
 
         <PhotoInput id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
@@ -142,8 +169,6 @@
 
         <StringInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
 
-        
-
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
             Take a photo  of the outdoor section of the refrigerant line set as it enters the building showing the 
             line set insulation has been protected from weather and UV. 
@@ -155,12 +180,13 @@
 
         <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
             Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
-
+            
+            Install service caps that have o-ring seals or use a copper flare gasket to help seal a brass-on-brass mating surface.
         </PhotoInput>
 
         ## Project Invoice
         <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-            Take a photo of the project invoice.
+            Take a photo of the project invoice if your program requires it.
         </PhotoInput>
 
     </Tab>
@@ -269,6 +295,7 @@
                 
             }
 
+
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
                 Photo or Screenshot of the manufacturer’s heating performance table for the heat pump make and model 
@@ -281,13 +308,36 @@
                 and model selected showing the sensible versus total cooling capacity at the design conditions.
             </Photo>
 
+            { props.data?.comment_equipment_selection && 
+            <p>Comment: {props.data?.comment_equipment_selection}</p>
+            }
+
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
             ## Installation
-            <Photo id="odu_name_plate_photo" label="ODU Name Plate – Photo" required>
-            Photo of the outdoor unit name plate
+            {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
+           
+            {props.data?.replacting_old_ac_or_heatpump && props.data?.replacting_old_ac_or_heatpump === "Yes"  && (
+            <>
+                <Photo id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo" required>
+                    Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+                </Photo> 
+                <Photo id="recover_setup_photo" label="Recovery Setup – Photo" required>
+                    Take a photo of the refrigerant recovery setup. 
+                </Photo> 
+                <Photo id="recover_scale_photo" label="Recovery Scale – Photo" required>
+                    Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+                </Photo>
+            </>
+            )}
+            
+            ## Equipment
+            <Photo id="odu_name_plate_photo" label="Outdoor Unit Nameplate – Photo" required>
+            Photo of the outdoor unit nameplate
             </Photo>
             
-            <Photo id="idu_name_plate_photo" label="IDU Name Plate – Photo" required>
-                Photo of the indoor unit name plate
+            <Photo id="idu_name_plate_photo" label="Indoor Uint Nameplate – Photo" required>
+                Photo of the indoor unit nameplate
             </Photo>
 
             <Photo id="circuit_breaker_amperage_photo" label="Circuit Breaker Amperage – Photo" required>
@@ -360,14 +410,13 @@
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
-             ## Project Invoice
-            <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
+            {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
-            </Photo>
-
+            </Photo> </>
+            )}
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
-
-
 
         </PrintSection>
         

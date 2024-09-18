@@ -1,8 +1,19 @@
 <Tabs>
 
   <Tab eventKey="assessment" title="Assessment">
-    The data for this tab should be collected during the initial site visit.
-
+    <Collapsible header="Existing Condition">
+    The application of air permeable insulation without first air sealing is not an acceptable practice. 
+    E.g. just blowing an attic with loose fill fiberglass, cellulose, or mineral wood without first 
+    checking air sealing details have been performed is not an acceptable practice. 
+    Instead HEAR (50122) requires air sealing efforts to precede insulation work unless the 
+    insulation is spray foam. The air sealing and insulation don’t have to be done by the same 
+    contractor. While not required, often to achieve comprehensive high quality air sealing, the attic 
+    first needs to be cleaned of dust, debris, and/or degraded insulation. Prior to air sealing inspect 
+    the attic for damaged or missing framing members, exhaust fans venting to the attic, unsafe wiring,
+     water leaks, mold, poor condition duct work, and old or unsafe HVAC or water heating appliances. 
+     Replacing these appliances in the attic afterwards can significantly damage or disturb air 
+     sealing and insulation.
+    </Collapsible>
     ## Blower Door
     <PhotoInput id="blower_door_setup_photo" label="Blower Door Setup – Photo">
         Photo of the blower door setup before the air sealing insulation work
@@ -22,6 +33,7 @@
       Floor plan sketch mapping the locations of air leaks found from feeling penetrations for air leaks while the blower door is running and/or with the assistance of a thermal imaging camera while the blower door is running.
      </PhotoInput>
      <StringInput  label="Comment on any notable and unusual leaks" path="comment_on_leaks_in_floor_plan_sketch" /> 
+     <CombustionSafetyChecksLink {...props} />
   </Tab>
 
   <Tab eventKey="preparation" title="Preparation">
@@ -183,6 +195,8 @@
       ? <p><strong>Comment on any notable and unusual leaks:</strong> {props.data.comment_on_leaks_in_floor_plan_sketch}</p> 
       : null
     }
+
+    <CombustionSafetyChecksReport path="combustion_safety_tests" />
     
 
     ## Attic Preparation
