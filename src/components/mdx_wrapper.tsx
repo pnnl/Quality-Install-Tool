@@ -30,6 +30,8 @@ import CheckBoxWrapper from './checkbox_wrapper'
 import CombustionSafetyChecks from './combustion_safety_checks_inputs'
 import CombustionSafetyChecksReport from './combustion_safety_checks_report'
 import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
+import DocNameInputWrapper from './doc_name_input_wrapper'
+import SaveCancelButtonWrapper from './save_cancel_button_wrapper'
 
 const components = {
     Collapsible,
@@ -60,6 +62,8 @@ const components = {
     CombustionSafetyChecks: CombustionSafetyChecks,
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
+    DocNameInput: DocNameInputWrapper,
+    SaveCancelButton: SaveCancelButtonWrapper,
 }
 
 interface MdxWrapperProps {

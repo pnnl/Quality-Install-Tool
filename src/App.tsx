@@ -29,7 +29,6 @@ const routes = [
     //     path: '/template_editor',
     //     element: <TemplateEditor />,
     // },
-
     {
         path: `/app/:projectId/workflows`,
         // Workflow list view:  List the names of workflows available for generating installation report.

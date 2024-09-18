@@ -48,7 +48,9 @@ export async function putNewDoc(
             created_at: now,
             last_modified_at: now,
             attachments: {},
+            status: 'new',
         },
+
         children: [],
     })
 }
@@ -136,9 +138,11 @@ export async function retrieveProjectDocs(
 ): Promise<any> {
     try {
         const allDocs = await db.allDocs({ include_docs: true })
+
         const projects = allDocs.rows
             .map(row => row.doc as any)
             .filter(doc => doc.type === 'project')
+
         return projects
     } catch (error) {
         console.error('Error retrieving projects:', error)

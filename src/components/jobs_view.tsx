@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TfiTrash, TfiPlus } from 'react-icons/tfi'
+import { TfiTrash, TfiPlus, TfiPencil } from 'react-icons/tfi'
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup, Modal } from 'react-bootstrap'
@@ -193,7 +193,9 @@ const JobList: React.FC = () => {
 
             <br />
 
-            <Button onClick={openAddModal}>Add Installation</Button>
+            <Button variant="primary" onClick={openAddModal}>
+                Add Installation
+            </Button>
             <StringInputModal
                 isOpen={isAddModalOpen}
                 closeModal={closeAddModal}
@@ -229,6 +231,7 @@ const JobList: React.FC = () => {
                             {jobID.metadata_.doc_name}
                             <span className="icon-container">
                                 <Button
+                                    variant="light"
                                     onClick={event => {
                                         event.stopPropagation()
                                         event.preventDefault()
@@ -238,10 +241,11 @@ const JobList: React.FC = () => {
                                         }))
                                     }}
                                 >
-                                    Rename
+                                    <TfiPencil size={22} />
                                 </Button>
 
                                 <Button
+                                    variant="light"
                                     onClick={event => {
                                         event.stopPropagation()
                                         event.preventDefault()
@@ -250,9 +254,8 @@ const JobList: React.FC = () => {
                                             jobID.metadata_.doc_name,
                                         )
                                     }}
-                                    variant="danger"
                                 >
-                                    <TfiTrash />
+                                    <TfiTrash size={22} />
                                 </Button>
                             </span>
                         </ListGroup.Item>

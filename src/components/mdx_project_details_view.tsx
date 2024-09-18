@@ -33,11 +33,9 @@ const MdxProjectView: FC = () => {
             dbName={dbName}
             docId={projectId as string}
             workflowName=""
-            docName={projectDoc.metadata_?.doc_name}
+            docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <h1>Project Details</h1>
-            <h3>{projectDoc.metadata_?.doc_name}</h3>
             <MdxWrapper
                 Component={DOEProjectDetailsTemplate}
                 Project={projectDoc}
