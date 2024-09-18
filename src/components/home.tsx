@@ -3,7 +3,6 @@ import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
-import { Tooltip } from 'react-tooltip'
 import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
@@ -172,9 +171,6 @@ const Home: FC = () => {
                     <Button onClick={handleAddJob} alt-text="Add a New Project">
                         Add a New Project
                     </Button>
-                    <Tooltip anchorSelect=".add-project" place="top">
-                        Add a New Project
-                    </Tooltip>
                 </div>
             </center>
         )
@@ -210,12 +206,6 @@ const Home: FC = () => {
                                     >
                                         <TfiPencil size={22} />
                                     </Button>
-                                    <Tooltip
-                                        anchorSelect=".edit"
-                                        place="bottom"
-                                    >
-                                        Edit
-                                    </Tooltip>
                                     <Button
                                         variant="light"
                                         onClick={event =>
@@ -224,12 +214,6 @@ const Home: FC = () => {
                                     >
                                         <TfiTrash size={22} />
                                     </Button>
-                                    <Tooltip
-                                        anchorSelect=".delete"
-                                        place="bottom"
-                                    >
-                                        Delete
-                                    </Tooltip>
                                 </span>
                                 <b>{key.metadata_?.doc_name}</b>
                                 {key.data_?.location?.street_address && (
