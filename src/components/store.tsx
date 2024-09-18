@@ -10,7 +10,7 @@ import React, {
 
 import { isEmpty, isObject, toNumber, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
-import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
+import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
@@ -318,14 +318,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         fileName?: string,
     ) => {
         // Create the metadata for the blob
-
-        const metadata: Attachment['metadata'] =
-            blob.type === 'image/jpeg'
-                ? await getMetadataFromCurrentGPSLocation()
-                : {
-                      filename: fileName,
-                      timestamp: new Date(Date.now()).toISOString(),
-                  }
+        const metadata: Attachment['metadata'] = isPhoto(blob)
+            ? await getMetadataFromPhoto(blob)
+            : {
+                  filename: fileName,
+                  timestamp: new Date(Date.now()).toISOString(),
+              }
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)
