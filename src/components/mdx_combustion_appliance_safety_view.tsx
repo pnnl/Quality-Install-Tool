@@ -38,12 +38,10 @@ const MdxCombustionSafetyView: FC = () => {
         >
             <h1>Combustion Appliance Safety Testing</h1>
             <h2>Installation for {projectDoc?.metadata_?.doc_name}</h2>
-            <h3>
-                {projectDoc?.data_?.location?.street_address}&nbsp;
-                {projectDoc?.data_?.location?.city}
-            </h3>
             <center>
                 <h3>
+                    {projectDoc?.data_?.location?.street_address}&nbsp;
+                    {projectDoc?.data_?.location?.city}
                     {projectDoc?.data_?.location?.state}&nbsp;
                     {projectDoc?.data_?.location?.zip_code}
                 </h3>
