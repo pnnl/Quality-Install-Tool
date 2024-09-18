@@ -7,7 +7,7 @@
 
 {props.data.assessment_for === 'Whole multifamily building' 
   ? <NumberInput label="Conditioned floor area of multifamily building" path="mf_conditioned_floor_area_sq_ft" hint="Include common areas"/>
-  : <Select label="Conditioned floor area of single dwelling unit" path="sf_conditioned_floor_area_sq_ft" options={["1500SF_2500SF", "500SF_1500SF", "GREATER_THAN_2500SF", "LESS_THAN_500SF"]}/>
+  : <Select label="Conditioned floor area of single dwelling unit" path="sf_conditioned_floor_area_sq_ft" options={["LESS_THAN_500SF", "500SF_1500SF", "1500SF_2500SF", "GREATER_THAN_2500SF", ]}/>
 }
 
 <Select label="Is the year the building was built known?" path="is_year_built_known" options={["YES", "NO"]} />
@@ -243,7 +243,7 @@
           : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_afue : "NOT_KNOWN"}</p>
         }
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[0].is_percent_conditioned_floor_area_served_known ? props.data.heating_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[0].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     {Number(props.data.num_heating_systems) > 1 && props.data.heating_systems[1] &&
@@ -257,7 +257,7 @@
           : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_afue : "NOT_KNOWN"}</p>
         }
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[1].is_percent_conditioned_floor_area_served_known ? props.data.heating_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     {Number(props.data.num_heating_systems) > 2 && props.data.heating_systems[2] &&
@@ -271,7 +271,7 @@
           : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_afue : "NOT_KNOWN"}</p>
         }
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[2].is_percent_conditioned_floor_area_served_known ? props.data.heating_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     </>
@@ -285,7 +285,7 @@
 
         <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[0].is_efficiency_known === 'YES' ? props.data.cooling_systems[0].efficiency_seer : "NOT_KNOWN"}</p>
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[0].is_percent_conditioned_floor_area_served_known ? props.data.cooling_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[0].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     {Number(props.data.num_cooling_systems) > 1 && props.data.cooling_systems[1] &&
@@ -294,7 +294,7 @@
 
         <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[1].is_efficiency_known === 'YES' ? props.data.cooling_systems[1].efficiency_seer : "NOT_KNOWN"}</p>
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[1].is_percent_conditioned_floor_area_served_known ? props.data.cooling_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     {Number(props.data.num_cooling_systems) > 2 && props.data.cooling_systems[2] &&
@@ -303,7 +303,7 @@
 
         <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[2].is_efficiency_known === 'YES' ? props.data.cooling_systems[2].efficiency_seer : "NOT_KNOWN"}</p>
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[2].is_percent_conditioned_floor_area_served_known ? props.data.cooling_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
       </>
     }
     </>
