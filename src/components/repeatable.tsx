@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import dbName from './db_details'
 import { useParams } from 'react-router-dom'
@@ -13,6 +13,14 @@ interface RepeatableProps {
     count: number // Default number of repetition
     children: any
     fixed: boolean
+}
+
+// Define an extended props type that includes the `id` prop
+interface CustomProps {
+    id?: string
+    path?: string
+    label?: string
+    children?: ReactNode
 }
 
 /**
@@ -197,24 +205,55 @@ const Repeatable: FC<RepeatableProps> = ({
         }
     }
 
+    const cloneChildAndNestedChild = (
+        child: ReactElement<CustomProps>,
+        {
+            path,
+            item_key,
+        }: {
+            path: string
+            item_key: string
+        },
+    ): React.ReactNode => {
+        if (React.isValidElement(child)) {
+            // Enhance child props
+            return React.cloneElement(child, {
+                key: `${item_key}-${child.props.label}`,
+                id: `${path}.${item_key}.${child.props.id}`,
+                path: `${path}[${item_key}].${child.props.path}`,
+                children: React.Children.map(
+                    child.props.children,
+                    nestedChild =>
+                        cloneChildAndNestedChild(
+                            nestedChild as ReactElement<CustomProps>,
+                            {
+                                path,
+                                item_key,
+                            },
+                        ),
+                ),
+            })
+        }
+        return child
+    }
+
     return (
         <div>
             {itemKeys &&
                 itemKeys.map((item_key: any, index) => (
                     <div key={item_key}>
                         <Collapsible
-                            header={`${label}: ${
+                            header={`${label}${' '}${index + 1} ${
                                 items[item_key]?.name
-                                    ? items[item_key]?.name
+                                    ? ': ' + items[item_key]?.name
                                     : ''
                             }`}
                         >
                             <div className="combustion_tests">
                                 {React.Children.map(children, child =>
-                                    React.cloneElement(child, {
-                                        path: `${path}[${item_key}].${child.props.path}`,
-                                        key: `${item_key}-${child.props.label}`, // Unique key for each input
-                                        id: `${path}.${item_key}.${child.props.id}`,
+                                    cloneChildAndNestedChild(child, {
+                                        path,
+                                        item_key,
                                     }),
                                 )}
                             </div>

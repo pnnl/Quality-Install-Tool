@@ -17,7 +17,6 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
             console.error('projectId is undefined')
             return
         }
-        console.log(projectId)
         try {
             const res: any = await db.get(projectId)
             const appliances_data = res.data_[path]
@@ -52,7 +51,6 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
             changes.cancel()
         }
     }, [])
-    console.log(appliances)
     return (
         <div>
             {appliances && Object.values(appliances)[0] && (
@@ -273,8 +271,6 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                                 </div>
                             )}
                         </div>
-
-                        <div>&nbsp;</div>
                     </div>
                 ))}
         </div>

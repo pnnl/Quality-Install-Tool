@@ -15,9 +15,8 @@
     Replacing these appliances in the attic afterwards can significantly damage or disturb the air sealing and insulation.
     </Collapsible>
 
-    <ShowOrHide visible={false}>
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} default_value={['Attic']} path="airsealing_location" />
-    </ShowOrHide>
+    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} default_value={['Attic']} path="airsealing_location" hidden />
+   
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="attic_air_leakage_rate" />
     
     <ShowOrHide visible={props.data?.attic_air_leakage_rate === 'CFM at 50Pa'}> 
@@ -186,8 +185,11 @@
   <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
-    *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+  *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  * If the ASHRAE 62.2 mechanical ventilation calculator finds that the home should have a whole-house mechanical ventilation system installed, please use the mechanical ventilation workflow to document.
+  <Button variant='primary' href={`/app/${props.project?._id}/doe_workflow_mechanical_ventilation`}> Document Mechanical Ventilation</Button>
+
   </Collapsible>
   <Radio label="Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
   ## Project Invoice 
@@ -332,15 +334,17 @@
     <p> What R-value was added to the ceiling? <strong>{props.data?.postinstall_ceiling_r_value}</strong> </p>
     <p> What percentage of ceiling area received additional insulation? <strong>{props.data?.postinstall_insulated_ceiling_area}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
     ## Ventilation
     <p> Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data?.post_retrofit_ashrae_62_2_calculation} </p>
 
-    ## Project Invoice
-    <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
-      Photo of the project invoice
-    </Photo>
+    {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+            </Photo> </>
+            )}
 
 
     </PrintSection>

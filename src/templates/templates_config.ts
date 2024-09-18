@@ -19,7 +19,6 @@ import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_vent
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
-import DOEWorkflowCombustionSafetyTesting from './doe_workflow_combustion_appliance_safety_tests.mdx'
 import { MDXProps } from 'mdx/types'
 
 interface TemplatesConfig {
@@ -37,10 +36,6 @@ const templatesConfig: TemplatesConfig = {
         title: 'Attic Air Sealing and Insulation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
     },
-    // doe_workflow_combustion_safety_testing: {
-    //     title: 'Combustion Appliance Safety Testing',
-    //     template: DOEWorkflowCombustionSafetyTesting,
-    // },
     doe_workflow_duct_air_sealing: {
         title: 'Duct Air Sealing and Insulation',
         template: DOEWorkflowDuctAirSealTemplate,
@@ -61,10 +56,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
-    doe_workflow_foundation_airsealing_and_insulation: {
-        title: 'Foundation Wall Air Sealing and Insulation',
-        template: DOEWorkflowFoundationAirSealingAndInsulation,
-    },
+    // doe_workflow_foundation_airsealing_and_insulation: {
+    //     title: 'Foundation Wall Air Sealing and Insulation',
+    //     template: DOEWorkflowFoundationAirSealingAndInsulation,
+    // },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
         template: DOEWorkflowFullFrameReplacementWindows,
@@ -105,14 +100,14 @@ const templatesConfig: TemplatesConfig = {
         title: 'Mechanical Ventilation',
         template: DOEWorkflowMechanicalVentilation,
     },
-    doe_workflow_slab_foundation_exterior: {
-        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
-        template: DOEWorkflowSlapFoundationExterior,
-    },
-    doe_workflow_wall_air_sealing_and_insulation_exterior: {
-        title: 'Wall Air Sealing and Insulation (Drill and Fill)',
-        template: DOEWorkflowWallAirSealingAndInsulation,
-    },
+    // doe_workflow_slab_foundation_exterior: {
+    //     title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
+    //     template: DOEWorkflowSlapFoundationExterior,
+    // },
+    // doe_workflow_wall_air_sealing_and_insulation_exterior: {
+    //     title: 'Wall Air Sealing and Insulation (Drill and Fill)',
+    //     template: DOEWorkflowWallAirSealingAndInsulation,
+    // }
 }
 
 // Assuming TemplatesConfig is defined somewhere as a type or interface

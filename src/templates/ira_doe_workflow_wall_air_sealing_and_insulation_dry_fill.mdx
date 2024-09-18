@@ -16,7 +16,7 @@
     the wall air sealing and insulation. 
     </Collapsible>
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" />
+    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="wall_air_leakage_rate" />
     
@@ -191,7 +191,7 @@
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
   ## Project Invoice 
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-    Take a photo of the project invoice. 
+      Take a photo of the project invoice if your program requires it.
   </PhotoInput>
   </Tab>
  
@@ -331,10 +331,12 @@
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
 
-    ## Project Invoice
-    <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
-      Photo of the project invoice
-    </Photo>
+   {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+            </Photo> </>
+            )}
 
     </PrintSection>
   </Tab>

@@ -10,6 +10,7 @@ interface CheckboxProps {
     options: string[]
     updateValue: (values: string[]) => void
     value: string[]
+    hidden?: boolean
 }
 
 /**
@@ -28,6 +29,7 @@ const Checkbox: FC<CheckboxProps> = ({
     options,
     updateValue,
     value: initialValue,
+    hidden,
 }) => {
     const [selectedValues, setSelectedValues] = useState<string[]>(
         initialValue || [],
@@ -57,9 +59,8 @@ const Checkbox: FC<CheckboxProps> = ({
             })
         }
     }
-
     return (
-        <Card className="input-card">
+        <Card className="input-card" hidden={hidden}>
             <Card.Body>
                 <label className="mb-3 custom-label">{label}</label>
                 <Form.Group className="mb-3" controlId={id}>

@@ -12,14 +12,12 @@
         </PhotoInput>        
         <StringInput label="Ductwork Comments" path="comment_ductwork" />
         
-
         ## Static Pressure Test
         Total external static pressure measurement
         <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
             Take a photo of the manometer readout or screenshot from digital instrument app.
         </PhotoInput>   
         <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c, assess whether the static pressure is in the supply or return. If it is in the return, consider recommending upsizing the return filter to accommodate a larger size and a deeper filter." />
-       
 
         ## Airflow Test
         Use flow plate test OR the pressure matching technique
@@ -572,8 +570,8 @@
                 : null
             }
 
-            {props.data?.project_invoice_photo && (<>
-                ## Project Invoice
+            {props.metadata?.attachments?.project_invoice_photo && (<>
+                <h2>Project Invoice</h2>
                 <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
                 </Photo> </>

@@ -83,8 +83,7 @@
             and model selected showing the sensible versus total cooling capacity at the design conditions.
         </PhotoInput>
 
-        <StringInput  label="Comment" path="comment_euipment_selection" hint="Comment if there will be backup or auxiliary heat sources, e.g. electric resistance baseboard heaters will be left in place as a backup or auxiliary heat source." />
-
+        <StringInput  label="Comment" path="comment_equipment_selection" hint="Comment if there will be backup or auxiliary heat sources, e.g. electric resistance baseboard heaters will be left in place as a backup or auxiliary heat source." />
 
         <CombustionSafetyChecksLink {...props} />
 
@@ -296,8 +295,6 @@
                 
             }
 
-            <CombustionSafetyChecksReport path="combustion_safety_tests" />
-
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
@@ -310,6 +307,12 @@
                 Photo or Screenshot of the manufacturer’s cooling performance table for the heat pump make
                 and model selected showing the sensible versus total cooling capacity at the design conditions.
             </Photo>
+
+            { props.data?.comment_equipment_selection && 
+            <p>Comment: {props.data?.comment_equipment_selection}</p>
+            }
+
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
@@ -407,8 +410,8 @@
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
-            {props.data?.project_invoice_photo && (
-            <>## Project Invoice
+            {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
             <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
             </Photo> </>

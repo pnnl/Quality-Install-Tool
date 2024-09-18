@@ -276,7 +276,6 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
                     data_: updatedData,
                     _rev: doc._rev, // Ensure you include the latest revision
                 }
-                console.log('Here', updatedData, attachments)
 
                 // Remove the attachments, if any
                 attachments &&
@@ -290,7 +289,6 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
                         }
                     })
 
-                console.log('Here2', updatedData)
                 if (updatedDoc)
                     // Save the updated document back to the database
                     await db.put(updatedDoc)

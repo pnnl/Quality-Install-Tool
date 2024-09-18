@@ -10,6 +10,7 @@ interface CheckBoxWrapperProps {
     options: string[]
     path: string
     default_value?: string[]
+    hidden?: boolean
 }
 
 /**
@@ -27,6 +28,7 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
     options,
     path,
     default_value,
+    hidden,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
@@ -42,6 +44,7 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
                         value={
                             get(data, path) ? get(data, path) : default_value
                         }
+                        hidden={hidden}
                     />
                 )
             }}
