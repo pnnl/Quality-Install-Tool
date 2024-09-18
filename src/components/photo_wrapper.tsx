@@ -1,11 +1,10 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
 import Photo from './photo'
 import PhotoMetadata from '../types/photo_metadata.type'
 import dbName from './db_details'
-import { retrieveDocFromDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -14,6 +13,7 @@ interface PhotoWrapperProps {
     required: boolean
     docId: string
     project?: any
+    fromParent?: boolean
 }
 
 /**
@@ -34,20 +34,30 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     id,
     label,
     required,
+    docId,
     project,
+    fromParent,
 }) => {
-    const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
+    const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
+    const [projectDoc, setProjectDoc] = useState<any>(project)
+    const db = new PouchDB(dbName)
 
-    if (id === 'building_number_photo') {
-        new PouchDB(dbName)
-            .getAttachment(project?._id, id)
-            .then(res => {
-                setBuildingPhotoBlob(res)
-            })
-            .catch(err => {
-                /* Building number photo not present */
-            })
-    }
+    useEffect(() => {
+        if (fromParent) {
+            const projectDocId = project?._id || docId
+            db.get(projectDocId)
+                .then(res => {
+                    setProjectDoc(res)
+                })
+                .catch(err => {})
+
+            db.getAttachment(projectDocId, id)
+                .then(res => {
+                    setPhotoBlob(res)
+                })
+                .catch(err => {})
+        }
+    }, [fromParent])
 
     return (
         <StoreContext.Consumer>
@@ -57,14 +67,25 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                     id,
                 )?.value
 
-                const photo =
-                    id === 'building_number_photo'
-                        ? buildingPhotoBlob
-                        : attachment?.blob
-                const metadata =
-                    id === 'building_number_photo'
-                        ? project?.metadata_?.attachments[id]
-                        : attachment?.metadata
+                const photo = fromParent ? photoBlob : attachment?.blob
+                let metadata = attachment?.metadata
+
+                if (fromParent) {
+                    const attachmentIdParts = id.split('.')
+
+                    if (attachmentIdParts.length > 1) {
+                        // Access nested attachment metadata using the split parts
+                        const [firstPart, secondPart, thirdPart] =
+                            attachmentIdParts
+                        metadata =
+                            projectDoc?.metadata_?.attachments[firstPart]?.[
+                                secondPart
+                            ]?.[thirdPart]
+                    } else {
+                        // Directly access attachment metadata if there's no nesting
+                        metadata = projectDoc?.metadata_?.attachments[id]
+                    }
+                }
 
                 return (
                     <Photo
