@@ -102,10 +102,9 @@
 
     ## Existing Condition
     <p>Is there an existing whole-house ventilation system? <strong>{props.data?.whole_house_ventilation}</strong></p>
-
-    {props.data?.whole_house_ventilation && props.data?.whole_house_ventilation === "Yes" && (
-    <> 
-      <Photo id="existing_mechanical_ventilation_air_flow_measurement_photo" label="Existing Whole-House Mechanical Ventilation Air Flow Measurement – Photo" />
+    
+    <ShowOrHide visible={props.data?.whole_house_ventilation === "Yes"}> 
+      <Photo id="existing_mechanical_ventilation_air_flow_measurement_photo" label="Existing Whole-House Mechanical Ventilation Air Flow Measurement – Photo" required />
       
       <p>Existing whole-house mechanical ventilation system: <strong>{props.data?.existing_ventilation_equipemnt_selection}</strong></p> 
       <ShowOrHide visible={["Supply only","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.existing_ventilation_equipemnt_selection)}>
@@ -115,7 +114,8 @@
       <ShowOrHide visible={["Continuous exhaust","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.existing_ventilation_equipemnt_selection)}>
         <p>What is the total exhaust based mechanical ventilation CFM? <strong>{props.data?.total_exhaust_cfm}</strong> </p>
       </ShowOrHide>
-    </>)}
+    </ShowOrHide>
+    
 
     <p>Equipment selection: <strong>{props.data?.ventilation_equipemnt_selection}</strong></p>
 
@@ -133,10 +133,11 @@
     </Photo>
 
     <ShowOrHide visible={["Continuous exhaust","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.ventilation_equipemnt_selection)}>
-      <Photo id="air_flow_measurement_exhaust_photo" label="Air Flow Measurement Exhaust – Photo" />
+      <Photo id="air_flow_measurement_exhaust_photo" label="Air Flow Measurement Exhaust – Photo" required/>
     </ShowOrHide>
+
     <ShowOrHide visible={["Supply only","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.ventilation_equipemnt_selection)}>
-      <Photo id="air_flow_measurement_supply_photo" label="Air Flow Measurement Supply – Photo" />
+      <Photo id="air_flow_measurement_supply_photo" label="Air Flow Measurement Supply – Photo" required/>
     </ShowOrHide>
 
     <Photo id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" required >
