@@ -11,6 +11,7 @@ import IRADOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_eff
 import IRADOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
 import IRADOEWorkflowFullFrameReplacementWindows from './ira_doe_workflow_full_frame_replacement_windows.mdx'
 import IRADOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
+import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
 
 import { MDXProps } from 'mdx/types'
 
@@ -64,6 +65,10 @@ const templatesConfig: TemplatesConfig = {
     ira_doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
         template: IRADOEWorkflowInsertReplacementWindows,
+    },
+    ira_doe_workflow_limited_assessment: {
+        title: 'IRA Limited Assessment',
+        template: IRADOEWorkflowLimitedAssessment,
     },
 }
 

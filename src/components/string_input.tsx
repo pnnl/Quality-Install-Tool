@@ -45,7 +45,7 @@ const StringInput: FC<StringInputProps> = ({
         } else if (inputValue.length > max) {
             setError('Input must be at most ' + max + ' characters long')
         } else if (!regexp.test(inputValue)) {
-            setError('Input must match' + regexp)
+            setError('Input must match the pattern')
         } else {
             setError('')
         }
