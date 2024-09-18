@@ -132,3 +132,4 @@ function validateTemplatesConfig(config: TemplatesConfig) {
 validateTemplatesConfig(templatesConfig)
 
 export default templatesConfig
+
