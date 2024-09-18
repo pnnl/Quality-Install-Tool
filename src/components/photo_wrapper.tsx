@@ -49,13 +49,13 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                 .then(res => {
                     setProjectDoc(res)
                 })
-                .catch(err => { })
+                .catch(err => {})
 
             db.getAttachment(projectDocId, id)
                 .then(res => {
                     setPhotoBlob(res)
                 })
-                .catch(err => { })
+                .catch(err => {})
         }
     }, [fromParent])
 
@@ -67,14 +67,25 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                     id,
                 )?.value
 
-                const photo =
-                    id === 'building_number_photo'
-                        ? buildingPhotoBlob
-                        : attachment?.blob
-                const metadata =
-                    id === 'building_number_photo'
-                        ? project?.metadata_?.attachments[id]
-                        : attachment?.metadata
+                const photo = fromParent ? photoBlob : attachment?.blob
+                let metadata = attachment?.metadata
+
+                if (fromParent) {
+                    const attachmentIdParts = id.split('.')
+
+                    if (attachmentIdParts.length > 1) {
+                        // Access nested attachment metadata using the split parts
+                        const [firstPart, secondPart, thirdPart] =
+                            attachmentIdParts
+                        metadata =
+                            projectDoc?.metadata_?.attachments[firstPart]?.[
+                                secondPart
+                            ]?.[thirdPart]
+                    } else {
+                        // Directly access attachment metadata if there's no nesting
+                        metadata = projectDoc?.metadata_?.attachments[id]
+                    }
+                }
 
                 return (
                     <Photo
