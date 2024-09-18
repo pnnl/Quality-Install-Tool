@@ -26,12 +26,10 @@ import PrintSectionWrapper from './print_section wrapper'
 import FileInputWrapper from './file_input_wrapper'
 import PDFRendererWrapper from './pdf_renderer_wrapper'
 import ShowOrHide from './show_or_hide'
-import Select from './select_wrapper'
 import CheckBoxWrapper from './checkbox_wrapper'
 import CombustionSafetyChecks from './combustion_safety_checks_inputs'
 import CombustionSafetyChecksReport from './combustion_safety_checks_report'
 import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
-import Repeatable from './repeatable'
 
 const components = {
     Collapsible,
@@ -62,7 +60,6 @@ const components = {
     CombustionSafetyChecks: CombustionSafetyChecks,
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
-    Repeatable: Repeatable,
 }
 
 interface MdxWrapperProps {

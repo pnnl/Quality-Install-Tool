@@ -16,13 +16,12 @@ const MdxCombustionSafetyView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.
     const { projectId } = useParams()
     const [projectDoc, setProjectDoc] = useState<any>({})
+    const db = new PouchDB(dbName)
 
     const project_info = async (): Promise<void> => {
-        retrieveDocFromDB(new PouchDB(dbName), projectId as string).then(
-            (res: any) => {
-                setProjectDoc(res)
-            },
-        )
+        retrieveDocFromDB(db, projectId as string).then((res: any) => {
+            setProjectDoc(res)
+        })
     }
 
     useEffect(() => {
@@ -37,7 +36,8 @@ const MdxCombustionSafetyView: FC = () => {
             docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <h1>{projectDoc?.metadata_?.doc_name}</h1>
+            <h1>Combustion Appliance Safety Testing</h1>
+            <h2>Installation for {projectDoc?.metadata_?.doc_name}</h2>
             <h3>
                 {projectDoc?.data_?.location?.street_address}&nbsp;
                 {projectDoc?.data_?.location?.city}

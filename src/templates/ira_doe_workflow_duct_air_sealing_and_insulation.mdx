@@ -2,7 +2,7 @@
   <Tab eventKey="pre-installation" title="Pre-Installation">
     ## Existing Conditions
     
-    <Select label="Do the existing ducts run primarily through conditioned or unconditioned space?" options={["Conditioned","Unconditioned","Don’t know"]} path="existing_duct_condition" />
+    <Select label="Do the existing ducts run primarily through conditioned or unconditioned space?" options={["Conditioned","Unconditioned"]} path="existing_duct_condition" />
 
     <PhotoInput id="existing_duct_photo" label="Condition of the inside of the ducts – Photo">
         Photo showing the condition of the inside of the ducts. Look for mold or high levels of dust
@@ -16,9 +16,9 @@
         Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
     </PhotoInput>
 
-    <Radio label="What is the total duct leakage before air sealing?" options={['CFM at 50Pa', 'Don\'t know',]} path="existing_duct_leakage_rate_radio" />
-    <ShowOrHide visible={props.data?.existing_duct_leakage_rate_radio === 'CFM at 50Pa'}> 
-    <NumberInput label="CFM at 50Pa" min={0} path="duct_leakage_cfm50"  />
+    <Radio label="What is the total duct leakage before air sealing?" options={['CFM at 25Pa', 'Not Measured',]} path="existing_duct_leakage_rate_radio" />
+    <ShowOrHide visible={props.data?.existing_duct_leakage_rate_radio === 'CFM at 25Pa'}> 
+    <NumberInput label="CFM at 25Pa" min={0} path="duct_leakage_cfm50"  />
     </ShowOrHide>
 
     <PhotoInput id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo">
@@ -64,7 +64,7 @@
       The supply and return plenum should be insulated with R-8 insulation. Use outward clinch staples and UL181 tape or mastic. Provide one representative example photo.
     </PhotoInput>
     <PhotoInput id="air_handler_access_panel_seams_sealed_photo" label="Air handler access panel seams sealed– Photo">
-      Seal all Air handler access panel seams with tape. Provide one representative example photo.
+      Seal all air handler access panel seams with tape. Provide one representative example photo.
     </PhotoInput>
     <PhotoInput id="air_filter_grille_slot_sealed_photo" label="Air filter grille/slot sealed – Photo">
       * If the system has an air filter slot, the door should have a gasket to seal it
@@ -77,14 +77,18 @@
     <Select label="What percentage of the duct system received additional insulation (choose the closest)?" options={["10%","25%","50%","75%","100%"]} path="postinstall_duct_insulation_percentage" />
 
     <PhotoInput id="postinstall_static_pressure_test_setup_photo" label="Post-installation total static pressure test setup – Photo">
-       Photo the total static pressure test setup
+       Photo of the total static pressure test setup
     </PhotoInput>
 
     <PhotoInput id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo">
         Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
     </PhotoInput>
 
-    <Radio label="What is the total duct leakage after air sealing?" options={['CFM at 50Pa', 'Don\'t know',]} path="postinstall_duct_leakage_rate" />
+    <Radio label="What is the total duct leakage after air sealing?" options={['CFM at 25Pa', 'Not Measured',]} path="postinstall_duct_leakage_rate" />
+
+    <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}> 
+      <NumberInput label="CFM at 25Pa" min={0} path="post_install_duct_leakage_cfm25"  />
+    </ShowOrHide>
 
     <PhotoInput id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo">
         Photo of floor plan sketch with the numbers
@@ -100,29 +104,23 @@
 
     ## Existing Conditions
 
-    <p> Existing ducts run primarily through conditioned or unconditioned space:   <strong> { props.data.existing_duct_condition ? props.data.existing_duct_condition : null } </strong> </p>
+    <p> Existing ducts run primarily through conditioned or unconditioned space:   <strong> { props.data?.existing_duct_condition } </strong> </p>
 
-    <Photo id="existing_duct_photo" label="Condition of the inside of the ducts – Photo" required>
-        Photo showing the condition of the inside of the ducts. Look for mold or high levels of dust
+    <Photo id="existing_duct_photo" label="Condition of the inside of the ducts – Photo" required >
+        Photo showing the condition of the inside of the ducts.
     </Photo>
 
-    <Photo id="existing_static_pressure_test_setup_photo" label="Existing condition total static pressure test setup – Photo" required>
-       Photo the total static pressure test setup, existing condition
-    </Photo>
+    <Photo id="existing_static_pressure_test_setup_photo" label="Existing condition total static pressure test setup – Photo" required/>
 
-    <Photo id="existing_static_pressure_read_out_photo" label="Existing condition total static pressure read out – Photo" required>
-       Photo the total static pressure read out, existing condition
-    </Photo>
+    <Photo id="existing_static_pressure_read_out_photo" label="Existing condition total static pressure read out – Photo" required />
+   
 
-    <p> Total duct leakage before air sealing:  <strong> { props.data.existing_duct_leakage_rate_radio ? props.data.existing_duct_leakage_rate_radio + ': ' : null } { props.data.existing_duct_leakage_rate_radio == 'CFM at 50Pa' ? props.data.duct_leakage_cfm50  : null } </strong></p>
+    <p> Total duct leakage before air sealing:  <strong> { (props.data?.existing_duct_leakage_rate_radio == 'CFM at 25Pa' && props.data?.duct_leakage_cfm50) ?  props.data?.duct_leakage_cfm50 + " "  : null } { props.data?.existing_duct_leakage_rate_radio}  </strong></p>
 
-    <Photo id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo" required>
-        Photo of the duct leakage
-    </Photo>
+    <Photo id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo" required />
 
-    <Photo id="existing_undersized_duct_or_return_photo" label="Undersized duct or return – Photo" required>
-       Photo of the undersized duct or return
-    </Photo>
+    <Photo id="existing_undersized_duct_or_return_photo" label="Undersized duct or return – Photo" required />
+
   
     ## Installation 
 
@@ -156,16 +154,15 @@
 
     ## Post Installation
 
-    <p>  Percentage of the duct system received additional insulation:  <strong> { props.data.postinstall_duct_insulation_percentage ? props.data.postinstall_duct_insulation_percentage : null } </strong> </p>
+    <p>  Percentage of the duct system received additional insulation:  <strong> { props.data?.postinstall_duct_insulation_percentage} </strong> </p>
 
     <Photo id="postinstall_static_pressure_test_setup_photo" label="Post-installation total static pressure test setup – Photo" required>
        Photo the total static pressure test setup
     </Photo>
 
-    <Photo id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo" required>
-        Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
-    </Photo>
-    <p> Total duct leakage after air sealing:  <strong> { props.data.postinstall_duct_leakage_rate ? props.data.postinstall_duct_leakage_rate : null } </strong> </p>
+    <Photo id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo" required />
+
+    <p> Total duct leakage after air sealing:  <strong> {props.data?.post_install_duct_leakage_cfm25 && props.data?.postinstall_duct_leakage_rate === "CFM at 25Pa" ? props.data?.post_install_duct_leakage_cfm25 : null}{' '}{ props.data?.postinstall_duct_leakage_rate} </strong> </p>
     <Photo id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo" required>
         Photo of floor plan sketch with the numbers
     </Photo>

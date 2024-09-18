@@ -264,38 +264,43 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
             return
         }
         try {
-            const db = new PouchDB(dbName)
             const doc: any = await db.get(projectId)
             const updatedData = { ...doc.data_, [path]: updatedAppliances }
 
-            const attachments = doc._attachments
+            if (doc && updatedData) {
+                const attachments = doc._attachments
 
-            // Prepare the updated document
-            const updatedDoc = {
-                ...doc,
-                data_: updatedData,
-                _rev: doc._rev, // Ensure you include the latest revision
-            }
-
-            // Remove the attachments, if any
-            Object.keys(attachments).map(attachmentId => {
-                if (
-                    attachmentId.includes(path + '.' + appliance_key) &&
-                    doc._attachments[attachmentId]
-                ) {
-                    delete doc._attachments[attachmentId]
+                // Prepare the updated document
+                const updatedDoc = {
+                    ...doc,
+                    data_: updatedData,
+                    _rev: doc._rev, // Ensure you include the latest revision
                 }
-            })
-            if (updatedDoc)
-                // Save the updated document back to the database
-                await db.put(updatedDoc)
 
-            fetchAppliances() // Update state after successful removal
+                // Remove the attachments, if any
+                attachments &&
+                    Object.keys(attachments).map(attachmentId => {
+                        if (
+                            attachmentId &&
+                            attachmentId.includes(path + '.' + appliance_key) &&
+                            doc._attachments[attachmentId]
+                        ) {
+                            delete doc._attachments[attachmentId]
+                        }
+                    })
+
+                if (updatedDoc)
+                    // Save the updated document back to the database
+                    await db.put(updatedDoc)
+
+                if (updatedAppliances) setAppliances(updatedAppliances)
+                else setAppliances({ ['A1']: {} })
+                setAppliancesKey(Object.keys(updatedAppliances))
+            }
         } catch (err) {
             console.error('Failed to remove appliance:', err)
         }
     }
-
     return (
         <div>
             {appliancesKey &&

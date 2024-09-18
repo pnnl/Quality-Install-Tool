@@ -1,12 +1,8 @@
 
 
 <Tabs>
-  
-
-  <Tab eventKey="assessment" title="Assessment">
+  <Tab eventKey="pre_installation" title="Pre-Installation">
     
-    The data for this tab should be collected during the initial site visit.
-
     ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
@@ -17,6 +13,7 @@
     </PhotoInput>
 
     ## HPWH Space Evaluation
+    Consider using the <a href="https://basc.pnnl.gov/hpwh_installation_tool" target="__new__">Heat Pump Water Heater Selection Tool </a> to help choose the optimal HPWH for the home.
     <Collapsible header="HPWH Space Evaluation — Instructions">
       The successful installation of a heat pump water heater (HPWH) begins in the planning
       stage by assessing whether the location where the HPWH will be installed is suitable.
@@ -76,9 +73,6 @@
       the cool air could possibly lower the temperature of the surface to the point of dewpoint 
       and cause moisture damage.
     </Collapsible>
-
-   <CombustionSafetyChecksLink {...props} />
-
   </Tab>
   <Tab eventKey="installation" title="Installation">
     ## HPWH Installation
@@ -186,14 +180,9 @@
       to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
       one is present, and reopen the cold water main shutoff valve.
     </Collapsible>
+    
+    <CombustionSafetyChecksLink {...props} />
 
-    <Collapsible header="Post-Installation Combustion Safety Testing">
-      Post installation combustion safety testing is required for a HPWH that is replacing a 
-      combustion water heater that draws air from the conditioned space and the zone will have 
-      a naturally drafted combustion appliance remaining after the HPWH is installed. Please 
-      use the combustion safety testing documentation workflow to document the combustion 
-      safety testing.
-    </Collapsible>
 
   </Tab>
   <Tab eventKey="report" title="Report">
@@ -245,11 +234,16 @@
     of the HPWH to an adjacent space. It is also possible to install a condensate pump where
     a drain located below the elevation of the HPWH’s condensate outlet is not available.
 
-    <Photo id="hpwh_location_photo" label="1. HPWH Location – Photo" required>
+    ## Existing Condition
+    <p>What is the fuel type of your existing water heater? <strong>{props.data?.existing_water_heater_fuel_type}</strong> </p>
+    <p>What is the type of your water heating system before upgrading to a heat pump water heater? <strong>{props.data?.existing_water_heater_type}</strong> </p>
+    <p>What is the storage capacity of the existing system? <strong>{props.data?.water_heater_storage_capacity}</strong> </p>
+    
+    <Photo id="hpwh_location_photo" label="HPWH Location – Photo" required>
       This wide-angle photo helps document that the HPWH Space Evaluation conditions 1-8 have been met.
     </Photo>
 
-    <Photo id="adjacent_space_photo" label="2. Adjacent Space – Photo">
+    <Photo id="adjacent_space_photo" label="Adjacent Space – Photo">
       This photo shows the adjacent space that will supply air to meet the air volume requirement 
       for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting 
       to meet air volume requirements.
@@ -261,38 +255,38 @@
       : null
     }
        
-
-  
     <h2>Old Hot Water Heater</h2>
-    <Photo id="old_nameplate_photo" label="3. Old Water Heater Nameplate – Photo">
+    <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       This photo shows the name plate of the old water heater. It may be used for rebate purposes
       or to determine the energy savings.
     </Photo>
         
    
-    ## Installation Day Photos
-    <Photo id="completed_installed_photo" label="4. Completed Installation – Photo" required>
+    ## Installation
+    <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
       This wide-angle photo shows the completed HPWH installation including the exhaust,
       insulated hot water line, pressure relief valve discharge, and condensate drainline.
     </Photo>
 
-    <Photo id="nameplate_photo" label="5. Nameplate – Photo" required>
+    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
       This close-up photo of the nameplate of the installed system shows the
       model number and serial number. A correctly-sized water heater is important for
       providing enough hot water while also being efficient.
     </Photo>
 
-    <Photo id="mode_photo" label="6. HPWH Screen with Mode – Photo" required>
+    <Photo id="mode_photo" label="HPWH Screen with Mode – Photo" required>
       This close-up photo shows the mode seeting of the HPWH.
     </Photo>
 
-    <Photo id="cta_2045_module_photo" label="7. CTA-2045 Module – Photo">
+    <Photo id="cta_2045_module_photo" label="CTA-2045 Module – Photo">
       This photo shows the installed CTA-2045 Module. This module is used by the electric utility
       to manage peak-time energy usage.
     </Photo>
 
+    ## Post-Installation
+    
+    <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
-    ## HPWHW Post-Installation
     The HPWH has an air filter that must be checked and cleaned every 3 months. 
     If dirty, clean the air filter by
     vacuuming the dust and washing with mild soap and detergent. Thoroughly dry before
@@ -331,6 +325,8 @@
     replenishes the heat in the tank quickly but less efficiently using the electric resistence elements
     or slower but much more
     efficiently using the heat pump.
+
+    
     </PrintSection>
   </Tab>
 </Tabs>

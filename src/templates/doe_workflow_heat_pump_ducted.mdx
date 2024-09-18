@@ -12,14 +12,12 @@
         </PhotoInput>        
         <StringInput label="Ductwork Comments" path="comment_ductwork" />
         
-
         ## Static Pressure Test
         Total external static pressure measurement
         <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
             Take a photo of the manometer readout or screenshot from digital instrument app.
         </PhotoInput>   
         <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c, assess whether the static pressure is in the supply or return. If it is in the return, consider recommending upsizing the return filter to accommodate a larger size and a deeper filter." />
-       
 
         ## Airflow Test
         Use flow plate test OR the pressure matching technique
@@ -141,15 +139,15 @@
         ## Refrigerant Recovery
         <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
         <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
-        <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
-            Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
-        </PhotoInput> 
-        <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
-            Take a photo of the refrigerant recovery setup. 
-        </PhotoInput> 
-        <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
-            Take a photo of the scale showing how much refrigerant was recovered out of the system. 
-        </PhotoInput> 
+            <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
+                Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+            </PhotoInput> 
+            <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
+                Take a photo of the refrigerant recovery setup. 
+            </PhotoInput> 
+            <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
+                Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+            </PhotoInput> 
        </ShowOrHide>
         ## Equipment
         <PhotoInput id="odu_nameplate_photo" label="ODU nameplate – Photo" >
@@ -160,10 +158,10 @@
         </PhotoInput>
         ## Electrical
         <PhotoInput id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
-            Take a photo showing the amperage of the breaker.
+            Take a photo showing the amperage of the Outdoor Unit (ODU) circuit breaker.
         </PhotoInput>
         <PhotoInput id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo">
-            Take a photo showing the amperage of the breaker.
+            Take a photo showing the amperage of the Indoor Unit (IDU) circuit breaker.
         </PhotoInput>
         
         <StringInput label="Circuit Breaker Notes" path="comment_circuit_breaker_notes" hint="E.g., wire size modifications, or shared or repurposed circuits." />
@@ -172,7 +170,8 @@
             Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer's recommended test pressure.
         </PhotoInput>
         <PhotoInput id="nitrogen_pressure_test_result_photo" label="Nitrogen Pressure Decay Test Results – Photo">
-            Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. Please use a digital pressure gauge.
+            Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. Please use a digital pressure gauge while the 
+            system is pressurized with nitrogen, check all the field made connections using non-corrosive bubble solution and/or an ultrasonic leak detector. 
         </PhotoInput>
         <PhotoInput id="vaccum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
             Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
@@ -207,7 +206,7 @@
         <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
            Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
 
-           Install service caps that have o-ring seals or use a flare gasket to help seal a brass-on-brass mating surface.
+           Install service caps that have o-ring seals or use a copper flare gasket to help seal a brass-on-brass mating surface.
         </PhotoInput>
 
         ## Plenum connections
@@ -238,7 +237,7 @@
 
         ## Project Invoice
         <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-            Take a photo of the project invoice.
+            Take a photo of the project invoice if your program requires it.
         </PhotoInput>
 
         ## Mechanical Ventilation
@@ -273,7 +272,7 @@
             success. It is strongly recommended a printed copy of this report be attached to the air handler
             as a record to help future home energy raters and HVAC techs.
             
-            ## About Atmospherically Vented Water Heaters
+            ## About Atmospherically Vented Appliances
             If there there are atmospherically vented appliances inside the home after the heat pump installation, a combustion safety 
             test should have been performed to test for backdrafting. Please refer to the combustion safety documentation report if such a test was performed at this house.
             
@@ -475,10 +474,27 @@
             }
                        
             ## Installation
-            <Photo id="odu_nameplate_photo" label="ODU Nameplate – Photo" required />
-            <Photo id="idu_nameplate_photo" label="IDU Nameplate – Photo" required />
-            <Photo id="odu_circuit_breaker_photo" label="ODU Circuit Breaker – Photo" required />
-            <Photo id="idu_circuit_breaker_photo" label="IDU Circuit Breaker – Photo" required />
+            {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
+           
+            {props.data?.replacting_old_ac_or_heatpump && props.data?.replacting_old_ac_or_heatpump === "Yes"  && (
+            <>
+                <Photo id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo" required>
+                    Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
+                </Photo> 
+                <Photo id="recover_setup_photo" label="Recovery Setup – Photo" required>
+                    Take a photo of the refrigerant recovery setup. 
+                </Photo> 
+                <Photo id="recover_scale_photo" label="Recovery Scale – Photo" required>
+                    Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+                </Photo>
+            </>
+            )}
+            
+            ## Equipment
+            <Photo id="odu_nameplate_photo" label="Outdoor Unit Nameplate – Photo" required />
+            <Photo id="idu_nameplate_photo" label="Indoor Unit Nameplate – Photo" required />
+            <Photo id="odu_circuit_breaker_photo" label="Outdoor Unit Circuit Breaker – Photo" required />
+            <Photo id="idu_circuit_breaker_photo" label="Indoor Unit Circuit Breaker – Photo" required />
             {
                 props.data.comment_circuit_breaker_notes
                 ? <p><strong>Circuit Breaker Notes: </strong> {props.data.comment_circuit_breaker_notes}</p> 
@@ -502,7 +518,7 @@
                 vacuum hose isolated from the system. This indicates the system contains no moisture and is leak free.
             </Photo>
             ## Refrigerant Adjustments
-            <Photo id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo" required >
+            <Photo id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo" >
                 Photo of scale readout and calculations for refrigerant charge adjustment
             </Photo>
             | Additional Refrigerant Added
@@ -554,11 +570,12 @@
                 : null
             }
 
-            ## Project Invoice
-            <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
+            {props.metadata?.attachments?.project_invoice_photo && (<>
+                <h2>Project Invoice</h2>
+                <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
-            </Photo>
-            
+                </Photo> </>
+            )}
             <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>

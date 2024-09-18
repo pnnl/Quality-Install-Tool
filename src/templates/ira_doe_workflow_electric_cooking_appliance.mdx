@@ -10,9 +10,12 @@
     <PhotoInput id="circuit_breaker_photo" label="Circuit Breaker – Photo ">
         Please take a picture of the circuit breaker that powers the electric cooling appliance.
     </PhotoInput>
-    <PhotoInput id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo">
-      Please take a picture of the gas pipe showing it is off and capped.
-    </PhotoInput>
+    <ShowOrHide visible={props.data?.existing_cooking_appliance_type === "Gas"}>
+      <PhotoInput id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo">
+        Please take a picture of the gas pipe showing it is off and capped.
+      </PhotoInput>
+    </ShowOrHide>
+
   </Tab>
   <Tab eventKey="post_installation" title="Post-Installation">
     <Select label="What is the new stovetop/oven/range type?" options={["Standard electric","Induction cooktop"]} path="postinstall_cooking_appliance_type" />
@@ -27,7 +30,7 @@
 
     ## Existing Conditions
 
-    <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data.existing_cooking_appliance_type ? props.data.existing_cooking_appliance_type : null } </strong> </p>
+    <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data?.existing_cooking_appliance_type} </strong> </p>
 
 
     ## Installation
@@ -37,13 +40,16 @@
     <Photo id="circuit_breaker_photo" label="Circuit Breaker – Photo " required>
         Please take a picture of the circuit breaker that powers the electric cooling appliance.
     </Photo>
-    <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
-      Please take a picture of the gas pipe showing it is off and capped.
-    </Photo>
+    
+    <ShowOrHide visible={props.data?.existing_cooking_appliance_type === "Gas"}>
+      <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
+        Please take a picture of the gas pipe showing it is off and capped.
+      </Photo>
+    </ShowOrHide>
 
     ## Post Installation
 
-    <p> What is the fuel type of the new stovetop/oven/range?   <strong> { props.data.postinstall_cooking_appliance_type ? props.data.postinstall_cooking_appliance_type : null } </strong> </p>
+    <p> What is the fuel type of the new stovetop/oven/range?   <strong> { props.data?.postinstall_cooking_appliance_type } </strong> </p>
 
     </PrintSection>
   </Tab>

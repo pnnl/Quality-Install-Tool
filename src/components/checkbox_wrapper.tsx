@@ -9,7 +9,8 @@ interface CheckBoxWrapperProps {
     label: string
     options: string[]
     path: string
-    default_value: string[]
+    default_value?: string[]
+    hidden?: boolean
 }
 
 /**
@@ -26,11 +27,11 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
     label,
     options,
     path,
-    default_value = null,
+    default_value,
+    hidden,
 }) => {
     // Generate an id for the input
     const id = pathToId(path, 'input')
-
     return (
         <StoreContext.Consumer>
             {({ data, upsertData }) => {
@@ -43,6 +44,7 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
                         value={
                             get(data, path) ? get(data, path) : default_value
                         }
+                        hidden={hidden}
                     />
                 )
             }}

@@ -1,13 +1,16 @@
-**Installer:**<br/>
-
-{props.project.data_.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.name}</span> : null} {props.project.data_.installer?.name ? <br/>: null}
-{props.project.data_.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.company_name}</span> : null}{props.project.data_.installer?.company_name ? <br/>: null}
-{props.project.data_.installer?.mailing_address ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.mailing_address}</span> : null}{props.project.data_.installer?.mailing_address ? <br/>: null}
-{props.project.data_.installer?.phone ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.phone} </span>: null}{props.project.data_.installer?.phone ? <br/>: null}
-{props.project.data_.installer?.email ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer?.email}</span>: null} {props.project.data_.installer?.email ? <br/>: null}
-
- 
-**Installation Date:**  <DateStr date={props.data.install_date}/> 
+<p>**Installer:**</p>
+<p className="margin-left">
+{props.project.data_.installer?.name} {props.project.data_.installer?.name ? <br/>: null}
+{props.project.data_.installer?.company_name }{props.project.data_.installer?.company_name ? <br/>: null}
+{props.project.data_.installer?.mailing_address }{props.project.data_.installer?.mailing_address ? <br/>: null}
+{props.project.data_.installer?.phone }{props.project.data_.installer?.phone ? <br/>: null}
+{props.project.data_.installer?.email} {props.project.data_.installer?.email ? <br/>: null}
+</p>
+{props.data.install_date && (
+  <>
+    <strong>Installation Date:</strong> <DateStr date={props.data.install_date} />
+  </>
+)}
 
 **Installation Address:** {props.project.data_.location?.street_address}, {props.project.data_.location?.city}, {props.project.data_.location?.state} {props.project.data_.location?.zip_code}
 
