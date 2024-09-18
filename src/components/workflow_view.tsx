@@ -59,8 +59,8 @@ const WorkFlowView: FC = () => {
     const templates = Object.keys(templatesConfig).map(key => (
         <LinkContainer key={key} to={`/app/${projectId}/${key}`}>
             <ListGroup.Item key={key} action={true}>
-                {templatesConfig[key as keyof typeof templatesConfig].title} (
-                {workflowJobsCount[key]})
+                {templatesConfig[key as keyof typeof templatesConfig].title}{' '}
+                {workflowJobsCount[key] > 0 && `(${workflowJobsCount[key]})`}
             </ListGroup.Item>
         </LinkContainer>
     ))

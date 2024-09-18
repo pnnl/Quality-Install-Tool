@@ -1,0 +1,343 @@
+<Tabs>
+  <Tab eventKey="pre-installation" title="Pre-Installation">
+    ## Existing Conditions
+    <Collapsible header="Existing Conditions">
+    The application of air permeable insulation without first air sealing is not an acceptable practice. 
+    E.g. just blowing in insulation into the walls without first blocking off and air sealing open top 
+    plates and bottom plate. Instead HEAR (50122) requires air sealing efforts to precede insulation work 
+    unless the insulation is spray foam which functions both as an air sealing product an insulation. 
+    The air sealing and insulation don’t have to be done by the same contractor. Prior to air sealing 
+    and insulating the walls check for signs of water intrusion, mold, pests, unsafe electrical wiring, 
+    polybutylene pipe, and exterior wall cavities used as a duct. Make necessary repairs prior to or at 
+    the same time as air sealing and insulating the walls. Inspect the windows and doors, if they are due 
+    for replacement, discuss with the customer the benefits of upgrading the windows and/or doors and then 
+    doing the wall air sealing and insulation. It is strongly recommended to discuss with the customer whether, 
+    electrical or HVAC upgrades, or remodeling work are in the near-term plans as these upgrades could damage 
+    the wall air sealing and insulation. 
+    </Collapsible>
+
+    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" hidden />
+
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="wall_air_leakage_rate" />
+    
+    <ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}> 
+      <NumberInput label="CFM at 50Pa" min={0} path="wall_air_leakage_cfm50"  />
+      <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+          Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <Select label="What is the existing insulation in the wall?" options={["None", "Cavity insulation (batt or blown-in)", " Fanfold insulation", "Exterior continuous insulation","Don’t know"]} path="existing_insulation_type" />
+
+    <StringInput label="What is the existing insulation R-value in the wall?" path="existing_r_value" />
+    
+    ## General Safety
+    <Collapsible header="General Safety">
+        Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
+    </Collapsible>
+
+    <Collapsible header="Roof condition">   
+    * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
+    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
+    </Collapsible>
+    <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="roof_condition" />
+
+    <Collapsible header="Drainage condition"> 
+    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
+    basement floor, check the gutters and downspouts are in good condition. Once the attic has been air sealed and 
+    insulated there is less heat escaping to dry the roof/attic thus water damage caused by clogged gutter will be 
+    much worse. Once the attic has been air sealed and insulated the amount of air exfiltrating through the attic 
+    is reduced and therefore the amount of air infiltrating into the crawlspace/basement is also reduced. 
+    Thus, even though attic air sealing and insulation of the attic is being performed, it can reduce the drying 
+    force of the crawlspace/basement, thus pre-existing moisture problems in the crawlspace/basement can be made 
+    worse by this action. Thus, it is a good practice to check and document pre-existing problems.
+    </Collapsible>
+    <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
+
+    <Collapsible header="Mold or Moisture in or Outside the Home"> 
+    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
+    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
+    thus it is important to check for the safety of the customer.
+    </Collapsible>
+    <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
+
+    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
+    *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+    </Collapsible>
+    <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
+
+    <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
+    
+  </Tab>
+  
+  <Tab eventKey="installation" title="Installation">
+    ##  Air Sealing Details
+    A blower door is recommended for finding were on walls to air seal and areas with missing interior air barrier. 
+    Depending on the home and the condition of the siding material, it might be similar cost to air seal and 
+    insulate the wall by adding exterior insulation when residing versus drilling and filling the walls with insulation.
+
+    <PhotoInput id="electrical_outlets_and_switches_photo" label="Electrical outlets and switches air sealed – Photo" >
+     * Air seal the box-to-drywall connection
+     * Air seal the wire penetrations.
+     * Provide one representative photo.
+    </PhotoInput> 
+
+    <PhotoInput id="windows_and_door_air_sealed_photo" label="Windows and door air sealed – Photo" >
+    *	Air seal the trim to the drywall.
+    *	Air seal the window/door frame to the trim.
+    *	Remember to caulk the top seams also. 
+    *	Provide one representative photo.
+    </PhotoInput> 
+
+    <PhotoInput id="rim_joist_air_sealed_photo" label="Rim/band joist between floors air sealed – Photo" >
+      Check if this home doesn’t have such a feature.
+       * If the budget allows and the customer is willing, cutting a strip of drywall out of the ceiling between floor 
+       to access the rim/band joist to air seal results in significant air leakage reduction.
+       * Insulation should be blown into air permeable bags to keep the insulation at the correct density and 
+       against the rim/band joist cavity. 
+    </PhotoInput> 
+
+    <PhotoInput id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo " >
+      Check if this home doesn’t have such a feature.
+      * Use a borescope camera to see if there is an interior air barrier for tub/shower installed against 
+          an exterior wall. Take a picture of the camera’s screen. If there is an air barrier good. 
+          If not when drilling and filling the walls with insulation, the tub/shower wall becomes the wall 
+          and interior air barrier
+      </PhotoInput> 
+
+    <PhotoInput id="prefabricated_metal_fireplace_exterior_wall_photo" label="Prefabricated metal fireplaces on exterior wall – Photo" >
+      Check if this home doesn’t have such a feature.
+      * Prefabricated metal fireplaces are often installed into niche framed into an exterior wall. 
+      Unfortunately, many of these fireplace niches are poorly sealed against air leaks. Sometimes they 
+      even lack an interior air barrier.  Use a borescope camera and/or a thermal imaging camera to see the 
+      interior air barrier and air sealing quality around the fireplace. Take a picture of the camera’s screen. 
+      If the fireplace has been removed to install air sealing and/or air barrier material, take a picture of the finished work.
+    </PhotoInput> 
+
+    <PhotoInput id="chase_wall_photo" label="Chase wall – Photo" >
+    Check if this home doesn’t have such a feature.
+    * Chase walls for chimneys intersecting with an exterior wall may lack an interior air barrier. 
+    To check, use a borescope camera to see if there is an interior air barrier. Take a picture of the camera’s screen. 
+    If there is an air barrier good. If not, discuss with the customer. If the budget allows and the customer is willing, 
+    cut a strip of drywall out of the chase wall to install an interior air barrier and air seal it. An alternative is 
+    to remove a section of siding and sheathing to install the interior air barrier from the outside.
+    </PhotoInput> 
+
+    <PhotoInput id="soffit_against_exterior_wall_photo" label="Soffit against exterior wall – Photo" >
+     Check if this home doesn’t have such a feature.
+    * Soffits are commonly used to house recessed lights or ventilation ducts. When they abut an exterior wall, 
+    the exterior wall often lacks an interior air barrier. To check, use a borescope camera to see if there is an 
+    interior air barrier. Take a picture of the camera’s screen. If there is an air barrier good. If not, discuss 
+    with the customer. If the budget allows and the customer is willing, cut a strip of drywall out of the chase 
+    wall to install an interior air barrier and air seal it. An alternative is to remove a section of siding and 
+    sheathing to install the interior air barrier from the outside.
+    </PhotoInput> 
+
+    <PhotoInput id="through_wall_pipe_penetration_photo" label="Through-wall pipe penetration Air Sealed – Photo" >
+    Check if this home doesn’t have such a feature.
+    *	Air seal water and drainpipes penetrations to the drywall that go into the exterior wall.
+    *	Provide one representative photo
+    </PhotoInput> 
+
+    <PhotoInput id="through_wall_vent_penetration_photo" label="TThrough-wall vent penetration Air Sealed – Photo" >
+      Check if this home doesn’t have such a feature.
+      * Air seal exhaust and intake penetrations to the drywall that go through the exterior wall. Check kitchen range hood, 
+      dryer vent, bath fans, and whole house mechanical ventilation, and barometric dampers.
+      * Provide one representative photo
+    </PhotoInput> 
+
+    ## Insulation Details
+    
+    <PhotoInput id="thermal_imaging_camera_cavities_filled_photo" label="Thermal imaging camera showing the cavities have been filled – Photo" >
+     * Provide one representative photo
+    </PhotoInput> 
+    <PhotoInput id="insulation_plugs_photo" label="Insulation plugs – Photo" >
+     * The holes drilled for blowing the insulation in have been plugged and caulked. 
+     *	Provide one representative photo
+    </PhotoInput> 
+  </Tab>
+
+  <Tab eventKey="post_installation"  title="Post-Installation">
+  
+  ## Final Conditions
+
+  <StringInput label="What insulation was added to the walls?" path="insulation_added" />
+
+  <Select label="Select one of Cavity Insulation Improvement:" options={["Cavity insulation – R-13", "Cavity insulation – R-19", "Cavity insulation – R-21", "Cavity insulation more than R-21"]} path="cavity_insulation_improvements" />
+
+  <Select label="select one of the following Exterior Insulation Improvements:" options={["None","Exterior continuous insulation – 1 inch", "Exterior continuous insulation – 2 inches", "Exterior continuous insulation – more than 2 inches"]} path="exterior_insulation_improvements" />
+
+  <Select label="What percent of the wall area received additional insulation (choose the closest)" options={["10%","25%","50%","75%","100%"]} path="postinstall_wall_area_insulated_percent" />
+
+  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_air_leakage_level" />  
+  <ShowOrHide visible={props.data?.postinstall_air_leakage_level === 'CFM at 50Pa'}> 
+  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
+  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
+      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+  </PhotoInput>
+  </ShowOrHide>
+  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
+  
+  <CombustionSafetyChecksLink {...props} />
+  
+  ## Ventilation
+  <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
+  *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
+  *	Consider infiltration credits.
+  * The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  </Collapsible>
+  <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
+  ## Project Invoice 
+  <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+      Take a photo of the project invoice if your program requires it.
+  </PhotoInput>
+  </Tab>
+ 
+ 
+ <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Wall Air Sealing and Insulation (Drill and Fill) Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## Existing Conditions
+
+    <p> What part of the home are you air sealing?  <strong> { props.data?.wall_airsealing_location ? ( Array.isArray(props.data.wall_airsealing_location) > 0 ? props.data.wall_airsealing_location.join(',') :  props.data?.wall_airsealing_location) : null } </strong> </p>
+    
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate} { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ? ":" + props.data?.wall_air_leakage_cfm50  : null } </strong></p>
+    <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </Photo>
+    
+    <p> What is the existing insulation in the wall?  <strong> { props.data?.existing_insulation_type} </strong> </p>
+
+    <p> What is the existing insulation R-value in the wall?  <strong> { props.data?.existing_r_value} </strong> </p>
+    
+    ## General Safety
+    <p> What is the roof condition?   <strong>{ props.data?.roof_condition} </strong></p>
+    <p> What is the drainage system condition?   <strong> { props.data?.drainage_condition } </strong></p>
+    <p> Are there signs of mold or moisture in or outside the home?  <strong> { props.data?.signs_of_mold_or_moisture} </strong></p>
+    <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
+    <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
+
+    ## Installation - Air Sealing Details
+
+     <Photo id="electrical_outlets_and_switches_photo" label="Electrical outlets and switches air sealed – Photo" required>
+     * Air seal the box-to-drywall connection
+     * Air seal the wire penetrations.
+     * Provide one representative photo.
+    </Photo> 
+
+    <Photo id="windows_and_door_air_sealed_photo" label="Windows and door air sealed – Photo" required>
+    *	Air seal the trim to the drywall.
+    *	Air seal the window/door frame to the trim.
+    *	Remember to caulk the top seams also. 
+    *	Provide one representative photo.
+    </Photo> 
+
+    <Photo id="rim_joist_air_sealed_photo" label="Rim/band joist between floors air sealed – Photo" required>
+      Check if this home doesn’t have such a feature.
+       * If the budget allows and the customer is willing, cutting a strip of drywall out of the ceiling between floor 
+       to access the rim/band joist to air seal results in significant air leakage reduction.
+       * Insulation should be blown into air permeable bags to keep the insulation at the correct density and 
+       against the rim/band joist cavity. 
+    </Photo> 
+
+    <Photo id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo " required>
+      Check if this home doesn’t have such a feature.
+      * Use a borescope camera to see if there is an interior air barrier for tub/shower installed against 
+          an exterior wall. Take a picture of the camera’s screen. If there is an air barrier good. 
+          If not when drilling and filling the walls with insulation, the tub/shower wall becomes the wall 
+          and interior air barrier
+      </Photo> 
+
+    <Photo id="prefabricated_metal_fireplace_exterior_wall_photo" label="Prefabricated metal fireplaces on exterior wall – Photo" required>
+      Check if this home doesn’t have such a feature.
+      * Prefabricated metal fireplaces are often installed into niche framed into an exterior wall. 
+      Unfortunately, many of these fireplace niches are poorly sealed against air leaks. Sometimes they 
+      even lack an interior air barrier.  Use a borescope camera and/or a thermal imaging camera to see the 
+      interior air barrier and air sealing quality around the fireplace. Take a picture of the camera’s screen. 
+      If the fireplace has been removed to install air sealing and/or air barrier material, take a picture of the finished work.
+    </Photo> 
+
+    <Photo id="chase_wall_photo" label="Chase wall – Photo" required>
+    Check if this home doesn’t have such a feature.
+    * Chase walls for chimneys intersecting with an exterior wall may lack an interior air barrier. 
+    To check, use a borescope camera to see if there is an interior air barrier. Take a picture of the camera’s screen. 
+    If there is an air barrier good. If not, discuss with the customer. If the budget allows and the customer is willing, 
+    cut a strip of drywall out of the chase wall to install an interior air barrier and air seal it. An alternative is 
+    to remove a section of siding and sheathing to install the interior air barrier from the outside.
+    </Photo> 
+
+    <Photo id="soffit_against_exterior_wall_photo" label="Soffit against exterior wall – Photo" required>
+     Check if this home doesn’t have such a feature.
+    * Soffits are commonly used to house recessed lights or ventilation ducts. When they abut an exterior wall, 
+    the exterior wall often lacks an interior air barrier. To check, use a borescope camera to see if there is an 
+    interior air barrier. Take a picture of the camera’s screen. If there is an air barrier good. If not, discuss 
+    with the customer. If the budget allows and the customer is willing, cut a strip of drywall out of the chase 
+    wall to install an interior air barrier and air seal it. An alternative is to remove a section of siding and 
+    sheathing to install the interior air barrier from the outside.
+    </Photo> 
+
+    <Photo id="through_wall_pipe_penetration_photo" label="Through-wall pipe penetration Air Sealed – Photo" required>
+    Check if this home doesn’t have such a feature.
+    *	Air seal water and drainpipes penetrations to the drywall that go into the exterior wall.
+    *	Provide one representative photo
+    </Photo> 
+
+  <Photo id="through_wall_vent_penetration_photo" label="TThrough-wall vent penetration Air Sealed – Photo" required>
+    Check if this home doesn’t have such a feature.
+    * Air seal exhaust and intake penetrations to the drywall that go through the exterior wall. Check kitchen range hood, 
+    dryer vent, bath fans, and whole house mechanical ventilation, and barometric dampers.
+    * Provide one representative photo
+  </Photo>  
+
+  ## Insulation Details
+   <Photo id="thermal_imaging_camera_cavities_filled_photo" label="Thermal imaging camera showing the cavities have been filled – Photo" required>
+     * Provide one representative photo
+    </Photo> 
+    <Photo id="insulation_plugs_photo" label="Insulation plugs – Photo" required>
+     * The holes drilled for blowing the insulation in have been plugged and caulked. 
+     * Provide one representative photo
+    </Photo> 
+
+    ## Final Conditions
+
+    <p> What insulation was added to the walls? <strong>{props.data?.insulation_added}</strong> </p>
+    
+    <p> Cavity Insulation Improvement:  <strong>{props.data?.cavity_insulation_improvements}</strong> </p>
+
+    <p> Exterior Insulation Improvements:  <strong>{props.data?.exterior_insulation_improvements}</strong> </p>
+
+    <p> What percent of the wall area received additional insulation? <strong>{props.data?.postinstall_wall_area_insulated_percent}</strong> </p>
+
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_air_leakage_level}</strong> </p>
+    {
+    props.data?.postinstall_air_leakage_level === 'CFM at 50Pa' ? 
+    <p> CFM at 50Pa: <strong>{props.data?.postinstall_air_leakage_cfm50}</strong> </p> : null
+    }
+    <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" >
+        Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+    </Photo>
+   
+    <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
+
+    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
+    ## Ventilation
+    <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
+
+   {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+            </Photo> </>
+            )}
+
+    </PrintSection>
+  </Tab>
+</Tabs>

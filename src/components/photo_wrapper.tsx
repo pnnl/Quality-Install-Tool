@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
@@ -13,6 +13,7 @@ interface PhotoWrapperProps {
     required: boolean
     docId: string
     project?: any
+    fromParent?: boolean
 }
 
 /**
@@ -33,20 +34,30 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     id,
     label,
     required,
+    docId,
     project,
+    fromParent,
 }) => {
-    const [buildingPhotoBlob, setBuildingPhotoBlob] = useState<Blob | Buffer>()
+    const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
+    const [projectDoc, setProjectDoc] = useState<any>(project)
     const db = new PouchDB(dbName)
 
-    if (id === 'building_number_photo') {
-        db.getAttachment(project?._id, id)
-            .then(res => {
-                setBuildingPhotoBlob(res)
-            })
-            .catch(err => {
-                /* Building number photo not present */
-            })
-    }
+    useEffect(() => {
+        if (fromParent) {
+            const projectDocId = project?._id || docId
+            db.get(projectDocId)
+                .then(res => {
+                    setProjectDoc(res)
+                })
+                .catch(err => { })
+
+            db.getAttachment(projectDocId, id)
+                .then(res => {
+                    setPhotoBlob(res)
+                })
+                .catch(err => { })
+        }
+    }, [fromParent])
 
     return (
         <StoreContext.Consumer>

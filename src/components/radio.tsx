@@ -36,7 +36,7 @@ const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
                             <Form.Check
                                 type="radio"
                                 label={option}
-                                name={label}
+                                name={id + label}
                                 value={option}
                                 checked={option === value}
                                 onChange={handleOptionChange}

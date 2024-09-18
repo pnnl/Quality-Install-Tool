@@ -245,12 +245,31 @@ h1 + h3 {
   padding: 5px 10px 5px 10px;  /* top right bottom left*/
 }
 
+.top-bottom-padding
+{
+  padding: 5px 0 5px 0;
+}
+
 /* disclaimer text */
 .disclaimer-text {
   padding-left: .75rem;
   padding-right: .75rem;
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+.combustion_tests {
+  padding: 5px 10px 5px 10px; 
+  background-color: white;
+}
+
+.align_justify {
+  justify-content: center;
+  text-align: justify;
+}
+
+.margin-left {
+  margin-left: 2em
 }
 
 
