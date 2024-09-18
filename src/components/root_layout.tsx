@@ -31,16 +31,23 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
 
     useEffect(() => {
         const regexPatternToHome = /^(.*?)\/app\//
+        const regexPatternToProjectDetails = /^.*?\/app\/([^\/]+)$/
         const regexPatternToWorkFlow = /^.*?\/app\/([^\/]+)\/([^\/]+)$/
         const regexPatternToTemplate =
             /^.*?\/app\/([^\/]+)\/([^\/]+)\/([^\/]+)$/
         const toTemplateMatchResult = location.pathname.match(
             regexPatternToTemplate,
         )
+
         const toWorkFlowMatchResult = location.pathname.match(
             regexPatternToWorkFlow,
         )
-        if (toWorkFlowMatchResult) {
+        const toProjectDetailsMatchResult = location.pathname.match(
+            regexPatternToProjectDetails,
+        )
+
+        if (toProjectDetailsMatchResult) setShowBackButton(false)
+        else if (toWorkFlowMatchResult) {
             setShowBackButton(true)
             const [, capturedTemplateName, workflowName] = toWorkFlowMatchResult
             if (workflowName == 'workflows') setBackUrl('/')

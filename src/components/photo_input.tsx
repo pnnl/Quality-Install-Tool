@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
 import { Button, Card, Image } from 'react-bootstrap'
-import { TfiGallery } from 'react-icons/tfi'
+import { TbCameraPlus } from 'react-icons/tb'
+
 import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
@@ -100,7 +101,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             onClick={handlePhotoGalleryButtonClick}
                             variant="outline-primary"
                         >
-                            <TfiGallery /> {buttonText}{' '}
+                            <TbCameraPlus /> {buttonText}{' '}
                         </Button>
                     </div>
                     {/* <input
