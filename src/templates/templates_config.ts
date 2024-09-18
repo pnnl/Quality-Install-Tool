@@ -1,6 +1,4 @@
 import DOEWorkflowHeatPumpWaterHeaterTemplate from './doe_workflow_heat_pump_water_heater.mdx'
-import DOEWorkflowAtticAirSealTemplate from './doe_workflow_attic_air_sealing.mdx'
-import DOEWorkflowAtticInsulationTemplate from './doe_workflow_attic_insulation.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_heat_pump_ductless.mdx'
 import DOEWorkflowDuctedHeatPumpTemplate from './doe_workflow_heat_pump_ducted.mdx'
 import DOEWorkflowDuctAirSealTemplate from './ira_doe_workflow_duct_air_sealing_and_insulation.mdx'
@@ -19,6 +17,8 @@ import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_vent
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
+import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
+
 import { MDXProps } from 'mdx/types'
 
 interface TemplatesConfig {
@@ -108,6 +108,10 @@ const templatesConfig: TemplatesConfig = {
     //     title: 'Wall Air Sealing and Insulation (Drill and Fill)',
     //     template: DOEWorkflowWallAirSealingAndInsulation,
     // }
+    ira_doe_workflow_limited_assessment: {
+        title: 'IRA Limited Assessment',
+        template: IRADOEWorkflowLimitedAssessment,
+    },
 }
 
 // Assuming TemplatesConfig is defined somewhere as a type or interface
