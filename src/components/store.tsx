@@ -35,6 +35,7 @@ type Attachments = Record<
 >
 
 export const StoreContext = React.createContext({
+    docId: '' satisfies string,
     attachments: {} satisfies Attachments,
     data: {} satisfies JSONValue,
     metadata: {} satisfies Metadata | Record<string, string>,
@@ -377,6 +378,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 attachments,
+                docId: docId,
                 data: doc.data_,
                 metadata: doc.metadata_,
                 upsertAttachment,

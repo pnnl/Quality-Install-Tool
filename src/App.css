@@ -89,11 +89,28 @@ h1 + h3 {
 /* used in jobs_view.tsx */
 .icon-container {
   float: right;
+  vertical-align: top;
 }
 
-.icon-container > * {
-  margin-left: 5px;
+.button-container-right {
+  float: right;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
+.button-container-center {
+  float: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+
+
+.menu-container {
+  float: right;
+  vertical-align: top;
+}
+
+
 .img-thumbnail {
   object-fit: contain;
   max-height: 500px;
@@ -129,7 +146,7 @@ h1 + h3 {
 }
 
 #root-banner {
-  background-color: green;
+  background-color: #006100;
 }
 
 #root-title {
@@ -149,7 +166,7 @@ h1 + h3 {
 
 #back-button {
   padding: 1rem;
-  background-color: green;
+  background-color: #006100;
 }
 
 #back-button-link {
@@ -253,4 +270,103 @@ h1 + h3 {
 
 .margin-left {
   margin-left: 2em
+}
+
+
+/* Primary Button - with background color */
+.btn-primary {
+  color: #fff; /* Text color */
+  background-color: #006100; /* Base background color */
+  border: 2px solid #006100; 
+  cursor: pointer; 
+  text-align: center; 
+  text-decoration: none; 
+  display: inline-block; 
+  transition: background-color 0.3s ease, border-color 0.3s ease; 
+  outline: none; 
+}
+
+.btn-primary:hover, 
+.btn-primary:active, 
+.btn-primary:focus, 
+.btn-primary:focus-visible, 
+.btn-primary:focus-within {
+  background-color: #004d00; 
+  border-color: #004d00; 
+}
+
+.btn-primary:disabled {
+  background-color: #4caf50; 
+  border-color: #4caf50; 
+  cursor: not-allowed; /* Not-allowed cursor on disabled */
+  opacity: 0.6; 
+}
+
+/* Outline Primary Button - only outline */
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle {
+  color: #fff; 
+  background-color:  #005f00; 
+  border-color:  #005f00; 
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-primary.dropdown-toggle:focus {
+  box-shadow: none
+}
+
+.btn-outline-primary{
+  background-color: transparent;
+  cursor: pointer; 
+  border: 2px solid #006100;
+  color: #006100; 
+
+}
+
+.btn-outline-primary:hover{
+  background-color: transparent; 
+  color: #006100; 
+  border-color: #006100;
+}
+
+
+/* Light Button - for Icons */
+.btn-light {
+  background-color: transparent;
+  border-color: transparent;
+  color: #000000;
+}
+btn-light:active,
+btn-light:hover {
+  box-shadow: none;
+}
+
+
+.welcome-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #006100;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+
+.welcome-content {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  color: #000000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media (max-width: 480px) {
+  .welcome-content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    color: #000000;
+    font-size: 12px;
+    font-weight: bold;
+  }
 }

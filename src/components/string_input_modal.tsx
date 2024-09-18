@@ -103,7 +103,11 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
                 {errorMessage && <div className="error">{errorMessage}</div>}
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={handleSubmit} disabled={!isValid}>
+                <Button
+                    onClick={handleSubmit}
+                    disabled={!isValid}
+                    variant="primary"
+                >
                     {modalOK}
                 </Button>
             </Modal.Footer>
