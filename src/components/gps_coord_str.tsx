@@ -51,11 +51,6 @@ const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
                         >
                             {geoStr}
                         </a>
-                        {source ? (
-                            <span style={{ marginLeft: '2px' }}>
-                                (source: {source})
-                            </span>
-                        ) : null}
                     </>
                 ) : (
                     <span>Missing</span>
