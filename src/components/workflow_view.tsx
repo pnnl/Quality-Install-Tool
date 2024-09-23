@@ -22,27 +22,22 @@ const WorkFlowView: FC = () => {
 
     const { projectId } = useParams()
     const [projectInfo, setProjectInfo] = useState<any>({})
+    const db = new PouchDB(dbName)
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
-        retrieveInstallationDocs(
-            new PouchDB(dbName),
-            projectId as string,
-            workflowName,
-        ).then(res => {
-            setWorkflowJobsCount(prevArray => ({
-                ...prevArray,
-                [workflowName]: res.length,
-            }))
-        })
+        retrieveInstallationDocs(db, projectId as string, workflowName).then(
+            res => {
+                setWorkflowJobsCount(prevArray => ({
+                    ...prevArray,
+                    [workflowName]: res.length,
+                }))
+            },
+        )
     }
     const project_info = async (): Promise<void> => {
         // Retrieves the project information which includes project name and installation address
-        retrieveProjectSummary(
-            new PouchDB(dbName),
-            projectId as string,
-            '',
-        ).then((res: any) => {
+        retrieveProjectSummary(db, projectId as string, '').then((res: any) => {
             setProjectInfo(res)
         })
     }
@@ -64,8 +59,8 @@ const WorkFlowView: FC = () => {
     const templates = Object.keys(templatesConfig).map(key => (
         <LinkContainer key={key} to={`/app/${projectId}/${key}`}>
             <ListGroup.Item key={key} action={true}>
-                {templatesConfig[key as keyof typeof templatesConfig].title} (
-                {workflowJobsCount[key]})
+                {templatesConfig[key as keyof typeof templatesConfig].title}{' '}
+                {workflowJobsCount[key] > 0 && `(${workflowJobsCount[key]})`}
             </ListGroup.Item>
         </LinkContainer>
     ))

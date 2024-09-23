@@ -60,6 +60,9 @@
         | CFM50 Reduction = { props.data.ach50_calculator?.initial_cfm50 && props.data.ach50_calculator?.final_cfm50 ?  (props.data.ach50_calculator.initial_cfm50 - props.data.ach50_calculator.final_cfm50) : null } 
 
         <StringInput  label="Comment on final blower door results" path="comment_blower_door_post_work" />
+        
+        <CombustionSafetyChecksLink {...props} />
+        
         <StringInput  label="Summary Comment" path="comment_summary" />
     </Tab>
     <Tab eventKey="report" title="Report">
@@ -167,7 +170,8 @@
          ? <p><strong>Summary Comment:</strong> {props.data.comment_summary}</p> 
          : null
         }
-    
+
+        <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
         </PrintSection>
     </Tab>
