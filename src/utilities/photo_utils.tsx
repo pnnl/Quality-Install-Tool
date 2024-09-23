@@ -107,7 +107,7 @@ export async function getMetadataFromPhoto(
     return metadata
 }
 
-export const PHOTO_MIME_TYPES: string[] = [
+/* Possible image formats 
     'image/avif',
     'image/heic',
     'image/heif',
@@ -115,7 +115,9 @@ export const PHOTO_MIME_TYPES: string[] = [
     'image/jpg',
     'image/png',
     'image/tiff',
-]
+*/
+// Currently supporting HEIC and JPEG
+export const PHOTO_MIME_TYPES: string[] = ['image/heic', 'image/jpeg']
 
 /**
  * Returns `true` if the MIME type for the given blob is supported as a "photo".
