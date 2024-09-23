@@ -370,3 +370,19 @@ btn-light:hover {
     font-weight: bold;
   }
 }
+
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light gray */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 30px; /* Size of the loader */
+  height: 30px; /* Size of the loader */
+  animation: spin 1s linear infinite; /* Animation */
+  background-color: white;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
