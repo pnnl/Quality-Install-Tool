@@ -323,9 +323,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
+        photoMetadata?: Attachment['metadata'],
     ) => {
-        // Create the metadata for the blob
-        const metadata: Attachment['metadata'] = isPhoto(blob)
+        const metadata: Attachment['metadata'] = photoMetadata
+            ? photoMetadata
+            : isPhoto(blob)
             ? await getMetadataFromPhoto(blob)
             : {
                 filename: fileName,

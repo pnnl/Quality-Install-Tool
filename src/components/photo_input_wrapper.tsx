@@ -1,3 +1,4 @@
+import ImageBlobReduce from 'image-blob-reduce'
 import React, { FC, useState } from 'react'
 
 import { StoreContext } from './store'
@@ -6,7 +7,9 @@ import PhotoMetadata from '../types/photo_metadata.type'
 
 import heic2any from 'heic2any'
 
+import convert from 'heic-jpg-exif'
 import { getMetadataFromPhoto } from '../utilities/photo_utils'
+import { Card } from 'react-bootstrap'
 
 const MAX_IMAGE_DIM_WIDTH = 500
 const MAX_IMAGE_DIM_HEIGHT = 350
@@ -36,8 +39,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     uploadable,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
-    const [error, setError] = useState('') // Loading state
-
     const img = new Image()
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
@@ -83,9 +84,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
             {({ attachments, upsertAttachment }) => {
                 const upsertPhoto = (img_file: Blob) => {
                     setLoading(true)
-                    // Process and reducing the image size for HEIC images
-                    if (img_file?.type === 'image/heic') {
-                        // Convert HEIC to JPEG to be compatible to display in all browsers
+                    if (img_file.type === 'image/heic') {
                         heic2any({
                             blob: img_file,
                             toType: 'image/jpeg',
@@ -94,10 +93,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             quality: 1,
                         })
                             .then(jpegBlob => {
-                                //Compress the image file to the configured size
                                 compressJpegBlob(jpegBlob as Blob).then(
                                     compressed_photo_blob => {
-                                        // Retrieve metadata from the uncompressed image file
                                         getMetadataFromPhoto(img_file).then(
                                             (photo_metadata: any) => {
                                                 upsertAttachment(
@@ -110,11 +107,9 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                                         )
                                     },
                                 )
-                                setError('')
                             })
                             .catch(error => {
                                 console.error('Conversion error:', error) // Handle errors
-                                setError('Image loading failed')
                             })
                             .finally(() => {
                                 setLoading(false) // Reset loading state
@@ -122,23 +117,10 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     }
                     // Reduce the image size - JPEG files
                     else
-                        compressJpegBlob(img_file as Blob)
-                            .then(compressed_photo_blob => {
-                                // Retrieve metadata from the uncompressed image file
-                                getMetadataFromPhoto(img_file).then(
-                                    (photo_metadata: any) => {
-                                        upsertAttachment(
-                                            compressed_photo_blob as Blob,
-                                            id,
-                                            undefined,
-                                            photo_metadata,
-                                        )
-                                    },
-                                )
-                            })
-                            .catch(error => {
-                                console.error('Compression error:', error) // Handle errors
-                                setError('Image loading failed')
+                        ImageBlobReduce()
+                            .toBlob(img_file, { max: MAX_IMAGE_DIM_WIDTH })
+                            .then(blob => {
+                                upsertAttachment(blob, id)
                             })
                             .finally(() => {
                                 setLoading(false) // Reset loading state
@@ -159,7 +141,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             upsertPhoto={upsertPhoto}
                             uploadable={uploadable}
                             loading={loading}
-                            error={error}
                         >
                             {children}
                         </PhotoInput>
