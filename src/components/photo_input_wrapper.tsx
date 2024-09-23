@@ -7,9 +7,7 @@ import PhotoMetadata from '../types/photo_metadata.type'
 
 import heic2any from 'heic2any'
 
-import convert from 'heic-jpg-exif'
 import { getMetadataFromPhoto } from '../utilities/photo_utils'
-import { Card } from 'react-bootstrap'
 
 const MAX_IMAGE_DIM_WIDTH = 500
 const MAX_IMAGE_DIM_HEIGHT = 350
@@ -84,6 +82,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
             {({ attachments, upsertAttachment }) => {
                 const upsertPhoto = (img_file: Blob) => {
                     setLoading(true)
+                    // Process and reducing the image size for HEIC images
                     if (img_file.type === 'image/heic') {
                         heic2any({
                             blob: img_file,
@@ -93,8 +92,10 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             quality: 1,
                         })
                             .then(jpegBlob => {
+                                //Compress the image file to the configured size
                                 compressJpegBlob(jpegBlob as Blob).then(
                                     compressed_photo_blob => {
+                                        // Retrieve metadata from the uncompressed image file
                                         getMetadataFromPhoto(img_file).then(
                                             (photo_metadata: any) => {
                                                 upsertAttachment(
