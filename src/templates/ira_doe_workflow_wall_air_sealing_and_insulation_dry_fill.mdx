@@ -18,7 +18,7 @@
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" hidden />
 
-    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="wall_air_leakage_rate" />
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
     
     <ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}> 
       <NumberInput label="CFM at 50Pa" min={0} path="wall_air_leakage_cfm50"  />
@@ -171,7 +171,7 @@
 
   <Select label="What percent of the wall area received additional insulation (choose the closest)" options={["10%","25%","50%","75%","100%"]} path="postinstall_wall_area_insulated_percent" />
 
-  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_air_leakage_level" />  
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_air_leakage_level === 'CFM at 50Pa'}> 
   <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
   <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">

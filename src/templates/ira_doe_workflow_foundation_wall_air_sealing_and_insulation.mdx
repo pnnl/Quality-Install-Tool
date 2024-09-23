@@ -17,7 +17,7 @@
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="wall_airsealing_location" hidden />
 
-    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="wall_air_leakage_rate" />
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
     
     <ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}> 
       <NumberInput label="CFM at 50Pa" min={0} path="wall_air_leakage_cfm50"  />
@@ -120,7 +120,7 @@
   <Select label="What percent of the foundation perimeter was insulated?" options={["10%","25%","50%","75%","100%"]} path="postinstall_foundation_perimeter_percent" />
 
   <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
-  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
   <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
   <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
@@ -157,7 +157,7 @@
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.wall_airsealing_location ? ( Array.isArray(props.data.wall_airsealing_location) > 0 ? props.data.wall_airsealing_location.join(',') :  props.data?.wall_airsealing_location) : null } </strong> </p>
     
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate} { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ? ":" + props.data?.wall_air_leakage_cfm50  : null } </strong></p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ?  props.data?.wall_air_leakage_cfm50 + " "  : null } { props.data?.wall_air_leakage_rate} </strong></p>
     <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </Photo>
@@ -211,11 +211,8 @@
 
     <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
 
-    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
-    {
-    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? 
-    <p> CFM at 50Pa: <strong>{props.data?.postinstall_foundation_air_leakage_cfm50}</strong> </p> : null
-    }
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null}{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
+   
 
     <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
