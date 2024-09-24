@@ -20,7 +20,12 @@ import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
 
-type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
+type UpsertAttachment = (
+    blob: Blob,
+    id: string,
+    fileName?: string,
+    photoMetadata?: Attachment['metadata'],
+) => void
 
 type UpsertData = (pathStr: string, value: any) => void
 
@@ -317,9 +322,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
+        photoMetadata?: Attachment['metadata'],
     ) => {
-        // Create the metadata for the blob
-        const metadata: Attachment['metadata'] = isPhoto(blob)
+        const metadata: Attachment['metadata'] = photoMetadata
+            ? photoMetadata
+            : isPhoto(blob)
             ? await getMetadataFromPhoto(blob)
             : {
                   filename: fileName,
