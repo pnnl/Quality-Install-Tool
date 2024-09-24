@@ -84,6 +84,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     setLoading(true)
                     // Process and reducing the image size for HEIC images
                     if (img_file.type === 'image/heic') {
+                        // Convert HEIC to JPEG to be compatible to display in all browsers
                         heic2any({
                             blob: img_file,
                             toType: 'image/jpeg',
@@ -118,10 +119,22 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     }
                     // Reduce the image size - JPEG files
                     else
-                        ImageBlobReduce()
-                            .toBlob(img_file, { max: MAX_IMAGE_DIM_WIDTH })
-                            .then(blob => {
-                                upsertAttachment(blob, id)
+                        compressJpegBlob(img_file as Blob)
+                            .then(compressed_photo_blob => {
+                                // Retrieve metadata from the uncompressed image file
+                                getMetadataFromPhoto(img_file).then(
+                                    (photo_metadata: any) => {
+                                        upsertAttachment(
+                                            compressed_photo_blob as Blob,
+                                            id,
+                                            undefined,
+                                            photo_metadata,
+                                        )
+                                    },
+                                )
+                            })
+                            .catch(error => {
+                                console.error('Conversion error:', error) // Handle errors
                             })
                             .finally(() => {
                                 setLoading(false) // Reset loading state
