@@ -8,7 +8,7 @@
     
     ## Existing Conditions
     
-    <StringInput label="What is the foundation type?" path="slab_foundation_type" />
+    <CheckBox label="What is the foundation type?" path="slab_foundation_type" options={["Slab"]} value="Slab" hidden />
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
 
@@ -26,21 +26,11 @@
         Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
     </Collapsible>
 
-    <Collapsible header="Roof condition">   
-    * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
-    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
-    </Collapsible>
-    <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="roof_condition" />
+   
 
     <Collapsible header="Drainage condition"> 
     Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
-    basement floor, check the gutters and downspouts are in good condition. Once the attic has been air sealed and 
-    insulated there is less heat escaping to dry the roof/attic thus water damage caused by clogged gutter will be 
-    much worse. Once the attic has been air sealed and insulated the amount of air exfiltrating through the attic 
-    is reduced and therefore the amount of air infiltrating into the crawlspace/basement is also reduced. 
-    Thus, even though attic air sealing and insulation of the attic is being performed, it can reduce the drying 
-    force of the crawlspace/basement, thus pre-existing moisture problems in the crawlspace/basement can be made 
-    worse by this action. Thus, it is a good practice to check and document pre-existing problems.
+    basement floor, check the gutters and downspouts are in good condition.
     </Collapsible>
     <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
 
@@ -51,9 +41,10 @@
     </Collapsible>
     <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
 
-    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
+    <Collapsible header="Pre-retrofit mechanical ventilation calculation"> 
     *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
+      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     </Collapsible>
     <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
@@ -66,10 +57,10 @@
 
     <PhotoInput id="exisitng_condition_photo" label="Existing Condition – Photo" >
      * Representative photo of a section of the foundation slab edge
-     * Look for major cracks in concrete, signs of water damage, pest damage,
+     * Look for major cracks in concrete, signs of water damage or pest damage.
     </PhotoInput> 
 
-    <PhotoInput id="moisture_test_photo" label="Mousture Test – Photo" >
+    <PhotoInput id="moisture_test_photo" label="Moisture Test – Photo" >
      * Photo showing the moisture sensor reading of the wall sill plate.
      * If the home’s walls were built on top of the concrete slab foundation without a sill gasket 
      to break the capillary action, the walls could have moisture problems. Probing the sill plate 
@@ -83,6 +74,7 @@
     <PhotoInput id="foundation_wall_insulation_photo" label="Foundation Wall Insulation – Photo" >
        * Photo showing the insulation and protective details prior to backfilling
        * The top of the exterior insulation should be flashed and detailed in a manner to promote positive drainage
+       * In regions with medium or high termite risk the protective details should meet best practices or local jurisdiction requirements for termite risk mitigation.
     </PhotoInput> 
 
     <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " >
@@ -90,7 +82,8 @@
     </PhotoInput> 
 
     <PhotoInput id="interior_still_air_sealing_photo" label="Interior Sill Plate Air Sealing – Photo" >
-      Photo showing the interior slab to sill plate connection has been air sealed
+      * Photo showing the interior slab to sill plate connection has been air sealed
+      * Take this photo prior to the reinstallation of baseboard moulding.
     </PhotoInput> 
 
   </Tab>  
@@ -102,7 +95,7 @@
 
   <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
 
-  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
+  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
     <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
     <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
@@ -114,10 +107,11 @@
   <CombustionSafetyChecksLink {...props} />
   
   ## Ventilation
-  <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
+  <Collapsible header="Post-retrofit mechanical ventialtion calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
-  *	Consider infiltration credits.
-  * The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+  *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
   ## Project Invoice 
@@ -157,7 +151,7 @@
       Representative photo of a section of the foundation slab edge
     </Photo> 
 
-    <Photo id="moisture_test_photo" label="Mousture Test – Photo" required>
+    <Photo id="moisture_test_photo" label="Moisture Test – Photo" required>
      Photo showing the moisture sensor reading of the wall sill plate.
     </Photo> 
 

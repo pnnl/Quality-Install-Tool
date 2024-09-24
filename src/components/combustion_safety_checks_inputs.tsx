@@ -37,7 +37,7 @@ const ApplianceSafetyTest: FC<ApplianceSafetyTestProps> = ({
             </PhotoInputWrapper>
             <RadioWrapper
                 label="Does the ambient CO test pass?"
-                options={['Passed', 'Failed', 'Warning', 'N/A']}
+                options={['Passed', 'Failed', 'Warning']}
                 path={`${path}.${appliance_key}.ambient_CO_test`}
             />
         </>
@@ -56,23 +56,35 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
                 label="Space Heating Appliance - Photo "
                 uploadable={false}
             >
-                Visually inspect the combustion heating appliance, comment on
-                any evidence of unsafe conditions.
+                Take a photo of the space heating appliance. In the photo
+                document any evidence of unsafe conditions such as corroded
+                flame tubes, poorly made duct connections, etc.
             </PhotoInputWrapper>
             <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_pipe_connection_leak_check_photo`}
                 label="Pipe Connection Leak Check - Photo"
                 uploadable={false}
             >
-                * Inspect the accessible section of gas piping, check all
-                accessible joints with combustion gas detector, confirm leaks
-                with bubble solution, comment if any found * Inspect oil supply
-                system, check all accessible tank and line components, comment
-                on any leaks or safety issues
+                <ul>
+                    <li>
+                        {' '}
+                        For gas pipping, take a photo of the combustion gas
+                        detector checking an accessible gas pipe connection,
+                        read out visible in the photo. Or if a leak is found,
+                        take a photo of the leaking connection with bubble
+                        solution applied.
+                    </li>
+
+                    <li>
+                        For oil supply systems, take a photo of the accessible
+                        tank and/or line components. If a leak is found, take a
+                        photo showing the leaking connection/area.
+                    </li>
+                </ul>
             </PhotoInputWrapper>
             <RadioWrapper
-                label="Does the gas leak detection test pass?"
-                options={['Passed', 'Failed', 'Warning', 'N/A']}
+                label="Does the leak check test pass?"
+                options={['Passed', 'Failed']}
                 path={`${path}.${appliance_key}.space_heating_gas_leak_detection_test`}
             />
             <PhotoInputWrapper
@@ -80,20 +92,23 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
                 label="Space heating Appliance Vent - Photo"
                 uploadable={false}
             >
-                Visually inspect the venting system, comment if there is an
-                unsafe configuration
+                Take a photo of the venting components. If there is an unsafe
+                configuration, focus the framing of the photo on that section.
             </PhotoInputWrapper>
             <PhotoInputWrapper
                 id={`${path}.${appliance_key}.space_heating_appliance_draft_photo`}
                 label="Space heating Appliance Draft – Photo"
                 uploadable={false}
             >
-                Perform test under ANSI/BPI-1200-S-2017 depressurization
-                conditions if the appliance is inside the pressure boundary.
+                Take a photo of the draft test. The test can be a smoke pencil,
+                lighter flame, or manometer pressure read-out. Perform test
+                under ANSI/BPI-1200-S-2017 depressurization conditions if the
+                appliance is inside the pressure boundary. Perform the test in
+                accordance to BPI spillage assessment procedures.
             </PhotoInputWrapper>
             <RadioWrapper
                 label="Does the spillage test(s) pass?"
-                options={['Passed', 'Warning', 'N/A']}
+                options={['Passed', 'Failed']}
                 path={`${path}.${appliance_key}.space_heating_spillage_test`}
             />
             <PhotoInputWrapper
@@ -101,14 +116,14 @@ const ApplianceSafetyTestFurnaceBoiler: FC<ApplianceSafetyTestProps> = ({
                 label="Space heating Appliance CO measurement – Photo "
                 uploadable={false}
             >
-                * Perform test under ANSI/BPI-1200-S-2017 depressurization
-                conditions if the appliance is inside the pressure boundary. *
-                Comment if CO levels are above the 200 PPM air free threshold
-                limit. * Provide a combustion analyzer readout photo.
+                Take a photo of the combustion analyzer readouts. Perform test
+                under ANSI/BPI-1200-S-2017 depressurization conditions if the
+                appliance is inside the pressure boundary. Perform the test in
+                accordance to BPI CO measurement procedures.
             </PhotoInputWrapper>
             <RadioWrapper
                 label="Does the undiluted CO test pass?"
-                options={['Passed', 'Failed', 'Warning', 'N/A']}
+                options={['Passed', 'Failed']}
                 path={`${path}.${appliance_key}.space_heating_undiluted_CO_test`}
             />{' '}
         </>
@@ -123,28 +138,38 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
     <>
         <PhotoInputWrapper
             id={`${path}.${appliance_key}.water_heater_photo`}
-            label="Water heater - Photo"
+            label="Water Heater Condition - Photo"
             uploadable={false}
         >
-            Visually inspect the combustion water heater, comment on any
-            evidence of unsafe conditions such as corroded or leaking water
-            connections, poorly supported, missing or inadequate seismic
-            strapping.
+            Take a photo of the combustion water heater. In the photo document
+            any evidence of unsafe conditions such as corroded or leaking water
+            connections, poorly supported water heater, or missing or inadequate
+            seismic strapping where required.
         </PhotoInputWrapper>
         <PhotoInputWrapper
             id={`${path}.${appliance_key}.water_heater_pipe_connection_leak_check_photo`}
             label="Pipe Connection Leak Check - Photo"
             uploadable={false}
         >
-            * Inspect the accessible section of gas piping, check all accessible
-            joints with combustion gas detector, confirm leaks with bubble
-            solution, comment if any found * Inspect oil supply system, check
-            all accessible tank and line components, comment on any leaks or
-            safety issues
+            <ul>
+                <li>
+                    {' '}
+                    For gas pipping, take a photo of the combustion gas detector
+                    checking an accessible gas pipe connection, read out visible
+                    in the photo. Or if a leak is found, take a photo of the
+                    leaking connection with bubble solution applied.
+                </li>
+
+                <li>
+                    For oil supply systems, take a photo of the accessible tank
+                    and/or line components. If a leak is found, take a photo
+                    showing the leaking connection/area.
+                </li>
+            </ul>
         </PhotoInputWrapper>
         <RadioWrapper
-            label="Does the gas leak detection test pass?"
-            options={['Passed', 'Failed', 'Warning', 'N/A']}
+            label="Does the leak check test pass?"
+            options={['Passed', 'Failed']}
             path={`${path}.${appliance_key}.water_heater_gas_leak_detection_test`}
         />
         <PhotoInputWrapper
@@ -152,20 +177,23 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
             label="Water Heater Vent - Photo"
             uploadable={false}
         >
-            Visually inspect the venting system, comment if there is an unsafe
-            configuration
+            Take a photo of the venting components. If there is an unsafe
+            configuration, focus the framing of the photo on that section.
         </PhotoInputWrapper>
         <PhotoInputWrapper
             id={`${path}.${appliance_key}.water_heater_draft_photo`}
             label="Water Heater Draft – Photo"
             uploadable={false}
         >
-            Perform test under ANSI/BPI-1200-S-2017 depressurization conditions
-            if the appliance is inside the pressure boundary.
+            Take a photo of the draft test. The test can be a smoke pencil,
+            lighter flame, or manometer pressure read-out. Perform test under
+            ANSI/BPI-1200-S-2017 depressurization conditions if the appliance is
+            inside the pressure boundary. Perform the test in accordance to BPI
+            spillage assessment procedures.
         </PhotoInputWrapper>
         <RadioWrapper
             label="Does the spillage test(s) pass?"
-            options={['Passed', 'Warning', 'N/A']}
+            options={['Passed', 'Failed']}
             path={`${path}.${appliance_key}.water_heater_spillage_test`}
         />
         <PhotoInputWrapper
@@ -173,14 +201,14 @@ const ApplianceSafetyTestWaterHeater: FC<ApplianceSafetyTestProps> = ({
             label="Water heater CO measurement – Photo "
             uploadable={false}
         >
-            * Perform test under ANSI/BPI-1200-S-2017 depressurization
-            conditions if the appliance is inside the pressure boundary. *
-            Comment if CO levels are above the 200 PPM air free threshold limit.
-            * Provide a combustion analyzer readout photo.
+            Take a photo of the combustion analyzer readouts. Perform test under
+            ANSI/BPI-1200-S-2017 depressurization conditions if the appliance is
+            inside the pressure boundary. Perform the test in accordance to BPI
+            CO measurement procedures.
         </PhotoInputWrapper>
         <RadioWrapper
             label="Does the undiluted CO test pass?"
-            options={['Passed', 'Failed', 'Warning', 'N/A']}
+            options={['Passed', 'Failed']}
             path={`${path}.${appliance_key}.water_heater_undiluted_CO_test`}
         />{' '}
     </>

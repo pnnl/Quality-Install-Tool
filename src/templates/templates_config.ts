@@ -56,10 +56,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
-    // doe_workflow_foundation_airsealing_and_insulation: {
-    //     title: 'Foundation Wall Air Sealing and Insulation',
-    //     template: DOEWorkflowFoundationAirSealingAndInsulation,
-    // },
+    doe_workflow_foundation_airsealing_and_insulation: {
+        title: 'Foundation Wall Air Sealing and Insulation - *',
+        template: DOEWorkflowFoundationAirSealingAndInsulation,
+    },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
         template: DOEWorkflowFullFrameReplacementWindows,
@@ -100,14 +100,14 @@ const templatesConfig: TemplatesConfig = {
         title: 'Mechanical Ventilation',
         template: DOEWorkflowMechanicalVentilation,
     },
-    // doe_workflow_slab_foundation_exterior: {
-    //     title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
-    //     template: DOEWorkflowSlapFoundationExterior,
-    // },
-    // doe_workflow_wall_air_sealing_and_insulation_exterior: {
-    //     title: 'Wall Air Sealing and Insulation (Drill and Fill)',
-    //     template: DOEWorkflowWallAirSealingAndInsulation,
-    // }
+    doe_workflow_slab_foundation_exterior: {
+        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation - *',
+        template: DOEWorkflowSlapFoundationExterior,
+    },
+    doe_workflow_wall_air_sealing_and_insulation_exterior: {
+        title: 'Wall Air Sealing and Insulation (Drill and Fill) - *',
+        template: DOEWorkflowWallAirSealingAndInsulation,
+    },
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,

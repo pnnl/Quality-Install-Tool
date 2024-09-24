@@ -1,5 +1,3 @@
-import EXIF from 'exif-js'
-
 import Attachment from '../types/attachment.type'
 
 /**
