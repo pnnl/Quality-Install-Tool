@@ -37,6 +37,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     uploadable,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
+    const [error, setError] = useState('') // Loading state
+
     const img = new Image()
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
@@ -109,9 +111,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                                         )
                                     },
                                 )
+                                setError('')
                             })
                             .catch(error => {
                                 console.error('Conversion error:', error) // Handle errors
+                                setError('Image loading failed')
                             })
                             .finally(() => {
                                 setLoading(false) // Reset loading state
@@ -134,7 +138,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                                 )
                             })
                             .catch(error => {
-                                console.error('Conversion error:', error) // Handle errors
+                                console.error('Compression error:', error) // Handle errors
+                                setError('Image loading failed')
                             })
                             .finally(() => {
                                 setLoading(false) // Reset loading state
@@ -155,6 +160,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             upsertPhoto={upsertPhoto}
                             uploadable={uploadable}
                             loading={loading}
+                            error={error}
                         >
                             {children}
                         </PhotoInput>
