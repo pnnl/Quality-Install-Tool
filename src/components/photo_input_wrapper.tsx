@@ -1,4 +1,3 @@
-import ImageBlobReduce from 'image-blob-reduce'
 import React, { FC, useState } from 'react'
 
 import { StoreContext } from './store'
