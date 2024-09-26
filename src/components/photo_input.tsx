@@ -7,6 +7,7 @@ import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetaData from '../types/photo_metadata.type'
+import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -105,16 +106,16 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         </Button>
                     </div>
                     {/* <input
-            accept="image/jpeg"
-            capture="environment"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoCaptureInputRef}
-            className='photo-input'
-            type="file"
-          /> */}
+                            accept={PHOTO_MIME_TYPES.join(',')}
+                            capture="environment"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoCaptureInputRef}
+                            className='photo-input'
+                            type="file"
+                        /> */}
                     {uploadable ? (
                         <input
-                            accept="image/jpeg"
+                            accept={PHOTO_MIME_TYPES.join(',')}
                             onChange={handleFileInputChange}
                             ref={hiddenPhotoUploadInputRef}
                             className="photo-upload-input"
@@ -122,7 +123,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         />
                     ) : (
                         <input
-                            accept="image/jpeg"
+                            accept={PHOTO_MIME_TYPES.join(',')}
                             onChange={handleFileInputChange}
                             ref={hiddenPhotoUploadInputRef}
                             className="photo-upload-input"
@@ -137,7 +138,10 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             <small>
                                 Timestamp:{' '}
                                 {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
+                                    <DateTimeStr
+                                        date={metadata.timestamp}
+                                        source={metadata.timestampSource}
+                                    />
                                 ) : (
                                     <span>Missing</span>
                                 )}
@@ -146,6 +150,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                 {metadata?.geolocation ? (
                                     <span>
                                         <GpsCoordStr
+                                            source={metadata.geolocationSource}
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>
