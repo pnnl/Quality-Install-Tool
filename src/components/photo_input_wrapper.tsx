@@ -83,7 +83,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 const upsertPhoto = (img_file: Blob) => {
                     setLoading(true)
                     // Process and reducing the image size for HEIC images
-                    if (img_file.type === 'image/heic') {
+                    if (img_file?.type === 'image/heic') {
                         // Convert HEIC to JPEG to be compatible to display in all browsers
                         heic2any({
                             blob: img_file,
