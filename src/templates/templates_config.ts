@@ -57,7 +57,7 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
     doe_workflow_foundation_airsealing_and_insulation: {
-        title: 'Foundation Wall Air Sealing and Insulation - *',
+        title: 'Foundation Wall Air Sealing and Insulation',
         template: DOEWorkflowFoundationAirSealingAndInsulation,
     },
     doe_workflow_full_frame_replacement_windows: {
@@ -101,11 +101,11 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowMechanicalVentilation,
     },
     doe_workflow_slab_foundation_exterior: {
-        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation - *',
+        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
         template: DOEWorkflowSlapFoundationExterior,
     },
     doe_workflow_wall_air_sealing_and_insulation_exterior: {
-        title: 'Wall Air Sealing and Insulation (Drill and Fill) - *',
+        title: 'Wall Air Sealing and Insulation (Drill and Fill)',
         template: DOEWorkflowWallAirSealingAndInsulation,
     },
     ira_doe_workflow_limited_assessment: {
