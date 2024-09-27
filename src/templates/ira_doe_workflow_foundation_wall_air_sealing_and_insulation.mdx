@@ -17,7 +17,7 @@
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="wall_airsealing_location" hidden />
 
-    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Don\'t know','CFM at 50Pa']} path="wall_air_leakage_rate" />
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
     
     <ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}> 
       <NumberInput label="CFM at 50Pa" min={0} path="wall_air_leakage_cfm50"  />
@@ -30,7 +30,14 @@
     <Radio label="Is the home located in a flood plain?" options={['Yes','No']} path="wall_air_sealing_flood_plan">The installation of flood vents is recommended for crawlspace/basement 
     foundations for homes located in a flood plain. </Radio>
 
+    <ShowOrHide visible={props.data?.wall_air_sealing_flood_plan === 'Yes'}> 
+    <p>Use insulation materials such as rigid foam that will remain in serviceable condition after a flood and can be cleaned, or consider air sealing and insulating the floor joists instead of the foundation walls.</p>
+    </ShowOrHide>
+
     <Radio label="Is the home located in an area with a risk of high radon levels?" options={['Yes','No']} path="wall_air_sealing_risk_of_radon">Air sealing and insulation can increase indoor radon level</Radio>
+    <ShowOrHide visible={props.data?.wall_air_sealing_risk_of_radon === 'Yes'}> 
+    <p>Remember to check the indoor radon levels and the condition of the radon mitigation system.</p>
+    </ShowOrHide>
 
     <CheckBox label="What is the material of the foundation wall?" options={['Wood','Concrete/CMU']} path="wall_air_sealing_material" />
     
@@ -39,21 +46,9 @@
         Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
     </Collapsible>
 
-    <Collapsible header="Roof condition">   
-    * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
-    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
-    </Collapsible>
-    <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="roof_condition" />
-
     <Collapsible header="Drainage condition"> 
     Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
-    basement floor, check the gutters and downspouts are in good condition. Once the attic has been air sealed and 
-    insulated there is less heat escaping to dry the roof/attic thus water damage caused by clogged gutter will be 
-    much worse. Once the attic has been air sealed and insulated the amount of air exfiltrating through the attic 
-    is reduced and therefore the amount of air infiltrating into the crawlspace/basement is also reduced. 
-    Thus, even though attic air sealing and insulation of the attic is being performed, it can reduce the drying 
-    force of the crawlspace/basement, thus pre-existing moisture problems in the crawlspace/basement can be made 
-    worse by this action. Thus, it is a good practice to check and document pre-existing problems.
+    basement floor, check the gutters and downspouts are in good condition. 
     </Collapsible>
     <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
 
@@ -64,9 +59,10 @@
     </Collapsible>
     <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
 
-    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
+    <Collapsible header="Pre-retrofit mechanical ventilation calculation"> 
     *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
+      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     </Collapsible>
     <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
@@ -84,17 +80,18 @@
     *	Look for appliances that are venting into the crawlspace/basement and not to outside.
     </PhotoInput> 
 
-    <PhotoInput id="moisture_test_photo" label="Mousture Test – Photo" >
+    <PhotoInput id="moisture_test_photo" label="Moisture Test – Photo" >
     *	Photo showing the moisture sensor reading of the foundation wall.
     * Use a pinless moisture meter for checking moisture in concrete
     * Use a Pin moisture meter for checking moisture in wood
+    * If the material’s moisture content is above 18% efforts should be made to dry the material and prevent it from getting wet in the future prior to applying air sealing and insulation products.
     </PhotoInput> 
 
     <PhotoInput id="rim_joist_air_sealed_photo" label="Rim Joist Air Sealed – Photo" >
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </PhotoInput> 
 
-    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace vents – Photo " >
+    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo " >
       Crawlspace vents blocked and sealed with spray foam
     </PhotoInput> 
 
@@ -120,7 +117,7 @@
   <Select label="What percent of the foundation perimeter was insulated?" options={["10%","25%","50%","75%","100%"]} path="postinstall_foundation_perimeter_percent" />
 
   <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
-  <Radio label="What is the air sealing level you have achieved?" options={['Don\'t know','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
+  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
   <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
   <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
@@ -132,10 +129,11 @@
   <CombustionSafetyChecksLink {...props} />
   
   ## Ventilation
-  <Collapsible header="Post-retrofit ASHRAE 62.2 Calculation">
+  <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
-  *	Consider infiltration credits.
-  * The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+  *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
   ## Project Invoice 
@@ -157,7 +155,7 @@
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.wall_airsealing_location ? ( Array.isArray(props.data.wall_airsealing_location) > 0 ? props.data.wall_airsealing_location.join(',') :  props.data?.wall_airsealing_location) : null } </strong> </p>
     
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate} { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ? ":" + props.data?.wall_air_leakage_cfm50  : null } </strong></p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ?  props.data?.wall_air_leakage_cfm50 + " "  : null } { props.data?.wall_air_leakage_rate} </strong></p>
     <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </Photo>
@@ -166,10 +164,9 @@
 
     <p> Is the home located in an area with a risk of high radon levels?  <strong> { props.data?.wall_air_sealing_risk_of_radon} </strong> </p>
     
-    <p> What is the material of the foundation wall? <strong> { props.data?.wall_air_sealing_material} </strong> </p>
+    <p> What is the material of the foundation wall? <strong> { props.data?.wall_airsealing_location ? ( Array.isArray(props.data.wall_air_sealing_material) > 0 ? props.data.wall_air_sealing_material.join(',') :  props.data?.wall_air_sealing_material) : null } </strong> </p>
 
     ## General Safety
-    <p> What is the roof condition?   <strong>{ props.data?.roof_condition} </strong></p>
     <p> What is the drainage system condition?   <strong> { props.data?.drainage_condition } </strong></p>
     <p> Are there signs of mold or moisture in or outside the home?  <strong> { props.data?.signs_of_mold_or_moisture} </strong></p>
     <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
@@ -181,7 +178,7 @@
     Photo of a section of the foundation wall/cripple wall/basement wall
     </Photo> 
 
-    <Photo id="moisture_test_photo" label="Mousture Test – Photo" required>
+    <Photo id="moisture_test_photo" label="Moisture Test – Photo" required>
     Photo of the moisture sensor reading of the foundation wall
     </Photo> 
 
@@ -189,7 +186,7 @@
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </Photo> 
 
-    <Photo id="crawlspace_vents_photo" label="Crawlspace vents – Photo " required>
+    <Photo id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo " required>
       Photo of Crawlspace vents blocked and sealed with spray foam
     </Photo> 
 
@@ -211,11 +208,8 @@
 
     <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
 
-    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
-    {
-    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? 
-    <p> CFM at 50Pa: <strong>{props.data?.postinstall_foundation_air_leakage_cfm50}</strong> </p> : null
-    }
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa' ? props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null}{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
+   
 
     <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
