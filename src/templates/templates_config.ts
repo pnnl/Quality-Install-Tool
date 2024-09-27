@@ -31,10 +31,14 @@ interface TemplatesConfig {
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
 // Add workflow templates for 'quality-install-tool'
-const GENERAL_WORKFLOW_TEMPLATES = {
-    doe_workflow_attic_air_sealing: {
-        title: 'Attic Air Sealing',
-        template: DOEWorkflowAtticAirSealTemplate,
+const templatesConfig: TemplatesConfig = {
+    doe_workflow_attic_air_sealing_and_insulation: {
+        title: 'Attic Air Sealing and Insulation',
+        template: DOEWorkflowAtticAirSealingAndInsulation,
+    },
+    doe_workflow_duct_air_sealing: {
+        title: 'Duct Air Sealing and Insulation',
+        template: DOEWorkflowDuctAirSealTemplate,
     },
     doe_workflow_electric_cooking_appliances: {
         title: 'Electric Cooking Appliances',
@@ -52,10 +56,10 @@ const GENERAL_WORKFLOW_TEMPLATES = {
         title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
-    doe_workflow_foundation_airsealing_and_insulation: {
-        title: 'Foundation Wall Air Sealing and Insulation',
-        template: DOEWorkflowFoundationAirSealingAndInsulation,
-    },
+    // doe_workflow_foundation_airsealing_and_insulation: {
+    //     title: 'Foundation Wall Air Sealing and Insulation',
+    //     template: DOEWorkflowFoundationAirSealingAndInsulation,
+    // },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
         template: DOEWorkflowFullFrameReplacementWindows,
@@ -74,23 +78,19 @@ const GENERAL_WORKFLOW_TEMPLATES = {
     },
     doe_workflow_heat_pump_water_heater: {
         title: 'Heat Pump Water Heater',
-        template: DOEWorkflowHPWHTemplate,
+        template: DOEWorkflowHeatPumpWaterHeaterTemplate,
     },
-}
-
-// Add workflow templates for 'ira-quality-install-tool'
-const IRA_WORKFLOW_TEMPLATES = {
-    ira_doe_workflow_central_ducted_split_heat_pump: {
-        title: 'IRA - Heat Pump Ducted',
-        template: IRADOEWorkflowCentralDuctedSplitHeatPumpTemplate,
+    doe_workflow_high_efficiency_gas_furnace: {
+        title: 'High Efficiency Gas Furnace',
+        template: DOEWorkflowHighEfficiencyGasFurnace,
     },
     doe_workflow_high_efficiency_modulating_boiler: {
         title: 'High Efficiency Modulating Boiler',
         template: DOEWorkflowHighEfficiencyModulatingBoiler,
     },
-    ira_doe_workflow_hpwh: {
-        title: 'IRA - Heat Pump Water Heater',
-        template: IRADOEWorkflowHPWHTemplate,
+    doe_workflow_high_efficiency_water_heater: {
+        title: 'High Efficiency Water Heater',
+        template: DOEWorkflowHighEfficiencyWaterHeater,
     },
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
@@ -100,14 +100,14 @@ const IRA_WORKFLOW_TEMPLATES = {
         title: 'Mechanical Ventilation',
         template: DOEWorkflowMechanicalVentilation,
     },
-    doe_workflow_slab_foundation_exterior: {
-        title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
-        template: DOEWorkflowSlapFoundationExterior,
-    },
-    doe_workflow_wall_air_sealing_and_insulation_exterior: {
-        title: 'Wall Air Sealing and Insulation (Drill and Fill)',
-        template: DOEWorkflowWallAirSealingAndInsulation,
-    },
+    // doe_workflow_slab_foundation_exterior: {
+    //     title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
+    //     template: DOEWorkflowSlapFoundationExterior,
+    // },
+    // doe_workflow_wall_air_sealing_and_insulation_exterior: {
+    //     title: 'Wall Air Sealing and Insulation (Drill and Fill)',
+    //     template: DOEWorkflowWallAirSealingAndInsulation,
+    // }
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,

@@ -96,7 +96,7 @@
 
   <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
 
-  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
     <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
     <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
@@ -175,10 +175,8 @@
     <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
 
     <p> What is the air sealing level you have achieved? <strong>{
-    <p> What is the air sealing level you have achieved? <strong>{
-    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? 
-     props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null}{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
-     props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null}{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
+    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null} {props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
+     
 
     { props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' && (
     <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>

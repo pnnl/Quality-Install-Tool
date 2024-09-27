@@ -27,42 +27,6 @@ interface DBDocType {
 export async function putNewDoc(
     db: PouchDB.Database<{}>,
     docName: string,
-): Promise<unknown> {
-    // Get the current date
-    const now = new Date()
-    // TODO: Handle the error case better
-    const dbInfo = await promisifiedDBInfo(db)
-    if (!dbInfo) {
-        throw new Error('Database info should never be null')
-    }
-    // The workflow name is the database name
-    const workflow_name = dbInfo.db_name
-    let workflow_title = dbInfo.db_name
-
-    // Get the corresponding workflow title from templates_config
-    if (workflow_name.indexOf('quality_install_tool') > 0) {
-        const template_name = workflow_name
-            .split('_')
-            .slice(1, workflow_name.length)
-            .join('_')
-        workflow_title = templatesConfig[template_name].title
-    }
-    // Store the new document if it does not exist
-    return db.putIfNotExists({
-        _id: docName,
-        data_: {},
-        metadata_: {
-            created_at: now,
-            last_modified_at: now,
-            attachments: {},
-            project_name: docName,
-        },
-    })
-}
-
-export async function putNewProject(
-    db: PouchDB.Database<{}>,
-    docName: string,
     docId: string,
     type: string,
 ): Promise<any> {

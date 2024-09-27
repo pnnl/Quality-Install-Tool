@@ -134,8 +134,7 @@ const EditorFlexBox: FC = () => {
             docId={'playground'}
             workflowName=""
             docName={''}
-            jobId=""
-            pathIndex={-1}
+            type=""
         >
             <StoreContext.Consumer>
                 {({ data }) => {
