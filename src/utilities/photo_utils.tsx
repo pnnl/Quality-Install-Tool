@@ -1,7 +1,5 @@
-import exifr from 'exifr'
-
 import Attachment from '../types/attachment.type'
-
+import exifr from 'exifr'
 /**
  * Get the current geolocation data from the device
  *

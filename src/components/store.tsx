@@ -327,11 +327,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         const metadata: Attachment['metadata'] = photoMetadata
             ? photoMetadata
             : isPhoto(blob)
-            ? await getMetadataFromPhoto(blob)
-            : {
-                  filename: fileName,
-                  timestamp: new Date(Date.now()).toISOString(),
-              }
+              ? await getMetadataFromPhoto(blob)
+              : {
+                    filename: fileName,
+                    timestamp: new Date(Date.now()).toISOString(),
+                }
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)
@@ -414,8 +414,8 @@ export function immutableUpsert(
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)
         : isNaN(parseInt(propName))
-        ? {}
-        : []
+          ? {}
+          : []
 
     if (newPath.length === 0) {
         newRecipient[propName] = target

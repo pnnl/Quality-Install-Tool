@@ -17,6 +17,7 @@ interface PhotoInputProps {
     upsertPhoto: (file: Blob) => void
     uploadable: boolean
     loading: boolean
+    error: string
 }
 
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -45,6 +46,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     upsertPhoto,
     uploadable,
     loading,
+    error,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -139,6 +141,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             <div className="loader" />
                         </div>
                     )}
+                    {error && <div className="error">{error}</div>}
                     {photo && (
                         <>
                             <Image src={URL.createObjectURL(photo)} thumbnail />

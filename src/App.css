@@ -129,6 +129,11 @@ h1 + h3 {
   }
 }
 
+.error{
+  color: red;
+  font-style: italic;
+}
+
 
 /* root_layout.tsx */
 #root-flex-layout {
@@ -386,3 +391,5 @@ btn-light:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+

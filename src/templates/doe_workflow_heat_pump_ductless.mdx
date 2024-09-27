@@ -85,7 +85,12 @@
 
         <StringInput  label="Comment" path="comment_equipment_selection" hint="Comment if there will be backup or auxiliary heat sources, e.g. electric resistance baseboard heaters will be left in place as a backup or auxiliary heat source." />
 
-        <CombustionSafetyChecksLink {...props} />
+
+        ## Combustion Appliance Safety Testing
+        <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft 
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
+        safety checks are required to be performed at the completion of the project. </p>
+  
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
@@ -188,6 +193,8 @@
         <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
             Take a photo of the project invoice if your program requires it.
         </PhotoInput>
+
+        <CombustionSafetyChecksLink {...props} />
 
     </Tab>
     <Tab eventKey="report" title="Report">
@@ -312,8 +319,6 @@
             <p>Comment: {props.data?.comment_equipment_selection}</p>
             }
 
-            <CombustionSafetyChecksReport path="combustion_safety_tests" />
-
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
            
@@ -409,6 +414,9 @@
             <Photo id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
+
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
 
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>
