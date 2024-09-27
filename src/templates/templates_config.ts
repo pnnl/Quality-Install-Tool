@@ -111,7 +111,7 @@ const templatesConfig: TemplatesConfig = {
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,
-    },
+    }
 }
 
 // Assuming TemplatesConfig is defined somewhere as a type or interface
