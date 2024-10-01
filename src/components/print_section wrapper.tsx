@@ -6,6 +6,7 @@ import PrintSection from './print_section'
 interface PrintSectionWrapperProps {
     children: React.ReactNode
     label: string
+    title?: string
 }
 
 /**
@@ -18,12 +19,19 @@ interface PrintSectionWrapperProps {
 const PrintSectionWrapper: FC<PrintSectionWrapperProps> = ({
     children,
     label,
+    title,
 }) => {
     // Generate an id for the input
     return (
         <StoreContext.Consumer>
             {({ metadata }) => {
-                return <PrintSection children={children} label={label} />
+                return (
+                    <PrintSection
+                        children={children}
+                        label={label}
+                        title={title}
+                    />
+                )
             }}
         </StoreContext.Consumer>
     )

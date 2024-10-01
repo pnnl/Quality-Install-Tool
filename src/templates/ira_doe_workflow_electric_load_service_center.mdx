@@ -26,7 +26,8 @@
     <NumberInput label="How many open breaker spots are there in the new electrical panel?"  path="postinstall_electrical_panel_open_breaker_spots" />
   </Tab>
   <Tab eventKey="report"  title="Report">
-    <PrintSection label="Print Report">
+   <PrintSection label="Print Report" title={props.project?.metadata_?.doc_name+ "-" + props.metadata?.template_title + "-" +props.metadata?.doc_name}>
+
     ---
     # Electric Load Service Center Upgrade
     ## Photo Report

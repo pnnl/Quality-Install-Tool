@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 interface PrintSectionProps {
     children: ReactNode
     label: string
+    title?: string
 }
 
 /**
@@ -14,7 +15,7 @@ interface PrintSectionProps {
  * @param children Content for printing
  * @param label Label for the print button
  */
-const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
+const PrintSection: FC<PrintSectionProps> = ({ children, label, title }) => {
     const printContainerId = useId()
     return (
         <>
@@ -23,8 +24,9 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
                     print({
                         maxWidth: 2000,
                         printable: printContainerId,
-                        onPrintDialogClose: () => {
-                            document.title = 'Quality Install Tool'
+                        onLoadingEnd: () => {
+                            document.title =
+                                `QI Tool Report-${title || ''}`.trim()
                         },
                         type: 'html',
                         targetStyles: ['*'],

@@ -21,7 +21,8 @@
     <Select label="What is the new stovetop/oven/range type?" options={["Standard electric","Induction cooktop"]} path="postinstall_cooking_appliance_type" />
   </Tab>
   <Tab eventKey="report"  title="Report">
-    <PrintSection label="Print Report">
+   <PrintSection label="Print Report" title={props.project?.metadata_?.doc_name+ "-" + props.metadata?.template_title + "-" +props.metadata?.doc_name}>
+
     ---
     # Electric Cooking Appliance Upgrade
     ## Photo Report
