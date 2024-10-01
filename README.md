@@ -232,3 +232,4 @@ A PDF rendering component for displaying PDF documents content. Uses `'id'` to r
 ```HTML
 <PDFRenderer id="ATTACHMENT_ID" label="FILE_LABEL" />
 ```
+
