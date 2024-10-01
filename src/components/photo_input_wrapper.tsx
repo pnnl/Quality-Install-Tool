@@ -1,6 +1,8 @@
 import ImageBlobReduce from 'image-blob-reduce'
 import React, { FC, useState } from 'react'
 
+import imageCompression from 'browser-image-compression'
+
 import { StoreContext } from './store'
 import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
@@ -8,9 +10,10 @@ import PhotoMetadata from '../types/photo_metadata.type'
 import heic2any from 'heic2any'
 
 import { getMetadataFromPhoto } from '../utilities/photo_utils'
+import { size } from 'lodash'
 
-const MAX_IMAGE_DIM_WIDTH = 500
-const MAX_IMAGE_DIM_HEIGHT = 350
+const MAX_IMAGE_DIM_WIDTH = 800
+const MAX_IMAGE_DIM_HEIGHT = 500
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -39,44 +42,34 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     const [loading, setLoading] = useState(false) // Loading state
     const [error, setError] = useState('') // Loading state
 
-    const img = new Image()
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    /**
+     * Compresses an image file (Blob) while maintaining its aspect ratio and ensuring it does not exceed specified size limits.
+     *
+     * @param {Blob} imageBlob - The original image file as a Blob object that needs to be compressed.
+     *
+     * @returns {Promise<Blob | undefined>} - A Promise that resolves to the compressed image file as a Blob.
+     *                                         If an error occurs during compression, it will be caught,
+     *                                         and the function may return undefined.
+     *
+     * @throws {Error} - Throws an error if the compression process fails.
+     *
+     */
+    async function compressFile(imageBlob: Blob) {
+        /*The compressed file will have a maximum size of `maxSizeMB` 
+         and dimensions constrained by`maxWidthOrHeight`. */
+        const options = {
+            maxSizeMB: 0.2,
+            useWebWorker: true,
+            maxWidthOrHeight: 1950,
+        }
 
-    function compressJpegBlob(jpegBlob: Blob, quality = 0.7) {
-        return new Promise((resolve, reject) => {
-            // Load the JPEG blob into the image
-            img.onload = () => {
-                // Set canvas dimensions based on the loaded image
-                canvas.width = Math.min(img.width, MAX_IMAGE_DIM_WIDTH)
-                canvas.height = Math.min(img.height, MAX_IMAGE_DIM_HEIGHT)
+        const compressedFile = await imageCompression(
+            imageBlob as File,
+            options,
+        )
 
-                // Clear the canvas before drawing the new image
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-                // Draw the image on the canvas
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-
-                // Export the canvas as a compressed JPEG Blob
-                canvas.toBlob(
-                    compressedBlob => {
-                        if (compressedBlob) {
-                            resolve(compressedBlob) // Resolve with the compressed blob
-                        } else {
-                            reject(new Error('Compression failed'))
-                        }
-                    },
-                    'image/jpeg',
-                    quality,
-                )
-            }
-
-            img.onerror = () => {
-                reject(new Error('Image loading failed'))
-            }
-
-            img.src = URL.createObjectURL(jpegBlob) // Create an object URL for the blob
-        })
+        console.log(compressedFile.size / 1024 / 1024)
+        return compressedFile
     }
 
     return (
@@ -90,19 +83,14 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                         heic2any({
                             blob: img_file,
                             toType: 'image/jpeg',
-                            // conversion quality
-                            // a number ranging from 0 to 1
-                            quality: 1,
                         })
                             .then(jpegBlob => {
-                                //Compress the image file to the configured size
-                                compressJpegBlob(jpegBlob as Blob).then(
-                                    compressed_photo_blob => {
-                                        // Retrieve metadata from the uncompressed image file
+                                compressFile(jpegBlob as Blob).then(
+                                    compressed_file => {
                                         getMetadataFromPhoto(img_file).then(
                                             (photo_metadata: any) => {
                                                 upsertAttachment(
-                                                    compressed_photo_blob as Blob,
+                                                    compressed_file as Blob,
                                                     id,
                                                     undefined,
                                                     photo_metadata,
@@ -123,7 +111,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     }
                     // Reduce the image size - JPEG files
                     else
-                        compressJpegBlob(img_file as Blob)
+                        compressFile(img_file as Blob)
                             .then(compressed_photo_blob => {
                                 // Retrieve metadata from the uncompressed image file
                                 getMetadataFromPhoto(img_file).then(
@@ -136,6 +124,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                                         )
                                     },
                                 )
+                                setError('')
                             })
                             .catch(error => {
                                 console.error('Compression error:', error) // Handle errors

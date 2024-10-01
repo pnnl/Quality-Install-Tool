@@ -24,7 +24,8 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
                         maxWidth: 2000,
                         printable: printContainerId,
                         onPrintDialogClose: () => {
-                            document.title = 'Quality Install Tool'
+                            document.title =
+                                'QI Tool - Project Name - Workflow Name - Installation'
                         },
                         type: 'html',
                         targetStyles: ['*'],

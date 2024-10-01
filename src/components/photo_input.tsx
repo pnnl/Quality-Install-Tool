@@ -144,7 +144,12 @@ const PhotoInput: FC<PhotoInputProps> = ({
                     {error && <div className="error">{error}</div>}
                     {photo && (
                         <>
-                            <Image src={URL.createObjectURL(photo)} thumbnail />
+                            <div className="photo-container">
+                                <Image
+                                    src={URL.createObjectURL(photo)}
+                                    thumbnail
+                                />
+                            </div>
                             <br />
                             <small>
                                 Timestamp:{' '}

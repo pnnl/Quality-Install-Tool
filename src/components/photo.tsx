@@ -44,8 +44,12 @@ const Photo: FC<PhotoProps> = ({
                     <Card.Text as="div">{description}</Card.Text>
                     {photo ? (
                         <>
-                            <Image src={URL.createObjectURL(photo)} thumbnail />
-                            <br />
+                            <div className="photo-container">
+                                <Image
+                                    src={URL.createObjectURL(photo)}
+                                    thumbnail
+                                />
+                            </div>
                             <small>
                                 Timestamp:{' '}
                                 {metadata?.timestamp ? (

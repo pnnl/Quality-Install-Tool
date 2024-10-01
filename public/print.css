@@ -393,3 +393,12 @@ btn-light:hover {
 }
 
 
+/* used in photo-input and photo component */
+.photo-container {
+  width: auto;
+  max-width: 350px; /* Maximum width */
+  overflow: hidden; /* Hide overflow */
+  position: relative; /* Position for absolute child */
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 500px; /* Maximum height */
+}
