@@ -9,11 +9,7 @@ import PhotoMetadata from '../types/photo_metadata.type'
 
 import heic2any from 'heic2any'
 
-import { getMetadataFromPhoto } from '../utilities/photo_utils'
-import { size } from 'lodash'
-
-const MAX_IMAGE_DIM_WIDTH = 800
-const MAX_IMAGE_DIM_HEIGHT = 500
+import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -58,17 +54,17 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
         /*The compressed file will have a maximum size of `maxSizeMB` 
          and dimensions constrained by`maxWidthOrHeight`. */
         const options = {
-            maxSizeMB: 0.2,
+            maxSizeMB: photoProperties.MAX_SIZE_IN_MB,
             useWebWorker: true,
-            maxWidthOrHeight: 1950,
+            maxWidthOrHeight: Math.max(
+                photoProperties.MAX_IMAGE_DIM_HEIGHT,
+                photoProperties.MAX_IMAGE_DIM_WIDTH,
+            ),
         }
-
         const compressedFile = await imageCompression(
             imageBlob as File,
             options,
         )
-
-        console.log(compressedFile.size / 1024 / 1024)
         return compressedFile
     }
 

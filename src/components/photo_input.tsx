@@ -150,7 +150,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                     thumbnail
                                 />
                             </div>
-                            <br />
                             <small>
                                 Timestamp:{' '}
                                 {metadata?.timestamp ? (
