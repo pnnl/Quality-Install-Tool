@@ -71,12 +71,10 @@
             </PhotoInput>        
         </ShowOrHide>
 
-## Combustion Appliance Safety Testing
-     <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft 
-hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
-safety checks are required to be performed at the completion of the project. </p>
-
-
+        ## Combustion Appliance Safety Testing
+            <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft 
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
+        safety checks are required to be performed at the completion of the project. </p>
         
     </Tab>
      <Tab eventKey="planning" title="Planning">
@@ -251,10 +249,7 @@ safety checks are required to be performed at the completion of the project. </p
         
     </Tab>
     <Tab eventKey="report" title="Report">
-        
-
-
-         <PrintSection label="Print Report">
+        <PrintSection label="Print Report">
             ---
             # Central Ducted Split Heat Pump Upgrade
             ## Photo Report
@@ -406,8 +401,6 @@ safety checks are required to be performed at the completion of the project. </p
                     Photo of the document showing the readings from all the supply registers
                 </Photo>        
             </ShowOrHide>
-
-            <CombustionSafetyChecksReport path="combustion_safety_tests" />
                        
             ## Planning
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
@@ -431,19 +424,19 @@ safety checks are required to be performed at the completion of the project. </p
 
             
             {
-                props.metadata.attachments?.manual_j_file || props.data.comment_manual_j ?
+                props.metadata.attachments?.manual_j_file && (
                 <>
                 <h2> Manual J </h2>
-                {
-                 props.metadata.attachments?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
-                }
+                 {props.metadata.attachments?.manual_j_file  ? <p>Please see the attached Manual J report.</p> : null}
+                </>)
+            }
+            <PDFRenderer id="manual_j_file" label="" />
+
                 
                 
-                { props.data.comment_manual_j
-                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
-                : null }
-                
-                </> : null
+            { props.data.comment_manual_j
+                && (<p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
+                )
             }
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
@@ -581,7 +574,9 @@ safety checks are required to be performed at the completion of the project. </p
                 Photo of the project invoice
                 </Photo> </>
             )}
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
+
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
 
         </PrintSection>
     </Tab>
