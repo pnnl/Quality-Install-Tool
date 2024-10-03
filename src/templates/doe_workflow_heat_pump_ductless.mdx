@@ -199,7 +199,7 @@
     </Tab>
     <Tab eventKey="report" title="Report">
         
-        <PrintSection label="Print Report">
+       <PrintSection label="Print Report">
             ---
             # Ductless Heat Pump Upgrade
             ## Photo Report
@@ -297,11 +297,11 @@
                 props.metadata.attachments?.manual_j_file  ?
                 <>
                 <h2> Manual J </h2>
-                <p>Please see the attached PDF containing the Manual J report.</p>
+                <p>Please see the attached Manual J report.</p>
                 </> : null
                 
             }
-
+            <PDFRenderer id="manual_j_file" label="" />
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
@@ -417,14 +417,12 @@
 
             <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
-
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>
             <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
             </Photo> </>
             )}
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>
         
