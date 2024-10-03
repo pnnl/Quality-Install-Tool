@@ -428,19 +428,19 @@
 
             
             {
-                props.metadata.attachments?.manual_j_file || props.data.comment_manual_j ?
+                props.metadata.attachments?.manual_j_file && (
                 <>
                 <h2> Manual J </h2>
-                {
-                 props.metadata.attachments?.manual_j_file  ? <p>Please see the attached PDF containing the Manual J report.</p> : null
-                }
+                 {props.metadata.attachments?.manual_j_file  ? <p>Please see the attached Manual J report.</p> : null}
+                </>)
+            }
+            <PDFRenderer id="manual_j_file" label="" />
+
                 
                 
-                { props.data.comment_manual_j
-                ? <p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
-                : null }
-                
-                </> : null
+            { props.data.comment_manual_j
+                && (<p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p> 
+                )
             }
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating 
@@ -582,7 +582,7 @@
             <CombustionSafetyChecksReport path="combustion_safety_tests" />
             <br/>
 
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
+           
 
         </PrintSection>
     </Tab>
