@@ -129,6 +129,11 @@ h1 + h3 {
   }
 }
 
+.error{
+  color: red;
+  font-style: italic;
+}
+
 
 /* root_layout.tsx */
 #root-flex-layout {
@@ -369,4 +374,31 @@ btn-light:hover {
     font-size: 12px;
     font-weight: bold;
   }
+}
+
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light gray */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 30px; /* Size of the loader */
+  height: 30px; /* Size of the loader */
+  animation: spin 1s linear infinite; /* Animation */
+  background-color: white;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* used in photo-input and photo component */
+.photo-container {
+  width: auto; /* Allow width to adjust based on content */
+  max-width: 500px; /* Maximum width */
+  overflow: hidden; /* Hide overflow */
+  position: relative; /* Position for absolute child */
+  height: auto; /* Allow height to adjust based on content */
+  max-height: 500px; /* Maximum height */
 }

@@ -85,7 +85,12 @@
 
         <StringInput  label="Comment" path="comment_equipment_selection" hint="Comment if there will be backup or auxiliary heat sources, e.g. electric resistance baseboard heaters will be left in place as a backup or auxiliary heat source." />
 
-        <CombustionSafetyChecksLink {...props} />
+
+        ## Combustion Appliance Safety Testing
+        <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft 
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
+        safety checks are required to be performed at the completion of the project. </p>
+  
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
@@ -137,7 +142,7 @@
         <PhotoInput id="vacuum_setup_photo" label="Vacuum Setup – Photo">
             Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
             
-            Valve Cores are not to be reused under any circumstances after removal from the Valve Body. 
+            Valve cores are not to be reused under any circumstances after removal from the valve Body. 
             The external sealing element of the core will take a “compression set”, conforming to the 
             mating port surface after installation. This is a common phenomenon for rubber, and contributes 
             to the robustness of rubber seals. But after the core has been removed and reinstalled the 
@@ -147,7 +152,7 @@
 
         <PhotoInput id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
             Take a photo of the vacuum decay test results. Use a digital micron gauge. 
-            The system must be isolated from the vaccum pump. The vaccum must not rise above 500 microns in 15 minutes.
+            The system must be isolated from the vacuum pump. The vacuum must not rise above 500 microns in 15 minutes.
 
         </PhotoInput>
 
@@ -189,10 +194,12 @@
             Take a photo of the project invoice if your program requires it.
         </PhotoInput>
 
+        <CombustionSafetyChecksLink {...props} />
+
     </Tab>
     <Tab eventKey="report" title="Report">
         
-        <PrintSection label="Print Report">
+       <PrintSection label="Print Report">
             ---
             # Ductless Heat Pump Upgrade
             ## Photo Report
@@ -290,11 +297,11 @@
                 props.metadata.attachments?.manual_j_file  ?
                 <>
                 <h2> Manual J </h2>
-                <p>Please see the attached PDF containing the Manual J report.</p>
+                <p>Please see the attached Manual J report.</p>
                 </> : null
                 
             }
-
+            <PDFRenderer id="manual_j_file" label="" />
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
@@ -311,8 +318,6 @@
             { props.data?.comment_equipment_selection && 
             <p>Comment: {props.data?.comment_equipment_selection}</p>
             }
-
-            <CombustionSafetyChecksReport path="combustion_safety_tests" />
 
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
@@ -410,13 +415,14 @@
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
+            <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>
             <Photo id="project_invoice_photo" label="Project Invoice – Photo">
                 Photo of the project invoice
             </Photo> </>
             )}
-            <PDFRenderer id="manual_j_file" label="PDF of Manual J - File" />
 
         </PrintSection>
         

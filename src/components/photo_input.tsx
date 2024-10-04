@@ -7,6 +7,7 @@ import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetaData from '../types/photo_metadata.type'
+import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -15,6 +16,8 @@ interface PhotoInputProps {
     photo: Blob | undefined
     upsertPhoto: (file: Blob) => void
     uploadable: boolean
+    loading: boolean
+    error: string
 }
 
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -33,6 +36,7 @@ interface PhotoInputProps {
  * @param upsertPhoto Function used to update/insert a photo into the store
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo (default).
+ * @param loader  When set, a loading image will be displayed during the upload process.
  */
 const PhotoInput: FC<PhotoInputProps> = ({
     children,
@@ -41,6 +45,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
     photo,
     upsertPhoto,
     uploadable,
+    loading,
+    error,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -105,16 +111,16 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         </Button>
                     </div>
                     {/* <input
-            accept="image/jpeg"
-            capture="environment"
-            onChange={handleFileInputChange}
-            ref={hiddenPhotoCaptureInputRef}
-            className='photo-input'
-            type="file"
-          /> */}
+                            accept={PHOTO_MIME_TYPES.join(',')}
+                            capture="environment"
+                            onChange={handleFileInputChange}
+                            ref={hiddenPhotoCaptureInputRef}
+                            className='photo-input'
+                            type="file"
+                        /> */}
                     {uploadable ? (
                         <input
-                            accept="image/jpeg"
+                            accept={PHOTO_MIME_TYPES.join(',')}
                             onChange={handleFileInputChange}
                             ref={hiddenPhotoUploadInputRef}
                             className="photo-upload-input"
@@ -122,7 +128,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         />
                     ) : (
                         <input
-                            accept="image/jpeg"
+                            accept={PHOTO_MIME_TYPES.join(',')}
                             onChange={handleFileInputChange}
                             ref={hiddenPhotoUploadInputRef}
                             className="photo-upload-input"
@@ -130,14 +136,27 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             capture="environment"
                         />
                     )}
+                    {loading && (
+                        <div className="padding">
+                            <div className="loader" />
+                        </div>
+                    )}
+                    {error && <div className="error">{error}</div>}
                     {photo && (
                         <>
-                            <Image src={URL.createObjectURL(photo)} thumbnail />
-                            <br />
+                            <div className="photo-container">
+                                <Image
+                                    src={URL.createObjectURL(photo)}
+                                    thumbnail
+                                />
+                            </div>
                             <small>
                                 Timestamp:{' '}
                                 {metadata?.timestamp ? (
-                                    <DateTimeStr date={metadata.timestamp} />
+                                    <DateTimeStr
+                                        date={metadata.timestamp}
+                                        source={metadata.timestampSource}
+                                    />
                                 ) : (
                                     <span>Missing</span>
                                 )}
@@ -146,6 +165,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                 {metadata?.geolocation ? (
                                     <span>
                                         <GpsCoordStr
+                                            source={metadata.geolocationSource}
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>

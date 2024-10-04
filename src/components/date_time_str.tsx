@@ -1,10 +1,13 @@
 import type { FC } from 'react'
 
+import type { TimestampSource } from '../types/photo_metadata.type'
+
 /**
  * Interface for the DateTimeStrProps
  */
 interface DateTimeStrProps {
     date: string
+    source?: TimestampSource | null
     locals?: string
     options?: Intl.DateTimeFormatOptions
 }
@@ -30,6 +33,7 @@ const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
  */
 const DateStr: FC<DateTimeStrProps> = ({
     date,
+    source,
     locals = 'en-us',
     options = {},
 }) => {

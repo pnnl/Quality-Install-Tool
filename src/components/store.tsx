@@ -10,7 +10,7 @@ import React, {
 
 import { isEmpty, isObject, toNumber, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
-import { getMetadataFromCurrentGPSLocation } from '../utilities/photo_utils'
+import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
@@ -20,7 +20,12 @@ import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
 
-type UpsertAttachment = (blob: Blob, id: string, fileName?: string) => void
+type UpsertAttachment = (
+    blob: Blob,
+    id: string,
+    fileName?: string,
+    photoMetadata?: Attachment['metadata'],
+) => void
 
 type UpsertData = (pathStr: string, value: any) => void
 
@@ -317,16 +322,16 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
+        photoMetadata?: Attachment['metadata'],
     ) => {
-        // Create the metadata for the blob
-
-        const metadata: Attachment['metadata'] =
-            blob.type === 'image/jpeg'
-                ? await getMetadataFromCurrentGPSLocation()
-                : {
-                      filename: fileName,
-                      timestamp: new Date(Date.now()).toISOString(),
-                  }
+        const metadata: Attachment['metadata'] = photoMetadata
+            ? photoMetadata
+            : isPhoto(blob)
+              ? await getMetadataFromPhoto(blob)
+              : {
+                    filename: fileName,
+                    timestamp: new Date(Date.now()).toISOString(),
+                }
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)
@@ -409,8 +414,8 @@ export function immutableUpsert(
             ? [...recipient]
             : ({ ...recipient } satisfies Record<string, any>)
         : isNaN(parseInt(propName))
-        ? {}
-        : []
+          ? {}
+          : []
 
     if (newPath.length === 0) {
         newRecipient[propName] = target

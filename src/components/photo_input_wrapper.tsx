@@ -1,11 +1,15 @@
 import ImageBlobReduce from 'image-blob-reduce'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+
+import imageCompression from 'browser-image-compression'
 
 import { StoreContext } from './store'
 import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
 
-const MAX_IMAGE_DIM = 500
+import heic2any from 'heic2any'
+
+import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -31,33 +35,121 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     label,
     uploadable,
 }) => {
+    const [loading, setLoading] = useState(false) // Loading state
+    const [error, setError] = useState('') // Loading state
+
+    /**
+     * Compresses an image file (Blob) while maintaining its aspect ratio and ensuring it does not exceed specified size limits.
+     *
+     * @param {Blob} imageBlob - The original image file as a Blob object that needs to be compressed.
+     *
+     * @returns {Promise<Blob | undefined>} - A Promise that resolves to the compressed image file as a Blob.
+     *                                         If an error occurs during compression, it will be caught,
+     *                                         and the function may return undefined.
+     *
+     * @throws {Error} - Throws an error if the compression process fails.
+     *
+     */
+    async function compressFile(imageBlob: Blob) {
+        /*The compressed file will have a maximum size of `maxSizeMB` 
+         and dimensions constrained by`maxWidthOrHeight`. */
+        const options = {
+            maxSizeMB: photoProperties.MAX_SIZE_IN_MB,
+            useWebWorker: true,
+            maxWidthOrHeight: Math.max(
+                photoProperties.MAX_IMAGE_DIM_HEIGHT,
+                photoProperties.MAX_IMAGE_DIM_WIDTH,
+            ),
+        }
+        const compressedFile = await imageCompression(
+            imageBlob as File,
+            options,
+        )
+        return compressedFile
+    }
+
     return (
         <StoreContext.Consumer>
             {({ attachments, upsertAttachment }) => {
                 const upsertPhoto = (img_file: Blob) => {
-                    // Reduce the image size as needed
-                    ImageBlobReduce()
-                        .toBlob(img_file, { max: MAX_IMAGE_DIM })
-                        .then(blob => {
-                            upsertAttachment(blob, id)
+                    setLoading(true)
+                    // Process and reducing the image size for HEIC images
+                    if (img_file?.type === 'image/heic') {
+                        // Convert HEIC to JPEG to be compatible to display in all browsers
+                        heic2any({
+                            blob: img_file,
+                            toType: 'image/jpeg',
                         })
+                            .then(jpegBlob => {
+                                compressFile(jpegBlob as Blob).then(
+                                    compressed_file => {
+                                        getMetadataFromPhoto(img_file).then(
+                                            (photo_metadata: any) => {
+                                                upsertAttachment(
+                                                    compressed_file as Blob,
+                                                    id,
+                                                    undefined,
+                                                    photo_metadata,
+                                                )
+                                            },
+                                        )
+                                    },
+                                )
+                                setError('')
+                            })
+                            .catch(error => {
+                                console.error('Conversion error:', error) // Handle errors
+                                setError('Image loading failed')
+                            })
+                            .finally(() => {
+                                setLoading(false) // Reset loading state
+                            })
+                    }
+                    // Reduce the image size - JPEG files
+                    else
+                        compressFile(img_file as Blob)
+                            .then(compressed_photo_blob => {
+                                // Retrieve metadata from the uncompressed image file
+                                getMetadataFromPhoto(img_file).then(
+                                    (photo_metadata: any) => {
+                                        upsertAttachment(
+                                            compressed_photo_blob as Blob,
+                                            id,
+                                            undefined,
+                                            photo_metadata,
+                                        )
+                                    },
+                                )
+                                setError('')
+                            })
+                            .catch(error => {
+                                console.error('Compression error:', error) // Handle errors
+                                setError('Image loading failed')
+                            })
+                            .finally(() => {
+                                setLoading(false) // Reset loading state
+                            })
                 }
                 const attachment = Object.getOwnPropertyDescriptor(
                     attachments,
                     id,
                 )?.value
                 return (
-                    <PhotoInput
-                        label={label}
-                        metadata={
-                            attachment?.metadata as unknown as PhotoMetadata
-                        }
-                        photo={attachment?.blob}
-                        upsertPhoto={upsertPhoto}
-                        uploadable={uploadable}
-                    >
-                        {children}
-                    </PhotoInput>
+                    <>
+                        <PhotoInput
+                            label={label}
+                            metadata={
+                                attachment?.metadata as unknown as PhotoMetadata
+                            }
+                            photo={attachment?.blob}
+                            upsertPhoto={upsertPhoto}
+                            uploadable={uploadable}
+                            loading={loading}
+                            error={error}
+                        >
+                            {children}
+                        </PhotoInput>
+                    </>
                 )
             }}
         </StoreContext.Consumer>
