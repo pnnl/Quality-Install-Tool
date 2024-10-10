@@ -3,10 +3,12 @@ import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
-import { TfiTrash, TfiPencil } from 'react-icons/tfi'
+import { TfiTrash, TfiPencil, TfiArrowDown } from 'react-icons/tfi'
 import dbName from './db_details'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
+import ImportDoc from './import_document_wrapper'
+import ExportDoc from './export_document_wrapper'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -121,7 +123,7 @@ const Home: FC = () => {
     }
 
     const sortByEditTime = (jobsList: any[]) => {
-        const sortedJobsByEditTime = jobsList.sort((a, b) => {
+        jobsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
                 b.metadata_.last_modified_at.toString()
@@ -146,6 +148,7 @@ const Home: FC = () => {
     const editAddressDetails = (projectID: string) => {
         navigate('app/' + projectID, { replace: true })
     }
+
     let projects_display: any = ''
     if (Object.keys(projectList).length == 0) {
         projects_display = (
@@ -171,6 +174,7 @@ const Home: FC = () => {
                     <Button onClick={handleAddJob} alt-text="Add a New Project">
                         Add a New Project
                     </Button>
+                    <ImportDoc id="project_json" label="Import a Project" />
                 </div>
             </center>
         )
@@ -181,6 +185,7 @@ const Home: FC = () => {
                     <Button onClick={handleAddJob} alt-text="Add a New Project">
                         Add a New Project
                     </Button>
+                    <ImportDoc id="project_json" label="Import Project" />
                 </div>
                 <br />
                 <br />
@@ -214,6 +219,11 @@ const Home: FC = () => {
                                     >
                                         <TfiTrash size={22} />
                                     </Button>
+                                    <ExportDoc
+                                        docId={key._id}
+                                        docName={key.metadata_?.doc_name}
+                                        includeChild={true}
+                                    />
                                 </span>
                                 <b>{key.metadata_?.doc_name}</b>
                                 {key.data_?.location?.street_address && (

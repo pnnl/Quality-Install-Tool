@@ -250,13 +250,169 @@ function promisifiedDBInfo(
 }
 
 /**
+ * Exports a document from the database as a JSON object.
+ * @param {any} db - The database instance from which the document will be exported.
+ * @param {string} docId - The ID of the document to be exported.
+ * @param {boolean} includeChild - A flag indicating whether to include child documents in the export.
+ * @returns {Promise<{}>} A promise that resolves to the exported document as a JSON object.
+ **/
+export async function exportDocumentAsJSONObject(
+    db: any,
+    docId: string,
+    includeChild: boolean,
+): Promise<{}> {
+    const docById = await db.get(docId, {
+        attachments: true,
+        revs_info: false,
+    })
+
+    if (includeChild) {
+        const childDocs: any = await db.allDocs({
+            keys: docById.children,
+            include_docs: true,
+            attachments: true,
+            revs_info: false,
+        })
+
+        const combinedDocs = [
+            docById,
+            ...childDocs.rows.map((row: { doc: any }) => row.doc),
+        ]
+        return JSON.stringify({ all_docs: combinedDocs })
+    }
+
+    return JSON.stringify({ all_docs: docById })
+}
+
+/**
+ * Finds the maximum index for a given document name in an array of names.
  *
+ * This function checks if any names in the provided array match the specified
+ * document name or the pattern of that name followed by an index in parentheses (e.g., "docName (1)").
+ * It returns the highest index found among the matching names. If no matching names are found,
+ * it returns -1 to indicate the absence of matches.
+ * @param {string[]} names - An array of strings representing document names.
+ * @param {string} docName - The base document name to search for.
+ * @returns {number} The maximum index found for the document name, or -1 if no matches are found.
  */
+const findMaxDocNameIndex = (names: string[], docName: string): number => {
+    // regex to match the document name with an optional index in parentheses.
+    const regex = new RegExp(`^${docName}( \\(\\d+\\))?$`)
+    return names.reduce((maxIndex, name) => {
+        if (regex.test(name)) {
+            const match = name.match(/\((\d+)\)/)
+            const index = match ? parseInt(match[1], 10) : 0
+            return Math.max(maxIndex, index)
+        }
+        return maxIndex
+    }, -1)
+}
+
+/**
+ * Updates the document name for a project to avoid duplicates.
+ * @param {any} input_doc - The document object that may contain a project.
+ * @returns {Promise<any>} The updated document object with a unique name.
+ */
+const updateProjectName = async (
+    input_doc: any,
+    docNames: string[],
+): Promise<any> => {
+    // Adjust doc_name for projects to avoid duplicates
+    if (input_doc.type === 'project') {
+        const doc_name = input_doc.metadata_.doc_name || ''
+        // finding the max index for doc_name, if the name is already present
+        const count = findMaxDocNameIndex(docNames, doc_name) + 1
+        input_doc.metadata_.doc_name =
+            count > 0 ? `${doc_name} (${count})` : doc_name
+    }
+    return input_doc
+}
+
+/**
+ * Updates the project.children with installationIds from imported installations.
+ * Retrieves the project document using projectId and updates its children field.
+ * @param {string} projectId - The ID of the project document to be updated.
+ * @param {string[]} installationIds - An array of installation IDs to be set as the project's children.
+ * @returns {Promise<void>} A promise that resolves when the update operation is complete.
+ */
+const updateProject = async (
+    db: PouchDB.Database<{}>,
+    projectId: string,
+    installationIds: string[],
+): Promise<void> => {
+    if (projectId) {
+        const projectDoc: any = await db.get(projectId)
+        projectDoc.children = installationIds
+        try {
+            await db.put(projectDoc)
+        } catch (error) {
+            console.log(
+                'Error in updating the installations in project doc in DB',
+                error,
+            )
+        }
+    }
+}
+
+/**
+ * Imports documents into the database.
+ * @param db - The database instance where the documents will be imported.
+ * @param jsonData - An object containing the documents along with the attachments to be imported,
+ * @param docNames - An array of document names to check and update unique project name for imported project doc.
+ * @returns A promise that resolves when the import is complete.
+ *
+ **/
+export async function ImportDocumentIntoDB(
+    db: PouchDB.Database<{}>,
+    jsonData: { all_docs: any },
+    docNames: string[],
+): Promise<void> {
+    let projectId: string | null = null
+    let installationIds: string[] = []
+    // Process each document in the JSON data
+    for (const input_doc of jsonData.all_docs) {
+        if (!input_doc || !input_doc.metadata_) continue
+
+        // Clean the data for new doc creation
+        // remove the id and rev from the imported doc
+        delete input_doc._id
+        delete input_doc._rev
+
+        // Check if the document is a project and update its name
+        // if the name is already present in the DB
+        const updated_doc = await updateProjectName(input_doc, docNames)
+
+        const now = new Date()
+        updated_doc.metadata_.created_at = now
+        updated_doc.metadata_.last_modified_at = now
+
+        const result = await db.post(input_doc)
+        // create a lis of the installationIds and set projectId based on document type
+        if (updated_doc.type === 'installation') {
+            installationIds.push(result.id)
+        } else {
+            projectId = result.id
+        }
+    }
+    // Update the imported project with the newly created installation IDs
+    if (projectId && installationIds)
+        updateProject(db, projectId, installationIds)
+}
+
+/**
+ * Appends a child document to a project document in the database.
+ *
+ * @param db - The PouchDB database instance where the project document resides.
+ * @param docId - The ID of the project document to which the child document will be appended.
+ * @param childDocId - The ID of the child document to be appended.
+ * @returns {Promise<{}>} A promise that resolves to an object containing updated document.
+ *
+ * */
 export async function appendChildToProject(
     db: PouchDB.Database<{}>,
     docId: string,
     childDocId: string,
-): Promise<unknown> {
+): Promise<{}> {
     try {
         // Fetch the document, update the children array, and put it back in one go
         return await db.upsert<any>(docId, doc => {
