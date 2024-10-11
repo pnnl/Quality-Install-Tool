@@ -152,7 +152,7 @@ const Home: FC = () => {
             <center>
                 <br />
                 <p className="welcome-header">
-                    Welcome to EverTrack
+                    Welcome to the Quality Install Tool
                 </p>
                 <br />
                 <p className="welcome-content">
