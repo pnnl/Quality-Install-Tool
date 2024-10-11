@@ -128,3 +128,13 @@ export const PHOTO_MIME_TYPES: string[] = ['image/heic', 'image/jpeg']
 export function isPhoto(blob: Blob): boolean {
     return PHOTO_MIME_TYPES.includes(blob.type)
 }
+
+/**
+ * This defines the maximum dimensions and size constraints for photos
+ * intended for upload and storage in the database
+ */
+export const photoProperties = {
+    MAX_IMAGE_DIM_WIDTH: 800,
+    MAX_IMAGE_DIM_HEIGHT: 500,
+    MAX_SIZE_IN_MB: 0.2, //The maximum file size of the photo in megabytes
+}
