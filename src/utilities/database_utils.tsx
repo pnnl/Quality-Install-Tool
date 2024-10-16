@@ -260,7 +260,7 @@ export async function exportDocumentAsJSONObject(
     db: any,
     docId: string,
     includeChild: boolean,
-): Promise<{}> {
+): Promise<any> {
     const docById = await db.get(docId, {
         attachments: true,
         revs_info: false,
@@ -289,23 +289,21 @@ export async function exportDocumentAsJSONObject(
  *
  * This function checks if any names in the provided array match the specified
  * document name or the pattern of that name followed by an index in parentheses (e.g., "docName (1)").
- * It returns the highest index found among the matching names. If no matching names are found,
- * it returns -1 to indicate the absence of matches.
  * @param {string[]} names - An array of strings representing document names.
  * @param {string} docName - The base document name to search for.
- * @returns {number} The maximum index found for the document name, or -1 if no matches are found.
+ * @returns {string} The document name appended by the  maximum index of a given document name.
  */
-const findMaxDocNameIndex = (names: string[], docName: string): number => {
+const findMaxDocNameIndex = (names: string[], docName: string): string => {
     // regex to match the document name with an optional index in parentheses.
-    const regex = new RegExp(`^${docName}( \\(\\d+\\))?$`)
-    return names.reduce((maxIndex, name) => {
-        if (regex.test(name)) {
-            const match = name.match(/\((\d+)\)/)
+    let count = names.reduce((maxIndex, name) => {
+        if (names.includes(docName)) {
+            const match = name.match(/\((\d+)\)[^()]*$/)
             const index = match ? parseInt(match[1], 10) : 0
             return Math.max(maxIndex, index)
         }
-        return maxIndex
+        return -1
     }, -1)
+    return count >= 0 ? `${docName} (${count + 1})` : docName
 }
 
 /**
@@ -320,10 +318,8 @@ const updateProjectName = async (
     // Adjust doc_name for projects to avoid duplicates
     if (input_doc.type === 'project') {
         const doc_name = input_doc.metadata_.doc_name || ''
-        // finding the max index for doc_name, if the name is already present
-        const count = findMaxDocNameIndex(docNames, doc_name) + 1
-        input_doc.metadata_.doc_name =
-            count > 0 ? `${doc_name} (${count})` : doc_name
+        // add the max index for doc_name in the end of the doc name, if the name is already present
+        input_doc.metadata_.doc_name = findMaxDocNameIndex(docNames, doc_name)
     }
     return input_doc
 }
@@ -381,6 +377,8 @@ export async function ImportDocumentIntoDB(
         // Check if the document is a project and update its name
         // if the name is already present in the DB
         const updated_doc = await updateProjectName(input_doc, docNames)
+
+        console.log(updated_doc)
 
         const now = new Date()
         updated_doc.metadata_.created_at = now

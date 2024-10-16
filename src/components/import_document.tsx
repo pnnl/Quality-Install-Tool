@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import dbName from './db_details'
 import PouchDB from 'pouchdb'
 import { ImportDocumentIntoDB } from '../utilities/database_utils'
+import { EXPORT_FILE_TYPE } from '../utilities/paths_utils'
 
 interface ImportDocProps {
     id: string
@@ -27,6 +28,7 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
     const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
     const [projectNames, setProjectNames] = useState<string[]>([])
     const [isFileProcessed, setIsFileProcessed] = useState<boolean>(false)
+    const [error, setError] = useState<String>('')
     const db = new PouchDB(dbName)
 
     const handleFileInputButtonClick = (
@@ -64,8 +66,19 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
     ) => {
         if (event.target.files) {
             const file = event.target.files[0]
-            if (file) processJsonData(file) // Processes JSON data from a file
-            // Reset input value to allow selecting the same file again
+            if (file) {
+                const isValid = file.name.endsWith(EXPORT_FILE_TYPE)
+                if (!isValid) {
+                    setError(
+                        "Please select file with extension '" +
+                            EXPORT_FILE_TYPE +
+                            "'",
+                    )
+                } else {
+                    setError('')
+                    processJsonData(file) // Processes JSON data from a file
+                }
+            }
             event.target.value = ''
         }
     }
@@ -102,12 +115,13 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
             &nbsp;
             <Button onClick={handleFileInputButtonClick}>{label}</Button>
             <input
-                accept=".qit"
+                accept={EXPORT_FILE_TYPE}
                 onChange={handleFileInputChange}
                 ref={hiddenFileUploadInputRef}
                 className="photo-upload-input"
                 type="file"
             />
+            {error && <div className="error">{error}</div>}
         </>
     )
 }
