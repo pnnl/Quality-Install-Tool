@@ -149,111 +149,123 @@ const Home: FC = () => {
         navigate('app/' + projectID, { replace: true })
     }
 
-    let projects_display: any = ''
-    if (Object.keys(projectList).length == 0) {
-        projects_display = (
-            <center>
-                <br />
-                <p className="welcome-header">
-                    Welcome to the Quality Install Tool
-                </p>
-                <br />
-                <p className="welcome-content">
-                    With this tool you will be able <br /> to easily take photos
-                    and document <br />
-                    your entire installation project. <br />
-                    <br />
-                    <br />
-                    For your records
-                    <br />
-                    For your clients
-                    <br />
-                    For quality assurance reporting
-                </p>
-                <div className="button-container-center" key={0}>
-                    <Button onClick={handleAddJob} alt-text="Add a New Project">
-                        Add a New Project
-                    </Button>
-                    <ImportDoc id="project_json" label="Import a Project" />
-                </div>
-            </center>
-        )
-    } else {
-        projects_display = [
-            <div key={0}>
-                <div className="button-container-right">
-                    <Button onClick={handleAddJob} alt-text="Add a New Project">
-                        Add a New Project
-                    </Button>
-                    <ImportDoc id="project_json" label="Import Project" />
-                </div>
-                <br />
-                <br />
-            </div>,
-            projectList.map((key, value) => (
-                <div key={key._id}>
-                    <ListGroup key={key._id} className="padding">
-                        <LinkContainer
-                            key={key}
-                            to={`/app/${key._id}/workflows`}
-                        >
-                            <ListGroup.Item key={key._id} action={true}>
-                                <span className="icon-container">
-                                    {/* <Menu options={options} /> */}
+    const projects_display =
+        Object.keys(projectList).length === 0
+            ? []
+            : projectList.map((key, value) => (
+                  <div key={key._id}>
+                      <ListGroup key={key._id} className="padding">
+                          <LinkContainer
+                              key={key}
+                              to={`/app/${key._id}/workflows`}
+                          >
+                              <ListGroup.Item key={key._id} action={true}>
+                                  <span className="icon-container">
+                                      {/* <Menu options={options} /> */}
 
-                                    <Button
-                                        variant="light"
-                                        onClick={event => {
-                                            event.stopPropagation()
-                                            event.preventDefault()
-                                            editAddressDetails(key._id)
-                                        }}
-                                    >
-                                        <TfiPencil size={22} />
-                                    </Button>
-                                    <Button
-                                        variant="light"
-                                        onClick={event =>
-                                            handleDelete(event, key)
-                                        }
-                                    >
-                                        <TfiTrash size={22} />
-                                    </Button>
-                                    <ExportDoc
-                                        docId={key._id}
-                                        docName={key.metadata_?.doc_name}
-                                        includeChild={true}
-                                    />
-                                </span>
-                                <b>{key.metadata_?.doc_name}</b>
-                                {key.data_?.location?.street_address && (
-                                    <>
-                                        <br />
-                                        {key.data_?.location?.street_address},
-                                    </>
-                                )}
-                                {key.data_?.location?.city && (
-                                    <>
-                                        <br />
-                                        {key.data_?.location?.city},{' '}
-                                    </>
-                                )}
-                                {key.data_.location?.state && (
-                                    <>{key.data_?.location?.state} </>
-                                )}
-                                {key.data_.location?.zip_code && (
-                                    <>{key.data_?.location?.zip_code}</>
-                                )}
-                            </ListGroup.Item>
-                        </LinkContainer>
-                    </ListGroup>
-                </div>
-            )),
-        ]
-    }
+                                      <Button
+                                          variant="light"
+                                          onClick={event => {
+                                              event.stopPropagation()
+                                              event.preventDefault()
+                                              editAddressDetails(key._id)
+                                          }}
+                                      >
+                                          <TfiPencil size={22} />
+                                      </Button>
+                                      <Button
+                                          variant="light"
+                                          onClick={event =>
+                                              handleDelete(event, key)
+                                          }
+                                      >
+                                          <TfiTrash size={22} />
+                                      </Button>
+                                      <ExportDoc
+                                          docId={key._id}
+                                          docName={key.metadata_?.doc_name}
+                                          includeChild={true}
+                                      />
+                                  </span>
+                                  <b>{key.metadata_?.doc_name}</b>
+                                  {key.data_?.location?.street_address && (
+                                      <>
+                                          <br />
+                                          {key.data_?.location?.street_address},
+                                      </>
+                                  )}
+                                  {key.data_?.location?.city && (
+                                      <>
+                                          <br />
+                                          {key.data_?.location?.city},{' '}
+                                      </>
+                                  )}
+                                  {key.data_.location?.state && (
+                                      <>{key.data_?.location?.state} </>
+                                  )}
+                                  {key.data_.location?.zip_code && (
+                                      <>{key.data_?.location?.zip_code}</>
+                                  )}
+                              </ListGroup.Item>
+                          </LinkContainer>
+                      </ListGroup>
+                  </div>
+              ))
+
     return (
         <>
-            {projects_display}
+            <div>
+                {Object.keys(projectList).length == 0 && (
+                    <center>
+                        <br />
+                        <p className="welcome-header">
+                            Welcome to the Quality Install Tool
+                        </p>
+                        <br />
+                        <p className="welcome-content">
+                            With this tool you will be able <br /> to easily
+                            take photos and document <br />
+                            your entire installation project. <br />
+                            <br />
+                            <br />
+                            For your records
+                            <br />
+                            For your clients
+                            <br />
+                            For quality assurance reporting
+                        </p>
+                        <div className="button-container-center" key={0}>
+                            <Button
+                                onClick={handleAddJob}
+                                alt-text="Add a New Project"
+                            >
+                                Add a New Project
+                            </Button>
+                            <ImportDoc
+                                id="project_json"
+                                label="Import a Project"
+                            />
+                        </div>
+                    </center>
+                )}
+                {Object.keys(projectList).length > 0 && (
+                    <div>
+                        <div className="align-right padding">
+                            <Button
+                                onClick={handleAddJob}
+                                alt-text="Add a New Project"
+                            >
+                                Add a New Project
+                            </Button>
+                            <ImportDoc
+                                id="project_json"
+                                label="Import Project"
+                            />
+                        </div>
+                        {projects_display}
+                    </div>
+                )}
+            </div>
             <br />
             <center>
                 <p className="welcome-content">

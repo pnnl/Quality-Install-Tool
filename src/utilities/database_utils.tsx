@@ -378,8 +378,6 @@ export async function ImportDocumentIntoDB(
         // if the name is already present in the DB
         const updated_doc = await updateProjectName(input_doc, docNames)
 
-        console.log(updated_doc)
-
         const now = new Date()
         updated_doc.metadata_.created_at = now
         updated_doc.metadata_.last_modified_at = now
