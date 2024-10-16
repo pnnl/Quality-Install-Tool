@@ -8,14 +8,17 @@ import React, {
     useState,
 } from 'react'
 
-import { isEmpty, isObject, toNumber, toPath } from 'lodash'
+import { isEmpty, isObject, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
 import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
-import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
+import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
-import { putNewProject, putNewInstallation } from '../utilities/database_utils'
-import templatesConfig from '../templates/templates_config'
+import {
+    putNewProject,
+    putNewInstallation,
+    useDB,
+} from '../utilities/database_utils'
 import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
@@ -177,7 +180,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         ;(async function connectStoreToDB() {
             // Establish a database connection
 
-            const db = new PouchDB(dbName, { auto_compaction: true })
+            const db = useDB(dbName)
             setDB(db)
 
             // Initialize the DB document as needed
@@ -214,17 +217,22 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     live: true,
                     since: 'now',
                 })
-                .on('change', function (change) {
-                    if (
-                        change.doc != null &&
-                        change.doc._rev !== revisionRef.current
-                    ) {
-                        // The change must have originated from outside this component, so update component state
-                        processDBDocChange(db, change.doc)
-                    }
-                    // else: the change originated from this component, so ignore it
-                })
-                .on('error', function (err) {
+                .on(
+                    'change',
+                    function (change: {
+                        doc: { _rev: string | undefined } | null
+                    }) {
+                        if (
+                            change.doc != null &&
+                            change.doc._rev !== revisionRef.current
+                        ) {
+                            // The change must have originated from outside this component, so update component state
+                            processDBDocChange(db, change.doc)
+                        }
+                        // else: the change originated from this component, so ignore it
+                    },
+                )
+                .on('error', function () {
                     // It's hard to imagine what would cause this since our DB is local
                     console.error('DB subscription connection failed')
                 })

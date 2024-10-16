@@ -1,4 +1,26 @@
+import { useMemo } from 'react'
 import templatesConfig from '../templates/templates_config'
+import PouchDB from 'pouchdb'
+import DBName from '../utilities/db_details'
+
+/**
+ * Custom hook to create and manage a PouchDB database instance.
+ * This hook initializes a PouchDB database with automatic compaction enabled.
+ * The database instance is memoized to ensure that a new instance is created
+ * only when the hook is used in a different context (e.g., a different component).
+ *
+ * @returns {PouchDB} The PouchDB database instance.
+ *
+ * @throws {Error} Throws an error if the database cannot be created or accessed.
+ */
+export function useDB(InputDBName?: string): any {
+    const dbName = InputDBName || DBName
+    const db_object = useMemo(
+        () => new PouchDB(dbName, { auto_compaction: true }),
+        [dbName],
+    )
+    return db_object
+}
 
 /**
  * Represents a document structure in a database with metadata and workflow information.
@@ -24,6 +46,7 @@ interface DBDocType {
  * @param {string} name - The name of the document to be added.
  * @returns A Promise that resolves to the new document if one was added.
  */
+
 export async function putNewDoc(
     db: PouchDB.Database<{}>,
     docName: string,
@@ -39,7 +62,7 @@ export async function putNewDoc(
     }
 
     // Store the new document if it does not exist
-    return db.putIfNotExists({
+    return await db.putIfNotExists({
         _id: docId ? docId : crypto.randomUUID(),
         type: type,
         data_: {},
@@ -270,5 +293,37 @@ export async function appendChildToProject(
     } catch (err) {
         console.error('Error appending child to project:', err)
         throw err
+    }
+}
+
+/**
+ * deleteEmptyProjects
+ */
+export async function deleteEmptyProjects(db: PouchDB.Database<{}>) {
+    try {
+        const allDocs: any = await db.allDocs({ include_docs: true })
+
+        const projectDocs: any = allDocs.rows
+            .map((row: { doc: any }) => row.doc)
+            .filter(
+                (doc: { metadata_: any; type: string }) =>
+                    doc?.type === 'project' &&
+                    doc?.metadata_?.doc_name === '' &&
+                    doc?.metadata_?.status === 'new',
+            )
+
+        await Promise.all(
+            projectDocs.map((doc: PouchDB.Core.RemoveDocument) =>
+                db.remove(doc),
+            ),
+        )
+        await Promise.all(
+            projectDocs.map((doc: PouchDB.Core.RemoveDocument) =>
+                db.remove(doc),
+            ),
+        )
+    } catch (error) {
+        //Log any errors that occur during the process
+        console.error('Error in removing the project', error)
     }
 }

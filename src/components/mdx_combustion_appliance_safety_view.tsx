@@ -1,10 +1,9 @@
 import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
-import PouchDB from 'pouchdb'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
-import dbName from './db_details'
-import { retrieveDocFromDB } from '../utilities/database_utils'
+import dbName from '../utilities/db_details'
+import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
 import DOECombustionTestTemplate from '../templates/doe_workflow_combustion_appliance_safety_tests.mdx'
 
 /**
@@ -16,7 +15,7 @@ const MdxCombustionSafetyView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.
     const { projectId } = useParams()
     const [projectDoc, setProjectDoc] = useState<any>({})
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const project_info = async (): Promise<void> => {
         retrieveDocFromDB(db, projectId as string).then((res: any) => {

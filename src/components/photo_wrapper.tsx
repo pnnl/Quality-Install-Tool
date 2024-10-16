@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
-import PouchDB from 'pouchdb'
 
 import { StoreContext } from './store'
 import Photo from './photo'
-import PhotoMetadata from '../types/photo_metadata.type'
-import dbName from './db_details'
+import { useDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -40,22 +38,24 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 }) => {
     const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
     const [projectDoc, setProjectDoc] = useState<any>(project)
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     useEffect(() => {
         if (fromParent) {
             const projectDocId = project?._id || docId
             db.get(projectDocId)
-                .then(res => {
+                .then((res: any) => {
                     setProjectDoc(res)
                 })
-                .catch(err => {})
+                .catch(() => {})
 
             db.getAttachment(projectDocId, id)
-                .then(res => {
-                    setPhotoBlob(res)
-                })
-                .catch(err => {})
+                .then(
+                    (res: React.SetStateAction<Blob | Buffer | undefined>) => {
+                        setPhotoBlob(res)
+                    },
+                )
+                .catch(() => {})
         }
     }, [fromParent])
 

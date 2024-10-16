@@ -5,9 +5,8 @@ import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup, Modal } from 'react-bootstrap'
 import templatesConfig from '../templates/templates_config'
 import { LinkContainer } from 'react-router-bootstrap'
-
-import dbName from './db_details'
 import { useParams } from 'react-router-dom'
+import { useDB } from '../utilities/database_utils'
 
 const StringInputModal = lazy(() => import('./string_input_modal'))
 
@@ -18,7 +17,7 @@ PouchDB.plugin(PouchDBUpsert)
  * @returns ListGroup component displaying the jobs or installations associated with the project
  */
 const JobList: React.FC = () => {
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const { projectId, workflowName } = useParams()
     const [sortedJobs, setSortedJobs] = useState<any[]>([])

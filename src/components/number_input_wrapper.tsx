@@ -1,6 +1,5 @@
 import { get } from 'lodash'
 import type { FC } from 'react'
-import React from 'react'
 import { StoreContext } from './store'
 import NumberInput from './number_input'
 import { pathToId } from '../utilities/paths_utils'

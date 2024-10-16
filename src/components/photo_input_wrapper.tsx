@@ -1,4 +1,3 @@
-import ImageBlobReduce from 'image-blob-reduce'
 import React, { FC, useState } from 'react'
 
 import imageCompression from 'browser-image-compression'
@@ -6,8 +5,6 @@ import imageCompression from 'browser-image-compression'
 import { StoreContext } from './store'
 import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
-
-import heic2any from 'heic2any'
 
 import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
 
@@ -68,6 +65,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
         return compressedFile
     }
 
+    async function loadHeic2Any() {
+        const { default: heic2any } = await import('heic2any')
+        return heic2any
+    }
+
     return (
         <StoreContext.Consumer>
             {({ attachments, upsertAttachment }) => {
@@ -76,34 +78,36 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     // Process and reducing the image size for HEIC images
                     if (img_file?.type === 'image/heic') {
                         // Convert HEIC to JPEG to be compatible to display in all browsers
-                        heic2any({
-                            blob: img_file,
-                            toType: 'image/jpeg',
+                        loadHeic2Any().then(heic2any => {
+                            heic2any({
+                                blob: img_file,
+                                toType: 'image/jpeg',
+                            })
+                                .then(jpegBlob => {
+                                    compressFile(jpegBlob as Blob).then(
+                                        compressed_file => {
+                                            getMetadataFromPhoto(img_file).then(
+                                                (photo_metadata: any) => {
+                                                    upsertAttachment(
+                                                        compressed_file as Blob,
+                                                        id,
+                                                        undefined,
+                                                        photo_metadata,
+                                                    )
+                                                },
+                                            )
+                                        },
+                                    )
+                                    setError('')
+                                })
+                                .catch(error => {
+                                    console.error('Conversion error:', error) // Handle errors
+                                    setError('Image loading failed')
+                                })
+                                .finally(() => {
+                                    setLoading(false) // Reset loading state
+                                })
                         })
-                            .then(jpegBlob => {
-                                compressFile(jpegBlob as Blob).then(
-                                    compressed_file => {
-                                        getMetadataFromPhoto(img_file).then(
-                                            (photo_metadata: any) => {
-                                                upsertAttachment(
-                                                    compressed_file as Blob,
-                                                    id,
-                                                    undefined,
-                                                    photo_metadata,
-                                                )
-                                            },
-                                        )
-                                    },
-                                )
-                                setError('')
-                            })
-                            .catch(error => {
-                                console.error('Conversion error:', error) // Handle errors
-                                setError('Image loading failed')
-                            })
-                            .finally(() => {
-                                setLoading(false) // Reset loading state
-                            })
                     }
                     // Reduce the image size - JPEG files
                     else
