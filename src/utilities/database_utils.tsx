@@ -50,20 +50,34 @@ interface DBDocType {
 export async function putNewDoc(
     db: PouchDB.Database<{}>,
     docName: string,
-    docId: string,
+    docId: string | null,
     type: string,
 ): Promise<any> {
     // Get the current date
     const now = new Date()
-    // TODO: Handle the error case better
+
+    // Get database info
     const dbInfo = await promisifiedDBInfo(db)
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
 
-    // Store the new document if it does not exist
-    return await db.putIfNotExists({
-        _id: docId ? docId : crypto.randomUUID(),
+    if (docId) {
+        try {
+            // Check if the document exists
+            const doc = await db.get(docId)
+            return doc // Document exists, returns the doc
+        } catch (err: any) {
+            if (err.status !== 404) {
+                // other errors
+                console.error('putNewDoc: Error retrieving document:', err)
+            }
+        }
+    }
+
+    // Document does not exist, continue to insert it
+    const newDoc = {
+        _id: docId || crypto.randomUUID(),
         type: type,
         data_: {},
         metadata_: {
@@ -73,9 +87,14 @@ export async function putNewDoc(
             attachments: {},
             status: 'new',
         },
-
         children: [],
-    })
+    }
+
+    try {
+        return db.put(newDoc)
+    } catch (err) {
+        console.error('putNewDoc: Error inserting document:', err)
+    }
 }
 
 /**
@@ -109,7 +128,7 @@ export async function putNewInstallation(
     workflowName: string,
     docName: string,
     parentId: string,
-): Promise<PouchDB.UpsertResponse> {
+) {
     // Get the current date
     const now = new Date()
     // TODO: Handle the error case better
@@ -117,16 +136,20 @@ export async function putNewInstallation(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
-    const installation_doc = putNewDoc(db, docName, docId, 'installation')
+    const installationDoc = await putNewDoc(db, docName, docId, 'installation')
 
+    if (!installationDoc || !installationDoc.id) {
+        const doc = await db.get(docId)
+        return doc // Document exists, returns the doc
+    }
     // append the installation.id in the project doc
-    appendChildToProject(db, parentId, (await installation_doc).id)
+    appendChildToProject(db, parentId, installationDoc.id)
 
     const template_name = workflowName
     let template_title = templatesConfig[workflowName].title
 
     // update installation doc to include template_name and template_title
-    return db.upsert((await installation_doc).id, function (doc: any) {
+    return db.upsert(installationDoc.id, function (doc: any) {
         doc.metadata_.template_title = template_title
         doc.metadata_.template_name = template_name
         return doc

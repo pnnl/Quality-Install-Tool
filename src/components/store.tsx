@@ -88,7 +88,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
-    const [db, setDB] = useState<PouchDB.Database>()
+    const [db, setDB] = useState<PouchDB.Database>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
@@ -178,16 +178,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
          *     originated from this component
          */
         ;(async function connectStoreToDB() {
-            // Establish a database connection
-
-            const db = useDB(dbName)
-            setDB(db)
-
-            // Initialize the DB document as needed
             try {
-                // It looks like the type def for putIfNotExists does not match its implementation
-                // TODO: Check this over carefully
-
+                // Initialize the DB document as needed
                 const result = !isInstallationDoc
                     ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewInstallation(
@@ -217,22 +209,17 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     live: true,
                     since: 'now',
                 })
-                .on(
-                    'change',
-                    function (change: {
-                        doc: { _rev: string | undefined } | null
-                    }) {
-                        if (
-                            change.doc != null &&
-                            change.doc._rev !== revisionRef.current
-                        ) {
-                            // The change must have originated from outside this component, so update component state
-                            processDBDocChange(db, change.doc)
-                        }
-                        // else: the change originated from this component, so ignore it
-                    },
-                )
-                .on('error', function () {
+                .on('change', function (change) {
+                    if (
+                        change.doc != null &&
+                        change.doc._rev !== revisionRef.current
+                    ) {
+                        // The change must have originated from outside this component, so update component state
+                        processDBDocChange(db, change.doc)
+                    }
+                    // else: the change originated from this component, so ignore it
+                })
+                .on('error', function (err) {
                     // It's hard to imagine what would cause this since our DB is local
                     console.error('DB subscription connection failed')
                 })
