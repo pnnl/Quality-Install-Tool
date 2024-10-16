@@ -1,12 +1,20 @@
-import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
+import React, {
+    useState,
+    type FC,
+    useEffect,
+    SetStateAction,
+    Suspense,
+} from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { putNewProject } from '../utilities/database_utils'
 import PouchDB from 'pouchdb'
 import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import dbName from './db_details'
-import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
+
+// Lazy load components
+const ImportDoc = React.lazy(() => import('./import_document_wrapper'))
+const ExportDoc = React.lazy(() => import('./export_document_wrapper'))
 
 /**
  * Home:  Renders the Home page for the APP
@@ -23,6 +31,11 @@ const Home: FC = () => {
         useState('')
 
     const retrieveProjectInfo = async (): Promise<void> => {
+        // Dynamically import the function when needed
+        const { retrieveProjectDocs } = await import(
+            '../utilities/database_utils'
+        )
+
         retrieveProjectDocs(db).then(res => {
             setProjectList(res)
             sortByEditTime(res)
@@ -42,10 +55,11 @@ const Home: FC = () => {
                         doc?.metadata_?.status === 'new',
                 )
 
-            for (const doc of projectDocs) {
-                // Remove the empty project document from the database
-                if (doc) await db.remove(doc)
-            }
+            await Promise.all(
+                projectDocs.map((doc: PouchDB.Core.RemoveDocument) =>
+                    db.remove(doc),
+                ),
+            )
         } catch (error) {
             //Log any errors that occur during the process
             console.error('Error in removing the project', error)
@@ -58,10 +72,11 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [projectList])
+    }, [projectList]) // Fetch the project details from DB as the state variable projectList is updated
 
     const handleAddJob = async () => {
-        // adding a new project doc here
+        // Dynamically import the function when needed
+        const { putNewProject } = await import('../utilities/database_utils')
         const updatedDBDoc: any = await putNewProject(db, '', '')
 
         // Refresh the project list after adding the new project
@@ -146,46 +161,10 @@ const Home: FC = () => {
     const editAddressDetails = (projectID: string) => {
         navigate('app/' + projectID, { replace: true })
     }
-    let projects_display: any = ''
-    if (Object.keys(projectList).length == 0) {
-        projects_display = (
-            <center>
-                <br />
-                <p className="welcome-header">
-                    Welcome to the Quality Install Tool
-                </p>
-                <br />
-                <p className="welcome-content">
-                    With this tool you will be able <br /> to easily take photos
-                    and document <br />
-                    your entire installation project. <br />
-                    <br />
-                    <br />
-                    For your records
-                    <br />
-                    For your clients
-                    <br />
-                    For quality assurance reporting
-                </p>
-                <div className="button-container-center" key={0}>
-                    <Button onClick={handleAddJob} alt-text="Add a New Project">
-                        Add a New Project
-                    </Button>
-                </div>
-            </center>
-        )
-    } else {
-        projects_display = [
-            <div key={0}>
-                <div className="button-container-right">
-                    <Button onClick={handleAddJob} alt-text="Add a New Project">
-                        Add a New Project
-                    </Button>
-                </div>
-                <br />
-                <br />
-            </div>,
-            projectList.map((key, value) => (
+    const projects_display =
+        Object.keys(projectList).length == 0
+            ? []
+            : projectList.map((key, value) => (
                 <div key={key._id}>
                     <ListGroup key={key._id} className="padding">
                         <LinkContainer
@@ -214,6 +193,17 @@ const Home: FC = () => {
                                     >
                                         <TfiTrash size={22} />
                                     </Button>
+                                    <Suspense
+                                        fallback={
+                                            <div>Loading Export...</div>
+                                        }
+                                    >
+                                        <ExportDoc
+                                            docId={key._id}
+                                            docName={key.metadata_?.doc_name}
+                                            includeChild={true}
+                                        />
+                                    </Suspense>
                                 </span>
                                 <b>{key.metadata_?.doc_name}</b>
                                 {key.data_?.location?.street_address && (
@@ -238,12 +228,66 @@ const Home: FC = () => {
                         </LinkContainer>
                     </ListGroup>
                 </div>
-            )),
-        ]
-    }
+            ))
+
     return (
         <>
-            {projects_display}
+            <div>
+                {Object.keys(projectList).length == 0 && (
+                    <center>
+                        <br />
+                        <p className="welcome-header">
+                            Welcome to the Quality Install Tool
+                        </p>
+                        <br />
+                        <p className="welcome-content">
+                            With this tool you will be able <br /> to easily
+                            take photos and document <br />
+                            your entire installation project. <br />
+                            <br />
+                            <br />
+                            For your records
+                            <br />
+                            For your clients
+                            <br />
+                            For quality assurance reporting
+                        </p>
+                        <div className="button-container-center" key={0}>
+                            <Button
+                                onClick={handleAddJob}
+                                alt-text="Add a New Project"
+                            >
+                                Add a New Project
+                            </Button>
+                            <Suspense fallback={<div> Loading Import...</div>}>
+                                <ImportDoc
+                                    id="project_json"
+                                    label="Import a Project"
+                                />
+                            </Suspense>
+                        </div>
+                    </center>
+                )}
+                {Object.keys(projectList).length > 0 && (
+                    <div className="row align-right padding">
+                        <div className="button-container-right">
+                            <Button
+                                onClick={handleAddJob}
+                                alt-text="Add a New Project"
+                            >
+                                Add a New Project
+                            </Button>
+                            <Suspense fallback={<div> Loading Import...</div>}>
+                                <ImportDoc
+                                    id="project_json"
+                                    label="Import Project"
+                                />
+                            </Suspense>
+                        </div>
+                        {projects_display}
+                    </div>
+                )}
+            </div>
             <br />
             <center>
                 <p className="welcome-content">
