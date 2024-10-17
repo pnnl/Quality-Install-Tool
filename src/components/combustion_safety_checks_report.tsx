@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react'
-import dbName from './db_details'
 import { useParams } from 'react-router-dom'
-import PouchDB from 'pouchdb'
 import PhotoWrapper from './photo_wrapper'
+import { useDB } from '../utilities/database_utils'
 
 const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
     const [appliances, setAppliances] = useState<any>({})
@@ -10,7 +9,7 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
         Object.keys(appliances),
     )
     const { projectId } = useParams()
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const fetchAppliances = async () => {
         if (!projectId) {
@@ -38,11 +37,11 @@ const CombustionSafetyChecksReport: FC<{ path: string }> = ({ path }) => {
                 since: 'now',
                 include_docs: true,
             })
-            .on('change', change => {
+            .on('change', () => {
                 // Call fetchAppliances() when a change is detected in DB
                 fetchAppliances()
             })
-            .on('error', err => {
+            .on('error', (err: any) => {
                 console.error('Changes feed error:', err)
             })
 

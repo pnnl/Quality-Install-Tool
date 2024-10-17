@@ -67,7 +67,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     /**
      * The title of the application
      */
-    const app_title = 'Quality Install Tool'
+    const app_title = 'Quality Install Tool Test'
 
     return (
         <div id="root-background">

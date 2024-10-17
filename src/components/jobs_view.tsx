@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { TfiTrash, TfiPlus, TfiPencil } from 'react-icons/tfi'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
+import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import PouchDB from 'pouchdb'
 import PouchDBUpsert from 'pouchdb-upsert'
 import { Button, ListGroup, Modal } from 'react-bootstrap'
 import templatesConfig from '../templates/templates_config'
-import StringInputModal from './string_input_modal'
 import { LinkContainer } from 'react-router-bootstrap'
-import {
-    putNewInstallation,
-    retrieveInstallationDocs,
-    retrieveProjectSummary,
-} from '../utilities/database_utils'
-import dbName from './db_details'
 import { useParams } from 'react-router-dom'
+import { useDB } from '../utilities/database_utils'
+
+const StringInputModal = lazy(() => import('./string_input_modal'))
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -21,7 +17,7 @@ PouchDB.plugin(PouchDBUpsert)
  * @returns ListGroup component displaying the jobs or installations associated with the project
  */
 const JobList: React.FC = () => {
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const { projectId, workflowName } = useParams()
     const [sortedJobs, setSortedJobs] = useState<any[]>([])
@@ -39,6 +35,9 @@ const JobList: React.FC = () => {
 
     // Retrieves the project information which includes project name and installation address
     const project_info = async (): Promise<void> => {
+        const { retrieveProjectSummary } = await import(
+            '../utilities/database_utils'
+        )
         retrieveProjectSummary(
             db,
             projectId as string,
@@ -79,6 +78,9 @@ const JobList: React.FC = () => {
     ]
 
     const retrieveJobs = async (): Promise<void> => {
+        const { retrieveInstallationDocs } = await import(
+            '../utilities/database_utils'
+        )
         retrieveInstallationDocs(
             db,
             projectId as string,
@@ -143,6 +145,9 @@ const JobList: React.FC = () => {
         // adding a new job here
         const docName = input
         if (docName !== null) {
+            const { putNewInstallation } = await import(
+                '../utilities/database_utils'
+            )
             await putNewInstallation(
                 db,
                 '',
@@ -196,15 +201,17 @@ const JobList: React.FC = () => {
             <Button variant="primary" onClick={openAddModal}>
                 Add Installation
             </Button>
-            <StringInputModal
-                isOpen={isAddModalOpen}
-                closeModal={closeAddModal}
-                onSubmit={handleAddJob}
-                validateInput={validateInput}
-                title="Enter new installation name"
-                okButton="Add"
-                value=""
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+                <StringInputModal
+                    isOpen={isAddModalOpen}
+                    closeModal={closeAddModal}
+                    onSubmit={handleAddJob}
+                    validateInput={validateInput}
+                    title="Enter new installation name"
+                    okButton="Add"
+                    value=""
+                />
+            </Suspense>
             <div className="bottom-margin"></div>
             {/* Sort feature, not used now but will be used in future. */
             /* <Dropdown>

@@ -2,11 +2,10 @@ import { FC, Key, useEffect, useState } from 'react'
 import RadioWrapper from './radio_wrapper'
 import { Button } from 'react-bootstrap'
 import PhotoInputWrapper from './photo_input_wrapper'
-import dbName from './db_details'
 import { useParams } from 'react-router-dom'
-import PouchDB from 'pouchdb'
 import ShowOrHide from './show_or_hide'
 import Collapsible from './collapsible'
+import { useDB } from '../utilities/database_utils'
 
 interface ApplianceSafetyTestProps {
     appliance_key: string
@@ -221,7 +220,7 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
     )
     const allowedApplianceKeys = ['A1', 'A2', 'A3', 'A4']
     const { projectId } = useParams()
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const fetchAppliances = async () => {
         if (!projectId) {
@@ -249,11 +248,11 @@ const CombustionSafetyChecks: FC<{ path: string }> = ({ path }) => {
                 since: 'now',
                 include_docs: true,
             })
-            .on('change', change => {
+            .on('change', () => {
                 // Call fetchAppliances() when a change is detected in DB
                 fetchAppliances()
             })
-            .on('error', err => {
+            .on('error', (err: any) => {
                 console.error('Changes feed error:', err)
             })
 
