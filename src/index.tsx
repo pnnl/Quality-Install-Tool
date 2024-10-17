@@ -17,14 +17,15 @@ root.render(
 // Learn more about service workers: https://cra.link/PWA
 // Register the service worker
 console.warn('Registering service worker')
-serviceWorkerRegistration.register({
-    onUpdate: (registration: ServiceWorkerRegistration) => {
-        console.log('Service worker updated', registration)
-    },
-    onSuccess: (registration: ServiceWorkerRegistration) => {
-        console.log('Service worker registered', registration)
-    },
-})
+serviceWorkerRegistration.unregister()
+// serviceWorkerRegistration.register({
+//     onUpdate: (registration: ServiceWorkerRegistration) => {
+//         console.log('Service worker updated', registration)
+//     },
+//     onSuccess: (registration: ServiceWorkerRegistration) => {
+//         console.log('Service worker registered', registration)
+//     },
+// })
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
