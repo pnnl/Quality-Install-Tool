@@ -226,6 +226,7 @@ This component displays photos within the report section, formatted for printing
 </Photo>
 ```
 
+
 ### PDFRenderer
 A PDF rendering component for displaying PDF documents content. Uses `'id'` to retrieve uploaded PDF and render its content in the web page.
 
