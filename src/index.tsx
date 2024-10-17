@@ -16,7 +16,7 @@ root.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 // Register the service worker
-console.warn("Registering service worker")
+console.warn('Registering service worker')
 serviceWorkerRegistration.register({
     onUpdate: (registration: ServiceWorkerRegistration) => {
         console.log('Service worker updated', registration)
