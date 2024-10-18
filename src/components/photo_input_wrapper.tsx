@@ -66,7 +66,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     }
 
     // Dynamically imports the `heic2any` module.
-    // This can help reduce initial bundle size and improve
+    // This helps to reduce initial bundle size and improve
     // performance by only loading the library when needed.
     async function loadHeic2Any() {
         const { default: heic2any } = await import('heic2any')
