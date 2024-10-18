@@ -5,6 +5,8 @@ import dbName from '../utilities/db_details'
 import React from 'react'
 import { useDB } from '../utilities/database_utils'
 
+// Lazily initializes the components, rendering them only when requested.
+// This reduces the bundle size when the app is loaded, improving initial load time
 const DOEProjectDetailsTemplate = React.lazy(
     () => import('../templates/doe_project_details.mdx'),
 )

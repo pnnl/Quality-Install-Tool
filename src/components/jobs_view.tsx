@@ -35,6 +35,7 @@ const JobList: React.FC = () => {
 
     // Retrieves the project information which includes project name and installation address
     const project_info = async (): Promise<void> => {
+        // Dynamically import the function when needed
         const { retrieveProjectSummary } = await import(
             '../utilities/database_utils'
         )
@@ -78,6 +79,7 @@ const JobList: React.FC = () => {
     ]
 
     const retrieveJobs = async (): Promise<void> => {
+        // Dynamically import the function when needed
         const { retrieveInstallationDocs } = await import(
             '../utilities/database_utils'
         )
@@ -145,6 +147,7 @@ const JobList: React.FC = () => {
         // adding a new job here
         const docName = input
         if (docName !== null) {
+            // Dynamically import the function when needed
             const { putNewInstallation } = await import(
                 '../utilities/database_utils'
             )

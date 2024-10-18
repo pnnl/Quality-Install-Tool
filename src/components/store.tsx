@@ -88,6 +88,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
+    //This  uses the `useDB` custom hook to create a PouchDB database with the specified `dbName`
     const [db, setDB] = useState<PouchDB.Database>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})

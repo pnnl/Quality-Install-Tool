@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import React, { Suspense, lazy } from 'react'
 
+// Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
 const WorkFlowView = lazy(() => import('./components/workflow_view'))
 const JobsView = lazy(() => import('./components/jobs_view'))
@@ -18,6 +19,12 @@ const MdxCombustionSafetyView = lazy(
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 
+/**
+ * Wraps the application in a <Suspense> component to handle loading states.
+ *
+ * The `fallback` prop displays a loading indicator while the child components
+ * are being loaded asynchronously.
+ */
 const routes = [
     {
         path: '/',

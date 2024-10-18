@@ -5,9 +5,11 @@ import DBName from '../utilities/db_details'
 
 /**
  * Custom hook to create and manage a PouchDB database instance.
+ *
  * This hook initializes a PouchDB database with automatic compaction enabled.
  * The database instance is memoized to ensure that a new instance is created
- * only when the hook is used in a different context (e.g., a different component).
+ * only when the hook is used in a different component, preventing unnecessary
+ * reinitialization and improving performance.
  *
  * @returns {PouchDB} The PouchDB database instance.
  *
