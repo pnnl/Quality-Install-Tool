@@ -1,27 +1,40 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import TemplateEditor from './components/editor'
-import WorkFlowView from './components/workflow_view'
-import JobsView from './components/jobs_view'
-import JsonStoreView from './components/json_store_view'
-import MdxTemplateView from './components/mdx_template_view'
-import RootLayout from './components/root_layout'
-import Home from './components/home'
-import MdxProjectView from './components/mdx_project_details_view'
-import MdxCombustionSafetyView from './components/mdx_combustion_appliance_safety_view'
+import React, { Suspense, lazy } from 'react'
+
+// Lazily initializes the views, rendering them only when requested.
+const RootLayout = lazy(() => import('./components/root_layout'))
+const WorkFlowView = lazy(() => import('./components/workflow_view'))
+const JobsView = lazy(() => import('./components/jobs_view'))
+const Home = lazy(() => import('./components/home'))
+const MdxProjectView = lazy(
+    () => import('./components/mdx_project_details_view'),
+)
+const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
+const MdxCombustionSafetyView = lazy(
+    () => import('./components/mdx_combustion_appliance_safety_view'),
+)
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
 
+/**
+ * Wraps the application in a <Suspense> component to handle loading states.
+ *
+ * The `fallback` prop displays a loading indicator while the child components
+ * are being loaded asynchronously.
+ */
 const routes = [
     {
         path: '/',
         // App Home page : Lists existing projects provides functionality to create new one
         element: (
-            <RootLayout>
-                <Home />
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <Home />
+                </RootLayout>
+            </Suspense>
         ),
     },
     // TODO: This route will be revisited and revised in the future
@@ -33,27 +46,33 @@ const routes = [
         path: `/app/:projectId/workflows`,
         // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
-            <RootLayout>
-                <WorkFlowView />
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <WorkFlowView />
+                </RootLayout>
+            </Suspense>
         ),
     },
     {
         path: `/app/:projectId/doe_workflow_combustion_safety_testing`,
         // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
-            <RootLayout>
-                <MdxCombustionSafetyView />
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <MdxCombustionSafetyView />
+                </RootLayout>
+            </Suspense>
         ),
     },
     {
         path: `/app/:projectId`,
         // Project details view: Collects information related to the project.
         element: (
-            <RootLayout>
-                <MdxProjectView />
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <MdxProjectView />
+                </RootLayout>
+            </Suspense>
         ),
     },
     {
@@ -61,20 +80,24 @@ const routes = [
         // Jobs List View: Lists existing installations associated with a particular workflow
         // and provides functionality to create new installations
         element: (
-            <RootLayout>
-                <div>
-                    <JobsView />
-                </div>
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <div>
+                        <JobsView />
+                    </div>
+                </RootLayout>
+            </Suspense>
         ),
     },
     {
         path: `/app/:projectId/:workflowName/:jobId`,
         // Jobs View: Gathering and displaying information pertinent to individual installations
         element: (
-            <RootLayout>
-                <MdxTemplateView />
-            </RootLayout>
+            <Suspense fallback={<div>Loading...</div>}>
+                <RootLayout>
+                    <MdxTemplateView />
+                </RootLayout>
+            </Suspense>
         ),
     },
     // TODO: This route will be revisited and revised in the future

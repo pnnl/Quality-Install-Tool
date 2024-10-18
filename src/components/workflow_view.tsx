@@ -5,9 +5,8 @@ import templatesConfig from '../templates/templates_config'
 import {
     retrieveInstallationDocs,
     retrieveProjectSummary,
+    useDB,
 } from '../utilities/database_utils'
-import dbName from './db_details'
-import PouchDB from 'pouchdb'
 import { useParams } from 'react-router-dom'
 
 /**
@@ -22,7 +21,7 @@ const WorkFlowView: FC = () => {
 
     const { projectId } = useParams()
     const [projectInfo, setProjectInfo] = useState<any>({})
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {

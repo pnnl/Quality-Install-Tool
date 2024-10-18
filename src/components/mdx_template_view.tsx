@@ -1,15 +1,14 @@
 import { useState, type FC, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import dbName from './db_details'
+import dbName from '../utilities/db_details'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import templatesConfig from '../templates/templates_config'
 import {
     retrieveProjectSummary,
     retrieveDocFromDB,
+    useDB,
 } from '../utilities/database_utils'
-import PouchDB from 'pouchdb'
-import { toNumber } from 'lodash'
 import { ListGroup } from 'react-bootstrap'
 
 /**
@@ -27,7 +26,7 @@ const MdxTemplateView: FC = () => {
     const [project, setProject] = useState<any>({})
     const [projectSummary, setProjectSummary] = useState<any>({})
     const [installationInfo, setInstallationInfo] = useState<any>({})
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const project_info = async (): Promise<void> => {
         retrieveProjectSummary(

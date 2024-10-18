@@ -1,4 +1,28 @@
+import { useMemo } from 'react'
 import templatesConfig from '../templates/templates_config'
+import PouchDB from 'pouchdb'
+import DBName from '../utilities/db_details'
+
+/**
+ * Custom hook to create and manage a PouchDB database instance.
+ *
+ * This hook initializes a PouchDB database with automatic compaction enabled.
+ * The database instance is memoized to ensure that a new instance is created
+ * only when the hook is used in a different component, preventing unnecessary
+ * reinitialization and improving performance.
+ *
+ * @returns {PouchDB} The PouchDB database instance.
+ *
+ * @throws {Error} Throws an error if the database cannot be created or accessed.
+ */
+export function useDB(InputDBName?: string): any {
+    const dbName = InputDBName || DBName
+    const db_object = useMemo(
+        () => new PouchDB(dbName, { auto_compaction: true }),
+        [dbName],
+    )
+    return db_object
+}
 
 /**
  * Represents a document structure in a database with metadata and workflow information.
@@ -24,23 +48,38 @@ interface DBDocType {
  * @param {string} name - The name of the document to be added.
  * @returns A Promise that resolves to the new document if one was added.
  */
+
 export async function putNewDoc(
     db: PouchDB.Database<{}>,
     docName: string,
-    docId: string,
+    docId: string | null,
     type: string,
 ): Promise<any> {
     // Get the current date
     const now = new Date()
-    // TODO: Handle the error case better
+
+    // Get database info
     const dbInfo = await promisifiedDBInfo(db)
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
 
-    // Store the new document if it does not exist
-    return db.putIfNotExists({
-        _id: docId ? docId : crypto.randomUUID(),
+    if (docId) {
+        try {
+            // Check if the document exists
+            const doc = await db.get(docId)
+            return doc // Document exists, returns the doc
+        } catch (err: any) {
+            if (err.status !== 404) {
+                // other errors
+                console.error('putNewDoc: Error retrieving document:', err)
+            }
+        }
+    }
+
+    // Document does not exist, continue to insert it
+    const newDoc = {
+        _id: docId || crypto.randomUUID(),
         type: type,
         data_: {},
         metadata_: {
@@ -50,9 +89,14 @@ export async function putNewDoc(
             attachments: {},
             status: 'new',
         },
-
         children: [],
-    })
+    }
+
+    try {
+        return db.put(newDoc)
+    } catch (err) {
+        console.error('putNewDoc: Error inserting document:', err)
+    }
 }
 
 /**
@@ -86,7 +130,7 @@ export async function putNewInstallation(
     workflowName: string,
     docName: string,
     parentId: string,
-): Promise<PouchDB.UpsertResponse> {
+) {
     // Get the current date
     const now = new Date()
     // TODO: Handle the error case better
@@ -94,16 +138,20 @@ export async function putNewInstallation(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
-    const installation_doc = putNewDoc(db, docName, docId, 'installation')
+    const installationDoc = await putNewDoc(db, docName, docId, 'installation')
 
+    if (!installationDoc || !installationDoc.id) {
+        const doc = await db.get(docId)
+        return doc // Document exists, returns the doc
+    }
     // append the installation.id in the project doc
-    appendChildToProject(db, parentId, (await installation_doc).id)
+    appendChildToProject(db, parentId, installationDoc.id)
 
     const template_name = workflowName
     let template_title = templatesConfig[workflowName].title
 
     // update installation doc to include template_name and template_title
-    return db.upsert((await installation_doc).id, function (doc: any) {
+    return db.upsert(installationDoc.id, function (doc: any) {
         doc.metadata_.template_title = template_title
         doc.metadata_.template_name = template_name
         return doc
@@ -270,5 +318,37 @@ export async function appendChildToProject(
     } catch (err) {
         console.error('Error appending child to project:', err)
         throw err
+    }
+}
+
+/**
+ * deleteEmptyProjects
+ */
+export async function deleteEmptyProjects(db: PouchDB.Database<{}>) {
+    try {
+        const allDocs: any = await db.allDocs({ include_docs: true })
+
+        const projectDocs: any = allDocs.rows
+            .map((row: { doc: any }) => row.doc)
+            .filter(
+                (doc: { metadata_: any; type: string }) =>
+                    doc?.type === 'project' &&
+                    doc?.metadata_?.doc_name === '' &&
+                    doc?.metadata_?.status === 'new',
+            )
+
+        await Promise.all(
+            projectDocs.map((doc: PouchDB.Core.RemoveDocument) =>
+                db.remove(doc),
+            ),
+        )
+        await Promise.all(
+            projectDocs.map((doc: PouchDB.Core.RemoveDocument) =>
+                db.remove(doc),
+            ),
+        )
+    } catch (error) {
+        //Log any errors that occur during the process
+        console.error('Error in removing the project', error)
     }
 }
