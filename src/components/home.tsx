@@ -266,6 +266,3 @@ const Home: FC = () => {
 }
 
 export default Home
-function useMemo(arg0: () => PouchDB.Database<{}>) {
-    throw new Error('Function not implemented.')
-}
