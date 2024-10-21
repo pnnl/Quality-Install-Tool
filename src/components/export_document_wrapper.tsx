@@ -1,8 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import ExportDoc from './export_document'
-import { exportDocumentAsJSONObject } from '../utilities/database_utils'
-import DBName from './db_details'
-import PouchDB from 'pouchdb'
+import { exportDocumentAsJSONObject, useDB } from '../utilities/database_utils'
 import JSONValue from '../types/json_value.type'
 
 // Define the props interface for ExportDocWrapper
@@ -24,7 +22,7 @@ const ExportDocWrapper: FC<ExportDocWrapperProps> = ({
     docName,
     includeChild,
 }: ExportDocWrapperProps): JSX.Element => {
-    const db = new PouchDB(DBName)
+    const db = useDB()
     const [sendData, setSendData] = useState<JSONValue>({})
 
     useEffect(() => {

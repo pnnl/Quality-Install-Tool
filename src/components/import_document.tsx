@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
 import { Button } from 'react-bootstrap'
-import dbName from './db_details'
-import PouchDB from 'pouchdb'
-import { ImportDocumentIntoDB } from '../utilities/database_utils'
+import { ImportDocumentIntoDB, useDB } from '../utilities/database_utils'
 import { EXPORT_FILE_TYPE } from '../utilities/paths_utils'
 
 interface ImportDocProps {
@@ -29,7 +27,7 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
     const [projectNames, setProjectNames] = useState<string[]>([])
     const [isFileProcessed, setIsFileProcessed] = useState<boolean>(false)
     const [error, setError] = useState<String>('')
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const handleFileInputButtonClick = (
         event: MouseEvent<HTMLButtonElement>,
@@ -115,7 +113,7 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
             &nbsp;
             <Button onClick={handleFileInputButtonClick}>{label}</Button>
             <input
-                accept={EXPORT_FILE_TYPE}
+                accept={'*' + EXPORT_FILE_TYPE}
                 onChange={handleFileInputChange}
                 ref={hiddenFileUploadInputRef}
                 className="photo-upload-input"
