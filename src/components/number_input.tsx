@@ -1,6 +1,5 @@
 import type { FC } from 'react'
-import React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'

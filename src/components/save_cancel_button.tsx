@@ -1,9 +1,8 @@
 import { FC, useEffect, useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PouchDB from 'pouchdb'
-import dbName from './db_details'
+import { useDB } from '../utilities/database_utils'
 
 interface SaveCancelButtonProps {
     id: string
@@ -36,7 +35,7 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     const [docStatus, setDocStatus] = useState<string>(doc_status)
     const [docName, setDocName] = useState<string>()
     const [buttonLabel, setButtonLabel] = useState<String>('Save Project')
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const handleSaveButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
         saveProject()

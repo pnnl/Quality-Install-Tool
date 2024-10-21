@@ -1,37 +1,50 @@
-import React from 'react'
-import type { FC } from 'react'
+import React, { FC, Suspense } from 'react'
 import Button from 'react-bootstrap/Button'
-import Collapsible from './collapsible'
-import DateInputWrapper from './date_input_wrapper'
-import FigureWrapper from './figure_wrapper'
-import NumberInputWrapper from './number_input_wrapper'
-import PhotoWrapper from './photo_wrapper'
-import PhotoInputWrapper from './photo_input_wrapper'
-import PrintSection from './print_section'
-import SelectWrapper from './select_wrapper'
-import StringInputWrapper from './string_input_wrapper'
-import TableWrapper from './table_wrapper'
-import TextInputWrapper from './text_input_wrapper'
-import USStateSelectWrapper from './us_state_select_wrapper'
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
 import { StoreContext } from './store'
-import DateStr from './date_str'
-import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
-import RadioWrapper from './radio_wrapper'
-import PageBreak from './page_break'
 import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
-import PrintSectionWrapper from './print_section wrapper'
-import FileInputWrapper from './file_input_wrapper'
-import PDFRendererWrapper from './pdf_renderer_wrapper'
-import ShowOrHide from './show_or_hide'
-import CheckBoxWrapper from './checkbox_wrapper'
-import CombustionSafetyChecks from './combustion_safety_checks_inputs'
-import CombustionSafetyChecksReport from './combustion_safety_checks_report'
-import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
-import DocNameInputWrapper from './doc_name_input_wrapper'
-import SaveCancelButtonWrapper from './save_cancel_button_wrapper'
+
+// Lazily initializes the components, rendering them only when requested.
+// This reduces the bundle size when the app is loaded, improving initial load time
+const Tab = React.lazy(() => import('react-bootstrap/Tab'))
+const Tabs = React.lazy(() => import('react-bootstrap/Tabs'))
+const Collapsible = React.lazy(() => import('./collapsible'))
+const DateInputWrapper = React.lazy(() => import('./date_input_wrapper'))
+const DateStr = React.lazy(() => import('./date_str'))
+const FigureWrapper = React.lazy(() => import('./figure_wrapper'))
+const NumberInputWrapper = React.lazy(() => import('./number_input_wrapper'))
+const PhotoWrapper = React.lazy(() => import('./photo_wrapper'))
+const PhotoInputWrapper = React.lazy(() => import('./photo_input_wrapper'))
+const PrintSectionWrapper = React.lazy(() => import('./print_section wrapper'))
+const SelectWrapper = React.lazy(() => import('./select_wrapper'))
+const StringInputWrapper = React.lazy(() => import('./string_input_wrapper'))
+const TableWrapper = React.lazy(() => import('./table_wrapper'))
+const TextInputWrapper = React.lazy(() => import('./text_input_wrapper'))
+const USStateSelectWrapper = React.lazy(
+    () => import('./us_state_select_wrapper'),
+)
+const ClimateZoneSelectWrapper = React.lazy(
+    () => import('./climate_zone_select_wrapper'),
+)
+const RadioWrapper = React.lazy(() => import('./radio_wrapper'))
+const PageBreak = React.lazy(() => import('./page_break'))
+const FileInputWrapper = React.lazy(() => import('./file_input_wrapper'))
+const PDFRendererWrapper = React.lazy(() => import('./pdf_renderer_wrapper'))
+const ShowOrHide = React.lazy(() => import('./show_or_hide'))
+const CheckBoxWrapper = React.lazy(() => import('./checkbox_wrapper'))
+const CombustionSafetyChecks = React.lazy(
+    () => import('./combustion_safety_checks_inputs'),
+)
+const CombustionSafetyChecksReport = React.lazy(
+    () => import('./combustion_safety_checks_report'),
+)
+const CombustionSafetyChecksLink = React.lazy(
+    () => import('../templates/reusable/combustion_safety_checks_link.mdx'),
+)
+const DocNameInputWrapper = React.lazy(() => import('./doc_name_input_wrapper'))
+const SaveCancelButtonWrapper = React.lazy(
+    () => import('./save_cancel_button_wrapper'),
+)
 
 const components = {
     Collapsible,
@@ -85,12 +98,14 @@ const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
                     <div className="container" id="mdx-container">
                         {/* metadata and data will be undefined for the very first render */}
                         {metadata && data ? (
-                            <Component
-                                components={components}
-                                metadata={metadata}
-                                data={data}
-                                project={Project}
-                            />
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Component
+                                    components={components}
+                                    metadata={metadata}
+                                    data={data}
+                                    project={Project}
+                                />
+                            </Suspense>
                         ) : null}
                     </div>
                 )

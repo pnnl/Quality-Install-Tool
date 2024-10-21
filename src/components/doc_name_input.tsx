@@ -1,9 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
-import { retrieveProjectDocs } from '../utilities/database_utils'
-import PouchDB from 'pouchdb'
-import dbName from './db_details'
+import { retrieveProjectDocs, useDB } from '../utilities/database_utils'
 
 /**
  * Props interface for the DocNameInput component.
@@ -49,7 +47,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
     const [projectList, setProjectList] = useState<any[]>([])
     const [projectNames, setProjectNames] = useState<any[]>([])
 
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     /*
      * Retrieves project information from the database and updates the component state.

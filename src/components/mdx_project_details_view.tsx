@@ -1,11 +1,16 @@
-import { useEffect, useState, type FC } from 'react'
+import { Suspense, useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
-import PouchDB from 'pouchdb'
 import { StoreProvider } from './store'
-import MdxWrapper from './mdx_wrapper'
-import DOEProjectDetailsTemplate from '../templates/doe_project_details.mdx'
-import dbName from './db_details'
-import { retrieveDocFromDB } from '../utilities/database_utils'
+import dbName from '../utilities/db_details'
+import React from 'react'
+import { useDB } from '../utilities/database_utils'
+
+// Lazily initializes the components, rendering them only when requested.
+// This reduces the bundle size when the app is loaded, improving initial load time
+const DOEProjectDetailsTemplate = React.lazy(
+    () => import('../templates/doe_project_details.mdx'),
+)
+const MdxWrapper = React.lazy(() => import('./mdx_wrapper'))
 
 /**
  * A component view of an instantiated MDX template
@@ -16,9 +21,14 @@ const MdxProjectView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.
     const { projectId } = useParams()
     const [projectDoc, setProjectDoc] = useState<any>({})
-    const db = new PouchDB(dbName)
+    const db = useDB()
 
     const project_info = async (): Promise<void> => {
+        // Dynamically import the function when needed
+        const { retrieveDocFromDB } = await import(
+            '../utilities/database_utils'
+        )
+
         retrieveDocFromDB(db, projectId as string).then((res: any) => {
             setProjectDoc(res)
         })
@@ -36,10 +46,12 @@ const MdxProjectView: FC = () => {
             docName={projectDoc?.metadata_?.doc_name}
             type="project"
         >
-            <MdxWrapper
-                Component={DOEProjectDetailsTemplate}
-                Project={projectDoc}
-            />
+            <Suspense fallback={<div>Loading..</div>}>
+                <MdxWrapper
+                    Component={DOEProjectDetailsTemplate}
+                    Project={projectDoc}
+                />
+            </Suspense>
         </StoreProvider>
     )
 }

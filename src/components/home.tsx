@@ -1,12 +1,9 @@
-import { useState, type FC, useEffect, useRef, SetStateAction } from 'react'
+import React, { useState, type FC, useEffect, SetStateAction } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { putNewProject } from '../utilities/database_utils'
-import PouchDB from 'pouchdb'
 import { TfiTrash, TfiPencil, TfiArrowDown } from 'react-icons/tfi'
-import dbName from './db_details'
-import { retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
+import { deleteEmptyProjects, useDB } from '../utilities/database_utils'
 import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
 
@@ -16,54 +13,37 @@ import ExportDoc from './export_document_wrapper'
  * @returns ListGroup component displaying the projects created
  */
 const Home: FC = () => {
-    const db = new PouchDB(dbName)
     const navigate = useNavigate()
     const [projectList, setProjectList] = useState<any[]>([])
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [selectedProjectToDelete, setSelectedProjectToDelete] = useState('')
     const [selectedProjectNameToDelete, setSelectedProjectNameToDelete] =
         useState('')
+    const db = useDB()
 
     const retrieveProjectInfo = async (): Promise<void> => {
+        // Dynamically import the function when needed
+        const { retrieveProjectDocs } = await import(
+            '../utilities/database_utils'
+        )
+
         retrieveProjectDocs(db).then(res => {
             setProjectList(res)
             sortByEditTime(res)
         })
     }
 
-    const deleteEmptyProjects = async () => {
-        try {
-            const allDocs: any = await db.allDocs({ include_docs: true })
-
-            const projectDocs: any = allDocs.rows
-                .map((row: { doc: any }) => row.doc)
-                .filter(
-                    (doc: { metadata_: any; type: string }) =>
-                        doc?.type === 'project' &&
-                        doc?.metadata_?.doc_name === '' &&
-                        doc?.metadata_?.status === 'new',
-                )
-
-            for (const doc of projectDocs) {
-                // Remove the empty project document from the database
-                if (doc) await db.remove(doc)
-            }
-        } catch (error) {
-            //Log any errors that occur during the process
-            console.error('Error in removing the project', error)
-        }
-    }
-
     useEffect(() => {
-        deleteEmptyProjects()
+        deleteEmptyProjects(db)
     }, [])
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [projectList])
+    }, [projectList]) // Fetch the project details from DB as the state variable projectList is updated
 
     const handleAddJob = async () => {
-        // adding a new project doc here
+        // Dynamically import the function when needed
+        const { putNewProject } = await import('../utilities/database_utils')
         const updatedDBDoc: any = await putNewProject(db, '', '')
 
         // Refresh the project list after adding the new project
@@ -153,64 +133,64 @@ const Home: FC = () => {
         Object.keys(projectList).length === 0
             ? []
             : projectList.map((key, value) => (
-                  <div key={key._id}>
-                      <ListGroup key={key._id} className="padding">
-                          <LinkContainer
-                              key={key}
-                              to={`/app/${key._id}/workflows`}
-                          >
-                              <ListGroup.Item key={key._id} action={true}>
-                                  <span className="icon-container">
-                                      {/* <Menu options={options} /> */}
+                <div key={key._id}>
+                    <ListGroup key={key._id} className="padding">
+                        <LinkContainer
+                            key={key}
+                            to={`/app/${key._id}/workflows`}
+                        >
+                            <ListGroup.Item key={key._id} action={true}>
+                                <span className="icon-container">
+                                    {/* <Menu options={options} /> */}
 
-                                      <Button
-                                          variant="light"
-                                          onClick={event => {
-                                              event.stopPropagation()
-                                              event.preventDefault()
-                                              editAddressDetails(key._id)
-                                          }}
-                                      >
-                                          <TfiPencil size={22} />
-                                      </Button>
-                                      <Button
-                                          variant="light"
-                                          onClick={event =>
-                                              handleDelete(event, key)
-                                          }
-                                      >
-                                          <TfiTrash size={22} />
-                                      </Button>
-                                      <ExportDoc
-                                          docId={key._id}
-                                          docName={key.metadata_?.doc_name}
-                                          includeChild={true}
-                                      />
-                                  </span>
-                                  <b>{key.metadata_?.doc_name}</b>
-                                  {key.data_?.location?.street_address && (
-                                      <>
-                                          <br />
-                                          {key.data_?.location?.street_address},
-                                      </>
-                                  )}
-                                  {key.data_?.location?.city && (
-                                      <>
-                                          <br />
-                                          {key.data_?.location?.city},{' '}
-                                      </>
-                                  )}
-                                  {key.data_.location?.state && (
-                                      <>{key.data_?.location?.state} </>
-                                  )}
-                                  {key.data_.location?.zip_code && (
-                                      <>{key.data_?.location?.zip_code}</>
-                                  )}
-                              </ListGroup.Item>
-                          </LinkContainer>
-                      </ListGroup>
-                  </div>
-              ))
+                                    <Button
+                                        variant="light"
+                                        onClick={event => {
+                                            event.stopPropagation()
+                                            event.preventDefault()
+                                            editAddressDetails(key._id)
+                                        }}
+                                    >
+                                        <TfiPencil size={22} />
+                                    </Button>
+                                    <Button
+                                        variant="light"
+                                        onClick={event =>
+                                            handleDelete(event, key)
+                                        }
+                                    >
+                                        <TfiTrash size={22} />
+                                    </Button>
+                                    <ExportDoc
+                                        docId={key._id}
+                                        docName={key.metadata_?.doc_name}
+                                        includeChild={true}
+                                    />
+                                </span>
+                                <b>{key.metadata_?.doc_name}</b>
+                                {key.data_?.location?.street_address && (
+                                    <>
+                                        <br />
+                                        {key.data_?.location?.street_address},
+                                    </>
+                                )}
+                                {key.data_?.location?.city && (
+                                    <>
+                                        <br />
+                                        {key.data_?.location?.city},{' '}
+                                    </>
+                                )}
+                                {key.data_.location?.state && (
+                                    <>{key.data_?.location?.state} </>
+                                )}
+                                {key.data_.location?.zip_code && (
+                                    <>{key.data_?.location?.zip_code}</>
+                                )}
+                            </ListGroup.Item>
+                        </LinkContainer>
+                    </ListGroup>
+                </div>
+            ))
 
     return (
         <>

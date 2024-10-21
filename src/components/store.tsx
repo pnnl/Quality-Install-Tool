@@ -8,14 +8,17 @@ import React, {
     useState,
 } from 'react'
 
-import { isEmpty, isObject, toNumber, toPath } from 'lodash'
+import { isEmpty, isObject, toPath } from 'lodash'
 import type JSONValue from '../types/json_value.type'
 import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
-import type { Objectish, NonEmptyArray } from '../types/misc_types.type'
+import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
-import { putNewProject, putNewInstallation } from '../utilities/database_utils'
-import templatesConfig from '../templates/templates_config'
+import {
+    putNewProject,
+    putNewInstallation,
+    useDB,
+} from '../utilities/database_utils'
 import EventEmitter from 'events'
 
 PouchDB.plugin(PouchDBUpsert)
@@ -85,7 +88,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
-    const [db, setDB] = useState<PouchDB.Database>()
+    //This  uses the `useDB` custom hook to create a PouchDB database with the specified `dbName`
+    const [db, setDB] = useState<PouchDB.Database>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
@@ -175,16 +179,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
          *     originated from this component
          */
         ;(async function connectStoreToDB() {
-            // Establish a database connection
-
-            const db = new PouchDB(dbName, { auto_compaction: true })
-            setDB(db)
-
-            // Initialize the DB document as needed
             try {
-                // It looks like the type def for putIfNotExists does not match its implementation
-                // TODO: Check this over carefully
-
+                // Initialize the DB document as needed
                 const result = !isInstallationDoc
                     ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewInstallation(
