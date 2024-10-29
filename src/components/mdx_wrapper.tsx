@@ -4,6 +4,8 @@ import { StoreContext } from './store'
 import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 
+// Lazily initializes the components, rendering them only when requested.
+// This reduces the bundle size when the app is loaded, improving initial load time
 const Tab = React.lazy(() => import('react-bootstrap/Tab'))
 const Tabs = React.lazy(() => import('react-bootstrap/Tabs'))
 const Collapsible = React.lazy(() => import('./collapsible'))
