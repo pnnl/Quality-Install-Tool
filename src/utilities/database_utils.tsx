@@ -342,10 +342,16 @@ export async function exportDocumentAsJSONObject(
  * @returns {string} The document name appended by the  maximum index of a given document name.
  */
 const findMaxDocNameIndex = (names: string[], docName: string): string => {
-    const baseDocName = docName.replace(/\(\d+\)$/, '') // Remove any existing index from the docName
+    const baseDocName = docName
+        .replace(/\(\d+\)$/, '')
+        .trim()
+        .replace(/\(\d+\)$/, '')
+        .trim() // Removing any existing index from the docName
 
     // Check if the docName (with or without index) already exists in the list
-    const nameExists = names.some(name => name.startsWith(baseDocName))
+    const nameExists = names.some(name => {
+        return name === baseDocName || name.startsWith(baseDocName)
+    })
 
     // If the name exists, find the next available index, otherwise return the name as is
     let count = 0
@@ -366,7 +372,7 @@ const findMaxDocNameIndex = (names: string[], docName: string): string => {
         }, 0) // Starts with 0 as the default if no matches are found
     }
 
-    return nameExists ? `${baseDocName} (${count + 1})` : docName
+    return nameExists ? `${baseDocName} (${count + 1})` : baseDocName
 }
 
 /**
