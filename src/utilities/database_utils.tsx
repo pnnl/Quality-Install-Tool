@@ -342,16 +342,31 @@ export async function exportDocumentAsJSONObject(
  * @returns {string} The document name appended by the  maximum index of a given document name.
  */
 const findMaxDocNameIndex = (names: string[], docName: string): string => {
-    // regex to match the document name with an optional index in parentheses.
-    let count = names.reduce((maxIndex, name) => {
-        if (names.includes(docName)) {
-            const match = name.match(/\((\d+)\)[^()]*$/)
-            const index = match ? parseInt(match[1], 10) : 0
-            return Math.max(maxIndex, index)
-        }
-        return -1
-    }, -1)
-    return count >= 0 ? `${docName} (${count + 1})` : docName
+    const baseDocName = docName.replace(/\(\d+\)$/, '') // Remove any existing index from the docName
+
+    // Check if the docName (with or without index) already exists in the list
+    const nameExists = names.some(name => name.startsWith(baseDocName))
+
+    // If the name exists, find the next available index, otherwise return the name as is
+    let count = 0
+    if (nameExists) {
+        count = names.reduce((maxIndex, name) => {
+            // considering names that start with the same base name
+            if (name.startsWith(baseDocName)) {
+                // Match the index in parentheses (e.g., "Project(2)", "Project(3)")
+                const match = name.match(/\((\d+)\)$/)
+
+                // Extracting the index or default to 0 if no index is found
+                const index = match && match[1] ? parseInt(match[1], 10) : 0
+
+                // Updating the maximum index if the current index is higher
+                return Math.max(maxIndex, index)
+            }
+            return maxIndex
+        }, 0) // Starts with 0 as the default if no matches are found
+    }
+
+    return nameExists ? `${baseDocName} (${count + 1})` : docName
 }
 
 /**
