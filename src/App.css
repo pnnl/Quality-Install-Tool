@@ -395,10 +395,29 @@ btn-light:hover {
 
 /* used in photo-input and photo component */
 .photo-container {
-  width: auto; /* Allow width to adjust based on content */
-  max-width: 500px; /* Maximum width */
-  overflow: hidden; /* Hide overflow */
-  position: relative; /* Position for absolute child */
-  height: auto; /* Allow height to adjust based on content */
-  max-height: 500px; /* Maximum height */
+  width: auto;           /* Allow width to adjust based on content */
+  max-width: 500px;      /* Maximum width */
+  overflow: hidden;      /* Hide overflow */
+  height: auto;          /* Allow height to adjust based on content */
+  max-height: 600px;     /* Maximum height */
+  margin-bottom: 20px;   /* Margin at the bottom */
+  position: relative;    /* Relative positioning for overlay elements */
+  display: inline-block; /* Display inline-block to shrink to content size */
+}
+
+.photo-delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border-radius: 50%;
+  padding: 5px;
+  z-index: 10; /* Ensures the button stays on top */
+  cursor: pointer;
+}
+
+.image-tag  {
+  width: '400px'; /* Fixed width */
+  height: '400px'; /* Fixed height */
+  object-fit: 'cover'; /* Ensure the image covers the area (cropped if necessary) */
+  border-radius: '8px'; /*Optional: adds rounded corners to the image */
 }
