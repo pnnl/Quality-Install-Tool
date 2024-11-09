@@ -405,6 +405,7 @@ btn-light:hover {
   display: inline-block; /* Display inline-block to shrink to content size */
 }
 
+/* used in photo-input component */
 .photo-delete-button {
   position: absolute;
   top: 5px;
@@ -415,9 +416,25 @@ btn-light:hover {
   cursor: pointer;
 }
 
+/* used in photo-input component */
 .image-tag  {
   width: '400px'; /* Fixed width */
   height: '400px'; /* Fixed height */
   object-fit: 'cover'; /* Ensure the image covers the area (cropped if necessary) */
   border-radius: '8px'; /*Optional: adds rounded corners to the image */
+}
+
+/* used in photo-input component */
+.modal-image-tag {
+    max-width: 100%; /* Limits the width */
+    max-height: 300px; /* Set a max height */
+    width: auto;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* used in photo-input component */
+.custom-modal {
+  max-width: 300px; 
+  margin: auto; 
 }

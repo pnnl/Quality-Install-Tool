@@ -421,3 +421,16 @@ btn-light:hover {
   object-fit: 'cover'; /* Ensure the image covers the area (cropped if necessary) */
   border-radius: '8px'; /*Optional: adds rounded corners to the image */
 }
+
+.modal-image-tag {
+    max-width: 100%; /* Limits the width */
+    max-height: 300px; /* Set a max height */
+    width: auto;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.custom-modal {
+  max-width: 300px; 
+  margin: auto; 
+}

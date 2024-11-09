@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
-import { Button, Card, Image } from 'react-bootstrap'
+import { Button, Card, Image, Modal } from 'react-bootstrap'
 import { TbCameraPlus } from 'react-icons/tb'
 
 import Collapsible from './collapsible'
@@ -55,7 +55,11 @@ const PhotoInput: FC<PhotoInputProps> = ({
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
     const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
+    const [selectedPhotoIdToDelete, setSelectedPhotoIdToDelete] = useState('')
+    const [selectedPhotoBlobToDelete, setSelectedPhotoBlobToDelete] =
+        useState<Blob>()
 
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [cameraAvailable, setCameraAvailable] = useState(false)
 
     // Handle button clicks
@@ -88,10 +92,29 @@ const PhotoInput: FC<PhotoInputProps> = ({
     }
 
     // Button text based on whether there are photos or not
-    const buttonText = photos?.length === 0 ? 'Add Photo' : 'Add Another Photo'
+    const buttonText = photos?.length === 0 ? 'Add Photo' : 'Add More Photo'
 
-    function handleDeletePhoto(id: string) {
-        deletePhoto(id)
+    function handleDeletePhoto(
+        event: React.MouseEvent,
+        id: string,
+        photo: Blob,
+    ) {
+        event.stopPropagation()
+        event.preventDefault()
+        setSelectedPhotoIdToDelete(id)
+        setShowDeleteConfirmation(true)
+        setSelectedPhotoBlobToDelete(photo)
+    }
+
+    const confirmDeletePhoto = async () => {
+        deletePhoto(selectedPhotoIdToDelete)
+        setShowDeleteConfirmation(false)
+        setSelectedPhotoIdToDelete('')
+    }
+
+    const cancelDeletePhoto = () => {
+        setShowDeleteConfirmation(false)
+        setSelectedPhotoIdToDelete('')
     }
 
     return (
@@ -138,8 +161,12 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                     {/* Delete Button */}
                                     <Button
                                         variant="danger"
-                                        onClick={() =>
-                                            handleDeletePhoto(photoData?.id)
+                                        onClick={event =>
+                                            handleDeletePhoto(
+                                                event,
+                                                photoData?.id,
+                                                photoData.photo,
+                                            )
                                         }
                                         className="photo-delete-button"
                                     >
@@ -201,6 +228,46 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             </Button>
                         </div>
                     )}
+                    <Modal
+                        show={showDeleteConfirmation}
+                        onHide={cancelDeletePhoto}
+                        dialogClassName="custom-modal"
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>Delete Photo</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {selectedPhotoBlobToDelete && (
+                                <center>
+                                    <img
+                                        src={URL.createObjectURL(
+                                            selectedPhotoBlobToDelete,
+                                        )}
+                                        alt="Photo preview"
+                                        className="modal-image-tag"
+                                    />
+                                </center>
+                            )}
+                            <div>
+                                Are you sure you want to permanently delete this
+                                photo? This action cannot be undone.
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button
+                                variant="secondary"
+                                onClick={cancelDeletePhoto}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="danger"
+                                onClick={confirmDeletePhoto}
+                            >
+                                Delete
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </Card.Body>
             </Card>
         </>
