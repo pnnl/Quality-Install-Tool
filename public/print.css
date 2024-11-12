@@ -93,9 +93,9 @@ h1 + h3 {
 }
 
 .button-container-right {
-  float: right;
   padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  padding-right: 0.75rem;  
+  float: right;
 }
 .button-container-center {
   float: center;
@@ -401,4 +401,8 @@ btn-light:hover {
   position: relative; /* Position for absolute child */
   height: auto; /* Allow height to adjust based on content */
   max-height: 500px; /* Maximum height */
+}
+
+.align-right{
+  text-align: right;
 }
