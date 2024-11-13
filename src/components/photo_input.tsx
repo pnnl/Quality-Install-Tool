@@ -248,7 +248,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                     />
                                 </center>
                             )}
-                            <div>
+                            <div className="modal-body-text">
                                 Are you sure you want to permanently delete this
                                 photo? This action cannot be undone.
                             </div>

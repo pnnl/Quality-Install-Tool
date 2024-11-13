@@ -67,14 +67,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
         return compressedFile
     }
 
-    async function getStorage() {
-        const quota = await navigator.storage.estimate()
-        const totalSpace = quota.quota
-        const usedSpace = quota.usage
-
-        console.log('totalSpace=', totalSpace, 'usedSpace=', usedSpace)
-    }
-
     // Function to find the max number at the end of the attachment name, and return the new  attachment name with max number
     function getMaxKeyWithNumberSuffix(keys: (string | any[])[], id: string) {
         let maxNumber = -1
@@ -94,7 +86,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
         // return the new key with the incremented number
         if (maxNumber > -1) {
             const newKey = `${maxKey.substring(0, maxKey.length - 1)}${maxNumber + 1}`
-            console.log('newKey', maxKey, newKey)
             return newKey
         }
         // else return first key with '_0'

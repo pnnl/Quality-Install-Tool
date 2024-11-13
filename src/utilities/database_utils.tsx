@@ -352,3 +352,10 @@ export async function deleteEmptyProjects(db: PouchDB.Database<{}>) {
         console.error('Error in removing the project', error)
     }
 }
+
+export async function getStorage() {
+    const quota = await navigator.storage.estimate()
+    const totalSpace = quota.quota
+    const usedSpace = quota.usage
+    return { TotalSpace: totalSpace, UsedSpace: usedSpace }
+}

@@ -36,64 +36,89 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     project,
     fromParent,
 }) => {
-    const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
+    const [matchingAttachments, setMatchingAttachments] = useState<any>({})
     const [projectDoc, setProjectDoc] = useState<any>(project)
     const db = useDB()
 
     useEffect(() => {
         if (fromParent) {
-            const projectDocId = project?._id || docId
-            db.get(projectDocId)
-                .then((res: any) => {
-                    setProjectDoc(res)
-                })
-                .catch(() => {})
-
-            db.getAttachment(projectDocId, id)
-                .then(
-                    (res: React.SetStateAction<Blob | Buffer | undefined>) => {
-                        setPhotoBlob(res)
-                    },
-                )
-                .catch(() => {})
+            const projectId = projectDoc?._id || docId
+            getMatchingAttachmentsFromParent(projectId)
         }
     }, [fromParent])
+
+    const getMatchingAttachmentsFromParent = (projectDocId: any) => {
+        db.get(projectDocId, { attachments: true })
+            .then((doc: { metadata_: any; _attachments: any }) => {
+                // Filter attachments whose IDs start with given 'id;
+                const matchingAttachments = Object.keys(doc._attachments)
+                    .filter(attachmentId => attachmentId.startsWith(id))
+                    .map(attachmentId => {
+                        const attachment = doc._attachments[attachmentId]
+
+                        // Decode the Base64 data to a Blob
+                        const byteCharacters = Uint8Array.from(
+                            window.atob(attachment.data),
+                            c => c.charCodeAt(0),
+                        )
+                        const photoBlob = new Blob([byteCharacters], {
+                            type: attachment.content_type,
+                        })
+
+                        return {
+                            id: attachmentId,
+                            photo: photoBlob, // Blob data
+                            metadata:
+                                doc.metadata_?.attachments?.[attachmentId], // Metadata if available
+                        }
+                    })
+
+                setMatchingAttachments(matchingAttachments)
+                // Set the filtered attachments in state
+                setProjectDoc(doc) // Set the full document if needed
+            })
+            .catch((err: any) => {
+                console.error('Failed to get matching attachments:', err)
+            })
+    }
+    const getMatchingAttachments = (attachments: {}, id: string) => {
+        const matchingAttachments: {
+            id: string
+            photo: any
+            metadata: any
+        }[] = []
+
+        Object.keys(attachments).forEach(key => {
+            // If the attachment name starts with the specified prefix
+            if (key.startsWith(id)) {
+                // Add the attachment information to the result array
+                const attachment_data = Object.getOwnPropertyDescriptor(
+                    attachments,
+                    key,
+                )?.value
+
+                matchingAttachments.push({
+                    id: key,
+                    photo: attachment_data?.blob,
+                    metadata: attachment_data?.metadata,
+                })
+            }
+        })
+        return matchingAttachments
+    }
 
     return (
         <StoreContext.Consumer>
             {({ attachments, data }) => {
-                const attachment = Object.getOwnPropertyDescriptor(
-                    attachments,
-                    id,
-                )?.value
-
-                const photo = fromParent ? photoBlob : attachment?.blob
-                let metadata = attachment?.metadata
-
-                if (fromParent) {
-                    const attachmentIdParts = id.split('.')
-
-                    if (attachmentIdParts.length > 1) {
-                        // Access nested attachment metadata using the split parts
-                        const [firstPart, secondPart, thirdPart] =
-                            attachmentIdParts
-                        metadata =
-                            projectDoc?.metadata_?.attachments[firstPart]?.[
-                                secondPart
-                            ]?.[thirdPart]
-                    } else {
-                        // Directly access attachment metadata if there's no nesting
-                        metadata = projectDoc?.metadata_?.attachments[id]
-                    }
-                }
-
                 return (
                     <Photo
                         description={children}
-                        id={id}
                         label={label}
-                        metadata={metadata}
-                        photo={photo}
+                        photos={
+                            fromParent
+                                ? matchingAttachments
+                                : getMatchingAttachments(attachments, id)
+                        }
                         required={required}
                     />
                 )

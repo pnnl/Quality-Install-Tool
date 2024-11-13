@@ -348,7 +348,6 @@ btn-light:hover {
   box-shadow: none;
 }
 
-
 .welcome-header {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -356,7 +355,6 @@ btn-light:hover {
   font-size: 28px;
   font-weight: bold;
 }
-
 
 .welcome-content {
   padding-left: 1.5rem;
@@ -397,10 +395,20 @@ btn-light:hover {
 .photo-container {
   width: auto;           /* Allow width to adjust based on content */
   max-width: 500px;      /* Maximum width */
-  overflow: hidden;      /* Hide overflow */
+  overflow: visible;      /* Hide overflow */
   height: auto;          /* Allow height to adjust based on content */
   max-height: 600px;     /* Maximum height */
   margin-bottom: 20px;   /* Margin at the bottom */
+  position: relative;    /* Relative positioning for overlay elements */
+  display: inline-block; /* Display inline-block to shrink to content size */
+}
+
+.photo-report-container {
+  width: auto;           /* Allow width to adjust based on content */
+  max-width: 500px;      /* Maximum width */
+  overflow: hidden;      /* Hide overflow */
+  height: auto;          /* Allow height to adjust based on content */
+  max-height: 600px;     /* Maximum height */
   position: relative;    /* Relative positioning for overlay elements */
   display: inline-block; /* Display inline-block to shrink to content size */
 }
@@ -437,4 +445,77 @@ btn-light:hover {
 .custom-modal {
   max-width: 300px; 
   margin: auto; 
+}
+
+/* Default font size */
+.modal-body-text {
+  font-size: 18px; /* Adjust the default font size */
+}
+
+/* Common font size for medium, small, and extra small devices */
+@media (max-width: 991.98px) {
+  .modal-body-text {
+    font-size: 14px; /* Adjust font size for all specified devices */
+  }
+}
+
+.safari-print-header {
+visibility: hidden;}
+
+@media print {
+  /* Adjusts the margin for printing */
+  @page {
+    margin-top: 4rem;
+    margin-bottom: 4rem; 
+  }
+
+  h2:not(.accordion-header, h1+h2)  {     
+    margin-top: 20px;
+    margin-bottom: 10px;  
+    border-bottom: 2px solid #4c4a4a;
+    page-break-inside: avoid;
+  }
+
+  .photo-card {
+    break-inside: avoid;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .photo-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Forces two columns */
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .photo-report-container {
+    padding: 0.5rem;    
+    text-align: left;
+    border: none;
+  }
+
+  .photo-report-container img {
+    width: 100%;
+    height: auto;    
+  }
+  .card {    
+    padding: 1rem;
+    /* Clone the border styling across pages */
+    box-decoration-break: clone;    
+    margin-bottom: 0.1px;
+    
+  } 
+  .safari-print-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    visibility: visible;
+    margin-bottom: 10px;
+    display: block;
+    page-break-before: always;
+  }
+
 }
