@@ -83,6 +83,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 }
             }
         })
+
         // return the new key with the incremented number
         if (maxNumber > -1) {
             const newKey = `${maxKey.substring(0, maxKey.length - 1)}${maxNumber + 1}`
