@@ -1,9 +1,11 @@
 import React, { useState, type FC, useEffect, SetStateAction } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import { TfiTrash, TfiPencil } from 'react-icons/tfi'
+import { TfiTrash, TfiPencil, TfiArrowDown } from 'react-icons/tfi'
 import { useNavigate } from 'react-router-dom'
 import { deleteEmptyProjects, useDB } from '../utilities/database_utils'
+import ImportDoc from './import_document_wrapper'
+import ExportDoc from './export_document_wrapper'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -101,7 +103,7 @@ const Home: FC = () => {
     }
 
     const sortByEditTime = (jobsList: any[]) => {
-        const sortedJobsByEditTime = jobsList.sort((a, b) => {
+        jobsList.sort((a, b) => {
             if (
                 a.metadata_.last_modified_at.toString() <
                 b.metadata_.last_modified_at.toString()
@@ -126,8 +128,9 @@ const Home: FC = () => {
     const editAddressDetails = (projectID: string) => {
         navigate('app/' + projectID, { replace: true })
     }
+
     const projects_display =
-        Object.keys(projectList).length == 0
+        Object.keys(projectList).length === 0
             ? []
             : projectList.map((key, value) => (
                   <div key={key._id}>
@@ -158,6 +161,11 @@ const Home: FC = () => {
                                       >
                                           <TfiTrash size={22} />
                                       </Button>
+                                      <ExportDoc
+                                          docId={key._id}
+                                          docName={key.metadata_?.doc_name}
+                                          includeChild={true}
+                                      />
                                   </span>
                                   <b>{key.metadata_?.doc_name}</b>
                                   {key.data_?.location?.street_address && (
@@ -213,6 +221,10 @@ const Home: FC = () => {
                             >
                                 Add a New Project
                             </Button>
+                            <ImportDoc
+                                id="project_json"
+                                label="Import a Project"
+                            />
                         </div>
                     </center>
                 )}
@@ -225,6 +237,10 @@ const Home: FC = () => {
                             >
                                 Add a New Project
                             </Button>
+                            <ImportDoc
+                                id="project_json"
+                                label="Import Project"
+                            />
                         </div>
                         {projects_display}
                     </div>
