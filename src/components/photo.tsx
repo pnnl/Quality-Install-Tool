@@ -41,7 +41,7 @@ const Photo: FC<PhotoProps> = ({ description, label, photos, required }) => {
                     {photos && photos.length > 0
                         ? Array.isArray(photos) &&
                           photos.map(photoData => (
-                              <Col md={6} key={photoData.id} className="mb-4">
+                              <Col key={photoData.id}>
                                   {photoData.photo ? (
                                       <div className="photo-report-container">
                                           <Image
@@ -50,40 +50,45 @@ const Photo: FC<PhotoProps> = ({ description, label, photos, required }) => {
                                               )}
                                               thumbnail
                                           />
-                                          <small>
-                                              Timestamp:{' '}
-                                              {photoData.metadata?.timestamp ? (
-                                                  <DateTimeStr
-                                                      date={
-                                                          photoData.metadata
-                                                              .timestamp
-                                                      }
-                                                      source={
-                                                          photoData.metadata
-                                                              .timestampSource
-                                                      }
-                                                  />
-                                              ) : (
-                                                  <span>Missing</span>
-                                              )}
-                                              <br />
-                                              Geolocation:{' '}
-                                              {photoData.metadata
-                                                  ?.geolocation ? (
-                                                  <span>
-                                                      <GpsCoordStr
+                                          <div>
+                                              <small>
+                                                  Timestamp:{' '}
+                                                  {photoData.metadata
+                                                      ?.timestamp ? (
+                                                      <DateTimeStr
+                                                          date={
+                                                              photoData.metadata
+                                                                  .timestamp
+                                                          }
                                                           source={
                                                               photoData.metadata
-                                                                  .geolocationSource
+                                                                  .timestampSource
                                                           }
-                                                          {...photoData.metadata
-                                                              .geolocation}
-                                                      />{' '}
-                                                  </span>
-                                              ) : (
-                                                  <span>Missing</span>
-                                              )}
-                                          </small>
+                                                      />
+                                                  ) : (
+                                                      <span>Missing</span>
+                                                  )}
+                                                  <br />
+                                                  Geolocation:{' '}
+                                                  {photoData.metadata
+                                                      ?.geolocation ? (
+                                                      <span>
+                                                          <GpsCoordStr
+                                                              source={
+                                                                  photoData
+                                                                      .metadata
+                                                                      .geolocationSource
+                                                              }
+                                                              {...photoData
+                                                                  .metadata
+                                                                  .geolocation}
+                                                          />{' '}
+                                                      </span>
+                                                  ) : (
+                                                      <span>Missing</span>
+                                                  )}
+                                              </small>
+                                          </div>
                                       </div>
                                   ) : null}
                               </Col>
