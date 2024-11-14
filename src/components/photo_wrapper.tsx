@@ -65,11 +65,26 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                             type: attachment.content_type,
                         })
 
+                        const attachmentIdParts = attachmentId.split('.')
+                        /* Fetching location metadata for objects stored in as nested objects
+                         *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
+                         */
+                        let location_metadata =
+                            doc.metadata_?.attachments?.[attachmentId]
+                        if (attachmentIdParts.length > 1) {
+                            // Access nested attachment metadata using the split parts
+                            const [firstPart, secondPart, thirdPart] =
+                                attachmentIdParts
+                            location_metadata =
+                                doc?.metadata_?.attachments[firstPart]?.[
+                                    secondPart
+                                ]?.[thirdPart]
+                        }
+
                         return {
                             id: attachmentId,
                             photo: photoBlob, // Blob data
-                            metadata:
-                                doc.metadata_?.attachments?.[attachmentId], // Metadata if available
+                            metadata: location_metadata, // Metadata if available
                         }
                     })
 

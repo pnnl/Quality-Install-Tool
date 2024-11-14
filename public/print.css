@@ -402,7 +402,7 @@ btn-light:hover {
   overflow: visible;      /* Hide overflow */
   height: auto;          /* Allow height to adjust based on content */
   max-height: 600px;     /* Maximum height */
-  margin-bottom: 20px;   /* Margin at the bottom */
+  margin-bottom: 5px;   /* Margin at the bottom */
   position: relative;    /* Relative positioning for overlay elements */
   display: inline-block; /* Display inline-block to shrink to content size */
 }
@@ -477,7 +477,7 @@ visibility: hidden;}
     margin-top: 20px;
     margin-bottom: 10px;  
     border-bottom: 2px solid #4c4a4a;
-    page-break-inside: avoid;
+    break-inside: auto;
   }
 
   .photo-card {
@@ -492,11 +492,10 @@ visibility: hidden;}
     display: grid;
     grid-template-columns: 1fr 1fr; /* Forces two columns */
     gap: 1rem;
-    margin-bottom: 1rem;
   }
 
   .photo-report-container {
-    padding: 0.5rem;    
+    padding: 0.3rem;    
     text-align: left;
     border: none;
   }

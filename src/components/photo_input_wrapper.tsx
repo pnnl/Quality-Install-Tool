@@ -104,7 +104,12 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment, deleteAttachment }) => {
+            {({
+                metadata,
+                attachments,
+                upsertAttachment,
+                deleteAttachment,
+            }) => {
                 const deletePhoto = (photoId: string) => {
                     deleteAttachment(photoId)
                 }
@@ -123,10 +128,28 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             key,
                         )?.value
 
+                        let location_metadata: PhotoMetadata =
+                            attachment_data?.metadata
+                        if (!location_metadata) {
+                            /* Fetching location metadata for objects stored in as nested objects
+                             *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
+                             */
+                            const attachmentIdParts = key.split('.')
+                            if (attachmentIdParts.length > 1) {
+                                // Access nested attachment metadata using the split parts
+                                const [firstPart, secondPart, thirdPart] =
+                                    attachmentIdParts
+                                location_metadata = (metadata as any)
+                                    ?.attachments[firstPart]?.[secondPart]?.[
+                                    thirdPart
+                                ]
+                            }
+                        }
+
                         matchingAttachments.push({
                             id: key,
                             photo: attachment_data?.blob,
-                            metadata: attachment_data?.metadata,
+                            metadata: location_metadata,
                         })
                     }
                 })
@@ -139,9 +162,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     )
 
                     const handleImageUpsert = async (file: Blob) => {
-                        const photoMetadata = await getMetadataFromPhoto(
-                            imgFile,
-                        )
+                        const photoMetadata =
+                            await getMetadataFromPhoto(imgFile)
                         upsertAttachment(
                             file,
                             nextKey,
@@ -161,9 +183,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             const compressedFile = await compressFile(jpegBlob)
                             await handleImageUpsert(compressedFile)
                         } else {
-                            const compressedPhotoBlob = await compressFile(
-                                imgFile,
-                            )
+                            const compressedPhotoBlob =
+                                await compressFile(imgFile)
                             await handleImageUpsert(compressedPhotoBlob)
                         }
                     } catch (error) {
