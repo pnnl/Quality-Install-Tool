@@ -426,6 +426,8 @@ btn-light:hover {
   padding: 5px;
   z-index: 10; /* Ensures the button stays on top */
   cursor: pointer;
+  background-color: transparent !important;  /* Makes background transparent */
+  color: red;                  
 }
 
 /* used in photo-input component */
