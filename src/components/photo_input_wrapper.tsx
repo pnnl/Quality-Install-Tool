@@ -86,7 +86,9 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 
         // return the new key with the incremented number
         if (maxNumber > -1) {
-            const newKey = `${maxKey.substring(0, maxKey.length - 1)}${maxNumber + 1}`
+            const newKey = `${maxKey.substring(0, maxKey.length - 1)}${
+                maxNumber + 1
+            }`
             return newKey
         }
         // else return first key with '_0'
@@ -138,8 +140,9 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     )
 
                     const handleImageUpsert = async (file: Blob) => {
-                        const photoMetadata =
-                            await getMetadataFromPhoto(imgFile)
+                        const photoMetadata = await getMetadataFromPhoto(
+                            imgFile,
+                        )
                         upsertAttachment(
                             file,
                             nextKey,
@@ -159,8 +162,9 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             const compressedFile = await compressFile(jpegBlob)
                             await handleImageUpsert(compressedFile)
                         } else {
-                            const compressedPhotoBlob =
-                                await compressFile(imgFile)
+                            const compressedPhotoBlob = await compressFile(
+                                imgFile,
+                            )
                             await handleImageUpsert(compressedPhotoBlob)
                         }
                     } catch (error) {
