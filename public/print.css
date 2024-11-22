@@ -207,14 +207,11 @@ h1 + h3 {
 
 /* photo.tsx */
 .photo-card {
-  break-inside: avoid;
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
 
-.card-body {
-  break-inside: avoid;
-}
+
 
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
@@ -417,6 +414,12 @@ btn-light:hover {
   display: inline-block; /* Display inline-block to shrink to content size */
 }
 
+.photo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Forces two columns */
+  gap: 1rem;
+}
+
 /* used in photo-input component */
 .photo-delete-button {
   position: absolute;
@@ -475,45 +478,13 @@ visibility: hidden;}
     margin-bottom: 4rem; 
   }
 
-  h2:not(.accordion-header, h1+h2)  {     
-    margin-top: 20px;
-    margin-bottom: 10px;  
-    border-bottom: 2px solid #4c4a4a;
-    break-inside: auto;
+  .photo-card:has(.photo-row) {
+    page-break-after: always;
   }
 
-  .photo-card {
-    break-inside: avoid;
-    padding: 1rem;
-    box-sizing: border-box;
-    overflow: visible;
-    max-height: none;
-  }
+  
 
-  .photo-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Forces two columns */
-    gap: 1rem;
-  }
-
-  .photo-report-container {
-    padding: 0.3rem;    
-    text-align: left;
-    border: none;
-  }
-
-  .photo-report-container img {
-    width: 100%;
-    height: auto;    
-  }
-  .card {    
-    padding: 1rem;
-    /* Clone the border styling across pages */
-    box-decoration-break: clone;    
-    margin-bottom: 0.1px;
-    
-  } 
-  .safari-print-header {
+     .safari-print-header {
     text-align: center;
     font-size: 10px;
     font-weight: bold;

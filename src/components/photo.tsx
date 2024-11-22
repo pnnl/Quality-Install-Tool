@@ -37,64 +37,67 @@ const Photo: FC<PhotoProps> = ({ description, label, photos, required }) => {
             <Card.Body>
                 <Card.Title>{label}</Card.Title>
                 <Card.Text as="div">{description}</Card.Text>
-                <Row className="photo-row">
-                    {photos && photos.length > 0
-                        ? Array.isArray(photos) &&
-                          photos.map(photoData => (
-                              <Col key={photoData.id}>
-                                  {photoData.photo ? (
-                                      <div className="photo-report-container">
-                                          <Image
-                                              src={URL.createObjectURL(
-                                                  photoData.photo,
-                                              )}
-                                              thumbnail
-                                          />
-                                          <div>
-                                              <small>
-                                                  Timestamp:{' '}
-                                                  {photoData.metadata
-                                                      ?.timestamp ? (
-                                                      <DateTimeStr
-                                                          date={
-                                                              photoData.metadata
-                                                                  .timestamp
-                                                          }
-                                                          source={
-                                                              photoData.metadata
-                                                                  .timestampSource
-                                                          }
-                                                      />
-                                                  ) : (
-                                                      <span>Missing</span>
+                {photos && photos.length > 0
+                    ? Array.isArray(photos) && (
+                          <Row className="photo-row">
+                              {photos.map(photoData => (
+                                  <Col key={photoData.id}>
+                                      {photoData.photo ? (
+                                          <div className="photo-report-container">
+                                              <Image
+                                                  src={URL.createObjectURL(
+                                                      photoData.photo,
                                                   )}
-                                                  <br />
-                                                  Geolocation:{' '}
-                                                  {photoData.metadata
-                                                      ?.geolocation ? (
-                                                      <span>
-                                                          <GpsCoordStr
+                                                  thumbnail
+                                              />
+                                              <div>
+                                                  <small>
+                                                      Timestamp:{' '}
+                                                      {photoData.metadata
+                                                          ?.timestamp ? (
+                                                          <DateTimeStr
+                                                              date={
+                                                                  photoData
+                                                                      .metadata
+                                                                      .timestamp
+                                                              }
                                                               source={
                                                                   photoData
                                                                       .metadata
-                                                                      .geolocationSource
+                                                                      .timestampSource
                                                               }
-                                                              {...photoData
-                                                                  .metadata
-                                                                  .geolocation}
-                                                          />{' '}
-                                                      </span>
-                                                  ) : (
-                                                      <span>Missing</span>
-                                                  )}
-                                              </small>
+                                                          />
+                                                      ) : (
+                                                          <span>Missing</span>
+                                                      )}
+                                                      <br />
+                                                      Geolocation:{' '}
+                                                      {photoData.metadata
+                                                          ?.geolocation ? (
+                                                          <span>
+                                                              <GpsCoordStr
+                                                                  source={
+                                                                      photoData
+                                                                          .metadata
+                                                                          .geolocationSource
+                                                                  }
+                                                                  {...photoData
+                                                                      .metadata
+                                                                      .geolocation}
+                                                              />{' '}
+                                                          </span>
+                                                      ) : (
+                                                          <span>Missing</span>
+                                                      )}
+                                                  </small>
+                                              </div>
                                           </div>
-                                      </div>
-                                  ) : null}
-                              </Col>
-                          ))
-                        : required && <em>Missing Photo</em>}
-                </Row>
+                                      ) : null}
+                                  </Col>
+                              ))}
+                          </Row>
+                      )
+                    : required && <em>Missing Photo</em>}
             </Card.Body>
         </Card>
     ) : null
