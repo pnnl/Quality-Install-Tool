@@ -207,11 +207,16 @@ h1 + h3 {
 
 /* photo.tsx */
 .photo-card {
+  break-inside: avoid;
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
 
-
+.photo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Forces two columns */
+  gap: 1rem;
+}
 
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
@@ -414,12 +419,6 @@ btn-light:hover {
   display: inline-block; /* Display inline-block to shrink to content size */
 }
 
-.photo-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Forces two columns */
-  gap: 1rem;
-}
-
 /* used in photo-input component */
 .photo-delete-button {
   position: absolute;
@@ -478,13 +477,8 @@ visibility: hidden;}
     margin-bottom: 4rem; 
   }
 
-  .photo-card:has(.photo-row) {
-    page-break-after: always;
-  }
 
-  
-
-     .safari-print-header {
+  .safari-print-header {
     text-align: center;
     font-size: 10px;
     font-weight: bold;
