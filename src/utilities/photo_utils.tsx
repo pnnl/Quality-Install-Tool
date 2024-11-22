@@ -7,12 +7,45 @@ import exifr from 'exifr'
  */
 function getCurrentGeolocation(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-            // Allow a cached GPS value to be used for up to a minute
-            maximumAge: 0,
-            // Assume the GPS is unavailable after a minute
-            timeout: 60 * 1000,
-        })
+        // First, check if geolocation is supported
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation is not supported by this browser.'))
+            return
+        }
+
+        // Attempt to get the current position
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                resolve(position) // Resolve with the position if successful
+            },
+            error => {
+                // Handle geolocation errors
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        reject(new Error('Permission denied by the user.'))
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        reject(
+                            new Error('Location information is unavailable.'),
+                        )
+                        break
+                    case error.TIMEOUT:
+                        reject(
+                            new Error(
+                                'The request to get user location timed out.',
+                            ),
+                        )
+                        break
+                    default:
+                        reject(new Error('Unknown error occurred.'))
+                        break
+                }
+            },
+            {
+                maximumAge: 0, // Do not use cached values
+                timeout: 60 * 1000, // Timeout after 1 minute
+            },
+        )
     })
 }
 
@@ -51,7 +84,7 @@ export async function getMetadataFromCurrentGPSLocation(): Promise<
             timestampSource: 'Date.now',
         }
         return metadata
-    } catch (e) {
+    } catch (error) {
         const metadata = {
             geolocation: {
                 altitude: null,
@@ -59,6 +92,7 @@ export async function getMetadataFromCurrentGPSLocation(): Promise<
                 longitude: null,
             },
             geolocationSource: null,
+            error: error,
             timestamp,
             timestampSource: 'Date.now',
         }

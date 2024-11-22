@@ -203,14 +203,11 @@ h1 + h3 {
 
 /* photo.tsx */
 .photo-card {
-  break-inside: avoid;
   margin-bottom: 1rem;
   margin-top: 1rem;
 }
 
-.card-body {
-  break-inside: avoid;
-}
+
 
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {

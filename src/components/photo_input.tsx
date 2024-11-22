@@ -69,10 +69,17 @@ const PhotoInput: FC<PhotoInputProps> = ({
     }
 
     useEffect(() => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
-                setCameraAvailable(true)
-            })
+        if (navigator?.mediaDevices?.getUserMedia) {
+            navigator.mediaDevices
+                .getUserMedia({ video: true, audio: true })
+                .then(stream => {
+                    setCameraAvailable(true)
+                })
+                .catch(error => {
+                    console.error('Error accessing media devices:', error)
+                })
+        } else {
+            console.log('getUserMedia is not supported by the browser.')
         }
     })
 
@@ -166,6 +173,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                     <span>
                                         <GpsCoordStr
                                             source={metadata.geolocationSource}
+                                            error={metadata?.error}
                                             {...metadata.geolocation}
                                         />{' '}
                                     </span>

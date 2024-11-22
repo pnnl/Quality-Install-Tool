@@ -12,6 +12,7 @@ export interface PhotoMetadata {
     // TODO: replace string with more precise type
     timestamp: string
     timestampSource?: TimestampSource | null
+    error: any
 }
 
 export default PhotoMetadata

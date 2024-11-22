@@ -10,6 +10,7 @@ interface GpsCoordStrProps {
     latitude: number | null
     longitude: number | null
     source?: GeolocationSource | null
+    error?: any
 }
 
 /**
@@ -18,10 +19,11 @@ interface GpsCoordStrProps {
  * @returns
  */
 const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
-    const { latitude, longitude, source } = geolocation
+    const { latitude, longitude, source, error } = geolocation || {}
+    if (error) console.log(error)
     const geoStr =
-        !isNull(latitude) && !isNull(longitude)
-            ? Number(latitude).toFixed(4) + ',' + Number(longitude).toFixed(4)
+        latitude && longitude
+            ? `${Number(latitude).toFixed(4)},${Number(longitude).toFixed(4)}`
             : null
 
     return (
@@ -40,7 +42,15 @@ const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
                     </a>
                 </>
             ) : (
-                <span>Missing</span>
+                <span>
+                    Missing{'  '}
+                    {error && (
+                        <span className="error">
+                            (Check the location service on your device and try
+                            uploading again.)
+                        </span>
+                    )}
+                </span>
             )}
         </>
     )
