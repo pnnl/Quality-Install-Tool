@@ -101,8 +101,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
         }
     }
 
-    // Button text based on whether there are photos or not
-    const buttonText = photos?.length === 0 ? 'Add Photo' : 'Add More Photo'
+    // Button text
+    const buttonText = 'Add Photo'
 
     function handleDeletePhoto(
         event: React.MouseEvent,
