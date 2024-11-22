@@ -99,6 +99,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
         if (event.target.files) {
             const file = event.target.files[0]
             upsertPhoto(file)
+            // Reset the file input to allow re-selection of the same file
+            event.target.value = '' // Reset the file input value
         }
     }
 
