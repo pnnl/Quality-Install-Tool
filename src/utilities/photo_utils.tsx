@@ -22,7 +22,7 @@ function getCurrentGeolocation(): Promise<GeolocationPosition> {
                 // Handle geolocation errors
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        reject(new Error('Permission denied by the user.'))
+                        reject(new Error('Location access denied by the user.'))
                         break
                     case error.POSITION_UNAVAILABLE:
                         reject(

@@ -46,8 +46,7 @@ const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
                     Missing{'  '}
                     {error && (
                         <span className="error">
-                            (Check the location service on your device and try
-                            uploading again.)
+                                {error.message}
                         </span>
                     )}
                 </span>
