@@ -7,7 +7,7 @@
     <FileInput id="manual_j_file" label="PDF of Manual J Load Calculation - File">
         Attach a PDF of the Manual J load calculation
     </FileInput>
-    
+
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
       Take a photo of the nameplate.
     </PhotoInput>
@@ -27,7 +27,7 @@
     </PhotoInput>
 
     <PhotoInput id="system_layout_diagram_photo" label="System Layout Diagram – Photo">
-      Take a photo of the system layout diagram. This can be a photo of a sketch, CAD drawing, or the diagram in the installation that matches the field installation setup 
+      Take a photo of the system layout diagram. This can be a photo of a sketch, CAD drawing, or the diagram in the installation that matches the field installation setup
     </PhotoInput>
 
     ## Venting
@@ -36,7 +36,7 @@
         -	To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANZI Z21 .10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA 8149.1 National Gas and Propane Installation Code.
         -	To show that the wall penetration for the vent has been flashed correctly.
         -	Install the termination high enough so that snow drifts won’t block the vent.
-        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake. 
+        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake.
         -	The installation of bird screens are recommended
     </PhotoInput>
 
@@ -58,19 +58,15 @@
       Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
     </PhotoInput>
 
-    <PhotoInput id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo">
-      Take a photo of the manometer measuring the inlet gas pressure.
-    </PhotoInput>
-
     <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
       Take a photo of the combustion analysis results. Refer to local regulations on how to do this tests, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
     </PhotoInput>
-    
+
     ## Condensate
     <PhotoInput id="condensate_management_piping_photo" label="Condensate management Piping – Photo">
-      Take a photo of the condensate management piping. 
+      Take a photo of the condensate management piping.
       - Photo must include the connections to the combustion air inlet moisture trap, acid neutralizer, secondary drain pan, and condensate pump if used.
-      -	Note, some units have built in traps while others require an external trap. Systems with a built in trap may need the trap to be filled with water prior to start up to prevent the escape of combustion gases. 
+      -	Note, some units have built in traps while others require an external trap. Systems with a built in trap may need the trap to be filled with water prior to start up to prevent the escape of combustion gases.
     </PhotoInput>
 
     ## Hydronics and Controls
@@ -79,16 +75,17 @@
     </PhotoInput>
 
     <PhotoInput id="heating_curve_coldest_outdoor_photo" label="Heating Curve Selected Setting for the Coldest Outdoor Temperature Day – Photo">
-      Take a photo of the heating curve selected setting for the coldest outdoor temperature day. 
+      Take a photo of the heating curve selected setting for the coldest outdoor temperature day.
     </PhotoInput>
 
     <PhotoInput id="heating_curve_warmest_outdoor_photo" label="Heating Curve Selected Setting for the Warmest Outdoor Temperature Day – Photo">
-      Take a photo of the heating curve selected setting for the warmest outdoor temperature day.  
+      Take a photo of the heating curve selected setting for the warmest outdoor temperature day.
     </PhotoInput>
 
     <NumberInput  label="Hydronic loop’s pressure loss (feet of head)" min={0} path="hydronic_loop_pressure_loss" />
 
     <NumberInput  label="Setting percent maximum pump speed" min={0} path="max_pump_speed_percent" />
+
   </Tab>
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
@@ -99,9 +96,9 @@
     <ProjectInfoReport {...props} />
 
     ## About the Report
-    
+
     The photos in this report are intended to document the critical details of upgrading to a high efficiency modulating boiler installation.
-   
+
     ### General
     <Photo id="nameplate_photo" label="Nameplate – Photo" required>
       Photo of the nameplate of the new system
@@ -142,17 +139,13 @@
       Photo of the electronic methane leak detector
     </Photo>
 
-    <Photo id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo" required>
-      Photo of the manometer measuring the inlet gas pressure
-    </Photo>
-
     <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" required>
       Photo of the combustion analysis results
     </Photo>
 
     ### Condensate
     <Photo id="condensate_management_piping_photo" label="Condensate management Piping – Photo" required>
-      Photo of the condensate management piping 
+      Photo of the condensate management piping
     </Photo>
 
     ### Hydronics and Controls
@@ -161,15 +154,15 @@
     </Photo>
 
     <Photo id="heating_curve_coldest_outdoor_photo" label="Heating Curve Selected Setting for the Coldest Outdoor Temperature Day – Photo" required>
-      Photo of the heating curve selected setting for the coldest outdoor temperature day    
+      Photo of the heating curve selected setting for the coldest outdoor temperature day
     </Photo>
 
     <Photo id="heating_curve_warmest_outdoor_photo" label="Heating Curve Selected Setting for the Warmest Outdoor Temperature Day – Photo" required>
-      Photo of the heating curve selected setting for the warmest outdoor temperature day    
+      Photo of the heating curve selected setting for the warmest outdoor temperature day
     </Photo>
 
     Hydronic loop’s pressure loss (feet of head): { props.data?.hydronic_loop_pressure_loss ? props.data?.hydronic_loop_pressure_loss : null } ft
-    
+
     For the integrated/primary circulation pump, percent of the maximum pump speed was set to { props.data?.max_pump_speed_percent ? props.data?.max_pump_speed_percent : null }%
 
     {
@@ -184,5 +177,6 @@
     <PDFRenderer id="manual_j_file" label="" />
 
     </PrintSection>
+
   </Tab>
 </Tabs>
