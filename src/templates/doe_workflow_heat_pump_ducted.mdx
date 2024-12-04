@@ -1,10 +1,12 @@
 <Tabs>
     <Tab eventKey="assessment" title="Assessment">
         ## Existing Heating and Cooling Equipment
+
         <PhotoInput id="existing_heating_and_cooling_equipment_photos" label="Existing Heating and Cooling Equipment - Photos ">
            Provide photos of the existing heating and cooling equipment. Examples: central air conditioner condenser,
            central air conditioner evaporator coil, furnace, boiler, electric baseboard, window air conditioner.
         </PhotoInput>
+
         <Select label="This heat pump will…" options={[
             "Replace electric resistance heat",
             "Replace natural gas heat",
@@ -15,6 +17,27 @@
             "Displace fuel oil heat",
             "Displace propane heat"
             ]} path="heat_pump_purpose" />
+
+        ## Visual Assessment of the Existing Equipment
+
+        <PhotoInput id="existing_heating_appliance_photo" label="Existing Heating Appliance - Photo">
+           Take a wide-angle photo of the existing heating appliance showing the condition.
+        </PhotoInput>
+        <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing Heating Appliance Name Plate – Photo">
+           Take a photo of the existing heating appliance’s nameplate.
+        </PhotoInput>
+        <PhotoInput id="existing_cooling_appliance_photo" label="Existing Cooling Appliance – Photo">
+           Take a wide-angle photo of the existing cooling appliance showing the condition.
+        </PhotoInput>
+
+    <CheckBox label="" options={['No cooling appliance']} path="no_cooling_appliance"  />
+
+        <ShowOrHide visible={props.data?.no_cooling_appliance.length === 0}>
+            <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo ">
+                Take a photo of the existing cooling appliance’s nameplate
+            </PhotoInput>
+        </ShowOrHide>
+
 
         ## Visual Assessment of the Ductwork
         If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and
