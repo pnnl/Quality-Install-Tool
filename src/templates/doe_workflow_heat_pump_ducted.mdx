@@ -30,7 +30,7 @@
            Take a wide-angle photo of the existing cooling appliance showing the condition.
         </PhotoInput>
 
-    <CheckBox label="" options={['No cooling appliance']} path="no_cooling_appliance"  />
+        <CheckBox label="" options={['No cooling appliance']} path="no_cooling_appliance"  />
 
         <ShowOrHide visible={props.data?.no_cooling_appliance.length === 0}>
             <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo ">
@@ -356,8 +356,45 @@
             <Photo id="existing_heating_and_cooling_equipment_photos" label="Existing Heating and Cooling Equipment - Photos " required>
                 Photo of existing heating and cooling equipment
             </Photo>
+
             <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
 
+            <Photo
+                id="existing_heating_appliance_photo"
+                label="Existing Heating Appliance - Photo"
+                required
+            >
+                Photo of existing heating appliance
+            </Photo>
+
+            <Photo
+                id="existing_heating_appliance_name_plate_photo"
+                label="Existing Heating Appliance Name Plate – Photo"
+                required
+            >
+                Photo of existing heating appliance’s nameplate
+            </Photo>
+
+            <Photo
+                id="existing_cooling_appliance_photo"
+                label="Existing Cooling Appliance – Photo"
+                required
+            >
+                Photo of existing cooling appliance
+            </Photo>
+
+            <p><strong>Cooling appliance exists: </strong>{props.data?.no_cooling_appliance.length === 0 ? "Yes" : "No"}</p>
+            {
+                props.data?.no_cooling_appliance.length === 0 &&
+
+                <Photo
+                    id="existing_cooling_appliance_photo"
+                    label="Existing Cooling Appliance – Photo"
+                    required
+                >
+                    Photo of existing cooling appliance’s nameplate
+                </Photo>
+            }
             <Photo id="existing_ductwork_photo" label="Ductwork – Photo" required>
                 Photo of existing ductwork condition
             </Photo>
