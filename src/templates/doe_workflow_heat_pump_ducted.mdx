@@ -57,12 +57,12 @@
         <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c, assess whether the static pressure is in the supply or return. If it is in the return, consider recommending upsizing the return filter to accommodate a larger size and a deeper filter." />
 
         ## Airflow Test
-        Use flow plate test OR the pressure matching technique
+        Use flow plate test OR the pressure matching technique OR the total external static pressure vs CFM fan curve method
         <PhotoInput id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Airflow Test Setup – Photo">
             Take a photo of the airflow test setup.
         </PhotoInput>
         <PhotoInput id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" uploadable >
-            Take a photo of the manometer CFM or upload a screenshot of the instrument app.
+            Take a photo of the manometer CFM or upload a screenshot of the instrument app or the manometer and fan curve chart/table.
         </PhotoInput>
         <StringInput label="Comments on Pre-Upgrade Airflow Test" path="comment_pre_upgrade_air_flow_test" hint="Comment on remediation plan if flow is much lower than 400 CFM per ton" />
 
@@ -427,7 +427,7 @@
                 Photo of the airflow test setup
             </Photo>
             <Photo id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" required>
-                Photo of the manometer CFM or upload a screenshot of the instrument app
+                Photo of the manometer CFM or upload a screenshot of the instrument app or the manometer and fan curve chart/table.
             </Photo>
             {
                 props.data.comment_pre_upgrade_air_flow_test
