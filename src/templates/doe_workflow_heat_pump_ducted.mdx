@@ -236,6 +236,9 @@
         |  Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
         <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comment_refrigerant_quantity_adjustments_or_weigh_in" />
         ## Protection
+        <PhotoInput id="condensate_line_photo" label="Condensate Line – Photo">
+           Take a photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+        </PhotoInput>
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
            Take a photo of the line set and line set wall penetration protection.
         </PhotoInput>
@@ -609,6 +612,10 @@
                 ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}</p>
                 : null
             }
+
+            <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
+                Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+            </Photo>
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
                 The line set and line set to wall penetration should be protected from damage by UV, rain, and pests.
             </Photo>
