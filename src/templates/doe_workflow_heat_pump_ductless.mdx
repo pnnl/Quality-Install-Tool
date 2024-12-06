@@ -82,14 +82,13 @@
         the duct air flow capability test result data.
 
         <Collapsible header="Equipment Selection Details">
-            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation
-            or alternate load sizing method. For example, if the ductless equipment is providing only supplemental
-            heating or cooling to a home with a central ducted system, sizing to loads smaller than those from
-            Manual J would make sense.
+        Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or alternate load sizing method.
+        For example, if the ductless equipment is providing only supplemental heating or cooling to a home with a central ducted system,
+        sizing to loads smaller than those from Manual J would make sense.
 
-            Equipment selection also depends on knowing the equipment’s performance at specific temperatures.
-            Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate
-            Air Source Heat Pump List. Factor in supplemental heating or cooling from other equipment if applicable.
+        Equipment selection also depends on knowing the equipment’s performance at specific temperatures.
+        Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List.
+        Factor in supplemental heating or cooling from other equipment if applicable. ACCA’s Manual S can also be used to help select the right heat pump.
         </Collapsible>
         <PhotoInput id="heating_performance_table_photo" label="Heating Performance Table – Photo" uploadable>
             Take a photo or attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model
@@ -193,6 +192,9 @@
 
         <StringInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
 
+        <PhotoInput id="condensate_line_photo" label="Condensate Line – Photo">
+            Take a photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+        </PhotoInput>
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
             Take a photo  of the outdoor section of the refrigerant line set as it enters the building showing the
             line set insulation has been protected from weather and UV.
@@ -425,7 +427,9 @@
                 ? <p><strong>Notes About Refridgerant Adjustment:</strong> {props.data.comment_refridgerant_adjustment}</p>
                 : null
             }
-
+            <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
+                Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+            </Photo>
 
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
                 Photo of the outdoor section of the refrigerant line set as it enters the building showing the
