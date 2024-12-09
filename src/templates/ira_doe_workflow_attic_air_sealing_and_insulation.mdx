@@ -32,7 +32,7 @@
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
-        <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
         Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
     </PhotoInput>
     </ShowOrHide>
@@ -224,44 +224,25 @@
     <p> What part of the home are you air sealing?  <strong> { props.data?.airsealing_location} </strong> </p>
     <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.attic_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50 + " " : null } { props.data?.attic_air_leakage_rate} </strong></p>
 
-    {props.data.attic_air_leakage_rate == 'CFM at 50Pa'  &&
-    (
+<ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >
+    |            |                                                                                                                                                                                                                               |
+    | -----------|----------------
+    | Conditioned Volume (ft3) | {props.data?.conditioned_volume_ft3}
+    | ACH50 | {(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }
 
-<>
-    <table>
-        <tbody>
-            <tr>
-                <td>Conditioned Volume (ft3)</td>
-                <td>{props.data?.conditioned_volume_ft3}</td>
-            </tr>
-            <tr>
-                <td>ACH50</td>
-                <td>{(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }</td>
-            </tr>
-        </tbody>
-    </table>
-    <Photo
-        id="cfm50_photo"
-        label="Starting blower door manometer showing the CFM50 value – Photo"
-        required
-    >
-        Photo of the manometer showing CFM50 of air leakage before air sealing
-        and insulation work was performed
+    <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </Photo>
     <Photo
-        id="conditioned_volume_photo"
-        label="Conditioned floor area and air volume calculation– Photo"
-        required
-    >
-        Photo of the math used to determine the conditioned floor area and
-        volume, label the rooms/sections and the corresponding length, width,
-        and height.
+      id="conditioned_volume_photo"
+      label="Conditioned floor area and air volume calculation– Photo"
+      required>
+      Photo of the math used to determine the conditioned floor area and
+      volume, label the rooms/sections and the corresponding length, width,
+      and height.
     </Photo>
 
-</>
-
-    )}
-
+</ShowOrHide>
 
     <p> What is the existing insulation in the ceiling?  <strong> { props.data?.existing_insulation_type} </strong></p>
     <p> What is the existing insulation R-value in the ceiling?  <strong>{ props?.data.airsealing_r_value} </strong></p>
