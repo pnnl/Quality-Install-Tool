@@ -182,16 +182,37 @@
   </Tab>  
   <Tab eventKey="post_installation"  title="Post-Installation">
   ## Final Conditions
-  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />  
-  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}> 
-  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
-  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-  </PhotoInput>
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />
+
+  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
+    | <NumberInput label="Conditioned Volume (ft3):" min={0} path="postinstall_conditioned_volume_ft3" />
+    | <p><strong>ACH50: </strong>{String((props?.data?.postinstall_air_leakage_cfm50 * 60)/props?.data?.postinstall_conditioned_volume_ft3) }</p>
+
+    <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+    </PhotoInput>
+
   </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_safety_briefing_to_homeowner" />
-  <Select label="What R-value was added to the ceiling?" options={["Less than R-30", "R-30","R-49", "R-60","more than R-60"]} path="postinstall_ceiling_r_value" />
-  <Select label="What percentage of ceiling area received additional insulation (choose the closest)? " options={["10%","25%","50%","75%","100%"]} path="postinstall_insulated_ceiling_area" />
+
+{' '}
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_safety_briefing_to_homeowner"
+/>
+<Select
+    label="What R-value was added to the ceiling?"
+    options={['Less than R-30', 'R-30', 'R-49', 'R-60', 'more than R-60']}
+    path="postinstall_ceiling_r_value"
+/>
+<Select
+    label="What percentage of ceiling area received additional insulation (choose the closest)? "
+    options={['10%', '25%', '50%', '75%', '100%']}
+    path="postinstall_insulated_ceiling_area"
+/>
 
   <CombustionSafetyChecksLink {...props} />
   
