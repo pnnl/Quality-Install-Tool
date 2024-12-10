@@ -27,7 +27,7 @@
     | ----------------------------
     | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
     | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
-    | <p><strong>ACH50: </strong>{(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }</p>
+    | <p><strong>ACH50: </strong>{String((props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3) }</p>
 
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
@@ -228,7 +228,7 @@
     |            |                                                                                                                                                                                                                               |
     | -----------|----------------
     | Conditioned Volume (ft3) | {props.data?.conditioned_volume_ft3}
-    | ACH50 | {(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }
+    | ACH50 | {String((props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3) }
 
     <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
