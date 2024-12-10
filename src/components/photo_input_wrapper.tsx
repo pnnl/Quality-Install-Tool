@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import imageCompression from 'browser-image-compression'
 
@@ -13,6 +13,7 @@ interface PhotoInputWrapperProps {
     id: string
     label: string
     uploadable: boolean
+    count?: number
 }
 
 /**
@@ -31,6 +32,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     id,
     label,
     uploadable,
+    count = 10,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
     const [error, setError] = useState('') // Loading state
@@ -65,6 +67,33 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
         return compressedFile
     }
 
+    // Function to find the max number at the end of the attachment name, and return the new  attachment name with max number
+    function getMaxKeyWithNumberSuffix(keys: (string | any[])[], id: string) {
+        let maxNumber = -1
+        let maxKey: string | any[] = ''
+        // Loop through each key
+        keys.forEach((key: string | any[]) => {
+            const lastChar = key[key.length - 1] // Get the last character of the key
+            if (!isNaN(lastChar)) {
+                // Check if the last character is a number
+                const number = parseInt(lastChar, 10) // Convert last character to a number
+                if (number > maxNumber) {
+                    maxNumber = number
+                    maxKey = key
+                }
+            }
+        })
+        // return the new key with the incremented number
+        if (maxNumber > -1) {
+            const newKey = `${maxKey.substring(0, maxKey.length - 1)}${
+                maxNumber + 1
+            }`
+            return newKey
+        }
+        // else return first key with '_0'
+        return id + '_' + 0
+    }
+
     // Dynamically imports the `heic2any` module.
     // This helps to reduce initial bundle size and improve
     // performance by only loading the library when needed.
@@ -75,84 +104,111 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
 
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment }) => {
-                const upsertPhoto = (img_file: Blob) => {
-                    setLoading(true)
-                    // Process and reducing the image size for HEIC images
-                    if (img_file?.type === 'image/heic') {
-                        // Convert HEIC to JPEG to be compatible to display in all browsers
-                        loadHeic2Any().then(heic2any => {
-                            heic2any({
-                                blob: img_file,
-                                toType: 'image/jpeg',
-                            })
-                                .then(jpegBlob => {
-                                    compressFile(jpegBlob as Blob).then(
-                                        compressed_file => {
-                                            getMetadataFromPhoto(img_file).then(
-                                                (photo_metadata: any) => {
-                                                    upsertAttachment(
-                                                        compressed_file as Blob,
-                                                        id,
-                                                        undefined,
-                                                        photo_metadata,
-                                                    )
-                                                },
-                                            )
-                                        },
-                                    )
-                                    setError('')
-                                })
-                                .catch(error => {
-                                    console.error('Conversion error:', error) // Handle errors
-                                    setError('Image loading failed')
-                                })
-                                .finally(() => {
-                                    setLoading(false) // Reset loading state
-                                })
+            {({
+                metadata,
+                attachments,
+                upsertAttachment,
+                deleteAttachment,
+            }) => {
+                const deletePhoto = (photoId: string) => {
+                    deleteAttachment(photoId)
+                }
+                const matchingAttachments: {
+                    id: string
+                    photo: any
+                    metadata: any
+                }[] = []
+
+                Object.keys(attachments).forEach(key => {
+                    // If the attachment name starts with the specified prefix
+                    if (key.startsWith(id)) {
+                        // Add the attachment information to the result array
+                        const attachment_data = Object.getOwnPropertyDescriptor(
+                            attachments,
+                            key,
+                        )?.value
+
+                        let location_metadata: PhotoMetadata =
+                            attachment_data?.metadata
+                        if (!location_metadata) {
+                            /* Fetching location metadata for objects stored in as nested objects
+                             *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
+                             */
+                            const attachmentIdParts = key.split('.')
+                            if (attachmentIdParts.length > 1) {
+                                // Access nested attachment metadata using the split parts
+                                const [firstPart, secondPart, thirdPart] =
+                                    attachmentIdParts
+                                location_metadata = (metadata as any)
+                                    ?.attachments[firstPart]?.[secondPart]?.[
+                                    thirdPart
+                                ]
+                            }
+                        }
+
+                        matchingAttachments.push({
+                            id: key,
+                            photo: attachment_data?.blob,
+                            metadata: location_metadata,
                         })
                     }
-                    // Reduce the image size - JPEG files
-                    else
-                        compressFile(img_file as Blob)
-                            .then(compressed_photo_blob => {
-                                // Retrieve metadata from the uncompressed image file
-                                getMetadataFromPhoto(img_file).then(
-                                    (photo_metadata: any) => {
-                                        upsertAttachment(
-                                            compressed_photo_blob as Blob,
-                                            id,
-                                            undefined,
-                                            photo_metadata,
-                                        )
-                                    },
-                                )
-                                setError('')
+                })
+
+                const upsertPhoto = async (imgFile: Blob) => {
+                    setLoading(true)
+                    const nextKey = getMaxKeyWithNumberSuffix(
+                        matchingAttachments.map(({ id }) => id),
+                        id,
+                    )
+
+                    const handleImageUpsert = async (file: Blob) => {
+                        const photoMetadata =
+                            await getMetadataFromPhoto(imgFile)
+                        upsertAttachment(
+                            file,
+                            nextKey,
+                            undefined,
+                            photoMetadata,
+                        )
+                        setError('')
+                    }
+
+                    try {
+                        if (imgFile.type === 'image/heic') {
+                            const heic2any = await loadHeic2Any()
+                            const jpegBlob: any = await heic2any({
+                                blob: imgFile,
+                                toType: 'image/jpeg',
                             })
-                            .catch(error => {
-                                console.error('Compression error:', error) // Handle errors
-                                setError('Image loading failed')
-                            })
-                            .finally(() => {
-                                setLoading(false) // Reset loading state
-                            })
+                            const compressedFile = await compressFile(jpegBlob)
+                            await handleImageUpsert(compressedFile)
+                        } else {
+                            const compressedPhotoBlob =
+                                await compressFile(imgFile)
+                            await handleImageUpsert(compressedPhotoBlob)
+                        }
+                    } catch (error) {
+                        console.error('Image processing error:', error)
+                        setError('Image loading failed')
+                    } finally {
+                        setLoading(false)
+                    }
                 }
-                const attachment = Object.getOwnPropertyDescriptor(
-                    attachments,
-                    id,
-                )?.value
+
                 return (
                     <>
                         <PhotoInput
                             label={label}
-                            metadata={
-                                attachment?.metadata as unknown as PhotoMetadata
-                            }
-                            photo={attachment?.blob}
+                            metadata={matchingAttachments.map(
+                                item => item.metadata,
+                            )}
+                            photos={matchingAttachments}
                             upsertPhoto={upsertPhoto}
                             uploadable={uploadable}
+                            deletePhoto={deletePhoto}
                             loading={loading}
                             error={error}
+                            count={count}
                         >
                             {children}
                         </PhotoInput>
