@@ -13,12 +13,20 @@
     </PhotoInput>
 
     <PhotoInput id="existing_static_pressure_read_out_photo" label="Existing condition total static pressure read out – Photo">
-        Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
+        Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c.
     </PhotoInput>
 
     <Radio label="What is the total duct leakage before air sealing?" options={['CFM at 25Pa', 'Not Measured',]} path="existing_duct_leakage_rate_radio" />
-    <ShowOrHide visible={props.data?.existing_duct_leakage_rate_radio === 'CFM at 25Pa'}> 
-    <NumberInput label="CFM at 25Pa" min={0} path="duct_leakage_cfm50"  />
+
+    <ShowOrHide visible={props.data?.existing_duct_leakage_rate_radio === 'CFM at 25Pa'}>
+      <PhotoInput id="conditioned_floor_area_calculation_photo" label="Conditioned Floor Area Calculation – Photo">
+          Take a photo of the math used to determine the conditioned floor area, label the rooms/sections and the corresponding length, width.
+      </PhotoInput>
+        |                                                                                                                                                                                                                                           |
+        | ----------------------------
+        | <NumberInput label="CFM at 25Pa" min={0} path="duct_leakage_cfm25"  />
+        | <NumberInput label="Conditioned Floor Area (ft2):" min={0} path="conditioned_floor_area_ft2" />
+        | <p><strong>Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present: </strong>{props.data?.duct_leakage_cfm25/props.data?.conditioned_floor_area_ft2*100}</p>
     </ShowOrHide>
 
     <PhotoInput id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo">
@@ -30,7 +38,7 @@
     *	This could be a photo of an undersized supply, undersized return, undersized return filter grille.
     *	The purpose of looking and evaluating is to reduce the incidents of air sealing and insulating ducts or return(s) that will need to be taken apart and upgraded. It is better to include in the scope of work the duct upgrades and air seal and insulate the new duct work.
     </PhotoInput>
-  
+
   </Tab>
   <Tab eventKey="installation" title="Installation">
     
@@ -74,6 +82,7 @@
     
   </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
+
     <Select label="What percentage of the duct system received additional insulation (choose the closest)?" options={["10%","25%","50%","75%","100%"]} path="postinstall_duct_insulation_percentage" />
 
     <PhotoInput id="postinstall_static_pressure_test_setup_photo" label="Post-installation total static pressure test setup – Photo">
@@ -81,18 +90,20 @@
     </PhotoInput>
 
     <PhotoInput id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo">
-        Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c. 
+        Look for kinked/crushed ductwork, undersized ducts or returns, or a dirty air filter if the static pressure is above 0.5 i.w.c.
     </PhotoInput>
 
     <Radio label="What is the total duct leakage after air sealing?" options={['CFM at 25Pa', 'Not Measured',]} path="postinstall_duct_leakage_rate" />
 
-    <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}> 
+    <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}>
       <NumberInput label="CFM at 25Pa" min={0} path="post_install_duct_leakage_cfm25"  />
+      <NumberInput label="Conditioned Floor Area (ft2):" min={0} path="conditioned_floor_area_ft2" />
     </ShowOrHide>
 
     <PhotoInput id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo">
         Photo of floor plan sketch with the numbers
     </PhotoInput>
+
   </Tab>
  <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
@@ -113,44 +124,83 @@
     <Photo id="existing_static_pressure_test_setup_photo" label="Existing condition total static pressure test setup – Photo" required/>
 
     <Photo id="existing_static_pressure_read_out_photo" label="Existing condition total static pressure read out – Photo" required />
-   
 
-    <p> Total duct leakage before air sealing:  <strong> { (props.data?.existing_duct_leakage_rate_radio == 'CFM at 25Pa' && props.data?.duct_leakage_cfm50) ?  props.data?.duct_leakage_cfm50 + " "  : null } { props.data?.existing_duct_leakage_rate_radio}  </strong></p>
+
+    <p> Total duct leakage before air sealing:  <strong> { (props.data?.existing_duct_leakage_rate_radio == 'CFM at 25Pa' && props.data?.duct_leakage_cfm25) ?  props.data?.duct_leakage_cfm25+ " "  : null } { props.data?.existing_duct_leakage_rate_radio}  </strong></p>
+
+    <ShowOrHide visible={props.data?.existing_duct_leakage_rate_radio === 'CFM at 25Pa'}>
+      <Photo id="conditioned_floor_area_calculation_photo" label="Conditioned Floor Area Calculation – Photo" required>
+          Photo of the math used to determine the conditioned floor area, label the rooms/sections and the corresponding length, width.
+      </Photo>
+        |               |                                                                                                                                                                                                                            |
+        | --------------|-------------
+        | Conditioned Floor Area (ft2) | {props.data?.conditioned_floor_area_ft2}
+        |Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present |{props.data?.duct_leakage_cfm25/props.data?.conditioned_floor_area_ft2*100}
+    </ShowOrHide>
 
     <Photo id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo" required />
 
     <Photo id="existing_undersized_duct_or_return_photo" label="Undersized duct or return – Photo" required />
 
-  
-    ## Installation 
 
-   <Photo id="secure_and_seal_duct_photo" label="Secure and seal duct boots – Photo" required>
-      Photo of the secure and seal duct boots
-    </Photo>
-    <Photo id="duct_to_duct_connection_sealed_photo" label="Duct to duct connection sealed – Photo" required>
-     Photo of duct to duct connection sealed 
-    </Photo>
-    <Photo id="duct_insulation_and_vapor_barrier_photo" label="Duct insulation and vapor barrier – Photo" required>
-      Photo of the duct insulation and vapor barrier
-    </Photo>
-    <Photo id="duct_support_photo" label="Duct support – Photo" required>
-      Photo of the duct support
-    </Photo>
-    <Photo id="take_off_collar_air_sealed_photo" label="Take off collar air sealed– Photo" required>
-      Photo of the take off collar air sealed
-    </Photo>
-    <Photo id="plenum_seams_air_sealed_photo" label="Plenum seams air sealed – Photo ">
-      Photo of plenum seams air sealed
-    </Photo>
-    <Photo id="plenum_insulated_photo" label="Plenum insulated – Photo" required>
-      Photo of the plenum insulated
-    </Photo>
-    <Photo id="air_handler_access_panel_seams_sealed_photo" label="Air handler access panel seams sealed– Photo" required>
-      Photo of the air handler access panel seams sealed
-    </Photo>
-    <Photo id="air_filter_grille_slot_sealed_photo" label="Air filter grille/slot sealed – Photo" required>
-     Photo of the air filter grille/slot sealed
-    </Photo>
+    ## Installation
+
+{' '}
+
+<Photo
+    id="secure_and_seal_duct_photo"
+    label="Secure and seal duct boots – Photo"
+    required
+>
+    Photo of the secure and seal duct boots
+</Photo>
+<Photo
+    id="duct_to_duct_connection_sealed_photo"
+    label="Duct to duct connection sealed – Photo"
+    required
+>
+    Photo of duct to duct connection sealed
+</Photo>
+<Photo
+    id="duct_insulation_and_vapor_barrier_photo"
+    label="Duct insulation and vapor barrier – Photo"
+    required
+>
+    Photo of the duct insulation and vapor barrier
+</Photo>
+<Photo id="duct_support_photo" label="Duct support – Photo" required>
+    Photo of the duct support
+</Photo>
+<Photo
+    id="take_off_collar_air_sealed_photo"
+    label="Take off collar air sealed– Photo"
+    required
+>
+    Photo of the take off collar air sealed
+</Photo>
+<Photo
+    id="plenum_seams_air_sealed_photo"
+    label="Plenum seams air sealed – Photo "
+>
+    Photo of plenum seams air sealed
+</Photo>
+<Photo id="plenum_insulated_photo" label="Plenum insulated – Photo" required>
+    Photo of the plenum insulated
+</Photo>
+<Photo
+    id="air_handler_access_panel_seams_sealed_photo"
+    label="Air handler access panel seams sealed– Photo"
+    required
+>
+    Photo of the air handler access panel seams sealed
+</Photo>
+<Photo
+    id="air_filter_grille_slot_sealed_photo"
+    label="Air filter grille/slot sealed – Photo"
+    required
+>
+    Photo of the air filter grille/slot sealed
+</Photo>
 
     ## Post Installation
 
@@ -169,5 +219,6 @@
 
 
     </PrintSection>
+
   </Tab>
 </Tabs>
