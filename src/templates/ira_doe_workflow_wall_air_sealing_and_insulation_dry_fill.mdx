@@ -25,7 +25,7 @@
     | ----------------------------
     | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
     | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
-    | <p><strong>ACH50: </strong>{(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }</p>
+    | <p><strong>ACH50: </strong>    {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? (props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3: 'N/A'}</p>
 
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
@@ -152,6 +152,7 @@
   ## Final Conditions
 
 {' '}
+
 <Select
     label="Select one of the Cavity Insulation Improvement:"
     path="cavity_insulation_type"
@@ -166,6 +167,7 @@
 </ShowOrHide>
 
 {' '}
+
 <Select
     label="Select one of the following Exterior Insulation Improvements:"
     options={[
@@ -178,6 +180,7 @@
 />
 
 {' '}
+
 <Select
     label="What percent of the wall area received additional insulation (choose the closest)"
     options={['10%', '25%', '50%', '75%', '100%']}
@@ -222,12 +225,12 @@
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.wall_airsealing_location ? ( Array.isArray(props.data.wall_airsealing_location) > 0 ? props.data.wall_airsealing_location.join(',') :  props.data?.wall_airsealing_location) : null } </strong> </p>
 
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ?  props.data?.wall_air_leakage_cfm50 +" "  : null } { props.data?.wall_air_leakage_rate}  </strong></p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ?  props.data?.air_leakage_cfm50 +" "  : null } { props.data?.wall_air_leakage_rate}  </strong></p>
     <ShowOrHide visible={props.data?.wall_air_leakage_rate == 'CFM at 50Pa'} >
         |            |                                                                                                                                                                                                                               |
         | -----------|----------------
         | Conditioned Volume (ft3) | {props.data?.conditioned_volume_ft3}
-        | ACH50 | {(props?.data?.air_leakage_cfm50 * 60)/props?.data?.conditioned_volume_ft3 }
+        | ACH50 |     {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? (props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3: 'N/A'}
 
         <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
             Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
@@ -275,6 +278,7 @@
 ## Installation - Insulation Details
 
 {' '}
+
 <Photo
     id="thermal_imaging_camera_cavities_filled_photo"
     label="Thermal imaging camera showing the cavities have been filled – Photo"
@@ -282,6 +286,7 @@
 />
 
 {' '}
+
 <Photo id="insulation_plugs_photo" label="Insulation plugs – Photo" required />
 
     ## Final Conditions
@@ -309,10 +314,13 @@
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
 
 {props.metadata?.attachments?.project_invoice_photo && (
-<><h2> Project Invoice</h2>
-<Photo id="project_invoice_photo" label="Project Invoice – Photo">
-Photo of the project invoice
-</Photo> </>
+
+<>
+    <h2> Project Invoice</h2>
+    <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+        Photo of the project invoice
+    </Photo>{' '}
+</>
 )}
 
     </PrintSection>
