@@ -22,7 +22,7 @@
 
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Floor/Foundation']} default_value={['Floor/Foundation']} path="floor_airsealing_location" hidden />
 
-    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM git sat 50Pa']} path="floor_air_leakage_rate" />
+    <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="floor_air_leakage_rate" />
 
     <ShowOrHide visible={props.data?.floor_air_leakage_rate === 'CFM at 50Pa'}>
     |                                                                                                                                                                                                                                           |
