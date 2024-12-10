@@ -525,3 +525,11 @@ export async function deleteEmptyProjects(db: PouchDB.Database<{}>) {
         console.error('Error in removing the project', error)
     }
 }
+
+export async function getAttachmentBlob(
+    db: any,
+    docId: any,
+    attachmentId: any,
+) {
+    return await db.getAttachment(docId, attachmentId)
+}

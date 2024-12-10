@@ -125,8 +125,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             for (const attachmentId in dbDocAttachments) {
                 const docAttachment = dbDocAttachments[attachmentId]
 
+                const attachmentIdParts = attachmentId.split('.')
+
                 const singleAttachmentMetadata =
-                    attachmentsMetadata[attachmentId]
+                    attachmentIdParts.length === 3
+                        ? attachmentsMetadata[attachmentIdParts[0]]?.[
+                              attachmentIdParts[1]
+                          ]?.[attachmentIdParts[2]]
+                        : attachmentsMetadata[attachmentId]
 
                 // digest is a hash of the attachment, so a different digest indicates a modified attachment
                 const digest = docAttachment?.digest
@@ -374,7 +380,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             upsertBlobDB(revisionRef.current)
         }
     }
-
     return (
         <StoreContext.Provider
             value={{

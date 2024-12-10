@@ -2,16 +2,14 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { StoreContext } from './store'
 import Photo from './photo'
-import { useDB } from '../utilities/database_utils'
+import { getAttachmentBlob, useDB } from '../utilities/database_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
     id: string
     label: string
     required: boolean
-    docId: string
-    project?: any
-    fromParent?: boolean
+    parent?: any
 }
 
 /**
@@ -32,32 +30,22 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     id,
     label,
     required,
-    docId,
-    project,
-    fromParent,
+    parent,
 }) => {
     const [photoBlob, setPhotoBlob] = useState<Blob | Buffer>()
-    const [projectDoc, setProjectDoc] = useState<any>(project)
+    const [projectDoc, setProjectDoc] = useState<any>(parent)
     const db = useDB()
 
     useEffect(() => {
-        if (fromParent) {
-            const projectDocId = project?._id || docId
-            db.get(projectDocId)
-                .then((res: any) => {
-                    setProjectDoc(res)
+        if (parent) {
+            setProjectDoc(parent)
+            getAttachmentBlob(db, parent?._id, id)
+                .then(blob => {
+                    setPhotoBlob(blob)
                 })
-                .catch(() => {})
-
-            db.getAttachment(projectDocId, id)
-                .then(
-                    (res: React.SetStateAction<Blob | Buffer | undefined>) => {
-                        setPhotoBlob(res)
-                    },
-                )
-                .catch(() => {})
+                .catch(error => {})
         }
-    }, [fromParent])
+    }, [])
 
     return (
         <StoreContext.Consumer>
@@ -67,10 +55,10 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                     id,
                 )?.value
 
-                const photo = fromParent ? photoBlob : attachment?.blob
+                const photo = parent ? photoBlob : attachment?.blob
                 let metadata = attachment?.metadata
 
-                if (fromParent) {
+                if (parent) {
                     const attachmentIdParts = id.split('.')
 
                     if (attachmentIdParts.length > 1) {

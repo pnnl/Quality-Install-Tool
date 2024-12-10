@@ -1,0 +1,97 @@
+## Combustion Appliance Safety Testing
+<Repeatable path="combustion_safety_tests" parent={props.project}>  
+    <LabelValue label="Appliance Type" path="appliance_type" parent={props.project} /> 
+        <Photo
+        id="indoor_ambient_air_co_level_photo"
+        label="Indoor ambient air CO level - Photo"
+        parent={props.project}
+    >
+        Indoor ambient air CO level readout photo
+    </Photo>
+    <LabelValue label="Does the ambient CO test pass?" path="ambient_CO_test" parent={props.project}  /> 
+    <ShowOrHide path="appliance_type" value="Gas/Oil Water Heater" parent={props.project} >
+        <Photo
+            id="water_heater_photo"
+            label="Water heater - Photo"
+            parent={props.project}
+        >
+            Photo of the Water Heater
+        </Photo>
+        <Photo
+            id="water_heater_pipe_connection_leak_check_photo"
+            label="Pipe Connection Leak Check - Photo"
+            parent={props.project}
+        >
+            Photo of the the accessible section of
+            Gas Piping
+        </Photo>
+        <LabelValue label="Does the gas leak detection test pass?" path="water_heater_gas_leak_detection_test" parent={props.project}  />
+        <Photo
+            id="water_heater_vent_photo"
+            label="Water Heater Vent - Photo"
+            parent={props.project}t
+        >
+            Photo of the Water Heater Vent
+        </Photo>
+        <Photo
+            id="water_heater_draft_photo"
+            label="Water Heater Draft – Photo"
+            parent={props.project}
+        >
+            Photo of the Water Heater Draft
+        </Photo>
+        <LabelValue label="Does the spillage test(s) pass?" path="water_heater_spillage_test" parent={props.project} />
+        <Photo
+            id="water_heater_co_measurement_photo"
+            label="Water heater CO measurement – Photo "
+            parent={props.project}
+        >
+            Photo of the combustion analyzer readout
+        </Photo>
+        <LabelValue label="Does the undiluted CO test pass?" path="water_heater_undiluted_CO_test"  parent={props.project} />
+    </ShowOrHide>
+    <ShowOrHide path="appliance_type" value="Gas/Oil Furnace/Boiler" parent={props.project} >
+        <Photo
+            id="space_heating_appliance_photo"
+            label="Space Heating Appliance - Photo"
+            parent={props.project}
+        >
+            Photo of the combustion heating
+            appliance
+        </Photo>
+        <Photo
+            id="space_heating_pipe_connection_leak_check_photo"
+            label="Pipe Connection Leak Check - Photo"
+            parent={props.project}
+        >
+            Photo of accessible section of the Gas
+            Piping
+        </Photo>
+        <LabelValue label="Does the gas leak detection test pass?" path="space_heating_gas_leak_detection_test" parent={props.project} />
+        <Photo
+            id="space_heating_appliance_vent_photo"
+            label="Space heating Appliance Vent - Photo"
+            parent={props.project}
+        >
+            Photo of the Space heating Appliance
+            Vent
+        </Photo>
+        <Photo
+            id="space_heating_appliance_draft_photo"
+            label="Space heating Appliance Draft – Photo"
+            parent={props.project}
+        >
+            Photo of the Space heating Appliance
+            Draft
+        </Photo>
+        <LabelValue label="Does the spillage test(s) pass?" path="space_heating_spillage_test" parent={props.project} />
+        <Photo
+            id="space_heating_appliance_co_measurement_photo"
+            label="Space heating Appliance CO measurement – Photo "
+            parent={props.project}
+        >
+            Photo of the combustion analyzer readout
+        </Photo>
+        <LabelValue label="Does the undiluted CO test pass?" path="space_heating_undiluted_CO_test" parent={props.project} />
+    </ShowOrHide>              
+</Repeatable>

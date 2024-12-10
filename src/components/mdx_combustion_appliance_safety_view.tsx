@@ -45,6 +45,7 @@ const MdxCombustionSafetyView: FC = () => {
                     {projectDoc?.data_?.location?.zip_code}
                 </h3>
             </center>
+            <br />
             <MdxWrapper
                 Component={DOECombustionTestTemplate}
                 Project={projectDoc}

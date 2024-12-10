@@ -32,19 +32,21 @@ const FileInputWrapper = React.lazy(() => import('./file_input_wrapper'))
 const PDFRendererWrapper = React.lazy(() => import('./pdf_renderer_wrapper'))
 const ShowOrHide = React.lazy(() => import('./show_or_hide'))
 const CheckBoxWrapper = React.lazy(() => import('./checkbox_wrapper'))
-const CombustionSafetyChecks = React.lazy(
-    () => import('./combustion_safety_checks_inputs'),
-)
-const CombustionSafetyChecksReport = React.lazy(
-    () => import('./combustion_safety_checks_report'),
-)
-const CombustionSafetyChecksLink = React.lazy(
-    () => import('../templates/reusable/combustion_safety_checks_link.mdx'),
-)
 const DocNameInputWrapper = React.lazy(() => import('./doc_name_input_wrapper'))
 const SaveCancelButtonWrapper = React.lazy(
     () => import('./save_cancel_button_wrapper'),
 )
+const RepeatableInputWrapper = React.lazy(
+    () => import('./repeatable_input_wrapper'),
+)
+const RepeatableWrapper = React.lazy(() => import('./repeatable_wrapper'))
+const CombustionSafetyChecksLink = React.lazy(
+    () => import('../templates/reusable/combustion_safety_checks_input.mdx'),
+)
+const CombustionSafetyChecksReport = React.lazy(
+    () => import('../templates/reusable/combustion_safety_checks_report.mdx'),
+)
+const LabelValueWrapper = React.lazy(() => import('./label_value_wrapper'))
 
 const components = {
     Collapsible,
@@ -72,11 +74,13 @@ const components = {
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
-    CombustionSafetyChecks: CombustionSafetyChecks,
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
     DocNameInput: DocNameInputWrapper,
     SaveCancelButton: SaveCancelButtonWrapper,
+    RepeatableInput: RepeatableInputWrapper,
+    Repeatable: RepeatableWrapper,
+    LabelValue: LabelValueWrapper,
 }
 
 interface MdxWrapperProps {

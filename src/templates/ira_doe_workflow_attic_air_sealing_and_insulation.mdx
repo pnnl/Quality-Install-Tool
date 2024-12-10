@@ -334,7 +334,7 @@
     <p> What R-value was added to the ceiling? <strong>{props.data?.postinstall_ceiling_r_value}</strong> </p>
     <p> What percentage of ceiling area received additional insulation? <strong>{props.data?.postinstall_insulated_ceiling_area}</strong> </p>
 
-    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+    <CombustionSafetyChecksReport {...props} />
 
     ## Ventilation
     <p> Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data?.post_retrofit_ashrae_62_2_calculation} </p>
