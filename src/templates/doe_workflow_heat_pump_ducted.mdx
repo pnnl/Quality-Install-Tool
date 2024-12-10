@@ -30,9 +30,9 @@
            Take a wide-angle photo of the existing cooling appliance showing the condition.
         </PhotoInput>
 
-        <CheckBox label="" options={['No cooling appliance']} path="no_cooling_appliance"  />
+        <CheckBox options={['No cooling appliance']} path="no_cooling_appliance"/>
 
-        <ShowOrHide visible={props.data?.no_cooling_appliance.length === 0}>
+        <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
             <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo ">
                 Take a photo of the existing cooling appliance’s nameplate
             </PhotoInput>
@@ -387,9 +387,9 @@
                 Photo of existing cooling appliance
             </Photo>
 
-            <p><strong>Cooling appliance exists: </strong>{props.data?.no_cooling_appliance.length === 0 ? "Yes" : "No"}</p>
+            <p><strong>Cooling appliance exists: </strong>{props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}</p>
             {
-                props.data?.no_cooling_appliance.length === 0 &&
+                props.data?.no_cooling_appliance?.length === 0 &&
 
                 <Photo
                     id="existing_cooling_appliance_photo"
