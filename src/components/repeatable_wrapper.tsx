@@ -57,7 +57,7 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [])
+    }, [parentDoc])
 
     return (
         <StoreContext.Consumer>

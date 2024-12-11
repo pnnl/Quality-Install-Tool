@@ -533,3 +533,10 @@ export async function getAttachmentBlob(
 ) {
     return await db.getAttachment(docId, attachmentId)
 }
+
+export async function getStorage() {
+    const quota = await navigator.storage.estimate()
+    const totalSpace = quota.quota
+    const usedSpace = quota.usage
+    return { TotalSpace: totalSpace, UsedSpace: usedSpace }
+}

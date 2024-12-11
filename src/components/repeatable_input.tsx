@@ -207,8 +207,8 @@ const RepeatableInput: FC<RepeatableProps> = ({
                     <div key={item_key}>
                         <Collapsible
                             header={`${label}${' '}${index + 1} ${
-                                items[item_key]?.name
-                                    ? ': ' + items[item_key]?.name
+                                items[item_key]?.appliance_type
+                                    ? ': ' + items[item_key]?.appliance_type
                                     : ''
                             }`}
                         >
