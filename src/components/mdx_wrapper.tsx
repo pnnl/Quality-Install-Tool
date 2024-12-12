@@ -85,7 +85,7 @@ const components = {
 
 interface MdxWrapperProps {
     Component: React.ComponentType<any>
-    Project: any
+    Project?: any
 }
 
 /**

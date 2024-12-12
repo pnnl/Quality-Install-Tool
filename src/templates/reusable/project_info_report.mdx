@@ -1,10 +1,20 @@
 <p>**Installer:**</p>
 <p className="margin-left">
-{props.project?.data_?.installer?.name} {props?.project?.data_?.installer?.name ? <br/>: null}
-{props.project?.data_?.installer?.company_name }{props?.project?.data_?.installer?.company_name ? <br/>: null}
-{props.project?.data_?.installer?.mailing_address }{props?.project?.data_?.installer?.mailing_address ? <br/>: null}
-{props.project?.data?.installer?.phone }{props?.project?.data_?.installer?.phone ? <br/>: null}
-{props.project?.data_?.installer?.email} {props.project?.data_?.installer?.email ? <br/>: null}
+{props.project ? <>
+  {props.project?.data_?.installer?.name} {props?.project?.data_?.installer?.name ? <br/>: null}
+  {props.project?.data_?.installer?.company_name }{props?.project?.data_?.installer?.company_name ? <br/>: null}
+  {props.project?.data_?.installer?.mailing_address }{props?.project?.data_?.installer?.mailing_address ? <br/>: null}
+  {props.project?.data_?.installer?.phone }{props?.project?.data_?.installer?.phone ? <br/>: null}
+  {props.project?.data_?.installer?.email} {props.project?.data_?.installer?.email ? <br/>: null}
+  </>
+  : 
+  <>
+  {props.data?.installer?.name} {props?.data?.installer?.name ? <br/>: null}
+  {props.data?.installer?.company_name }{props?.data?.installer?.company_name ? <br/>: null}
+  {props.data?.installer?.mailing_address }{props?.data?.installer?.mailing_address ? <br/>: null}
+  {props.data?.installer?.phone }{props?.data?.installer?.phone ? <br/>: null}
+  {props.data?.installer?.email} {props.data?.installer?.email ? <br/>: null}
+  </>}
 </p>
 {props.data.install_date && (
   <>
@@ -12,7 +22,7 @@
   </>
 )}
 
-**Installation Address:** {props.project.data_?.location?.street_address}, {props.project.data_?.location?.city}, {props.project.data_?.location?.state} {props.project.data_?.location?.zip_code}
+**Installation Address:** {props.project ? <> {props.project.data_?.location?.street_address}, {props.project.data_?.location?.city}, {props.project.data_?.location?.state} {props.project.data_?.location?.zip_code} </> : <>{props.data?.location?.street_address}, {props.data?.location?.city}, {props.data?.location?.state} {props.data?.location?.zip_code}</>}
 
 <Photo id="building_number_photo" label="Building Number" project={props.project} required>
       A photo of the building showing the building number.
