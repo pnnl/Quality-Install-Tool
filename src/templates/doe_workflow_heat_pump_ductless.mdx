@@ -5,20 +5,17 @@
 
         ## Existing Heating and Cooling Equipment
 
-        <PhotoInput id="existing_heating_and_cooling_equipment_photos" label="Existing Heating and Cooling Equipment - Photos ">
-           Provide photos of the existing heating and cooling equipment. Examples: central air conditioner condenser,
-           central air conditioner evaporator coil, furnace, boiler, electric baseboard, window air conditioner.
-        </PhotoInput>
-
         <Select label="This heat pump will…" options={[
             "Replace electric resistance heat",
             "Replace natural gas heat",
             "Replace fuel oil heat",
             "Replace propane heat",
-            "Displace electric resistance heat",
-            "Displace natural gas heat",
-            "Displace fuel oil heat",
-            "Displace propane heat"
+            "Replace wood heat",
+            "Displace/Reduce electric resistance heat",
+            "Displace/Reduce natural gas heat",
+            "Displace/Reduce fuel oil heat",
+            "Displace/Reduce propane heat",
+            "Displace/Reduce wood heat",
             ]} path="heat_pump_purpose" />
 
 
@@ -287,11 +284,6 @@
 
 
             ## Pre-Installation
-
-            <Photo id="existing_heating_and_cooling_equipment_photos" label="Existing Heating and Cooling Equipment - Photos " required>
-                Photo of existing heating and cooling equipment
-            </Photo>
-
             <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
 
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
