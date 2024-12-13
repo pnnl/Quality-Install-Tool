@@ -526,6 +526,14 @@ export async function deleteEmptyProjects(db: PouchDB.Database<{}>) {
     }
 }
 
+export async function getAttachmentBlob(
+    db: any,
+    docId: any,
+    attachmentId: any,
+) {
+    return await db.getAttachment(docId, attachmentId)
+}
+
 export async function getStorage() {
     const quota = await navigator.storage.estimate()
     const totalSpace = quota.quota
