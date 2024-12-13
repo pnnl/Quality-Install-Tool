@@ -52,6 +52,7 @@ export const StoreContext = React.createContext({
         id: any,
         fileName?,
     ) => {}) as UpsertAttachment,
+    deleteAttachment: (attachmentId: string) => {},
     upsertData: ((pathStr: string, data: any) => {}) as UpsertData,
     upsertMetadata: ((pathStr: string, data: any) => {}) as UpsertMetadata,
 })
@@ -310,6 +311,65 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     /**
+     * Deletes an attachment (file/photo blob) and its associated metadata from a document in the database.
+     *
+     * This function removes the specified attachment by its ID, updates the document's metadata to reflect
+     * the removal, and updates the local state to exclude the deleted attachment.
+     *
+     * @param {string} attachmentId - The ID of the attachment to delete.
+     *
+     * @throws {Error} Logs an error to the console if the deletion or update process fails.
+     */
+    const deleteAttachment = async (attachmentId: string) => {
+        try {
+            // Fetch the latest document revision
+            const docDeleteAttachment: any = await db.get(docId)
+
+            // Remove the attachment with the given attachmentId from the document
+            await db.removeAttachment(
+                docId,
+                attachmentId,
+                docDeleteAttachment._rev,
+            )
+
+            // Fetch the updated document to update its metadata
+            const docRemovePhotoMetadata: any = await db.get(docId)
+            const attachmentMetadata = doc.metadata_?.attachments || []
+
+            // Filter out the deleted attachment from metadata
+            const updatedAttachmentMetadata = Object.entries(attachmentMetadata)
+                .filter(([key, value]) => key !== attachmentId)
+                .reduce((acc: any, [key, value]) => {
+                    acc[key] = value // Rebuild the object
+                    return acc
+                }, {})
+
+            // Update the document's metadata with the filtered attachments
+            docRemovePhotoMetadata.metadata_ = {
+                ...docRemovePhotoMetadata.metadata_,
+                attachments: updatedAttachmentMetadata,
+            }
+
+            // Update the document with the new metadata
+            db.put(docRemovePhotoMetadata).then(function (res) {
+                revisionRef.current = res.rev
+            })
+
+            // Update the local attachments state by removing the deleted attachment
+            const updatedAttachments = Object.entries(attachments)
+                .filter(([key, value]) => key !== attachmentId)
+                .reduce((acc: any, [key, value]) => {
+                    acc[key] = value // Rebuild the object
+                    return acc
+                }, {})
+
+            setAttachments(updatedAttachments)
+        } catch (error) {
+            console.error('Error deleting attachment:', error)
+        }
+    }
+
+    /**
      *
      * @param blob
      * @param id
@@ -383,6 +443,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 data: doc.data_,
                 metadata: doc.metadata_,
                 upsertAttachment,
+                deleteAttachment,
                 upsertData,
                 upsertMetadata,
             }}
