@@ -9,9 +9,11 @@ import React from 'react'
  * @property {boolean} [required=false] - A flag to determine if the label-value pair should be rendered.
  */
 interface LabelValueProps {
-    label: string
+    label?: string
     value: string
     required?: boolean
+    prefix?: string
+    suffix?: string
 }
 
 /**
@@ -32,12 +34,22 @@ const LabelValue: React.FC<LabelValueProps> = ({
     label,
     value,
     required = false,
+    prefix = '',
+    suffix = '',
 }: LabelValueProps): JSX.Element | null => {
     return required || value ? (
-        <div className="top-bottom-padding">
-            <span>{label}: </span>
-            <strong>{value}</strong>
-        </div>
+        label ? (
+            <div className="top-bottom-padding">
+                <span>{label}: </span>
+                <strong>{value}</strong>
+            </div>
+        ) : (
+            <>
+                {prefix}
+                {value}
+                {suffix}
+            </>
+        )
     ) : null
 }
 

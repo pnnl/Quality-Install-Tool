@@ -6,6 +6,8 @@ import LabelValue from './label_value'
 interface LabelValueWrapperProps {
     label: string
     path: string
+    prefix?: string
+    suffix?: string
     required?: boolean
     parent?: any
 }
@@ -34,6 +36,8 @@ interface LabelValueWrapperProps {
 const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     label,
     path,
+    prefix,
+    suffix,
     parent = null,
     required = false,
 }: LabelValueWrapperProps): JSX.Element | null => {
@@ -49,6 +53,8 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                         label={label}
                         value={value}
                         required={required}
+                        prefix={prefix}
+                        suffix={suffix}
                     />
                 )
             }}
