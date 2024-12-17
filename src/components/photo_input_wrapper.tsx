@@ -14,6 +14,7 @@ interface PhotoInputWrapperProps {
     label: string
     uploadable: boolean
     count?: number
+    path?: string
 }
 
 /**
@@ -26,6 +27,7 @@ interface PhotoInputWrapperProps {
  * @param label The label of the PhotoInput component
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo.
+ *  * @param path The path (consistent with the path provided to the lodash
  */
 const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,
@@ -33,6 +35,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     label,
     uploadable,
     count = 10,
+    path,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
     const [error, setError] = useState('') // Loading state
@@ -109,7 +112,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 attachments,
                 upsertAttachment,
                 deleteAttachment,
+                data,
+                upsertData,
             }) => {
+                const photoNoteId = data[id]
+
                 const deletePhoto = (photoId: string) => {
                     deleteAttachment(photoId)
                 }
@@ -209,6 +216,11 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             loading={loading}
                             error={error}
                             count={count}
+                            updateNoteValue={(value: any) =>
+                                upsertData(`${id}_note`, value)
+                            }
+                            noteValue={}
+                            // {data[id] ?? data[id] : ""}
                         >
                             {children}
                         </PhotoInput>

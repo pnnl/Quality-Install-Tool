@@ -22,6 +22,9 @@ interface PhotoInputProps {
     loading: boolean
     error: string
     count: number
+    data?: any
+    noteValue: string
+    updateNoteValue: (value: string) => void
 }
 // TODO: Determine whether or not the useEffect() method is needed.
 // We don't seem to need a separate camera button on an Android phone.
@@ -40,6 +43,7 @@ interface PhotoInputProps {
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo (default).
  * @param loader  When set, a loading image will be displayed during the upload process.
+ * @param updateNoteValue Function for setting the note
  */
 const PhotoInput: FC<PhotoInputProps> = ({
     children,
@@ -52,6 +56,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
     loading,
     error,
     count,
+    noteValue,
+    updateNoteValue,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -62,7 +68,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [cameraAvailable, setCameraAvailable] = useState(false)
-    const [noteValue, setNoteValue] = useState('')
 
     // Handle button clicks
     const handlePhotoCaptureButtonClick = (
@@ -144,7 +149,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         id="TEST-ID"
                         label="Optional note about photo(s):"
                         value={noteValue}
-                        updateValue={setNoteValue}
+                        updateValue={updateNoteValue}
                         min={0}
                         max={300}
                         regexp={/.*/} //any string
