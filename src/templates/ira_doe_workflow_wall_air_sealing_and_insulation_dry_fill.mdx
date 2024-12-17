@@ -69,8 +69,8 @@
     <DateInput label="Installation Date" path="install_date" />
 
     ##  Air Sealing Details
-    A blower door is recommended for finding were on walls to air seal and areas with missing interior air barrier. 
-    Depending on the home and the condition of the siding material, it might be similar cost to air seal and 
+    A blower door is recommended for finding were on walls to air seal and areas with missing interior air barrier.
+    Depending on the home and the condition of the siding material, it might be similar cost to air seal and
     insulate the wall by adding exterior insulation when residing versus drilling and filling the walls with insulation.
 
     <PhotoInput id="electrical_outlets_and_switches_photo" label="Electrical outlets and switches air sealed – Photo" >
@@ -229,22 +229,19 @@
 
     <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.wall_air_leakage_rate == 'CFM at 50Pa' ?  props.data?.air_leakage_cfm50 +" "  : null } { props.data?.wall_air_leakage_rate}  </strong></p>
     <ShowOrHide visible={props.data?.wall_air_leakage_rate == 'CFM at 50Pa'} >
-        |            |                                                                                                                                                                                                                               |
-        | -----------|----------------
-        | Conditioned Volume (ft3) | {props.data?.conditioned_volume_ft3}
-        | ACH50 |     {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? (props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3: 'N/A'}
-
-        <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
-            Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
-        </Photo>
-        <Photo
-          id="conditioned_volume_photo"
-          label="Conditioned floor area and air volume calculation– Photo"
-          required>
-          Photo of the math used to determine the conditioned floor area and
-          volume, label the rooms/sections and the corresponding length, width,
-          and height.
-        </Photo>
+      <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3} </strong></p>
+      <p>ACH50: <strong>{!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? (props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3: 'N/A'}</strong></p>
+      <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
+          Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+      </Photo>
+      <Photo
+        id="conditioned_volume_photo"
+        label="Conditioned floor area and air volume calculation– Photo"
+        required>
+        Photo of the math used to determine the conditioned floor area and
+        volume, label the rooms/sections and the corresponding length, width,
+        and height.
+      </Photo>
 
     </ShowOrHide>
     <p> What is the existing insulation in the wall?  <strong> { props.data?.existing_insulation_type} </strong> </p>

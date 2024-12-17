@@ -47,7 +47,7 @@
       Secure and seal all gaps between duct supply and return boots to the subfloor or ceiling (some can be sealed from the inside or outside), one example photo
     </PhotoInput>
     <PhotoInput id="duct_to_duct_connection_sealed_photo" label="Duct to duct connection sealed – Photo">
-      *	For flex ducts secure the inner liner to the supply and return boots and take off collars with zip tie and seal with mastic. 
+      *	For flex ducts secure the inner liner to the supply and return boots and take off collars with zip tie and seal with mastic.
       *	For rigid duct fasten connects with screws and seal with mastic.
       *	Provide one representative example photo
     </PhotoInput>
@@ -58,7 +58,7 @@
     </PhotoInput>
     <PhotoInput id="duct_support_photo" label="Duct support – Photo">
       *	For flex ducts proper support means the supports are frequent enough that there is minimal sagging, and no kinks or excessive length. Typically, every 4 ft, and a support within two feet of each elbow.
-      *	For rigid ducts the minimum support is one every 10 ft for rectangular ducts and every 12 ft for round and flat oval ducts. 
+      *	For rigid ducts the minimum support is one every 10 ft for rectangular ducts and every 12 ft for round and flat oval ducts.
       *	Provide one representative example photo.
     </PhotoInput>
     <PhotoInput id="take_off_collar_air_sealed_photo" label="Take off collar air sealed– Photo">
@@ -80,7 +80,7 @@
       * If the system has an air filter grille, the filter should be taped to the grill around the perimeter to minimize air bypass.
       * Provide one representative example photo.
     </PhotoInput>
-    
+
   </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
 
@@ -99,6 +99,7 @@
     <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}>
       <NumberInput label="CFM at 25Pa" min={0} path="post_install_duct_leakage_cfm25"  />
       <p><strong>Conditioned Floor Area (ft2): </strong> {props.data?.conditioned_floor_area_ft2} </p>
+      <p><strong>Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present: </strong>{!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.post_install_duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100).toString() : 'N/A'}</p>
     </ShowOrHide>
 
     <PhotoInput id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo">
