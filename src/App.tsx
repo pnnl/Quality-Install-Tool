@@ -54,7 +54,7 @@ const routes = [
         ),
     },
     {
-        path: `/app/:projectId/doe_workflow_combustion_safety_testing`,
+        path: `/app/:projectId/doe_combustion_appliance_safety_tests`,
         // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
             <Suspense fallback={<div>Loading...</div>}>
