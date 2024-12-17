@@ -19,6 +19,8 @@
                 of Buildings Technical Standard.
             </a>
         </Collapsible>
+        <DateInput label="Assessment Date" path="assessment_date" />
+
         <RepeatableInput path="combustion_safety_tests" label="Appliance: ">
             <Radio
                 label="Appliance Type:"
@@ -193,14 +195,13 @@
                 />{' '}
             </ShowOrHide>
         </RepeatableInput>
-        {/* <CombustionSafetyChecks path="combustion_safety_tests" /> */}
     </Tab>
     <Tab eventKey="report"  title="Report">
         <PrintSection label="Print Report">
               ---
                 # Combustion Appliance Safety Testing
                 ## Photo Report
-
+            **Assessment Date:**&nbsp; <DateStr date={props.data.assessment_date} />
             <ProjectInfoReport {...props} />
             <CombustionSafetyChecksReport {...props} />
         </PrintSection>
