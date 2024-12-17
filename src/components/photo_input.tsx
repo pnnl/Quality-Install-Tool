@@ -9,6 +9,7 @@ import GpsCoordStr from './gps_coord_str'
 import type PhotoMetaData from '../types/photo_metadata.type'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
+import TextInput from './text_input'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -61,6 +62,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
     const [cameraAvailable, setCameraAvailable] = useState(false)
+    const [noteValue, setNoteValue] = useState('')
 
     // Handle button clicks
     const handlePhotoCaptureButtonClick = (
@@ -138,6 +140,15 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             and may be a <p>. Nested <p>s are not allowed, so we use a <div> */}
                         <Card.Text as="div">{children}</Card.Text>
                     </Collapsible>
+                    <TextInput
+                        id="TEST-ID"
+                        label="Optional note about photo(s):"
+                        value={noteValue}
+                        updateValue={setNoteValue}
+                        min={0}
+                        max={300}
+                        regexp={/.*/} //any string
+                    />
 
                     {uploadable ? (
                         <input
