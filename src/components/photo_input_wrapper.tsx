@@ -18,6 +18,23 @@ interface PhotoInputWrapperProps {
     path?: string
 }
 
+interface JSONObject {
+    [key: string]: JSONValue
+}
+//This function takes a data object from the StoreContext and converts it into an object
+//whose values we can access via string-type keys
+function convertDataObject(data: {}): JSONObject {
+    let jsonObject = data as JSONObject
+    let newDataObject: JSONObject = {}
+
+    for (const key in jsonObject) {
+        if (jsonObject.hasOwnProperty(key)) {
+            newDataObject[key] = jsonObject[key]
+        }
+    }
+    return newDataObject
+}
+
 /**
  * A component that wraps a PhotoInput component in order to tie it to the data store
  *
@@ -116,7 +133,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 data,
                 upsertData,
             }) => {
-                debugger
                 const deletePhoto = (photoId: string) => {
                     deleteAttachment(photoId)
                 }
@@ -202,29 +218,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     }
                 }
 
-                interface JSONObject {
-                    [key: string]: JSONValue
-                }
-
-                function convertDataToNewData(data: {}): JSONObject {
-                    let jsonObject = data as JSONObject
-                    let newData: JSONObject = {}
-
-                    // Add logic here to convert data into a newData object whose values can be accessed using newData[id]
-                    for (const key in jsonObject) {
-                        if (jsonObject.hasOwnProperty(key)) {
-                            newData[key] = jsonObject[key]
-                        }
-                    }
-
-                    return newData
-                }
-
-                const newData = convertDataToNewData(data)
-                const noteValue = newData[`${id}_note`]
-                console.log(noteValue)
-                debugger
-
                 return (
                     <>
                         <PhotoInput
@@ -242,8 +235,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             updateNoteValue={(value: any) =>
                                 upsertData(`${id}_note`, value)
                             }
-                            noteValue={noteValue}
-                            // {data[id] ?? data[id] : ""}
+                            noteValue={convertDataObject(data)[`${id}_note`]}
+                            id={id}
                         >
                             {children}
                         </PhotoInput>
