@@ -147,15 +147,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             and may be a <p>. Nested <p>s are not allowed, so we use a <div> */}
                         <Card.Text as="div">{children}</Card.Text>
                     </Collapsible>
-                    <TextInput
-                        id="TEST-ID"
-                        label="Optional note about photo(s):"
-                        value={noteValue ? noteValue?.toString() : ''}
-                        updateValue={updateNoteValue}
-                        min={0}
-                        max={300}
-                        regexp={/.*/} //any string
-                    />
 
                     {uploadable ? (
                         <input
@@ -249,7 +240,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                     )}
                     {error && <div className="error">{error}</div>}
                     {photos?.length < count && (
-                        <div>
+                        <div className="pb-2">
                             <Button
                                 onClick={handlePhotoGalleryButtonClick}
                                 variant="outline-primary"
@@ -258,6 +249,15 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             </Button>
                         </div>
                     )}
+                    <TextInput
+                        id="TEST-ID"
+                        label="Optional note about photo(s):"
+                        value={noteValue ? noteValue?.toString() : ''}
+                        updateValue={updateNoteValue}
+                        min={0}
+                        max={300}
+                        regexp={/.*/} //any string
+                    />
                     <Modal
                         show={showDeleteConfirmation}
                         onHide={cancelDeletePhoto}
