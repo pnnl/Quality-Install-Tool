@@ -4,6 +4,8 @@ import { StoreContext } from './store'
 import Photo from './photo'
 import { useDB } from '../utilities/database_utils'
 
+import JSONValue from '../types/json_value.type'
+
 interface PhotoWrapperProps {
     children: React.ReactNode
     id: string
@@ -12,6 +14,23 @@ interface PhotoWrapperProps {
     docId: string
     project?: any
     fromParent?: boolean
+}
+
+interface JSONObject {
+    [key: string]: JSONValue
+}
+//This function takes a data object from the StoreContext and converts it into an object
+//whose values we can access via string-type keys
+function convertDataObject(data: {}): JSONObject {
+    let jsonObject = data as JSONObject
+    let newDataObject: JSONObject = {}
+
+    for (const key in jsonObject) {
+        if (jsonObject.hasOwnProperty(key)) {
+            newDataObject[key] = jsonObject[key]
+        }
+    }
+    return newDataObject
 }
 
 /**
@@ -125,18 +144,20 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ attachments, data }) => {
-                return (
-                    <Photo
-                        description={children}
-                        label={label}
-                        photos={
-                            fromParent
-                                ? matchingAttachments
-                                : getMatchingAttachments(attachments, id)
-                        }
-                        required={required}
-                    />
-                )
+                if (data)
+                    return (
+                        <Photo
+                            description={children}
+                            label={label}
+                            photos={
+                                fromParent
+                                    ? matchingAttachments
+                                    : getMatchingAttachments(attachments, id)
+                            }
+                            required={required}
+                            noteValue={convertDataObject(data)[`${id}_note`]}
+                        />
+                    )
             }}
         </StoreContext.Consumer>
     )

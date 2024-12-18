@@ -5,12 +5,14 @@ import { Card, Image, Row, Col } from 'react-bootstrap'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetadata from '../types/photo_metadata.type'
+import JSONValue from '../types/json_value.type'
 
 interface PhotoProps {
     description: React.ReactNode
     label: string
     photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Array of photo objects with metadata
     required: boolean
+    noteValue: JSONValue
 }
 
 /**
@@ -30,13 +32,24 @@ interface PhotoProps {
  * @param required When unset, the Photo component will only show if there is a
  * photo attachment in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
+ * @param noteValue The value to be displayed as the note for the photos
  */
-const Photo: FC<PhotoProps> = ({ description, label, photos, required }) => {
+const Photo: FC<PhotoProps> = ({
+    description,
+    label,
+    photos,
+    required,
+    noteValue,
+}) => {
     return (photos && photos.length > 0) || required ? (
         <Card className="photo-card">
             <Card.Body>
                 <Card.Title>{label}</Card.Title>
                 <Card.Text as="div">{description}</Card.Text>
+                <div className="photo-notes">
+                    <h3>Notes: </h3>
+                    <div>{noteValue ? noteValue.toString() : null}</div>
+                </div>
                 {photos && photos.length > 0
                     ? Array.isArray(photos) && (
                           <Row className="photo-row">
