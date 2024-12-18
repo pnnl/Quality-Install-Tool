@@ -24,7 +24,7 @@ interface PhotoInputProps {
     error: string
     count: number
     noteValue: JSONValue | undefined
-    updateNoteValue: (value: any) => void
+    updateNoteValue: (value: string) => void
     id: string
 }
 // TODO: Determine whether or not the useEffect() method is needed.
@@ -62,7 +62,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
     updateNoteValue,
     id,
 }) => {
-    debugger
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
     const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)

@@ -291,7 +291,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param value The value that is to be updated/inserted
      */
     const upsertData: UpsertData = (pathStr, value) => {
-        debugger
         pathStr = 'data_.' + pathStr
         upsertDoc(pathStr, value)
     }

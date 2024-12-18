@@ -30,7 +30,6 @@ const TextInputWrapper: FC<TextInputWrapperProps> = ({
     max = 10240,
     regexp = /.*/,
 }) => {
-    debugger
     // Generate an id for the input
     const id = pathToId(path, 'input')
 

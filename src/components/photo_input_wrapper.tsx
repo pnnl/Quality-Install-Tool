@@ -15,7 +15,6 @@ interface PhotoInputWrapperProps {
     label: string
     uploadable: boolean
     count?: number
-    path?: string
 }
 
 interface JSONObject {
@@ -45,7 +44,6 @@ function convertDataObject(data: {}): JSONObject {
  * @param label The label of the PhotoInput component
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo.
- *  * @param path The path (consistent with the path provided to the lodash
  */
 const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,
@@ -53,7 +51,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     label,
     uploadable,
     count = 10,
-    path,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
     const [error, setError] = useState('') // Loading state
