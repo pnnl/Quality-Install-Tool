@@ -26,6 +26,7 @@ interface PhotoInputProps {
     noteValue: JSONValue | undefined
     updateNoteValue: (value: string) => void
     id: string
+    notes?: boolean
 }
 // TODO: Determine whether or not the useEffect() method is needed.
 // We don't seem to need a separate camera button on an Android phone.
@@ -47,6 +48,7 @@ interface PhotoInputProps {
  * @param noteValue The value to populate the photo caption box
  * @param updateNoteValue Function for setting the note in the photo caption box
  * @param id Attachment id
+ * @param notes If notes is false, then the note input will not show up
  */
 const PhotoInput: FC<PhotoInputProps> = ({
     children,
@@ -61,6 +63,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     noteValue,
     updateNoteValue,
     id,
+    notes = true,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -250,15 +253,18 @@ const PhotoInput: FC<PhotoInputProps> = ({
                             </Button>
                         </div>
                     )}
-                    <TextInput
-                        id={id}
-                        label="Optional note about photo(s):"
-                        value={noteValue ? noteValue?.toString() : ''}
-                        updateValue={updateNoteValue}
-                        min={0}
-                        max={300}
-                        regexp={/.*/} //any string
-                    />
+                    {notes && (
+                        <TextInput
+                            id={id}
+                            label="Optional note about photo(s):"
+                            value={noteValue ? noteValue?.toString() : ''}
+                            updateValue={updateNoteValue}
+                            min={0}
+                            max={300}
+                            regexp={/.*/} //any string
+                        />
+                    )}
+
                     <Modal
                         show={showDeleteConfirmation}
                         onHide={cancelDeletePhoto}

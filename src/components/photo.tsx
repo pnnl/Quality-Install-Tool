@@ -46,10 +46,13 @@ const Photo: FC<PhotoProps> = ({
             <Card.Body>
                 <Card.Title>{label}</Card.Title>
                 <Card.Text as="div">{description}</Card.Text>
-                <div className="photo-notes">
-                    <h3>Notes: </h3>
-                    <div>{noteValue ? noteValue.toString() : null}</div>
-                </div>
+                {noteValue && (
+                    <div className="photo-notes">
+                        <h3>Notes: </h3>
+                        <div>{noteValue ? noteValue.toString() : null}</div>
+                    </div>
+                )}
+
                 {photos && photos.length > 0
                     ? Array.isArray(photos) && (
                           <Row className="photo-row">
