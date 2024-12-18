@@ -10,6 +10,7 @@ import type PhotoMetaData from '../types/photo_metadata.type'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
 import TextInput from './text_input'
+import JSONValue from '../types/json_value.type'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -23,8 +24,8 @@ interface PhotoInputProps {
     error: string
     count: number
     data?: any
-    noteValue: string
-    updateNoteValue: (value: string) => void
+    noteValue: JSONValue | undefined
+    updateNoteValue: (value: any) => void
 }
 // TODO: Determine whether or not the useEffect() method is needed.
 // We don't seem to need a separate camera button on an Android phone.
@@ -59,6 +60,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
     noteValue,
     updateNoteValue,
 }) => {
+    debugger
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
     const hiddenPhotoUploadInputRef = useRef<HTMLInputElement>(null)
@@ -148,7 +150,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                     <TextInput
                         id="TEST-ID"
                         label="Optional note about photo(s):"
-                        value={noteValue}
+                        value={noteValue ? noteValue?.toString() : ''}
                         updateValue={updateNoteValue}
                         min={0}
                         max={300}

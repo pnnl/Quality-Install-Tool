@@ -7,6 +7,7 @@ import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
 
 import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
+import JSONValue from '../types/json_value.type'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -115,8 +116,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 data,
                 upsertData,
             }) => {
-                const photoNoteId = data[id]
-
+                debugger
                 const deletePhoto = (photoId: string) => {
                     deleteAttachment(photoId)
                 }
@@ -202,6 +202,29 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     }
                 }
 
+                interface JSONObject {
+                    [key: string]: JSONValue
+                }
+
+                function convertDataToNewData(data: {}): JSONObject {
+                    let jsonObject = data as JSONObject
+                    let newData: JSONObject = {}
+
+                    // Add logic here to convert data into a newData object whose values can be accessed using newData[id]
+                    for (const key in jsonObject) {
+                        if (jsonObject.hasOwnProperty(key)) {
+                            newData[key] = jsonObject[key]
+                        }
+                    }
+
+                    return newData
+                }
+
+                const newData = convertDataToNewData(data)
+                const noteValue = newData[`${id}_note`]
+                console.log(noteValue)
+                debugger
+
                 return (
                     <>
                         <PhotoInput
@@ -219,7 +242,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             updateNoteValue={(value: any) =>
                                 upsertData(`${id}_note`, value)
                             }
-                            noteValue={}
+                            noteValue={noteValue}
                             // {data[id] ?? data[id] : ""}
                         >
                             {children}
