@@ -197,8 +197,6 @@
 
   </ShowOrHide>
 
-{' '}
-
 <Radio
     label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?"
     options={['Yes', 'No', 'N/A']}
@@ -373,7 +371,7 @@
     </Photo>
 
     ## Final Conditions
-    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa"  ? props.data?.postinstall_air_leakage_cfm50 : null } {' '} {props.data?.postinstall_attic_air_leakage_rate }</strong> </p>
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa"  ? props.data?.postinstall_air_leakage_cfm50 : null }{props.data?.postinstall_attic_air_leakage_rate }</strong> </p>
 
 
     <ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >

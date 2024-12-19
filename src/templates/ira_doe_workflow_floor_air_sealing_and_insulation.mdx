@@ -159,7 +159,7 @@
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.floor_airsealing_location ? ( Array.isArray(props.data.floor_airsealing_location) > 0 ? props.data.floor_airsealing_location.join(',') :  props.data.floor_airsealing_location) : null } </strong> </p>
 
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.floor_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50  : null }{' '}{ props.data?.floor_air_leakage_rate}  </strong></p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.floor_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50  : null }{ props.data?.floor_air_leakage_rate}  </strong></p>
 
     <ShowOrHide visible={ props.data?.floor_air_leakage_rate == 'CFM at 50Pa'}>
 

@@ -145,8 +145,6 @@
 
     ## Installation
 
-{' '}
-
 <Photo
     id="secure_and_seal_duct_photo"
     label="Secure and seal duct boots – Photo"
@@ -212,7 +210,7 @@
 
     <Photo id="postinstall_static_pressure_read_out_photo" label="Post-installation total external static pressure read out – Photo" required />
 
-    <p> Total duct leakage after air sealing:  <strong> {props.data?.post_install_duct_leakage_cfm25 && props.data?.postinstall_duct_leakage_rate === "CFM at 25Pa" ? props.data?.post_install_duct_leakage_cfm25 : null}{' '}{ props.data?.postinstall_duct_leakage_rate} </strong> </p>
+    <p> Total duct leakage after air sealing:  <strong> {props.data?.post_install_duct_leakage_cfm25 && props.data?.postinstall_duct_leakage_rate === "CFM at 25Pa" ? props.data?.post_install_duct_leakage_cfm25 : null}{ props.data?.postinstall_duct_leakage_rate} </strong> </p>
     <Photo id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo" required>
         Photo of floor plan sketch with the numbers
     </Photo>
