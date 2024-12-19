@@ -382,7 +382,7 @@
       </Photo>
 
       <p>Conditioned Volume (ft3): <strong>{props.data?.conditioned_volume_ft3}</strong> </p>
-      <p> ACH50 : <strong> {!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? (props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3: 'N/A'}</strong></p>
+      <p> ACH50 : <strong> {!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</strong></p>
 
   </ShowOrHide>
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_safety_briefing_to_homeowner}</strong> </p>
