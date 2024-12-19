@@ -1,18 +1,209 @@
-<Collapsible header="Combustion Appliance Safety Testing Details">
-    If the home upgrades will result in a barometric draft controlled or
-    Category I appliances equipped with a draft hood or connected to a natural
-    draft venting system remaining in the conditioned envelope of the home,
-    combustion safety checks are required to be performed at the completion of
-    the project. If the tests fail, a combustion air opening connecting the
-    combustion appliance area to the outdoors may need to be added or some other
-    remediation may be required. The combustion safety tests performed and
-    documented in this report follows the
-    <a
-        target="_blank"
-        href="http://www.bpi.org/sites/default/files/ANSI BPI-1200-S-2017 Standard Practice for Basic Analysis of Buildings.pdf"
-    >
-        ANSI /BPI-1200-S-2017 Standard Practice for Basic Analysis of Buildings
-        Technical Standard.
-    </a>
-</Collapsible>
-<CombustionSafetyChecks path="combustion_safety_tests" />
+<Tabs>
+    <Tab eventKey="test"  title="Appliance Safety Tests" >
+        <Collapsible header="Combustion Appliance Safety Testing Details">
+            If the home upgrades will result in a barometric draft
+            controlled or Category I appliances equipped with a draft hood
+            or connected to a natural draft venting system remaining in the
+            conditioned envelope of the home, combustion safety checks are
+            required to be performed at the completion of the project.
+            
+            If the tests fail, a combustion air opening connecting the
+            combustion appliance area to the outdoors may need to be added
+            or some other remediation may be required. The combustion safety
+            tests performed and documented in this report follows the{' '}
+            <a
+                target="_blank"
+                href="http://www.bpi.org/sites/default/files/ANSI BPI-1200-S-2017 Standard Practice for Basic Analysis of Buildings.pdf"
+            >
+                ANSI /BPI-1200-S-2017 Standard Practice for Basic Analysis
+                of Buildings Technical Standard.
+            </a>
+        </Collapsible>
+        <DateInput label="Assessment Date" path="assessment_date" />
+
+        <RepeatableInput path="combustion_safety_tests" label="Appliance: ">
+            <Radio
+                label="Appliance Type:"
+                options={['Gas/Oil Water Heater', 'Gas/Oil Furnace/Boiler']}
+                path="appliance_type"
+            />
+            <PhotoInput
+                id="indoor_ambient_air_co_level_photo"
+                label="Indoor ambient air CO level - Photo"
+                uploadable={false}
+            >
+                Indoor ambient air CO level readout photo (if the CO level is
+                above 9 PPM look for the source)
+            </PhotoInput>
+            <Radio
+                label="Does the ambient CO test pass?"
+                options={['Passed', 'Failed', 'Warning']}
+                path="ambient_CO_test"
+            />
+            <ShowOrHide path="appliance_type" value="Gas/Oil Water Heater">
+                <PhotoInput
+                    id="water_heater_photo"
+                    label="Water Heater Condition - Photo"
+                    uploadable={false}
+                >
+                    Take a photo of the combustion water heater. In the photo document
+                    any evidence of unsafe conditions such as corroded or leaking water
+                    connections, poorly supported water heater, or missing or inadequate
+                    seismic strapping where required.
+                </PhotoInput>
+                <PhotoInput
+                    id="water_heater_pipe_connection_leak_check_photo"
+                    label="Pipe Connection Leak Check - Photo"
+                    uploadable={false}
+                >
+                    <ul>
+                        <li>
+                            {' '}
+                            For gas pipping, take a photo of the combustion gas detector
+                            checking an accessible gas pipe connection, read out visible
+                            in the photo. Or if a leak is found, take a photo of the
+                            leaking connection with bubble solution applied.
+                        </li>
+
+                        <li>
+                            For oil supply systems, take a photo of the accessible tank
+                            and/or line components. If a leak is found, take a photo
+                            showing the leaking connection/area.
+                        </li>
+                    </ul>
+                </PhotoInput>
+                <Radio
+                    label="Does the leak check test pass?"
+                    options={['Passed', 'Failed']}
+                    path="water_heater_gas_leak_detection_test"
+                />
+                <PhotoInput
+                    id="water_heater_vent_photo"
+                    label="Water Heater Vent - Photo"
+                    uploadable={false}
+                >
+                    Take a photo of the venting components. If there is an unsafe
+                    configuration, focus the framing of the photo on that section.
+                </PhotoInput>
+                <PhotoInput
+                    id="water_heater_draft_photo"
+                    label="Water Heater Draft – Photo"
+                    uploadable={false}
+                >
+                    Take a photo of the draft test. The test can be a smoke pencil,
+                    lighter flame, or manometer pressure read-out. Perform test under
+                    ANSI/BPI-1200-S-2017 depressurization conditions if the appliance is
+                    inside the pressure boundary. Perform the test in accordance to BPI
+                    spillage assessment procedures.
+                </PhotoInput>
+                <Radio
+                    label="Does the spillage test(s) pass?"
+                    options={['Passed', 'Failed']}
+                    path="water_heater_spillage_test"
+                />
+                <PhotoInput
+                    id="water_heater_co_measurement_photo"
+                    label="Water heater CO measurement – Photo "
+                    uploadable={false}
+                >
+                    Take a photo of the combustion analyzer readouts. Perform test under
+                    ANSI/BPI-1200-S-2017 depressurization conditions if the appliance is
+                    inside the pressure boundary. Perform the test in accordance to BPI
+                    CO measurement procedures.
+                </PhotoInput>
+                <Radio
+                    label="Does the undiluted CO test pass?"
+                    options={['Passed', 'Failed']}
+                    path="water_heater_undiluted_CO_test"
+                />{' '}
+            </ShowOrHide>
+            <ShowOrHide path="appliance_type" value="Gas/Oil Furnace/Boiler">
+                <PhotoInput
+                    id="space_heating_appliance_photo"
+                    label="Space Heating Appliance - Photo "
+                    uploadable={false}
+                >
+                    Take a photo of the space heating appliance. In the photo
+                    document any evidence of unsafe conditions such as corroded
+                    flame tubes, poorly made duct connections, etc.
+                </PhotoInput>
+                <PhotoInput
+                    id="space_heating_pipe_connection_leak_check_photo"
+                    label="Pipe Connection Leak Check - Photo"
+                    uploadable={false}
+                >
+                    <ul>
+                        <li>
+                            {' '}
+                            For gas pipping, take a photo of the combustion gas
+                            detector checking an accessible gas pipe connection,
+                            read out visible in the photo. Or if a leak is found,
+                            take a photo of the leaking connection with bubble
+                            solution applied.
+                        </li>
+
+                        <li>
+                            For oil supply systems, take a photo of the accessible
+                            tank and/or line components. If a leak is found, take a
+                            photo showing the leaking connection/area.
+                        </li>
+                    </ul>
+                </PhotoInput>
+                <Radio
+                    label="Does the leak check test pass?"
+                    options={['Passed', 'Failed']}
+                    path="space_heating_gas_leak_detection_test"
+                />
+                <PhotoInput
+                    id="space_heating_appliance_vent_photo"
+                    label="Space heating Appliance Vent - Photo"
+                    uploadable={false}
+                >
+                    Take a photo of the venting components. If there is an unsafe
+                    configuration, focus the framing of the photo on that section.
+                </PhotoInput>
+                <PhotoInput
+                    id="space_heating_appliance_draft_photo"
+                    label="Space heating Appliance Draft – Photo"
+                    uploadable={false}
+                >
+                    Take a photo of the draft test. The test can be a smoke pencil,
+                    lighter flame, or manometer pressure read-out. Perform test
+                    under ANSI/BPI-1200-S-2017 depressurization conditions if the
+                    appliance is inside the pressure boundary. Perform the test in
+                    accordance to BPI spillage assessment procedures.
+                </PhotoInput>
+                <Radio
+                    label="Does the spillage test(s) pass?"
+                    options={['Passed', 'Failed']}
+                    path="space_heating_spillage_test"
+                />
+                <PhotoInput
+                    id="space_heating_appliance_co_measurement_photo"
+                    label="Space heating Appliance CO measurement – Photo "
+                    uploadable={false}
+                >
+                    Take a photo of the combustion analyzer readouts. Perform test
+                    under ANSI/BPI-1200-S-2017 depressurization conditions if the
+                    appliance is inside the pressure boundary. Perform the test in
+                    accordance to BPI CO measurement procedures.
+                </PhotoInput>
+                <Radio
+                    label="Does the undiluted CO test pass?"
+                    options={['Passed', 'Failed']}
+                    path="space_heating_undiluted_CO_test"
+                />{' '}
+            </ShowOrHide>
+        </RepeatableInput>
+    </Tab>
+    <Tab eventKey="report"  title="Report">
+        <PrintSection label="Print Report">
+              ---
+                # Combustion Appliance Safety Testing
+                ## Photo Report
+            **Assessment Date:**&nbsp; <DateStr date={props.data.assessment_date} />
+            <ProjectInfoReport {...props} />
+            <CombustionSafetyChecksReport {...props} />
+        </PrintSection>
+    </Tab>
+</Tabs>
