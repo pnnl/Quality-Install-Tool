@@ -21,6 +21,11 @@
     <PhotoInput id="dryer_circuit_photo" label="Dryer Circuit – Photo">
       Please take a picture of the circuit breaker that powers the heat pump clothes dryer.
     </PhotoInput>
+    <ShowOrHide visible={props.data?.existing_dryer_fuel_type === "Gas"}>
+      <PhotoInput id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo">
+        Please take a picture of the gas pipe showing it is off and capped.
+      </PhotoInput>
+    </ShowOrHide>
   </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
     ## Post Installation
@@ -36,26 +41,31 @@
 
     ## Existing Conditions
 
-    <p> What is the existing dryer fuel type?   <strong> { props.data.existing_dryer_fuel_type ? props.data.existing_dryer_fuel_type : null } </strong> </p>
+    <p> What is the existing dryer fuel type?   <strong> <LabelValue path="existing_dryer_fuel_type" /> </strong> </p>
 
     ## Installation
     
     <Photo id="nameplate_photo" label="Nameplate of the Heat Pump Dryer  – Photo" required>
-        Please take a photo of the nameplate of the heat pump dryer showing the model number and serial number.   
+        Photo of the nameplate of the heat pump dryer showing the model number and serial number   
     </Photo>
     <Photo id="condensate_management_photo" label="Condensate Management – Photo" required>
-        Please take a picture of the condensate drain location for the heat pump clothes dryer.
+        Photo of the condensate drain location for the heat pump clothes dryer
     </Photo>
     <Photo id="dryer_vent_capped_photo" label="Dryer Vent Capped  – Photo " required>
-        Please take a picture of the dryer vent capped and air sealed.
+        Photo of the dryer vent capped and air sealed
     </Photo>
     <Photo id="dryer_circuit_photo" label="Dryer Circuit – Photo" required>
-      Please take a picture of the circuit breaker that powers the heat pump clothes dryer.
+      Photo of the circuit breaker that powers the heat pump clothes dryer
     </Photo>
+    <ShowOrHide visible={props.data?.existing_dryer_fuel_type === "Gas"}>
+      <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
+        Photo of the gas pipe showing it is off and capped
+      </Photo>
+    </ShowOrHide>
 
     ## Post Installation
 
-    <p> What is the annual energy use estimated on the EnergyGuide label of the new clothes dryer? (kWh/yr)   <strong> { props.data.annual_enery_use ? props.data.annual_enery_use : null } </strong> </p>
+    <p> What is the annual energy use estimated on the EnergyGuide label of the new clothes dryer? (kWh/yr) <strong> <LabelValue path="annual_enery_use" /> </strong> </p>
 
     </PrintSection>
   </Tab>
