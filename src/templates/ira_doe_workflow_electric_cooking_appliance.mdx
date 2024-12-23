@@ -32,26 +32,26 @@
 
     ## Existing Conditions
 
-    <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data?.existing_cooking_appliance_type} </strong> </p>
+    <p> What is the fuel type of the existing stovetop/oven/range?  <strong> <LabelValue path="existing_cooking_appliance_type" /> </strong> </p>
 
 
     ## Installation
     <Photo id="electric_cooking_appliance_nameplate_photo" label="Nameplate of the Electric Cooking Appliance – Photo" required>
-        Please take a photo of the nameplate of the electric cooking appliance showing the model number and serial number.    
+        Photo of the nameplate of the electric cooking appliance showing the model number and serial number   
     </Photo>
     <Photo id="circuit_breaker_photo" label="Circuit Breaker – Photo " required>
-        Please take a picture of the circuit breaker that powers the electric cooling appliance.
+        Photo of the circuit breaker that powers the electric cooling appliance
     </Photo>
     
     <ShowOrHide visible={props.data?.existing_cooking_appliance_type === "Gas"}>
       <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
-        Please take a picture of the gas pipe showing it is off and capped.
+        Photo of the gas pipe showing it is off and capped
       </Photo>
     </ShowOrHide>
 
     ## Post Installation
 
-    <p> What is the fuel type of the new stovetop/oven/range?   <strong> { props.data?.postinstall_cooking_appliance_type } </strong> </p>
+    <p> What is the fuel type of the new stovetop/oven/range?   <strong><LabelValue path="postinstall_cooking_appliance_type" /> </strong> </p>
 
     </PrintSection>
   </Tab>

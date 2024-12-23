@@ -428,8 +428,6 @@ btn-light:hover {
   padding: 5px;
   z-index: 5; /* Ensures the button stays on top */
   cursor: pointer;
-  background-color: transparent !important;  /* Makes background transparent */
-  color: red;                  
   transform: scale(1.2);  /* Increase icon size */
   stroke-width: 2;
 }
