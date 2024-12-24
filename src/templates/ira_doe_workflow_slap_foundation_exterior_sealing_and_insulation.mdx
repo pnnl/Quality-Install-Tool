@@ -13,12 +13,20 @@
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="air_leakage_rate" />
-    
-    <ShowOrHide visible={props.data?.air_leakage_rate === 'CFM at 50Pa'}> 
-      <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
-      <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
-          Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
-      </PhotoInput>
+
+    <ShowOrHide visible={props.data?.air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+    | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
+    | <p><strong>ACH50: </strong>    {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</p>
+
+    <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+    </PhotoInput>
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+        Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
+    </PhotoInput>
     </ShowOrHide>
 
     ## General Safety
@@ -26,31 +34,31 @@
         Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
     </Collapsible>
 
-   
 
-    <Collapsible header="Drainage condition"> 
-    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
+
+    <Collapsible header="Drainage condition">
+    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or
     basement floor, check the gutters and downspouts are in good condition.
     </Collapsible>
     <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
 
-    <Collapsible header="Mold or Moisture in or Outside the Home"> 
-    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
-    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
+    <Collapsible header="Mold or Moisture in or Outside the Home">
+    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing
+    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse,
     thus it is important to check for the safety of the customer.
     </Collapsible>
     <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
 
-    <Collapsible header="Pre-retrofit mechanical ventilation calculation"> 
+    <Collapsible header="Pre-retrofit mechanical ventilation calculation">
     *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
     * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     </Collapsible>
     <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
-    
+
   </Tab>
   
   <Tab eventKey="installation" title="Installation">
@@ -59,42 +67,57 @@
     <PhotoInput id="exisitng_condition_photo" label="Existing Condition – Photo" >
      * Representative photo of a section of the foundation slab edge
      * Look for major cracks in concrete, signs of water damage or pest damage.
-    </PhotoInput> 
+    </PhotoInput>
 
     <PhotoInput id="moisture_test_photo" label="Moisture Test – Photo" >
      * Photo showing the moisture sensor reading of the wall sill plate.
-     * If the home’s walls were built on top of the concrete slab foundation without a sill gasket 
-     to break the capillary action, the walls could have moisture problems. Probing the sill plate 
-     with a pin type moisture sensor can determine of there is a moisture problem that should be 
+     * If the home’s walls were built on top of the concrete slab foundation without a sill gasket
+     to break the capillary action, the walls could have moisture problems. Probing the sill plate
+     with a pin type moisture sensor can determine of there is a moisture problem that should be
      addressed prior to air sealing and insulation.
-     * If the sill plates are indeed wet due to the lack of a sill gasket, the walls can be lifted 
-     with jacks just enough to retrofit a sill gasket. This work is invasive and will damage air 
+     * If the sill plates are indeed wet due to the lack of a sill gasket, the walls can be lifted
+     with jacks just enough to retrofit a sill gasket. This work is invasive and will damage air
      sealing and insulation work, thus it should be done prior.
-    </PhotoInput> 
+    </PhotoInput>
 
     <PhotoInput id="foundation_wall_insulation_photo" label="Foundation Wall Insulation – Photo" >
        * Photo showing the insulation and protective details prior to backfilling
        * The top of the exterior insulation should be flashed and detailed in a manner to promote positive drainage
        * In regions with medium or high termite risk the protective details should meet best practices or local jurisdiction requirements for termite risk mitigation.
-    </PhotoInput> 
+    </PhotoInput>
 
     <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " >
       Photo showing the backfill and gutter downspouts reinstalled
-    </PhotoInput> 
+    </PhotoInput>
 
     <PhotoInput id="interior_still_air_sealing_photo" label="Interior Sill Plate Air Sealing – Photo" >
       * Photo showing the interior slab to sill plate connection has been air sealed
       * Take this photo prior to the reinstallation of baseboard moulding.
-    </PhotoInput> 
+    </PhotoInput>
 
   </Tab>  
   <Tab eventKey="post_installation"  title="Post-Installation">
   
   ## Final Conditions
 
-  <Select label="What percent of the foundation perimeter was insulated?" options={["10%","25%","50%","75%","100%"]} path="postinstall_foundation_perimeter_percent" />
+<Select
+    label="What percent of the foundation perimeter was insulated?"
+    options={['10%', '25%', '50%', '75%', '100%']}
+    path="postinstall_foundation_perimeter_percent"
+/>
 
-  <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
+<Select
+    label="What R-value was added to the foundation perimeter?"
+    options={[
+        'Less than R-10',
+        'R-10',
+        'R-13',
+        'R-19',
+        'R-30',
+        'more than R-30',
+    ]}
+    path="postinstall_foundation_r_value"
+/>
 
   <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
   <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
@@ -133,11 +156,24 @@
     <p> What is the foundation type?  <strong> { props.data?.slab_foundation_type} </strong> </p>
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.airsealing_location ? ( Array.isArray(props.data.airsealing_location) > 0 ? props.data.airsealing_location.join(',') :  props.data?.airsealing_location) : null } </strong> </p>
-    
+
     <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.air_leakage_rate == 'CFM at 50Pa' ? ":" + props.data?.air_leakage_cfm50+ " "  : null }{ props.data?.air_leakage_rate} </strong></p>
-    <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
-        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
-    </Photo>
+    <ShowOrHide visible={props.data?.air_leakage_rate == 'CFM at 50Pa'} >
+      <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3} </strong></p>
+      <p>ACH50: <strong>{!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</strong></p>
+      <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
+          Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+      </Photo>
+      <Photo
+        id="conditioned_volume_photo"
+        label="Conditioned floor area and air volume calculation– Photo"
+        required>
+        Photo of the math used to determine the conditioned floor area and
+        volume, label the rooms/sections and the corresponding length, width,
+        and height.
+      </Photo>
+
+    </ShowOrHide>
 
     ## General Safety
     <p> What is the drainage system condition?   <strong> { props.data?.drainage_condition } </strong></p>
@@ -149,23 +185,23 @@
 
      <Photo id="exisitng_condition_photo" label="Existing Condition – Photo" required>
       Representative photo of a section of the foundation slab edge
-    </Photo> 
+    </Photo>
 
     <Photo id="moisture_test_photo" label="Moisture Test – Photo" required>
      Photo showing the moisture sensor reading of the wall sill plate.
-    </Photo> 
+    </Photo>
 
     <Photo id="foundation_wall_insulation_photo" label="Foundation Wall Insulation – Photo" required>
        Photo showing the insulation and protective details prior to backfilling
-    </Photo> 
+    </Photo>
 
     <Photo id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " required>
       Photo showing the backfill and gutter downspouts reinstalled
-    </Photo> 
+    </Photo>
 
     <Photo id="interior_still_air_sealing_photo" label="Interior Sill Plate Air Sealing – Photo" required>
       Photo showing the interior slab to sill plate connection has been air sealed
-    </Photo>  
+    </Photo>
 
     ## Final Conditions
 
@@ -174,7 +210,7 @@
     <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
 
     <p> What is the air sealing level you have achieved? <strong>{
-    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ? 
+    props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ?
      props.data?.postinstall_foundation_air_leakage_cfm50 + " " : null}{props.data?.postinstall_foundation_air_leakage_level}</strong> </p>
 
     { props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' && (
@@ -185,7 +221,7 @@
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+    <CombustionSafetyChecksReport {...props} />
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
@@ -198,5 +234,6 @@
             )}
 
     </PrintSection>
+
   </Tab>
 </Tabs>

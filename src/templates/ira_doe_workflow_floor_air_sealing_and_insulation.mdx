@@ -1,6 +1,5 @@
 <Tabs>
 
-
   <Tab eventKey="pre-installation" title="Pre-Installation">
     ## Existing Conditions
     <Collapsible header="Existing Conditions">
@@ -14,7 +13,7 @@
     insulated prior to this work.
 
     <Figure src="/images/floor_insulation/floor_insulation.jpeg">
-      Floor Air Sealing and Insulation Above Unconditioned Space 
+      Floor Air Sealing and Insulation Above Unconditioned Space
     </Figure>
 
     </Collapsible>
@@ -24,43 +23,52 @@
     <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Floor/Foundation']} default_value={['Floor/Foundation']} path="floor_airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="floor_air_leakage_rate" />
-    
-    <ShowOrHide visible={props.data?.floor_air_leakage_rate === 'CFM at 50Pa'}> 
-    <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+
+    <ShowOrHide visible={props.data?.floor_air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+    | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
+    | <p><strong>ACH50: </strong>{!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</p>
+
+
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
+        <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+        Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
+    </PhotoInput>
     </ShowOrHide>
 
-    <Radio label="Is the home located in a flood plain?" options={['Yes','No']} path="floor_air_sealing_flood_plan">The installation of flood vents is recommended for crawlspace/basement 
+    <Radio label="Is the home located in a flood plain?" options={['Yes','No']} path="floor_air_sealing_flood_plan">The installation of flood vents is recommended for crawlspace/basement
     foundations for homes located in a flood plain. </Radio>
 
     <Radio label="Is the home located in an area with a risk of high radon levels?" options={['Yes','No']} path="floor_air_sealing_risk_of_radon">Air sealing and insulation can increase indoor radon level</Radio>
 
     <Select label="What percent of floor area is above unconditioned space (choose the closest)? " options={["10%","25%","50%","75%","100%"]} path="floor_area_unconditioned_space_percent" />
-    
+
     ## General Safety
     <Collapsible header="General Safety">
-        Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, 
+        Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer,
         it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues in the crawlspace include: missing or leaking gutters or downspouts, inadequate or reversed grading around the home, or missing or poor condition vapor barrier.
     </Collapsible>
 
-    <Collapsible header="Drainage condition"> 
-    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or 
+    <Collapsible header="Drainage condition">
+    Check the grade around the home is sloped away from the house, check for standing water in the crawlspace or
     basement floor, check the gutters and downspouts are in good condition.
     </Collapsible>
     <Radio label="What is the drainage system condition?" options={['Good','Potential Issue']} path="drainage_condition" />
 
-    <Collapsible header="Mold or Moisture in or Outside the Home"> 
-    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
-    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
+    <Collapsible header="Mold or Moisture in or Outside the Home">
+    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing
+    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse,
     thus it is important to check for the safety of the customer.
     </Collapsible>
     <Radio label="Are there signs of mold or moisture in or outside the home?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
 
-    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation"> 
+    <Collapsible header="Pre-retrofit ASHRAE 62.2 calculation">
     *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     </Collapsible>
     <Radio label="Has an ASHRAE 62.2 calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
@@ -82,18 +90,18 @@
 
     <PhotoInput id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photo">
     Please provide a representative photo of plumbing, electrical, and/or duct penetrations through the subfloor air sealed.
-    </PhotoInput> 
-    
+    </PhotoInput>
+
     <PhotoInput id="floor_joist_air_sealed_and_insulated_photo" label="Floor Joists Air Sealed and Insulated – Photo">
     Please provide a photo of floor joists air sealed and insulated using one of the three methods below
       1.	Rigid foam under the floor joists with joist cavities uninsulated, the joints of the rigid foam should be taped
       2.	Rigid foam under the floor joists with joist cavities insulated,
-      3.	Joist cavities and joists insulated with close-cell spray foam encapsulating joist tips also. 
+      3.	Joist cavities and joists insulated with close-cell spray foam encapsulating joist tips also.
       Insulated to climate zone requirements.
     </PhotoInput>
 
     <PhotoInput id="pipe_penetration_thru_foram_boards_photo" label="Foam Board Penetrations Sealed – Photo">
-      If the air sealing and insulation of the floor uses rigid foam board insulation, please provide a photo showing pipe penetrations through the foam board have been air sealed with spray foam. 
+      If the air sealing and insulation of the floor uses rigid foam board insulation, please provide a photo showing pipe penetrations through the foam board have been air sealed with spray foam.
     </PhotoInput>
 
     <PhotoInput id="foundation_floor_photo" label="Foundation floor – Photo">
@@ -107,9 +115,9 @@
 
     <PhotoInput id="crawl_door_access_photo" label="Crawlspace Door/Access – Photo">
       * If the door/access is between the outside and the unconditioned space it must have weatherstripping and a secure lock.
-      * If the door/access is between conditioned space and the unconditioned space it must have weatherstripping and insulation. 
+      * If the door/access is between conditioned space and the unconditioned space it must have weatherstripping and insulation.
     </PhotoInput>
-       
+
   </Tab>  
   <Tab eventKey="post_installation"  title="Post-Installation">
   ## Final Conditions
@@ -150,19 +158,31 @@
     <p> What is the foundation type?  <strong> { props.data?.floor_airsealing_foundation_type} </strong> </p>
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.floor_airsealing_location ? ( Array.isArray(props.data.floor_airsealing_location) > 0 ? props.data.floor_airsealing_location.join(',') :  props.data.floor_airsealing_location) : null } </strong> </p>
-    
-    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.floor_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50  : null }{' '}{ props.data?.floor_air_leakage_rate}  </strong></p>
-    
+
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.floor_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50  : null }{ props.data?.floor_air_leakage_rate}  </strong></p>
+
     <ShowOrHide visible={ props.data?.floor_air_leakage_rate == 'CFM at 50Pa'}>
+
+      <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3}</strong></p>
+      <p>ACH50: <strong> {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1) : 'N/A'}</strong></p>
+
       <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
-          Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
-     </Photo>
+            Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+      </Photo>
+      <Photo
+        id="conditioned_volume_photo"
+        label="Conditioned floor area and air volume calculation– Photo"
+        required>
+        Photo of the math used to determine the conditioned floor area and
+        volume, label the rooms/sections and the corresponding length, width,
+        and height.
+      </Photo>
     </ShowOrHide>
-    
+
     <p> Is the home located in a flood plain?  <strong> { props.data?.floor_air_sealing_flood_plan} </strong> </p>
 
     <p> Is the home located in an area with a risk of high radon levels?  <strong> { props.data?.floor_air_sealing_risk_of_radon} </strong> </p>
-    
+
     <p> What percent of floor area is above unconditioned space? <strong> { props.data?.floor_area_unconditioned_space_percent} </strong> </p>
 
 
@@ -175,8 +195,8 @@
 
     ## Installation
 
-    <Photo id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photo" required /> 
-    
+    <Photo id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photo" required />
+
     <Photo id="floor_joist_air_sealed_and_insulated_photo" label="Floor Joists Air Sealed and Insulated – Photo" required>
       Photo of the Floor Joists Air Sealed and Insulated using one of three methods
     </Photo>
@@ -201,7 +221,7 @@
     <p> What R-value was added to the floor? <strong>{props.data?.postinstall_floor_r_value}</strong> </p>
 
     <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_air_leakage_cfm50 && props.data?.postinstall_floor_air_leakage_level === 'CFM at 50Pa' ? props.data?.postinstall_air_leakage_cfm50 +" " : null} {props.data?.postinstall_floor_air_leakage_level}</strong> </p>
-  
+
 
     <ShowOrHide visible={props.data?.postinstall_floor_air_leakage_level === 'CFM at 50Pa'}>
       <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>
@@ -210,19 +230,22 @@
     </ShowOrHide>
 
 
-    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+    <CombustionSafetyChecksReport {...props} />
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality? <strong> { props.data?.post_retrofit_ashrae_62_2_calculation} </strong> </p>
 
-   {props.metadata?.attachments?.project_invoice_photo && (
-            <><h2> Project Invoice</h2>
-            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
-                Photo of the project invoice
-            </Photo> </>
-            )}
+{props.metadata?.attachments?.project_invoice_photo && (
 
+<>
+    <h2> Project Invoice</h2>
+    <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+        Photo of the project invoice
+    </Photo>
+</>
+)}
 
     </PrintSection>
+
   </Tab>
 </Tabs>
