@@ -17,7 +17,7 @@ interface PhotoInputProps {
     photos: { id: string; photo: Blob; metadata: PhotoMetaData }[] // Changed to array of photos with metadata
     upsertPhoto: (file: Blob) => void // Function to add new photo
     deletePhoto: (photoId: string) => void // Function to delete photo by index
-    uploadable: boolean
+    uploadable?: boolean
     loading: boolean
     error: string
     count: number

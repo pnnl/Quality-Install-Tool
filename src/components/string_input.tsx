@@ -11,7 +11,7 @@ interface StringInputProps {
     min: number
     max: number
     regexp: RegExp
-    hint: string
+    hint?: string
 }
 
 /**

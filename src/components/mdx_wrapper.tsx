@@ -47,7 +47,7 @@ const CombustionSafetyChecksReport = React.lazy(
     () => import('../templates/reusable/combustion_safety_checks_report.mdx'),
 )
 const LabelValueWrapper = React.lazy(() => import('./label_value_wrapper'))
-const NewProjectPopup = React.lazy(() => import('./new_project_popup'))
+const NewProject = React.lazy(() => import('./new_project'))
 
 const components = {
     Collapsible,
@@ -82,7 +82,7 @@ const components = {
     RepeatableInput: RepeatableInputWrapper,
     Repeatable: RepeatableWrapper,
     LabelValue: LabelValueWrapper,
-    NewProjectPopup: NewProjectPopup,
+    NewProject: NewProject,
 }
 
 interface MdxWrapperProps {

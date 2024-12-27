@@ -11,6 +11,7 @@ const Home = lazy(() => import('./components/home'))
 const MdxProjectView = lazy(
     () => import('./components/mdx_project_details_view'),
 )
+const NewProject = lazy(() => import('./components/new_project'))
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
 const MdxCombustionSafetyView = lazy(
     () => import('./components/mdx_combustion_appliance_safety_view'),
@@ -70,11 +71,14 @@ const routes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
-                    <MdxProjectView />
+                    {/* <MdxProjectView />
+                    <h1>NEW PROJECT BELOW</h1> */}
+                    <NewProject />
                 </RootLayout>
             </Suspense>
         ),
     },
+
     {
         path: `/app/:projectId/:workflowName`,
         // Jobs List View: Lists existing installations associated with a particular workflow
