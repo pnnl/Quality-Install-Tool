@@ -71,8 +71,8 @@ const routes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
-                    {/* <MdxProjectView />
-                    <h1>NEW PROJECT BELOW</h1> */}
+                    <MdxProjectView />
+                    <h1>NEW PROJECT BELOW</h1>
                     <NewProject />
                 </RootLayout>
             </Suspense>
@@ -119,6 +119,7 @@ const routes = [
 const router = createBrowserRouter(routes)
 
 function App(): any {
+    debugger
     return <RouterProvider router={router} />
 }
 

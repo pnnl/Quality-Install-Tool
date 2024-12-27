@@ -83,6 +83,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     type,
     parentId,
 }) => {
+    debugger
     const changesRef = useRef<PouchDB.Core.Changes<{}>>()
     const revisionRef = useRef<string>()
     // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
@@ -255,6 +256,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      */
     const upsertDoc: UpsertDoc = (pathStr, data) => {
         // Update doc state
+        debugger
 
         const newDoc = immutableUpsert(
             doc,
@@ -440,6 +442,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             upsertBlobDB(revisionRef.current)
         }
     }
+
     return (
         <StoreContext.Provider
             value={{
