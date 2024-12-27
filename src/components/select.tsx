@@ -8,7 +8,7 @@ interface SelectProps {
     label: string
     options: string[]
     updateValue: (inputValue: string) => void
-    value: string
+    value?: string
 }
 
 /**

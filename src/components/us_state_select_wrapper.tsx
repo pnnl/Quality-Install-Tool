@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import SelectWrapper from './select_wrapper'
 
-const US_STATES = [
+export const US_STATES = [
     'Alabama',
     'Alaska',
     'Arizona',
