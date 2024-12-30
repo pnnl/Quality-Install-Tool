@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState } from 'react'
 import { Form, Button, FloatingLabel } from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
-import { StoreProvider, StoreContext } from './store' // Import StoreProvider and StoreContext
+
 import { useDB } from '../utilities/database_utils'
-import DBName from '../utilities/db_details'
-import { useParams } from 'react-router-dom'
+
 import { useLocation } from 'react-router-dom'
 
 const NewProjectForm = () => {
-    debugger
-    const { upsertAttachment, upsertData, upsertMetadata } =
-        useContext(StoreContext) // Use context
     const [projectDocs, setProjectDocs] = useState<any[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
@@ -29,37 +25,20 @@ const NewProjectForm = () => {
     //     project_info()
     // }, [db])
 
+    const location = useLocation()
+    const url = location.pathname
+    const extractIdFromURL = (url: string) => {
+        // Assuming the URL is in the format .../app/{id}
+        const parts = url.split('/app/')
+        return parts.length > 1 ? parts[1] : null
+    }
+    const docId = extractIdFromURL(url)
+
     const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault() // stops the page refresh
         if (validateDocName(docName)) {
             const form = e.target as HTMLFormElement
             const formData = new FormData(form)
-
-            // Upsert metadata
-            upsertMetadata('status', 'created')
-            upsertMetadata('doc_name', docName)
-            upsertMetadata('created_at', new Date().toISOString())
-            upsertMetadata('last_modified_at', new Date().toISOString())
-
-            // Upsert form data under appropriate fields
-            upsertData(
-                'installer.company_name',
-                formData.get('installation_company') || '',
-            )
-            upsertData('installer.name', formData.get('technician_name') || '')
-            upsertData(
-                'installer.mailing_address',
-                formData.get('company_address') || '',
-            )
-            upsertData('installer.phone', formData.get('company_phone') || '')
-            upsertData('installer.email', formData.get('company_email') || '')
-            upsertData(
-                'location.street_address',
-                formData.get('street_address') || '',
-            )
-            upsertData('location.city', formData.get('city') || '')
-            upsertData('location.state', formData.get('state') || '')
-            upsertData('location.zip_code', formData.get('zip_code') || '')
 
             alert('submitted')
         } else {
@@ -94,29 +73,37 @@ const NewProjectForm = () => {
         setDocNameError('')
         return true
     }
-    const location = useLocation()
-    const url = location.pathname
-    const extractIdFromURL = (url: string) => {
-        // Assuming the URL is in the format .../app/{id}
-        const parts = url.split('/app/')
-        return parts.length > 1 ? parts[1] : null
-    }
-    const docId = extractIdFromURL(url)
 
     const updateFieldInDocument = async (docId: any, updates: any) => {
-        // debugger
         try {
             // Fetch the document
             const doc = await db.get(docId)
+            // console.log(doc)
+            // debugger
 
-            // Modify the fields
+            // Destructure the metadata to update the last_modified_at field
+            const { metadata_ } = doc
+            const updatedMetadata = {
+                ...metadata_,
+                last_modified_at: new Date().toISOString(),
+            }
+
+            // Create an updated data_ object with the new installer info
+            const updatedData = {
+                ...doc.data_,
+                installer: {
+                    ...doc.data_.installer,
+                    company_name: updates['data_.installer.company_name'],
+                    email: updates['data_.installer.email'],
+                },
+            }
+
+            // Construct the updated document
             const updatedDoc = {
                 ...doc,
-                ...updates,
-                metadata_: {
-                    ...doc.metadata_,
-                    last_modified_at: new Date().toISOString(),
-                },
+                data_: updatedData,
+                metadata_: updatedMetadata,
+                _rev: doc._rev, // retain the current revision
             }
 
             // Save the updated document
@@ -206,8 +193,9 @@ const NewProjectForm = () => {
             <FloatingLabel controlId="zip_code" label="Zip Code">
                 <Form.Control type="text" name="zip_code" />
             </FloatingLabel>
+            <h1>PUT PHOTO UPLOAD HERE</h1>
 
-            <Form.Group controlId="building_number_photo" className="mb-3">
+            {/* <Form.Group controlId="building_number_photo" className="mb-3">
                 <Form.Label>Building Number – Photo</Form.Label>
                 <Form.Control
                     type="file"
@@ -223,7 +211,7 @@ const NewProjectForm = () => {
                     Provide a photo of the building that shows the building
                     number.
                 </Form.Text>
-            </Form.Group>
+            </Form.Group> */}
 
             <Button variant="secondary" type="button">
                 Cancel
