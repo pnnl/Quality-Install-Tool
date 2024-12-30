@@ -11,7 +11,7 @@ const Home = lazy(() => import('./components/home'))
 const MdxProjectView = lazy(
     () => import('./components/mdx_project_details_view'),
 )
-const NewProject = lazy(() => import('./components/new_project'))
+const WrappedNewProjectForm = lazy(() => import('./components/new_project'))
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
 const MdxCombustionSafetyView = lazy(
     () => import('./components/mdx_combustion_appliance_safety_view'),
@@ -73,7 +73,7 @@ const routes = [
                 <RootLayout>
                     {/* <MdxProjectView />
                     <h1>NEW PROJECT BELOW</h1> */}
-                    <NewProject />
+                    <WrappedNewProjectForm />
                 </RootLayout>
             </Suspense>
         ),

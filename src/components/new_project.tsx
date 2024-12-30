@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, FloatingLabel } from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
-
 import { useDB } from '../utilities/database_utils'
-
 import { useLocation, useNavigate } from 'react-router-dom'
+import PhotoInputWrapper from './photo_input_wrapper' // Import the PhotoInputWrapper component
+import { StoreProvider, StoreContext } from './store'
 
 const NewProjectForm = () => {
     const navigate = useNavigate()
+    const { docId } = React.useContext(StoreContext) // Access the context to get docId
     const [projectDocs, setProjectDocs] = useState<any[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
@@ -15,13 +16,22 @@ const NewProjectForm = () => {
     const [docStatus, setDocStatus] = useState<string>('')
     const db = useDB()
 
-    const location = useLocation()
-    const url = location.pathname
-    const extractIdFromURL = (url: string) => {
-        const parts = url.split('/app/')
-        return parts.length > 1 ? parts[1] : null
-    }
-    const docId = extractIdFromURL(url)
+    useEffect(() => {
+        const fetchProjectDoc = async () => {
+            if (docId) {
+                try {
+                    const doc = await db.get(docId)
+                    setFormData(doc.data_)
+                    setDocName(doc.metadata_.doc_name)
+                    setDocStatus(doc.metadata_.status)
+                } catch (error) {
+                    console.error('Error fetching document:', error)
+                }
+            }
+        }
+
+        fetchProjectDoc()
+    }, [docId, db])
 
     const deleteEmptyProject = async () => {
         try {
@@ -49,23 +59,6 @@ const NewProjectForm = () => {
 
         deleteEmptyProject()
     }
-
-    useEffect(() => {
-        const fetchProjectDoc = async () => {
-            if (docId) {
-                try {
-                    const doc = await db.get(docId)
-                    setFormData(doc.data_)
-                    setDocName(doc.metadata_.doc_name)
-                    setDocStatus(doc.metadata_.status)
-                } catch (error) {
-                    console.error('Error fetching document:', error)
-                }
-            }
-        }
-
-        fetchProjectDoc()
-    }, [docId, db])
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault() // stops the page refresh
@@ -287,7 +280,15 @@ const NewProjectForm = () => {
                     defaultValue={formData.project_address?.zip_code || ''}
                 />
             </FloatingLabel>
-            <h1>PUT PHOTO UPLOAD HERE</h1>
+
+            {/* Photo Upload Wrapper */}
+            <PhotoInputWrapper
+                id="project_photos"
+                label="Upload Project Photos"
+                uploadable
+            >
+                <em>Please upload photos related to your project.</em>
+            </PhotoInputWrapper>
 
             <Button
                 onClick={handleCancelButtonClick}
@@ -301,4 +302,40 @@ const NewProjectForm = () => {
     )
 }
 
-export default NewProjectForm
+const WrappedNewProjectForm = ({
+    dbName,
+    workflowName,
+    docName,
+    type,
+    parentId,
+}: {
+    dbName: string
+    workflowName: string
+    docName: string
+    type: string
+    parentId?: string
+}) => {
+    const location = useLocation()
+    const extractIdFromURL = (url: string) => {
+        const parts = url.split('/app/')
+        return parts.length > 1 ? parts[1] : null
+    }
+    const docId = extractIdFromURL(location.pathname)
+
+    if (!docId) return <div>Error: Cannot find document ID in the URL.</div>
+
+    return (
+        <StoreProvider
+            dbName={dbName}
+            docId={docId}
+            workflowName={workflowName}
+            docName={docName}
+            type={type}
+            parentId={parentId}
+        >
+            <NewProjectForm />
+        </StoreProvider>
+    )
+}
+
+export default WrappedNewProjectForm
