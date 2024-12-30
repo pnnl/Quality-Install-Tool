@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, FloatingLabel } from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
 
@@ -11,6 +11,7 @@ const NewProjectForm = () => {
     const [projectDocs, setProjectDocs] = useState<any[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
+    const [formData, setFormData] = useState<any>({})
     const db = useDB() // Assuming useDB() provides the necessary db instance
 
     const location = useLocation()
@@ -20,6 +21,22 @@ const NewProjectForm = () => {
         return parts.length > 1 ? parts[1] : null
     }
     const docId = extractIdFromURL(url)
+
+    useEffect(() => {
+        const fetchProjectDoc = async () => {
+            if (docId) {
+                try {
+                    const doc = await db.get(docId)
+                    setFormData(doc.data_)
+                    setDocName(doc.metadata_.doc_name)
+                } catch (error) {
+                    console.error('Error fetching document:', error)
+                }
+            }
+        }
+
+        fetchProjectDoc()
+    }, [docId, db])
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault() // stops the page refresh
@@ -159,39 +176,72 @@ const NewProjectForm = () => {
             </p>
 
             <FloatingLabel controlId="technician_name" label="Technician Name">
-                <Form.Control type="text" name="technician_name" />
+                <Form.Control
+                    type="text"
+                    name="technician_name"
+                    defaultValue={formData.installer?.technician_name || ''}
+                />
             </FloatingLabel>
 
             <FloatingLabel
                 controlId="installation_company"
                 label="Installation Company"
             >
-                <Form.Control type="text" name="installation_company" />
+                <Form.Control
+                    type="text"
+                    name="installation_company"
+                    defaultValue={formData.installer?.company_name || ''}
+                />
             </FloatingLabel>
 
             <FloatingLabel controlId="company_address" label="Company Address">
-                <Form.Control type="text" name="company_address" />
+                <Form.Control
+                    type="text"
+                    name="company_address"
+                    defaultValue={formData.installer?.company_address || ''}
+                />
             </FloatingLabel>
 
             <FloatingLabel controlId="company_phone" label="Company Phone">
-                <Form.Control type="text" name="company_phone" />
+                <Form.Control
+                    type="text"
+                    name="company_phone"
+                    defaultValue={formData.installer?.company_phone || ''}
+                />
             </FloatingLabel>
 
             <FloatingLabel controlId="company_email" label="Company Email">
-                <Form.Control type="text" name="company_email" />
+                <Form.Control
+                    type="text"
+                    name="company_email"
+                    defaultValue={formData.installer?.company_email || ''}
+                />
             </FloatingLabel>
 
             <h5>Project Address</h5>
             <FloatingLabel controlId="street_address" label="Street Address">
-                <Form.Control type="text" name="street_address" />
+                <Form.Control
+                    type="text"
+                    name="street_address"
+                    defaultValue={
+                        formData.project_address?.street_address || ''
+                    }
+                />
             </FloatingLabel>
 
             <FloatingLabel controlId="city" label="City">
-                <Form.Control type="text" name="city" />
+                <Form.Control
+                    type="text"
+                    name="city"
+                    defaultValue={formData.project_address?.city || ''}
+                />
             </FloatingLabel>
 
             <FloatingLabel className="mb-3" controlId="state" label="State">
-                <Form.Select name="state">
+                <Form.Select
+                    name="state"
+                    defaultValue={formData.project_address?.state || ''}
+                >
                     <option key="" value="" />
                     {US_STATES.map(option => (
                         <option key={option} value={option}>
@@ -202,7 +252,11 @@ const NewProjectForm = () => {
             </FloatingLabel>
 
             <FloatingLabel controlId="zip_code" label="Zip Code">
-                <Form.Control type="text" name="zip_code" />
+                <Form.Control
+                    type="text"
+                    name="zip_code"
+                    defaultValue={formData.project_address?.zip_code || ''}
+                />
             </FloatingLabel>
             <h1>PUT PHOTO UPLOAD HERE</h1>
 
