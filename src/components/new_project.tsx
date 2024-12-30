@@ -4,43 +4,48 @@ import { US_STATES } from './us_state_select_wrapper'
 
 import { useDB } from '../utilities/database_utils'
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const NewProjectForm = () => {
+    const navigate = useNavigate()
     const [projectDocs, setProjectDocs] = useState<any[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
     const db = useDB() // Assuming useDB() provides the necessary db instance
 
-    // useEffect(() => {
-    //     const project_info = async (): Promise<void> => {
-    //         const { retrieveProjectDocs } = await import(
-    //             '../utilities/database_utils'
-    //         )
-    //         retrieveProjectDocs(db).then((res: any) => {
-    //             setProjectDocs(res)
-    //         })
-    //     }
-
-    //     project_info()
-    // }, [db])
-
     const location = useLocation()
     const url = location.pathname
     const extractIdFromURL = (url: string) => {
-        // Assuming the URL is in the format .../app/{id}
         const parts = url.split('/app/')
         return parts.length > 1 ? parts[1] : null
     }
     const docId = extractIdFromURL(url)
 
-    const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault() // stops the page refresh
         if (validateDocName(docName)) {
             const form = e.target as HTMLFormElement
             const formData = new FormData(form)
+            const updates = {
+                'metadata_.doc_name': formData.get('doc_name'),
+                'data_.installer.technician_name':
+                    formData.get('technician_name'),
+                'data_.installer.company_name': formData.get(
+                    'installation_company',
+                ),
+                'data_.installer.company_address':
+                    formData.get('company_address'),
+                'data_.installer.company_phone': formData.get('company_phone'),
+                'data_.installer.company_email': formData.get('company_email'),
+                'data_.project_address.street_address':
+                    formData.get('street_address'),
+                'data_.project_address.city': formData.get('city'),
+                'data_.project_address.state': formData.get('state'),
+                'data_.project_address.zip_code': formData.get('zip_code'),
+            }
 
-            alert('submitted')
+            await updateFieldInDocument(docId, updates)
+            navigate('/', { replace: true })
         } else {
             alert('Please fix form errors before submitting.')
         }
@@ -74,27 +79,41 @@ const NewProjectForm = () => {
         return true
     }
 
-    const updateFieldInDocument = async (docId: any, updates: any) => {
+    const updateFieldInDocument = async (
+        docId: string | null,
+        updates: Record<string, any>,
+    ) => {
         try {
             // Fetch the document
             const doc = await db.get(docId)
-            // console.log(doc)
-            // debugger
 
             // Destructure the metadata to update the last_modified_at field
             const { metadata_ } = doc
             const updatedMetadata = {
                 ...metadata_,
+                doc_name: updates['metadata_.doc_name'],
                 last_modified_at: new Date().toISOString(),
+                status: 'created',
             }
 
-            // Create an updated data_ object with the new installer info
+            // Create an updated data_ object with the new installer and project info
             const updatedData = {
                 ...doc.data_,
                 installer: {
                     ...doc.data_.installer,
                     company_name: updates['data_.installer.company_name'],
-                    email: updates['data_.installer.email'],
+                    email: updates['data_.installer.company_email'],
+                    technician_name: updates['data_.installer.technician_name'],
+                    company_address: updates['data_.installer.company_address'],
+                    company_phone: updates['data_.installer.company_phone'],
+                },
+                project_address: {
+                    ...doc.data_.project_address,
+                    street_address:
+                        updates['data_.project_address.street_address'],
+                    city: updates['data_.project_address.city'],
+                    state: updates['data_.project_address.state'],
+                    zip_code: updates['data_.project_address.zip_code'],
                 },
             }
 
@@ -111,16 +130,8 @@ const NewProjectForm = () => {
             console.log('Document updated successfully', response)
         } catch (error) {
             console.error('Error updating document:', error)
-            return <div>ERROR</div>
         }
     }
-
-    const updates = {
-        'data_.installer.company_name': 'Updated Company Name',
-        'data_.installer.email': 'updated_email@example.com',
-    }
-
-    updateFieldInDocument(docId, updates)
 
     return (
         <Form onSubmit={handleSubmitForm}>
@@ -194,24 +205,6 @@ const NewProjectForm = () => {
                 <Form.Control type="text" name="zip_code" />
             </FloatingLabel>
             <h1>PUT PHOTO UPLOAD HERE</h1>
-
-            {/* <Form.Group controlId="building_number_photo" className="mb-3">
-                <Form.Label>Building Number – Photo</Form.Label>
-                <Form.Control
-                    type="file"
-                    name="building_number_photo"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files?.[0]
-                        if (file) {
-                            upsertAttachment(file, 'building_number_photo')
-                        }
-                    }}
-                />
-                <Form.Text className="text-muted">
-                    Provide a photo of the building that shows the building
-                    number.
-                </Form.Text>
-            </Form.Group> */}
 
             <Button variant="secondary" type="button">
                 Cancel
