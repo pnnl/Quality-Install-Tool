@@ -12,7 +12,8 @@ const NewProjectForm = () => {
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
     const [formData, setFormData] = useState<any>({})
-    const db = useDB() // Assuming useDB() provides the necessary db instance
+    const [docStatus, setDocStatus] = useState<string>('')
+    const db = useDB()
 
     const location = useLocation()
     const url = location.pathname
@@ -22,6 +23,33 @@ const NewProjectForm = () => {
     }
     const docId = extractIdFromURL(url)
 
+    const deleteEmptyProject = async () => {
+        try {
+            if (docStatus === 'new') {
+                const projectDoc: any = await db.get(docId)
+                if (projectDoc) {
+                    db.remove(projectDoc)
+                    setDocStatus('deleted')
+                }
+            }
+        } catch (error) {
+            console.error('Error in discarding the empty project:', error)
+        } finally {
+            navigate('/', { replace: true })
+        }
+    }
+
+    const handleCancelButtonClick = async (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        if (docStatus === 'created') {
+            navigate('/', { replace: true })
+            return
+        }
+
+        deleteEmptyProject()
+    }
+
     useEffect(() => {
         const fetchProjectDoc = async () => {
             if (docId) {
@@ -29,6 +57,7 @@ const NewProjectForm = () => {
                     const doc = await db.get(docId)
                     setFormData(doc.data_)
                     setDocName(doc.metadata_.doc_name)
+                    setDocStatus(doc.metadata_.status)
                 } catch (error) {
                     console.error('Error fetching document:', error)
                 }
@@ -260,7 +289,11 @@ const NewProjectForm = () => {
             </FloatingLabel>
             <h1>PUT PHOTO UPLOAD HERE</h1>
 
-            <Button variant="secondary" type="button">
+            <Button
+                onClick={handleCancelButtonClick}
+                variant="secondary"
+                type="button"
+            >
                 Cancel
             </Button>
             <Button type="submit">Save</Button>
