@@ -302,19 +302,7 @@ const NewProjectForm = () => {
     )
 }
 
-const WrappedNewProjectForm = ({
-    dbName,
-    workflowName,
-    docName,
-    type,
-    parentId,
-}: {
-    dbName: string
-    workflowName: string
-    docName: string
-    type: string
-    parentId?: string
-}) => {
+const WrappedNewProjectForm = () => {
     const location = useLocation()
     const extractIdFromURL = (url: string) => {
         const parts = url.split('/app/')
@@ -326,12 +314,11 @@ const WrappedNewProjectForm = ({
 
     return (
         <StoreProvider
-            dbName={dbName}
+            dbName="quality-install-tool"
             docId={docId}
-            workflowName={workflowName}
-            docName={docName}
-            type={type}
-            parentId={parentId}
+            workflowName={''}
+            docName={''}
+            type={'project'}
         >
             <NewProjectForm />
         </StoreProvider>
