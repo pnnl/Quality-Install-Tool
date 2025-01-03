@@ -12,7 +12,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper' // Import the PhotoInputWrapper component
 import { StoreProvider, StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
-
 interface Project {
     type: string
     data_: Record<string, any>
@@ -39,13 +38,12 @@ const NewProjectForm = () => {
     const [selectedProject, setSelectedProject] = useState<any>()
     const db = useDB()
 
-    //get projectDocs
+    // Get projectDocs
     const retrieveProjectInfo = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
             setProjectDocs(res)
             const selectedProject = lastModifiedProject(res)
-            console.log(selectedProject)
             setSelectedProject(selectedProject)
         } catch (error) {
             console.error('Error retrieving project docs:', error)
@@ -61,7 +59,6 @@ const NewProjectForm = () => {
         const filteredProjects = projectDocs.filter(
             project => project.metadata_.status !== 'new',
         )
-
         // Reduce the filtered list to find the project with the latest modified date
         return filteredProjects.reduce((latest, project) => {
             const latestDate = new Date(latest.metadata_.last_modified_at)
@@ -83,9 +80,17 @@ const NewProjectForm = () => {
                 }
             }
         }
-
         fetchProjectDoc()
     }, [docId, db])
+
+    // Update form data when a new project is selected
+    useEffect(() => {
+        if (selectedProject) {
+            setFormData(selectedProject.data_)
+            setDocName(selectedProject.metadata_.doc_name)
+            setDocStatus(selectedProject.metadata_.status)
+        }
+    }, [selectedProject])
 
     const deleteEmptyProject = async () => {
         try {
@@ -110,7 +115,6 @@ const NewProjectForm = () => {
             navigate('/', { replace: true })
             return
         }
-
         deleteEmptyProject()
     }
 
@@ -136,7 +140,6 @@ const NewProjectForm = () => {
                 'data_.project_address.state': formData.get('state'),
                 'data_.project_address.zip_code': formData.get('zip_code'),
             }
-
             await updateFieldInDocument(docId, updates)
             navigate('/', { replace: true })
         } else {
@@ -170,7 +173,6 @@ const NewProjectForm = () => {
             )
             return false
         }
-
         const isDuplicate = projectDocs.some(
             doc => doc.metadata_.doc_name === name,
         )
@@ -180,7 +182,6 @@ const NewProjectForm = () => {
             )
             return false
         }
-
         setDocNameError('')
         return true
     }
@@ -192,7 +193,6 @@ const NewProjectForm = () => {
         try {
             // Fetch the document
             const doc = await db.get(docId)
-
             // Destructure the metadata to update the last_modified_at field
             const { metadata_ } = doc
             const updatedMetadata = {
@@ -201,7 +201,6 @@ const NewProjectForm = () => {
                 last_modified_at: new Date().toISOString(),
                 status: 'created',
             }
-
             // Create an updated data_ object with the new installer and project info
             const updatedData = {
                 ...doc.data_,
@@ -222,7 +221,6 @@ const NewProjectForm = () => {
                     zip_code: updates['data_.project_address.zip_code'],
                 },
             }
-
             // Construct the updated document
             const updatedDoc = {
                 ...doc,
@@ -230,7 +228,6 @@ const NewProjectForm = () => {
                 metadata_: updatedMetadata,
                 _rev: doc._rev, // retain the current revision
             }
-
             // Save the updated document
             const response = await db.put(updatedDoc)
             console.log('Document updated successfully', response)
@@ -241,23 +238,25 @@ const NewProjectForm = () => {
 
     return (
         <Form onSubmit={handleSubmitForm}>
-            <DropdownButton
-                id="project-selector"
-                title={
-                    selectedProject?.metadata_?.doc_name || 'Select a Project'
-                }
-                onSelect={handleSelect}
-            >
-                {projectDocs.map(project => (
-                    <Dropdown.Item
-                        key={project._id}
-                        eventKey={project.metadata_.doc_name}
-                    >
-                        {project.metadata_.doc_name}
-                    </Dropdown.Item>
-                ))}
-            </DropdownButton>
-
+            {selectedProject && (
+                <DropdownButton
+                    id="project-selector"
+                    title={
+                        selectedProject?.metadata_?.doc_name ||
+                        'Select a Project'
+                    }
+                    onSelect={handleSelect}
+                >
+                    {projectDocs.map(project => (
+                        <Dropdown.Item
+                            key={project._id}
+                            eventKey={project.metadata_.doc_name}
+                        >
+                            {project.metadata_.doc_name}
+                        </Dropdown.Item>
+                    ))}
+                </DropdownButton>
+            )}
             <h4>New Project Information</h4>
             <FloatingLabel controlId="doc_name" label="Project Name">
                 <Form.Control
@@ -271,7 +270,6 @@ const NewProjectForm = () => {
                     {docNameError}
                 </Form.Control.Feedback>
             </FloatingLabel>
-
             <h5>Installer Information</h5>
             <p>
                 <em>
@@ -280,7 +278,6 @@ const NewProjectForm = () => {
                     report.
                 </em>
             </p>
-
             <FloatingLabel controlId="technician_name" label="Technician Name">
                 <Form.Control
                     type="text"
@@ -288,7 +285,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.installer?.technician_name || ''}
                 />
             </FloatingLabel>
-
             <FloatingLabel
                 controlId="installation_company"
                 label="Installation Company"
@@ -299,7 +295,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.installer?.company_name || ''}
                 />
             </FloatingLabel>
-
             <FloatingLabel controlId="company_address" label="Company Address">
                 <Form.Control
                     type="text"
@@ -307,7 +302,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.installer?.company_address || ''}
                 />
             </FloatingLabel>
-
             <FloatingLabel controlId="company_phone" label="Company Phone">
                 <Form.Control
                     type="text"
@@ -315,7 +309,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.installer?.company_phone || ''}
                 />
             </FloatingLabel>
-
             <FloatingLabel controlId="company_email" label="Company Email">
                 <Form.Control
                     type="text"
@@ -323,7 +316,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.installer?.company_email || ''}
                 />
             </FloatingLabel>
-
             <h5>Project Address</h5>
             <FloatingLabel controlId="street_address" label="Street Address">
                 <Form.Control
@@ -334,7 +326,6 @@ const NewProjectForm = () => {
                     }
                 />
             </FloatingLabel>
-
             <FloatingLabel controlId="city" label="City">
                 <Form.Control
                     type="text"
@@ -342,7 +333,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.project_address?.city || ''}
                 />
             </FloatingLabel>
-
             <FloatingLabel className="mb-3" controlId="state" label="State">
                 <Form.Select
                     name="state"
@@ -356,7 +346,6 @@ const NewProjectForm = () => {
                     ))}
                 </Form.Select>
             </FloatingLabel>
-
             <FloatingLabel controlId="zip_code" label="Zip Code">
                 <Form.Control
                     type="text"
@@ -364,7 +353,6 @@ const NewProjectForm = () => {
                     defaultValue={formData.project_address?.zip_code || ''}
                 />
             </FloatingLabel>
-
             {/* Photo Upload Wrapper */}
             <PhotoInputWrapper
                 id="project_photos"
@@ -373,7 +361,6 @@ const NewProjectForm = () => {
             >
                 <em>Please upload photos related to your project.</em>
             </PhotoInputWrapper>
-
             <Button
                 onClick={handleCancelButtonClick}
                 variant="secondary"
@@ -393,9 +380,7 @@ const WrappedNewProjectForm = () => {
         return parts.length > 1 ? parts[1] : null
     }
     const docId = extractIdFromURL(location.pathname)
-
     if (!docId) return <div>Error: Cannot find document ID in the URL.</div>
-
     return (
         <StoreProvider
             dbName="quality-install-tool"
