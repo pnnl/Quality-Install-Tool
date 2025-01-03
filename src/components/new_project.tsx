@@ -36,6 +36,7 @@ const NewProjectForm = () => {
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('')
     const [selectedProject, setSelectedProject] = useState<any>()
+    const [dropdownOpen, setDropdownOpen] = useState(false) // State to control dropdown visibility
     const db = useDB()
 
     // Get projectDocs
@@ -154,13 +155,21 @@ const NewProjectForm = () => {
 
     // Handle selection change
     const handleSelect = (docName: string | null) => {
-        if (docName) {
+        if (docName === 'CLEAR_FORM') {
+            // Clear form data
+            setFormData({})
+            setDocName('')
+            setDocStatus('')
+            setSelectedProject(null)
+            setDropdownOpen(true) // Keep dropdown open after clearing
+        } else if (docName) {
             const selected = projectDocs.find(
                 project => project.metadata_.doc_name === docName,
             )
             if (selected) {
                 setSelectedProject(selected)
             }
+            setDropdownOpen(false) // Close dropdown after selection
         }
     }
 
@@ -238,24 +247,37 @@ const NewProjectForm = () => {
 
     return (
         <Form onSubmit={handleSubmitForm}>
-            {selectedProject && (
-                <DropdownButton
-                    id="project-selector"
-                    title={
-                        selectedProject?.metadata_?.doc_name ||
-                        'Select a Project'
-                    }
-                    onSelect={handleSelect}
-                >
-                    {projectDocs.map(project => (
-                        <Dropdown.Item
-                            key={project._id}
-                            eventKey={project.metadata_.doc_name}
-                        >
-                            {project.metadata_.doc_name}
+            {projectDocs.length > 1 && (
+                <>
+                    <p>
+                        The form has been auto-populated with information from
+                        your last project. You can clear the form or choose
+                        another project from the dropdown menu:
+                    </p>
+                    <DropdownButton
+                        id="project-selector"
+                        title={
+                            selectedProject?.metadata_?.doc_name ||
+                            'Select a Project'
+                        }
+                        onSelect={handleSelect}
+                        show={dropdownOpen} // Ensure dropdown stays open
+                        onToggle={() => setDropdownOpen(prev => !prev)} // Toggle state manually
+                    >
+                        {projectDocs.map(project => (
+                            <Dropdown.Item
+                                key={project._id}
+                                eventKey={project.metadata_.doc_name}
+                            >
+                                {project.metadata_.doc_name}
+                            </Dropdown.Item>
+                        ))}
+                        <Dropdown.Divider />
+                        <Dropdown.Item eventKey="CLEAR_FORM">
+                            Clear Form
                         </Dropdown.Item>
-                    ))}
-                </DropdownButton>
+                    </DropdownButton>
+                </>
             )}
             <h4>New Project Information</h4>
             <FloatingLabel controlId="doc_name" label="Project Name">
