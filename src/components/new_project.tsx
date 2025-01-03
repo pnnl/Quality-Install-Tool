@@ -12,6 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper' // Import the PhotoInputWrapper component
 import { StoreProvider, StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
+
 interface Project {
     type: string
     data_: Record<string, any>
@@ -246,7 +247,10 @@ const NewProjectForm = () => {
     }
 
     return (
-        <Form onSubmit={handleSubmitForm}>
+        <Form
+            onSubmit={handleSubmitForm}
+            className="new-project-form container"
+        >
             {projectDocs.length > 1 && (
                 <>
                     <p>
@@ -261,7 +265,6 @@ const NewProjectForm = () => {
                             'Select a Project'
                         }
                         onSelect={handleSelect}
-                        show={dropdownOpen} // Ensure dropdown stays open
                         onToggle={() => setDropdownOpen(prev => !prev)} // Toggle state manually
                     >
                         {projectDocs.map(project => (
@@ -378,19 +381,24 @@ const NewProjectForm = () => {
             {/* Photo Upload Wrapper */}
             <PhotoInputWrapper
                 id="project_photos"
-                label="Upload Project Photos"
+                label="Building Number - Photo"
                 uploadable
             >
-                <em>Please upload photos related to your project.</em>
+                <em>
+                    Provide a photo of the building that shows the building
+                    number.
+                </em>
             </PhotoInputWrapper>
-            <Button
-                onClick={handleCancelButtonClick}
-                variant="secondary"
-                type="button"
-            >
-                Cancel
-            </Button>
-            <Button type="submit">Save</Button>
+            <div className="buttons-div">
+                <Button
+                    onClick={handleCancelButtonClick}
+                    variant="secondary"
+                    type="button"
+                >
+                    Cancel
+                </Button>
+                <Button type="submit">Save Project</Button>
+            </div>
         </Form>
     )
 }
