@@ -1,20 +1,74 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Button, FloatingLabel } from 'react-bootstrap'
+import {
+    Form,
+    Button,
+    FloatingLabel,
+    Dropdown,
+    DropdownButton,
+} from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
 import { useDB } from '../utilities/database_utils'
 import { useLocation, useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper' // Import the PhotoInputWrapper component
 import { StoreProvider, StoreContext } from './store'
+import { retrieveProjectDocs } from '../utilities/database_utils'
+
+interface Project {
+    type: string
+    data_: Record<string, any>
+    metadata_: {
+        doc_name: string
+        created_at: string
+        last_modified_at: string
+        attachments: Record<string, any>
+        status: string
+    }
+    children: any[]
+    _id: string
+    _rev: string
+}
 
 const NewProjectForm = () => {
     const navigate = useNavigate()
     const { docId } = React.useContext(StoreContext) // Access the context to get docId
-    const [projectDocs, setProjectDocs] = useState<any[]>([])
+    const [projectDocs, setProjectDocs] = useState<Project[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('')
+    const [selectedProject, setSelectedProject] = useState<any>()
     const db = useDB()
+
+    //get projectDocs
+    const retrieveProjectInfo = async (): Promise<void> => {
+        try {
+            const res = await retrieveProjectDocs(db)
+            setProjectDocs(res)
+            const selectedProject = lastModifiedProject(res)
+            console.log(selectedProject)
+            setSelectedProject(selectedProject)
+        } catch (error) {
+            console.error('Error retrieving project docs:', error)
+        }
+    }
+
+    useEffect(() => {
+        retrieveProjectInfo()
+    }, [db])
+
+    const lastModifiedProject = (projectDocs: Project[]) => {
+        // Filter out projects with status "created"
+        const filteredProjects = projectDocs.filter(
+            project => project.metadata_.status !== 'new',
+        )
+
+        // Reduce the filtered list to find the project with the latest modified date
+        return filteredProjects.reduce((latest, project) => {
+            const latestDate = new Date(latest.metadata_.last_modified_at)
+            const currentDate = new Date(project.metadata_.last_modified_at)
+            return currentDate > latestDate ? project : latest
+        })
+    }
 
     useEffect(() => {
         const fetchProjectDoc = async () => {
@@ -95,11 +149,24 @@ const NewProjectForm = () => {
         validateDocName(e.target.value)
     }
 
+    // Handle selection change
+    const handleSelect = (docName: string | null) => {
+        if (docName) {
+            const selected = projectDocs.find(
+                project => project.metadata_.doc_name === docName,
+            )
+            if (selected) {
+                setSelectedProject(selected)
+            }
+        }
+    }
+
     const validateDocName = (name: string) => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
         if (!regex.test(name) || name.length > 64) {
             setDocNameError(
-                'Project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
+                `Project name must be no more than 64 characters consisting of letters, numbers, 
+                dashes, and single spaces. Single spaces can only appear between other characters.`,
             )
             return false
         }
@@ -174,6 +241,23 @@ const NewProjectForm = () => {
 
     return (
         <Form onSubmit={handleSubmitForm}>
+            <DropdownButton
+                id="project-selector"
+                title={
+                    selectedProject?.metadata_?.doc_name || 'Select a Project'
+                }
+                onSelect={handleSelect}
+            >
+                {projectDocs.map(project => (
+                    <Dropdown.Item
+                        key={project._id}
+                        eventKey={project.metadata_.doc_name}
+                    >
+                        {project.metadata_.doc_name}
+                    </Dropdown.Item>
+                ))}
+            </DropdownButton>
+
             <h4>New Project Information</h4>
             <FloatingLabel controlId="doc_name" label="Project Name">
                 <Form.Control
