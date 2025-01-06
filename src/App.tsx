@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import React, { Suspense, lazy } from 'react'
+import { Suspense, lazy } from 'react'
 
 // Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
@@ -11,7 +11,7 @@ const Home = lazy(() => import('./components/home'))
 const MdxProjectView = lazy(
     () => import('./components/mdx_project_details_view'),
 )
-const WrappedNewProjectForm = lazy(() => import('./components/new_project'))
+const NewProjectWrapper = lazy(() => import('./components/new_project_wrapper'))
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
 const MdxCombustionSafetyView = lazy(
     () => import('./components/mdx_combustion_appliance_safety_view'),
@@ -71,9 +71,7 @@ const routes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
-                    {/* <MdxProjectView />
-                    <h1>NEW PROJECT BELOW</h1> */}
-                    <WrappedNewProjectForm />
+                    <NewProjectWrapper />
                 </RootLayout>
             </Suspense>
         ),

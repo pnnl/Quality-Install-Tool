@@ -8,9 +8,9 @@ import {
 } from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
 import { useDB } from '../utilities/database_utils'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper'
-import { StoreProvider, StoreContext } from './store'
+import { StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 
 interface Project {
@@ -496,25 +496,4 @@ const NewProjectForm = () => {
     )
 }
 
-const WrappedNewProjectForm = () => {
-    const location = useLocation()
-    const extractIdFromURL = (url: string) => {
-        const parts = url.split('/app/')
-        return parts.length > 1 ? parts[1] : null
-    }
-    const docId = extractIdFromURL(location.pathname)
-    if (!docId) return <div>Error: Cannot find document ID in the URL.</div>
-    return (
-        <StoreProvider
-            dbName="quality-install-tool"
-            docId={docId}
-            workflowName={''}
-            docName={''}
-            type={'project'}
-        >
-            <NewProjectForm />
-        </StoreProvider>
-    )
-}
-
-export default WrappedNewProjectForm
+export default NewProjectForm
