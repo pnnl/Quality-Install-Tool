@@ -147,11 +147,10 @@ const NewProjectForm = () => {
                     formData.get('company_address'),
                 'data_.installer.company_phone': formData.get('company_phone'),
                 'data_.installer.email': formData.get('company_email'),
-                'data_.project_address.street_address':
-                    formData.get('street_address'),
-                'data_.project_address.city': formData.get('city'),
-                'data_.project_address.state': formData.get('state'),
-                'data_.project_address.zip_code': formData.get('zip_code'),
+                'data_.location.street_address': formData.get('street_address'),
+                'data_.location.city': formData.get('city'),
+                'data_.location.state': formData.get('state'),
+                'data_.location.zip_code': formData.get('zip_code'),
             }
             await updateFieldInDocument(docId, updates)
             navigate('/', { replace: true })
@@ -238,13 +237,12 @@ const NewProjectForm = () => {
                     company_address: updates['data_.installer.company_address'],
                     company_phone: updates['data_.installer.company_phone'],
                 },
-                project_address: {
-                    ...doc.data_.project_address,
-                    street_address:
-                        updates['data_.project_address.street_address'],
-                    city: updates['data_.project_address.city'],
-                    state: updates['data_.project_address.state'],
-                    zip_code: updates['data_.project_address.zip_code'],
+                location: {
+                    ...doc.data_.location,
+                    street_address: updates['data_.location.street_address'],
+                    city: updates['data_.location.city'],
+                    state: updates['data_.location.state'],
+                    zip_code: updates['data_.location.zip_code'],
                 },
             }
             const updatedDoc = {
@@ -407,12 +405,12 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="street_address"
-                    value={formData.project_address?.street_address || ''}
+                    value={formData.location?.street_address || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
-                            project_address: {
-                                ...formData.project_address,
+                            location: {
+                                ...formData.location,
                                 street_address: e.target.value,
                             },
                         })
@@ -423,12 +421,12 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="city"
-                    value={formData.project_address?.city || ''}
+                    value={formData.location?.city || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
-                            project_address: {
-                                ...formData.project_address,
+                            location: {
+                                ...formData.location,
                                 city: e.target.value,
                             },
                         })
@@ -438,12 +436,12 @@ const NewProjectForm = () => {
             <FloatingLabel className="mb-3" controlId="state" label="State">
                 <Form.Select
                     name="state"
-                    value={formData.project_address?.state || ''}
+                    value={formData.location?.state || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
-                            project_address: {
-                                ...formData.project_address,
+                            location: {
+                                ...formData.location,
                                 state: e.target.value,
                             },
                         })
@@ -461,12 +459,12 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="zip_code"
-                    value={formData.project_address?.zip_code || ''}
+                    value={formData.location?.zip_code || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
-                            project_address: {
-                                ...formData.project_address,
+                            location: {
+                                ...formData.location,
                                 zip_code: e.target.value,
                             },
                         })
