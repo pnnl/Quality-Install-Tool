@@ -280,10 +280,10 @@ const NewProjectForm = () => {
             {projectDocs.length > 1 && (
                 <>
                     <p>
-                        The installer information has been pre-populated with
-                        information from your last project. You can clear these
-                        fields or fill them from another project in the dropdown
-                        menu:
+                        New projects are pre-populated with installer
+                        information your most recent project. You can clear
+                        these fields or fill them from another project in the
+                        dropdown menu:
                     </p>
                     <DropdownButton
                         id="project-selector"
