@@ -33,6 +33,7 @@ const NewProjectForm = () => {
     const { docId } = React.useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
     const [docName, setDocName] = useState('')
+    const [initialDocName, setInitialDocName] = useState('') // State to keep track of initial document name
     const [docNameError, setDocNameError] = useState('')
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('')
@@ -74,6 +75,9 @@ const NewProjectForm = () => {
                     setFormData(doc.data_)
                     setDocName(doc.metadata_.doc_name)
                     setDocStatus(doc.metadata_.status)
+                    if (doc.metadata_.status === 'created') {
+                        setInitialDocName(doc.metadata_.doc_name) // Set the initial document name if status is created
+                    }
                 } catch (error) {
                     console.error('Error fetching document:', error)
                 }
@@ -82,7 +86,6 @@ const NewProjectForm = () => {
         fetchProjectDoc()
     }, [docId, db])
 
-    // Only update installer information when a new project is selected
     useEffect(() => {
         if (selectedProject) {
             setFormData((prevData: any) => ({
@@ -164,10 +167,17 @@ const NewProjectForm = () => {
 
     const handleSelect = (docName: string | null) => {
         if (docName === 'CLEAR_FORM') {
-            setFormData({})
-            setDocName('')
-            setDocStatus('')
-            setSelectedProject(null)
+            setFormData((prevData: any) => ({
+                ...prevData,
+                installer: {
+                    // Only reset installer information
+                    technician_name: '',
+                    company_name: '',
+                    company_address: '',
+                    company_phone: '',
+                    email: '',
+                },
+            }))
             setDropdownOpen(true)
         } else if (docName) {
             const selected = projectDocs.find(
@@ -182,6 +192,7 @@ const NewProjectForm = () => {
 
     const validateDocName = (name: string) => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
+
         if (!regex.test(name) || name.length > 64) {
             setDocNameError(
                 `Project name must be no more than 64 characters consisting of letters, numbers, 
@@ -190,7 +201,9 @@ const NewProjectForm = () => {
             return false
         }
         const isDuplicate = projectDocs.some(
-            doc => doc.metadata_.doc_name === name,
+            doc =>
+                doc.metadata_.doc_name !== initialDocName &&
+                doc.metadata_.doc_name === name, // Allow initial document name
         )
         if (isDuplicate) {
             setDocNameError(
@@ -276,9 +289,10 @@ const NewProjectForm = () => {
             {projectDocs.length > 1 && (
                 <>
                     <p>
-                        The form has been pre-populated with information from
-                        your last project. You can clear the form or choose
-                        another project from the dropdown menu:
+                        The installer information has been pre-populated with
+                        information from your last project. You can clear these
+                        fields or fill them from another project in the dropdown
+                        menu:
                     </p>
                     <DropdownButton
                         id="project-selector"
