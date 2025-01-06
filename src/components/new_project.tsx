@@ -9,7 +9,7 @@ import {
 import { US_STATES } from './us_state_select_wrapper'
 import { useDB } from '../utilities/database_utils'
 import { useLocation, useNavigate } from 'react-router-dom'
-import PhotoInputWrapper from './photo_input_wrapper' // Import the PhotoInputWrapper component
+import PhotoInputWrapper from './photo_input_wrapper'
 import { StoreProvider, StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 
@@ -30,17 +30,16 @@ interface Project {
 
 const NewProjectForm = () => {
     const navigate = useNavigate()
-    const { docId } = React.useContext(StoreContext) // Access the context to get docId
+    const { docId } = React.useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
     const [docName, setDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('')
     const [selectedProject, setSelectedProject] = useState<any>()
-    const [dropdownOpen, setDropdownOpen] = useState(false) // State to control dropdown visibility
+    const [dropdownOpen, setDropdownOpen] = useState(false)
     const db = useDB()
 
-    // Get projectDocs
     const retrieveProjectInfo = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
@@ -57,11 +56,9 @@ const NewProjectForm = () => {
     }, [db])
 
     const lastModifiedProject = (projectDocs: Project[]) => {
-        // Filter out projects with status "created"
         const filteredProjects = projectDocs.filter(
             project => project.metadata_.status !== 'new',
         )
-        // Reduce the filtered list to find the project with the latest modified date
         return filteredProjects.reduce((latest, project) => {
             const latestDate = new Date(latest.metadata_.last_modified_at)
             const currentDate = new Date(project.metadata_.last_modified_at)
@@ -85,12 +82,23 @@ const NewProjectForm = () => {
         fetchProjectDoc()
     }, [docId, db])
 
-    // Update form data when a new project is selected
+    // Only update installer information when a new project is selected
     useEffect(() => {
         if (selectedProject) {
-            setFormData(selectedProject.data_)
-            setDocName(selectedProject.metadata_.doc_name)
-            setDocStatus(selectedProject.metadata_.status)
+            setFormData((prevData: any) => ({
+                ...prevData,
+                installer: {
+                    technician_name:
+                        selectedProject.data_.installer?.technician_name || '',
+                    company_name:
+                        selectedProject.data_.installer?.company_name || '',
+                    company_address:
+                        selectedProject.data_.installer?.company_address || '',
+                    company_phone:
+                        selectedProject.data_.installer?.company_phone || '',
+                    email: selectedProject.data_.installer?.email || '',
+                },
+            }))
         }
     }, [selectedProject])
 
@@ -121,7 +129,7 @@ const NewProjectForm = () => {
     }
 
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault() // stops the page refresh
+        e.preventDefault()
         if (validateDocName(docName)) {
             const form = e.target as HTMLFormElement
             const formData = new FormData(form)
@@ -135,7 +143,7 @@ const NewProjectForm = () => {
                 'data_.installer.company_address':
                     formData.get('company_address'),
                 'data_.installer.company_phone': formData.get('company_phone'),
-                'data_.installer.company_email': formData.get('company_email'),
+                'data_.installer.email': formData.get('company_email'),
                 'data_.project_address.street_address':
                     formData.get('street_address'),
                 'data_.project_address.city': formData.get('city'),
@@ -154,15 +162,13 @@ const NewProjectForm = () => {
         validateDocName(e.target.value)
     }
 
-    // Handle selection change
     const handleSelect = (docName: string | null) => {
         if (docName === 'CLEAR_FORM') {
-            // Clear form data
             setFormData({})
             setDocName('')
             setDocStatus('')
             setSelectedProject(null)
-            setDropdownOpen(true) // Keep dropdown open after clearing
+            setDropdownOpen(true)
         } else if (docName) {
             const selected = projectDocs.find(
                 project => project.metadata_.doc_name === docName,
@@ -170,7 +176,7 @@ const NewProjectForm = () => {
             if (selected) {
                 setSelectedProject(selected)
             }
-            setDropdownOpen(false) // Close dropdown after selection
+            setDropdownOpen(false)
         }
     }
 
@@ -201,9 +207,7 @@ const NewProjectForm = () => {
         updates: Record<string, any>,
     ) => {
         try {
-            // Fetch the document
             const doc = await db.get(docId)
-            // Destructure the metadata to update the last_modified_at field
             const { metadata_ } = doc
             const updatedMetadata = {
                 ...metadata_,
@@ -211,13 +215,12 @@ const NewProjectForm = () => {
                 last_modified_at: new Date().toISOString(),
                 status: 'created',
             }
-            // Create an updated data_ object with the new installer and project info
             const updatedData = {
                 ...doc.data_,
                 installer: {
                     ...doc.data_.installer,
                     company_name: updates['data_.installer.company_name'],
-                    email: updates['data_.installer.company_email'],
+                    email: updates['data_.installer.email'],
                     technician_name: updates['data_.installer.technician_name'],
                     company_address: updates['data_.installer.company_address'],
                     company_phone: updates['data_.installer.company_phone'],
@@ -231,14 +234,12 @@ const NewProjectForm = () => {
                     zip_code: updates['data_.project_address.zip_code'],
                 },
             }
-            // Construct the updated document
             const updatedDoc = {
                 ...doc,
                 data_: updatedData,
                 metadata_: updatedMetadata,
-                _rev: doc._rev, // retain the current revision
+                _rev: doc._rev,
             }
-            // Save the updated document
             const response = await db.put(updatedDoc)
             console.log('Document updated successfully', response)
         } catch (error) {
@@ -251,37 +252,6 @@ const NewProjectForm = () => {
             onSubmit={handleSubmitForm}
             className="new-project-form container"
         >
-            {projectDocs.length > 1 && (
-                <>
-                    <p>
-                        The form has been auto-populated with information from
-                        your last project. You can clear the form or choose
-                        another project from the dropdown menu:
-                    </p>
-                    <DropdownButton
-                        id="project-selector"
-                        title={
-                            selectedProject?.metadata_?.doc_name ||
-                            'Select a Project'
-                        }
-                        onSelect={handleSelect}
-                        onToggle={() => setDropdownOpen(prev => !prev)} // Toggle state manually
-                    >
-                        {projectDocs.map(project => (
-                            <Dropdown.Item
-                                key={project._id}
-                                eventKey={project.metadata_.doc_name}
-                            >
-                                {project.metadata_.doc_name}
-                            </Dropdown.Item>
-                        ))}
-                        <Dropdown.Divider />
-                        <Dropdown.Item eventKey="CLEAR_FORM">
-                            Clear Form
-                        </Dropdown.Item>
-                    </DropdownButton>
-                </>
-            )}
             <h4>New Project Information</h4>
             <FloatingLabel controlId="doc_name" label="Project Name">
                 <Form.Control
@@ -303,11 +273,52 @@ const NewProjectForm = () => {
                     report.
                 </em>
             </p>
+            {projectDocs.length > 1 && (
+                <>
+                    <p>
+                        The form has been pre-populated with information from
+                        your last project. You can clear the form or choose
+                        another project from the dropdown menu:
+                    </p>
+                    <DropdownButton
+                        id="project-selector"
+                        title={
+                            selectedProject?.metadata_?.doc_name ||
+                            'Select a Project'
+                        }
+                        onSelect={handleSelect}
+                        onToggle={() => setDropdownOpen(prev => !prev)}
+                    >
+                        {projectDocs.map(project => (
+                            <Dropdown.Item
+                                key={project._id}
+                                eventKey={project.metadata_.doc_name}
+                            >
+                                {project.metadata_.doc_name}
+                            </Dropdown.Item>
+                        ))}
+                        <Dropdown.Divider />
+                        <Dropdown.Item eventKey="CLEAR_FORM">
+                            Clear Form
+                        </Dropdown.Item>
+                    </DropdownButton>
+                </>
+            )}
+
             <FloatingLabel controlId="technician_name" label="Technician Name">
                 <Form.Control
                     type="text"
                     name="technician_name"
-                    defaultValue={formData.installer?.technician_name || ''}
+                    value={formData.installer?.technician_name || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                technician_name: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <FloatingLabel
@@ -317,28 +328,64 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="installation_company"
-                    defaultValue={formData.installer?.company_name || ''}
+                    value={formData.installer?.company_name || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                company_name: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <FloatingLabel controlId="company_address" label="Company Address">
                 <Form.Control
                     type="text"
                     name="company_address"
-                    defaultValue={formData.installer?.company_address || ''}
+                    value={formData.installer?.company_address || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                company_address: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <FloatingLabel controlId="company_phone" label="Company Phone">
                 <Form.Control
                     type="text"
                     name="company_phone"
-                    defaultValue={formData.installer?.company_phone || ''}
+                    value={formData.installer?.company_phone || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                company_phone: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <FloatingLabel controlId="company_email" label="Company Email">
                 <Form.Control
                     type="text"
                     name="company_email"
-                    defaultValue={formData.installer?.company_email || ''}
+                    value={formData.installer?.email || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                email: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <h5>Project Address</h5>
@@ -346,8 +393,15 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="street_address"
-                    defaultValue={
-                        formData.project_address?.street_address || ''
+                    value={formData.project_address?.street_address || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            project_address: {
+                                ...formData.project_address,
+                                street_address: e.target.value,
+                            },
+                        })
                     }
                 />
             </FloatingLabel>
@@ -355,13 +409,31 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="city"
-                    defaultValue={formData.project_address?.city || ''}
+                    value={formData.project_address?.city || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            project_address: {
+                                ...formData.project_address,
+                                city: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             <FloatingLabel className="mb-3" controlId="state" label="State">
                 <Form.Select
                     name="state"
-                    defaultValue={formData.project_address?.state || ''}
+                    value={formData.project_address?.state || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            project_address: {
+                                ...formData.project_address,
+                                state: e.target.value,
+                            },
+                        })
+                    }
                 >
                     <option key="" value="" />
                     {US_STATES.map(option => (
@@ -375,7 +447,16 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="zip_code"
-                    defaultValue={formData.project_address?.zip_code || ''}
+                    value={formData.project_address?.zip_code || ''}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            project_address: {
+                                ...formData.project_address,
+                                zip_code: e.target.value,
+                            },
+                        })
+                    }
                 />
             </FloatingLabel>
             {/* Photo Upload Wrapper */}
