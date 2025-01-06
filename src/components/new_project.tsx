@@ -38,7 +38,6 @@ const NewProjectForm = () => {
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('')
     const [selectedProject, setSelectedProject] = useState<any>()
-    const [dropdownOpen, setDropdownOpen] = useState(false)
     const db = useDB()
 
     const retrieveProjectInfo = async (): Promise<void> => {
@@ -93,12 +92,10 @@ const NewProjectForm = () => {
                 installer: {
                     technician_name:
                         selectedProject.data_.installer?.technician_name || '',
-                    company_name:
-                        selectedProject.data_.installer?.company_name || '',
-                    company_address:
-                        selectedProject.data_.installer?.company_address || '',
-                    company_phone:
-                        selectedProject.data_.installer?.company_phone || '',
+                    name: selectedProject.data_.installer?.name || '',
+                    mailing_address:
+                        selectedProject.data_.installer?.mailing_address || '',
+                    phone: selectedProject.data_.installer?.phone || '',
                     email: selectedProject.data_.installer?.email || '',
                 },
             }))
@@ -140,12 +137,10 @@ const NewProjectForm = () => {
                 'metadata_.doc_name': formData.get('doc_name'),
                 'data_.installer.technician_name':
                     formData.get('technician_name'),
-                'data_.installer.company_name': formData.get(
-                    'installation_company',
-                ),
-                'data_.installer.company_address':
-                    formData.get('company_address'),
-                'data_.installer.company_phone': formData.get('company_phone'),
+                'data_.installer.name': formData.get('installation_company'),
+                'data_.installer.mailing_address':
+                    formData.get('mailing_address'),
+                'data_.installer.phone': formData.get('phone'),
                 'data_.installer.email': formData.get('company_email'),
                 'data_.location.street_address': formData.get('street_address'),
                 'data_.location.city': formData.get('city'),
@@ -171,13 +166,12 @@ const NewProjectForm = () => {
                 installer: {
                     // Only reset installer information
                     technician_name: '',
-                    company_name: '',
-                    company_address: '',
-                    company_phone: '',
+                    name: '',
+                    mailing_address: '',
+                    phone: '',
                     email: '',
                 },
             }))
-            setDropdownOpen(true)
         } else if (docName) {
             const selected = projectDocs.find(
                 project => project.metadata_.doc_name === docName,
@@ -185,7 +179,6 @@ const NewProjectForm = () => {
             if (selected) {
                 setSelectedProject(selected)
             }
-            setDropdownOpen(false)
         }
     }
 
@@ -231,11 +224,11 @@ const NewProjectForm = () => {
                 ...doc.data_,
                 installer: {
                     ...doc.data_.installer,
-                    company_name: updates['data_.installer.company_name'],
+                    name: updates['data_.installer.name'],
                     email: updates['data_.installer.email'],
                     technician_name: updates['data_.installer.technician_name'],
-                    company_address: updates['data_.installer.company_address'],
-                    company_phone: updates['data_.installer.company_phone'],
+                    mailing_address: updates['data_.installer.mailing_address'],
+                    phone: updates['data_.installer.phone'],
                 },
                 location: {
                     ...doc.data_.location,
@@ -299,7 +292,6 @@ const NewProjectForm = () => {
                             'Select a Project'
                         }
                         onSelect={handleSelect}
-                        onToggle={() => setDropdownOpen(prev => !prev)}
                     >
                         {projectDocs.map(project => (
                             <Dropdown.Item
@@ -340,45 +332,45 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="installation_company"
-                    value={formData.installer?.company_name || ''}
+                    value={formData.installer?.name || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
                             installer: {
                                 ...formData.installer,
-                                company_name: e.target.value,
+                                name: e.target.value,
                             },
                         })
                     }
                 />
             </FloatingLabel>
-            <FloatingLabel controlId="company_address" label="Company Address">
+            <FloatingLabel controlId="mailing_address" label="Company Address">
                 <Form.Control
                     type="text"
-                    name="company_address"
-                    value={formData.installer?.company_address || ''}
+                    name="mailing_address"
+                    value={formData.installer?.mailing_address || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
                             installer: {
                                 ...formData.installer,
-                                company_address: e.target.value,
+                                mailing_address: e.target.value,
                             },
                         })
                     }
                 />
             </FloatingLabel>
-            <FloatingLabel controlId="company_phone" label="Company Phone">
+            <FloatingLabel controlId="phone" label="Company Phone">
                 <Form.Control
                     type="text"
-                    name="company_phone"
-                    value={formData.installer?.company_phone || ''}
+                    name="phone"
+                    value={formData.installer?.phone || ''}
                     onChange={e =>
                         setFormData({
                             ...formData,
                             installer: {
                                 ...formData.installer,
-                                company_phone: e.target.value,
+                                phone: e.target.value,
                             },
                         })
                     }
