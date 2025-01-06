@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
     Form,
     Button,
@@ -7,65 +7,41 @@ import {
     DropdownButton,
 } from 'react-bootstrap'
 import { US_STATES } from './us_state_select_wrapper'
-import { useDB } from '../utilities/database_utils'
+import { useDB, retrieveProjectDocs } from '../utilities/database_utils'
 import { useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper'
 import { StoreContext } from './store'
-import { retrieveProjectDocs } from '../utilities/database_utils'
+import type {
+    Project,
+    InstallerData,
+    LocationData,
+    FormData,
+} from '../types/new_project.types'
 
-interface Project {
-    type: string
-    data_: Record<string, any>
-    metadata_: {
-        doc_name: string
-        created_at: string
-        last_modified_at: string
-        attachments: Record<string, any>
-        status: string
-    }
-    children: any[]
-    _id: string
-    _rev: string
-}
-
-const NewProjectForm = () => {
+const NewProjectForm: React.FC = () => {
     const navigate = useNavigate()
-    const { docId } = React.useContext(StoreContext)
+    const { docId } = useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
+    const [formData, setFormData] = useState<FormData>({})
     const [docName, setDocName] = useState('')
-    const [initialDocName, setInitialDocName] = useState('') // State to keep track of initial document name
+    const [initialDocName, setInitialDocName] = useState('')
     const [docNameError, setDocNameError] = useState('')
-    const [formData, setFormData] = useState<any>({})
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null)
     const [docStatus, setDocStatus] = useState<string>('')
-    const [selectedProject, setSelectedProject] = useState<any>()
-    const [dropdownOpen, setDropdownOpen] = useState(false)
     const db = useDB()
 
-    const retrieveProjectInfo = async (): Promise<void> => {
-        try {
-            const res = await retrieveProjectDocs(db)
-            setProjectDocs(res)
-            const selectedProject = lastModifiedProject(res)
-            setSelectedProject(selectedProject)
-        } catch (error) {
-            console.error('Error retrieving project docs:', error)
-        }
-    }
-
     useEffect(() => {
-        retrieveProjectInfo()
+        const fetchProjectDocs = async () => {
+            try {
+                const res = await retrieveProjectDocs(db)
+                setProjectDocs(res)
+                setSelectedProject(lastModifiedProject(res))
+            } catch (error) {
+                console.error('Error retrieving project docs:', error)
+            }
+        }
+        fetchProjectDocs()
     }, [db])
-
-    const lastModifiedProject = (projectDocs: Project[]) => {
-        const filteredProjects = projectDocs.filter(
-            project => project.metadata_.status !== 'new',
-        )
-        return filteredProjects.reduce((latest, project) => {
-            const latestDate = new Date(latest.metadata_.last_modified_at)
-            const currentDate = new Date(project.metadata_.last_modified_at)
-            return currentDate > latestDate ? project : latest
-        })
-    }
 
     useEffect(() => {
         const fetchProjectDoc = async () => {
@@ -76,7 +52,7 @@ const NewProjectForm = () => {
                     setDocName(doc.metadata_.doc_name)
                     setDocStatus(doc.metadata_.status)
                     if (doc.metadata_.status === 'created') {
-                        setInitialDocName(doc.metadata_.doc_name) // Set the initial document name if status is created
+                        setInitialDocName(doc.metadata_.doc_name)
                     }
                 } catch (error) {
                     console.error('Error fetching document:', error)
@@ -88,70 +64,61 @@ const NewProjectForm = () => {
 
     useEffect(() => {
         if (selectedProject) {
-            setFormData((prevData: any) => ({
+            setFormData((prevData: FormData) => ({
                 ...prevData,
                 installer: {
-                    technician_name:
-                        selectedProject.data_.installer?.technician_name || '',
-                    company_name:
-                        selectedProject.data_.installer?.company_name || '',
-                    company_address:
-                        selectedProject.data_.installer?.company_address || '',
-                    company_phone:
-                        selectedProject.data_.installer?.company_phone || '',
-                    email: selectedProject.data_.installer?.email || '',
+                    ...selectedProject.data_.installer,
                 },
             }))
         }
     }, [selectedProject])
 
-    const deleteEmptyProject = async () => {
-        try {
-            if (docStatus === 'new') {
-                const projectDoc: any = await db.get(docId)
-                if (projectDoc) {
-                    db.remove(projectDoc)
-                    setDocStatus('deleted')
-                }
-            }
-        } catch (error) {
-            console.error('Error in discarding the empty project:', error)
-        } finally {
-            navigate('/', { replace: true })
-        }
-    }
+    const lastModifiedProject = (projectDocs: Project[]): Project | null =>
+        projectDocs
+            .filter(project => project.metadata_.status !== 'new')
+            .reduce(
+                (latest, project) =>
+                    new Date(project.metadata_.last_modified_at) >
+                    new Date(latest.metadata_.last_modified_at)
+                        ? project
+                        : latest,
+                projectDocs[0],
+            ) || null
 
-    const handleCancelButtonClick = async (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
+    const handleCancel = async () => {
         if (docStatus === 'created') {
             navigate('/', { replace: true })
-            return
+        } else {
+            await deleteEmptyProject()
+            navigate('/', { replace: true })
         }
-        deleteEmptyProject()
     }
 
-    const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (validateDocName(docName)) {
-            const form = e.target as HTMLFormElement
-            const formData = new FormData(form)
-            const updates = {
-                'metadata_.doc_name': formData.get('doc_name'),
-                'data_.installer.technician_name':
-                    formData.get('technician_name'),
-                'data_.installer.company_name': formData.get(
-                    'installation_company',
-                ),
-                'data_.installer.company_address':
-                    formData.get('company_address'),
-                'data_.installer.company_phone': formData.get('company_phone'),
-                'data_.installer.email': formData.get('company_email'),
-                'data_.location.street_address': formData.get('street_address'),
-                'data_.location.city': formData.get('city'),
-                'data_.location.state': formData.get('state'),
-                'data_.location.zip_code': formData.get('zip_code'),
+            const formData = new FormData(e.currentTarget)
+            const updates: Record<string, any> = {
+                'metadata_.doc_name': formData.get('doc_name') as string,
             }
+            ;[
+                'technician_name',
+                'company_name',
+                'company_address',
+                'company_phone',
+                'email',
+                'street_address',
+                'city',
+                'state',
+                'zip_code',
+            ].forEach(field => {
+                const value = formData.get(field)
+                if (value) {
+                    const key = `data_.${field.replace(/_/g, '.')}`
+                    updates[key] = value
+                }
+            })
+
             await updateFieldInDocument(docId, updates)
             navigate('/', { replace: true })
         } else {
@@ -164,47 +131,35 @@ const NewProjectForm = () => {
         validateDocName(e.target.value)
     }
 
-    const handleSelect = (docName: string | null) => {
-        if (docName === 'CLEAR_FORM') {
-            setFormData((prevData: any) => ({
-                ...prevData,
-                installer: {
-                    // Only reset installer information
-                    technician_name: '',
-                    company_name: '',
-                    company_address: '',
-                    company_phone: '',
-                    email: '',
-                },
-            }))
-            setDropdownOpen(true)
-        } else if (docName) {
-            const selected = projectDocs.find(
-                project => project.metadata_.doc_name === docName,
-            )
-            if (selected) {
-                setSelectedProject(selected)
+    const deleteEmptyProject = async () => {
+        try {
+            if (docStatus === 'new') {
+                const projectDoc = await db.get(docId)
+                if (projectDoc) {
+                    await db.remove(projectDoc)
+                    setDocStatus('deleted')
+                }
             }
-            setDropdownOpen(false)
+        } catch (error) {
+            console.error('Error in discarding the empty project:', error)
         }
     }
 
-    const validateDocName = (name: string) => {
+    const validateDocName = (name: string): boolean => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
-
         if (!regex.test(name) || name.length > 64) {
             setDocNameError(
-                `Project name must be no more than 64 characters consisting of letters, numbers, 
-                dashes, and single spaces. Single spaces can only appear between other characters.`,
+                'Project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
             )
             return false
         }
-        const isDuplicate = projectDocs.some(
-            doc =>
-                doc.metadata_.doc_name !== initialDocName &&
-                doc.metadata_.doc_name === name, // Allow initial document name
-        )
-        if (isDuplicate) {
+        if (
+            projectDocs.some(
+                doc =>
+                    doc.metadata_.doc_name === name &&
+                    doc.metadata_.doc_name !== initialDocName,
+            )
+        ) {
             setDocNameError(
                 'Project name already exists. Please choose a different name.',
             )
@@ -220,49 +175,49 @@ const NewProjectForm = () => {
     ) => {
         try {
             const doc = await db.get(docId)
-            const { metadata_ } = doc
-            const updatedMetadata = {
-                ...metadata_,
-                doc_name: updates['metadata_.doc_name'],
-                last_modified_at: new Date().toISOString(),
-                status: 'created',
-            }
-            const updatedData = {
-                ...doc.data_,
-                installer: {
-                    ...doc.data_.installer,
-                    company_name: updates['data_.installer.company_name'],
-                    email: updates['data_.installer.email'],
-                    technician_name: updates['data_.installer.technician_name'],
-                    company_address: updates['data_.installer.company_address'],
-                    company_phone: updates['data_.installer.company_phone'],
-                },
-                location: {
-                    ...doc.data_.location,
-                    street_address: updates['data_.location.street_address'],
-                    city: updates['data_.location.city'],
-                    state: updates['data_.location.state'],
-                    zip_code: updates['data_.location.zip_code'],
-                },
-            }
             const updatedDoc = {
                 ...doc,
-                data_: updatedData,
-                metadata_: updatedMetadata,
-                _rev: doc._rev,
+                data_: {
+                    ...doc.data_,
+                    installer: updates,
+                },
+                metadata_: {
+                    ...doc.metadata_,
+                    doc_name: updates['metadata_.doc_name'],
+                    last_modified_at: new Date().toISOString(),
+                    status: 'created',
+                },
             }
-            const response = await db.put(updatedDoc)
-            console.log('Document updated successfully', response)
+            await db.put(updatedDoc)
         } catch (error) {
             console.error('Error updating document:', error)
         }
     }
 
+    const handleSelect = (docName: string | null) => {
+        if (docName === 'CLEAR_FORM') {
+            setFormData((prevData: FormData) => ({
+                ...prevData,
+                installer: {
+                    technician_name: '',
+                    company_name: '',
+                    company_address: '',
+                    company_phone: '',
+                    email: '',
+                },
+            }))
+        } else if (docName) {
+            const selected = projectDocs.find(
+                project => project.metadata_.doc_name === docName,
+            )
+            if (selected) {
+                setSelectedProject(selected)
+            }
+        }
+    }
+
     return (
-        <Form
-            onSubmit={handleSubmitForm}
-            className="new-project-form container"
-        >
+        <Form onSubmit={handleSubmit} className="new-project-form container">
             <h4>New Project Information</h4>
             <FloatingLabel controlId="doc_name" label="Project Name">
                 <Form.Control
@@ -295,11 +250,10 @@ const NewProjectForm = () => {
                     <DropdownButton
                         id="project-selector"
                         title={
-                            selectedProject?.metadata_?.doc_name ||
+                            selectedProject?.metadata_.doc_name ||
                             'Select a Project'
                         }
                         onSelect={handleSelect}
-                        onToggle={() => setDropdownOpen(prev => !prev)}
                     >
                         {projectDocs.map(project => (
                             <Dropdown.Item
@@ -316,138 +270,85 @@ const NewProjectForm = () => {
                     </DropdownButton>
                 </>
             )}
-
-            <FloatingLabel controlId="technician_name" label="Technician Name">
-                <Form.Control
-                    type="text"
-                    name="technician_name"
-                    value={formData.installer?.technician_name || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                technician_name: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            <FloatingLabel
-                controlId="installation_company"
-                label="Installation Company"
-            >
-                <Form.Control
-                    type="text"
-                    name="installation_company"
-                    value={formData.installer?.company_name || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                company_name: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="company_address" label="Company Address">
-                <Form.Control
-                    type="text"
-                    name="company_address"
-                    value={formData.installer?.company_address || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                company_address: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="company_phone" label="Company Phone">
-                <Form.Control
-                    type="text"
-                    name="company_phone"
-                    value={formData.installer?.company_phone || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                company_phone: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="company_email" label="Company Email">
-                <Form.Control
-                    type="text"
-                    name="company_email"
-                    value={formData.installer?.email || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                email: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
+            {[
+                'technician_name',
+                'company_name',
+                'company_address',
+                'company_phone',
+                'email',
+            ].map(field => (
+                <FloatingLabel
+                    key={field}
+                    controlId={field}
+                    label={field
+                        .replace(/_/g, ' ')
+                        .replace(/^\w/, c => c.toUpperCase())}
+                >
+                    <Form.Control
+                        type="text"
+                        name={field}
+                        value={
+                            formData.installer?.[
+                                field as keyof InstallerData
+                            ] || ''
+                        }
+                        onChange={e =>
+                            setFormData((prevData: FormData) => ({
+                                ...prevData,
+                                installer: {
+                                    ...prevData.installer,
+                                    [field as keyof InstallerData]:
+                                        e.target.value,
+                                },
+                            }))
+                        }
+                    />
+                </FloatingLabel>
+            ))}
             <h5>Project Address</h5>
-            <FloatingLabel controlId="street_address" label="Street Address">
-                <Form.Control
-                    type="text"
-                    name="street_address"
-                    value={formData.location?.street_address || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            location: {
-                                ...formData.location,
-                                street_address: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="city" label="City">
-                <Form.Control
-                    type="text"
-                    name="city"
-                    value={formData.location?.city || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            location: {
-                                ...formData.location,
-                                city: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
+            {['street_address', 'city', 'zip_code'].map(field => (
+                <FloatingLabel
+                    key={field}
+                    controlId={field}
+                    label={field
+                        .replace(/_/g, ' ')
+                        .replace(/^\w/, c => c.toUpperCase())}
+                >
+                    <Form.Control
+                        type="text"
+                        name={field}
+                        value={
+                            formData.location?.[field as keyof LocationData] ||
+                            ''
+                        }
+                        onChange={e =>
+                            setFormData((prevData: FormData) => ({
+                                ...prevData,
+                                location: {
+                                    ...prevData.location,
+                                    [field as keyof LocationData]:
+                                        e.target.value,
+                                },
+                            }))
+                        }
+                    />
+                </FloatingLabel>
+            ))}
             <FloatingLabel className="mb-3" controlId="state" label="State">
                 <Form.Select
                     name="state"
                     value={formData.location?.state || ''}
                     onChange={e =>
-                        setFormData({
-                            ...formData,
+                        setFormData((prevData: FormData) => ({
+                            ...prevData,
                             location: {
-                                ...formData.location,
+                                ...prevData.location,
                                 state: e.target.value,
                             },
-                        })
+                        }))
                     }
                 >
-                    <option key="" value="" />
+                    <option value="" />
                     {US_STATES.map(option => (
                         <option key={option} value={option}>
                             {option}
@@ -455,23 +356,6 @@ const NewProjectForm = () => {
                     ))}
                 </Form.Select>
             </FloatingLabel>
-            <FloatingLabel controlId="zip_code" label="Zip Code">
-                <Form.Control
-                    type="text"
-                    name="zip_code"
-                    value={formData.location?.zip_code || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            location: {
-                                ...formData.location,
-                                zip_code: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
-            {/* Photo Upload Wrapper */}
             <PhotoInputWrapper
                 id="project_photos"
                 label="Building Number - Photo"
@@ -484,7 +368,7 @@ const NewProjectForm = () => {
             </PhotoInputWrapper>
             <div className="buttons-div">
                 <Button
-                    onClick={handleCancelButtonClick}
+                    onClick={handleCancel}
                     variant="secondary"
                     type="button"
                 >
