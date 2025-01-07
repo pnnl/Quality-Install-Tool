@@ -33,15 +33,14 @@ const NewProjectForm = () => {
     const { docId } = React.useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
     const [docNameInput, setDocNameInput] = useState('')
-    const [initialDocName, setInitialDocName] = useState('') //This is for editing an existing project, to keep track of the name it started with
+    const [initialDocName, setInitialDocName] = useState('') // This is for editing an existing project, to keep track of the name it started with
     const [docNameInputError, setDocNameInputError] = useState('')
     const [formData, setFormData] = useState<any>({})
-    const [docStatus, setDocStatus] = useState<string>('') //new, created etc
-    const [selectedProject, setSelectedProject] = useState<any>() //to keep track of the project that the user chooses to prepopulate the installer fields
+    const [docStatus, setDocStatus] = useState<string>('') // new, created etc
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null) // To keep track of the project that the user chooses to prepopulate the installer fields
     const db = useDB()
 
-    //Get all the existing project from the db
-    //Pre-populate the Installer fields with the last created project data
+    // Get all the existing projects from the db
     const retrieveProjects = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
@@ -68,17 +67,38 @@ const NewProjectForm = () => {
         })
     }
 
-    //Get the data for the form by looking up the project by id in the db
+    // Get the data for the form by looking up the project by id in the db
     useEffect(() => {
         const fetchProjectDoc = async () => {
             if (docId) {
                 try {
                     const doc = await db.get(docId)
-                    setFormData(doc.data_)
-                    setDocNameInput(doc.metadata_.doc_name)
                     setDocStatus(doc.metadata_.status)
                     if (doc.metadata_.status === 'created') {
+                        setFormData(doc.data_)
+                        setDocNameInput(doc.metadata_.doc_name)
                         setInitialDocName(doc.metadata_.doc_name)
+                        setSelectedProject(doc) // Set the dropdown to this project
+                    } else {
+                        setFormData({
+                            installer: {
+                                technician_name:
+                                    selectedProject?.data_.installer
+                                        ?.technician_name || '',
+                                name:
+                                    selectedProject?.data_.installer?.name ||
+                                    '',
+                                mailing_address:
+                                    selectedProject?.data_.installer
+                                        ?.mailing_address || '',
+                                phone:
+                                    selectedProject?.data_.installer?.phone ||
+                                    '',
+                                email:
+                                    selectedProject?.data_.installer?.email ||
+                                    '',
+                            },
+                        })
                     }
                 } catch (error) {
                     console.error('Error fetching document:', error)
@@ -86,11 +106,11 @@ const NewProjectForm = () => {
             }
         }
         fetchProjectDoc()
-    }, [docId, db])
+    }, [docId, db, selectedProject])
 
-    //Update the installer fields when the user selects a different project to pre-populate them
+    // Update the installer fields when the user selects a different project to pre-populate them
     useEffect(() => {
-        if (selectedProject) {
+        if (selectedProject && docStatus !== 'created') {
             setFormData((prevData: any) => ({
                 ...prevData,
                 installer: {
@@ -104,9 +124,9 @@ const NewProjectForm = () => {
                 },
             }))
         }
-    }, [selectedProject])
+    }, [selectedProject, docStatus])
 
-    //Cancel button functions:
+    // Cancel button functions:
     const handleCancelButtonClick = async (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -132,7 +152,7 @@ const NewProjectForm = () => {
             navigate('/', { replace: true })
         }
     }
-    //Save form functions:
+    // Save form functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (validateDocName(docNameInput)) {
@@ -203,7 +223,7 @@ const NewProjectForm = () => {
         }
     }
 
-    //Form behavior functions:
+    // Form behavior functions:
     const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDocNameInput(e.target.value)
         validateDocName(e.target.value)
@@ -283,11 +303,11 @@ const NewProjectForm = () => {
                     report.
                 </em>
             </p>
-            {projectDocs.length > 1 && (
+            {projectDocs.length > 1 && docStatus === 'new' && (
                 <>
                     <p>
                         New projects are pre-populated with installer
-                        information your most recent project. You can clear
+                        information from your most recent project. You can clear
                         these fields or fill them from another project in the
                         dropdown menu:
                     </p>
