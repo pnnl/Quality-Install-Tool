@@ -53,8 +53,8 @@ const NewProjectForm = () => {
             //set the doc status
             const currentDoc = res.filter(
                 (project: Project) => project._id === docId,
-            )
-            const currentDocStatus = currentDoc[0].metadata_.status
+            )[0]
+            const currentDocStatus = currentDoc.metadata_.status
             setDocStatus(currentDocStatus)
             if (currentDocStatus === 'new') {
                 //prepopulate the installer fields with data from the lastModifiedProject
@@ -70,6 +70,30 @@ const NewProjectForm = () => {
                         email: lastProject?.data_.installer?.email || '',
                     },
                 })
+            } else {
+                //populate the entire form with that project's data
+                setFormData({
+                    installer: {
+                        technician_name:
+                            currentDoc?.data_.installer?.technician_name || '',
+                        name: currentDoc?.data_.installer?.name || '',
+                        mailing_address:
+                            currentDoc?.data_.installer?.mailing_address || '',
+                        phone: currentDoc?.data_.installer?.phone || '',
+                        email: currentDoc?.data_.installer?.email || '',
+                    },
+                    location: {
+                        street_address:
+                            currentDoc?.data_.location?.street_address || '',
+                        city: currentDoc?.data_.location?.city || '',
+                        state: currentDoc?.data_.location?.state || '',
+                        zip_code: currentDoc?.data_.location?.zip_code || '',
+                    },
+                    metadata_: {
+                        doc_name: currentDoc?.metadata_?.doc_name || '',
+                    },
+                })
+
                 //set the selectedProject to lastModifiedProject
             }
         } catch (error) {
@@ -312,7 +336,7 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="doc_name"
-                    value={docNameInput}
+                    value={formData?.metadata_?.doc_name || ''}
                     onChange={handleDocNameChange}
                     isInvalid={!!docNameInputError}
                 />
