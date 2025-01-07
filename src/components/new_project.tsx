@@ -58,7 +58,6 @@ const NewProjectForm = () => {
             setDocStatus(currentDocStatus)
             if (currentDocStatus === 'new') {
                 //prepopulate the installer fields with data from the lastModifiedProject
-
                 setFormData({
                     installer: {
                         technician_name:
@@ -70,6 +69,8 @@ const NewProjectForm = () => {
                         email: lastProject?.data_.installer?.email || '',
                     },
                 })
+
+                //set the selectedProject to lastModifiedProject
             } else {
                 //populate the entire form with that project's data
                 setFormData({
@@ -93,8 +94,6 @@ const NewProjectForm = () => {
                         doc_name: currentDoc?.metadata_?.doc_name || '',
                     },
                 })
-
-                //set the selectedProject to lastModifiedProject
             }
         } catch (error) {
             console.error('Error retrieving project docs:', error)
@@ -204,9 +203,9 @@ const NewProjectForm = () => {
     // // Save form functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (validateDocName(docNameInput)) {
-            const form = e.target as HTMLFormElement
-            const formData = new FormData(form)
+        const form = e.target as HTMLFormElement
+        const formData = new FormData(form)
+        if (validateDocName(formData.get('doc_name'))) {
             const updates = {
                 'metadata_.doc_name': formData.get('doc_name'),
                 'data_.installer.technician_name':
@@ -274,8 +273,9 @@ const NewProjectForm = () => {
 
     // // Form behavior functions:
     const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDocNameInput(e.target.value)
-        validateDocName(e.target.value)
+        // setDocNameInput(e.target.value)
+        // validateDocName(e.target.value)
+        console.log(e.target.value)
     }
 
     const handleSelect = (docNameInput: string | null) => {
@@ -301,10 +301,13 @@ const NewProjectForm = () => {
         }
     }
 
-    const validateDocName = (name: string) => {
+    const validateDocName = (name: FormDataEntryValue | null) => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
-
+        if (typeof name !== 'string') {
+            return false
+        }
         if (!regex.test(name) || name.length > 64) {
+            ///make this logic better
             setDocNameInputError(
                 `Project name must be no more than 64 characters consisting of letters, numbers,
                 dashes, and single spaces. Single spaces can only appear between other characters.`,
@@ -337,8 +340,16 @@ const NewProjectForm = () => {
                     type="text"
                     name="doc_name"
                     value={formData?.metadata_?.doc_name || ''}
-                    onChange={handleDocNameChange}
-                    isInvalid={!!docNameInputError}
+                    // onChange={handleDocNameChange}
+                    // isInvalid={!!docNameInputError}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            metadata_: {
+                                doc_name: e.target.value,
+                            },
+                        })
+                    }
                 />
                 <Form.Control.Feedback type="invalid">
                     {docNameInputError}
