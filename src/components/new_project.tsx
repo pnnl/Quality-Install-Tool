@@ -273,14 +273,7 @@ const NewProjectForm = () => {
         }
     }
 
-    // // Form behavior functions:
-    const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // setDocNameInput(e.target.value)
-        // validateDocName(e.target.value)
-        console.log(e.target.value)
-    }
-
-    const handleSelect = (docNameInput: string | null) => {
+    const handleSelectExistingInstallerInfo = (docNameInput: string | null) => {
         if (docNameInput === 'CLEAR_FORM') {
             setFormData((prevData: any) => ({
                 ...prevData,
@@ -297,9 +290,18 @@ const NewProjectForm = () => {
             const selected = projectDocs.find(
                 project => project.metadata_.doc_name === docNameInput,
             )
-            if (selected) {
-                setSelectedProject(selected)
-            }
+            // debugger
+            setFormData({
+                installer: {
+                    technician_name:
+                        selected?.data_.installer?.technician_name || '',
+                    name: selected?.data_.installer?.name || '',
+                    mailing_address:
+                        selected?.data_.installer?.mailing_address || '',
+                    phone: selected?.data_.installer?.phone || '',
+                    email: selected?.data_.installer?.email || '',
+                },
+            })
         }
     }
 
@@ -379,7 +381,7 @@ const NewProjectForm = () => {
                             selectedProject?.metadata_?.doc_name ||
                             'Select a Project'
                         }
-                        onSelect={handleSelect}
+                        onSelect={handleSelectExistingInstallerInfo}
                     >
                         {projectDocs.map(project => (
                             <Dropdown.Item
