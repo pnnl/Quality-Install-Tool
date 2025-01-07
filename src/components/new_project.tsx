@@ -71,6 +71,7 @@ const NewProjectForm = () => {
                 })
 
                 //set the selectedProject to lastModifiedProject
+                setSelectedProject(lastProject)
             } else {
                 //populate the entire form with that project's data
                 setFormData({
@@ -273,8 +274,10 @@ const NewProjectForm = () => {
         }
     }
 
-    const handleSelectExistingInstallerInfo = (docNameInput: string | null) => {
-        if (docNameInput === 'CLEAR_FORM') {
+    const handleSelectExistingInstallerInfo = (
+        selectedDocName: string | null,
+    ) => {
+        if (selectedDocName === 'CLEAR_FORM') {
             setFormData((prevData: any) => ({
                 ...prevData,
                 installer: {
@@ -286,22 +289,25 @@ const NewProjectForm = () => {
                     email: '',
                 },
             }))
-        } else if (docNameInput) {
+            setSelectedProject(null)
+        } else if (selectedDocName) {
             const selected = projectDocs.find(
-                project => project.metadata_.doc_name === docNameInput,
+                project => project.metadata_.doc_name === selectedDocName,
             )
-            // debugger
-            setFormData({
-                installer: {
-                    technician_name:
-                        selected?.data_.installer?.technician_name || '',
-                    name: selected?.data_.installer?.name || '',
-                    mailing_address:
-                        selected?.data_.installer?.mailing_address || '',
-                    phone: selected?.data_.installer?.phone || '',
-                    email: selected?.data_.installer?.email || '',
-                },
-            })
+            if (selected) {
+                setFormData({
+                    installer: {
+                        technician_name:
+                            selected?.data_.installer?.technician_name || '',
+                        name: selected?.data_.installer?.name || '',
+                        mailing_address:
+                            selected?.data_.installer?.mailing_address || '',
+                        phone: selected?.data_.installer?.phone || '',
+                        email: selected?.data_.installer?.email || '',
+                    },
+                })
+                setSelectedProject(selected)
+            }
         }
     }
 
