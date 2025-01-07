@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import PhotoInputWrapper from './photo_input_wrapper'
 import { StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
+import { debug } from 'console'
 
 interface Project {
     type: string
@@ -38,25 +39,29 @@ const NewProjectForm = () => {
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('') // new, created etc
     const [selectedProject, setSelectedProject] = useState<Project | null>(null) // To keep track of the project that the user chooses to prepopulate the installer fields
+    const [lastModifiedProject, setLastModifiedProject] =
+        useState<Project | null>(null)
     const db = useDB()
 
-    // Get all the existing projects from the db
+    // // Get all the existing projects from the db
     const retrieveProjects = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
             setProjectDocs(res)
-            const selectedProject = lastModifiedProject(res)
-            setSelectedProject(selectedProject)
+            setLastModifiedProject(findLastModifiedProject(res))
+            //set the doc status
+            console.log(res)
+            const currentDoc = res.filter(
+                (project: Project) => project._id === docId,
+            )
+            const currentDocStatus = currentDoc[0].metadata_.status
+            setDocStatus(currentDocStatus)
         } catch (error) {
             console.error('Error retrieving project docs:', error)
         }
     }
 
-    useEffect(() => {
-        retrieveProjects()
-    }, [db])
-
-    const lastModifiedProject = (projectDocs: Project[]) => {
+    const findLastModifiedProject = (projectDocs: Project[]) => {
         const filteredProjects = projectDocs.filter(
             project => project.metadata_.status !== 'new',
         )
@@ -67,66 +72,70 @@ const NewProjectForm = () => {
         })
     }
 
-    // Get the data for the form by looking up the project by id in the db
     useEffect(() => {
-        const fetchProjectDoc = async () => {
-            if (docId) {
-                try {
-                    const doc = await db.get(docId)
-                    setDocStatus(doc.metadata_.status)
-                    if (doc.metadata_.status === 'created') {
-                        setFormData(doc.data_)
-                        setDocNameInput(doc.metadata_.doc_name)
-                        setInitialDocName(doc.metadata_.doc_name)
-                        setSelectedProject(doc) // Set the dropdown to this project
-                    } else {
-                        setFormData({
-                            installer: {
-                                technician_name:
-                                    selectedProject?.data_.installer
-                                        ?.technician_name || '',
-                                name:
-                                    selectedProject?.data_.installer?.name ||
-                                    '',
-                                mailing_address:
-                                    selectedProject?.data_.installer
-                                        ?.mailing_address || '',
-                                phone:
-                                    selectedProject?.data_.installer?.phone ||
-                                    '',
-                                email:
-                                    selectedProject?.data_.installer?.email ||
-                                    '',
-                            },
-                        })
-                    }
-                } catch (error) {
-                    console.error('Error fetching document:', error)
-                }
-            }
-        }
-        fetchProjectDoc()
-    }, [docId, db, selectedProject])
+        retrieveProjects()
+    }, [db])
 
-    // Update the installer fields when the user selects a different project to pre-populate them
-    useEffect(() => {
-        if (selectedProject && docStatus !== 'created') {
-            setFormData((prevData: any) => ({
-                ...prevData,
-                installer: {
-                    technician_name:
-                        selectedProject.data_.installer?.technician_name || '',
-                    name: selectedProject.data_.installer?.name || '',
-                    mailing_address:
-                        selectedProject.data_.installer?.mailing_address || '',
-                    phone: selectedProject.data_.installer?.phone || '',
-                    email: selectedProject.data_.installer?.email || '',
-                },
-            }))
-        }
-    }, [selectedProject, docStatus])
+    // // Get the data for the form by looking up the project by id in the db
+    // useEffect(() => {
+    //     const fetchProjectDoc = async () => {
+    //         if (docId) {
+    //             try {
+    //                 const doc = await db.get(docId)
+    //                 setDocStatus(doc.metadata_.status)
+    //                 if (doc.metadata_.status === 'created') {
+    //                     setFormData(doc.data_)
+    //                     setDocNameInput(doc.metadata_.doc_name)
+    //                     setInitialDocName(doc.metadata_.doc_name)
+    //                     setSelectedProject(doc) // Set the dropdown to this project
+    //                 } else {
+    //                     setFormData({
+    //                         installer: {
+    //                             technician_name:
+    //                                 selectedProject?.data_.installer
+    //                                     ?.technician_name || '',
+    //                             name:
+    //                                 selectedProject?.data_.installer?.name ||
+    //                                 '',
+    //                             mailing_address:
+    //                                 selectedProject?.data_.installer
+    //                                     ?.mailing_address || '',
+    //                             phone:
+    //                                 selectedProject?.data_.installer?.phone ||
+    //                                 '',
+    //                             email:
+    //                                 selectedProject?.data_.installer?.email ||
+    //                                 '',
+    //                         },
+    //                     })
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching document:', error)
+    //             }
+    //         }
+    //     }
+    //     fetchProjectDoc()
+    // }, [docId, db, selectedProject])
 
-    // Cancel button functions:
+    // // Update the installer fields when the user selects a different project to pre-populate them
+    // useEffect(() => {
+    //     if (selectedProject && docStatus !== 'created') {
+    //         setFormData((prevData: any) => ({
+    //             ...prevData,
+    //             installer: {
+    //                 technician_name:
+    //                     selectedProject.data_.installer?.technician_name || '',
+    //                 name: selectedProject.data_.installer?.name || '',
+    //                 mailing_address:
+    //                     selectedProject.data_.installer?.mailing_address || '',
+    //                 phone: selectedProject.data_.installer?.phone || '',
+    //                 email: selectedProject.data_.installer?.email || '',
+    //             },
+    //         }))
+    //     }
+    // }, [selectedProject, docStatus])
+
+    // // Cancel button functions:
     const handleCancelButtonClick = async (
         event: React.MouseEvent<HTMLButtonElement>,
     ) => {
@@ -152,7 +161,7 @@ const NewProjectForm = () => {
             navigate('/', { replace: true })
         }
     }
-    // Save form functions:
+    // // Save form functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (validateDocName(docNameInput)) {
@@ -223,7 +232,7 @@ const NewProjectForm = () => {
         }
     }
 
-    // Form behavior functions:
+    // // Form behavior functions:
     const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDocNameInput(e.target.value)
         validateDocName(e.target.value)
@@ -257,7 +266,7 @@ const NewProjectForm = () => {
 
         if (!regex.test(name) || name.length > 64) {
             setDocNameInputError(
-                `Project name must be no more than 64 characters consisting of letters, numbers, 
+                `Project name must be no more than 64 characters consisting of letters, numbers,
                 dashes, and single spaces. Single spaces can only appear between other characters.`,
             )
             return false
