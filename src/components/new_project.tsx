@@ -94,6 +94,8 @@ const NewProjectForm = () => {
                         doc_name: currentDoc?.metadata_?.doc_name || '',
                     },
                 })
+                //set initialDocName so we can allow it through validation
+                setInitialDocName(currentDoc?.metadata_?.doc_name)
             }
         } catch (error) {
             console.error('Error retrieving project docs:', error)
@@ -341,7 +343,7 @@ const NewProjectForm = () => {
                     name="doc_name"
                     value={formData?.metadata_?.doc_name || ''}
                     // onChange={handleDocNameChange}
-                    // isInvalid={!!docNameInputError}
+                    isInvalid={!!docNameInputError}
                     onChange={e =>
                         setFormData({
                             ...formData,
