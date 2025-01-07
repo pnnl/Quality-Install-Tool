@@ -32,15 +32,17 @@ const NewProjectForm = () => {
     const navigate = useNavigate()
     const { docId } = React.useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
-    const [docName, setDocName] = useState('')
-    const [initialDocName, setInitialDocName] = useState('') // State to keep track of initial document name
-    const [docNameError, setDocNameError] = useState('')
+    const [docNameInput, setDocNameInput] = useState('')
+    const [initialDocName, setInitialDocName] = useState('') //This is for editing an existing project, to keep track of the name it started with
+    const [docNameInputError, setDocNameInputError] = useState('')
     const [formData, setFormData] = useState<any>({})
-    const [docStatus, setDocStatus] = useState<string>('')
-    const [selectedProject, setSelectedProject] = useState<any>()
+    const [docStatus, setDocStatus] = useState<string>('') //new, created etc
+    const [selectedProject, setSelectedProject] = useState<any>() //to keep track of the project that the user chooses to prepopulate the installer fields
     const db = useDB()
 
-    const retrieveProjectInfo = async (): Promise<void> => {
+    //Get all the existing project from the db
+    //Pre-populate the Installer fields with the last created project data
+    const retrieveProjects = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
             setProjectDocs(res)
@@ -52,7 +54,7 @@ const NewProjectForm = () => {
     }
 
     useEffect(() => {
-        retrieveProjectInfo()
+        retrieveProjects()
     }, [db])
 
     const lastModifiedProject = (projectDocs: Project[]) => {
@@ -66,16 +68,17 @@ const NewProjectForm = () => {
         })
     }
 
+    //Get the data for the form by looking up the project by id in the db
     useEffect(() => {
         const fetchProjectDoc = async () => {
             if (docId) {
                 try {
                     const doc = await db.get(docId)
                     setFormData(doc.data_)
-                    setDocName(doc.metadata_.doc_name)
+                    setDocNameInput(doc.metadata_.doc_name)
                     setDocStatus(doc.metadata_.status)
                     if (doc.metadata_.status === 'created') {
-                        setInitialDocName(doc.metadata_.doc_name) // Set the initial document name if status is created
+                        setInitialDocName(doc.metadata_.doc_name)
                     }
                 } catch (error) {
                     console.error('Error fetching document:', error)
@@ -85,6 +88,7 @@ const NewProjectForm = () => {
         fetchProjectDoc()
     }, [docId, db])
 
+    //Update the installer fields when the user selects a different project to pre-populate them
     useEffect(() => {
         if (selectedProject) {
             setFormData((prevData: any) => ({
@@ -102,6 +106,17 @@ const NewProjectForm = () => {
         }
     }, [selectedProject])
 
+    //Cancel button functions:
+    const handleCancelButtonClick = async (
+        event: React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        if (docStatus === 'created') {
+            navigate('/', { replace: true })
+            return
+        }
+        deleteEmptyProject()
+    }
+
     const deleteEmptyProject = async () => {
         try {
             if (docStatus === 'new') {
@@ -117,20 +132,10 @@ const NewProjectForm = () => {
             navigate('/', { replace: true })
         }
     }
-
-    const handleCancelButtonClick = async (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
-        if (docStatus === 'created') {
-            navigate('/', { replace: true })
-            return
-        }
-        deleteEmptyProject()
-    }
-
+    //Save form functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (validateDocName(docName)) {
+        if (validateDocName(docNameInput)) {
             const form = e.target as HTMLFormElement
             const formData = new FormData(form)
             const updates = {
@@ -147,67 +152,14 @@ const NewProjectForm = () => {
                 'data_.location.state': formData.get('state'),
                 'data_.location.zip_code': formData.get('zip_code'),
             }
-            await updateFieldInDocument(docId, updates)
+            await updateFieldsInDocument(docId, updates)
             navigate('/', { replace: true })
         } else {
             alert('Please fix form errors before submitting.')
         }
     }
 
-    const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDocName(e.target.value)
-        validateDocName(e.target.value)
-    }
-
-    const handleSelect = (docName: string | null) => {
-        if (docName === 'CLEAR_FORM') {
-            setFormData((prevData: any) => ({
-                ...prevData,
-                installer: {
-                    // Only reset installer information
-                    technician_name: '',
-                    name: '',
-                    mailing_address: '',
-                    phone: '',
-                    email: '',
-                },
-            }))
-        } else if (docName) {
-            const selected = projectDocs.find(
-                project => project.metadata_.doc_name === docName,
-            )
-            if (selected) {
-                setSelectedProject(selected)
-            }
-        }
-    }
-
-    const validateDocName = (name: string) => {
-        const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
-
-        if (!regex.test(name) || name.length > 64) {
-            setDocNameError(
-                `Project name must be no more than 64 characters consisting of letters, numbers, 
-                dashes, and single spaces. Single spaces can only appear between other characters.`,
-            )
-            return false
-        }
-        const isDuplicate = projectDocs.some(
-            doc =>
-                doc.metadata_.doc_name !== initialDocName &&
-                doc.metadata_.doc_name === name, // Allow initial document name
-        )
-        if (isDuplicate) {
-            setDocNameError(
-                'Project name already exists. Please choose a different name.',
-            )
-            return false
-        }
-        setDocNameError('')
-        return true
-    }
-
-    const updateFieldInDocument = async (
+    const updateFieldsInDocument = async (
         docId: string | null,
         updates: Record<string, any>,
     ) => {
@@ -251,6 +203,60 @@ const NewProjectForm = () => {
         }
     }
 
+    //Form behavior functions:
+    const handleDocNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDocNameInput(e.target.value)
+        validateDocName(e.target.value)
+    }
+
+    const handleSelect = (docNameInput: string | null) => {
+        if (docNameInput === 'CLEAR_FORM') {
+            setFormData((prevData: any) => ({
+                ...prevData,
+                installer: {
+                    // Only reset installer information
+                    technician_name: '',
+                    name: '',
+                    mailing_address: '',
+                    phone: '',
+                    email: '',
+                },
+            }))
+        } else if (docNameInput) {
+            const selected = projectDocs.find(
+                project => project.metadata_.doc_name === docNameInput,
+            )
+            if (selected) {
+                setSelectedProject(selected)
+            }
+        }
+    }
+
+    const validateDocName = (name: string) => {
+        const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
+
+        if (!regex.test(name) || name.length > 64) {
+            setDocNameInputError(
+                `Project name must be no more than 64 characters consisting of letters, numbers, 
+                dashes, and single spaces. Single spaces can only appear between other characters.`,
+            )
+            return false
+        }
+        const isDuplicate = projectDocs.some(
+            doc =>
+                doc.metadata_.doc_name !== initialDocName &&
+                doc.metadata_.doc_name === name, // Allow initial document name
+        )
+        if (isDuplicate) {
+            setDocNameInputError(
+                'Project name already exists. Please choose a different name.',
+            )
+            return false
+        }
+        setDocNameInputError('')
+        return true
+    }
+
     return (
         <Form
             onSubmit={handleSubmitForm}
@@ -261,12 +267,12 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="doc_name"
-                    value={docName}
+                    value={docNameInput}
                     onChange={handleDocNameChange}
-                    isInvalid={!!docNameError}
+                    isInvalid={!!docNameInputError}
                 />
                 <Form.Control.Feedback type="invalid">
-                    {docNameError}
+                    {docNameInputError}
                 </Form.Control.Feedback>
             </FloatingLabel>
             <h5>Installer Information</h5>
