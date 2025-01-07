@@ -44,18 +44,34 @@ const NewProjectForm = () => {
     const db = useDB()
 
     // // Get all the existing projects from the db
-    const retrieveProjects = async (): Promise<void> => {
+    const setUpForm = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
             setProjectDocs(res)
-            setLastModifiedProject(findLastModifiedProject(res))
+            const lastProject = findLastModifiedProject(res)
+            setLastModifiedProject(lastProject)
             //set the doc status
-            console.log(res)
             const currentDoc = res.filter(
                 (project: Project) => project._id === docId,
             )
             const currentDocStatus = currentDoc[0].metadata_.status
             setDocStatus(currentDocStatus)
+            if (currentDocStatus === 'new') {
+                //prepopulate the installer fields with data from the lastModifiedProject
+
+                setFormData({
+                    installer: {
+                        technician_name:
+                            lastProject?.data_.installer?.technician_name || '',
+                        name: lastProject?.data_.installer?.name || '',
+                        mailing_address:
+                            lastProject?.data_.installer?.mailing_address || '',
+                        phone: lastProject?.data_.installer?.phone || '',
+                        email: lastProject?.data_.installer?.email || '',
+                    },
+                })
+                //set the selectedProject to lastModifiedProject
+            }
         } catch (error) {
             console.error('Error retrieving project docs:', error)
         }
@@ -73,7 +89,7 @@ const NewProjectForm = () => {
     }
 
     useEffect(() => {
-        retrieveProjects()
+        setUpForm()
     }, [db])
 
     // // Get the data for the form by looking up the project by id in the db
