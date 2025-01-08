@@ -51,14 +51,17 @@ const NewProjectForm = () => {
     const setUpForm = async (): Promise<void> => {
         try {
             const res = await retrieveProjectDocs(db)
+            //ProjectDocs set in state to validate project name edits
+            //and create a list of installer information selection options to pre-populate form
             setProjectDocs(res)
-            const lastProject = findLastModifiedProject(res)
             const currentDoc = res.filter(
                 (project: Project) => project._id === docId,
             )[0]
             const currentDocStatus = currentDoc.metadata_.status
             setDocStatus(currentDocStatus)
+
             if (currentDocStatus === 'new') {
+                const lastProject = findLastModifiedProject(res)
                 //prepopulate the installer fields with data from the lastModifiedProject
                 setFormData({
                     installer: {
@@ -72,17 +75,17 @@ const NewProjectForm = () => {
                     },
                 })
 
-                //set the selectedProject to lastModifiedProject
-                setSelectedProject(lastProject)
-                //get unique installer information from projects
+                //get unique installer information from projects to populate Installer Info dropdown
                 setUniqueInstallers(getUniqueInstallers(res))
+                //set the selectedInstaller information to last used installer info
                 setSelectedInstaller([
                     lastProject?.data_.installer?.technician_name || '',
                     lastProject?.data_.installer?.name || '',
                     lastProject?.data_.installer?.phone || '',
                 ])
             } else {
-                //populate the entire form with that project's data
+                //In the case that the user is editing an existing project...
+                //Populate the entire form with that project's data
                 setFormData({
                     installer: {
                         technician_name:
@@ -104,7 +107,7 @@ const NewProjectForm = () => {
                         doc_name: currentDoc?.metadata_?.doc_name || '',
                     },
                 })
-                //set initialDocName so we can allow it through validation
+                //set initialDocName to exisiting docName so we can allow it through validation
                 setInitialDocName(currentDoc?.metadata_?.doc_name)
             }
         } catch (error) {
@@ -139,7 +142,10 @@ const NewProjectForm = () => {
                     mailing_address,
                 ])
 
-                installerSet.add(installerInfo)
+                //make sure we're not adding an array of empty strings to the installerset
+                if (technician_name !== '' && name !== '' && phone !== '') {
+                    installerSet.add(installerInfo)
+                }
             }
         })
 
@@ -162,7 +168,6 @@ const NewProjectForm = () => {
                     email: '',
                 },
             }))
-            setSelectedProject(null)
             setSelectedInstaller(null)
         } else if (selectedInstaller) {
             const selected = uniqueInstallers.find(
@@ -171,19 +176,20 @@ const NewProjectForm = () => {
 
             if (selected) {
                 setSelectedInstaller(selected)
-                // debugger
                 setFormData({
                     installer: {
                         technician_name: selected[0],
                         name: selected[1],
-                        mailing_address: selected[4],
                         phone: selected[2],
                         email: selected[3],
+                        mailing_address: selected[4],
                     },
                 })
-
-                // setSelectedProject(selected)
+            } else {
+                console.log('Error in the installer selector.')
             }
+        } else {
+            console.log('Error in the installer selector.')
         }
     }
 
@@ -345,41 +351,45 @@ const NewProjectForm = () => {
                     report.
                 </em>
             </p>
-            {projectDocs.length > 1 && docStatus === 'new' && (
-                <>
-                    <p>
-                        New projects are pre-populated with installer
-                        information from your most recent project. You can clear
-                        these fields or choose a different one from the drop
-                        down menu:
-                    </p>
-                    <DropdownButton
-                        id="project-selector"
-                        title={
-                            selectedInstaller
-                                ? selectedInstaller.slice(0, 3).join(', ')
-                                : 'Select a Project'
-                        }
-                        onSelect={handleSelectExistingInstallerInfo}
-                    >
-                        {uniqueInstallers.map(array => {
-                            const installerString = array.slice(0, 3).join(', ')
-                            return (
-                                <Dropdown.Item
-                                    key={installerString}
-                                    eventKey={installerString}
-                                >
-                                    {installerString}
-                                </Dropdown.Item>
-                            )
-                        })}
-                        <Dropdown.Divider />
-                        <Dropdown.Item eventKey="CLEAR_FORM">
-                            Clear Installer Information
-                        </Dropdown.Item>
-                    </DropdownButton>
-                </>
-            )}
+            {projectDocs.length > 1 &&
+                docStatus === 'new' &&
+                uniqueInstallers.length > 0 && (
+                    <>
+                        <p>
+                            New projects are pre-populated with installer
+                            information from your most recent project. You can
+                            clear these fields or choose a different one from
+                            the drop down menu:
+                        </p>
+                        <DropdownButton
+                            id="project-selector"
+                            title={
+                                selectedInstaller
+                                    ? selectedInstaller.slice(0, 3).join(', ')
+                                    : 'Select a Project'
+                            }
+                            onSelect={handleSelectExistingInstallerInfo}
+                        >
+                            {uniqueInstallers.map(array => {
+                                const installerString = array
+                                    .slice(0, 3)
+                                    .join(', ')
+                                return (
+                                    <Dropdown.Item
+                                        key={installerString}
+                                        eventKey={installerString}
+                                    >
+                                        {installerString}
+                                    </Dropdown.Item>
+                                )
+                            })}
+                            <Dropdown.Divider />
+                            <Dropdown.Item eventKey="CLEAR_FORM">
+                                Clear Installer Information
+                            </Dropdown.Item>
+                        </DropdownButton>
+                    </>
+                )}
 
             <FloatingLabel controlId="technician_name" label="Technician Name">
                 <Form.Control
