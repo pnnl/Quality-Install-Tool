@@ -2,7 +2,19 @@
 FROM node:20-alpine AS builder
 
 # Install dependencies required by node-gyp
-RUN apk add --no-cache python3 py3-pip make g++ 
+RUN apk add --no-cache \
+  python3 \
+  py3-pip \
+  make \
+  g++ \
+  libc-dev \
+  cairo-dev \
+  pango-dev \
+  jpeg-dev \
+  giflib-dev \
+  pixman-dev \
+  libpng-dev \
+  pkgconfig
 
 # Set working directory
 WORKDIR /app
