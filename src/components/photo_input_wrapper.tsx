@@ -130,8 +130,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 attachments,
                 upsertAttachment,
                 deleteAttachment,
-                data,
-                upsertData,
             }) => {
                 const deletePhoto = (photoId: string) => {
                     deleteAttachment(photoId)
@@ -232,10 +230,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             loading={loading}
                             error={error}
                             count={count}
-                            updateNoteValue={(value: any) =>
-                                upsertData(`${id}_note`, value)
-                            }
-                            noteValue={convertDataObject(data)[`${id}_note`]}
                             id={id}
                             notes={notes}
                         >

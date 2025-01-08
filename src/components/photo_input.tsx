@@ -10,6 +10,7 @@ import type PhotoMetaData from '../types/photo_metadata.type'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
 import TextInput from './text_input'
+import TextInputWrapper from './text_input_wrapper'
 import JSONValue from '../types/json_value.type'
 
 interface PhotoInputProps {
@@ -23,8 +24,6 @@ interface PhotoInputProps {
     loading: boolean
     error: string
     count: number
-    noteValue: JSONValue | undefined
-    updateNoteValue: (value: string) => void
     id: string
     notes?: boolean
 }
@@ -45,8 +44,6 @@ interface PhotoInputProps {
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo (default).
  * @param loader  When set, a loading image will be displayed during the upload process.
- * @param noteValue The value to populate the photo caption box
- * @param updateNoteValue Function for setting the note in the photo caption box
  * @param id Attachment id
  * @param notes If notes is false, then the note input will not show up
  */
@@ -60,8 +57,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
     loading,
     error,
     count,
-    noteValue,
-    updateNoteValue,
     id,
     notes = true,
 }) => {
@@ -254,11 +249,9 @@ const PhotoInput: FC<PhotoInputProps> = ({
                         </div>
                     )}
                     {notes && (
-                        <TextInput
-                            id={id}
+                        <TextInputWrapper
+                            path={`${id}_note`}
                             label="Optional note about photo(s):"
-                            value={noteValue ? noteValue?.toString() : ''}
-                            updateValue={updateNoteValue}
                             min={0}
                             max={300}
                             regexp={/.*/} //any string
