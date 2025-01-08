@@ -12,8 +12,7 @@ interface PhotoWrapperProps {
     label: string
     required: boolean
     docId: string
-    project?: any
-    fromParent?: boolean
+    parent?: any
 }
 
 interface JSONObject {
@@ -52,19 +51,18 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     label,
     required,
     docId,
-    project,
-    fromParent,
+    parent,
 }) => {
     const [matchingAttachments, setMatchingAttachments] = useState<any>({})
-    const [projectDoc, setProjectDoc] = useState<any>(project)
+    const [projectDoc, setProjectDoc] = useState<any>(parent)
     const db = useDB()
 
     useEffect(() => {
-        if (fromParent) {
-            const projectId = projectDoc?._id || docId
+        if (parent) {
+            const projectId = parent?._id || docId
             getMatchingAttachmentsFromParent(projectId)
         }
-    }, [fromParent])
+    }, [parent])
 
     const getMatchingAttachmentsFromParent = (projectDocId: any) => {
         db.get(projectDocId, { attachments: true })
@@ -150,7 +148,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                             description={children}
                             label={label}
                             photos={
-                                fromParent
+                                parent
                                     ? matchingAttachments
                                     : getMatchingAttachments(attachments, id)
                             }
