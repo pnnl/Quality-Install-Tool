@@ -1,4 +1,4 @@
-name: Deploy Vapor Quality App
+name: Deploy Vapor Quality Image to ECR
 
 on:
   workflow_dispatch:
@@ -6,10 +6,6 @@ on:
       tag:
         description: "Docker image tag for Vapor-Quality ECR."
         required: true
-      branch:
-        description: "Branch to deploy."
-        required: true
-        default: "main"
 
 permissions:
   id-token: write
@@ -19,7 +15,6 @@ jobs:
   build-image:
     name: Build and push to Amazon ECR
     runs-on: ubuntu-latest
-    environment: images
 
     steps:
       - name: Github Workflow Information
@@ -28,8 +23,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{github.event.inputs.branch}}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
