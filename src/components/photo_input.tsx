@@ -9,9 +9,7 @@ import GpsCoordStr from './gps_coord_str'
 import type PhotoMetaData from '../types/photo_metadata.type'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
-import TextInput from './text_input'
 import TextInputWrapper from './text_input_wrapper'
-import JSONValue from '../types/json_value.type'
 
 interface PhotoInputProps {
     children: React.ReactNode
