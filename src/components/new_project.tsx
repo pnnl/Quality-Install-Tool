@@ -37,6 +37,10 @@ const NewProjectForm = () => {
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('') // new, created etc
     const [selectedProject, setSelectedProject] = useState<Project | null>(null) // To keep track of the project that the user chooses to prepopulate the installer fields
+    const [selectedInstaller, setSelectedInstaller] = useState<String[] | null>(
+        null,
+    )
+    const [uniqueInstallers, setUniqueInstallers] = useState<String[][]>([[]])
     const db = useDB()
 
     //Set up the form:
@@ -67,8 +71,16 @@ const NewProjectForm = () => {
                         email: lastProject?.data_.installer?.email || '',
                     },
                 })
+
                 //set the selectedProject to lastModifiedProject
                 setSelectedProject(lastProject)
+                //get unique installer information from projects
+                setUniqueInstallers(getUniqueInstallers(res))
+                setSelectedInstaller([
+                    lastProject?.data_.installer?.technician_name || '',
+                    lastProject?.data_.installer?.name || '',
+                    lastProject?.data_.installer?.phone || '',
+                ])
             } else {
                 //populate the entire form with that project's data
                 setFormData({
@@ -111,11 +123,34 @@ const NewProjectForm = () => {
         })
     }
 
+    function getUniqueInstallers(projects: Project[]) {
+        const installerSet = new Set<string>()
+
+        projects.forEach(project => {
+            if (project.data_.installer) {
+                const { technician_name, name, phone, email, mailing_address } =
+                    project.data_.installer
+
+                const installerInfo = JSON.stringify([
+                    technician_name,
+                    name,
+                    phone,
+                    email,
+                    mailing_address,
+                ])
+
+                installerSet.add(installerInfo)
+            }
+        })
+
+        return Array.from(installerSet).map(installer => JSON.parse(installer))
+    }
+
     //Installer information selection function:
     const handleSelectExistingInstallerInfo = (
-        selectedDocName: string | null,
+        selectedInstaller: string | null,
     ) => {
-        if (selectedDocName === 'CLEAR_FORM') {
+        if (selectedInstaller === 'CLEAR_FORM') {
             setFormData((prevData: any) => ({
                 ...prevData,
                 installer: {
@@ -128,23 +163,26 @@ const NewProjectForm = () => {
                 },
             }))
             setSelectedProject(null)
-        } else if (selectedDocName) {
-            const selected = projectDocs.find(
-                project => project.metadata_.doc_name === selectedDocName,
+            setSelectedInstaller(null)
+        } else if (selectedInstaller) {
+            const selected = uniqueInstallers.find(
+                array => array.slice(0, 3).join(', ') === selectedInstaller,
             )
+
             if (selected) {
+                setSelectedInstaller(selected)
+                // debugger
                 setFormData({
                     installer: {
-                        technician_name:
-                            selected?.data_.installer?.technician_name || '',
-                        name: selected?.data_.installer?.name || '',
-                        mailing_address:
-                            selected?.data_.installer?.mailing_address || '',
-                        phone: selected?.data_.installer?.phone || '',
-                        email: selected?.data_.installer?.email || '',
+                        technician_name: selected[0],
+                        name: selected[1],
+                        mailing_address: selected[4],
+                        phone: selected[2],
+                        email: selected[3],
                     },
                 })
-                setSelectedProject(selected)
+
+                // setSelectedProject(selected)
             }
         }
     }
@@ -312,28 +350,32 @@ const NewProjectForm = () => {
                     <p>
                         New projects are pre-populated with installer
                         information from your most recent project. You can clear
-                        these fields or fill them from another project in the
-                        dropdown menu:
+                        these fields or choose a different one from the drop
+                        down menu:
                     </p>
                     <DropdownButton
                         id="project-selector"
                         title={
-                            selectedProject?.metadata_?.doc_name ||
-                            'Select a Project'
+                            selectedInstaller
+                                ? selectedInstaller.slice(0, 3).join(', ')
+                                : 'Select a Project'
                         }
                         onSelect={handleSelectExistingInstallerInfo}
                     >
-                        {projectDocs.map(project => (
-                            <Dropdown.Item
-                                key={project._id}
-                                eventKey={project.metadata_.doc_name}
-                            >
-                                {project.metadata_.doc_name}
-                            </Dropdown.Item>
-                        ))}
+                        {uniqueInstallers.map(array => {
+                            const installerString = array.slice(0, 3).join(', ')
+                            return (
+                                <Dropdown.Item
+                                    key={installerString}
+                                    eventKey={installerString}
+                                >
+                                    {installerString}
+                                </Dropdown.Item>
+                            )
+                        })}
                         <Dropdown.Divider />
                         <Dropdown.Item eventKey="CLEAR_FORM">
-                            Clear Form
+                            Clear Installer Information
                         </Dropdown.Item>
                     </DropdownButton>
                 </>
