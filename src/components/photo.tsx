@@ -5,16 +5,14 @@ import { Card, Image, Row, Col } from 'react-bootstrap'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import type PhotoMetadata from '../types/photo_metadata.type'
-import JSONValue from '../types/json_value.type'
 
 interface PhotoProps {
     description: React.ReactNode
     label: string
     photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Array of photo objects with metadata
     required: boolean
-    noteValue: JSONValue
+    noteValue: string | undefined
 }
-
 /**
  * A component that displays a photo, timestamp, geolocation, label, and description
  * Displays multiple photos (2 per row) with metadata in a grid layout
@@ -22,7 +20,6 @@ interface PhotoProps {
  * @param description Content (most commonly markdown text) used to describe the photo
  * @param label Label for the component
  * @param metadata Photo metadata including timestamp and geolocation
- * @param notes User notes associated with the photo
  * @param photos Array of photo objects with photo Blob and metadata for each photo
  *         {
  *         id attachment id for the photo and metadata
@@ -49,7 +46,7 @@ const Photo: FC<PhotoProps> = ({
                 {noteValue && (
                     <div className="photo-notes">
                         <h3>Notes: </h3>
-                        <div>{noteValue ? noteValue.toString() : null}</div>
+                        <div>{noteValue ? noteValue : null}</div>
                     </div>
                 )}
 

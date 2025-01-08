@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 import imageCompression from 'browser-image-compression'
 
@@ -7,7 +7,6 @@ import PhotoInput from './photo_input'
 import PhotoMetadata from '../types/photo_metadata.type'
 
 import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
-import JSONValue from '../types/json_value.type'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -16,23 +15,6 @@ interface PhotoInputWrapperProps {
     uploadable: boolean
     count?: number
     notes?: boolean
-}
-
-interface JSONObject {
-    [key: string]: JSONValue
-}
-//This function takes a data object from the StoreContext and converts it into an object
-//whose values we can access via string-type keys
-function convertDataObject(data: {}): JSONObject {
-    let jsonObject = data as JSONObject
-    let newDataObject: JSONObject = {}
-
-    for (const key in jsonObject) {
-        if (jsonObject.hasOwnProperty(key)) {
-            newDataObject[key] = jsonObject[key]
-        }
-    }
-    return newDataObject
 }
 
 /**
@@ -45,7 +27,7 @@ function convertDataObject(data: {}): JSONObject {
  * @param label The label of the PhotoInput component
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo.
- * @param note Boolean from the mdx component that indicates whether the notes field will be available
+ * @param notes Boolean from the mdx component that indicates whether the notes field will be available
  */
 const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,

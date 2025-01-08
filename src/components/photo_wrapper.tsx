@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
-
+import { get } from 'lodash'
 import { StoreContext } from './store'
 import Photo from './photo'
 import { useDB } from '../utilities/database_utils'
-
-import JSONValue from '../types/json_value.type'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -13,23 +11,6 @@ interface PhotoWrapperProps {
     required: boolean
     docId: string
     parent?: any
-}
-
-interface JSONObject {
-    [key: string]: JSONValue
-}
-//This function takes a data object from the StoreContext and converts it into an object
-//whose values we can access via string-type keys
-function convertDataObject(data: {}): JSONObject {
-    let jsonObject = data as JSONObject
-    let newDataObject: JSONObject = {}
-
-    for (const key in jsonObject) {
-        if (jsonObject.hasOwnProperty(key)) {
-            newDataObject[key] = jsonObject[key]
-        }
-    }
-    return newDataObject
 }
 
 /**
@@ -54,7 +35,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     parent,
 }) => {
     const [matchingAttachments, setMatchingAttachments] = useState<any>({})
-    const [projectDoc, setProjectDoc] = useState<any>(parent)
     const db = useDB()
 
     useEffect(() => {
@@ -107,7 +87,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 
                 setMatchingAttachments(matchingAttachments)
                 // Set the filtered attachments in state
-                setProjectDoc(doc) // Set the full document if needed
             })
             .catch((err: any) => {
                 console.error('Failed to get matching attachments:', err)
@@ -153,7 +132,11 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                                     : getMatchingAttachments(attachments, id)
                             }
                             required={required}
-                            noteValue={convertDataObject(data)[`${id}_note`]}
+                            noteValue={
+                                get(data, `${id}_note`)
+                                    ? get(data, `${id}_note`)
+                                    : ''
+                            }
                         />
                     )
             }}
