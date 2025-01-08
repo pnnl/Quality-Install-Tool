@@ -1,6 +1,9 @@
 # Stage 1: Build
 FROM node:20-alpine AS builder
 
+# Install dependencies required by node-gyp
+RUN apk add --no-cache python3 py3-pip make g++ 
+
 # Set working directory
 WORKDIR /app
 
@@ -27,9 +30,6 @@ RUN rm -rf ./*
 
 # Copy build output from Stage 1
 COPY --from=builder /app/build .
-
-# Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
