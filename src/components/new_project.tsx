@@ -377,7 +377,7 @@ const NewProjectForm = () => {
                             title={
                                 selectedInstaller
                                     ? selectedInstaller.slice(0, 3).join(', ')
-                                    : 'Select a Project'
+                                    : 'Select Installer Information'
                             }
                             onSelect={handleSelectExistingInstallerInfo}
                         >
