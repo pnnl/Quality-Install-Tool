@@ -62,27 +62,38 @@ const NewProjectForm = () => {
 
             if (currentDocStatus === 'new') {
                 const lastProject = findLastModifiedProject(res)
-                //prepopulate the installer fields with data from the lastModifiedProject
-                setFormData({
-                    installer: {
-                        technician_name:
-                            lastProject?.data_.installer?.technician_name || '',
-                        name: lastProject?.data_.installer?.name || '',
-                        mailing_address:
-                            lastProject?.data_.installer?.mailing_address || '',
-                        phone: lastProject?.data_.installer?.phone || '',
-                        email: lastProject?.data_.installer?.email || '',
-                    },
-                })
 
                 //get unique installer information from projects to populate Installer Info dropdown
                 setUniqueInstallers(getUniqueInstallers(res))
-                //set the selectedInstaller information to last used installer info
-                setSelectedInstaller([
-                    lastProject?.data_.installer?.technician_name || '',
-                    lastProject?.data_.installer?.name || '',
-                    lastProject?.data_.installer?.phone || '',
-                ])
+
+                //prepopulate the installer fields with data from the lastModifiedProject
+                //only if the tech name or installer company or phone number exists
+                //Weird, but this keeps it synced with the drop down correctly
+                if (
+                    lastProject?.data_.installer?.technician_name !== '' &&
+                    lastProject?.data_.installer?.name !== '' &&
+                    lastProject?.data_.installer?.phone !== ''
+                ) {
+                    //set the selectedInstaller information to last used installer info
+                    setSelectedInstaller([
+                        lastProject?.data_.installer?.technician_name || '',
+                        lastProject?.data_.installer?.name || '',
+                        lastProject?.data_.installer?.phone || '',
+                    ])
+                    setFormData({
+                        installer: {
+                            technician_name:
+                                lastProject?.data_.installer?.technician_name ||
+                                '',
+                            name: lastProject?.data_.installer?.name || '',
+                            mailing_address:
+                                lastProject?.data_.installer?.mailing_address ||
+                                '',
+                            phone: lastProject?.data_.installer?.phone || '',
+                            email: lastProject?.data_.installer?.email || '',
+                        },
+                    })
+                }
             } else {
                 //In the case that the user is editing an existing project...
                 //Populate the entire form with that project's data
