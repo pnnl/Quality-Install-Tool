@@ -1,7 +1,6 @@
 import React, { FC, Suspense } from 'react'
 import Button from 'react-bootstrap/Button'
 import { StoreContext } from './store'
-import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
 import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
 
 // Lazily initializes the components, rendering them only when requested.
@@ -32,7 +31,6 @@ const FileInputWrapper = React.lazy(() => import('./file_input_wrapper'))
 const PDFRendererWrapper = React.lazy(() => import('./pdf_renderer_wrapper'))
 const ShowOrHide = React.lazy(() => import('./show_or_hide'))
 const CheckBoxWrapper = React.lazy(() => import('./checkbox_wrapper'))
-const DocNameInputWrapper = React.lazy(() => import('./doc_name_input_wrapper'))
 const SaveCancelButtonWrapper = React.lazy(
     () => import('./save_cancel_button_wrapper'),
 )
@@ -47,7 +45,6 @@ const CombustionSafetyChecksReport = React.lazy(
     () => import('../templates/reusable/combustion_safety_checks_report.mdx'),
 )
 const LabelValueWrapper = React.lazy(() => import('./label_value_wrapper'))
-const NewProject = React.lazy(() => import('./new_project'))
 
 const components = {
     Collapsible,
@@ -70,19 +67,16 @@ const components = {
     Tab: Tab,
     Tabs: Tabs,
     PageBreak: PageBreak,
-    ProjectInfoInputs: ProjectInfoInputs,
     ProjectInfoReport: ProjectInfoReport,
     FileInput: FileInputWrapper,
     PDFRenderer: PDFRendererWrapper,
     ShowOrHide: ShowOrHide,
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
-    DocNameInput: DocNameInputWrapper,
     SaveCancelButton: SaveCancelButtonWrapper,
     RepeatableInput: RepeatableInputWrapper,
     Repeatable: RepeatableWrapper,
     LabelValue: LabelValueWrapper,
-    NewProject: NewProject,
 }
 
 interface MdxWrapperProps {

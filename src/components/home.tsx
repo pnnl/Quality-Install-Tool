@@ -126,7 +126,7 @@ const Home: FC = () => {
     }
 
     const editAddressDetails = (projectID: string) => {
-        navigate('app/' + projectID, { replace: true })
+        navigate('app/' + projectID)
     }
 
     const projects_display =

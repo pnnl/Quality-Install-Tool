@@ -8,9 +8,6 @@ const RootLayout = lazy(() => import('./components/root_layout'))
 const WorkFlowView = lazy(() => import('./components/workflow_view'))
 const JobsView = lazy(() => import('./components/jobs_view'))
 const Home = lazy(() => import('./components/home'))
-const MdxProjectView = lazy(
-    () => import('./components/mdx_project_details_view'),
-)
 const NewProjectWrapper = lazy(() => import('./components/new_project_wrapper'))
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
 const MdxCombustionSafetyView = lazy(
