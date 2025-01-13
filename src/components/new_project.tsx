@@ -339,6 +339,7 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="doc_name"
+                    // required
                     value={formData?.metadata_?.doc_name || ''}
                     isInvalid={!!docNameInputError}
                     onChange={e =>
@@ -425,6 +426,7 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="installation_company"
+                    required
                     value={formData.installer?.name || ''}
                     onChange={e =>
                         setFormData({
