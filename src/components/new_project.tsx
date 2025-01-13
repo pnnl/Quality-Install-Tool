@@ -37,10 +37,10 @@ const NewProjectForm = () => {
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('') // new, created etc
     const [selectedProject, setSelectedProject] = useState<Project | null>(null) // To keep track of the project that the user chooses to prepopulate the installer fields
-    const [selectedInstaller, setSelectedInstaller] = useState<String[] | null>(
+    const [selectedInstaller, setSelectedInstaller] = useState<Project | null>(
         null,
     )
-    const [uniqueInstallers, setUniqueInstallers] = useState<String[][]>([[]])
+    const [uniqueInstallers, setUniqueInstallers] = useState<any[] | null>(null)
     const db = useDB()
 
     //Set up the form:
@@ -50,36 +50,26 @@ const NewProjectForm = () => {
 
     const setUpForm = async (): Promise<void> => {
         try {
-            const res = await retrieveProjectDocs(db)
+            const allProjectDocs = await retrieveProjectDocs(db)
             //ProjectDocs set in state to validate project name edits
             //and create a list of installer information selection options to pre-populate form
-            setProjectDocs(res)
-            const currentDoc = res.filter(
+
+            setProjectDocs(allProjectDocs)
+            console.log('All projects', allProjectDocs)
+            const currentDoc = allProjectDocs.filter(
                 (project: Project) => project._id === docId,
             )[0]
             const currentDocStatus = currentDoc.metadata_.status
             setDocStatus(currentDocStatus)
 
             if (currentDocStatus === 'new') {
-                const lastProject = findLastModifiedProject(res)
-
-                //get unique installer information from projects to populate Installer Info dropdown
-                setUniqueInstallers(getUniqueInstallers(res))
-
-                //prepopulate the installer fields with data from the lastModifiedProject
-                //only if the tech name or installer company or phone number exists
-                //Weird, but this keeps it synced with the drop down correctly
-                if (
-                    lastProject?.data_.installer?.technician_name !== '' &&
-                    lastProject?.data_.installer?.name !== '' &&
-                    lastProject?.data_.installer?.phone !== ''
-                ) {
+                if (allProjectDocs.length > 1) {
+                    const lastProject = findLastModifiedProject(allProjectDocs)
+                    //get unique installer information from projects to populate Installer Info dropdown
+                    setUniqueInstallers(getInstallerEntries(allProjectDocs))
                     //set the selectedInstaller information to last used installer info
-                    setSelectedInstaller([
-                        lastProject?.data_.installer?.technician_name || '',
-                        lastProject?.data_.installer?.name || '',
-                        lastProject?.data_.installer?.phone || '',
-                    ])
+
+                    setSelectedInstaller(lastProject.data_.name)
                     setFormData({
                         installer: {
                             technician_name:
@@ -126,6 +116,41 @@ const NewProjectForm = () => {
         }
     }
 
+    function getInstallerEntries(data: any) {
+        // Create a map to store the latest entry for each installer
+        const installerMap = new Map()
+
+        data.forEach((entry: any) => {
+            const installer = entry.data_.installer
+            const metadata = entry.metadata_
+
+            if (installer && metadata) {
+                const name = installer.name
+                const lastModifiedAt = new Date(metadata.last_modified_at)
+
+                if (
+                    !installerMap.has(name) ||
+                    lastModifiedAt >
+                        new Date(installerMap.get(name).lastModifiedAt)
+                ) {
+                    installerMap.set(name, {
+                        installer: {
+                            technician_name: installer.technician_name,
+                            name: installer.name,
+                            mailing_address: installer.mailing_address,
+                            phone: installer.phone,
+                            email: installer.email,
+                        },
+                        lastModifiedAt: metadata.last_modified_at,
+                    })
+                }
+            }
+        })
+
+        // Return array of latest installer entries
+        return Array.from(installerMap.values()).map(entry => entry.installer)
+    }
+
     const findLastModifiedProject = (projectDocs: Project[]) => {
         const filteredProjects = projectDocs.filter(
             project => project.metadata_.status !== 'new',
@@ -137,71 +162,44 @@ const NewProjectForm = () => {
         })
     }
 
-    function getUniqueInstallers(projects: Project[]) {
-        const installerSet = new Set<string>()
-
-        projects.forEach(project => {
-            if (project.data_.installer) {
-                const { technician_name, name, phone, email, mailing_address } =
-                    project.data_.installer
-
-                const installerInfo = JSON.stringify([
-                    technician_name,
-                    name,
-                    phone,
-                    email,
-                    mailing_address,
-                ])
-
-                //make sure we're not adding an array of empty strings to the installerset
-                if (technician_name !== '' && name !== '' && phone !== '') {
-                    installerSet.add(installerInfo)
-                }
-            }
-        })
-
-        return Array.from(installerSet).map(installer => JSON.parse(installer))
-    }
-
     //Installer information selection function:
     const handleSelectExistingInstallerInfo = (
         selectedInstaller: string | null,
     ) => {
-        if (selectedInstaller === 'CLEAR_FORM') {
-            setFormData((prevData: any) => ({
-                ...prevData,
-                installer: {
-                    // Only reset installer information
-                    technician_name: '',
-                    name: '',
-                    mailing_address: '',
-                    phone: '',
-                    email: '',
-                },
-            }))
-            setSelectedInstaller(null)
-        } else if (selectedInstaller) {
-            const selected = uniqueInstallers.find(
-                array => array.slice(0, 3).join(', ') === selectedInstaller,
-            )
-
-            if (selected) {
-                setSelectedInstaller(selected)
-                setFormData({
-                    installer: {
-                        technician_name: selected[0],
-                        name: selected[1],
-                        phone: selected[2],
-                        email: selected[3],
-                        mailing_address: selected[4],
-                    },
-                })
-            } else {
-                console.log('Error in the installer selector.')
-            }
-        } else {
-            console.log('Error in the installer selector.')
-        }
+        // if (selectedInstaller === 'CLEAR_FORM') {
+        //     setFormData((prevData: any) => ({
+        //         ...prevData,
+        //         installer: {
+        //             // Only reset installer information
+        //             technician_name: '',
+        //             name: '',
+        //             mailing_address: '',
+        //             phone: '',
+        //             email: '',
+        //         },
+        //     }))
+        //     setSelectedInstaller(null)
+        // } else if (selectedInstaller) {
+        //     const selected = uniqueInstallers.find(
+        //         array => array.slice(0, 3).join(', ') === selectedInstaller,
+        //     )
+        //     if (selected) {
+        //         setSelectedInstaller(selected)
+        //         setFormData({
+        //             installer: {
+        //                 technician_name: selected[0],
+        //                 name: selected[1],
+        //                 phone: selected[2],
+        //                 email: selected[3],
+        //                 mailing_address: selected[4],
+        //             },
+        //         })
+        //     } else {
+        //         console.log('Error in the installer selector.')
+        //     }
+        // } else {
+        //     console.log('Error in the installer selector.')
+        // }
     }
 
     //Cancel button functions:
@@ -339,7 +337,6 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="doc_name"
-                    // required
                     value={formData?.metadata_?.doc_name || ''}
                     isInvalid={!!docNameInputError}
                     onChange={e =>
@@ -365,6 +362,7 @@ const NewProjectForm = () => {
             </p>
             {projectDocs.length > 1 &&
                 docStatus === 'new' &&
+                uniqueInstallers &&
                 uniqueInstallers.length > 0 && (
                     <>
                         <p>
@@ -377,21 +375,18 @@ const NewProjectForm = () => {
                             id="project-selector"
                             title={
                                 selectedInstaller
-                                    ? selectedInstaller.slice(0, 3).join(', ')
+                                    ? selectedInstaller.data_.name
                                     : 'Select Installer Information'
                             }
                             onSelect={handleSelectExistingInstallerInfo}
                         >
-                            {uniqueInstallers.map(array => {
-                                const installerString = array
-                                    .slice(0, 3)
-                                    .join(', ')
+                            {uniqueInstallers.map(obj => {
                                 return (
                                     <Dropdown.Item
-                                        key={installerString}
-                                        eventKey={installerString}
+                                        key={obj.name}
+                                        eventKey={obj.name}
                                     >
-                                        {installerString}
+                                        {obj.name}
                                     </Dropdown.Item>
                                 )
                             })}
