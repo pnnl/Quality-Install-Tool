@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import imageCompression from 'browser-image-compression'
 
@@ -14,7 +14,6 @@ interface PhotoInputWrapperProps {
     label: string
     uploadable: boolean
     count?: number
-    notes?: boolean
 }
 
 /**
@@ -27,7 +26,6 @@ interface PhotoInputWrapperProps {
  * @param label The label of the PhotoInput component
  * @param uploadable When set, the PhotoInput component will open the gallery to upload the photo.
  *                   When unset, the PhotoInput component will use device camera for taking new photo.
- * @param notes Boolean from the mdx component that indicates whether the notes field will be available
  */
 const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     children,
@@ -35,7 +33,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     label,
     uploadable,
     count = 10,
-    notes,
 }) => {
     const [loading, setLoading] = useState(false) // Loading state
     const [error, setError] = useState('') // Loading state
@@ -215,8 +212,6 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             loading={loading}
                             error={error}
                             count={count}
-                            id={id}
-                            notes={notes}
                         >
                             {children}
                         </PhotoInput>
