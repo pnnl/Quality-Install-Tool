@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
 import Photo from './photo'
 import { useDB } from '../utilities/database_utils'
+import { get } from 'lodash'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -35,7 +36,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     parent,
 }) => {
     const [matchingAttachments, setMatchingAttachments] = useState<any>({})
-    const [projectDoc, setProjectDoc] = useState<any>(parent)
     const db = useDB()
 
     useEffect(() => {
@@ -88,7 +88,6 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 
                 setMatchingAttachments(matchingAttachments)
                 // Set the filtered attachments in state
-                setProjectDoc(doc) // Set the full document if needed
             })
             .catch((err: any) => {
                 console.error('Failed to get matching attachments:', err)
@@ -123,18 +122,24 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ attachments, data }) => {
-                return (
-                    <Photo
-                        description={children}
-                        label={label}
-                        photos={
-                            parent
-                                ? matchingAttachments
-                                : getMatchingAttachments(attachments, id)
-                        }
-                        required={required}
-                    />
-                )
+                if (data)
+                    return (
+                        <Photo
+                            description={children}
+                            label={label}
+                            photos={
+                                parent
+                                    ? matchingAttachments
+                                    : getMatchingAttachments(attachments, id)
+                            }
+                            required={required}
+                            noteValue={
+                                get(data, `${id}_note`)
+                                    ? get(data, `${id}_note`)
+                                    : ''
+                            }
+                        />
+                    )
             }}
         </StoreContext.Consumer>
     )

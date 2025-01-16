@@ -11,6 +11,7 @@ interface PhotoProps {
     label: string
     photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Array of photo objects with metadata
     required: boolean
+    noteValue: string | undefined
 }
 
 /**
@@ -20,7 +21,6 @@ interface PhotoProps {
  * @param description Content (most commonly markdown text) used to describe the photo
  * @param label Label for the component
  * @param metadata Photo metadata including timestamp and geolocation
- * @param notes User notes associated with the photo
  * @param photos Array of photo objects with photo Blob and metadata for each photo
  *         {
  *         id attachment id for the photo and metadata
@@ -30,13 +30,26 @@ interface PhotoProps {
  * @param required When unset, the Photo component will only show if there is a
  * photo attachment in the data store with the given id. When set, the Photo component
  * will always show and the Photo component will indicate when the photo is missing.
+ * @param noteValue The value to be displayed as the note for the photos
  */
-const Photo: FC<PhotoProps> = ({ description, label, photos, required }) => {
+const Photo: FC<PhotoProps> = ({
+    description,
+    label,
+    photos,
+    required,
+    noteValue,
+}) => {
     return (photos && photos.length > 0) || required ? (
         <Card className="photo-card">
             <Card.Body>
                 <Card.Title>{label}</Card.Title>
                 <Card.Text as="div">{description}</Card.Text>
+                {noteValue && (
+                    <div className="photo-notes">
+                        <h3>Notes: </h3>
+                        <div>{noteValue ? noteValue : null}</div>
+                    </div>
+                )}
                 {photos && photos.length > 0
                     ? Array.isArray(photos) && (
                           <Row className="photo-row">
