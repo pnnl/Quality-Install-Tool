@@ -9,6 +9,7 @@ import GpsCoordStr from './gps_coord_str'
 import type PhotoMetaData from '../types/photo_metadata.type'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
+import TextInputWrapper from './text_input_wrapper'
 
 interface PhotoInputProps {
     children: React.ReactNode
@@ -21,6 +22,8 @@ interface PhotoInputProps {
     loading: boolean
     error: string
     count: number
+    id: string
+    notes?: boolean
 }
 // TODO: Determine whether or not the useEffect() method is needed.
 // We don't seem to need a separate camera button on an Android phone.
@@ -40,6 +43,8 @@ interface PhotoInputProps {
  *                   When unset, the PhotoInput component will use device camera for taking new photo (default).
  * @param loader  When set, a loading image will be displayed during the upload process.
  * @param loader  When set, a loading image will be displayed during the upload process.
+ * @param id Attachment id
+ * @param notes If notes is false, then the note input will not show up
  */
 const PhotoInput: FC<PhotoInputProps> = ({
     children,
@@ -52,6 +57,8 @@ const PhotoInput: FC<PhotoInputProps> = ({
     loading,
     error,
     count,
+    id,
+    notes = true,
 }) => {
     // Create references to the hidden file inputs
     const hiddenPhotoCaptureInputRef = useRef<HTMLInputElement>(null)
@@ -232,7 +239,7 @@ const PhotoInput: FC<PhotoInputProps> = ({
                     )}
                     {error && <div className="error">{error}</div>}
                     {photos?.length < count && (
-                        <div>
+                        <div className="pb-2">
                             <Button
                                 onClick={handlePhotoGalleryButtonClick}
                                 variant="outline-primary"
@@ -240,6 +247,15 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                 <TbCameraPlus /> {buttonText}
                             </Button>
                         </div>
+                    )}
+                    {notes && (
+                        <TextInputWrapper
+                            path={`${id}_note`}
+                            label="Optional note about photo(s):"
+                            min={0}
+                            max={300}
+                            regexp={/.*/} //any string
+                        />
                     )}
                     <Modal
                         show={showDeleteConfirmation}
