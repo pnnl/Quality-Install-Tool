@@ -38,18 +38,12 @@ const Photo: FC<PhotoProps> = ({
     required,
     noteValue,
 }) => {
+    const noteValueArray = noteValue?.split(`\n`)
     return (photos && photos.length > 0) || required ? (
         <Card className="photo-card">
             <Card.Body>
                 <Card.Title>{label}</Card.Title>
                 <Card.Text as="div">{description}</Card.Text>
-                {noteValue && (
-                    <div className="photo-notes">
-                        <h3>Notes: </h3>
-                        <div>{noteValue ? noteValue : null}</div>
-                    </div>
-                )}
-
                 {photos && photos.length > 0
                     ? Array.isArray(photos) && (
                           <Row className="photo-row">
@@ -111,6 +105,20 @@ const Photo: FC<PhotoProps> = ({
                           </Row>
                       )
                     : required && <em>Missing Photo</em>}
+                {noteValue && (
+                    <div className="photo-notes">
+                        <h3>Notes: </h3>
+                        <div>
+                            {noteValueArray
+                                ? noteValueArray.map(string => (
+                                      <p className="photo-note-string">
+                                          {string}
+                                      </p>
+                                  ))
+                                : null}
+                        </div>
+                    </div>
+                )}
             </Card.Body>
         </Card>
     ) : null
