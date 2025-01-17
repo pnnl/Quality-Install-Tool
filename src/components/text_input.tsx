@@ -20,8 +20,8 @@ interface TextInputProps {
  * @param updateValue A function called whenever the user changes the
  * input value. The function has the new input value as the sole arguement.
  * @param value The input value
- * @param min The minimum allowed value for the input field.
- * @param max The maximum allowed value for the input field.
+ * @param min The minimum allowed number of characters for the input field.
+ * @param max The maximum allowed number of characters for the input field.
  * @param regexp The regular expression pattern to validate the input string.
  */
 const TextInput: FC<TextInputProps> = ({

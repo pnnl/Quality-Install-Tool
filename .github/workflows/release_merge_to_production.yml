@@ -27,7 +27,7 @@ jobs:
           BRANCH: "main"
           PULL_REQUEST_BRANCH: "production"
           PULL_REQUEST_FROM_BRANCH: "main"
-          PULL_REQUEST_REVIEWERS: sudhacheran, charliepnnl, mvgeorgescu
+          PULL_REQUEST_REVIEWERS: charliepnnl, sudhacheran 
         with:
           title: "${{ env.PULL_REQUEST_TITLE }}"
           body: "${{ env.PULL_REQUEST_BODY }}"
