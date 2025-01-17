@@ -166,9 +166,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     )
 
                     const handleImageUpsert = async (file: Blob) => {
-                        const photoMetadata = await getMetadataFromPhoto(
-                            imgFile,
-                        )
+                        const photoMetadata =
+                            await getMetadataFromPhoto(imgFile)
                         upsertAttachment(
                             file,
                             nextKey,
@@ -188,9 +187,8 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             const compressedFile = await compressFile(jpegBlob)
                             await handleImageUpsert(compressedFile)
                         } else {
-                            const compressedPhotoBlob = await compressFile(
-                                imgFile,
-                            )
+                            const compressedPhotoBlob =
+                                await compressFile(imgFile)
                             await handleImageUpsert(compressedPhotoBlob)
                         }
                     } catch (error) {
