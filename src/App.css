@@ -1,443 +1,444 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
-.align-right{
-  text-align: right;
+.align-right {
+    text-align: right;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 /* Code below are added by PNNL */
 /*Headings*/
 h1 {
-  font-size: 1.5rem; 
-  text-align: center;
-  break-after: avoid-page;
-  justify-self: center;
+    font-size: 1.5rem;
+    text-align: center;
+    break-after: avoid-page;
+    justify-self: center;
 }
 h2 {
-  break-after: avoid-page;
-  font-size: 1.25rem;
+    break-after: avoid-page;
+    font-size: 1.25rem;
 }
-h2:not(.accordion-header, h1+h2) {
-  margin-top: 30px;
+h2:not(.accordion-header, h1 + h2) {
+    margin-top: 30px;
 }
 h3 {
-  font-size: 1rem;
-  break-after: avoid-page;
+    font-size: 1rem;
+    break-after: avoid-page;
 }
 /* used in all templates - for report title */
 h1 + h2 {
-  text-align: center;
+    text-align: center;
 }
 
 /* used in mdx_project_details_view.tsx */
 h1 + h3 {
-  text-align: center;
+    text-align: center;
 }
 
 /* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
-.address
-{
-  text-align: center;
+.address {
+    text-align: center;
 }
 
 /* used in home.tsx */
 .flex-container {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  align-content: center;
-  justify-content: space-around;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: flex-start;
+    align-content: center;
+    justify-content: space-around;
 }
 
 .flex-child {
-  flex: 1;
-  align-self: top;
+    flex: 1;
+    align-self: top;
 }
 
 /* used in jobs_view.tsx */
 .icon-container {
-  float: right;
-  vertical-align: top;
+    float: right;
+    vertical-align: top;
 }
 
 .button-container-right {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;  
-  float: right;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    float: right;
 }
 .button-container-center {
-  float: center;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+    float: center;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
 }
-
-
 
 .menu-container {
-  float: right;
-  vertical-align: top;
+    float: right;
+    vertical-align: top;
 }
 
-
 .img-thumbnail {
-  object-fit: contain;
-  max-height: 500px;
+    object-fit: contain;
+    max-height: 500px;
 }
 
 /* jobs_view.tsx & collapsible.tsx */
 .bottom-margin {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
+.string-input-modal {
+    .error {
+        color: red;
+        font-style: italic;
+    }
+}
 
-.string-input-modal{
-  .error{
+.error {
     color: red;
     font-style: italic;
-  }
 }
-
-.error{
-  color: red;
-  font-style: italic;
-}
-
 
 /* root_layout.tsx */
 #root-flex-layout {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #root-background {
-  margin-left: auto;
-  margin-right: auto; 
-  max-width: 800px; 
-  background-color: rgba(231, 231, 231);
-  min-height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+    background-color: rgba(231, 231, 231);
+    min-height: 100vh;
 }
 
 #root-banner {
-  background-color: #006100;
+    background-color: #006100;
 }
 
 #root-title {
-  color: gold;
-  font-size: 2rem;
+    color: gold;
+    font-size: 2rem;
 }
 
 #root-body {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 #back-button-logo {
-  color: white;
-  height: 100%;
+    color: white;
+    height: 100%;
 }
 
 #back-button {
-  padding: 1rem;
-  background-color: #006100;
+    padding: 1rem;
+    background-color: #006100;
 }
 
 #back-button-link {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 #back-button-container {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 /* editor-flexbox.tsx */
-.editor-textarea{
-  height: auto;
-  min-height: 700px;
-  resize: none;
+.editor-textarea {
+    height: auto;
+    min-height: 700px;
+    resize: none;
 }
 
 /* photo_input.tsx */
 .input-card {
-  page-break-before: always;
-  margin-bottom: 1rem;
+    page-break-before: always;
+    margin-bottom: 1rem;
 } /*also in radio.tsx*/
 
 /* stylizes the hidden input for photo upload*/
 .photo-upload-input {
-  display: none;
+    display: none;
 }
 
 /* photo.tsx */
 .photo-card {
-  break-inside: avoid;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.photo-card > .card-body > div {
+    margin-bottom: 1rem;
 }
 
 .photo-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Forces two columns */
-  gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Forces two columns */
+    gap: 1rem;
+}
+
+.photo-notes h3 {
+    font-weight: bold;
 }
 
 /* stylizes tab component here to avoid putting styles in editor*/
 .tab-content {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 
 /* styling for PDFRenderer component  */
-.react-pdf__Page__textContent{
+.react-pdf__Page__textContent {
     display: none;
-  }
+}
 
 /* 'hint' styling - the input components */
-.form-text{
-  margin-left:.50rem;
-  margin-top:.25rem;
-  font-size:.875rem;
-  color:var(--bs-secondary-color);
-  font-style: italic;
+.form-text {
+    margin-left: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--bs-secondary-color);
+    font-style: italic;
 }
 
 /* label styling for the Radio component */
 .custom-label {
-  color: gray;
-  font-size: .9rem;
+    color: gray;
+    font-size: 0.9rem;
 }
-
 
 /* BETA version text - styling for new templates - temperary */
 .beta-text {
-  color: red;
-  padding-left: .75rem;
-  font-size: 0.9rem;
+    color: red;
+    padding-left: 0.75rem;
+    font-size: 0.9rem;
 }
 
 /* used in home.tsx  */
 .padding {
-  padding: 5px 10px 5px 10px;  /* top right bottom left*/
+    padding: 5px 10px 5px 10px; /* top right bottom left*/
 }
 
-.top-bottom-padding
-{
-  padding: 5px 0 5px 0;
+.top-bottom-padding {
+    padding: 5px 0 5px 0;
 }
 
 /* disclaimer text */
 .disclaimer-text {
-  padding-left: .75rem;
-  padding-right: .75rem;
-  font-size: 0.9rem;
-  font-weight: bold;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .combustion_tests {
-  padding: 5px 10px 5px 10px; 
-  background-color: white;
+    padding: 5px 10px 5px 10px;
+    background-color: white;
 }
 
 .align_justify {
-  justify-content: center;
-  text-align: justify;
+    justify-content: center;
+    text-align: justify;
 }
 
 .margin-left {
-  margin-left: 2em
+    margin-left: 2em;
 }
-
 
 /* Primary Button - with background color */
 .btn-primary {
-  color: #fff; /* Text color */
-  background-color: #006100; /* Base background color */
-  border: 2px solid #006100; 
-  cursor: pointer; 
-  text-align: center; 
-  text-decoration: none; 
-  display: inline-block; 
-  transition: background-color 0.3s ease, border-color 0.3s ease; 
-  outline: none; 
+    color: #fff; /* Text color */
+    background-color: #006100; /* Base background color */
+    border: 2px solid #006100;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+    outline: none;
 }
 
-.btn-primary:hover, 
-.btn-primary:active, 
-.btn-primary:focus, 
-.btn-primary:focus-visible, 
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:focus-visible,
 .btn-primary:focus-within {
-  background-color: #004d00; 
-  border-color: #004d00; 
+    background-color: #004d00;
+    border-color: #004d00;
 }
 
 .btn-primary:disabled {
-  background-color: #4caf50; 
-  border-color: #4caf50; 
-  cursor: not-allowed; /* Not-allowed cursor on disabled */
-  opacity: 0.6; 
+    background-color: #4caf50;
+    border-color: #4caf50;
+    cursor: not-allowed; /* Not-allowed cursor on disabled */
+    opacity: 0.6;
 }
 
 /* Outline Primary Button - only outline */
 .btn-outline-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
-  color: #fff; 
-  background-color:  #005f00; 
-  border-color:  #005f00; 
+    color: #fff;
+    background-color: #005f00;
+    border-color: #005f00;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
 .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
-  box-shadow: none
+    box-shadow: none;
 }
 
-.btn-outline-primary{
-  background-color: transparent;
-  cursor: pointer; 
-  border: 2px solid #006100;
-  color: #006100; 
-
+.btn-outline-primary {
+    background-color: transparent;
+    cursor: pointer;
+    border: 2px solid #006100;
+    color: #006100;
 }
 
-.btn-outline-primary:hover{
-  background-color: transparent; 
-  color: #006100; 
-  border-color: #006100;
+.btn-outline-primary:hover {
+    background-color: transparent;
+    color: #006100;
+    border-color: #006100;
 }
-
 
 /* Light Button - for Icons */
 .btn-light {
-  background-color: transparent;
-  border-color: transparent;
-  color: #000000;
+    background-color: transparent;
+    border-color: transparent;
+    color: #000000;
 }
 btn-light:active,
 btn-light:hover {
-  box-shadow: none;
+    box-shadow: none;
 }
 
 .welcome-header {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  color: #006100;
-  font-size: 28px;
-  font-weight: bold;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: #006100;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .welcome-content {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  color: #000000;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-@media (max-width: 480px) {
-  .welcome-content {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     color: #000000;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
-  }
 }
 
+@media (max-width: 480px) {
+    .welcome-content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        color: #000000;
+        font-size: 12px;
+        font-weight: bold;
+    }
+}
 
 .loader {
-  border: 8px solid #f3f3f3; /* Light gray */
-  border-top: 8px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 30px; /* Size of the loader */
-  height: 30px; /* Size of the loader */
-  animation: spin 1s linear infinite; /* Animation */
-  background-color: white;
+    border: 8px solid #f3f3f3; /* Light gray */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 30px; /* Size of the loader */
+    height: 30px; /* Size of the loader */
+    animation: spin 1s linear infinite; /* Animation */
+    background-color: white;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
-
 
 /* used in photo-input and photo component */
 .photo-container {
-  width: auto;           /* Allow width to adjust based on content */
-  max-width: 500px;      /* Maximum width */
-  overflow: visible;      /* Hide overflow */
-  height: auto;          /* Allow height to adjust based on content */
-  max-height: 600px;     /* Maximum height */
-  margin-bottom: 5px;   /* Margin at the bottom */
-  position: relative;    /* Relative positioning for overlay elements */
-  display: inline-block; /* Display inline-block to shrink to content size */
+    width: auto; /* Allow width to adjust based on content */
+    max-width: 500px; /* Maximum width */
+    overflow: visible; /* Hide overflow */
+    height: auto; /* Allow height to adjust based on content */
+    max-height: 600px; /* Maximum height */
+    margin-bottom: 5px; /* Margin at the bottom */
+    position: relative; /* Relative positioning for overlay elements */
+    display: inline-block; /* Display inline-block to shrink to content size */
 }
 
 .photo-report-container {
-  width: auto;           /* Allow width to adjust based on content */
-  max-width: 500px;      /* Maximum width */
-  overflow: hidden;      /* Hide overflow */
-  height: auto;          /* Allow height to adjust based on content */
-  max-height: 600px;     /* Maximum height */
-  position: relative;    /* Relative positioning for overlay elements */
-  display: inline-block; /* Display inline-block to shrink to content size */
+    width: auto; /* Allow width to adjust based on content */
+    max-width: 500px; /* Maximum width */
+    overflow: hidden; /* Hide overflow */
+    height: auto; /* Allow height to adjust based on content */
+    max-height: 600px; /* Maximum height */
+    position: relative; /* Relative positioning for overlay elements */
+    display: inline-block; /* Display inline-block to shrink to content size */
 }
 
 /* used in photo-input component */
 .photo-delete-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  border-radius: 50%;
-  padding: 5px;
-  z-index: 5; /* Ensures the button stays on top */
-  cursor: pointer;
-  transform: scale(1.2);  /* Increase icon size */
-  stroke-width: 2;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border-radius: 50%;
+    padding: 5px;
+    z-index: 5; /* Ensures the button stays on top */
+    cursor: pointer;
+    transform: scale(1.2); /* Increase icon size */
+    stroke-width: 2;
 }
 
 /* used in photo-input component */
-.image-tag  {
-  width: '400px'; /* Fixed width */
-  height: '400px'; /* Fixed height */
-  object-fit: 'cover'; /* Ensure the image covers the area (cropped if necessary) */
-  border-radius: '8px'; /*Optional: adds rounded corners to the image */
+.image-tag {
+    width: '400px'; /* Fixed width */
+    height: '400px'; /* Fixed height */
+    object-fit: 'cover'; /* Ensure the image covers the area (cropped if necessary) */
+    border-radius: '8px'; /*Optional: adds rounded corners to the image */
 }
 
 /* used in photo-input component */
@@ -451,40 +452,40 @@ btn-light:hover {
 
 /* used in photo-input component */
 .custom-modal {
-  max-width: 300px; 
-  margin: auto; 
+    max-width: 300px;
+    margin: auto;
 }
 
 /* Default font size */
 .modal-body-text {
-  font-size: 18px; /* Adjust the default font size */
+    font-size: 18px; /* Adjust the default font size */
 }
 
 /* Common font size for medium, small, and extra small devices */
 @media (max-width: 991.98px) {
-  .modal-body-text {
-    font-size: 14px; /* Adjust font size for all specified devices */
-  }
+    .modal-body-text {
+        font-size: 14px; /* Adjust font size for all specified devices */
+    }
 }
 
 .safari-print-header {
-visibility: hidden;}
+    visibility: hidden;
+}
 
 @media print {
-  /* Adjusts the margin for printing */
-  @page {
-    margin-top: 4rem;
-    margin-bottom: 4rem; 
-  }
+    /* Adjusts the margin for printing */
+    @page {
+        margin-top: 4rem;
+        margin-bottom: 4rem;
+    }
 
-
-  .safari-print-header {
-    text-align: center;
-    font-size: 10px;
-    font-weight: bold;
-    visibility: visible;
-    margin-bottom: 10px;
-    display: block;
-    page-break-before: always;
-  }
+    .safari-print-header {
+        text-align: center;
+        font-size: 10px;
+        font-weight: bold;
+        visibility: visible;
+        margin-bottom: 10px;
+        display: block;
+        page-break-before: always;
+    }
 }
