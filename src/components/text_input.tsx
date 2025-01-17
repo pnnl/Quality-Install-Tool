@@ -33,6 +33,11 @@ const TextInput: FC<TextInputProps> = ({
     max,
     regexp,
 }) => {
+    const booststrapFloatingLabelHeight =
+        'calc(3.5rem + calc(var(--bs-border-width)* 2))'
+    const [textAreaHeight, setTextAreaHeight] = useState(
+        booststrapFloatingLabelHeight,
+    )
     const [error, setError] = useState<string>('')
 
     const handleChange = (inputValue: string) => {
@@ -50,6 +55,14 @@ const TextInput: FC<TextInputProps> = ({
         }
     }
 
+    const handleFocus = () => {
+        setTextAreaHeight('100px')
+    }
+
+    const handleBlur = () => {
+        setTextAreaHeight(booststrapFloatingLabelHeight)
+    }
+
     return (
         <>
             <FloatingLabel className="mb-3" controlId={id} label={label}>
@@ -59,6 +72,8 @@ const TextInput: FC<TextInputProps> = ({
                     placeholder="A placeholder"
                     value={value || ''}
                     isInvalid={Boolean(error)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                 />
                 {error && (
                     <Form.Control.Feedback type="invalid">
