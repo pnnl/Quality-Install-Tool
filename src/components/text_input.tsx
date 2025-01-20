@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 
@@ -33,11 +33,18 @@ const TextInput: FC<TextInputProps> = ({
     max,
     regexp,
 }) => {
-    const booststrapFloatingLabelHeight =
-        'calc(3.5rem + calc(var(--bs-border-width)* 2))'
-    const [textAreaHeight, setTextAreaHeight] = useState(
-        booststrapFloatingLabelHeight,
+    const bootStrapTextAreaStyles = {
+        height: 'calc(3.5rem + calc(var(--bs-border-width)* 2))',
+    }
+    const bootstrapFloatingLabelClasses = 'mb-3'
+    const [textAreaStyles, setTextAreaStyles] = useState<any>(
+        bootStrapTextAreaStyles,
     )
+    const [floatingLabelClasses, setFloatingLabelClasses] =
+        useState<any>('mb-3')
+
+    const [textAreaFocused, setTextAreaFocused] = useState<boolean>(false)
+
     const [error, setError] = useState<string>('')
 
     const handleChange = (inputValue: string) => {
@@ -56,24 +63,52 @@ const TextInput: FC<TextInputProps> = ({
     }
 
     const handleFocus = () => {
-        setTextAreaHeight('100px')
+        // setTextAreaStyles({
+        //     height: '100px',
+        //     paddingTop: value ? '.625rem' : undefined,
+        //     backgroundColor: 'pink',
+        // })
+        // setHintClasses('mb-3 floating-label-hidden')
     }
 
     const handleBlur = () => {
-        setTextAreaHeight(booststrapFloatingLabelHeight)
+        // setTextAreaStyles({
+        //     height: undefined,
+        //     paddingTop: value ? '.625rem' : undefined,
+        //     backgroundColor: 'pink',
+        // })
+        // setHintClasses(
+        //     value
+        //         ? 'mb-3 floating-label-hidden'
+        //         : bootstrapFloatingLabelClasses,
+        // )
     }
+
+    useEffect(() => {
+        let floatingLabelClasses = 'mb-3'
+        if (value || textAreaFocused) {
+            floatingLabelClasses += ' label-hidden'
+        }
+
+        if (textAreaFocused) {
+            floatingLabelClasses += ' text-area-expanded'
+        }
+
+        setFloatingLabelClasses(floatingLabelClasses)
+    }, [value, textAreaFocused])
 
     return (
         <>
-            <FloatingLabel className="mb-3" controlId={id} label={label}>
+            <FloatingLabel className={floatingLabelClasses} label={label}>
                 <Form.Control
                     as="textarea"
                     onChange={event => handleChange(event.target.value)}
                     placeholder="A placeholder"
                     value={value || ''}
                     isInvalid={Boolean(error)}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    onFocus={() => setTextAreaFocused(true)}
+                    onBlur={() => setTextAreaFocused(false)}
+                    // style={textAreaStyles}
                 />
                 {error && (
                     <Form.Control.Feedback type="invalid">

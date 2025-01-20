@@ -460,6 +460,19 @@ btn-light:hover {
     margin: auto;
 }
 
+/* Used in text_input component */
+.label-hidden.form-floating > label {
+    visibility: hidden;
+}
+
+.label-hidden.form-floating > textarea {
+    padding: 1rem 0.75rem !important;
+}
+
+.text-area-expanded.form-floating > textarea {
+    height: 100px;
+}
+
 /* Default font size */
 .modal-body-text {
     font-size: 18px; /* Adjust the default font size */
