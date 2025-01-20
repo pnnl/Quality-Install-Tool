@@ -50,8 +50,8 @@ const NewProjectForm: React.FC = () => {
     const navigate = useNavigate()
     const { docId } = useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
-    const [initialDocName, setInitialDocName] = useState('')
-    const [docNameInputError, setDocNameInputError] = useState('')
+    const [initialDocName, setInitialDocName] = useState<string>('')
+    const [docNameInputError, setDocNameInputError] = useState<string>('')
     const [installationCompanyInputError, setInstallationCompanyInputError] =
         useState<string>('')
     const [formData, setFormData] = useState<
@@ -66,6 +66,7 @@ const NewProjectForm: React.FC = () => {
     )
     const db = useDB()
 
+    //Set up the form on first render
     useEffect(() => {
         setUpForm()
     }, [db])
@@ -181,6 +182,7 @@ const NewProjectForm: React.FC = () => {
         })
     }
 
+    //Installer Information Drop Down Selection Function:
     const handleSelectExistingInstallerInfo = (
         newSelectedInstaller: string | null,
     ) => {
@@ -227,6 +229,7 @@ const NewProjectForm: React.FC = () => {
         }
     }
 
+    //Cancel Button Functions:
     const handleCancelButtonClick = async () => {
         if (docStatus === 'created') {
             navigate('/', { replace: true })
@@ -250,8 +253,9 @@ const NewProjectForm: React.FC = () => {
         }
     }
 
+    //Submit form Functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault() //Prevent refresh of page
         const form = e.target as HTMLFormElement
         const formData = new FormData(form)
 
@@ -259,6 +263,7 @@ const NewProjectForm: React.FC = () => {
         const installationCompanyValid = validateInstallationCompany(
             formData.get('installation_company'),
         )
+
         if (docNameValid && installationCompanyValid) {
             const updates = {
                 'metadata_.doc_name': formData.get('doc_name'),
