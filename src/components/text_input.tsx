@@ -33,13 +33,6 @@ const TextInput: FC<TextInputProps> = ({
     max,
     regexp,
 }) => {
-    const bootStrapTextAreaStyles = {
-        height: 'calc(3.5rem + calc(var(--bs-border-width)* 2))',
-    }
-    const bootstrapFloatingLabelClasses = 'mb-3'
-    const [textAreaStyles, setTextAreaStyles] = useState<any>(
-        bootStrapTextAreaStyles,
-    )
     const [floatingLabelClasses, setFloatingLabelClasses] =
         useState<any>('mb-3')
 
@@ -60,28 +53,6 @@ const TextInput: FC<TextInputProps> = ({
             setError('')
             updateValue(inputValue)
         }
-    }
-
-    const handleFocus = () => {
-        // setTextAreaStyles({
-        //     height: '100px',
-        //     paddingTop: value ? '.625rem' : undefined,
-        //     backgroundColor: 'pink',
-        // })
-        // setHintClasses('mb-3 floating-label-hidden')
-    }
-
-    const handleBlur = () => {
-        // setTextAreaStyles({
-        //     height: undefined,
-        //     paddingTop: value ? '.625rem' : undefined,
-        //     backgroundColor: 'pink',
-        // })
-        // setHintClasses(
-        //     value
-        //         ? 'mb-3 floating-label-hidden'
-        //         : bootstrapFloatingLabelClasses,
-        // )
     }
 
     useEffect(() => {
@@ -108,7 +79,6 @@ const TextInput: FC<TextInputProps> = ({
                     isInvalid={Boolean(error)}
                     onFocus={() => setTextAreaFocused(true)}
                     onBlur={() => setTextAreaFocused(false)}
-                    // style={textAreaStyles}
                 />
                 {error && (
                     <Form.Control.Feedback type="invalid">
