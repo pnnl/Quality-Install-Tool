@@ -12,7 +12,7 @@ interface PhotoInputWrapperProps {
     children: React.ReactNode
     id: string
     label: string
-    uploadable: boolean
+    uploadable?: boolean
     count?: number
 }
 

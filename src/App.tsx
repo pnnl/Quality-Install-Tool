@@ -1,16 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
-import React, { Suspense, lazy } from 'react'
+import { Suspense, lazy } from 'react'
 
 // Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
 const WorkFlowView = lazy(() => import('./components/workflow_view'))
 const JobsView = lazy(() => import('./components/jobs_view'))
 const Home = lazy(() => import('./components/home'))
-const MdxProjectView = lazy(
-    () => import('./components/mdx_project_details_view'),
-)
+const NewProjectWrapper = lazy(() => import('./components/new_project_wrapper'))
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
 const MdxCombustionSafetyView = lazy(
     () => import('./components/mdx_combustion_appliance_safety_view'),
@@ -70,11 +68,12 @@ const routes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
-                    <MdxProjectView />
+                    <NewProjectWrapper />
                 </RootLayout>
             </Suspense>
         ),
     },
+
     {
         path: `/app/:projectId/:workflowName`,
         // Jobs List View: Lists existing installations associated with a particular workflow
