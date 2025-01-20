@@ -440,6 +440,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             upsertBlobDB(revisionRef.current)
         }
     }
+
     return (
         <StoreContext.Provider
             value={{

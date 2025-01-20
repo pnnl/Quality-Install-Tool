@@ -19,7 +19,7 @@ interface DocNameInputProps {
     updateValue: (inputValue: string) => void
     value: string
     regexp: RegExp
-    hint: string
+    hint?: string | undefined
 }
 
 /**

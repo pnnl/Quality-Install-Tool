@@ -8,8 +8,8 @@ import { pathToId } from '../utilities/paths_utils'
 interface StringInputWrapperProps {
     label: string
     path: string
-    regexp: RegExp
-    hint: string
+    regexp?: RegExp | undefined
+    hint?: string | undefined
 }
 
 /**
