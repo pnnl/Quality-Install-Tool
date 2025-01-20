@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
     Form,
     Button,
@@ -13,9 +13,27 @@ import PhotoInputWrapper from './photo_input_wrapper'
 import { StoreContext } from './store'
 import { retrieveProjectDocs } from '../utilities/database_utils'
 
+interface Installer {
+    technician_name: string
+    name: string
+    mailing_address: string
+    phone: string
+    email: string
+}
+
+interface Location {
+    street_address: string
+    city: string
+    state: string
+    zip_code: string
+}
+
 interface Project {
     type: string
-    data_: Record<string, any>
+    data_: {
+        installer: Installer
+        location?: Location
+    }
     metadata_: {
         doc_name: string
         created_at: string
@@ -28,16 +46,18 @@ interface Project {
     _rev: string
 }
 
-const NewProjectForm = () => {
+const NewProjectForm: React.FC = () => {
     const navigate = useNavigate()
-    const { docId } = React.useContext(StoreContext)
+    const { docId } = useContext(StoreContext)
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
-    const [initialDocName, setInitialDocName] = useState('') // This is for editing an existing project, to keep track of the name it started with
+    const [initialDocName, setInitialDocName] = useState('')
     const [docNameInputError, setDocNameInputError] = useState('')
     const [installationCompanyInputError, setInstallationCompanyInputError] =
         useState<string>('')
-    const [formData, setFormData] = useState<any>({})
-    const [docStatus, setDocStatus] = useState<string>('') // new, created etc
+    const [formData, setFormData] = useState<
+        Partial<Project['data_'] & { metadata_: { doc_name: string } }>
+    >({})
+    const [docStatus, setDocStatus] = useState<string>('')
     const [selectedInstallerName, setSelectedInstallerName] = useState<
         string | null
     >(null)
@@ -46,7 +66,6 @@ const NewProjectForm = () => {
     )
     const db = useDB()
 
-    //Set up the form:
     useEffect(() => {
         setUpForm()
     }, [db])
@@ -54,77 +73,73 @@ const NewProjectForm = () => {
     const setUpForm = async (): Promise<void> => {
         try {
             const allProjectDocs = await retrieveProjectDocs(db)
-            //ProjectDocs set in state to validate project name edits
-            //and create a list of installer information selection options to pre-populate form
-
             setProjectDocs(allProjectDocs)
 
-            const currentDoc = allProjectDocs.filter(
+            const currentDoc = allProjectDocs.find(
                 (project: Project) => project._id === docId,
-            )[0]
-            const currentDocStatus = currentDoc.metadata_.status
-            setDocStatus(currentDocStatus)
+            )
+            if (currentDoc) {
+                const currentDocStatus = currentDoc.metadata_.status
+                setDocStatus(currentDocStatus)
 
-            if (currentDocStatus === 'new') {
-                if (allProjectDocs.length > 1) {
-                    const lastProject = findLastModifiedProject(allProjectDocs)
-                    //get unique installer information from projects to populate Installer Info dropdown
-                    setUniqueInstallers(getInstallerEntries(allProjectDocs))
-                    //set the selectedInstaller information to last used installer info
-
-                    setSelectedInstallerName(lastProject.data_.installer.name)
+                if (currentDocStatus === 'new') {
+                    if (allProjectDocs.length > 1) {
+                        const lastProject =
+                            findLastModifiedProject(allProjectDocs)
+                        setUniqueInstallers(getInstallerEntries(allProjectDocs))
+                        setSelectedInstallerName(
+                            lastProject.data_.installer.name,
+                        )
+                        setFormData({
+                            installer: {
+                                technician_name:
+                                    lastProject?.data_.installer
+                                        .technician_name || '',
+                                name: lastProject?.data_.installer.name || '',
+                                mailing_address:
+                                    lastProject?.data_.installer
+                                        .mailing_address || '',
+                                phone: lastProject?.data_.installer.phone || '',
+                                email: lastProject?.data_.installer.email || '',
+                            },
+                        })
+                    }
+                } else {
                     setFormData({
                         installer: {
                             technician_name:
-                                lastProject?.data_.installer?.technician_name ||
+                                currentDoc.data_.installer.technician_name ||
                                 '',
-                            name: lastProject?.data_.installer?.name || '',
+                            name: currentDoc.data_.installer.name || '',
                             mailing_address:
-                                lastProject?.data_.installer?.mailing_address ||
+                                currentDoc.data_.installer.mailing_address ||
                                 '',
-                            phone: lastProject?.data_.installer?.phone || '',
-                            email: lastProject?.data_.installer?.email || '',
+                            phone: currentDoc.data_.installer.phone || '',
+                            email: currentDoc.data_.installer.email || '',
+                        },
+                        location: {
+                            street_address:
+                                currentDoc.data_.location?.street_address || '',
+                            city: currentDoc.data_.location?.city || '',
+                            state: currentDoc.data_.location?.state || '',
+                            zip_code: currentDoc.data_.location?.zip_code || '',
+                        },
+                        metadata_: {
+                            doc_name: currentDoc.metadata_.doc_name || '',
                         },
                     })
+                    setInitialDocName(currentDoc.metadata_.doc_name)
                 }
-            } else {
-                //In the case that the user is editing an existing project...
-                //Populate the entire form with that project's data
-                setFormData({
-                    installer: {
-                        technician_name:
-                            currentDoc?.data_.installer?.technician_name || '',
-                        name: currentDoc?.data_.installer?.name || '',
-                        mailing_address:
-                            currentDoc?.data_.installer?.mailing_address || '',
-                        phone: currentDoc?.data_.installer?.phone || '',
-                        email: currentDoc?.data_.installer?.email || '',
-                    },
-                    location: {
-                        street_address:
-                            currentDoc?.data_.location?.street_address || '',
-                        city: currentDoc?.data_.location?.city || '',
-                        state: currentDoc?.data_.location?.state || '',
-                        zip_code: currentDoc?.data_.location?.zip_code || '',
-                    },
-                    metadata_: {
-                        doc_name: currentDoc?.metadata_?.doc_name || '',
-                    },
-                })
-                //set initialDocName to exisiting docName so we can allow it through validation
-                setInitialDocName(currentDoc?.metadata_?.doc_name)
             }
         } catch (error) {
             console.error('Error retrieving project docs:', error)
         }
     }
 
-    function getInstallerEntries(entries: Project[]) {
-        // Create a map to track the most recent entry for each installer by name
-        const installerMap = new Map()
+    const getInstallerEntries = (entries: Project[]): Project[] => {
+        const installerMap = new Map<string, Project>()
 
         entries.forEach(entry => {
-            // Ensure the entry is not 'new' and contains the necessary data
             if (
                 entry.metadata_ &&
                 entry.metadata_.status !== 'new' &&
@@ -137,14 +152,13 @@ const NewProjectForm = () => {
                         entry.metadata_.last_modified_at,
                     )
 
-                    // Update the map if the entry is the first one or if it's more recent
                     if (
                         !installerMap.has(name) ||
                         lastModifiedAt >
                             new Date(
                                 installerMap.get(
                                     name,
-                                ).metadata_.last_modified_at,
+                                )!.metadata_.last_modified_at,
                             )
                     ) {
                         installerMap.set(name, entry)
@@ -153,11 +167,10 @@ const NewProjectForm = () => {
             }
         })
 
-        // Convert the map values to an array
         return Array.from(installerMap.values())
     }
 
-    const findLastModifiedProject = (projectDocs: Project[]) => {
+    const findLastModifiedProject = (projectDocs: Project[]): Project => {
         const filteredProjects = projectDocs.filter(
             project => project.metadata_.status !== 'new',
         )
@@ -168,43 +181,44 @@ const NewProjectForm = () => {
         })
     }
 
-    //Installer information selection function:
     const handleSelectExistingInstallerInfo = (
         newSelectedInstaller: string | null,
     ) => {
         if (newSelectedInstaller === 'CLEAR_FORM') {
-            setFormData((prevData: any) => ({
-                ...prevData,
+            setFormData({
+                ...formData,
                 installer: {
-                    // Only reset installer information
                     technician_name: '',
                     name: '',
                     mailing_address: '',
                     phone: '',
                     email: '',
                 },
-            }))
+            })
             setSelectedInstallerName(null)
         } else if (newSelectedInstaller && uniqueInstallers) {
             const selectedInstallerObject = uniqueInstallers.find(
-                obj => obj.data_?.installer?.name === newSelectedInstaller,
+                obj => obj.data_.installer.name === newSelectedInstaller,
             )
             if (selectedInstallerObject) {
                 setSelectedInstallerName(newSelectedInstaller)
-                setFormData((prevData: any) => ({
-                    ...prevData,
+                setFormData({
+                    ...formData,
                     installer: {
                         technician_name:
-                            selectedInstallerObject.data_?.installer
-                                ?.technician_name,
-                        name: selectedInstallerObject.data_?.installer.name,
-                        phone: selectedInstallerObject.data_?.installer.phone,
-                        email: selectedInstallerObject.data_?.installer.email,
+                            selectedInstallerObject.data_.installer
+                                .technician_name || '',
+                        name:
+                            selectedInstallerObject.data_.installer.name || '',
                         mailing_address:
-                            selectedInstallerObject.data_?.installer
-                                .mailing_address,
+                            selectedInstallerObject.data_.installer
+                                .mailing_address || '',
+                        phone:
+                            selectedInstallerObject.data_.installer.phone || '',
+                        email:
+                            selectedInstallerObject.data_.installer.email || '',
                     },
-                }))
+                })
             } else {
                 console.log('Error in the installer selector.')
             }
@@ -213,10 +227,7 @@ const NewProjectForm = () => {
         }
     }
 
-    //Cancel button functions:
-    const handleCancelButtonClick = async (
-        event: React.MouseEvent<HTMLButtonElement>,
-    ) => {
+    const handleCancelButtonClick = async () => {
         if (docStatus === 'created') {
             navigate('/', { replace: true })
             return
@@ -227,9 +238,9 @@ const NewProjectForm = () => {
     const deleteEmptyProject = async () => {
         try {
             if (docStatus === 'new') {
-                const projectDoc: any = await db.get(docId)
+                const projectDoc = await db.get(docId)
                 if (projectDoc) {
-                    db.remove(projectDoc)
+                    await db.remove(projectDoc)
                 }
             }
         } catch (error) {
@@ -239,7 +250,6 @@ const NewProjectForm = () => {
         }
     }
 
-    // Save form functions:
     const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
@@ -308,30 +318,30 @@ const NewProjectForm = () => {
                 metadata_: updatedMetadata,
                 _rev: doc._rev,
             }
-            const response = await db.put(updatedDoc)
+            await db.put(updatedDoc)
         } catch (error) {
             console.error('Error updating document:', error)
         }
     }
 
-    const validateDocName = (name: FormDataEntryValue | null) => {
+    const validateDocName = (name: FormDataEntryValue | null): boolean => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
         if (typeof name !== 'string') {
-            setDocNameInputError('Doc name must be a string.') //This will probably never happen
+            setDocNameInputError('Doc name must be a string.')
             return false
         }
         if (!regex.test(name) || name.length > 64) {
-            ///make this logic better
             setDocNameInputError(
-                `Project name must be no more than 64 characters consisting of letters, numbers,
-                dashes, and single spaces. Single spaces can only appear between other characters.`,
+                `Project name must be no more than 64 characters consisting of letters, 
+        numbers, dashes, and single spaces. Single spaces can only appear 
+        between other characters.`,
             )
             return false
         }
         const isDuplicate = projectDocs.some(
             doc =>
                 doc.metadata_.doc_name !== initialDocName &&
-                doc.metadata_.doc_name === name, // Allow initial document name
+                doc.metadata_.doc_name === name,
         )
         if (isDuplicate) {
             setDocNameInputError(
@@ -343,10 +353,12 @@ const NewProjectForm = () => {
         return true
     }
 
-    const validateInstallationCompany = (entry: FormDataEntryValue | null) => {
+    const validateInstallationCompany = (
+        entry: FormDataEntryValue | null,
+    ): boolean => {
         if (typeof entry !== 'string') {
             setInstallationCompanyInputError(
-                'Installation Company must be a string.', //This will probably never happen
+                'Installation Company must be a string.',
             )
             return false
         }
@@ -370,7 +382,7 @@ const NewProjectForm = () => {
                 <Form.Control
                     type="text"
                     name="doc_name"
-                    value={formData?.metadata_?.doc_name || ''}
+                    value={formData.metadata_?.doc_name || ''}
                     isInvalid={!!docNameInputError}
                     onChange={e =>
                         setFormData({
@@ -402,7 +414,7 @@ const NewProjectForm = () => {
                             New projects are pre-populated with installer
                             information from your most recent project. You can
                             clear these fields or choose a different one from
-                            the drop down menu:
+                            the drop-down menu:
                         </p>
                         <DropdownButton
                             id="project-selector"
@@ -411,18 +423,18 @@ const NewProjectForm = () => {
                                     ? selectedInstallerName
                                     : 'Select Installer Information'
                             }
-                            onSelect={handleSelectExistingInstallerInfo}
+                            onSelect={eventKey =>
+                                handleSelectExistingInstallerInfo(eventKey)
+                            }
                         >
-                            {uniqueInstallers.map(obj => {
-                                return (
-                                    <Dropdown.Item
-                                        key={obj.data_.installer.name}
-                                        eventKey={obj.data_.installer.name}
-                                    >
-                                        {obj.data_.installer.name}
-                                    </Dropdown.Item>
-                                )
-                            })}
+                            {uniqueInstallers.map(obj => (
+                                <Dropdown.Item
+                                    key={obj.data_.installer.name}
+                                    eventKey={obj.data_.installer.name}
+                                >
+                                    {obj.data_.installer.name}
+                                </Dropdown.Item>
+                            ))}
                             <Dropdown.Divider />
                             <Dropdown.Item eventKey="CLEAR_FORM">
                                 Clear Installer Information
@@ -443,7 +455,7 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             installer: {
-                                ...formData.installer,
+                                ...formData.installer!,
                                 name: e.target.value,
                             },
                         })
@@ -462,14 +474,13 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             installer: {
-                                ...formData.installer,
+                                ...formData.installer!,
                                 technician_name: e.target.value,
                             },
                         })
                     }
                 />
             </FloatingLabel>
-
             <FloatingLabel controlId="mailing_address" label="Company Address">
                 <Form.Control
                     type="text"
@@ -479,7 +490,7 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             installer: {
-                                ...formData.installer,
+                                ...formData.installer!,
                                 mailing_address: e.target.value,
                             },
                         })
@@ -495,7 +506,7 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             installer: {
-                                ...formData.installer,
+                                ...formData.installer!,
                                 phone: e.target.value,
                             },
                         })
@@ -511,7 +522,7 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             installer: {
-                                ...formData.installer,
+                                ...formData.installer!,
                                 email: e.target.value,
                             },
                         })
@@ -528,7 +539,7 @@ const NewProjectForm = () => {
                         setFormData({
                             ...formData,
                             location: {
-                                ...formData.location,
+                                ...formData.location!,
                                 street_address: e.target.value,
                             },
                         })
@@ -541,13 +552,13 @@ const NewProjectForm = () => {
                     name="city"
                     value={formData.location?.city || ''}
                     onChange={e =>
-                        setFormData({
-                            ...formData,
+                        setFormData(prevData => ({
+                            ...prevData,
                             location: {
-                                ...formData.location,
+                                ...prevData.location!,
                                 city: e.target.value,
                             },
-                        })
+                        }))
                     }
                 />
             </FloatingLabel>
@@ -556,13 +567,13 @@ const NewProjectForm = () => {
                     name="state"
                     value={formData.location?.state || ''}
                     onChange={e =>
-                        setFormData({
-                            ...formData,
+                        setFormData(prevData => ({
+                            ...prevData,
                             location: {
-                                ...formData.location,
+                                ...prevData.location!,
                                 state: e.target.value,
                             },
-                        })
+                        }))
                     }
                 >
                     <option key="" value="" />
@@ -579,17 +590,16 @@ const NewProjectForm = () => {
                     name="zip_code"
                     value={formData.location?.zip_code || ''}
                     onChange={e =>
-                        setFormData({
-                            ...formData,
+                        setFormData(prevData => ({
+                            ...prevData,
                             location: {
-                                ...formData.location,
+                                ...prevData.location!,
                                 zip_code: e.target.value,
                             },
-                        })
+                        }))
                     }
                 />
             </FloatingLabel>
-            {/* Photo Upload Wrapper */}
             <PhotoInputWrapper
                 id="project_photos"
                 label="Building Number - Photo"
