@@ -34,6 +34,8 @@ const NewProjectForm = () => {
     const [projectDocs, setProjectDocs] = useState<Project[]>([])
     const [initialDocName, setInitialDocName] = useState('') // This is for editing an existing project, to keep track of the name it started with
     const [docNameInputError, setDocNameInputError] = useState('')
+    const [installationCompanyInputError, setInstallationCompanyInputError] =
+        useState<string>('')
     const [formData, setFormData] = useState<any>({})
     const [docStatus, setDocStatus] = useState<string>('') // new, created etc
     const [selectedInstallerName, setSelectedInstallerName] = useState<
@@ -242,7 +244,12 @@ const NewProjectForm = () => {
         e.preventDefault()
         const form = e.target as HTMLFormElement
         const formData = new FormData(form)
-        if (validateDocName(formData.get('doc_name'))) {
+
+        const docNameValid = validateDocName(formData.get('doc_name'))
+        const installationCompanyValid = validateInstallationCompany(
+            formData.get('installation_company'),
+        )
+        if (docNameValid && installationCompanyValid) {
             const updates = {
                 'metadata_.doc_name': formData.get('doc_name'),
                 'data_.installer.technician_name':
@@ -310,6 +317,7 @@ const NewProjectForm = () => {
     const validateDocName = (name: FormDataEntryValue | null) => {
         const regex = /^[a-zA-Z0-9]+(?:[ -][a-zA-Z0-9]+)*$/
         if (typeof name !== 'string') {
+            setDocNameInputError('Doc name must be a string.') //This will probably never happen
             return false
         }
         if (!regex.test(name) || name.length > 64) {
@@ -335,13 +343,30 @@ const NewProjectForm = () => {
         return true
     }
 
+    const validateInstallationCompany = (entry: FormDataEntryValue | null) => {
+        if (typeof entry !== 'string') {
+            setInstallationCompanyInputError(
+                'Installation Company must be a string.', //This will probably never happen
+            )
+            return false
+        }
+
+        if (!entry) {
+            setInstallationCompanyInputError('Please fill out this field.')
+            return false
+        }
+
+        setInstallationCompanyInputError('')
+        return true
+    }
+
     return (
         <Form
             onSubmit={handleSubmitForm}
             className="new-project-form container"
         >
             <h4>New Project Information</h4>
-            <FloatingLabel controlId="doc_name" label="Project Name">
+            <FloatingLabel controlId="doc_name" label="Project Name*">
                 <Form.Control
                     type="text"
                     name="doc_name"
@@ -363,9 +388,9 @@ const NewProjectForm = () => {
             <h5>Installer Information</h5>
             <p>
                 <em>
-                    The Installer information is optional, but we recommend
-                    filling in at least one field for reference in the final
-                    report.
+                    Apart from the Installation Company Name, the installer
+                    information is optional, but we recommend filling in at
+                    least one more field for reference in the final report.
                 </em>
             </p>
             {projectDocs.length > 1 &&
@@ -405,7 +430,29 @@ const NewProjectForm = () => {
                         </DropdownButton>
                     </>
                 )}
-
+            <FloatingLabel
+                controlId="installation_company"
+                label="Installation Company*"
+            >
+                <Form.Control
+                    type="text"
+                    name="installation_company"
+                    value={formData.installer?.name || ''}
+                    isInvalid={!!installationCompanyInputError}
+                    onChange={e =>
+                        setFormData({
+                            ...formData,
+                            installer: {
+                                ...formData.installer,
+                                name: e.target.value,
+                            },
+                        })
+                    }
+                />
+                <Form.Control.Feedback type="invalid">
+                    {installationCompanyInputError}
+                </Form.Control.Feedback>
+            </FloatingLabel>
             <FloatingLabel controlId="technician_name" label="Technician Name">
                 <Form.Control
                     type="text"
@@ -422,26 +469,7 @@ const NewProjectForm = () => {
                     }
                 />
             </FloatingLabel>
-            <FloatingLabel
-                controlId="installation_company"
-                label="Installation Company"
-            >
-                <Form.Control
-                    type="text"
-                    name="installation_company"
-                    required
-                    value={formData.installer?.name || ''}
-                    onChange={e =>
-                        setFormData({
-                            ...formData,
-                            installer: {
-                                ...formData.installer,
-                                name: e.target.value,
-                            },
-                        })
-                    }
-                />
-            </FloatingLabel>
+
             <FloatingLabel controlId="mailing_address" label="Company Address">
                 <Form.Control
                     type="text"
