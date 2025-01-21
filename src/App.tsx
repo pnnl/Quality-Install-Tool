@@ -1,7 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {
+    createBrowserRouter,
+    RouterProvider,
+    useLocation,
+} from 'react-router-dom'
 import './App.css'
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
+import { initGA, logPageView } from './analytics'
 
 // Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
@@ -18,35 +23,23 @@ const MdxCombustionSafetyView = lazy(
 
 // Routes to be used by React Router, which handles all the
 // browser routing within this domain.
-
-/**
- * Wraps the application in a <Suspense> component to handle loading states.
- *
- * The `fallback` prop displays a loading indicator while the child components
- * are being loaded asynchronously.
- */
 const routes = [
     {
         path: '/',
-        // App Home page : Lists existing projects provides functionality to create new one
         element: (
             <Suspense fallback={<div>Loading...</div>}>
+                <AnalyticsTracker />
                 <RootLayout>
                     <Home />
                 </RootLayout>
             </Suspense>
         ),
     },
-    // TODO: This route will be revisited and revised in the future
-    // {
-    //     path: '/template_editor',
-    //     element: <TemplateEditor />,
-    // },
     {
         path: `/app/:projectId/workflows`,
-        // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
             <Suspense fallback={<div>Loading...</div>}>
+                <AnalyticsTracker />
                 <RootLayout>
                     <WorkFlowView />
                 </RootLayout>
@@ -55,9 +48,9 @@ const routes = [
     },
     {
         path: `/app/:projectId/doe_combustion_appliance_safety_tests`,
-        // Workflow list view:  List the names of workflows available for generating installation report.
         element: (
             <Suspense fallback={<div>Loading...</div>}>
+                <AnalyticsTracker />
                 <RootLayout>
                     <MdxCombustionSafetyView />
                 </RootLayout>
@@ -66,9 +59,9 @@ const routes = [
     },
     {
         path: `/app/:projectId`,
-        // Project details view: Collects information related to the project.
         element: (
             <Suspense fallback={<div>Loading...</div>}>
+                <AnalyticsTracker />
                 <RootLayout>
                     <MdxProjectView />
                 </RootLayout>
@@ -77,10 +70,9 @@ const routes = [
     },
     {
         path: `/app/:projectId/:workflowName`,
-        // Jobs List View: Lists existing installations associated with a particular workflow
-        // and provides functionality to create new installations
         element: (
             <Suspense fallback={<div>Loading...</div>}>
+                <AnalyticsTracker />
                 <RootLayout>
                     <div>
                         <JobsView />
@@ -91,7 +83,6 @@ const routes = [
     },
     {
         path: `/app/:projectId/:workflowName/:jobId`,
-        // Jobs View: Gathering and displaying information pertinent to individual installations
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
@@ -100,22 +91,35 @@ const routes = [
             </Suspense>
         ),
     },
-    // TODO: This route will be revisited and revised in the future
-    // {
-    //     path: `/app/:projectId/:workflowName/:jobId/json`,
-    //     element: (
-    //         <RootLayout>
-    //             <JsonStoreView />
-    //         </RootLayout>
-    //     ),
-    // },
 ]
 
-// React Router
 const router = createBrowserRouter(routes)
 
 function App(): any {
-    return <RouterProvider router={router} />
+    // Move the location tracking logic to the child components, inside Router context
+    return (
+        <>
+            <RouterProvider router={router} />
+        </>
+    )
+}
+
+// Create a separate component to handle analytics, wrapped by the Router context
+function AnalyticsTracker() {
+    const location = useLocation()
+
+    useEffect(() => {
+        initGA() // Initialize Google Analytics on the first render
+        logPageView() // Log initial page view
+
+        // Listen for route changes using `useLocation` from React Router
+    }, []) // Only run once on mount to initialize GA
+
+    useEffect(() => {
+        logPageView() // Log page view when the location changes (route changes)
+    }, [location]) // Run this whenever the route/location changes
+
+    return null // This component doesn't render anything
 }
 
 export default App
