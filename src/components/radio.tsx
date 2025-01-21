@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { FloatingLabel } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
+import { logEvent } from '../analytics'
 
 interface RadioProps {
     id: string
@@ -24,6 +25,7 @@ interface RadioProps {
  */
 const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
     const handleOptionChange = (event: React.FormEvent<HTMLInputElement>) => {
+        logEvent('User Interaction', 'Click Button', 'Signup Button')
         updateValue(event.currentTarget.value)
     }
     return (
