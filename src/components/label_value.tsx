@@ -10,10 +10,12 @@ import React from 'react'
  */
 interface LabelValueProps {
     label?: string
-    value: string
+    value?: string | number | boolean
     required?: boolean
     prefix?: string
     suffix?: string
+    type: 'string' | 'number' | 'date' | 'boolean'
+    decimalPlaces?: number
 }
 
 /**
