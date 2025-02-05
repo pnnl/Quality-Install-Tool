@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
-import { retrieveProjectDocs, useDB } from '../utilities/database_utils'
+import { getProjects, useDB } from '../utilities/database_utils'
 
 /**
  * Props interface for the DocNameInput component.
@@ -54,7 +54,7 @@ const DocNameInput: FC<DocNameInputProps> = ({
      */
     const retrieveProjectInfo = async (): Promise<void> => {
         try {
-            const res = await retrieveProjectDocs(db)
+            const res = await getProjects(db)
             setProjectList(res)
         } catch (error) {
             console.error('Error retrieving project docs:', error)

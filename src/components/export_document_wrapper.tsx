@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import ExportDoc from './export_document'
-import { exportDocumentAsJSONObject, useDB } from '../utilities/database_utils'
+import { useDB } from '../utilities/database_utils'
+import { exportJSONDocument } from '../utilities/json_serialization_utils'
 import JSONValue from '../types/json_value.type'
 
 // Define the props interface for ExportDocWrapper
@@ -26,8 +27,8 @@ const ExportDocWrapper: FC<ExportDocWrapperProps> = ({
     const [sendData, setSendData] = useState<JSONValue>({})
 
     useEffect(() => {
-        exportDocumentAsJSONObject(db, docId, includeChild).then(data =>
-            setSendData(data),
+        exportJSONDocument(db, docId, includeChild).then(data =>
+            setSendData(JSON.stringify(data)),
         )
     }, [])
 

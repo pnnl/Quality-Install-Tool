@@ -4,11 +4,8 @@ import dbName from '../utilities/db_details'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import templatesConfig from '../templates/templates_config'
-import {
-    retrieveProjectSummary,
-    retrieveDocFromDB,
-    useDB,
-} from '../utilities/database_utils'
+import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import { getProjectSummary } from '../utilities/project_summary_utils'
 import { ListGroup } from 'react-bootstrap'
 
 /**
@@ -29,13 +26,11 @@ const MdxTemplateView: FC = () => {
     const db = useDB()
 
     const project_info = async (): Promise<void> => {
-        retrieveProjectSummary(
-            db,
-            projectId as string,
-            workflowName as string,
-        ).then((res: any) => {
-            setProjectSummary(res)
-        })
+        getProjectSummary(db, projectId as string, workflowName as string).then(
+            (res: any) => {
+                setProjectSummary(res)
+            },
+        )
     }
 
     const retrieveInstallationsInfo = async (): Promise<void> => {

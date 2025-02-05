@@ -14,6 +14,7 @@ import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
 import type Attachment from '../types/attachment.type'
 import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
+import { type Base } from '../types/database.types'
 import {
     putNewProject,
     putNewInstallation,
@@ -83,14 +84,14 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     type,
     parentId,
 }) => {
-    const changesRef = useRef<PouchDB.Core.Changes<{}>>()
+    const changesRef = useRef<PouchDB.Core.Changes<Base>>()
     const revisionRef = useRef<string>()
     // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
     //This  uses the `useDB` custom hook to create a PouchDB database with the specified `dbName`
-    const [db, setDB] = useState<PouchDB.Database>(useDB(dbName))
+    const [db, setDB] = useState<PouchDB.Database<Base>>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
@@ -105,7 +106,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      *
      * @param dbDoc The full object representation of the changed document from the database
      */
-    async function processDBDocChange(db: PouchDB.Database, dbDoc: any) {
+    async function processDBDocChange(db: PouchDB.Database<Base>, dbDoc: any) {
         revisionRef.current = dbDoc._rev
 
         // Set doc state
@@ -192,10 +193,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     ? ((await putNewProject(db, docName, docId)) as unknown)
                     : ((await putNewInstallation(
                           db,
-                          docId,
+                          parentId as string,
                           workflowName,
                           docName,
-                          parentId as string,
+                          docId,
                       )) as unknown)
                 revisionRef.current = (result as PouchDB.Core.Response).rev
             } catch (err) {

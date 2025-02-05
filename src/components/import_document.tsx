@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
 import { Button } from 'react-bootstrap'
-import { ImportDocumentIntoDB, useDB } from '../utilities/database_utils'
+import { useDB } from '../utilities/database_utils'
+import { importJSONDocument } from '../utilities/json_serialization_utils'
 import { EXPORT_FILE_TYPE } from '../utilities/paths_utils'
 
 interface ImportDocProps {
@@ -24,7 +25,6 @@ interface ImportDocProps {
 const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
     // Create references to the hidden file inputs
     const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
-    const [projectNames, setProjectNames] = useState<string[]>([])
     const [isFileProcessed, setIsFileProcessed] = useState<boolean>(false)
     const [error, setError] = useState<String>('')
     const db = useDB()
@@ -34,30 +34,6 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
     ) => {
         hiddenFileUploadInputRef.current?.click()
     }
-
-    /**
-     * Fetches project names from the database and updates the state.
-     *
-     * @returns {Promise<void>} A promise that resolves when the fetch operation is complete.
-     */
-    const fetchProjectNames = async (): Promise<void> => {
-        const result = await db.allDocs({
-            include_docs: true,
-        })
-        const projectDocs = result.rows
-            .map((row: any) => row.doc)
-            .filter((doc: any) => doc.type === 'project')
-
-        const projectNames = projectDocs.map(
-            (doc: any) => doc.metadata_.doc_name,
-        )
-        setProjectNames(projectNames)
-    }
-
-    useEffect(() => {
-        // Retrieve all project names from the database when each upload is processed
-        fetchProjectNames()
-    }, [projectNames, isFileProcessed])
 
     const handleFileInputChange = async (
         event: ChangeEvent<HTMLInputElement>,
@@ -100,8 +76,7 @@ const ImportDoc: FC<ImportDocProps> = ({ id, label }) => {
                 return
             }
             try {
-                const jsonData = JSON.parse(dataFromFile)
-                await ImportDocumentIntoDB(db, jsonData, projectNames)
+                await importJSONDocument(db, JSON.parse(dataFromFile))
             } catch (error) {
                 console.error('Error parsing JSON from file:', error)
             }

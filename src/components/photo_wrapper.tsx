@@ -46,15 +46,18 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
 
     const getMatchingAttachmentsFromParent = (projectDocId: any) => {
         db.get(projectDocId, { attachments: true })
-            .then((doc: { metadata_: any; _attachments: any }) => {
+            .then(doc => {
                 // Filter attachments whose IDs start with given 'id;
+                // @ts-ignore: TS2769
                 const matchingAttachments = Object.keys(doc._attachments)
                     .filter(attachmentId => attachmentId.startsWith(id))
                     .map(attachmentId => {
+                        // @ts-ignore: TS18048
                         const attachment = doc._attachments[attachmentId]
 
                         // Decode the Base64 data to a Blob
                         const byteCharacters = Uint8Array.from(
+                            // @ts-ignore: TS2339
                             window.atob(attachment.data),
                             c => c.charCodeAt(0),
                         )
@@ -73,6 +76,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
                             const [firstPart, secondPart, thirdPart] =
                                 attachmentIdParts
                             location_metadata =
+                                // @ts-ignore: TS7053
                                 doc?.metadata_?.attachments[firstPart]?.[
                                     secondPart
                                 ]?.[thirdPart]

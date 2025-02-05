@@ -36,16 +36,14 @@ const JobList: React.FC = () => {
     // Retrieves the project information which includes project name and installation address
     const project_info = async (): Promise<void> => {
         // Dynamically import the function when needed
-        const { retrieveProjectSummary } = await import(
-            '../utilities/database_utils'
+        const { getProjectSummary } = await import(
+            '../utilities/project_summary_utils'
         )
-        retrieveProjectSummary(
-            db,
-            projectId as string,
-            workflowName as string,
-        ).then(res => {
-            setProjectInfo(res)
-        })
+        getProjectSummary(db, projectId as string, workflowName as string).then(
+            res => {
+                setProjectInfo(res)
+            },
+        )
     }
 
     const installation_name = templatesConfig[workflowName as string].title
@@ -80,17 +78,13 @@ const JobList: React.FC = () => {
 
     const retrieveJobs = async (): Promise<void> => {
         // Dynamically import the function when needed
-        const { retrieveInstallationDocs } = await import(
-            '../utilities/database_utils'
+        const { getInstallations } = await import('../utilities/database_utils')
+        getInstallations(db, projectId as string, workflowName as string).then(
+            res => {
+                setJobsList(res)
+                sortByEditTime(res)
+            },
         )
-        retrieveInstallationDocs(
-            db,
-            projectId as string,
-            workflowName as string,
-        ).then(res => {
-            setJobsList(res)
-            sortByEditTime(res)
-        })
     }
 
     useEffect(() => {
@@ -153,10 +147,10 @@ const JobList: React.FC = () => {
             )
             await putNewInstallation(
                 db,
-                '',
+                projectId as string,
                 workflowName as string,
                 docName,
-                projectId as string,
+                undefined,
             )
         }
         // Refresh the job list after adding the new job
@@ -227,7 +221,7 @@ const JobList: React.FC = () => {
           </Dropdown.Item>
           <Dropdown.Item onClick={event => {sortByEditTime(jobsList)}}>
             Sort By Edit Date
-          </Dropdown.Item> 
+          </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown> */}
 

@@ -2,11 +2,8 @@ import { useState, type FC, useEffect } from 'react'
 import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig from '../templates/templates_config'
-import {
-    retrieveInstallationDocs,
-    retrieveProjectSummary,
-    useDB,
-} from '../utilities/database_utils'
+import { getInstallations, useDB } from '../utilities/database_utils'
+import { getProjectSummary } from '../utilities/project_summary_utils'
 import { useParams } from 'react-router-dom'
 
 /**
@@ -25,18 +22,16 @@ const WorkFlowView: FC = () => {
 
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
-        retrieveInstallationDocs(db, projectId as string, workflowName).then(
-            res => {
-                setWorkflowJobsCount(prevArray => ({
-                    ...prevArray,
-                    [workflowName]: res.length,
-                }))
-            },
-        )
+        getInstallations(db, projectId as string, workflowName).then(res => {
+            setWorkflowJobsCount(prevArray => ({
+                ...prevArray,
+                [workflowName]: res.length,
+            }))
+        })
     }
     const project_info = async (): Promise<void> => {
         // Retrieves the project information which includes project name and installation address
-        retrieveProjectSummary(db, projectId as string, '').then((res: any) => {
+        getProjectSummary(db, projectId as string, '').then((res: any) => {
             setProjectInfo(res)
         })
     }

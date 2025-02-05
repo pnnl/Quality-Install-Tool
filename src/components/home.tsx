@@ -3,7 +3,12 @@ import { ListGroup, Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { TfiTrash, TfiPencil, TfiArrowDown } from 'react-icons/tfi'
 import { useNavigate } from 'react-router-dom'
-import { deleteEmptyProjects, useDB } from '../utilities/database_utils'
+import {
+    getProjects,
+    removeEmptyProjects,
+    removeProject,
+    useDB,
+} from '../utilities/database_utils'
 import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
 
@@ -22,19 +27,14 @@ const Home: FC = () => {
     const db = useDB()
 
     const retrieveProjectInfo = async (): Promise<void> => {
-        // Dynamically import the function when needed
-        const { retrieveProjectDocs } = await import(
-            '../utilities/database_utils'
-        )
-
-        retrieveProjectDocs(db).then(res => {
+        getProjects(db).then(res => {
             setProjectList(res)
             sortByEditTime(res)
         })
     }
 
     useEffect(() => {
-        deleteEmptyProjects(db)
+        removeEmptyProjects(db)
     }, [])
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Home: FC = () => {
     const handleAddJob = async () => {
         // Dynamically import the function when needed
         const { putNewProject } = await import('../utilities/database_utils')
-        const updatedDBDoc: any = await putNewProject(db, '', '')
+        const updatedDBDoc: any = await putNewProject(db, '', undefined)
 
         // Refresh the project list after adding the new project
         await retrieveProjectInfo()
@@ -58,29 +58,8 @@ const Home: FC = () => {
 
     const confirmDeleteJob = async () => {
         try {
-            // delete the selected project
-            const projectDoc: any = await db.get(selectedProjectToDelete)
-
-            const installDocs: any = await db.allDocs({
-                keys: projectDoc.children,
-                include_docs: true,
-            })
-
-            // Filter jobs/installations linked to the projects and mark for deletion
-            const docsToDelete: any = installDocs.rows
-                .filter((row: { doc: any }) => !!row.doc) // Filter out rows without a document
-                .map((row: { doc: { _id: any; _rev: any } }) => ({
-                    _deleted: true,
-                    _id: row.doc?._id,
-                    _rev: row.doc?._rev,
-                }))
-
-            // performing bulk delete of jobs/installation doc
-            if (docsToDelete.length > 0) {
-                const deleteResult = await db.bulkDocs(docsToDelete)
-            }
-            // Deleting the project document
-            await db.remove(projectDoc)
+            // delete the selected project and associated installations
+            await removeProject(db, selectedProjectToDelete)
 
             //Refresh the project list after deletion
             await retrieveProjectInfo()
