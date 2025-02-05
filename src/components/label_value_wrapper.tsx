@@ -54,6 +54,9 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     decimalPlaces = 1,
     type,
 }: LabelValueWrapperProps): JSX.Element | null => {
+    if (type == undefined) {
+        console.error('Type must be defined in <LabelValue/> in MDX file.')
+    }
     const [parentData, _] = useState<any>(parent?.data_)
     return (
         <StoreContext.Consumer>

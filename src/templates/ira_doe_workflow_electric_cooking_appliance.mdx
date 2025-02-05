@@ -1,7 +1,34 @@
 <div className="test-label-section">
 <h1>This is a test section </h1>
+
+<p> Enter a value to be retrieved by the LabelValues below</p>
+
+<TextInput path="label-value-test-input" />
+
 <h2>LabelValue with no props:</h2>
-<LabelValue path="fake_path"/>
+<code>
+    `<LabelValue />`
+</code>
+<div className="label-value-container" type="string">
+    <LabelValue />
+</div>
+
+<h2>LabelValue with path prop:</h2>
+<code>
+    `<LabelValue path="existing_cooking_appliance_type" />`
+</code>
+<div className="label-value-container">
+    <LabelValue path="label-value-test-input" />
+</div>
+
+<h2>LabelValue with number type prop:</h2>
+<code>
+    `<LabelValue path="existing_cooking_appliance_type" type="number" />`
+</code>
+<div className="label-value-container">
+    <LabelValue path="label-value-test-input" type="number" />
+</div>
+
 </div>
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
