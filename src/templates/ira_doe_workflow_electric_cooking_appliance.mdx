@@ -1,3 +1,8 @@
+<div className="test-label-section">
+<h1>This is a test section </h1>
+<h2>LabelValue with no props:</h2>
+<LabelValue path="fake_path"/>
+</div>
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
     ## Existing Conditions 
@@ -7,7 +12,7 @@
     <DateInput label="Installation Date" path="install_date" />
 
     <PhotoInput id="electric_cooking_appliance_nameplate_photo" label="Nameplate of the Electric Cooking Appliance – Photo">
-        Please take a photo of the nameplate of the electric cooking appliance showing the model number and serial number.    
+        Please take a photo of the nameplate of the electric cooking appliance showing the model number and serial number.
     </PhotoInput>
     <PhotoInput id="circuit_breaker_photo" label="Circuit Breaker – Photo ">
         Please take a picture of the circuit breaker that powers the electric cooling appliance.
@@ -37,12 +42,12 @@
 
     ## Installation
     <Photo id="electric_cooking_appliance_nameplate_photo" label="Nameplate of the Electric Cooking Appliance – Photo" required>
-        Photo of the nameplate of the electric cooking appliance showing the model number and serial number   
+        Photo of the nameplate of the electric cooking appliance showing the model number and serial number
     </Photo>
     <Photo id="circuit_breaker_photo" label="Circuit Breaker – Photo " required>
         Photo of the circuit breaker that powers the electric cooling appliance
     </Photo>
-    
+
     <ShowOrHide visible={props.data?.existing_cooking_appliance_type === "Gas"}>
       <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
         Photo of the gas pipe showing it is off and capped
@@ -54,5 +59,6 @@
     <p> What is the fuel type of the new stovetop/oven/range?   <strong><LabelValue path="postinstall_cooking_appliance_type" /> </strong> </p>
 
     </PrintSection>
+
   </Tab>
 </Tabs>

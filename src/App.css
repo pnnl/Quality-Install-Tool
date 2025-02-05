@@ -1,3 +1,8 @@
+.test-label-section {
+    background-color: pink;
+    margin: 10px;
+    padding: 20px;
+}
 .App {
     text-align: center;
 }

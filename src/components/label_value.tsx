@@ -38,6 +38,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
     required = false,
     prefix = '',
     suffix = '',
+    type,
 }: LabelValueProps): JSX.Element | null => {
     return required || value ? (
         label ? (
