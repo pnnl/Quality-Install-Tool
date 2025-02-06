@@ -110,19 +110,24 @@ const Home: React.FC<HomeProps> = () => {
                             <ImportDoc label="Import Project" />
                         </div>
                         <div>
-                            {projectDocs.map(projectDoc => (
-                                <ProjectListGroup
-                                    projectDoc={projectDoc}
-                                    onEdit={() =>
-                                        navigate(`app/${projectDoc._id}`, {
-                                            replace: true,
-                                        })
-                                    }
-                                    onDelete={() =>
-                                        setSelectedProjectDoc(projectDoc)
-                                    }
-                                />
-                            ))}
+                            {projectDocs.map(
+                                (
+                                    projectDoc: PouchDB.Core.ExistingDocument<Project> &
+                                        PouchDB.Core.AllDocsMeta,
+                                ) => (
+                                    <ProjectListGroup
+                                        projectDoc={projectDoc}
+                                        onEdit={() =>
+                                            navigate(`app/${projectDoc._id}`, {
+                                                replace: true,
+                                            })
+                                        }
+                                        onDelete={() =>
+                                            setSelectedProjectDoc(projectDoc)
+                                        }
+                                    />
+                                ),
+                            )}
                         </div>
                     </div>
                 )}
@@ -148,12 +153,12 @@ const Home: React.FC<HomeProps> = () => {
                     onHide={() => setSelectedProjectDoc(undefined)}
                     onCancel={() => setSelectedProjectDoc(undefined)}
                     onConfirm={async () => {
-                        const [response] = await removeProject(
-                            db,
-                            selectedProjectDoc._id,
-                        )
+                        const [projectResponse, installationResponses]: [
+                            PouchDB.Core.Response,
+                            Array<PouchDB.Core.Response | PouchDB.Core.Error>,
+                        ] = await removeProject(db, selectedProjectDoc._id)
 
-                        if (response.ok) {
+                        if (projectResponse.ok) {
                             setProjectDocs(previousProjectDocs => {
                                 return previousProjectDocs.filter(
                                     previousProjectDoc => {
