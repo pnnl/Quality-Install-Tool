@@ -77,7 +77,7 @@ const Home: React.FC<HomeProps> = () => {
                         <div className="button-container-center">
                             <NewProjectButton
                                 label="Add a New Project"
-                                onClick={async () => {
+                                onClick={async (): Promise<void> => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta =
                                         await putNewProject(db, '', undefined)
@@ -96,7 +96,7 @@ const Home: React.FC<HomeProps> = () => {
                         <div className="align-right padding">
                             <NewProjectButton
                                 label="Add a New Project"
-                                onClick={async () => {
+                                onClick={async (): Promise<void> => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta =
                                         await putNewProject(db, '', undefined)
@@ -117,12 +117,12 @@ const Home: React.FC<HomeProps> = () => {
                                 ) => (
                                     <ProjectListGroup
                                         projectDoc={projectDoc}
-                                        onEdit={() =>
+                                        onEdit={(): void =>
                                             navigate(`app/${projectDoc._id}`, {
                                                 replace: true,
                                             })
                                         }
-                                        onDelete={() =>
+                                        onDelete={(): void =>
                                             setSelectedProjectDoc(projectDoc)
                                         }
                                     />
@@ -150,9 +150,9 @@ const Home: React.FC<HomeProps> = () => {
                 <DeleteConfirmationModal
                     label={selectedProjectDoc.metadata_.doc_name}
                     show={selectedProjectDoc !== undefined}
-                    onHide={() => setSelectedProjectDoc(undefined)}
-                    onCancel={() => setSelectedProjectDoc(undefined)}
-                    onConfirm={async () => {
+                    onHide={(): void => setSelectedProjectDoc(undefined)}
+                    onCancel={(): void => setSelectedProjectDoc(undefined)}
+                    onConfirm={async (): Promise<void> => {
                         const [projectResponse, installationResponses]: [
                             PouchDB.Core.Response,
                             Array<PouchDB.Core.Response | PouchDB.Core.Error>,
