@@ -4,13 +4,24 @@ import { get } from 'lodash'
 import LabelValue from './label_value'
 
 interface LabelValueWrapperProps {
-    label: string
-    path: string
+    label?: string
+    path?: string
     prefix?: string
     suffix?: string
     required?: boolean
     parent?: any
+    value?: string | number | boolean
+    type?: 'string' | 'number' | 'date' | 'boolean'
+    decimalPlaces?: number
 }
+
+// value (optional): The data to be displayed.
+// type (required): The type of the data (string, number, date, or boolean).
+// label (optional): A label to display alongside the value.
+// path (optional): The path in the data object (from DB) where the value can be found.
+// decimalPlaces (optional, default: 1): The number of decimal places to use when formatting numeric values.
+// prefix (optional): A string to prepend to the value (e.g., a currency symbol).
+// suffix (optional): A string to append to the value (e.g., a percentage symbol).
 
 /**
  * `LabelValueWrapper` is a React functional component that renders a label-value pair,
@@ -40,7 +51,12 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     suffix,
     parent = null,
     required = false,
+    decimalPlaces,
+    type = 'string',
 }: LabelValueWrapperProps): JSX.Element | null => {
+    if (type == undefined) {
+        console.error('Type must be defined in <LabelValue/> in MDX file.')
+    }
     const [parentData, _] = useState<any>(parent?.data_)
     return (
         <StoreContext.Consumer>
@@ -48,6 +64,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                 const data_object = parent ? parentData : data
                 const key = path == null ? '' : path
                 const value = get(data_object, key)
+                // debugger
                 return (
                     <LabelValue
                         label={label}
@@ -55,6 +72,8 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                         required={required}
                         prefix={prefix}
                         suffix={suffix}
+                        decimalPlaces={decimalPlaces}
+                        type={type}
                     />
                 )
             }}
