@@ -1,23 +1,26 @@
-import React, { useState, type FC, useEffect, SetStateAction } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ListGroup, Button, Modal } from 'react-bootstrap'
+import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import { LinkContainer } from 'react-router-bootstrap'
-import { TfiTrash, TfiPencil, TfiArrowDown } from 'react-icons/tfi'
 import { useNavigate } from 'react-router-dom'
+
+import ExportDoc from './export_document'
+import ImportDoc from './import_document'
 import {
     getProjects,
     removeEmptyProjects,
     removeProject,
     useDB,
 } from '../utilities/database_utils'
-import ImportDoc from './import_document_wrapper'
-import ExportDoc from './export_document_wrapper'
+
+interface HomeProps {}
 
 /**
  * Home:  Renders the Home page for the APP
  *
  * @returns ListGroup component displaying the projects created
  */
-const Home: FC = () => {
+const Home: React.FC<HomeProps> = () => {
     const navigate = useNavigate()
     const [projectList, setProjectList] = useState<any[]>([])
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
@@ -73,7 +76,7 @@ const Home: FC = () => {
 
     const handleDelete = (
         event: React.MouseEvent,
-        key: { _id: string; metadata_: { doc_name: SetStateAction<string> } },
+        key: { _id: string; metadata_: { doc_name: string } },
     ) => {
         event.stopPropagation()
         event.preventDefault()
@@ -141,9 +144,8 @@ const Home: FC = () => {
                                           <TfiTrash size={22} />
                                       </Button>
                                       <ExportDoc
-                                          docId={key._id}
-                                          docName={key.metadata_?.doc_name}
-                                          includeChild={true}
+                                          projectId={key._id}
+                                          includeInstallations={true}
                                       />
                                   </span>
                                   <b>{key.metadata_?.doc_name}</b>
@@ -200,10 +202,8 @@ const Home: FC = () => {
                             >
                                 Add a New Project
                             </Button>
-                            <ImportDoc
-                                id="project_json"
-                                label="Import a Project"
-                            />
+                            &nbsp;&nbsp;
+                            <ImportDoc label="Import a Project" />
                         </div>
                     </center>
                 )}
@@ -216,10 +216,8 @@ const Home: FC = () => {
                             >
                                 Add a New Project
                             </Button>
-                            <ImportDoc
-                                id="project_json"
-                                label="Import Project"
-                            />
+                            &nbsp;&nbsp;
+                            <ImportDoc label="Import Project" />
                         </div>
                         {projects_display}
                     </div>

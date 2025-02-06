@@ -1,57 +1,60 @@
-import React from 'react'
-import JSONValue from '../types/json_value.type'
+import PouchDB from 'pouchdb'
+import React, { useCallback } from 'react'
 import { Button } from 'react-bootstrap'
 import { TfiImport } from 'react-icons/tfi'
-import { EXPORT_FILE_TYPE } from '../utilities/paths_utils'
+
+import { type Base, type Project } from '../types/database.types'
+import { sendBlob } from '../utilities/blob_utils'
+import { getProject, useDB } from '../utilities/database_utils'
+import {
+    type JSONDocument,
+    JSON_DOCUMENT_CONTENT_TYPE,
+    JSON_DOCUMENT_FILE_EXTENSION,
+    exportJSONDocument,
+} from '../utilities/json_serialization_utils'
 
 interface ExportDocProps {
-    sendData: JSONValue // The data to be downloaded
-    fileName: string // The name of the file
+    projectId: PouchDB.Core.DocumentId
+    includeInstallations: boolean
 }
 
-/**
- * A component that triggers the download of a document as a file.
- * @param sendData - The data to be exported, json data from the DB.
- * @param fileName - The name of the file to be downloaded. (extension as *.qit)
- * @returns A React element that renders a button for downloading the document.
- */
 const ExportDoc: React.FC<ExportDocProps> = ({
-    sendData,
-    fileName,
-}: any): JSX.Element => {
-    const handleDownload = () => {
-        try {
-            //Create a Blob from the sendData
-            const blob = new Blob([sendData as BlobPart], {
-                type: 'application/json',
+    projectId,
+    includeInstallations,
+}) => {
+    const db: PouchDB.Database<Base> = useDB()
+
+    const handleClick = useCallback(
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
+            event.stopPropagation()
+            event.preventDefault()
+
+            const projectDoc: PouchDB.Core.Document<Project> &
+                PouchDB.Core.GetMeta = await getProject(db, projectId)
+
+            const data: JSONDocument = await exportJSONDocument(
+                db,
+                projectId,
+                includeInstallations,
+            )
+
+            const blob: Blob = new Blob([JSON.stringify(data)], {
+                type: JSON_DOCUMENT_CONTENT_TYPE,
             })
-            const url = URL.createObjectURL(blob)
 
-            // Create a temporary anchor element to trigger the download
-            const link = document.createElement('a')
-            link.href = url
-            link.setAttribute('download', `${fileName + EXPORT_FILE_TYPE}`)
+            const fileName: string = `${projectDoc.metadata_.doc_name} ${new Date().toUTCString()}${JSON_DOCUMENT_FILE_EXTENSION}`
 
-            // Append to the body, click and remove it
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+            sendBlob(blob, fileName)
 
-            // Clean up the URL object
-            URL.revokeObjectURL(url)
-        } catch (error) {
-            console.log('Error in exporting the document', error)
-        }
-    }
+            return false
+        },
+        [db, projectId, includeInstallations],
+    )
+
     return (
-        <Button
-            variant="light"
-            onClick={event => {
-                event.stopPropagation()
-                event.preventDefault()
-                handleDownload()
-            }}
-        >
+        <Button variant="light" onClick={handleClick}>
             <TfiImport size={20} />
         </Button>
     )

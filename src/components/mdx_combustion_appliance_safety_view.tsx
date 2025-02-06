@@ -2,8 +2,11 @@ import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
-import dbName from '../utilities/db_details'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import {
+    DEFAULT_POUCHDB_DATABASE_NAME,
+    retrieveDocFromDB,
+    useDB,
+} from '../utilities/database_utils'
 import DOECombustionTestTemplate from '../templates/doe_workflow_combustion_appliance_safety_tests.mdx'
 
 /**
@@ -29,7 +32,7 @@ const MdxCombustionSafetyView: FC = () => {
 
     return (
         <StoreProvider
-            dbName={dbName}
+            dbName={DEFAULT_POUCHDB_DATABASE_NAME}
             docId={projectId as string}
             workflowName=""
             docName={projectDoc?.metadata_?.doc_name}

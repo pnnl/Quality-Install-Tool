@@ -13,7 +13,12 @@ import {
     type Project,
 } from '../types/database.types'
 import { type Location } from '../types/location.type'
-import DBName from '../utilities/db_details'
+
+//
+// CONFIGURATION
+//
+
+export const DEFAULT_POUCHDB_DATABASE_NAME: string = 'quality-install-tool'
 
 //
 // HOOKS
@@ -42,7 +47,7 @@ import DBName from '../utilities/db_details'
  * @throws {Error} Throws an error if the database cannot be created/accessed.
  */
 export function useDB(
-    name: string = DBName,
+    name: string = DEFAULT_POUCHDB_DATABASE_NAME,
     options: PouchDB.Configuration.DatabaseConfiguration = {},
 ): PouchDB.Database<Base> {
     return useMemo<PouchDB.Database<Base>>(() => {

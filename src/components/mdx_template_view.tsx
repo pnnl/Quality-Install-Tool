@@ -1,10 +1,13 @@
 import { useState, type FC, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import dbName from '../utilities/db_details'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import templatesConfig from '../templates/templates_config'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import {
+    DEFAULT_POUCHDB_DATABASE_NAME,
+    retrieveDocFromDB,
+    useDB,
+} from '../utilities/database_utils'
 import { getProjectSummary } from '../utilities/project_summary_utils'
 import { ListGroup } from 'react-bootstrap'
 
@@ -51,7 +54,7 @@ const MdxTemplateView: FC = () => {
 
     return (
         <StoreProvider
-            dbName={dbName}
+            dbName={DEFAULT_POUCHDB_DATABASE_NAME}
             docId={jobId as string}
             workflowName={workflowName as string}
             docName={doc_name}

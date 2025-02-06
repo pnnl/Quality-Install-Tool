@@ -26,7 +26,3 @@ export function pathToId(
     }
     return [prefix, ...toPath(path)].join(separator)
 }
-
-// File extension for the project doc(JSON data) downloaded from the QI tool.
-// Expected extension: .qit.json
-export const EXPORT_FILE_TYPE = '.qit.json'

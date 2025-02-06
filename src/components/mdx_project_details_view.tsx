@@ -1,9 +1,11 @@
 import { Suspense, useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { StoreProvider } from './store'
-import dbName from '../utilities/db_details'
 import React from 'react'
-import { useDB } from '../utilities/database_utils'
+import {
+    DEFAULT_POUCHDB_DATABASE_NAME,
+    useDB,
+} from '../utilities/database_utils'
 
 // Lazily initializes the components, rendering them only when requested.
 // This reduces the bundle size when the app is loaded, improving initial load time
@@ -40,7 +42,7 @@ const MdxProjectView: FC = () => {
 
     return (
         <StoreProvider
-            dbName={dbName}
+            dbName={DEFAULT_POUCHDB_DATABASE_NAME}
             docId={projectId as string}
             workflowName=""
             docName={projectDoc?.metadata_?.doc_name}
