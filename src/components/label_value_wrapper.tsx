@@ -11,7 +11,7 @@ interface LabelValueWrapperProps {
     required?: boolean
     parent?: any
     value?: string | number | boolean
-    type: 'string' | 'number' | 'date' | 'boolean'
+    type?: 'string' | 'number' | 'date' | 'boolean'
     decimalPlaces?: number
 }
 
@@ -51,8 +51,8 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     suffix,
     parent = null,
     required = false,
-    decimalPlaces = 1,
-    type,
+    decimalPlaces,
+    type = 'string',
 }: LabelValueWrapperProps): JSX.Element | null => {
     if (type == undefined) {
         console.error('Type must be defined in <LabelValue/> in MDX file.')
@@ -64,6 +64,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                 const data_object = parent ? parentData : data
                 const key = path == null ? '' : path
                 const value = get(data_object, key)
+                // debugger
                 return (
                     <LabelValue
                         label={label}

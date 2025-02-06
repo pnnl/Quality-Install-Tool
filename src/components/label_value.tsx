@@ -38,8 +38,34 @@ const LabelValue: React.FC<LabelValueProps> = ({
     required = false,
     prefix = '',
     suffix = '',
-    type,
+    decimalPlaces = 1,
+    type = 'string',
 }: LabelValueProps): JSX.Element | null => {
+    //If type is "number" and decimalPlaces, round the value
+    if (type === 'number' && typeof value === 'number') {
+        // debugger
+        //check that value is actually a number
+        //Need to do this because TS can't do its job in MDX files and there's a chance that
+        //someone could pass bad values in via props
+
+        if (
+            typeof value === 'number' &&
+            !isNaN(value) &&
+            typeof decimalPlaces === 'number' &&
+            !isNaN(decimalPlaces)
+        ) {
+            value = value.toFixed(decimalPlaces)
+        } else {
+            console.log(
+                'Make sure that your value and decimalPlaces params are actually numbers.',
+            )
+        }
+    } else if (type === 'number' && typeof value !== 'number') {
+        console.log(
+            `You are trying to set the type of a non-number value to 'number'. Value is : ${value} and typeof value is: ${typeof value}`,
+        )
+    }
+
     return required || value ? (
         label ? (
             <div className="top-bottom-padding">

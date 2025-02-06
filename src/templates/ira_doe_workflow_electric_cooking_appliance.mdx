@@ -1,9 +1,13 @@
 <div className="test-label-section">
 <h1>This is a test section </h1>
 
-<p> Enter a value to be retrieved by the LabelValues below</p>
+<p> Enter a text value to be retrieved by the LabelValues below</p>
 
-<TextInput path="label-value-test-input" />
+<TextInput path="label-value-test-text-input" />
+
+<p> Enter a number value to be retrieved by the LabelValues below</p>
+
+<NumberInput path="label-value-test-number-input" />
 
 <h2>LabelValue with no props:</h2>
 <code>
@@ -15,7 +19,7 @@
 
 <h2>LabelValue with path prop:</h2>
 <code>
-    `<LabelValue path="existing_cooking_appliance_type" />`
+    `<LabelValue path="label-value-test-input" />`
 </code>
 <div className="label-value-container">
     <LabelValue path="label-value-test-input" />
@@ -23,10 +27,31 @@
 
 <h2>LabelValue with number type prop:</h2>
 <code>
-    `<LabelValue path="existing_cooking_appliance_type" type="number" />`
+    `<LabelValue path="label-value-test-number-input" type="number" />`
 </code>
 <div className="label-value-container">
-    <LabelValue path="label-value-test-input" type="number" />
+    <LabelValue path="label-value-test-number-input" type="number" />
+</div>
+
+<h2>
+    LabelValue with number type prop and string value (Will console.log an error
+    message)
+</h2>
+<code>
+
+    <LabelValue
+        path="label-value-test-text-input"
+        type="number"
+        decimalPlaces={2}
+    />
+
+</code>
+<div className="label-value-container">
+    <LabelValue
+        path="label-value-test-text-input"
+        type="number"
+        decimalPlaces={2}
+    />
 </div>
 
 </div>
