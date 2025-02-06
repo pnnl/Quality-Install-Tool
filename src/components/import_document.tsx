@@ -12,9 +12,10 @@ import {
 
 interface ImportDocProps {
     label: string
+    onImport: (projectId: PouchDB.Core.DocumentId) => Promise<void>
 }
 
-const ImportDoc: React.FC<ImportDocProps> = ({ label }) => {
+const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
     const db: PouchDB.Database<Base> = useDB()
 
     const ref = useRef<HTMLInputElement>(null)
@@ -33,9 +34,16 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label }) => {
                 const data: JSONDocument = JSON.parse(text)
 
                 try {
-                    await importJSONDocument(db, data)
+                    const [projectResponse, installationResponses] =
+                        await importJSONDocument(db, data)
 
-                    setError(undefined)
+                    if (projectResponse.ok) {
+                        setError(undefined)
+
+                        onImport && (await onImport(projectResponse.id))
+                    } else {
+                        setError('Failed to save product document.')
+                    }
                 } catch (cause: unknown) {
                     setError('Failed to import JSON.')
                 }

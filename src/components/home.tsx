@@ -8,6 +8,7 @@ import NewProjectButton from './new_project_button'
 import ProjectListGroup from './project_list_group'
 import { type Base, type Project } from '../types/database.types'
 import {
+    getProject,
     getProjects,
     putNewProject,
     removeEmptyProjects,
@@ -88,7 +89,25 @@ const Home: React.FC<HomeProps> = () => {
                                 }}
                             />
                             &nbsp;&nbsp;
-                            <ImportDoc label="Import a Project" />
+                            <ImportDoc
+                                label="Import a Project"
+                                onImport={async (
+                                    projectId: PouchDB.Core.DocumentId,
+                                ): Promise<void> => {
+                                    const projectDoc: PouchDB.Core.Document<Project> &
+                                        PouchDB.Core.GetMeta = await getProject(
+                                        db,
+                                        projectId,
+                                    )
+
+                                    setProjectDocs(previousProjectDocs => {
+                                        return [
+                                            projectDoc,
+                                            ...previousProjectDocs,
+                                        ]
+                                    })
+                                }}
+                            />
                         </div>
                     </center>
                 ) : (
@@ -107,7 +126,25 @@ const Home: React.FC<HomeProps> = () => {
                                 }}
                             />
                             &nbsp;&nbsp;
-                            <ImportDoc label="Import Project" />
+                            <ImportDoc
+                                label="Import Project"
+                                onImport={async (
+                                    projectId: PouchDB.Core.DocumentId,
+                                ): Promise<void> => {
+                                    const projectDoc: PouchDB.Core.Document<Project> &
+                                        PouchDB.Core.GetMeta = await getProject(
+                                        db,
+                                        projectId,
+                                    )
+
+                                    setProjectDocs(previousProjectDocs => {
+                                        return [
+                                            projectDoc,
+                                            ...previousProjectDocs,
+                                        ]
+                                    })
+                                }}
+                            />
                         </div>
                         <div>
                             {projectDocs.map(

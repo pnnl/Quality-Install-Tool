@@ -120,7 +120,7 @@ export async function getInstallationIds(
     projectId: PouchDB.Core.DocumentId,
     workflowName: keyof typeof templatesConfig | undefined = undefined,
 ): Promise<Array<PouchDB.Core.DocumentId>> {
-    await db.info()
+    // await db.info()
 
     const doc: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta =
         await getProject(db, projectId, {})
