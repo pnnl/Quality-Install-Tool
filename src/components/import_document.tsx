@@ -45,7 +45,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label }) => {
         }
 
         return _reader
-    }, [db])
+    }, [])
 
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
@@ -68,12 +68,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label }) => {
 
     return (
         <>
-            <Button
-                disabled={ref.current === null}
-                onClick={() => ref.current?.click()}
-            >
-                {label}
-            </Button>
+            <Button onClick={() => ref.current?.click()}>{label}</Button>
             <input
                 ref={ref}
                 className="photo-upload-input"

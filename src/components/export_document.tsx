@@ -50,7 +50,7 @@ const ExportDoc: React.FC<ExportDocProps> = ({
 
             return false
         },
-        [db, projectId, includeInstallations],
+        [projectId, includeInstallations],
     )
 
     return (
