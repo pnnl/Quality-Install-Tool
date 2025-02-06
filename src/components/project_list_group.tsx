@@ -50,7 +50,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     )
 
     return (
-        <ListGroup key={projectDoc._id} className="padding">
+        <ListGroup className="padding">
             <LinkContainer to={`/app/${projectDoc._id}/workflows`}>
                 <ListGroup.Item action={true}>
                     <span className="icon-container">

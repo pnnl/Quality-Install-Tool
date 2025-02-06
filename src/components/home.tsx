@@ -153,6 +153,7 @@ const Home: React.FC<HomeProps> = () => {
                                         PouchDB.Core.AllDocsMeta,
                                 ) => (
                                     <ProjectListGroup
+                                        key={projectDoc._id}
                                         projectDoc={projectDoc}
                                         onEdit={(): void =>
                                             navigate(`app/${projectDoc._id}`, {
