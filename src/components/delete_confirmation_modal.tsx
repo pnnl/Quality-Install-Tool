@@ -4,9 +4,9 @@ import { Button, Modal } from 'react-bootstrap'
 interface DeleteConfirmationModalProps {
     label: string
     show: boolean
-    onCancel: () => void
-    onConfirm: () => Promise<void>
-    onHide: () => void
+    onCancel: () => void | Promise<void>
+    onConfirm: () => void | Promise<void>
+    onHide: () => void | Promise<void>
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
@@ -17,11 +17,13 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     onHide,
 }) => {
     const handleCancel = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>): boolean => {
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
             event.stopPropagation()
             event.preventDefault()
 
-            onCancel && onCancel()
+            onCancel && (await onCancel())
 
             return false
         },
@@ -42,8 +44,8 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         [onConfirm],
     )
 
-    const handleHide = useCallback((): void => {
-        onHide && onHide()
+    const handleHide = useCallback(async (): Promise<void> => {
+        onHide && (await onHide())
     }, [onHide])
 
     return (

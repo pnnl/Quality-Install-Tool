@@ -12,8 +12,8 @@ import { hasLocation } from '../utilities/location_utils'
 interface ProjectListGroupProps {
     projectDoc: PouchDB.Core.ExistingDocument<Project> &
         PouchDB.Core.AllDocsMeta
-    onEdit: () => void
-    onDelete: () => void
+    onEdit: () => void | Promise<void>
+    onDelete: () => void | Promise<void>
 }
 
 const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
@@ -22,11 +22,13 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     onDelete,
 }) => {
     const handleEdit = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>): boolean => {
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
             event.stopPropagation()
             event.preventDefault()
 
-            onEdit && onEdit()
+            onEdit && (await onEdit())
 
             return false
         },
@@ -34,11 +36,13 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     )
 
     const handleDelete = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>): boolean => {
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
             event.stopPropagation()
             event.preventDefault()
 
-            onDelete && onDelete()
+            onDelete && (await onDelete())
 
             return false
         },

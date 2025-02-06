@@ -12,7 +12,7 @@ import {
 
 interface ImportDocProps {
     label: string
-    onImport: (projectId: PouchDB.Core.DocumentId) => Promise<void>
+    onImport: (projectId: PouchDB.Core.DocumentId) => void | Promise<void>
 }
 
 const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
