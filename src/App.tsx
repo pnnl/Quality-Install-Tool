@@ -1,11 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './App.css'
 import React, { Suspense, lazy } from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
+import 'bootstrap/dist/css/bootstrap.css'
+
+import './App.css'
 
 // Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
-const WorkFlowView = lazy(() => import('./components/workflow_view'))
+const WorkflowView = lazy(() => import('./components/workflow_view'))
 const JobsView = lazy(() => import('./components/jobs_view'))
 const Home = lazy(() => import('./components/home'))
 const MdxProjectView = lazy(
@@ -48,7 +50,7 @@ const routes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
-                    <WorkFlowView />
+                    <WorkflowView />
                 </RootLayout>
             </Suspense>
         ),
@@ -114,7 +116,9 @@ const routes = [
 // React Router
 const router = createBrowserRouter(routes)
 
-function App(): any {
+interface AppProps {}
+
+const App: React.FC<AppProps> = () => {
     return <RouterProvider router={router} />
 }
 

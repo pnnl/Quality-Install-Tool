@@ -61,6 +61,56 @@ export function useDB(
 }
 
 //
+// BASE
+//
+
+export async function renameDoc<Model>(
+    db: PouchDB.Database<Base>,
+    id: PouchDB.Core.DocumentId,
+    docName: string,
+): Promise<PouchDB.UpsertResponse> {
+    const lastModifiedAt = new Date()
+
+    const diffFun: PouchDB.UpsertDiffCallback<Base & Model> = (
+        doc: Partial<PouchDB.Core.Document<Base & Model>>,
+    ) => {
+        if (doc) {
+            return {
+                ...doc,
+                metadata_: {
+                    ...doc.metadata_,
+                    doc_name: docName,
+                    last_modified_at: lastModifiedAt,
+                },
+            } as Base & Model & Partial<PouchDB.Core.IdMeta>
+        } else {
+            return null as PouchDB.CancelUpsert
+        }
+    }
+
+    const upsertResponse: PouchDB.UpsertResponse = await db.upsert<
+        Base & Model
+    >(id, diffFun)
+
+    return upsertResponse
+}
+
+// @todo Replace all calls to {retrieveDocFromDB} with calls to {getProject}
+//     and {getInstallation}, and then remove {retrieveDocFromDB}.
+export async function retrieveDocFromDB<Model>(
+    db: PouchDB.Database<Base>,
+    id: PouchDB.Core.DocumentId,
+    options: PouchDB.Core.GetOptions = {},
+): Promise<PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta> {
+    await db.info()
+
+    const doc: PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta =
+        await db.get<Model>(id, options)
+
+    return doc
+}
+
+//
 // INSTALLATIONS
 //
 
@@ -72,7 +122,7 @@ export function newInstallation(
     const createdAt: Date = new Date()
     const lastModifiedAt: Date = createdAt
 
-    const templateName: string | number = workflowName
+    const templateName: keyof typeof templatesConfig = workflowName
     const templateTitle: string = templatesConfig[workflowName]?.title ?? ''
 
     const _id: PouchDB.Core.DocumentId = id ?? crypto.randomUUID()
@@ -217,18 +267,22 @@ export async function putInstallation(
     )
 
     if (response.ok) {
-        // @ts-ignore: TS2322
         const diffFun: PouchDB.UpsertDiffCallback<Project> = (
             doc: Partial<PouchDB.Core.Document<Project>>,
         ) => {
-            const children: Array<PouchDB.Core.DocumentId> = doc.children ?? []
+            if (doc) {
+                const children: Array<PouchDB.Core.DocumentId> =
+                    doc.children ?? []
 
-            if (children.includes(response.id)) {
-                return null as PouchDB.CancelUpsert
+                if (children.includes(response.id)) {
+                    return null as PouchDB.CancelUpsert
+                } else {
+                    doc.children = [...children, response.id]
+
+                    return doc as Project & Partial<PouchDB.Core.IdMeta>
+                }
             } else {
-                doc.children = [...children, response.id]
-
-                return doc
+                return null as PouchDB.CancelUpsert
             }
         }
 
@@ -293,7 +347,6 @@ export async function removeInstallation(
 ): Promise<[PouchDB.Core.Response | undefined, PouchDB.UpsertResponse]> {
     await db.info()
 
-    // @ts-ignore: TS2322
     const diffFun: PouchDB.UpsertDiffCallback<Project> = (
         doc: Partial<PouchDB.Core.Document<Project>>,
     ) => {
@@ -303,6 +356,8 @@ export async function removeInstallation(
             doc.children = children.filter(childId => {
                 return childId !== id
             })
+
+            return doc as Project & Partial<PouchDB.Core.IdMeta>
         } else {
             return null as PouchDB.CancelUpsert
         }
@@ -631,21 +686,4 @@ export async function removeProject(
 
         return [response, []]
     }
-}
-
-//
-// TODO
-//
-
-export async function retrieveDocFromDB<Model>(
-    db: PouchDB.Database<Base>,
-    id: PouchDB.Core.DocumentId,
-    options: PouchDB.Core.GetOptions = {},
-): Promise<PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta> {
-    await db.info()
-
-    const doc: PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta =
-        await db.get<Model>(id, options)
-
-    return doc
 }

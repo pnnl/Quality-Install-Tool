@@ -1,80 +1,131 @@
-import { useState, type FC, useEffect } from 'react'
-import { ListGroup, Button } from 'react-bootstrap'
+import PouchDB from 'pouchdb'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ListGroup } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import templatesConfig from '../templates/templates_config'
-import { getInstallations, useDB } from '../utilities/database_utils'
-import { getProjectSummary } from '../utilities/project_summary_utils'
 import { useParams } from 'react-router-dom'
 
-/**
- * A component View to lists workflow names, facilitating the selection of workflows
- * when generating quality installation reports.
- *
- */
-const WorkFlowView: FC = () => {
-    const [workflowJobsCount, setWorkflowJobsCount] = useState<{
-        [jobId: string]: number
-    }>({})
+import LocationStr from './location_str'
+import TemplatesListGroup from './templates_list_group'
+import templatesConfig from '../templates/templates_config'
+import {
+    type Base,
+    type Installation,
+    type Project,
+} from '../types/database.types'
+import {
+    getInstallations,
+    getProject,
+    useDB,
+} from '../utilities/database_utils'
+import { someLocation } from '../utilities/location_utils'
+
+interface WorkflowViewProps {}
+
+const WorkflowView: React.FC<WorkflowViewProps> = () => {
+    const db: PouchDB.Database<Base> = useDB()
 
     const { projectId } = useParams()
-    const [projectInfo, setProjectInfo] = useState<any>({})
-    const db = useDB()
 
-    // Retrieves the installation details with the specific workflow name
-    const retrieveJobs = async (workflowName: string): Promise<void> => {
-        getInstallations(db, projectId as string, workflowName).then(res => {
-            setWorkflowJobsCount(prevArray => ({
-                ...prevArray,
-                [workflowName]: res.length,
-            }))
-        })
-    }
-    const project_info = async (): Promise<void> => {
-        // Retrieves the project information which includes project name and installation address
-        getProjectSummary(db, projectId as string, '').then((res: any) => {
-            setProjectInfo(res)
-        })
-    }
+    const [installationDocs, setInstallationDocs] = useState<
+        Array<
+            PouchDB.Core.ExistingDocument<Installation> &
+                PouchDB.Core.AllDocsMeta
+        >
+    >([])
+    const [projectDoc, setProjectDoc] = useState<
+        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
+    >(undefined)
+
+    const installationDocsByWorkflowName = useMemo<
+        Map<
+            keyof typeof templatesConfig,
+            Array<
+                PouchDB.Core.ExistingDocument<Installation> &
+                    PouchDB.Core.AllDocsMeta
+            >
+        >
+    >(() => {
+        return installationDocs.reduce((accumulator, installationDoc) => {
+            const workflowName = installationDoc.metadata_.template_name
+
+            if (!accumulator.has(workflowName)) {
+                accumulator.set(workflowName, [])
+            }
+
+            accumulator.get(workflowName).push(installationDoc)
+
+            return accumulator
+        }, new Map())
+    }, [installationDocs])
+
+    const reloadProjectDoc = useCallback(async () => {
+        const projectDoc: PouchDB.Core.Document<Project> &
+            PouchDB.Core.GetMeta = await getProject(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+        )
+
+        setProjectDoc(projectDoc)
+    }, [projectId])
 
     useEffect(() => {
-        Object.keys(templatesConfig).map(key => retrieveJobs(key))
-        project_info()
-    }, [])
+        reloadProjectDoc()
 
-    const project_name = projectInfo?.project_name
-        ? projectInfo?.project_name
-        : ''
-    const street_address = projectInfo?.street_address
-        ? projectInfo?.street_address
-        : ''
-    const city = projectInfo?.city ? projectInfo?.city : ''
-    const state = projectInfo?.state ? projectInfo?.state : ''
-    const zip_code = projectInfo?.zip_code ? projectInfo?.zip_code : ''
-    const templates = Object.keys(templatesConfig).map(key => (
-        <LinkContainer key={key} to={`/app/${projectId}/${key}`}>
-            <ListGroup.Item key={key} action={true}>
-                {templatesConfig[key as keyof typeof templatesConfig].title}{' '}
-                {workflowJobsCount[key] > 0 && `(${workflowJobsCount[key]})`}
-            </ListGroup.Item>
-        </LinkContainer>
-    ))
+        return () => {
+            setProjectDoc(undefined)
+        }
+    }, [reloadProjectDoc])
+
+    const reloadInstallationDocs = useCallback(async () => {
+        const installationDocs: Array<
+            PouchDB.Core.ExistingDocument<Installation> &
+                PouchDB.Core.AllDocsMeta
+        > = await getInstallations(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+            undefined,
+        )
+
+        setInstallationDocs(installationDocs)
+    }, [projectId])
+
+    useEffect(() => {
+        reloadInstallationDocs()
+
+        return () => {
+            setInstallationDocs([])
+        }
+    }, [reloadInstallationDocs])
+
     return (
         <div>
             <h1>Choose an Installation Workflow</h1>
-            <h2>Installations for {project_name} </h2>
-            <ListGroup className="address">
-                {' ' + street_address}
-                {city}
-                {state} {'   '}
-                {zip_code}
-            </ListGroup>
+            <h2>
+                Installations
+                {projectDoc?.metadata_.doc_name && (
+                    <> for {projectDoc.metadata_.doc_name}</>
+                )}
+            </h2>
+            {projectDoc?.data_.location &&
+                someLocation(projectDoc.data_.location) && (
+                    <p className="address">
+                        <LocationStr
+                            location={projectDoc.data_.location}
+                            separators={[', ', ', ', ' ']}
+                        />
+                    </p>
+                )}
             <br />
-
             <div className="container">
-                <ListGroup>{templates}</ListGroup>
+                <TemplatesListGroup
+                    projectId={projectId as PouchDB.Core.DocumentId}
+                    installationDocsByWorkflowName={
+                        installationDocsByWorkflowName
+                    }
+                />
             </div>
         </div>
     )
 }
 
-export default WorkFlowView
+export default WorkflowView

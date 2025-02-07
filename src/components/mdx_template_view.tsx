@@ -1,80 +1,120 @@
-import { useState, type FC, useEffect } from 'react'
+import PouchDB from 'pouchdb'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { StoreProvider } from './store'
+
+import LocationStr from './location_str'
 import MdxWrapper from './mdx_wrapper'
-import templatesConfig from '../templates/templates_config'
+import { StoreProvider } from './store'
+import templatesConfig, {
+    type TemplateConfiguration,
+} from '../templates/templates_config'
+import {
+    type Base,
+    type Installation,
+    type Project,
+} from '../types/database.types'
 import {
     DEFAULT_POUCHDB_DATABASE_NAME,
-    retrieveDocFromDB,
+    getInstallation,
+    getProject,
     useDB,
 } from '../utilities/database_utils'
-import { getProjectSummary } from '../utilities/project_summary_utils'
-import { ListGroup } from 'react-bootstrap'
+import { someLocation } from '../utilities/location_utils'
 
-/**
- * A component view of an instantiated MDX template
- *
- * @remarks
- * The installation ID (or jobId), parent doc id and workflow name
- * for the instance is taken from a dynamic segment of the route, :jobId, :projectId, workflowName.
- *
- */
-const MdxTemplateView: FC = () => {
+interface MdxTemplateViewProps {}
+
+const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
+    const db: PouchDB.Database<Base> = useDB()
+
     const { jobId, projectId, workflowName } = useParams()
-    const config = templatesConfig[workflowName as string]
 
-    const [project, setProject] = useState<any>({})
-    const [projectSummary, setProjectSummary] = useState<any>({})
-    const [installationInfo, setInstallationInfo] = useState<any>({})
-    const db = useDB()
+    const [installationDoc, setInstallationDoc] = useState<
+        (PouchDB.Core.Document<Installation> & PouchDB.Core.GetMeta) | undefined
+    >(undefined)
+    const [projectDoc, setProjectDoc] = useState<
+        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
+    >(undefined)
 
-    const project_info = async (): Promise<void> => {
-        getProjectSummary(db, projectId as string, workflowName as string).then(
-            (res: any) => {
-                setProjectSummary(res)
-            },
+    const reloadProjectDoc = useCallback(async () => {
+        const projectDoc: PouchDB.Core.Document<Project> &
+            PouchDB.Core.GetMeta = await getProject(
+            db,
+            projectId as PouchDB.Core.DocumentId,
         )
-    }
 
-    const retrieveInstallationsInfo = async (): Promise<void> => {
-        retrieveDocFromDB(db, jobId as string).then((res: any) => {
-            setInstallationInfo(res)
-        })
-        retrieveDocFromDB(db, projectId as string).then((res: any) => {
-            setProject(res)
-        })
-    }
+        setProjectDoc(projectDoc)
+    }, [projectId])
 
     useEffect(() => {
-        project_info()
-        retrieveInstallationsInfo()
-    }, [])
+        reloadProjectDoc()
 
-    const doc_name = installationInfo?.metadata_?.doc_name
+        return () => {
+            setProjectDoc(undefined)
+        }
+    }, [reloadProjectDoc])
+
+    const reloadInstallationDoc = useCallback(async () => {
+        const installationDoc: PouchDB.Core.Document<Installation> &
+            PouchDB.Core.GetMeta = await getInstallation(
+            db,
+            jobId as PouchDB.Core.DocumentId,
+        )
+
+        setInstallationDoc(installationDoc)
+    }, [jobId])
+
+    useEffect(() => {
+        reloadInstallationDoc()
+
+        return () => {
+            setInstallationDoc(undefined)
+        }
+    }, [reloadInstallationDoc])
+
+    const templateConfiguration = useMemo<TemplateConfiguration>(() => {
+        return templatesConfig[workflowName as keyof typeof templatesConfig]
+    }, [workflowName])
 
     return (
-        <StoreProvider
-            dbName={DEFAULT_POUCHDB_DATABASE_NAME}
-            docId={jobId as string}
-            workflowName={workflowName as string}
-            docName={doc_name}
-            type={'installation'}
-            parentId={projectId as string}
-        >
-            <h1>{projectSummary?.installation_name}</h1>
-            <h2>Installation for {projectSummary?.project_name}</h2>
-            <ListGroup className="address">
-                {projectSummary?.street_address}
-                {projectSummary?.city}
-                {projectSummary?.state}
-                {projectSummary?.zip_code}
-            </ListGroup>
-            <center>
-                <b>{doc_name}</b>
-            </center>
+        <>
+            <h1>{templateConfiguration.title}</h1>
+            <h2>
+                Installation
+                {projectDoc?.metadata_.doc_name && (
+                    <> for {projectDoc.metadata_.doc_name}</>
+                )}
+            </h2>
+            {projectDoc?.data_.location &&
+                someLocation(projectDoc.data_.location) && (
+                    <p className="address">
+                        <LocationStr
+                            location={projectDoc.data_.location}
+                            separators={[', ', ', ', ' ']}
+                        />
+                    </p>
+                )}
+            {installationDoc?.metadata_.doc_name && (
+                <p>
+                    <center>
+                        <b>{installationDoc.metadata_.doc_name}</b>
+                    </center>
+                </p>
+            )}
             <br />
-            <MdxWrapper Component={config.template} Project={project} />
-        </StoreProvider>
+            <StoreProvider
+                dbName={DEFAULT_POUCHDB_DATABASE_NAME}
+                docId={jobId as PouchDB.Core.DocumentId}
+                workflowName={workflowName as keyof typeof templatesConfig}
+                docName={installationDoc?.metadata_.doc_name ?? ''}
+                type={'installation'}
+                parentId={projectId as PouchDB.Core.DocumentId}
+            >
+                <MdxWrapper
+                    Component={templateConfiguration.template}
+                    Project={projectDoc}
+                />
+            </StoreProvider>
+        </>
     )
 }
 

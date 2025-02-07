@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 
 interface NewProjectButtonProps {
     label: string
-    onClick: () => void | Promise<void>
+    onClick?: () => void | Promise<void>
 }
 
 const NewProjectButton: React.FC<NewProjectButtonProps> = ({

@@ -4,9 +4,9 @@ import { Button, Modal } from 'react-bootstrap'
 interface DeleteConfirmationModalProps {
     label: string
     show: boolean
-    onCancel: () => void | Promise<void>
-    onConfirm: () => void | Promise<void>
-    onHide: () => void | Promise<void>
+    onCancel?: () => void | Promise<void>
+    onConfirm?: () => void | Promise<void>
+    onHide?: () => void | Promise<void>
 }
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({

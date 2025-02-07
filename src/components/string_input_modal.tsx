@@ -1,114 +1,112 @@
-import { SetStateAction, useState } from 'react'
-import { Button } from 'react-bootstrap'
-import Modal from 'react-bootstrap/Modal'
-import PropTypes from 'prop-types'
+import React, { ReactNode, useCallback, useMemo } from 'react'
+import { Button, Modal } from 'react-bootstrap'
 
-/**
- * Props for the StringInputModal component.
- */
+import { type Validator, validate } from '../utilities/validation_utils'
+
 interface StringInputModalProps {
-    isOpen: boolean
-    closeModal: () => void
-    onSubmit: (input: string) => void
-    validateInput: Array<{
-        validator: (input: string) => boolean
-        errorMsg: string
-    }>
-    title: string
-    okButton: string
+    title: ReactNode
+    cancelLabel: ReactNode
+    confirmLabel: ReactNode
     value: string
+    validators: Array<Validator<string>>
+    show: boolean
+    onCancel?: () => void | Promise<void>
+    onConfirm?: () => void | Promise<void>
+    onHide?: () => void | Promise<void>
+    onChange?: (value: string) => void | Promise<void>
 }
 
-/**
- * Modal component with an input field for string input.
- * @param {StringInputModalProps} props - The component receives several props:
- *    isOpen: Indicates whether the mvalidateInput.findodal is open or closed.
- *    closeModal: A callback function to close the modal.
- *    onSubmit: A callback function invoked when the user submits the input value.
- *    validateInput: An array of validators for input validation. Each validator is an object with a validator function and an errorMsg string.
- *    title: The title of the modal.
- *    okButton: the message appare for the ok button.
- * @returns {JSX.Element} The rendered component.
- */
 const StringInputModal: React.FC<StringInputModalProps> = ({
-    isOpen,
-    closeModal,
-    onSubmit,
-    validateInput,
     title,
-    okButton,
+    cancelLabel,
+    confirmLabel,
     value,
+    validators,
+    show,
+    onCancel,
+    onConfirm,
+    onHide,
+    onChange,
 }) => {
-    const [inputValue, setInputValue] = useState(value)
-    const [errorMessage, setErrorMessage] = useState('')
-    const [isValid, setIsValid] = useState(false)
+    const errorMessages = useMemo<Array<string>>(() => {
+        return validate(value, validators)
+    }, [value, validators])
 
-    const handleSubmit = () => {
-        onSubmit(inputValue.trim())
-        closeModal()
-    }
+    const handleCancel = useCallback(
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
+            event.stopPropagation()
+            event.preventDefault()
 
-    const handleKeyPress = (target: KeyboardEvent) => {
-        if (target.key === 'Enter') {
-            isValid && handleSubmit()
-        }
-    }
+            onCancel && (await onCancel())
 
-    /**
-     * Handles the change in the input field value.
-     * @param {Object} event - The input change event.
-     */
-    const handleInputChange = (event: { target: { value: string } }) => {
-        let input = event.target.value
-        setInputValue(input)
-        setIsValid(validateInput.every(validator => validator.validator(input)))
-    }
+            return false
+        },
+        [onCancel],
+    )
 
-    /**
-     * Determining the specific error message based on the input field's value.
-     * Uses state variables 'isValid' and 'inputValue'.
-     */
-    const evalErrorMessage = () => {
-        setErrorMessage('')
-        if (!isValid) {
-            const errorValidator = validateInput.find(
-                validator => !validator.validator(inputValue),
-            )
-            const errorMessage = errorValidator?.errorMsg || ''
-            setErrorMessage(errorMessage)
-        }
-    }
+    const handleChange = useCallback(
+        async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+            onChange && (await onChange(event.target.value))
+        },
+        [onChange],
+    )
 
-    const modalTitle = title || 'Default Title'
-    const modalOK = okButton || 'OK'
+    const handleConfirm = useCallback(
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
+            event.stopPropagation()
+            event.preventDefault()
+
+            onConfirm && (await onConfirm())
+
+            return false
+        },
+        [onConfirm],
+    )
+
+    const handleHide = useCallback(async (): Promise<void> => {
+        onHide && (await onHide())
+    }, [onHide])
+
+    const handleKeyUp = useCallback(
+        async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
+            if (event.key === 'Enter' && errorMessages.length === 0) {
+                onConfirm && (await onConfirm())
+            }
+        },
+        [onConfirm],
+    )
 
     return (
-        <Modal
-            show={isOpen}
-            onHide={closeModal}
-            onKeyPress={handleKeyPress}
-            className="string-input-modal"
-        >
+        <Modal show={show} onHide={handleHide}>
             <Modal.Header closeButton>
-                <Modal.Title>{modalTitle}</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <input
                     type="text"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyUp={evalErrorMessage}
+                    value={value}
+                    onChange={handleChange}
+                    onKeyUp={handleKeyUp}
                     autoFocus
                 />
-                {errorMessage && <div className="error">{errorMessage}</div>}
+                {errorMessages.length > 0 && (
+                    <div className="error">{errorMessages.join(' ')}</div>
+                )}
             </Modal.Body>
             <Modal.Footer>
+                <Button variant="secondary" onClick={handleCancel}>
+                    {cancelLabel}
+                </Button>
                 <Button
-                    onClick={handleSubmit}
-                    disabled={!isValid}
-                    variant="primary"
+                    variant="danger"
+                    disabled={errorMessages.length > 0}
+                    onClick={handleConfirm}
                 >
-                    {modalOK}
+                    {confirmLabel}
                 </Button>
             </Modal.Footer>
         </Modal>

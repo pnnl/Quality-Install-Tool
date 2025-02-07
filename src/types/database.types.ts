@@ -2,6 +2,7 @@ import PouchDB from 'pouchdb'
 
 import { type Installer } from './installer.type'
 import { type Location } from './location.type'
+import templatesConfig from '../templates/templates_config'
 
 export interface Base {
     id: PouchDB.Core.DocumentId
@@ -31,7 +32,7 @@ export interface InstallationData extends BaseData {}
 
 export interface InstallationMetadata extends BaseMetadata {
     template_title: string
-    template_name: string
+    template_name: keyof typeof templatesConfig
 }
 
 export interface Project extends Base {

@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import DeleteConfirmationModal from './delete_confirmation_modal'
@@ -7,6 +7,7 @@ import ImportDoc from './import_document'
 import NewProjectButton from './new_project_button'
 import ProjectListGroup from './project_list_group'
 import { type Base, type Project } from '../types/database.types'
+import { type Comparator, comparator } from '../utilities/comparison_utils'
 import {
     getProject,
     getProjects,
@@ -31,24 +32,30 @@ const Home: React.FC<HomeProps> = () => {
         | undefined
     >(undefined)
 
-    useEffect((): void => {
-        removeEmptyProjects(db).then(async (): Promise<void> => {
-            const projectDocs: Array<
-                PouchDB.Core.ExistingDocument<Project> &
-                    PouchDB.Core.AllDocsMeta
-            > = await getProjects(db)
-
-            setProjectDocs(
-                projectDocs.sort((a, b): number => {
-                    const aDate: Date = new Date(a.metadata_.last_modified_at)
-                    const bDate: Date = new Date(b.metadata_.last_modified_at)
-
-                    // Descending order.
-                    return bDate.getTime() - aDate.getTime()
-                }),
-            )
-        })
+    const projectComparator: Comparator<Project> = useMemo<
+        Comparator<Project>
+    >(() => {
+        return comparator<Project>('last_modified_at', 'desc')
     }, [])
+
+    const reloadProjectDocs = useCallback(async () => {
+        await removeEmptyProjects(db)
+
+        const projectDocs: Array<
+            PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta
+        > = await getProjects(db)
+
+        setProjectDocs(projectDocs.sort(projectComparator))
+    }, [projectComparator])
+
+    useEffect(() => {
+        reloadProjectDocs()
+
+        return () => {
+            setProjectDocs([])
+            setSelectedProjectDoc(undefined)
+        }
+    }, [reloadProjectDocs])
 
     return (
         <>
@@ -78,7 +85,7 @@ const Home: React.FC<HomeProps> = () => {
                         <div className="button-container-center">
                             <NewProjectButton
                                 label="Add a New Project"
-                                onClick={async (): Promise<void> => {
+                                onClick={async () => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta =
                                         await putNewProject(db, '', undefined)
@@ -93,13 +100,14 @@ const Home: React.FC<HomeProps> = () => {
                                 label="Import a Project"
                                 onImport={async (
                                     projectId: PouchDB.Core.DocumentId,
-                                ): Promise<void> => {
+                                ) => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta = await getProject(
                                         db,
                                         projectId,
                                     )
 
+                                    // reloadProjectDocs()
                                     setProjectDocs(previousProjectDocs => {
                                         return [
                                             projectDoc,
@@ -115,7 +123,7 @@ const Home: React.FC<HomeProps> = () => {
                         <div className="align-right padding">
                             <NewProjectButton
                                 label="Add a New Project"
-                                onClick={async (): Promise<void> => {
+                                onClick={async () => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta =
                                         await putNewProject(db, '', undefined)
@@ -130,13 +138,14 @@ const Home: React.FC<HomeProps> = () => {
                                 label="Import Project"
                                 onImport={async (
                                     projectId: PouchDB.Core.DocumentId,
-                                ): Promise<void> => {
+                                ) => {
                                     const projectDoc: PouchDB.Core.Document<Project> &
                                         PouchDB.Core.GetMeta = await getProject(
                                         db,
                                         projectId,
                                     )
 
+                                    // reloadProjectDocs()
                                     setProjectDocs(previousProjectDocs => {
                                         return [
                                             projectDoc,
@@ -155,12 +164,12 @@ const Home: React.FC<HomeProps> = () => {
                                     <ProjectListGroup
                                         key={projectDoc._id}
                                         projectDoc={projectDoc}
-                                        onEdit={(): void =>
+                                        onEdit={() =>
                                             navigate(`app/${projectDoc._id}`, {
                                                 replace: true,
                                             })
                                         }
-                                        onDelete={(): void =>
+                                        onDelete={() =>
                                             setSelectedProjectDoc(projectDoc)
                                         }
                                     />
@@ -188,15 +197,27 @@ const Home: React.FC<HomeProps> = () => {
                 <DeleteConfirmationModal
                     label={selectedProjectDoc.metadata_.doc_name}
                     show={selectedProjectDoc !== undefined}
-                    onHide={(): void => setSelectedProjectDoc(undefined)}
-                    onCancel={(): void => setSelectedProjectDoc(undefined)}
-                    onConfirm={async (): Promise<void> => {
+                    onHide={() => setSelectedProjectDoc(undefined)}
+                    onCancel={() => setSelectedProjectDoc(undefined)}
+                    onConfirm={async () => {
                         const [projectResponse, installationResponses]: [
                             PouchDB.Core.Response,
                             Array<PouchDB.Core.Response | PouchDB.Core.Error>,
                         ] = await removeProject(db, selectedProjectDoc._id)
 
-                        if (projectResponse.ok) {
+                        if (
+                            projectResponse.ok &&
+                            installationResponses.every(
+                                installationResponse => {
+                                    return
+                                    'ok' in installationResponse &&
+                                        (
+                                            installationResponse as PouchDB.Core.Response
+                                        ).ok
+                                },
+                            )
+                        ) {
+                            // reloadProjectDocs()
                             setProjectDocs(previousProjectDocs => {
                                 return previousProjectDocs.filter(
                                     previousProjectDoc => {

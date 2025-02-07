@@ -1,311 +1,383 @@
-import React, { lazy, Suspense, useEffect, useState } from 'react'
-import { TfiTrash, TfiPencil } from 'react-icons/tfi'
 import PouchDB from 'pouchdb'
-import PouchDBUpsert from 'pouchdb-upsert'
-import { Button, ListGroup, Modal } from 'react-bootstrap'
-import templatesConfig from '../templates/templates_config'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useParams } from 'react-router-dom'
-import { useDB } from '../utilities/database_utils'
 
-const StringInputModal = lazy(() => import('./string_input_modal'))
+import DeleteConfirmationModal from './delete_confirmation_modal'
+import InstallationListGroup from './installation_list_group'
+import LocationStr from './location_str'
+import StringInputModal from './string_input_modal'
+import templatesConfig from '../templates/templates_config'
+import {
+    type Base,
+    type Installation,
+    type Project,
+} from '../types/database.types'
+import { type Comparator, comparator } from '../utilities/comparison_utils'
+import {
+    getProject,
+    getInstallations,
+    putNewInstallation,
+    removeInstallation,
+    renameDoc,
+    useDB,
+} from '../utilities/database_utils'
+import { someLocation } from '../utilities/location_utils'
+import { type Validator } from '../utilities/validation_utils'
 
-PouchDB.plugin(PouchDBUpsert)
+interface JobListProps {}
 
-/**
- * A component view to list installations for a Project.
- * @returns ListGroup component displaying the jobs or installations associated with the project
- */
-const JobList: React.FC = () => {
-    const db = useDB()
+const JobList: React.FC<JobListProps> = () => {
+    const db: PouchDB.Database<Base> = useDB()
 
     const { projectId, workflowName } = useParams()
-    const [sortedJobs, setSortedJobs] = useState<any[]>([])
-    const [sortedJobNames, setSortedJobNames] = useState<any[]>([])
-    const [jobsList, setJobsList] = useState<any[]>([])
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
-    const [modalOpenMap, setModalOpenMap] = useState<{
-        [jobId: string]: boolean
-    }>({})
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
-    const [selectedJobToDelete, setSelectedJobToDelete] = useState('')
-    const [selectedJobNameToDelete, setSelectedJobNameToDelete] = useState('')
 
-    const [projectInfo, setProjectInfo] = useState<any>({})
+    const [installationDocs, setInstallationDocs] = useState<
+        Array<
+            PouchDB.Core.ExistingDocument<Installation> &
+                PouchDB.Core.AllDocsMeta
+        >
+    >([])
+    const [
+        installationDocForAddModalValue,
+        setInstallationDocForAddModalValue,
+    ] = useState<string>('')
+    const [
+        installationDocForRenameModalValue,
+        setInstallationDocForRenameModalValue,
+    ] = useState<string>('')
+    const [
+        isInstallationDocForAddModalVisible,
+        setIsInstallationDocForAddModalVisible,
+    ] = useState<boolean>(false)
+    const [projectDoc, setProjectDoc] = useState<
+        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
+    >(undefined)
+    const [
+        selectedInstallationDocForDelete,
+        setSelectedInstallationDocForDelete,
+    ] = useState<
+        | (PouchDB.Core.ExistingDocument<Installation> &
+              PouchDB.Core.AllDocsMeta)
+        | undefined
+    >(undefined)
+    const [
+        selectedInstallationDocForRename,
+        setSelectedInstallationDocForRename,
+    ] = useState<
+        | (PouchDB.Core.ExistingDocument<Installation> &
+              PouchDB.Core.AllDocsMeta)
+        | undefined
+    >(undefined)
 
-    // Retrieves the project information which includes project name and installation address
-    const project_info = async (): Promise<void> => {
-        // Dynamically import the function when needed
-        const { getProjectSummary } = await import(
-            '../utilities/project_summary_utils'
-        )
-        getProjectSummary(db, projectId as string, workflowName as string).then(
-            res => {
-                setProjectInfo(res)
-            },
-        )
-    }
-
-    const installation_name = templatesConfig[workflowName as string].title
-
-    const openAddModal = (): void => {
-        setIsAddModalOpen(true)
-    }
-
-    const closeAddModal = (): void => {
-        setIsAddModalOpen(false)
-    }
-
-    const validateInput = [
-        {
-            validator: (input: string) => {
-                // Restrict the character set to [a-zA-Z0-9-_#:>]
-                const regex = /^(?![\s-])[a-zA-Z0-9, \-]{1,64}$/
-                return regex.test(input)
-            },
-            errorMsg:
-                'The job or task name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.',
-        },
-        {
-            validator: (input: string) => {
-                // Not allow a duplicate with an existing job nam
-                return !sortedJobNames.includes(input.trim())
-            },
-            errorMsg:
-                'Job name already exists. Please choose a different name.',
-        },
-    ]
-
-    const retrieveJobs = async (): Promise<void> => {
-        // Dynamically import the function when needed
-        const { getInstallations } = await import('../utilities/database_utils')
-        getInstallations(db, projectId as string, workflowName as string).then(
-            res => {
-                setJobsList(res)
-                sortByEditTime(res)
-            },
-        )
-    }
-
-    useEffect(() => {
-        retrieveJobs()
-        project_info()
+    const installationComparator: Comparator<Installation> = useMemo<
+        Comparator<Installation>
+    >(() => {
+        return comparator<Installation>('last_modified_at', 'desc')
     }, [])
 
-    const sortByEditTime = (jobsList: any[]) => {
-        const sortedJobsByEditTime = jobsList.sort((a, b) => {
-            if (
-                a.metadata_.last_modified_at.toString() <
-                b.metadata_.last_modified_at.toString()
-            ) {
-                return 1
-            } else if (
-                a.metadata_.last_modified_at.toString() >
-                b.metadata_.last_modified_at.toString()
-            ) {
-                return -1
-            } else {
-                return 0
-            }
-        })
-        setSortedJobs(sortedJobsByEditTime)
-        setSortedJobNames(
-            sortedJobsByEditTime.map(doc => doc.metadata_.doc_name),
+    const installationDocNameValidators = useMemo<
+        Array<Validator<string>>
+    >(() => {
+        const re: RegExp = /^(?![\s-])[a-z0-9, -]{1,64}$/i
+
+        const installationDocNames: string[] = installationDocs.map(
+            installationDoc => {
+                return installationDoc.metadata_.doc_name
+            },
         )
-    }
 
-    const handleDeleteJob = (jobId: string) => {
-        setSelectedJobToDelete(jobId)
-        setShowDeleteConfirmation(true)
-    }
+        return [
+            (input: string): string | undefined => {
+                if (re.test(input)) {
+                    return undefined
+                } else {
+                    return 'The job or task name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.'
+                }
+            },
+            (input: string): string | undefined => {
+                if (installationDocNames.includes(input.trim())) {
+                    return 'Job name already exists. Please choose a different name.'
+                } else {
+                    return undefined
+                }
+            },
+        ]
+    }, [installationDocs])
 
-    const confirmDeleteJob = async () => {
-        try {
-            const projectDoc = await db.get(selectedJobToDelete)
-            await db.remove(projectDoc)
-            await retrieveJobs()
-        } catch (error) {
-            console.error('Error deleting job:', error)
-        } finally {
-            setShowDeleteConfirmation(false)
-            setSelectedJobToDelete('')
+    const reloadProjectDoc = useCallback(async () => {
+        const projectDoc: PouchDB.Core.Document<Project> &
+            PouchDB.Core.GetMeta = await getProject(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+        )
+
+        setProjectDoc(projectDoc)
+    }, [projectId])
+
+    useEffect(() => {
+        reloadProjectDoc()
+
+        return () => {
+            setProjectDoc(undefined)
         }
-    }
+    }, [reloadProjectDoc])
 
-    const cancelDeleteJob = () => {
-        setShowDeleteConfirmation(false)
-        setSelectedJobToDelete('')
-    }
+    const reloadInstallationDocs = useCallback(async () => {
+        const installationDocs: Array<
+            PouchDB.Core.ExistingDocument<Installation> &
+                PouchDB.Core.AllDocsMeta
+        > = await getInstallations(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+            workflowName as keyof typeof templatesConfig | undefined,
+        )
 
-    const handleAddJob = async (input: string) => {
-        // adding a new job here
-        const docName = input
-        if (docName !== null) {
-            // Dynamically import the function when needed
-            const { putNewInstallation } = await import(
-                '../utilities/database_utils'
-            )
-            await putNewInstallation(
+        setInstallationDocs(installationDocs.sort(installationComparator))
+    }, [installationComparator, projectId, workflowName])
+
+    useEffect(() => {
+        reloadInstallationDocs()
+
+        return () => {
+            setInstallationDocs([])
+            setSelectedInstallationDocForDelete(undefined)
+            setSelectedInstallationDocForRename(undefined)
+        }
+    }, [reloadInstallationDocs])
+
+    const handleConfirmInstallationDocForAdd = useCallback(async () => {
+        const installationDoc: PouchDB.Core.Document<Installation> &
+            PouchDB.Core.GetMeta = await putNewInstallation(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+            workflowName as keyof typeof templatesConfig,
+            installationDocForAddModalValue,
+            undefined,
+        )
+
+        // reloadInstallationDocs()
+        setInstallationDocs(previousInstallationDocs => {
+            return [installationDoc, ...previousInstallationDocs]
+        })
+
+        reloadProjectDoc()
+
+        setIsInstallationDocForAddModalVisible(false)
+
+        setInstallationDocForAddModalValue('')
+    }, [
+        installationDocForAddModalValue,
+        reloadProjectDoc,
+        projectId,
+        workflowName,
+    ])
+
+    const handleConfirmInstallationDocForDelete = useCallback(async () => {
+        if (selectedInstallationDocForDelete) {
+            const [installationResponse, projectUpsertResponse]: [
+                PouchDB.Core.Response | undefined,
+                PouchDB.UpsertResponse,
+            ] = await removeInstallation(
                 db,
-                projectId as string,
-                workflowName as string,
-                docName,
-                undefined,
+                projectId as PouchDB.Core.DocumentId,
+                selectedInstallationDocForDelete._id,
+                selectedInstallationDocForDelete._rev,
             )
-        }
-        // Refresh the job list after adding the new job
-        await retrieveJobs()
-    }
 
-    const handleRenameJob = async (input: string, jobId: string) => {
-        try {
-            if (input !== null) {
-                await db.upsert(jobId, function (doc: any) {
-                    doc.metadata_.doc_name = input
-                    return doc
+            if (
+                installationResponse &&
+                installationResponse.ok &&
+                projectUpsertResponse.updated
+            ) {
+                // reloadInstallationDocs()
+                setInstallationDocs(previousInstallationDocs => {
+                    return previousInstallationDocs.filter(
+                        previousInstallationDoc => {
+                            return (
+                                previousInstallationDoc._id !==
+                                selectedInstallationDocForDelete._id
+                            )
+                        },
+                    )
                 })
+
+                reloadProjectDoc()
+
+                setSelectedInstallationDocForDelete(undefined)
+            } else {
+                throw new Error(
+                    'handleConfirmInstallationDocForDelete: Upsert failed.',
+                )
             }
-            // Refresh the job list after renaming
-            await retrieveJobs()
-        } catch (error) {
-            console.error('Error renaming job:', error)
         }
-    }
+    }, [
+        reloadInstallationDocs,
+        reloadProjectDoc,
+        projectId,
+        selectedInstallationDocForDelete,
+    ])
+
+    const handleConfirmInstallationDocForRename = useCallback(async () => {
+        if (selectedInstallationDocForRename) {
+            const upsertResponse: PouchDB.UpsertResponse =
+                await renameDoc<Installation>(
+                    db,
+                    selectedInstallationDocForRename._id,
+                    installationDocForRenameModalValue,
+                )
+
+            if (upsertResponse.updated) {
+                reloadInstallationDocs()
+            } else {
+                throw new Error(
+                    'handleConfirmInstallationDocForRename: Upsert failed.',
+                )
+            }
+
+            setSelectedInstallationDocForRename(undefined)
+
+            setInstallationDocForRenameModalValue('')
+        }
+    }, [
+        installationDocForRenameModalValue,
+        reloadInstallationDocs,
+        selectedInstallationDocForRename,
+    ])
 
     return (
-        <div className="container">
-            <h1>{installation_name}</h1>
-            <h2>
-                Installations for{' '}
-                {projectInfo?.project_name && (
+        <>
+            <div className="container">
+                <h1>
+                    {
+                        templatesConfig[
+                            workflowName as keyof typeof templatesConfig
+                        ].title
+                    }
+                </h1>
+                <h2>
+                    Installations
+                    {projectDoc?.metadata_.doc_name && (
+                        <> for {projectDoc.metadata_.doc_name}</>
+                    )}
+                </h2>
+                {projectDoc?.data_.location &&
+                    someLocation(projectDoc.data_.location) && (
+                        <p className="address">
+                            <LocationStr
+                                location={projectDoc.data_.location}
+                                separators={[', ', ', ', ' ']}
+                            />
+                        </p>
+                    )}
+                <br />
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        setIsInstallationDocForAddModalVisible(true)
+                    }}
+                >
+                    Add Installation
+                </Button>
+                {installationDocs.length > 0 && (
                     <>
-                        {projectInfo?.project_name}
-                        <br />
+                        <div className="bottom-margin"></div>
+                        <div>
+                            {installationDocs.map(
+                                (
+                                    installationDoc: PouchDB.Core.ExistingDocument<Installation> &
+                                        PouchDB.Core.AllDocsMeta,
+                                ) => (
+                                    <InstallationListGroup
+                                        key={installationDoc._id}
+                                        projectId={
+                                            projectId as PouchDB.Core.DocumentId
+                                        }
+                                        workflowName={
+                                            workflowName as keyof typeof templatesConfig
+                                        }
+                                        installationDoc={installationDoc}
+                                        onEdit={() => {
+                                            setSelectedInstallationDocForRename(
+                                                installationDoc,
+                                            )
+
+                                            setInstallationDocForRenameModalValue(
+                                                installationDoc.metadata_
+                                                    .doc_name,
+                                            )
+                                        }}
+                                        onDelete={() => {
+                                            setSelectedInstallationDocForDelete(
+                                                installationDoc,
+                                            )
+                                        }}
+                                    />
+                                ),
+                            )}
+                        </div>
                     </>
                 )}
-            </h2>
-            <ListGroup className="address">
-                {projectInfo?.street_address && (
-                    <>{projectInfo?.street_address}</>
-                )}
-                {projectInfo?.city && <>{projectInfo?.city}</>}
-                {projectInfo?.state && <>{projectInfo?.state} </>}
-                {projectInfo?.zip_code && <>{projectInfo?.zip_code}</>}
-            </ListGroup>
+            </div>
+            <StringInputModal
+                title="Enter new installation name"
+                cancelLabel="Cancel"
+                confirmLabel="Add"
+                value={installationDocForAddModalValue}
+                validators={installationDocNameValidators}
+                show={isInstallationDocForAddModalVisible}
+                onHide={() => {
+                    setIsInstallationDocForAddModalVisible(false)
 
-            <br />
+                    setInstallationDocForAddModalValue('')
+                }}
+                onCancel={() => {
+                    setIsInstallationDocForAddModalVisible(false)
 
-            <Button variant="primary" onClick={openAddModal}>
-                Add Installation
-            </Button>
-            <Suspense fallback={<div>Loading...</div>}>
-                <StringInputModal
-                    isOpen={isAddModalOpen}
-                    closeModal={closeAddModal}
-                    onSubmit={handleAddJob}
-                    validateInput={validateInput}
-                    title="Enter new installation name"
-                    okButton="Add"
-                    value=""
-                />
-            </Suspense>
-            <div className="bottom-margin"></div>
-            {/* Sort feature, not used now but will be used in future. */
-            /* <Dropdown>
-        <Dropdown.Toggle variant="success">
-          <TfiFilter/>
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={event => {sortByCreateTime(jobsList)}}>
-            Sort By Created Date
-          </Dropdown.Item>
-          <Dropdown.Item onClick={event => {sortByEditTime(jobsList)}}>
-            Sort By Edit Date
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown> */}
+                    setInstallationDocForAddModalValue('')
+                }}
+                onConfirm={handleConfirmInstallationDocForAdd}
+                onChange={(value: string) => {
+                    setInstallationDocForAddModalValue(value)
+                }}
+            />
+            <StringInputModal
+                title="Enter new installation name"
+                cancelLabel="Cancel"
+                confirmLabel="Rename"
+                value={installationDocForRenameModalValue}
+                validators={installationDocNameValidators}
+                show={selectedInstallationDocForRename !== undefined}
+                onHide={() => {
+                    setSelectedInstallationDocForRename(undefined)
 
-            {sortedJobs.map((jobID, job) => (
-                <ListGroup key={jobID._id}>
-                    <LinkContainer
-                        key={jobID._id}
-                        to={`/app/${projectId}/${workflowName}/${jobID._id}`}
-                    >
-                        <ListGroup.Item action={true} key={jobID._id}>
-                            {jobID.metadata_.doc_name}
-                            <span className="icon-container">
-                                <Button
-                                    variant="light"
-                                    onClick={event => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        setModalOpenMap(prevState => ({
-                                            ...prevState,
-                                            [job]: true,
-                                        }))
-                                    }}
-                                >
-                                    <TfiPencil size={22} />
-                                </Button>
+                    setInstallationDocForRenameModalValue('')
+                }}
+                onCancel={() => {
+                    setSelectedInstallationDocForRename(undefined)
 
-                                <Button
-                                    variant="light"
-                                    onClick={event => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        handleDeleteJob(jobID._id)
-                                        setSelectedJobNameToDelete(
-                                            jobID.metadata_.doc_name,
-                                        )
-                                    }}
-                                >
-                                    <TfiTrash size={22} />
-                                </Button>
-                            </span>
-                        </ListGroup.Item>
-                    </LinkContainer>
-                    <StringInputModal
-                        isOpen={modalOpenMap[job] || false}
-                        closeModal={() => {
-                            setModalOpenMap(prevState => ({
-                                ...prevState,
-                                [job]: false,
-                            }))
-                        }}
-                        onSubmit={input => handleRenameJob(input, jobID._id)}
-                        validateInput={validateInput}
-                        title="Enter new installation name"
-                        okButton="Rename"
-                        value={jobID.metadata_.doc_name}
-                    />
-
-                    <Modal
-                        show={showDeleteConfirmation}
-                        onHide={cancelDeleteJob}
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm Delete</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Are you sure you want to permanently delete{' '}
-                            <b>{selectedJobNameToDelete}</b>? This action cannot
-                            be undone.
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button
-                                variant="secondary"
-                                onClick={cancelDeleteJob}
-                            >
-                                Cancel
-                            </Button>
-                            <Button variant="danger" onClick={confirmDeleteJob}>
-                                Permanently Delete
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
-                </ListGroup>
-            ))}
-        </div>
+                    setInstallationDocForRenameModalValue('')
+                }}
+                onConfirm={handleConfirmInstallationDocForRename}
+                onChange={(value: string) => {
+                    setInstallationDocForRenameModalValue(value)
+                }}
+            />
+            <DeleteConfirmationModal
+                label={
+                    selectedInstallationDocForDelete?.metadata_.doc_name ?? ''
+                }
+                show={selectedInstallationDocForDelete !== undefined}
+                onHide={() => {
+                    setSelectedInstallationDocForDelete(undefined)
+                }}
+                onCancel={() => {
+                    setSelectedInstallationDocForDelete(undefined)
+                }}
+                onConfirm={handleConfirmInstallationDocForDelete}
+            />
+        </>
     )
 }
 

@@ -1,3 +1,6 @@
+import { MDXProps } from 'mdx/types'
+import React from 'react'
+
 import DOEWorkflowHeatPumpWaterHeaterTemplate from './doe_workflow_heat_pump_water_heater.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_heat_pump_ductless.mdx'
 import DOEWorkflowDuctedHeatPumpTemplate from './doe_workflow_heat_pump_ducted.mdx'
@@ -20,19 +23,15 @@ import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_ai
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
 import DOECombustionApplianceSafetyTests from './doe_workflow_combustion_appliance_safety_tests.mdx'
 
-import { MDXProps } from 'mdx/types'
-
-interface TemplatesConfig {
-    [key: string]: {
-        title: string
-        template: (props: MDXProps) => JSX.Element
-    }
+export interface TemplateConfiguration {
+    title: string
+    template: React.FC<MDXProps>
 }
 
 const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
 
 // Add workflow templates for 'quality-install-tool'
-const templatesConfig: TemplatesConfig = {
+const templatesConfig: Record<string, TemplateConfiguration> = {
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
@@ -119,14 +118,14 @@ const templatesConfig: TemplatesConfig = {
     },
 }
 
-// Assuming TemplatesConfig is defined somewhere as a type or interface
-
 /**
  * Validates a TemplatesConfig object by checking if template names adhere to templateRegex pattern.
- * @param {TemplatesConfig} config - The TemplatesConfig object to validate.
+ * @param {Record<string, TemplateConfiguration>} config - The TemplatesConfig object to validate.
  * @throws {Error} Throws an error if one or more template names are not allowed.
  */
-function validateTemplatesConfig(config: TemplatesConfig) {
+function validateTemplatesConfig(
+    config: Record<string, TemplateConfiguration>,
+) {
     Object.keys(config).forEach(key => {
         if (!templateRegex.test(key)) {
             throw new Error(key + ' template name is not allowed') //Decide on what to do if not pass
