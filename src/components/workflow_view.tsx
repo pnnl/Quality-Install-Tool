@@ -6,23 +6,20 @@ import { useParams } from 'react-router-dom'
 
 import LocationStr from './location_str'
 import TemplatesListGroup from './templates_list_group'
+import { useDatabase } from '../providers/database_provider'
 import templatesConfig from '../templates/templates_config'
 import {
     type Base,
     type Installation,
     type Project,
 } from '../types/database.types'
-import {
-    getInstallations,
-    getProject,
-    useDB,
-} from '../utilities/database_utils'
+import { getInstallations, getProject } from '../utilities/database_utils'
 import { someLocation } from '../utilities/location_utils'
 
 interface WorkflowViewProps {}
 
 const WorkflowView: React.FC<WorkflowViewProps> = () => {
-    const db: PouchDB.Database<Base> = useDB()
+    const db: PouchDB.Database<Base> = useDatabase()
 
     const { projectId } = useParams()
 

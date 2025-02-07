@@ -5,29 +5,21 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 import './App.css'
 
-// Lazily initializes the views, rendering them only when requested.
-const RootLayout = lazy(() => import('./components/root_layout'))
-const WorkflowView = lazy(() => import('./components/workflow_view'))
-const JobsView = lazy(() => import('./components/jobs_view'))
+import DatabaseProvider from './providers/database_provider'
+
 const Home = lazy(() => import('./components/home'))
+const JobsView = lazy(() => import('./components/jobs_view'))
+const MdxCombustionSafetyView = lazy(
+    () => import('./components/mdx_combustion_appliance_safety_view'),
+)
 const MdxProjectView = lazy(
     () => import('./components/mdx_project_details_view'),
 )
 const MdxTemplateView = lazy(() => import('./components/mdx_template_view'))
-const MdxCombustionSafetyView = lazy(
-    () => import('./components/mdx_combustion_appliance_safety_view'),
-)
+const RootLayout = lazy(() => import('./components/root_layout'))
+const WorkflowView = lazy(() => import('./components/workflow_view'))
 
-// Routes to be used by React Router, which handles all the
-// browser routing within this domain.
-
-/**
- * Wraps the application in a <Suspense> component to handle loading states.
- *
- * The `fallback` prop displays a loading indicator while the child components
- * are being loaded asynchronously.
- */
-const routes = [
+const router = createBrowserRouter([
     {
         path: '/',
         // App Home page : Lists existing projects provides functionality to create new one
@@ -111,15 +103,16 @@ const routes = [
     //         </RootLayout>
     //     ),
     // },
-]
-
-// React Router
-const router = createBrowserRouter(routes)
+])
 
 interface AppProps {}
 
 const App: React.FC<AppProps> = () => {
-    return <RouterProvider router={router} />
+    return (
+        <DatabaseProvider>
+            <RouterProvider router={router} />
+        </DatabaseProvider>
+    )
 }
 
 export default App

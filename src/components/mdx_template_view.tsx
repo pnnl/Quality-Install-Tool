@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import LocationStr from './location_str'
 import MdxWrapper from './mdx_wrapper'
 import { StoreProvider } from './store'
+import { useDatabase } from '../providers/database_provider'
 import templatesConfig, {
     type TemplateConfiguration,
 } from '../templates/templates_config'
@@ -13,18 +14,13 @@ import {
     type Installation,
     type Project,
 } from '../types/database.types'
-import {
-    DEFAULT_POUCHDB_DATABASE_NAME,
-    getInstallation,
-    getProject,
-    useDB,
-} from '../utilities/database_utils'
+import { getInstallation, getProject } from '../utilities/database_utils'
 import { someLocation } from '../utilities/location_utils'
 
 interface MdxTemplateViewProps {}
 
 const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
-    const db: PouchDB.Database<Base> = useDB()
+    const db: PouchDB.Database<Base> = useDatabase()
 
     const { jobId, projectId, workflowName } = useParams()
 
@@ -94,15 +90,13 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
                     </p>
                 )}
             {installationDoc?.metadata_.doc_name && (
-                <p>
-                    <center>
-                        <b>{installationDoc.metadata_.doc_name}</b>
-                    </center>
-                </p>
+                <center>
+                    <b>{installationDoc.metadata_.doc_name}</b>
+                </center>
             )}
             <br />
             <StoreProvider
-                dbName={DEFAULT_POUCHDB_DATABASE_NAME}
+                db={db}
                 docId={jobId as PouchDB.Core.DocumentId}
                 workflowName={workflowName as keyof typeof templatesConfig}
                 docName={installationDoc?.metadata_.doc_name ?? ''}

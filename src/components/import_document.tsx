@@ -2,8 +2,8 @@ import PouchDB from 'pouchdb'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
+import { useDatabase } from '../providers/database_provider'
 import { type Base } from '../types/database.types'
-import { useDB } from '../utilities/database_utils'
 import {
     type JSONDocument,
     JSON_DOCUMENT_FILE_EXTENSION,
@@ -16,7 +16,7 @@ interface ImportDocProps {
 }
 
 const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
-    const db: PouchDB.Database<Base> = useDB()
+    const db: PouchDB.Database<Base> = useDatabase()
 
     const ref = useRef<HTMLInputElement>(null)
 

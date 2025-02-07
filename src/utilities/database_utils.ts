@@ -4,61 +4,12 @@ PouchDB.plugin(PouchDBFind)
 import PouchDBUpsert from 'pouchdb-upsert'
 PouchDB.plugin(PouchDBUpsert)
 
-import { useMemo } from 'react'
-
 import templatesConfig from '../templates/templates_config'
 import {
     type Base,
     type Installation,
     type Project,
 } from '../types/database.types'
-import { type Location } from '../types/location.type'
-
-//
-// CONFIGURATION
-//
-
-export const DEFAULT_POUCHDB_DATABASE_NAME: string = 'quality-install-tool'
-
-//
-// HOOKS
-//
-
-/**
- * Custom hook to create a PouchDB database instance.
- *
- * This hook initializes a PouchDB database instance with the supplied
- * name and configuration. Automatic compaction always enabled.
- *
- * The PouchDB database instance is memoized to ensure that a new instance is
- * created only when the hook is used in a different component, preventing
- * unnecessary reinitialization and improving performance.
- *
- * @see {@link https://pouchdb.com/guides/compact-and-destroy.html#auto-compaction}
- *
- * @param {string | undefined} name - The name of the local database or the URL
- *     for the remote database. The default database name is used if this
- *     parameter is not supplied.
- * @param {PouchDB.Configuration.DatabaseConfiguration} options - The options
- *     for configuring the PouchDB database.
- *
- * @returns {PouchDB.Database<Base>} The PouchDB database instance.
- *
- * @throws {Error} Throws an error if the database cannot be created/accessed.
- */
-export function useDB(
-    name: string = DEFAULT_POUCHDB_DATABASE_NAME,
-    options: PouchDB.Configuration.DatabaseConfiguration = {},
-): PouchDB.Database<Base> {
-    return useMemo<PouchDB.Database<Base>>(() => {
-        const db: PouchDB.Database<Base> = new PouchDB<Base>(name, {
-            ...options,
-            auto_compaction: true,
-        })
-
-        return db
-    }, [name, options])
-}
 
 //
 // BASE

@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
 import Repeatable from './repeatable'
-import { getProject, useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
+import { getProject } from '../utilities/database_utils'
 
 interface RepeatableWrapperProps {
     label: string
@@ -32,7 +33,7 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
     parent,
 }: RepeatableWrapperProps): JSX.Element => {
     const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDB()
+    const db = useDatabase()
 
     useEffect(() => {
         if (parent) setParentDoc(parent)

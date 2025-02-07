@@ -1,5 +1,4 @@
 import PouchDB from 'pouchdb'
-import PouchDBUpsert from 'pouchdb-upsert'
 import React, {
     type FC,
     type ReactNode,
@@ -15,14 +14,8 @@ import type Attachment from '../types/attachment.type'
 import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import { type Base } from '../types/database.types'
-import {
-    putNewProject,
-    putNewInstallation,
-    useDB,
-} from '../utilities/database_utils'
+import { putNewProject, putNewInstallation } from '../utilities/database_utils'
 import EventEmitter from 'events'
-
-PouchDB.plugin(PouchDBUpsert)
 
 type UpsertAttachment = (
     blob: Blob,
@@ -60,7 +53,7 @@ export const StoreContext = React.createContext({
 
 interface StoreProviderProps {
     children: ReactNode
-    dbName: string | undefined
+    db: PouchDB.Database<Base>
     docId: string
     workflowName: string
     docName: string
@@ -72,12 +65,12 @@ interface StoreProviderProps {
  * A wrapper component that connects its children to a data store via React Context
  *
  * @param children - The content wrapped by this component
- * @param dbName - Database name associated with an MDX template
+ * @param db - Database associated with an MDX template
  * @param docId - Document instance id
  */
 export const StoreProvider: FC<StoreProviderProps> = ({
     children,
-    dbName,
+    db,
     docId,
     workflowName,
     docName,
@@ -90,8 +83,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
-    //This  uses the `useDB` custom hook to create a PouchDB database with the specified `dbName`
-    const [db, setDB] = useState<PouchDB.Database<Base>>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
@@ -240,9 +231,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 }
             }
         })()
-
-        // Run this effect after the first render and whenever the dbName prop changes
-    }, [dbName])
+    }, [])
 
     /**
      * Updates (or inserts) data into the doc state and persists the new doc

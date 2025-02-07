@@ -2,11 +2,8 @@ import { useEffect, useState, type FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
-import {
-    DEFAULT_POUCHDB_DATABASE_NAME,
-    getProject,
-    useDB,
-} from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
+import { getProject } from '../utilities/database_utils'
 import DOECombustionTestTemplate from '../templates/doe_workflow_combustion_appliance_safety_tests.mdx'
 
 /**
@@ -18,7 +15,7 @@ const MdxCombustionSafetyView: FC = () => {
     // Note: 'project?._id' is the docId from the DB.
     const { projectId } = useParams()
     const [projectDoc, setProjectDoc] = useState<any>({})
-    const db = useDB()
+    const db = useDatabase()
 
     const project_info = async (): Promise<void> => {
         getProject(db, projectId as string).then((res: any) => {
@@ -32,7 +29,7 @@ const MdxCombustionSafetyView: FC = () => {
 
     return (
         <StoreProvider
-            dbName={DEFAULT_POUCHDB_DATABASE_NAME}
+            db={db}
             docId={projectId as string}
             workflowName=""
             docName={projectDoc?.metadata_?.doc_name}

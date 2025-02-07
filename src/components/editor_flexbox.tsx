@@ -1,10 +1,14 @@
 import { evaluateSync } from '@mdx-js/mdx'
 import * as provider from '@mdx-js/react'
 import { useMDXComponents } from '@mdx-js/react'
+import PouchDB from 'pouchdb'
 import type { FC } from 'react'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Tab from 'react-bootstrap/Tab'
 import Tabs from 'react-bootstrap/Tabs'
+
+import { type Base } from '../types/database.types'
+
 //@TODO This code will be revisited and revised in future
 // import {
 //     Fragment as _Fragment,
@@ -95,6 +99,10 @@ function generateTemplateView(templateText: string): any {
 }
 
 const EditorFlexBox: FC = () => {
+    const db = useMemo<PouchDB.Database<Base>>(() => {
+        return new PouchDB<Base>('template_editor', { auto_compaction: true })
+    }, [])
+
     const savedTemplateText = localStorage.getItem('templateText')
     if (savedTemplateText != null) {
         initialTemplateText = savedTemplateText
@@ -130,7 +138,7 @@ const EditorFlexBox: FC = () => {
 
     return (
         <StoreProvider
-            dbName="template_editor"
+            db={db}
             docId={'playground'}
             workflowName=""
             docName={''}

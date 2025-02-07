@@ -2,9 +2,9 @@ import type { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { StoreContext, StoreProvider } from './store'
+import { useDatabase } from '../providers/database_provider'
 
 interface JsonStoreViewProps {
-    dbName: string
     project: any
 }
 
@@ -17,12 +17,14 @@ interface JsonStoreViewProps {
  *
  * @param dbName - The database name associated with an MDX template
  */
-const JsonStoreView: FC<JsonStoreViewProps> = ({ dbName, project }) => {
+const JsonStoreView: FC<JsonStoreViewProps> = ({ project }) => {
+    const db = useDatabase()
+
     const { jobId } = useParams()
 
     return jobId != null ? (
         <StoreProvider
-            dbName={dbName}
+            db={db}
             docId={project?._id}
             workflowName=""
             docName={''}

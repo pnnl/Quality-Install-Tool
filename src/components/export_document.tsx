@@ -3,9 +3,10 @@ import React, { useCallback } from 'react'
 import { Button } from 'react-bootstrap'
 import { TfiImport } from 'react-icons/tfi'
 
+import { useDatabase } from '../providers/database_provider'
 import { type Base, type Project } from '../types/database.types'
 import { sendBlob } from '../utilities/blob_utils'
-import { getProject, useDB } from '../utilities/database_utils'
+import { getProject } from '../utilities/database_utils'
 import {
     type JSONDocument,
     JSON_DOCUMENT_CONTENT_TYPE,
@@ -22,7 +23,7 @@ const ExportDoc: React.FC<ExportDocProps> = ({
     projectId,
     includeInstallations,
 }) => {
-    const db: PouchDB.Database<Base> = useDB()
+    const db: PouchDB.Database<Base> = useDatabase()
 
     const handleClick = useCallback(
         async (

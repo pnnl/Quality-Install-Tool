@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { get } from 'lodash'
 import { StoreContext } from './store'
 import Photo from './photo'
-import { useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -35,7 +35,7 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     parent,
 }) => {
     const [matchingAttachments, setMatchingAttachments] = useState<any>({})
-    const db = useDB()
+    const db = useDatabase()
 
     useEffect(() => {
         if (parent) {

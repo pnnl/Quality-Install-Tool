@@ -2,7 +2,7 @@ import { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Collapsible from './collapsible'
 import React from 'react'
-import { useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
 
 interface RepeatableProps {
     label: string
@@ -86,7 +86,7 @@ const RepeatableInput: FC<RepeatableProps> = ({
 
     const [items, setItems] = useState(displayObjects)
     const [itemKeys, setItemKeys] = useState<any[]>(Object.keys(items))
-    const db = useDB()
+    const db = useDatabase()
 
     const fetchItems = async () => {
         try {

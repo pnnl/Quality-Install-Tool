@@ -8,6 +8,7 @@ import DeleteConfirmationModal from './delete_confirmation_modal'
 import InstallationListGroup from './installation_list_group'
 import LocationStr from './location_str'
 import StringInputModal from './string_input_modal'
+import { useDatabase } from '../providers/database_provider'
 import templatesConfig from '../templates/templates_config'
 import {
     type Base,
@@ -21,7 +22,6 @@ import {
     putNewInstallation,
     removeInstallation,
     renameDoc,
-    useDB,
 } from '../utilities/database_utils'
 import { someLocation } from '../utilities/location_utils'
 import { type Validator } from '../utilities/validation_utils'
@@ -29,7 +29,7 @@ import { type Validator } from '../utilities/validation_utils'
 interface JobListProps {}
 
 const JobList: React.FC<JobListProps> = () => {
-    const db: PouchDB.Database<Base> = useDB()
+    const db: PouchDB.Database<Base> = useDatabase()
 
     const { projectId, workflowName } = useParams()
 

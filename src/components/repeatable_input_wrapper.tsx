@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
-import { getProject, useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
+import { getProject } from '../utilities/database_utils'
 import RepeatableInput from './repeatable_input'
 
 interface RepeatableInputWrapperProps {
@@ -43,7 +44,7 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     fixed = false,
 }: RepeatableInputWrapperProps): JSX.Element => {
     const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDB()
+    const db = useDatabase()
 
     useEffect(() => {
         if (parent) setParentDoc(parent)
