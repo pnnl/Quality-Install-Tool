@@ -90,12 +90,9 @@ const PhotoInput: FC<PhotoInputProps> = ({
                     setCameraAvailable(true) // Camera is available
                 })
                 .catch(error => {
-                    console.error('Error accessing the camera: ', error)
                     setCameraAvailable(false) // Camera is not available
-                    // You can also show a user-friendly message to the user if needed
                 })
         } else {
-            console.error('getUserMedia not supported in this browser.')
             setCameraAvailable(false) // Camera is not available
         }
     }, [])
