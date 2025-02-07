@@ -4,7 +4,7 @@ import { StoreProvider } from './store'
 import MdxWrapper from './mdx_wrapper'
 import {
     DEFAULT_POUCHDB_DATABASE_NAME,
-    retrieveDocFromDB,
+    getProject,
     useDB,
 } from '../utilities/database_utils'
 import DOECombustionTestTemplate from '../templates/doe_workflow_combustion_appliance_safety_tests.mdx'
@@ -21,7 +21,7 @@ const MdxCombustionSafetyView: FC = () => {
     const db = useDB()
 
     const project_info = async (): Promise<void> => {
-        retrieveDocFromDB(db, projectId as string).then((res: any) => {
+        getProject(db, projectId as string).then((res: any) => {
             setProjectDoc(res)
         })
     }

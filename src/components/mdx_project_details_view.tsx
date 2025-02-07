@@ -4,6 +4,7 @@ import { StoreProvider } from './store'
 import React from 'react'
 import {
     DEFAULT_POUCHDB_DATABASE_NAME,
+    getProject,
     useDB,
 } from '../utilities/database_utils'
 
@@ -26,12 +27,7 @@ const MdxProjectView: FC = () => {
     const db = useDB()
 
     const project_info = async (): Promise<void> => {
-        // Dynamically import the function when needed
-        const { retrieveDocFromDB } = await import(
-            '../utilities/database_utils'
-        )
-
-        retrieveDocFromDB(db, projectId as string).then((res: any) => {
+        getProject(db, projectId as string).then((res: any) => {
             setProjectDoc(res)
         })
     }

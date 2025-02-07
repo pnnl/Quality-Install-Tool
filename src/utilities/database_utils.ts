@@ -95,21 +95,6 @@ export async function renameDoc<Model>(
     return upsertResponse
 }
 
-// @todo Replace all calls to {retrieveDocFromDB} with calls to {getProject}
-//     and {getInstallation}, and then remove {retrieveDocFromDB}.
-export async function retrieveDocFromDB<Model>(
-    db: PouchDB.Database<Base>,
-    id: PouchDB.Core.DocumentId,
-    options: PouchDB.Core.GetOptions = {},
-): Promise<PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta> {
-    await db.info()
-
-    const doc: PouchDB.Core.Document<Base & Model> & PouchDB.Core.GetMeta =
-        await db.get<Model>(id, options)
-
-    return doc
-}
-
 //
 // INSTALLATIONS
 //

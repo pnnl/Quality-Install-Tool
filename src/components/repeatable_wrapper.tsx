@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
 import Repeatable from './repeatable'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import { getProject, useDB } from '../utilities/database_utils'
 
 interface RepeatableWrapperProps {
     label: string
@@ -43,11 +43,8 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
                 include_docs: true,
             })
             .on('change', () => {
-                // Call retrieveDocFromDB() when a change is detected in DB
                 if (parent)
-                    retrieveDocFromDB(db, parent?._id).then(doc =>
-                        setParentDoc(doc),
-                    )
+                    getProject(db, parent._id).then(doc => setParentDoc(doc))
             })
             .on('error', (err: any) => {
                 console.error('Changes feed error:', err)

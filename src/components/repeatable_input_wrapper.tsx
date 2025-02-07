@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import { getProject, useDB } from '../utilities/database_utils'
 import RepeatableInput from './repeatable_input'
 
 interface RepeatableInputWrapperProps {
@@ -54,11 +54,8 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
                 include_docs: true,
             })
             .on('change', () => {
-                // Call retrieveDocFromDB() when a change is detected in DB
                 if (parent)
-                    retrieveDocFromDB(db, parent?._id).then(doc =>
-                        setParentDoc(doc),
-                    )
+                    getProject(db, parent._id).then(doc => setParentDoc(doc))
             })
             .on('error', (err: any) => {
                 console.error('Changes feed error:', err)
