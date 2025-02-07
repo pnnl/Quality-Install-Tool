@@ -1,5 +1,6 @@
 .App {
     text-align: center;
+    text-align: center;
 }
 
 .App-logo {
@@ -206,10 +207,22 @@ h1 + h3 {
     margin-top: 1rem;
 }
 
+.photo-card > .card-body > div {
+    margin-bottom: 1rem;
+}
+
 .photo-row {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Forces two columns */
     gap: 1rem;
+}
+
+.photo-notes h3 {
+    font-weight: bold;
+}
+
+.photo-notes .photo-note-string {
+    margin-bottom: unset;
 }
 
 /* stylizes tab component here to avoid putting styles in editor*/
@@ -456,6 +469,19 @@ btn-light:hover {
 .custom-modal {
     max-width: 300px;
     margin: auto;
+}
+
+/* Used in text_input component */
+.label-hidden.form-floating > label {
+    visibility: hidden;
+}
+
+.label-hidden.form-floating > textarea {
+    padding: 1rem 0.75rem !important;
+}
+
+.text-area-expanded.form-floating > textarea {
+    height: 100px;
 }
 
 /* Default font size */

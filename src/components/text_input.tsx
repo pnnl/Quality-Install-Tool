@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 import Form from 'react-bootstrap/Form'
 
@@ -20,8 +20,8 @@ interface TextInputProps {
  * @param updateValue A function called whenever the user changes the
  * input value. The function has the new input value as the sole arguement.
  * @param value The input value
- * @param min The minimum allowed value for the input field.
- * @param max The maximum allowed value for the input field.
+ * @param min The minimum allowed number of characters for the input field.
+ * @param max The maximum allowed number of characters for the input field.
  * @param regexp The regular expression pattern to validate the input string.
  */
 const TextInput: FC<TextInputProps> = ({
@@ -33,6 +33,11 @@ const TextInput: FC<TextInputProps> = ({
     max,
     regexp,
 }) => {
+    const [floatingLabelClasses, setFloatingLabelClasses] =
+        useState<any>('mb-3')
+
+    const [textAreaFocused, setTextAreaFocused] = useState<boolean>(false)
+
     const [error, setError] = useState<string>('')
 
     const handleChange = (inputValue: string) => {
@@ -50,15 +55,30 @@ const TextInput: FC<TextInputProps> = ({
         }
     }
 
+    useEffect(() => {
+        let floatingLabelClasses = 'mb-3'
+        if (value || textAreaFocused) {
+            floatingLabelClasses += ' label-hidden'
+        }
+
+        if (textAreaFocused) {
+            floatingLabelClasses += ' text-area-expanded'
+        }
+
+        setFloatingLabelClasses(floatingLabelClasses)
+    }, [value, textAreaFocused])
+
     return (
         <>
-            <FloatingLabel className="mb-3" controlId={id} label={label}>
+            <FloatingLabel className={floatingLabelClasses} label={label}>
                 <Form.Control
                     as="textarea"
                     onChange={event => handleChange(event.target.value)}
                     placeholder="A placeholder"
                     value={value || ''}
                     isInvalid={Boolean(error)}
+                    onFocus={() => setTextAreaFocused(true)}
+                    onBlur={() => setTextAreaFocused(false)}
                 />
                 {error && (
                     <Form.Control.Feedback type="invalid">

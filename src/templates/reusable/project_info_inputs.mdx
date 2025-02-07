@@ -1,0 +1,27 @@
+#### New Project Information
+
+<DocNameInput label="Project Name" path="doc_name" required />
+##### Installer Information *The Installer information is optional, but we
+recommend filling in at least one field for reference in the the final report.*
+<StringInput label="Technician Name" path="installer.name" />
+<StringInput label="Installation Company" path="installer.company_name" />
+<StringInput label="Company Address" path="installer.mailing_address" />
+<StringInput label="Company Phone" path="installer.phone" />
+<StringInput label="Company Email" path="installer.email" />
+
+##### Project Address
+
+<StringInput label="Street Address" path="location.street_address" />
+<StringInput label="City" path="location.city" />
+<USStateSelect label="State" path="location.state" />
+<StringInput label="Zip Code" path="location.zip_code" />
+
+<PhotoInput
+    id="building_number_photo"
+    label="Building Number – Photo"
+    notes={false}
+>
+    Provide a photo of the building that shows the building number.
+</PhotoInput>
+
+<SaveCancelButton path="status" />
