@@ -47,7 +47,6 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     const db = useDatabase()
 
     useEffect(() => {
-        if (parent) setParentDoc(parent)
         const changes = db
             .changes({
                 live: true,
@@ -71,7 +70,7 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ data, docId }) => {
-                const dataFromDoc = parent ? parentDoc.data_ : data
+                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
                     <RepeatableInput
                         path={path}

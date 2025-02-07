@@ -36,7 +36,6 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
     const db = useDatabase()
 
     useEffect(() => {
-        if (parent) setParentDoc(parent)
         const changes = db
             .changes({
                 live: true,
@@ -55,12 +54,12 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [parentDoc])
+    }, [])
 
     return (
         <StoreContext.Consumer>
             {({ data }) => {
-                const dataFromDoc = parent ? parentDoc.data_ : data
+                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
                     <Repeatable path={path} label={label} data={dataFromDoc}>
                         {children}

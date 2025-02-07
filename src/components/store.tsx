@@ -15,7 +15,6 @@ import type { NonEmptyArray } from '../types/misc_types.type'
 import type Metadata from '../types/metadata.type'
 import { type Base } from '../types/database.types'
 import { putNewProject, putNewInstallation } from '../utilities/database_utils'
-import EventEmitter from 'events'
 
 type UpsertAttachment = (
     blob: Blob,
@@ -77,7 +76,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     type,
     parentId,
 }) => {
-    const changesRef = useRef<PouchDB.Core.Changes<Base>>()
     const revisionRef = useRef<string>()
     // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
@@ -88,9 +86,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
     // Determining the doc type for updating it accordingly
     const isInstallationDoc = type === 'installation'
-
-    // Increase the maximum number of listeners for all EventEmitters
-    EventEmitter.defaultMaxListeners = 20
 
     /**
      * Updates component state based on a database document change
@@ -166,71 +161,48 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
-        /**
-         * Connects the store to the database document
-         *
-         * @remarks
-         * This is an IIFE (Immediately Invoked Function Expression) that
-         * (1) Establishes a database connection
-         * (2) Initializes the database document if it does not already exist
-         * (3) Initializes the doc and attachments state from the database document
-         * (4) Subscribes to future changes to the database document — it ignores changes that
-         *     originated from this component
-         */
-        ;(async function connectStoreToDB() {
-            try {
-                // Initialize the DB document as needed
-                const result = !isInstallationDoc
-                    ? ((await putNewProject(db, docName, docId)) as unknown)
-                    : ((await putNewInstallation(
-                          db,
-                          parentId as string,
-                          workflowName,
-                          docName,
-                          docId,
-                      )) as unknown)
-                revisionRef.current = (result as PouchDB.Core.Response).rev
-            } catch (err) {
-                console.error('DB initialization error:', err)
-                // TODO: Rethink how best to handle errors
-            }
-            // Initialize doc and attachments state from the DB document
-            try {
-                const dbDoc = await db.get(docId)
+        if (isInstallationDoc) {
+            putNewInstallation(
+                db,
+                parentId as string,
+                workflowName,
+                docName,
+                docId,
+            ).then(dbDoc => {
+                revisionRef.current = dbDoc._rev
+
                 processDBDocChange(db, dbDoc)
-            } catch (err) {
-                console.error('Unable to initialize state from DB:', err)
-            }
+            })
+        } else {
+            putNewProject(db, docName, docId).then(dbDoc => {
+                revisionRef.current = dbDoc._rev
 
-            // Subscribe to DB document changes
-            changesRef.current = db
-                .changes({
-                    include_docs: true,
-                    live: true,
-                    since: 'now',
-                })
-                .on('change', function (change) {
-                    if (
-                        change.doc != null &&
-                        change.doc._rev !== revisionRef.current
-                    ) {
-                        // The change must have originated from outside this component, so update component state
-                        processDBDocChange(db, change.doc)
-                    }
-                    // else: the change originated from this component, so ignore it
-                })
-                .on('error', function (err) {
-                    // It's hard to imagine what would cause this since our DB is local
-                    console.error('DB subscription connection failed')
-                })
+                processDBDocChange(db, dbDoc)
+            })
+        }
 
-            // Cancel the DB subscription just before the component unmounts
-            return () => {
-                if (changesRef.current != null) {
-                    changesRef.current.cancel()
+        // Subscribe to DB document changes
+        const changes = db
+            .changes({
+                include_docs: true,
+                live: true,
+                since: 'now',
+                doc_ids: [docId],
+            })
+            .on('change', change => {
+                if (
+                    change.doc != null &&
+                    change.doc._rev !== revisionRef.current
+                ) {
+                    // The change must have originated from outside this component, so update component state
+                    processDBDocChange(db, change.doc)
                 }
-            }
-        })()
+            })
+
+        // Cancel the DB subscription just before the component unmounts
+        return () => {
+            changes.cancel()
+        }
     }, [])
 
     /**
