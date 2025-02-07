@@ -357,6 +357,16 @@ btn-light:hover {
     box-shadow: none;
 }
 
+.new-project-form > * {
+    margin-bottom: 1rem;
+}
+
+.new-project-form .buttons-div {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
 .welcome-header {
     padding-left: 1rem;
     padding-right: 1rem;
