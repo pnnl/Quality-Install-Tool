@@ -87,10 +87,6 @@ const NewProjectForm: React.FC = () => {
                     if (allProjectDocs.length > 1) {
                         const lastProject =
                             findLastModifiedProject(allProjectDocs)
-                        setUniqueInstallers(getInstallerEntries(allProjectDocs))
-                        setSelectedInstallerName(
-                            lastProject.data_.installer.name,
-                        )
                         setFormData({
                             installer: {
                                 technician_name:
@@ -180,53 +176,6 @@ const NewProjectForm: React.FC = () => {
             const currentDate = new Date(project.metadata_.last_modified_at)
             return currentDate > latestDate ? project : latest
         })
-    }
-
-    //Installer Information Drop Down Selection Function:
-    const handleSelectExistingInstallerInfo = (
-        newSelectedInstaller: string | null,
-    ) => {
-        if (newSelectedInstaller === 'CLEAR_FORM') {
-            setFormData({
-                ...formData,
-                installer: {
-                    technician_name: '',
-                    name: '',
-                    mailing_address: '',
-                    phone: '',
-                    email: '',
-                },
-            })
-            setSelectedInstallerName(null)
-        } else if (newSelectedInstaller && uniqueInstallers) {
-            const selectedInstallerObject = uniqueInstallers.find(
-                obj => obj.data_.installer.name === newSelectedInstaller,
-            )
-            if (selectedInstallerObject) {
-                setSelectedInstallerName(newSelectedInstaller)
-                setFormData({
-                    ...formData,
-                    installer: {
-                        technician_name:
-                            selectedInstallerObject.data_.installer
-                                .technician_name || '',
-                        name:
-                            selectedInstallerObject.data_.installer.name || '',
-                        mailing_address:
-                            selectedInstallerObject.data_.installer
-                                .mailing_address || '',
-                        phone:
-                            selectedInstallerObject.data_.installer.phone || '',
-                        email:
-                            selectedInstallerObject.data_.installer.email || '',
-                    },
-                })
-            } else {
-                console.log('Error in the installer selector.')
-            }
-        } else {
-            console.log('Error in the installer selector.')
-        }
     }
 
     //Cancel Button Functions:
@@ -410,43 +359,6 @@ const NewProjectForm: React.FC = () => {
                     least one more field for reference in the final report.
                 </em>
             </p>
-            {projectDocs.length > 1 &&
-                docStatus === 'new' &&
-                uniqueInstallers &&
-                uniqueInstallers.length > 0 && (
-                    <>
-                        <p>
-                            New projects are pre-populated with installer
-                            information from your most recent project. You can
-                            clear these fields or choose a different one from
-                            the drop-down menu:
-                        </p>
-                        <DropdownButton
-                            id="project-selector"
-                            title={
-                                selectedInstallerName
-                                    ? selectedInstallerName
-                                    : 'Select Installer Information'
-                            }
-                            onSelect={eventKey =>
-                                handleSelectExistingInstallerInfo(eventKey)
-                            }
-                        >
-                            {uniqueInstallers.map(obj => (
-                                <Dropdown.Item
-                                    key={obj.data_.installer.name}
-                                    eventKey={obj.data_.installer.name}
-                                >
-                                    {obj.data_.installer.name}
-                                </Dropdown.Item>
-                            ))}
-                            <Dropdown.Divider />
-                            <Dropdown.Item eventKey="CLEAR_FORM">
-                                Clear Installer Information
-                            </Dropdown.Item>
-                        </DropdownButton>
-                    </>
-                )}
             <FloatingLabel
                 controlId="installation_company"
                 label="Installation Company*"
