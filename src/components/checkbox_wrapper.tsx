@@ -42,7 +42,9 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
                         options={options}
                         updateValue={(value: any) => upsertData(path, value)}
                         value={
-                            get(data, path) ? get(data, path) : default_value
+                            get(data, path)
+                                ? get(data, path)
+                                : (default_value ?? [])
                         }
                         hidden={hidden}
                     />

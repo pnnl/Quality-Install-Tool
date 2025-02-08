@@ -1,5 +1,5 @@
 import React from 'react'
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { FloatingLabel } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
@@ -31,34 +31,23 @@ const Checkbox: FC<CheckboxProps> = ({
     value: initialValue,
     hidden,
 }) => {
-    const [selectedValues, setSelectedValues] = useState<string[]>(
-        initialValue || [],
+    const [selectedValues, setSelectedValues] = useState<string[]>(initialValue)
+
+    const handleChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            const { value, checked } = event.target
+
+            const newSelectedValues = checked
+                ? [...selectedValues, value]
+                : selectedValues.filter(item => item !== value)
+
+            setSelectedValues(newSelectedValues)
+
+            updateValue(newSelectedValues)
+        },
+        [selectedValues],
     )
 
-    useEffect(() => {
-        // Sync internal state with the default value prop
-        setSelectedValues(initialValue)
-        // update the default checked options in DB
-        updateValue(initialValue)
-    }, [initialValue])
-
-    const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { value, checked } = event.target
-        if (checked) {
-            setSelectedValues(prevValues => {
-                const newValues =
-                    prevValues == undefined ? [value] : [...prevValues, value]
-                updateValue(newValues)
-                return newValues
-            })
-        } else {
-            setSelectedValues(prevValues => {
-                const newValues = prevValues.filter(item => item !== value)
-                updateValue(newValues)
-                return newValues
-            })
-        }
-    }
     return (
         <Card className="input-card" hidden={hidden}>
             <Card.Body>
@@ -70,11 +59,8 @@ const Checkbox: FC<CheckboxProps> = ({
                             label={option}
                             name={label}
                             value={option}
-                            checked={
-                                selectedValues &&
-                                selectedValues.includes(option)
-                            }
-                            onChange={handleOptionChange}
+                            checked={selectedValues.includes(option)}
+                            onChange={handleChange}
                             key={option}
                         />
                     ))}
