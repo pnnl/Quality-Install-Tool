@@ -8,19 +8,42 @@ import React, {
 } from 'react'
 
 import { isEmpty, isObject, toPath } from 'lodash'
-import type JSONValue from '../types/json_value.type'
-import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
-import type Attachment from '../types/attachment.type'
-import type { NonEmptyArray } from '../types/misc_types.type'
-import type Metadata from '../types/metadata.type'
-import { type Base } from '../types/database.types'
+import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
+import {
+    type Base,
+    type FileMetadata,
+    type PhotoMetadata,
+} from '../types/database.types'
 import { putNewProject, putNewInstallation } from '../utilities/database_utils'
+
+type JSONValue =
+    | string
+    | number
+    | boolean
+    | { [x: string]: JSONValue }
+    | Array<JSONValue>
+
+export type NonEmptyArray<T> = [T, ...Array<T>]
+
+interface Metadata {
+    created_at: Date
+    last_modified_at: Date
+    attachments: Record<string, JSONValue>
+    doc_name: string
+    template_title: string
+}
+
+interface Attachment {
+    blob: Blob
+    digest?: string
+    metadata: Record<string, any>
+}
 
 type UpsertAttachment = (
     blob: Blob,
     id: string,
     fileName?: string,
-    photoMetadata?: Attachment['metadata'],
+    photoMetadata?: PhotoMetadata,
 ) => void
 
 type UpsertData = (pathStr: string, value: any) => void
@@ -346,16 +369,18 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
-        photoMetadata?: Attachment['metadata'],
+        photoMetadata?: PhotoMetadata,
     ) => {
-        const metadata: Attachment['metadata'] = photoMetadata
+        const fileMetadata: FileMetadata = {
+            filename: fileName ?? '',
+            timestamp: new Date().toISOString(),
+        }
+
+        const metadata: FileMetadata | PhotoMetadata = photoMetadata
             ? photoMetadata
             : isPhoto(blob)
-              ? await getMetadataFromPhoto(blob)
-              : {
-                    filename: fileName,
-                    timestamp: new Date(Date.now()).toISOString(),
-                }
+              ? await getPhotoMetadata(blob)
+              : fileMetadata
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)

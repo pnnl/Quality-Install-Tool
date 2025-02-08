@@ -1,7 +1,9 @@
 import PouchDB from 'pouchdb'
 
+import { type Geolocation, type GeolocationSource } from './geolocation.type'
 import { type Installer } from './installer.type'
 import { type Location } from './location.type'
+import { type Timestamp, type TimestampSource } from './timestamp.type'
 import templatesConfig from '../templates/templates_config'
 
 export interface Base {
@@ -17,7 +19,7 @@ export interface BaseData {}
 export interface BaseMetadata {
     created_at: Date
     last_modified_at: Date
-    attachments: Record<PouchDB.Core.AttachmentId, {}>
+    attachments: Record<PouchDB.Core.AttachmentId, FileMetadata | PhotoMetadata>
     doc_name: string
     status: 'new' | 'deleted'
 }
@@ -47,3 +49,15 @@ export interface ProjectData extends BaseData {
 }
 
 export interface ProjectMetadata extends BaseMetadata {}
+
+export interface FileMetadata {
+    filename: string
+    timestamp: Timestamp
+}
+
+export interface PhotoMetadata {
+    geolocation: Geolocation
+    geolocationSource?: GeolocationSource | null
+    timestamp: Timestamp
+    timestampSource?: TimestampSource | null
+}

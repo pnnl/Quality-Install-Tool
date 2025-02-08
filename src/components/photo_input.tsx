@@ -6,16 +6,16 @@ import { TbCameraPlus } from 'react-icons/tb'
 import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
-import type PhotoMetaData from '../types/photo_metadata.type'
-import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 import { TfiTrash } from 'react-icons/tfi'
 import TextInputWrapper from './text_input_wrapper'
+import { type PhotoMetadata } from '../types/database.types'
+import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 interface PhotoInputProps {
     children: React.ReactNode
     label: string
-    metadata: PhotoMetaData[]
-    photos: { id: string; photo: Blob; metadata: PhotoMetaData }[] // Changed to array of photos with metadata
+    metadata: PhotoMetadata[]
+    photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Changed to array of photos with metadata
     upsertPhoto: (file: Blob) => void // Function to add new photo
     deletePhoto: (photoId: string) => void // Function to delete photo by index
     uploadable: boolean
@@ -197,10 +197,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                                         photoData.metadata
                                                             ?.timestamp
                                                     }
-                                                    source={
-                                                        photoData.metadata
-                                                            ?.timestampSource
-                                                    }
                                                 />
                                             ) : (
                                                 <span>Missing</span>
@@ -210,10 +206,6 @@ const PhotoInput: FC<PhotoInputProps> = ({
                                             {photoData.metadata?.geolocation ? (
                                                 <span>
                                                     <GpsCoordStr
-                                                        source={
-                                                            photoData.metadata
-                                                                ?.geolocationSource
-                                                        }
                                                         {...photoData.metadata
                                                             ?.geolocation}
                                                     />{' '}

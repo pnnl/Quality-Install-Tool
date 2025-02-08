@@ -1,58 +1,84 @@
-import Attachment from '../types/attachment.type'
 import exifr from 'exifr'
-/**
- * Get the current geolocation data from the device
- *
- * @returns A GeolocationPosition object
- */
-function getCurrentGeolocation(): Promise<GeolocationPosition> {
-    return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-            // Allow a cached GPS value to be used for up to a minute
-            maximumAge: 0,
-            // Assume the GPS is unavailable after a minute
-            timeout: 60 * 1000,
-        })
-    })
-}
+
+import { type PhotoMetadata } from '../types/database.types'
+
+export const PHOTO_MIME_TYPES: string[] = [
+    // 'image/avif',
+    'image/heic',
+    // 'image/heif',
+    'image/jpeg',
+    // 'image/jpg',
+    // 'image/png',
+    // 'image/tiff',
+]
 
 /**
- * Retrieves Geolocation data from device gps
- *   Internally calls getCurrentGeolocation for current location data
- *
- * @returns An object of the form:
- * {
- *  geolocation: {
- *    altitude,
- *    latitude,
- *    longitude
- *  },
- *  timestamp
- * }
+ * Retrieves EXIF metadata for the given photo, including the GPS coordinates
+ * and the original timestamp. If the GPS coordinates are not present, then
+ * delegates to the current device location.
  */
-export async function getMetadataFromCurrentGPSLocation(): Promise<
-    Attachment['metadata']
-> {
-    // Do NOT get the timestamp from position because getCurrentGeolocation
-    // may return a cached GeolocationPosition if the lat, long have not
-    // changed sufficiently.
-    const timestamp = new Date(Date.now()).toISOString()
+export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
+    const timestamp = new Date().toISOString()
+    const timestampSource = 'Date.now'
+
+    const tags = await exifr.parse(blob)
+
+    if (tags) {
+        const altitude = tags['altitude'] as number | null
+        const latitude = tags['latitude'] as number | null
+        const longitude = tags['longitude'] as number | null
+        const DateTimeOriginal = tags['DateTimeOriginal'] as Date | null
+
+        if (latitude && longitude) {
+            const geolocation = {
+                altitude,
+                latitude,
+                longitude,
+            }
+            const geolocationSource = 'EXIF'
+
+            if (DateTimeOriginal) {
+                return {
+                    geolocation,
+                    geolocationSource,
+                    timestamp: DateTimeOriginal.toISOString(),
+                    timestampSource: 'EXIF',
+                }
+            } else {
+                return {
+                    geolocation,
+                    geolocationSource,
+                    timestamp,
+                    timestampSource,
+                }
+            }
+        }
+    }
 
     try {
-        const position = await getCurrentGeolocation()
-        const metadata = {
+        const geolocationPosition = await new Promise<GeolocationPosition>(
+            (resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    // Allow a cached GPS value to be used for up to 1 minute.
+                    maximumAge: 0,
+                    // Assume that GPS is unavailable after 1 minute.
+                    timeout: 60 * 1000,
+                })
+            },
+        )
+
+        return {
             geolocation: {
-                altitude: position.coords.altitude || null,
-                latitude: position.coords.latitude || null,
-                longitude: position.coords.longitude || null,
+                altitude: geolocationPosition.coords.altitude,
+                latitude: geolocationPosition.coords.latitude,
+                longitude: geolocationPosition.coords.longitude,
             },
             geolocationSource: 'navigator.geolocation',
             timestamp,
-            timestampSource: 'Date.now',
+            timestampSource,
         }
-        return metadata
-    } catch (e) {
-        const metadata = {
+    } catch (cause: unknown) {
+        return {
             geolocation: {
                 altitude: null,
                 latitude: null,
@@ -60,64 +86,10 @@ export async function getMetadataFromCurrentGPSLocation(): Promise<
             },
             geolocationSource: null,
             timestamp,
-            timestampSource: 'Date.now',
-        }
-        return metadata
-    }
-}
-
-/**
- * Retrieves EXIF metadata for the given photo, including the GPS coordinates
- * and the original timestamp. If the GPS coordinates are not present, then
- * delegates to the current device location.
- */
-export async function getMetadataFromPhoto(
-    blob: Blob,
-): Promise<Attachment['metadata']> {
-    const tags = await exifr.parse(blob)
-    if (tags) {
-        const latitude = tags['latitude']
-        const longitude = tags['longitude']
-        if (latitude && longitude) {
-            var timestamp = tags['DateTimeOriginal']?.toISOString()
-            var timestampSource = 'EXIF'
-            if (!timestamp) {
-                // Do NOT get the timestamp from position because getCurrentGeolocation
-                // may return a cached GeolocationPosition if the lat, long have not
-                // changed sufficiently.
-                timestamp = new Date(Date.now()).toISOString()
-                timestampSource = 'Date.now'
-            }
-
-            const metadata = {
-                geolocation: {
-                    altitude: tags['GPSAltitude'],
-                    latitude,
-                    longitude,
-                },
-                geolocationSource: 'EXIF',
-                timestamp,
-                timestampSource,
-            }
-            return metadata
+            timestampSource,
         }
     }
-
-    const metadata = await getMetadataFromCurrentGPSLocation()
-    return metadata
 }
-
-/* Possible image formats 
-    'image/avif',
-    'image/heic',
-    'image/heif',
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/tiff',
-*/
-// Currently supporting HEIC and JPEG
-export const PHOTO_MIME_TYPES: string[] = ['image/heic', 'image/jpeg']
 
 /**
  * Returns `true` if the MIME type for the given blob is supported as a "photo".
@@ -125,14 +97,4 @@ export const PHOTO_MIME_TYPES: string[] = ['image/heic', 'image/jpeg']
  */
 export function isPhoto(blob: Blob): boolean {
     return PHOTO_MIME_TYPES.includes(blob.type)
-}
-
-/**
- * This defines the maximum dimensions and size constraints for photos
- * intended for upload and storage in the database
- */
-export const photoProperties = {
-    MAX_IMAGE_DIM_WIDTH: 800,
-    MAX_IMAGE_DIM_HEIGHT: 500,
-    MAX_SIZE_IN_MB: 0.2, //The maximum file size of the photo in megabytes
 }
