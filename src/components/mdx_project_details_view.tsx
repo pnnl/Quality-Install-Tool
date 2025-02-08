@@ -1,47 +1,52 @@
-import { Suspense, useEffect, useState, type FC } from 'react'
+import PouchDB from 'pouchdb'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+
+import MdxWrapper from './mdx_wrapper'
 import { StoreProvider } from './store'
-import React from 'react'
 import { useDatabase } from '../providers/database_provider'
+import DOEProjectDetailsTemplate from '../templates/doe_project_details.mdx'
+import { type Project } from '../types/database.types'
 import { getProject } from '../utilities/database_utils'
 
-// Lazily initializes the components, rendering them only when requested.
-// This reduces the bundle size when the app is loaded, improving initial load time
-const DOEProjectDetailsTemplate = React.lazy(
-    () => import('../templates/doe_project_details.mdx'),
-)
-const MdxWrapper = React.lazy(() => import('./mdx_wrapper'))
+interface MdxProjectViewProps {}
 
-/**
- * A component view of an instantiated MDX template
- * It serves as a central component for accessing and managing project information.
- *
- */
-const MdxProjectView: FC = () => {
-    // Note: 'project?._id' is the docId from the DB.
-    const { projectId } = useParams()
-    const [projectDoc, setProjectDoc] = useState<any>({})
+const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
 
-    const project_info = async (): Promise<void> => {
-        getProject(db, projectId as string).then((res: any) => {
-            setProjectDoc(res)
-        })
-    }
+    const { projectId } = useParams()
+
+    const [projectDoc, setProjectDoc] = useState<
+        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
+    >(undefined)
+
+    const reloadProjectDoc = useCallback(async () => {
+        const projectDoc: PouchDB.Core.Document<Project> &
+            PouchDB.Core.GetMeta = await getProject(
+            db,
+            projectId as PouchDB.Core.DocumentId,
+        )
+
+        setProjectDoc(projectDoc)
+    }, [projectId])
 
     useEffect(() => {
-        project_info()
-    }, [])
+        reloadProjectDoc()
+
+        return () => {
+            setProjectDoc(undefined)
+        }
+    }, [reloadProjectDoc])
 
     return (
         <StoreProvider
             db={db}
-            docId={projectId as string}
+            docId={projectId as PouchDB.Core.DocumentId}
             workflowName=""
-            docName={projectDoc?.metadata_?.doc_name}
+            docName={projectDoc?.metadata_?.doc_name ?? ''}
             type="project"
         >
-            <Suspense fallback={<div>Loading..</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
                 <MdxWrapper
                     Component={DOEProjectDetailsTemplate}
                     Project={projectDoc}

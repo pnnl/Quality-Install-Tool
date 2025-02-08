@@ -1,5 +1,11 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react'
 import { useParams } from 'react-router-dom'
 
 import LocationStr from './location_str'
@@ -103,10 +109,12 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
                 type={'installation'}
                 parentId={projectId as PouchDB.Core.DocumentId}
             >
-                <MdxWrapper
-                    Component={templateConfiguration.template}
-                    Project={projectDoc}
-                />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <MdxWrapper
+                        Component={templateConfiguration.template}
+                        Project={projectDoc}
+                    />
+                </Suspense>
             </StoreProvider>
         </>
     )
