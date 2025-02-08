@@ -1,6 +1,54 @@
-
 # Playground
 
-<StringInput label="Grade" path="student.grade" />
+<Button variant='primary' href="https://quality-install-tool.pnnl.gov/">Button</Button>
 
-Grade: {props.doc.student.grade}
+<CheckBox options={['CheckBox']} path="check_box" />
+
+<ClimateZoneSelect label="ClimateZoneSelect" path="climate_zone_select" />
+
+<Collapsible header="Collapsible">
+    Collapsible
+</Collapsible>
+
+<DateInput label="DateInput" path="date_input" />
+
+**DateStr:** <DateStr date={props.data.date_input}/>
+
+<Figure src="/logo192.png" />
+
+<FileInput id="file_input" label="File Input">FileInput</FileInput>
+
+<LabelValue label="LabelValue" path="doc_name" parent={props.project} />
+
+<NumberInput label="NumberInput" min={0} max={100} path="number_input" />
+
+<PhotoInput id="photo_input" label="PhotoInput">PhotoInput</PhotoInput>
+
+<Radio label="Radio" options={['Yes','No']} path="radio" />
+
+<Select label="Select" options={["Yes", "No"]} path="select" />
+
+<StringInput label="StringInput" path="string_input" />
+
+<TextInput label="TextInput" path="text_input" />
+
+<USStateSelect label="USStateSelect" path="u_s_state_select" />
+
+## TODO
+
+* CombustionSafetyChecksLink
+* CombustionSafetyChecksReport
+* DocNameInput
+* PDFRenderer
+* PageBreak
+* Photo
+* PrintSection
+* ProjectInfoInputs
+* ProjectInfoReport
+* Repeatable
+* RepeatableInput
+* SaveCancelButton
+* ShowOrHide
+* Tab
+* Tabs
+* table

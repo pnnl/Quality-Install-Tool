@@ -22,6 +22,7 @@ import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_vent
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
+// import Playground from './playground.mdx'
 
 export interface TemplateConfiguration {
     title: string
@@ -116,6 +117,10 @@ const templatesConfig: Record<string, TemplateConfiguration> = {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,
     },
+    // playground: {
+    //     title: 'Playground',
+    //     template: Playground,
+    // },
 }
 
 /**
