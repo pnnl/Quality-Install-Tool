@@ -74,7 +74,11 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
     }, [reloadInstallation])
 
     if (error) {
-        return <p>Installation not found.</p>
+        return (
+            <div className="container">
+                <p>Installation not found.</p>
+            </div>
+        )
     } else {
         return (
             <InstallationContext.Provider

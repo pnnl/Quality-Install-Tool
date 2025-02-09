@@ -74,7 +74,11 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
     }, [reloadProject])
 
     if (error) {
-        return <p>Project not found.</p>
+        return (
+            <div className="container">
+                <p>Project not found.</p>
+            </div>
+        )
     } else {
         return (
             <ProjectContext.Provider

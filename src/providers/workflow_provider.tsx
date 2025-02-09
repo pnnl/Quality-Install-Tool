@@ -26,7 +26,11 @@ const WorkflowProvider: React.FC<WorkflowProviderProps> = ({
             </WorkflowContext.Provider>
         )
     } else {
-        return <p>Workflow not found.</p>
+        return (
+            <div className="container">
+                <p>Workflow not found.</p>
+            </div>
+        )
     }
 }
 
