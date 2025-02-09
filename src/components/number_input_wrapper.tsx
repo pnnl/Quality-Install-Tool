@@ -2,7 +2,7 @@ import { get } from 'lodash'
 import type { FC } from 'react'
 import { StoreContext } from './store'
 import NumberInput from './number_input'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 
 interface NumberInputWrapperProps {
     label: string

@@ -2,7 +2,7 @@ import { get } from 'lodash'
 import React, { FC } from 'react'
 
 import { StoreContext } from './store'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 import Checkbox from './checkbox'
 
 interface CheckBoxWrapperProps {

@@ -3,7 +3,7 @@ import type { FC } from 'react'
 
 import DateInput from './date_input'
 import { StoreContext } from './store'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 
 interface DateInputWrapperProps {
     label: string

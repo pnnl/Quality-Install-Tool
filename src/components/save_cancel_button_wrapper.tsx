@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { StoreContext } from './store'
 
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 import SaveCancelButton from './save_cancel_button'
 
 interface SaveCancelButtonWrapperProps {
