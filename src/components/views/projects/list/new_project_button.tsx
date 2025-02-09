@@ -3,11 +3,13 @@ import { Button } from 'react-bootstrap'
 
 interface NewProjectButtonProps {
     label: React.ReactNode
+    altText?: string
     onClick?: () => void | Promise<void>
 }
 
 const NewProjectButton: React.FC<NewProjectButtonProps> = ({
     label,
+    altText,
     onClick,
 }) => {
     const handleClick = useCallback(
@@ -25,7 +27,7 @@ const NewProjectButton: React.FC<NewProjectButtonProps> = ({
     )
 
     return (
-        <Button onClick={handleClick} alt-text={label}>
+        <Button onClick={handleClick} alt-text={altText}>
             {label}
         </Button>
     )

@@ -79,6 +79,7 @@ const Home: React.FC<HomeProps> = () => {
                         <div className="button-container-center">
                             <NewProjectButton
                                 label="Add a New Project"
+                                altText="Add a New Project"
                                 onClick={async () => {
                                     const project = await putNewProject(
                                         db,
@@ -115,6 +116,7 @@ const Home: React.FC<HomeProps> = () => {
                     <div className="align-right padding">
                         <NewProjectButton
                             label="Add a New Project"
+                            altText="Add a New Project"
                             onClick={async () => {
                                 const project = await putNewProject(
                                     db,

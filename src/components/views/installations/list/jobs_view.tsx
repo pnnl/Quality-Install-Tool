@@ -4,8 +4,8 @@ import { Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import InstallationListGroup from './installation_list_group'
-import StringInputModal from './string_input_modal'
 import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
+import StringInputModal from '../../shared/string_input_modal'
 import LocationStr from '../../../location_str'
 import { useDatabase } from '../../../../providers/database_provider'
 import {
