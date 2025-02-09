@@ -29,7 +29,7 @@ export interface TemplateConfiguration {
     template: React.FC<MDXProps>
 }
 
-const templatesConfig: Record<string, TemplateConfiguration> = {
+const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
@@ -124,13 +124,10 @@ const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
 
 const RE_TEMPLATE_KEY: RegExp = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/i
 
-Object.keys(templatesConfig).forEach(key => {
-    if (
-        RESERVED_TEMPLATE_KEYS.includes(key) ||
-        !RE_TEMPLATE_KEY.test(key)
-    ) {
+Object.keys(TEMPLATES).forEach(key => {
+    if (RESERVED_TEMPLATE_KEYS.includes(key) || !RE_TEMPLATE_KEY.test(key)) {
         throw new Error(`Invalid template key: ${JSON.stringify(key)}`)
     }
 })
 
-export default templatesConfig
+export default TEMPLATES

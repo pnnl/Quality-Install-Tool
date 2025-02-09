@@ -1,8 +1,6 @@
 import React, { createContext, useContext } from 'react'
 
-import templatesConfig, {
-    type TemplateConfiguration,
-} from '../templates/templates_config'
+import TEMPLATES, { type TemplateConfiguration } from '../templates'
 
 export const WorkflowContext = createContext<TemplateConfiguration | undefined>(
     undefined,
@@ -13,7 +11,7 @@ export function useWorkflow(): TemplateConfiguration | undefined {
 }
 
 interface WorkflowProviderProps {
-    workflowName: keyof typeof templatesConfig | undefined
+    workflowName: keyof typeof TEMPLATES | undefined
     children: React.ReactNode
 }
 
@@ -21,9 +19,9 @@ const WorkflowProvider: React.FC<WorkflowProviderProps> = ({
     workflowName,
     children,
 }) => {
-    if (workflowName && workflowName in templatesConfig) {
+    if (workflowName && workflowName in TEMPLATES) {
         return (
-            <WorkflowContext.Provider value={templatesConfig[workflowName]}>
+            <WorkflowContext.Provider value={TEMPLATES[workflowName]}>
                 {children}
             </WorkflowContext.Provider>
         )

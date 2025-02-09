@@ -4,7 +4,7 @@ import { ListGroup } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import { type InstallationDocument } from '../../../../providers/installations_provider'
-import templatesConfig from '../../../../templates/templates_config'
+import TEMPLATES from '../../../../templates'
 import { type Installation } from '../../../../types/database.types'
 
 interface TemplatesListGroupProps {
@@ -17,7 +17,7 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
     installations,
 }) => {
     const installationsByWorkflowName = useMemo<
-        Map<keyof typeof templatesConfig, Array<InstallationDocument>>
+        Map<keyof typeof TEMPLATES, Array<InstallationDocument>>
     >(() => {
         return installations.reduce((accumulator, installation) => {
             const workflowName = installation.metadata_.template_name
@@ -32,8 +32,7 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
         }, new Map())
     }, [installations])
 
-    const workflowNames: Array<keyof typeof templatesConfig> =
-        Object.keys(templatesConfig)
+    const workflowNames: Array<keyof typeof TEMPLATES> = Object.keys(TEMPLATES)
 
     if (workflowNames.length === 0) {
         return null
@@ -41,8 +40,7 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
         return (
             <ListGroup>
                 {workflowNames.map(workflowName => {
-                    const workflowTitle: string =
-                        templatesConfig[workflowName].title
+                    const workflowTitle: string = TEMPLATES[workflowName].title
 
                     const installationDocsCount: number =
                         installationsByWorkflowName.get(workflowName)?.length ??

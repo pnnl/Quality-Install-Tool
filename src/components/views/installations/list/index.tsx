@@ -10,13 +10,13 @@ import InstallationsProvider, {
 } from '../../../../providers/installations_provider'
 import ProjectProvider from '../../../../providers/project_provider'
 import WorkflowProvider from '../../../../providers/workflow_provider'
-import templatesConfig from '../../../../templates/templates_config'
+import TEMPLATES from '../../../../templates'
 import { comparator } from '../../../../utilities/comparison_utils'
 
 const View: React.FC = () => {
     const { projectId, workflowName } = useParams<{
         projectId: PouchDB.Core.DocumentId
-        workflowName: keyof typeof templatesConfig
+        workflowName: keyof typeof TEMPLATES
     }>()
 
     return (

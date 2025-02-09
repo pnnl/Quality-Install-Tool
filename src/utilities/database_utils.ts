@@ -4,7 +4,7 @@ PouchDB.plugin(PouchDBFind)
 import PouchDBUpsert from 'pouchdb-upsert'
 PouchDB.plugin(PouchDBUpsert)
 
-import templatesConfig from '../templates/templates_config'
+import TEMPLATES from '../templates'
 import {
     type Base,
     type Installation,
@@ -52,14 +52,14 @@ export async function setDocumentName<Model>(
 
 export function newInstallation(
     docName: string,
-    workflowName: keyof typeof templatesConfig,
+    workflowName: keyof typeof TEMPLATES,
     id: PouchDB.Core.DocumentId | undefined = undefined,
 ): PouchDB.Core.PutDocument<Installation> {
     const createdAt: Date = new Date()
     const lastModifiedAt: Date = createdAt
 
-    const templateName: keyof typeof templatesConfig = workflowName
-    const templateTitle: string = templatesConfig[workflowName]?.title ?? ''
+    const templateName: keyof typeof TEMPLATES = workflowName
+    const templateTitle: string = TEMPLATES[workflowName]?.title ?? ''
 
     const _id: PouchDB.Core.DocumentId = id ?? crypto.randomUUID()
     const _rev: PouchDB.Core.RevisionId | undefined = undefined
@@ -104,7 +104,7 @@ export async function getInstallation(
 export async function getInstallationIds(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: keyof typeof templatesConfig | undefined = undefined,
+    workflowName: keyof typeof TEMPLATES | undefined = undefined,
 ): Promise<Array<PouchDB.Core.DocumentId>> {
     // await db.info()
 
@@ -148,7 +148,7 @@ export async function getInstallationIds(
 export async function getInstallations(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: keyof typeof templatesConfig | undefined = undefined,
+    workflowName: keyof typeof TEMPLATES | undefined = undefined,
     options: PouchDB.Core.AllDocsOptions = {},
 ): Promise<
     Array<
@@ -236,7 +236,7 @@ export async function putInstallation(
 export async function putNewInstallation(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: keyof typeof templatesConfig,
+    workflowName: keyof typeof TEMPLATES,
     docName: string,
     id: PouchDB.Core.DocumentId | undefined = undefined,
     getOptions: PouchDB.Core.GetOptions = {},

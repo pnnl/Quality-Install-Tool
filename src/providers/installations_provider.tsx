@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 
 import { useDatabase } from './database_provider'
-import templatesConfig from '../templates/templates_config'
+import TEMPLATES from '../templates'
 import { type Installation } from '../types/database.types'
 import { type Comparator } from '../utilities/comparison_utils'
 import { getInstallations } from '../utilities/database_utils'
@@ -34,7 +34,7 @@ export function useInstallations(): [
 
 interface InstallationsProviderProps {
     projectId: PouchDB.Core.DocumentId | undefined
-    workflowName?: keyof typeof templatesConfig
+    workflowName?: keyof typeof TEMPLATES
     installationComparator?: Comparator<InstallationDocument>
     children: React.ReactNode
 }
