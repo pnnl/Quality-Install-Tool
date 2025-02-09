@@ -29,9 +29,6 @@ export interface TemplateConfiguration {
     template: React.FC<MDXProps>
 }
 
-const templateRegex = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/
-
-// Add workflow templates for 'quality-install-tool'
 const templatesConfig: Record<string, TemplateConfiguration> = {
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
@@ -123,21 +120,17 @@ const templatesConfig: Record<string, TemplateConfiguration> = {
     // },
 }
 
-/**
- * Validates a TemplatesConfig object by checking if template names adhere to templateRegex pattern.
- * @param {Record<string, TemplateConfiguration>} config - The TemplatesConfig object to validate.
- * @throws {Error} Throws an error if one or more template names are not allowed.
- */
-function validateTemplatesConfig(
-    config: Record<string, TemplateConfiguration>,
-) {
-    Object.keys(config).forEach(key => {
-        if (!templateRegex.test(key)) {
-            throw new Error(key + ' template name is not allowed') //Decide on what to do if not pass
-        }
-    })
-}
+const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
 
-validateTemplatesConfig(templatesConfig)
+const RE_TEMPLATE_KEY: RegExp = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/i
+
+Object.keys(templatesConfig).forEach(key => {
+    if (
+        RESERVED_TEMPLATE_KEYS.includes(key) ||
+        !RE_TEMPLATE_KEY.test(key)
+    ) {
+        throw new Error(`Invalid template key: ${JSON.stringify(key)}`)
+    }
+})
 
 export default templatesConfig
