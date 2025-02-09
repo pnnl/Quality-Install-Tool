@@ -5,36 +5,31 @@ import { Link, useLocation } from 'react-router-dom'
 
 const TITLE: string = 'Quality Install Tool'
 
-// @todo Refactor {RegExp} objects into top-level constants.
-// @todo Optimize implementation of {getBackPathname} function.
+const RE_PATH: RegExp = /^\/(?:app\/([^\/]+)(?:\/([^\/]+)(?:\/([^\/]+))?)?)?$/i
+
 function getBackPathname(pathname: string): string | undefined {
-    const regexPatternToHome = /^(.*?)\/app\//
-    const regexPatternToProjectDetails = /^.*?\/app\/([^\/]+)$/
-    const regexPatternToWorkFlow = /^.*?\/app\/([^\/]+)\/([^\/]+)$/
-    const regexPatternToTemplate = /^.*?\/app\/([^\/]+)\/([^\/]+)\/([^\/]+)$/
+    const result = pathname.match(RE_PATH)
 
-    const toTemplateMatchResult = pathname.match(regexPatternToTemplate)
-    const toWorkFlowMatchResult = pathname.match(regexPatternToWorkFlow)
-    const toProjectDetailsMatchResult = pathname.match(
-        regexPatternToProjectDetails,
-    )
+    if (result) {
+        const [_pathname, projectId, workflowName, jobId] = result
 
-    if (toProjectDetailsMatchResult) {
-        return undefined
-    } else if (toWorkFlowMatchResult) {
-        const [, capturedTemplateName, workflowName] = toWorkFlowMatchResult
-
-        if (workflowName == 'workflows') {
-            return '/'
+        if (projectId) {
+            if (workflowName) {
+                if (workflowName === 'workflows') {
+                    return '/'
+                } else {
+                    if (jobId) {
+                        return `/app/${projectId}/${workflowName}`
+                    } else {
+                        return `/app/${projectId}/workflows`
+                    }
+                }
+            } else {
+                return undefined
+            }
         } else {
-            return `/app/${capturedTemplateName}/workflows`
+            return undefined
         }
-    } else if (toTemplateMatchResult) {
-        const [, capturedTemplateName, workflowName] = toTemplateMatchResult
-
-        return `/app/${capturedTemplateName}/${workflowName}`
-    } else if (regexPatternToHome.test(pathname)) {
-        return '/'
     } else {
         return undefined
     }
