@@ -19,7 +19,7 @@ import { type Installation } from '../../../../types/database.types'
 import {
     putNewInstallation,
     removeInstallation,
-    renameDoc,
+    setDocumentName,
 } from '../../../../utilities/database_utils'
 import { someLocation } from '../../../../utilities/location_utils'
 import { type Validator } from '../../../../utilities/validation_utils'
@@ -131,7 +131,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
     const handleConfirmInstallationForRename = useCallback(async () => {
         if (selectedInstallationForRename) {
-            await renameDoc<Installation>(
+            await setDocumentName<Installation>(
                 db,
                 selectedInstallationForRename._id,
                 installationForRenameModalValue,

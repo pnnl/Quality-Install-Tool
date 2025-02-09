@@ -15,7 +15,7 @@ import {
 // BASE
 //
 
-export async function renameDoc<Model>(
+export async function setDocumentName<Model>(
     db: PouchDB.Database<Base>,
     id: PouchDB.Core.DocumentId,
     docName: string,
