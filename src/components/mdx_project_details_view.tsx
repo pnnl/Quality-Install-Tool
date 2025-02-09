@@ -20,7 +20,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 docId={project._id}
                 workflowName=""
                 docName={project.metadata_.doc_name}
-                type="project"
+                type={project.type}
             >
                 <MdxWrapper
                     Component={DOEProjectDetailsTemplate}
