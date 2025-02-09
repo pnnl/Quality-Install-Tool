@@ -1,26 +1,37 @@
 import PouchDB from 'pouchdb'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
+import { type InstallationDocument } from '../providers/installations_provider'
 import templatesConfig from '../templates/templates_config'
 import { type Installation } from '../types/database.types'
 
 interface TemplatesListGroupProps {
     projectId: PouchDB.Core.DocumentId
-    installationDocsByWorkflowName: Map<
-        keyof typeof templatesConfig,
-        Array<
-            PouchDB.Core.ExistingDocument<Installation> &
-                PouchDB.Core.AllDocsMeta
-        >
-    >
+    installations: Array<InstallationDocument>
 }
 
 const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
     projectId,
-    installationDocsByWorkflowName,
+    installations,
 }) => {
+    const installationsByWorkflowName = useMemo<
+        Map<keyof typeof templatesConfig, Array<InstallationDocument>>
+    >(() => {
+        return installations.reduce((accumulator, installation) => {
+            const workflowName = installation.metadata_.template_name
+
+            if (!accumulator.has(workflowName)) {
+                accumulator.set(workflowName, [])
+            }
+
+            accumulator.get(workflowName).push(installation)
+
+            return accumulator
+        }, new Map())
+    }, [installations])
+
     const workflowNames: Array<keyof typeof templatesConfig> =
         Object.keys(templatesConfig)
 
@@ -34,8 +45,8 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
                         templatesConfig[workflowName].title
 
                     const installationDocsCount: number =
-                        installationDocsByWorkflowName.get(workflowName)
-                            ?.length ?? 0
+                        installationsByWorkflowName.get(workflowName)?.length ??
+                        0
 
                     return (
                         <LinkContainer

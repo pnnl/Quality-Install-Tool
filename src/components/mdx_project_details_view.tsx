@@ -1,59 +1,36 @@
-import PouchDB from 'pouchdb'
-import React, { Suspense, useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react'
 
 import MdxWrapper from './mdx_wrapper'
 import { StoreProvider } from './store'
 import { useDatabase } from '../providers/database_provider'
+import { useProject } from '../providers/project_provider'
 import DOEProjectDetailsTemplate from '../templates/doe_project_details.mdx'
-import { type Project } from '../types/database.types'
-import { getProject } from '../utilities/database_utils'
 
 interface MdxProjectViewProps {}
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
 
-    const { projectId } = useParams()
+    const [project] = useProject()
 
-    const [projectDoc, setProjectDoc] = useState<
-        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
-    >(undefined)
-
-    const reloadProjectDoc = useCallback(async () => {
-        const projectDoc: PouchDB.Core.Document<Project> &
-            PouchDB.Core.GetMeta = await getProject(
-            db,
-            projectId as PouchDB.Core.DocumentId,
-        )
-
-        setProjectDoc(projectDoc)
-    }, [projectId])
-
-    useEffect(() => {
-        reloadProjectDoc()
-
-        return () => {
-            setProjectDoc(undefined)
-        }
-    }, [reloadProjectDoc])
-
-    return (
-        <StoreProvider
-            db={db}
-            docId={projectId as PouchDB.Core.DocumentId}
-            workflowName=""
-            docName={projectDoc?.metadata_?.doc_name ?? ''}
-            type="project"
-        >
-            <Suspense fallback={<div>Loading...</div>}>
+    if (project) {
+        return (
+            <StoreProvider
+                db={db}
+                docId={project._id}
+                workflowName=""
+                docName={project.metadata_.doc_name}
+                type="project"
+            >
                 <MdxWrapper
                     Component={DOEProjectDetailsTemplate}
-                    Project={projectDoc}
+                    Project={project}
                 />
-            </Suspense>
-        </StoreProvider>
-    )
+            </StoreProvider>
+        )
+    } else {
+        return null
+    }
 }
 
 export default MdxProjectView

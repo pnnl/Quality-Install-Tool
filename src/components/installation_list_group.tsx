@@ -4,24 +4,18 @@ import { TfiPencil, TfiTrash } from 'react-icons/tfi'
 import { Button, ListGroup } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import templatesConfig from '../templates/templates_config'
-import { type Installation } from '../types/database.types'
-
 interface InstallationListGroupProps {
-    projectId: PouchDB.Core.DocumentId
-    workflowName: keyof typeof templatesConfig
-    installationDoc: PouchDB.Core.ExistingDocument<Installation> &
-        PouchDB.Core.AllDocsMeta
-    onEdit: () => void | Promise<void>
-    onDelete: () => void | Promise<void>
+    onEdit?: () => void | Promise<void>
+    onDelete?: () => void | Promise<void>
+    to: string
+    children: React.ReactNode
 }
 
 const InstallationListGroup: React.FC<InstallationListGroupProps> = ({
-    projectId,
-    workflowName,
-    installationDoc,
     onEdit,
     onDelete,
+    to,
+    children,
 }) => {
     const handleEdit = useCallback(
         async (
@@ -52,20 +46,24 @@ const InstallationListGroup: React.FC<InstallationListGroupProps> = ({
     )
 
     return (
-        <ListGroup key={installationDoc._id}>
-            <LinkContainer
-                to={`/app/${projectId}/${workflowName}/${installationDoc._id}`}
-            >
+        <ListGroup>
+            <LinkContainer to={to}>
                 <ListGroup.Item action={true}>
-                    {installationDoc.metadata_.doc_name}
-                    <span className="icon-container">
-                        <Button variant="light" onClick={handleEdit}>
-                            <TfiPencil size={22} />
-                        </Button>
-                        <Button variant="light" onClick={handleDelete}>
-                            <TfiTrash size={22} />
-                        </Button>
-                    </span>
+                    {(onEdit || onDelete) && (
+                        <span className="icon-container">
+                            {onEdit && (
+                                <Button variant="light" onClick={handleEdit}>
+                                    <TfiPencil size={22} />
+                                </Button>
+                            )}
+                            {onDelete && (
+                                <Button variant="light" onClick={handleDelete}>
+                                    <TfiTrash size={22} />
+                                </Button>
+                            )}
+                        </span>
+                    )}
+                    {children}
                 </ListGroup.Item>
             </LinkContainer>
         </ListGroup>

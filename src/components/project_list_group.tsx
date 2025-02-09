@@ -1,4 +1,3 @@
-import PouchDB from 'pouchdb'
 import React, { useCallback } from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
 import { TfiPencil, TfiTrash } from 'react-icons/tfi'
@@ -6,18 +5,17 @@ import { LinkContainer } from 'react-router-bootstrap'
 
 import ExportDoc from './export_document'
 import LocationStr from './location_str'
-import { type Project } from '../types/database.types'
+import { type ProjectDocument } from '../providers/projects_provider'
 import { someLocation } from '../utilities/location_utils'
 
 interface ProjectListGroupProps {
-    projectDoc: PouchDB.Core.ExistingDocument<Project> &
-        PouchDB.Core.AllDocsMeta
-    onEdit: () => void | Promise<void>
-    onDelete: () => void | Promise<void>
+    onEdit?: () => void | Promise<void>
+    onDelete?: () => void | Promise<void>
+    project: ProjectDocument
 }
 
 const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
-    projectDoc,
+    project,
     onEdit,
     onDelete,
 }) => {
@@ -51,27 +49,31 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
 
     return (
         <ListGroup className="padding">
-            <LinkContainer to={`/app/${projectDoc._id}/workflows`}>
+            <LinkContainer to={`/app/${project._id}/workflows`}>
                 <ListGroup.Item action={true}>
                     <span className="icon-container">
-                        <Button variant="light" onClick={handleEdit}>
-                            <TfiPencil size={22} />
-                        </Button>
-                        <Button variant="light" onClick={handleDelete}>
-                            <TfiTrash size={22} />
-                        </Button>
+                        {onEdit && (
+                            <Button variant="light" onClick={handleEdit}>
+                                <TfiPencil size={22} />
+                            </Button>
+                        )}
+                        {onDelete && (
+                            <Button variant="light" onClick={handleDelete}>
+                                <TfiTrash size={22} />
+                            </Button>
+                        )}
                         <ExportDoc
-                            projectId={projectDoc._id}
+                            projectId={project._id}
                             includeInstallations={true}
                         />
                     </span>
-                    <b>{projectDoc.metadata_.doc_name}</b>
-                    {projectDoc.data_.location &&
-                        someLocation(projectDoc.data_.location) && (
+                    <b>{project.metadata_.doc_name}</b>
+                    {project.data_.location &&
+                        someLocation(project.data_.location) && (
                             <>
                                 <br />
                                 <LocationStr
-                                    location={projectDoc.data_.location}
+                                    location={project.data_.location}
                                     separators={[<br />, ', ', ' ']}
                                 />
                             </>

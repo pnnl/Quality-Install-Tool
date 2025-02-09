@@ -1,123 +1,63 @@
-import PouchDB from 'pouchdb'
-import React, {
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-} from 'react'
-import { useParams } from 'react-router-dom'
+import React, { Suspense } from 'react'
 
 import LocationStr from './location_str'
 import MdxWrapper from './mdx_wrapper'
 import { StoreProvider } from './store'
 import { useDatabase } from '../providers/database_provider'
-import templatesConfig, {
-    type TemplateConfiguration,
-} from '../templates/templates_config'
-import {
-    type Base,
-    type Installation,
-    type Project,
-} from '../types/database.types'
-import { getInstallation, getProject } from '../utilities/database_utils'
+import { useInstallation } from '../providers/installation_provider'
+import { useProject } from '../providers/project_provider'
+import { useWorkflow } from '../providers/workflow_provider'
 import { someLocation } from '../utilities/location_utils'
 
 interface MdxTemplateViewProps {}
 
 const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
-    const db: PouchDB.Database<Base> = useDatabase()
+    const db = useDatabase()
 
-    const { jobId, projectId, workflowName } = useParams()
+    const [project] = useProject()
 
-    const [installationDoc, setInstallationDoc] = useState<
-        (PouchDB.Core.Document<Installation> & PouchDB.Core.GetMeta) | undefined
-    >(undefined)
-    const [projectDoc, setProjectDoc] = useState<
-        (PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta) | undefined
-    >(undefined)
+    const workflow = useWorkflow()
 
-    const reloadProjectDoc = useCallback(async () => {
-        const projectDoc: PouchDB.Core.Document<Project> &
-            PouchDB.Core.GetMeta = await getProject(
-            db,
-            projectId as PouchDB.Core.DocumentId,
-        )
+    const [installation] = useInstallation()
 
-        setProjectDoc(projectDoc)
-    }, [projectId])
-
-    useEffect(() => {
-        reloadProjectDoc()
-
-        return () => {
-            setProjectDoc(undefined)
-        }
-    }, [reloadProjectDoc])
-
-    const reloadInstallationDoc = useCallback(async () => {
-        const installationDoc: PouchDB.Core.Document<Installation> &
-            PouchDB.Core.GetMeta = await getInstallation(
-            db,
-            jobId as PouchDB.Core.DocumentId,
-        )
-
-        setInstallationDoc(installationDoc)
-    }, [jobId])
-
-    useEffect(() => {
-        reloadInstallationDoc()
-
-        return () => {
-            setInstallationDoc(undefined)
-        }
-    }, [reloadInstallationDoc])
-
-    const templateConfiguration = useMemo<TemplateConfiguration>(() => {
-        return templatesConfig[workflowName as keyof typeof templatesConfig]
-    }, [workflowName])
-
-    return (
-        <>
-            <h1>{templateConfiguration.title}</h1>
-            <h2>
-                Installation
-                {projectDoc?.metadata_.doc_name && (
-                    <> for {projectDoc.metadata_.doc_name}</>
-                )}
-            </h2>
-            {projectDoc?.data_.location &&
-                someLocation(projectDoc.data_.location) && (
-                    <p className="address">
-                        <LocationStr
-                            location={projectDoc.data_.location}
-                            separators={[', ', ', ', ' ']}
-                        />
-                    </p>
-                )}
-            {installationDoc?.metadata_.doc_name && (
+    if (project && installation && workflow) {
+        return (
+            <>
+                <h1>{workflow.title}</h1>
+                <h2>Installation for {project.metadata_.doc_name}</h2>
+                {project.data_.location &&
+                    someLocation(project.data_.location) && (
+                        <p className="address">
+                            <LocationStr
+                                location={project.data_.location}
+                                separators={[', ', ', ', ' ']}
+                            />
+                        </p>
+                    )}
                 <center>
-                    <b>{installationDoc.metadata_.doc_name}</b>
+                    <b>{installation.metadata_.doc_name}</b>
                 </center>
-            )}
-            <br />
-            <StoreProvider
-                db={db}
-                docId={jobId as PouchDB.Core.DocumentId}
-                workflowName={workflowName as keyof typeof templatesConfig}
-                docName={installationDoc?.metadata_.doc_name ?? ''}
-                type={'installation'}
-                parentId={projectId as PouchDB.Core.DocumentId}
-            >
-                <Suspense fallback={<div>Loading...</div>}>
-                    <MdxWrapper
-                        Component={templateConfiguration.template}
-                        Project={projectDoc}
-                    />
-                </Suspense>
-            </StoreProvider>
-        </>
-    )
+                <br />
+                <StoreProvider
+                    db={db}
+                    docId={installation._id}
+                    workflowName={installation.metadata_.template_name}
+                    docName={installation.metadata_.doc_name}
+                    type={installation.type}
+                    parentId={project._id}
+                >
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <MdxWrapper
+                            Component={workflow.template}
+                            Project={project}
+                        />
+                    </Suspense>
+                </StoreProvider>
+            </>
+        )
+    } else {
+        return null
+    }
 }
 
 export default MdxTemplateView
