@@ -2,13 +2,13 @@ import PouchDB from 'pouchdb'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
-import { useDatabase } from '../providers/database_provider'
-import { type Base } from '../types/database.types'
+import { useDatabase } from '../../../../providers/database_provider'
+import { type Base } from '../../../../types/database.types'
 import {
     type JSONDocument,
     JSON_DOCUMENT_FILE_EXTENSION,
     importJSONDocument,
-} from '../utilities/json_serialization_utils'
+} from '../../../../utilities/json_serialization_utils'
 
 interface ImportDocProps {
     label: string

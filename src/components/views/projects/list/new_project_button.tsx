@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Button } from 'react-bootstrap'
 
 interface NewProjectButtonProps {
-    label: string
+    label: React.ReactNode
     onClick?: () => void | Promise<void>
 }
 

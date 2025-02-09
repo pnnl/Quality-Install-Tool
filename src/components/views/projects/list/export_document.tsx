@@ -3,16 +3,16 @@ import React, { useCallback } from 'react'
 import { Button } from 'react-bootstrap'
 import { TfiImport } from 'react-icons/tfi'
 
-import { useDatabase } from '../providers/database_provider'
-import { type Base, type Project } from '../types/database.types'
-import { sendBlob } from '../utilities/blob_utils'
-import { getProject } from '../utilities/database_utils'
+import { useDatabase } from '../../../../providers/database_provider'
+import { type Base, type Project } from '../../../../types/database.types'
+import { sendBlob } from '../../../../utilities/blob_utils'
+import { getProject } from '../../../../utilities/database_utils'
 import {
     type JSONDocument,
     JSON_DOCUMENT_CONTENT_TYPE,
     JSON_DOCUMENT_FILE_EXTENSION,
     exportJSONDocument,
-} from '../utilities/json_serialization_utils'
+} from '../../../../utilities/json_serialization_utils'
 
 interface ExportDocProps {
     projectId: PouchDB.Core.DocumentId

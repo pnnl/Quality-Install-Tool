@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 
+import Home from './home'
 import Layout from '../../layouts/default'
-import Home from '../../../home'
 import ProjectsProvider, {
     type ProjectDocument,
 } from '../../../../providers/projects_provider'

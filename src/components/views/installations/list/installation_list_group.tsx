@@ -1,4 +1,3 @@
-import PouchDB from 'pouchdb'
 import React, { useCallback } from 'react'
 import { TfiPencil, TfiTrash } from 'react-icons/tfi'
 import { Button, ListGroup } from 'react-bootstrap'

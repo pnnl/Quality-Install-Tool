@@ -3,9 +3,9 @@ import React, { useMemo } from 'react'
 import { ListGroup } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import { type InstallationDocument } from '../providers/installations_provider'
-import templatesConfig from '../templates/templates_config'
-import { type Installation } from '../types/database.types'
+import { type InstallationDocument } from '../../../../providers/installations_provider'
+import templatesConfig from '../../../../templates/templates_config'
+import { type Installation } from '../../../../types/database.types'
 
 interface TemplatesListGroupProps {
     projectId: PouchDB.Core.DocumentId

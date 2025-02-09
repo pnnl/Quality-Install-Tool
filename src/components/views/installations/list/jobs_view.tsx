@@ -3,26 +3,26 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-import DeleteConfirmationModal from './delete_confirmation_modal'
 import InstallationListGroup from './installation_list_group'
-import LocationStr from './location_str'
 import StringInputModal from './string_input_modal'
-import { useDatabase } from '../providers/database_provider'
+import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
+import LocationStr from '../../../location_str'
+import { useDatabase } from '../../../../providers/database_provider'
 import {
     type InstallationDocument,
     useInstallations,
-} from '../providers/installations_provider'
-import { useProject } from '../providers/project_provider'
-import { useWorkflow } from '../providers/workflow_provider'
-import templatesConfig from '../templates/templates_config'
-import { type Installation } from '../types/database.types'
+} from '../../../../providers/installations_provider'
+import { useProject } from '../../../../providers/project_provider'
+import { useWorkflow } from '../../../../providers/workflow_provider'
+import templatesConfig from '../../../../templates/templates_config'
+import { type Installation } from '../../../../types/database.types'
 import {
     putNewInstallation,
     removeInstallation,
     renameDoc,
-} from '../utilities/database_utils'
-import { someLocation } from '../utilities/location_utils'
-import { type Validator } from '../utilities/validation_utils'
+} from '../../../../utilities/database_utils'
+import { someLocation } from '../../../../utilities/location_utils'
+import { type Validator } from '../../../../utilities/validation_utils'
 
 interface JobListProps {
     workflowName: keyof typeof templatesConfig | undefined

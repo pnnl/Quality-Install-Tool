@@ -4,9 +4,9 @@ import { TfiPencil, TfiTrash } from 'react-icons/tfi'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import ExportDoc from './export_document'
-import LocationStr from './location_str'
-import { type ProjectDocument } from '../providers/projects_provider'
-import { someLocation } from '../utilities/location_utils'
+import LocationStr from '../../../location_str'
+import { type ProjectDocument } from '../../../../providers/projects_provider'
+import { someLocation } from '../../../../utilities/location_utils'
 
 interface ProjectListGroupProps {
     onEdit?: () => void | Promise<void>

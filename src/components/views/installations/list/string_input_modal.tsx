@@ -1,12 +1,15 @@
-import React, { ReactNode, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 
-import { type Validator, validate } from '../utilities/validation_utils'
+import {
+    type Validator,
+    validate,
+} from '../../../../utilities/validation_utils'
 
 interface StringInputModalProps {
-    title: ReactNode
-    cancelLabel: ReactNode
-    confirmLabel: ReactNode
+    title: React.ReactNode
+    cancelLabel: React.ReactNode
+    confirmLabel: React.ReactNode
     value: string
     validators: Array<Validator<string>>
     show: boolean

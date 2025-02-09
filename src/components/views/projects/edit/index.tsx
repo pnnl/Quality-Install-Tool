@@ -2,8 +2,8 @@ import PouchDB from 'pouchdb'
 import React, { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
+import MdxProjectView from './mdx_project_details_view'
 import Layout from '../../layouts/default'
-import MdxProjectView from '../../../mdx_project_details_view'
 import ProjectProvider from '../../../../providers/project_provider'
 
 const View: React.FC = () => {

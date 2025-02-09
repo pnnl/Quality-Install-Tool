@@ -1,11 +1,11 @@
 import React from 'react'
 
-import LocationStr from './location_str'
 import TemplatesListGroup from './templates_list_group'
-import { useDatabase } from '../providers/database_provider'
-import { useInstallations } from '../providers/installations_provider'
-import { useProject } from '../providers/project_provider'
-import { someLocation } from '../utilities/location_utils'
+import LocationStr from '../../../location_str'
+import { useDatabase } from '../../../../providers/database_provider'
+import { useInstallations } from '../../../../providers/installations_provider'
+import { useProject } from '../../../../providers/project_provider'
+import { someLocation } from '../../../../utilities/location_utils'
 
 interface WorkflowViewProps {}
 

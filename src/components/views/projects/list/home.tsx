@@ -2,20 +2,20 @@ import PouchDB from 'pouchdb'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import DeleteConfirmationModal from './delete_confirmation_modal'
 import ImportDoc from './import_document'
 import NewProjectButton from './new_project_button'
 import ProjectListGroup from './project_list_group'
-import { useDatabase } from '../providers/database_provider'
+import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
+import { useDatabase } from '../../../../providers/database_provider'
 import {
     type ProjectDocument,
     useProjects,
-} from '../providers/projects_provider'
+} from '../../../../providers/projects_provider'
 import {
     getProject,
     putNewProject,
     removeProject,
-} from '../utilities/database_utils'
+} from '../../../../utilities/database_utils'
 
 interface HomeProps {}
 

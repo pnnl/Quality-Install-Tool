@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react'
 
-import LocationStr from './location_str'
-import MdxWrapper from './mdx_wrapper'
-import { StoreProvider } from './store'
-import { useDatabase } from '../providers/database_provider'
-import { useInstallation } from '../providers/installation_provider'
-import { useProject } from '../providers/project_provider'
-import { useWorkflow } from '../providers/workflow_provider'
-import { someLocation } from '../utilities/location_utils'
+import LocationStr from '../../../location_str'
+import MdxWrapper from '../../../mdx_wrapper'
+import { StoreProvider } from '../../../store'
+import { useDatabase } from '../../../../providers/database_provider'
+import { useInstallation } from '../../../../providers/installation_provider'
+import { useProject } from '../../../../providers/project_provider'
+import { useWorkflow } from '../../../../providers/workflow_provider'
+import { someLocation } from '../../../../utilities/location_utils'
 
 interface MdxTemplateViewProps {}
 

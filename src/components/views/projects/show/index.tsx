@@ -2,8 +2,8 @@ import PouchDB from 'pouchdb'
 import React, { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
+import WorkflowView from './workflow_view'
 import Layout from '../../layouts/default'
-import WorkflowView from '../../../workflow_view'
 import InstallationsProvider from '../../../../providers/installations_provider'
 import ProjectProvider from '../../../../providers/project_provider'
 

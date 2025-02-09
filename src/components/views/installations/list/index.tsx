@@ -2,9 +2,9 @@ import PouchDB from 'pouchdb'
 import React, { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
+import JobsView from './jobs_view'
+import MdxCombustionSafetyView from './mdx_combustion_appliance_safety_view'
 import Layout from '../../layouts/default'
-import JobsView from '../../../jobs_view'
-import MdxCombustionSafetyView from '../../../mdx_combustion_appliance_safety_view'
 import InstallationsProvider, {
     type InstallationDocument,
 } from '../../../../providers/installations_provider'
