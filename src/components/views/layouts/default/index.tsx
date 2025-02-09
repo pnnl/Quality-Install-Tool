@@ -11,14 +11,14 @@ function getBackPathname(pathname: string): string | undefined {
     const result = pathname.match(RE_PATH)
 
     if (result) {
-        const [_pathname, projectId, workflowName, jobId] = result
+        const [_pathname, projectId, workflowName, installationId] = result
 
         if (projectId) {
             if (workflowName) {
                 if (workflowName === 'workflows') {
                     return '/'
                 } else {
-                    if (jobId) {
+                    if (installationId) {
                         return `/app/${projectId}/${workflowName}`
                     } else {
                         return `/app/${projectId}/workflows`

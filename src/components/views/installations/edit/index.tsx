@@ -10,10 +10,10 @@ import WorkflowProvider from '../../../../providers/workflow_provider'
 import TEMPLATES from '../../../../templates'
 
 const View: React.FC = () => {
-    const { projectId, workflowName, jobId } = useParams<{
+    const { projectId, workflowName, installationId } = useParams<{
         projectId: PouchDB.Core.DocumentId
         workflowName: keyof typeof TEMPLATES
-        jobId: PouchDB.Core.DocumentId
+        installationId: PouchDB.Core.DocumentId
     }>()
 
     return (
@@ -21,7 +21,7 @@ const View: React.FC = () => {
             <Layout>
                 <ProjectProvider projectId={projectId}>
                     <WorkflowProvider workflowName={workflowName}>
-                        <InstallationProvider installationId={jobId}>
+                        <InstallationProvider installationId={installationId}>
                             <MdxTemplateView />
                         </InstallationProvider>
                     </WorkflowProvider>

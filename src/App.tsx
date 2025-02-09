@@ -32,11 +32,11 @@ const router = createBrowserRouter([
         element: <InstallationsListView />,
     },
     {
-        path: `/app/:projectId/:workflowName/:jobId`,
+        path: `/app/:projectId/:workflowName/:installationId`,
         element: <InstallationsEditView />,
     },
     // {
-    //     path: `/app/:projectId/:workflowName/:jobId/json`,
+    //     path: `/app/:projectId/:workflowName/:installationId/json`,
     //     element: (
     //         <Layout>
     //             <JsonStoreView />

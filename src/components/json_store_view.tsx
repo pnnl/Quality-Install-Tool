@@ -20,9 +20,9 @@ interface JsonStoreViewProps {
 const JsonStoreView: FC<JsonStoreViewProps> = ({ project }) => {
     const db = useDatabase()
 
-    const { jobId } = useParams()
+    const { installationId } = useParams()
 
-    return jobId != null ? (
+    return installationId ? (
         <StoreProvider
             db={db}
             docId={project?._id}
