@@ -21,7 +21,6 @@ export interface BaseMetadata {
     last_modified_at: Date
     attachments: Record<PouchDB.Core.AttachmentId, FileMetadata | PhotoMetadata>
     doc_name: string
-    status: 'new' | 'created' | 'deleted'
 }
 
 export interface Installation extends Base {
@@ -48,7 +47,9 @@ export interface ProjectData extends BaseData {
     location?: Location
 }
 
-export interface ProjectMetadata extends BaseMetadata {}
+export interface ProjectMetadata extends BaseMetadata {
+    status: 'new' | 'created' | 'deleted'
+}
 
 export interface FileMetadata {
     filename: string

@@ -81,7 +81,6 @@ export function newInstallation(
             created_at: createdAt,
             last_modified_at: lastModifiedAt,
             attachments: {},
-            status: 'new',
         },
     }
 
