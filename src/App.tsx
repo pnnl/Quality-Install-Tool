@@ -36,14 +36,6 @@ const router = createBrowserRouter([
         element: <InstallationsEditView />,
     },
     // {
-    //     path: `/app/:projectId/:workflowName/:installationId/json`,
-    //     element: (
-    //         <Layout>
-    //             <JsonStoreView />
-    //         </Layout>
-    //     ),
-    // },
-    // {
     //     path: '/template_editor',
     //     element: <TemplateEditor />,
     // },
