@@ -3,7 +3,9 @@ import React, { ReactNode, createContext, useContext } from 'react'
 
 import { type Base } from '../types/database.types'
 
-const db = new PouchDB<Base>('quality-install-tool', { auto_compaction: true })
+const db = new PouchDB<Base>(process.env.REACT_APP_POUCHDB_DATABASE_NAME, {
+    auto_compaction: true,
+})
 
 const DatabaseContext = createContext<PouchDB.Database<Base>>(db)
 

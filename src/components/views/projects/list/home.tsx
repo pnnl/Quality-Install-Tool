@@ -58,7 +58,7 @@ const Home: React.FC<HomeProps> = () => {
                     <center>
                         <br />
                         <p className="welcome-header">
-                            Welcome to the Quality Install Tool
+                            Welcome to the {process.env.REACT_APP_NAME}
                         </p>
                         <br />
                         <p className="welcome-content">
@@ -165,11 +165,11 @@ const Home: React.FC<HomeProps> = () => {
                     <br />
                     Click here to learn more about the{' '}
                     <a
-                        href="https://www.pnnl.gov/projects/quality-install-tool"
+                        href={process.env.REACT_APP_HOMEPAGE}
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        Quality Install Tool
+                        {process.env.REACT_APP_NAME}
                     </a>
                 </p>
             </center>

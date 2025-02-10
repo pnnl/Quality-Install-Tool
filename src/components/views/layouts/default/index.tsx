@@ -3,8 +3,6 @@ import { Button, Container, Image, Navbar } from 'react-bootstrap'
 import { TfiAngleLeft } from 'react-icons/tfi'
 import { Link, useLocation } from 'react-router-dom'
 
-const TITLE: string = 'Quality Install Tool'
-
 const RE_PATH: RegExp = /^\/(?:app\/([^\/]+)(?:\/([^\/]+)(?:\/([^\/]+))?)?)?$/i
 
 function getBackPathname(pathname: string): string | undefined {
@@ -60,7 +58,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 )}
                 <Container id="root-flex-layout">
                     <Navbar.Brand>
-                        <span id="root-title">{TITLE}</span>
+                        <span id="root-title">
+                            {process.env.REACT_APP_NAME}
+                        </span>
                     </Navbar.Brand>
                 </Container>
                 {backPathname && <div id="settings-button-container"></div>}
