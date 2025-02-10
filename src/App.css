@@ -181,6 +181,13 @@ h1 + h3 {
     margin-right: 0.5rem;
 }
 
+#settings-button-container {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 60px!important;
+    height: 58px!important;
+}
+
 /* editor-flexbox.tsx */
 .editor-textarea {
     height: auto;

@@ -63,6 +63,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <span id="root-title">{TITLE}</span>
                     </Navbar.Brand>
                 </Container>
+                {backPathname && <div id="settings-button-container"></div>}
             </Navbar>
             <div id="root-body">{children}</div>
         </div>
