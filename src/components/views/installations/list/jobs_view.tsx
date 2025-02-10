@@ -17,7 +17,8 @@ import { useWorkflow } from '../../../../providers/workflow_provider'
 import TEMPLATES from '../../../../templates'
 import { type Installation } from '../../../../types/database.types'
 import {
-    putNewInstallation,
+    newInstallation,
+    putInstallation,
     removeInstallation,
     setDocumentName,
 } from '../../../../utilities/database_utils'
@@ -80,17 +81,15 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
     const handleConfirmInstallationForAdd = useCallback(async () => {
         if (project && workflowName) {
-            const installation = await putNewInstallation(
-                db,
-                project._id,
-                workflowName,
+            const installation = newInstallation(
                 installationForAddModalValue.trim(),
+                workflowName,
                 undefined,
             )
 
-            setInstallations(previousInstallations => {
-                return [installation, ...previousInstallations]
-            })
+            await putInstallation(db, project._id, installation)
+
+            reloadInstallations()
 
             reloadProject()
         }
