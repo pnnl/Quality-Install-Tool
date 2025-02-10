@@ -35,10 +35,6 @@ const router = createBrowserRouter([
         path: `/app/:projectId/:workflowName/:installationId`,
         element: <InstallationsEditView />,
     },
-    // {
-    //     path: '/template_editor',
-    //     element: <TemplateEditor />,
-    // },
 ])
 
 const App: React.FC = () => {
