@@ -31,7 +31,7 @@ const GpsCoordStr: React.FC<GpsCoordStrProps> = ({
                             'https://www.google.com/maps/search/?api=1&query=' +
                             geoStr
                         }
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         target="_blank"
                     >
                         {geoStr}

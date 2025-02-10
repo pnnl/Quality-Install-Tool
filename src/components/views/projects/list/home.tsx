@@ -166,8 +166,8 @@ const Home: React.FC<HomeProps> = () => {
                     Click here to learn more about the{' '}
                     <a
                         href="https://www.pnnl.gov/projects/quality-install-tool"
-                        target="_blank"
                         rel="noopener noreferrer"
+                        target="_blank"
                     >
                         Quality Install Tool
                     </a>

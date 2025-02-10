@@ -64,6 +64,7 @@ const FileInput: FC<FileInputProps> = ({
                                         File Name:{' '}
                                         <a
                                             href={URL.createObjectURL(file)}
+                                            rel="noopener noreferrer"
                                             target="_blank"
                                         >
                                             {fileMetadata?.filename}
