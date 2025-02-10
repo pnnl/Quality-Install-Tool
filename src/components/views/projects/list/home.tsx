@@ -15,7 +15,8 @@ import {
 import { type Project } from '../../../../types/database.types'
 import {
     getProject,
-    putNewProject,
+    newProject,
+    putProject,
     removeProject,
     setDocumentName,
 } from '../../../../utilities/database_utils'
@@ -69,15 +70,11 @@ const Home: React.FC<HomeProps> = () => {
     }, [projects])
 
     const handleConfirmProjectForAdd = useCallback(async () => {
-        const project = await putNewProject(
-            db,
-            projectForAddModalValue.trim(),
-            undefined,
-        )
+        const project = newProject(projectForAddModalValue.trim(), undefined)
 
-        // setProjects(previousProjects => {
-        //     return [project, ...previousProjects]
-        // })
+        await putProject(db, project)
+
+        // reloadProjects()
         //
         // setProjectForAddModalValue('')
         //
@@ -86,7 +83,10 @@ const Home: React.FC<HomeProps> = () => {
         navigate(`app/${project._id}`, {
             replace: true,
         })
-    }, [projectForAddModalValue])
+    }, [
+        projectForAddModalValue,
+        // reloadProjects
+    ])
 
     const handleConfirmProjectForRename = useCallback(async () => {
         if (selectedProjectForRename) {
