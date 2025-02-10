@@ -1,4 +1,4 @@
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 
 describe('pathToId', () => {
     test('converts path to id with default prefix and separator', () => {

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
+import { getProject } from '../utilities/database_utils'
 import RepeatableInput from './repeatable_input'
 
 interface RepeatableInputWrapperProps {
@@ -43,10 +44,9 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     fixed = false,
 }: RepeatableInputWrapperProps): JSX.Element => {
     const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDB()
+    const db = useDatabase()
 
     useEffect(() => {
-        if (parent) setParentDoc(parent)
         const changes = db
             .changes({
                 live: true,
@@ -54,11 +54,8 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
                 include_docs: true,
             })
             .on('change', () => {
-                // Call retrieveDocFromDB() when a change is detected in DB
                 if (parent)
-                    retrieveDocFromDB(db, parent?._id).then(doc =>
-                        setParentDoc(doc),
-                    )
+                    getProject(db, parent._id).then(doc => setParentDoc(doc))
             })
             .on('error', (err: any) => {
                 console.error('Changes feed error:', err)
@@ -73,7 +70,7 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ data, docId }) => {
-                const dataFromDoc = parent ? parentDoc.data_ : data
+                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
                     <RepeatableInput
                         path={path}

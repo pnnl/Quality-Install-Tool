@@ -4,9 +4,14 @@ import imageCompression from 'browser-image-compression'
 
 import { StoreContext } from './store'
 import PhotoInput from './photo_input'
-import PhotoMetadata from '../types/photo_metadata.type'
 
-import { getMetadataFromPhoto, photoProperties } from '../utilities/photo_utils'
+import { getPhotoMetadata } from '../utilities/photo_utils'
+
+const MAX_IMAGE_DIM_WIDTH: number = 800
+
+const MAX_IMAGE_DIM_HEIGHT: number = 500
+
+const MAX_SIZE_IN_MB: number = 0.2
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -53,14 +58,14 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
      *
      */
     async function compressFile(imageBlob: Blob) {
-        /*The compressed file will have a maximum size of `maxSizeMB` 
+        /*The compressed file will have a maximum size of `maxSizeMB`
          and dimensions constrained by`maxWidthOrHeight`. */
         const options = {
-            maxSizeMB: photoProperties.MAX_SIZE_IN_MB,
+            maxSizeMB: MAX_SIZE_IN_MB,
             useWebWorker: true,
             maxWidthOrHeight: Math.max(
-                photoProperties.MAX_IMAGE_DIM_HEIGHT,
-                photoProperties.MAX_IMAGE_DIM_WIDTH,
+                MAX_IMAGE_DIM_HEIGHT,
+                MAX_IMAGE_DIM_WIDTH,
             ),
         }
         const compressedFile = await imageCompression(
@@ -131,8 +136,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                             key,
                         )?.value
 
-                        let location_metadata: PhotoMetadata =
-                            attachment_data?.metadata
+                        let location_metadata = attachment_data?.metadata
                         if (!location_metadata) {
                             /* Fetching location metadata for objects stored in as nested objects
                              *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
@@ -165,8 +169,7 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     )
 
                     const handleImageUpsert = async (file: Blob) => {
-                        const photoMetadata =
-                            await getMetadataFromPhoto(imgFile)
+                        const photoMetadata = await getPhotoMetadata(imgFile)
                         upsertAttachment(
                             file,
                             nextKey,

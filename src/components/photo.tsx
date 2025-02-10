@@ -4,7 +4,7 @@ import { Card, Image, Row, Col } from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
-import type PhotoMetadata from '../types/photo_metadata.type'
+import { type PhotoMetadata } from '../types/database.types'
 
 interface PhotoProps {
     description: React.ReactNode
@@ -68,11 +68,6 @@ const Photo: FC<PhotoProps> = ({
                                                                       .metadata
                                                                       .timestamp
                                                               }
-                                                              source={
-                                                                  photoData
-                                                                      .metadata
-                                                                      .timestampSource
-                                                              }
                                                           />
                                                       ) : (
                                                           <span>Missing</span>
@@ -83,11 +78,6 @@ const Photo: FC<PhotoProps> = ({
                                                           ?.geolocation ? (
                                                           <span>
                                                               <GpsCoordStr
-                                                                  source={
-                                                                      photoData
-                                                                          .metadata
-                                                                          .geolocationSource
-                                                                  }
                                                                   {...photoData
                                                                       .metadata
                                                                       .geolocation}

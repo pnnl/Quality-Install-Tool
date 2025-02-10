@@ -1,5 +1,4 @@
 import PouchDB from 'pouchdb'
-import PouchDBUpsert from 'pouchdb-upsert'
 import React, {
     type FC,
     type ReactNode,
@@ -9,25 +8,42 @@ import React, {
 } from 'react'
 
 import { isEmpty, isObject, toPath } from 'lodash'
-import type JSONValue from '../types/json_value.type'
-import { getMetadataFromPhoto, isPhoto } from '../utilities/photo_utils'
-import type Attachment from '../types/attachment.type'
-import type { NonEmptyArray } from '../types/misc_types.type'
-import type Metadata from '../types/metadata.type'
+import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
 import {
-    putNewProject,
-    putNewInstallation,
-    useDB,
-} from '../utilities/database_utils'
-import EventEmitter from 'events'
+    type Base,
+    type FileMetadata,
+    type PhotoMetadata,
+} from '../types/database.types'
+import { putNewProject, putNewInstallation } from '../utilities/database_utils'
 
-PouchDB.plugin(PouchDBUpsert)
+type JSONValue =
+    | string
+    | number
+    | boolean
+    | { [x: string]: JSONValue }
+    | Array<JSONValue>
+
+export type NonEmptyArray<T> = [T, ...Array<T>]
+
+interface Metadata {
+    created_at: Date
+    last_modified_at: Date
+    attachments: Record<string, JSONValue>
+    doc_name: string
+    template_title: string
+}
+
+interface Attachment {
+    blob: Blob
+    digest?: string
+    metadata: Record<string, any>
+}
 
 type UpsertAttachment = (
     blob: Blob,
     id: string,
     fileName?: string,
-    photoMetadata?: Attachment['metadata'],
+    photoMetadata?: PhotoMetadata,
 ) => void
 
 type UpsertData = (pathStr: string, value: any) => void
@@ -59,7 +75,7 @@ export const StoreContext = React.createContext({
 
 interface StoreProviderProps {
     children: ReactNode
-    dbName: string | undefined
+    db: PouchDB.Database<Base>
     docId: string
     workflowName: string
     docName: string
@@ -71,41 +87,35 @@ interface StoreProviderProps {
  * A wrapper component that connects its children to a data store via React Context
  *
  * @param children - The content wrapped by this component
- * @param dbName - Database name associated with an MDX template
+ * @param db - Database associated with an MDX template
  * @param docId - Document instance id
  */
 export const StoreProvider: FC<StoreProviderProps> = ({
     children,
-    dbName,
+    db,
     docId,
     workflowName,
     docName,
     type,
     parentId,
 }) => {
-    const changesRef = useRef<PouchDB.Core.Changes<{}>>()
     const revisionRef = useRef<string>()
     // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
     const [attachments, setAttachments] = useState<Record<string, Attachment>>(
         {},
     )
-    //This  uses the `useDB` custom hook to create a PouchDB database with the specified `dbName`
-    const [db, setDB] = useState<PouchDB.Database>(useDB(dbName))
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
 
     // Determining the doc type for updating it accordingly
     const isInstallationDoc = type === 'installation'
 
-    // Increase the maximum number of listeners for all EventEmitters
-    EventEmitter.defaultMaxListeners = 20
-
     /**
      * Updates component state based on a database document change
      *
      * @param dbDoc The full object representation of the changed document from the database
      */
-    async function processDBDocChange(db: PouchDB.Database, dbDoc: any) {
+    async function processDBDocChange(db: PouchDB.Database<Base>, dbDoc: any) {
         revisionRef.current = dbDoc._rev
 
         // Set doc state
@@ -174,74 +184,49 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
-        /**
-         * Connects the store to the database document
-         *
-         * @remarks
-         * This is an IIFE (Immediately Invoked Function Expression) that
-         * (1) Establishes a database connection
-         * (2) Initializes the database document if it does not already exist
-         * (3) Initializes the doc and attachments state from the database document
-         * (4) Subscribes to future changes to the database document — it ignores changes that
-         *     originated from this component
-         */
-        ;(async function connectStoreToDB() {
-            try {
-                // Initialize the DB document as needed
-                const result = !isInstallationDoc
-                    ? ((await putNewProject(db, docName, docId)) as unknown)
-                    : ((await putNewInstallation(
-                          db,
-                          docId,
-                          workflowName,
-                          docName,
-                          parentId as string,
-                      )) as unknown)
-                revisionRef.current = (result as PouchDB.Core.Response).rev
-            } catch (err) {
-                console.error('DB initialization error:', err)
-                // TODO: Rethink how best to handle errors
-            }
-            // Initialize doc and attachments state from the DB document
-            try {
-                const dbDoc = await db.get(docId)
+        if (isInstallationDoc) {
+            putNewInstallation(
+                db,
+                parentId as string,
+                workflowName,
+                docName,
+                docId,
+            ).then(dbDoc => {
+                revisionRef.current = dbDoc._rev
+
                 processDBDocChange(db, dbDoc)
-            } catch (err) {
-                console.error('Unable to initialize state from DB:', err)
-            }
+            })
+        } else {
+            putNewProject(db, docName, docId).then(dbDoc => {
+                revisionRef.current = dbDoc._rev
 
-            // Subscribe to DB document changes
-            changesRef.current = db
-                .changes({
-                    include_docs: true,
-                    live: true,
-                    since: 'now',
-                })
-                .on('change', function (change) {
-                    if (
-                        change.doc != null &&
-                        change.doc._rev !== revisionRef.current
-                    ) {
-                        // The change must have originated from outside this component, so update component state
-                        processDBDocChange(db, change.doc)
-                    }
-                    // else: the change originated from this component, so ignore it
-                })
-                .on('error', function (err) {
-                    // It's hard to imagine what would cause this since our DB is local
-                    console.error('DB subscription connection failed')
-                })
+                processDBDocChange(db, dbDoc)
+            })
+        }
 
-            // Cancel the DB subscription just before the component unmounts
-            return () => {
-                if (changesRef.current != null) {
-                    changesRef.current.cancel()
+        // Subscribe to DB document changes
+        const changes = db
+            .changes({
+                include_docs: true,
+                live: true,
+                since: 'now',
+                doc_ids: [docId],
+            })
+            .on('change', change => {
+                if (
+                    change.doc != null &&
+                    change.doc._rev !== revisionRef.current
+                ) {
+                    // The change must have originated from outside this component, so update component state
+                    processDBDocChange(db, change.doc)
                 }
-            }
-        })()
+            })
 
-        // Run this effect after the first render and whenever the dbName prop changes
-    }, [dbName])
+        // Cancel the DB subscription just before the component unmounts
+        return () => {
+            changes.cancel()
+        }
+    }, [])
 
     /**
      * Updates (or inserts) data into the doc state and persists the new doc
@@ -384,16 +369,18 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         blob: Blob,
         id: string,
         fileName?: string,
-        photoMetadata?: Attachment['metadata'],
+        photoMetadata?: PhotoMetadata,
     ) => {
-        const metadata: Attachment['metadata'] = photoMetadata
+        const fileMetadata: FileMetadata = {
+            filename: fileName ?? '',
+            timestamp: new Date().toISOString(),
+        }
+
+        const metadata: FileMetadata | PhotoMetadata = photoMetadata
             ? photoMetadata
             : isPhoto(blob)
-              ? await getMetadataFromPhoto(blob)
-              : {
-                    filename: fileName,
-                    timestamp: new Date(Date.now()).toISOString(),
-                }
+              ? await getPhotoMetadata(blob)
+              : fileMetadata
 
         // Storing SingleAttachmentMetaData in the DB
         upsertMetadata('attachments.' + id, metadata)

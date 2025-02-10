@@ -25,7 +25,7 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
             if (printWrapper) {
                 const header = document.createElement('div')
                 header.className = 'safari-print-header'
-                header.innerText = 'DOE - Quality Installation Report' // Customize your header text
+                header.innerText = process.env.REACT_APP_PRINT_TITLE
                 printWrapper.prepend(header) // Add header at the top
             }
         }
@@ -39,12 +39,12 @@ const PrintSection: FC<PrintSectionProps> = ({ children, label }) => {
                         maxWidth: 2000,
                         printable: printContainerId,
                         onPrintDialogClose: () => {
-                            document.title = 'Quality Install Tool'
+                            document.title = process.env.REACT_APP_NAME
                         },
                         type: 'html',
                         targetStyles: ['*'],
                         css: ['/bootstrap.min.css', '/print.css'],
-                        documentTitle: 'DOE - Quality Installation Report',
+                        documentTitle: process.env.REACT_APP_PRINT_TITLE,
                         scanStyles: false,
                     })
                 }}

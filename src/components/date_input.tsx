@@ -31,7 +31,7 @@ const DateInput: FC<DateInputProps> = ({
                         handleValueChange(event.target.value)
                     }}
                     type="date"
-                    value={value}
+                    value={value ?? ''}
                 />
             </FloatingLabel>
         </>

@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 import { StoreContext } from './store'
 import Repeatable from './repeatable'
-import { retrieveDocFromDB, useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
+import { getProject } from '../utilities/database_utils'
 
 interface RepeatableWrapperProps {
     label: string
@@ -32,10 +33,9 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
     parent,
 }: RepeatableWrapperProps): JSX.Element => {
     const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDB()
+    const db = useDatabase()
 
     useEffect(() => {
-        if (parent) setParentDoc(parent)
         const changes = db
             .changes({
                 live: true,
@@ -43,11 +43,8 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
                 include_docs: true,
             })
             .on('change', () => {
-                // Call retrieveDocFromDB() when a change is detected in DB
                 if (parent)
-                    retrieveDocFromDB(db, parent?._id).then(doc =>
-                        setParentDoc(doc),
-                    )
+                    getProject(db, parent._id).then(doc => setParentDoc(doc))
             })
             .on('error', (err: any) => {
                 console.error('Changes feed error:', err)
@@ -57,12 +54,12 @@ const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [parentDoc])
+    }, [])
 
     return (
         <StoreContext.Consumer>
             {({ data }) => {
-                const dataFromDoc = parent ? parentDoc.data_ : data
+                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
                     <Repeatable path={path} label={label} data={dataFromDoc}>
                         {children}

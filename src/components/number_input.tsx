@@ -77,7 +77,7 @@ const NumberInput: FC<NumberInputProps> = ({
                         handleChange(event.target.value)
                     }}
                     type="number"
-                    value={localValue}
+                    value={localValue ?? ''}
                     isInvalid={Boolean(error)}
                 />
                 {hint && <Form.Text>{hint}</Form.Text>}

@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { StoreContext } from './store'
 import DocNameInput from './doc_name_input'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 
 interface StringInputWrapperProps {
     label: string

@@ -1,15 +1,10 @@
-import type { FC } from 'react'
-import type {
-    GeolocationSource,
-    PhotoMetadata,
-} from '../types/photo_metadata.type'
 import { isNull } from 'lodash'
+import React from 'react'
 
 interface GpsCoordStrProps {
-    altitude?: string | null
+    altitude?: number | null
     latitude: number | null
     longitude: number | null
-    source?: GeolocationSource | null
 }
 
 /**
@@ -17,8 +12,11 @@ interface GpsCoordStrProps {
  * @param dec Geographic degrees
  * @returns
  */
-const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
-    const { latitude, longitude, source } = geolocation
+const GpsCoordStr: React.FC<GpsCoordStrProps> = ({
+    altitude,
+    latitude,
+    longitude,
+}) => {
     const geoStr =
         !isNull(latitude) && !isNull(longitude)
             ? Number(latitude).toFixed(4) + ',' + Number(longitude).toFixed(4)
@@ -33,7 +31,7 @@ const GpsCoordStr: FC<GpsCoordStrProps> = geolocation => {
                             'https://www.google.com/maps/search/?api=1&query=' +
                             geoStr
                         }
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         target="_blank"
                     >
                         {geoStr}

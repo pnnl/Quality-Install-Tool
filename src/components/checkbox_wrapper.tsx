@@ -2,7 +2,7 @@ import { get } from 'lodash'
 import React, { FC } from 'react'
 
 import { StoreContext } from './store'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 import Checkbox from './checkbox'
 
 interface CheckBoxWrapperProps {
@@ -42,7 +42,9 @@ const CheckBoxWrapper: FC<CheckBoxWrapperProps> = ({
                         options={options}
                         updateValue={(value: any) => upsertData(path, value)}
                         value={
-                            get(data, path) ? get(data, path) : default_value
+                            get(data, path)
+                                ? get(data, path)
+                                : (default_value ?? [])
                         }
                         hidden={hidden}
                     />

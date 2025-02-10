@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { StoreContext } from './store'
 import Select from './select'
-import { pathToId } from '../utilities/paths_utils'
+import { pathToId } from '../utilities/path_utils'
 
 interface SelectWrapperProps {
     label: string

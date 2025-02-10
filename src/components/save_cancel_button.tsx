@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDB } from '../utilities/database_utils'
+import { useDatabase } from '../providers/database_provider'
 
 interface SaveCancelButtonProps {
     id: string
@@ -35,7 +35,7 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     const [docStatus, setDocStatus] = useState<string>(doc_status)
     const [docName, setDocName] = useState<string>()
     const [buttonLabel, setButtonLabel] = useState<String>('Save Project')
-    const db = useDB()
+    const db = useDatabase()
 
     const handleSaveButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
         saveProject()
@@ -59,10 +59,18 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
 
     useEffect(() => {
         checkProjectDocName()
-        db.changes({
-            since: 'now',
-            live: true,
-        }).on('change', checkProjectDocName)
+
+        const changes = db
+            .changes({
+                since: 'now',
+                live: true,
+                doc_ids: [id],
+            })
+            .on('change', checkProjectDocName)
+
+        return () => {
+            changes.cancel()
+        }
     }, [])
 
     const checkProjectDocName = async () => {

@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, MouseEvent } from 'react'
 import { Button, Card, Image } from 'react-bootstrap'
 import Collapsible from './collapsible'
-import type FileMetadata from '../types/file_metadata.types'
 import DateTimeStr from './date_time_str'
+import { type FileMetadata } from '../types/database.types'
 
 interface FileInputProps {
     children: React.ReactNode
@@ -64,6 +64,7 @@ const FileInput: FC<FileInputProps> = ({
                                         File Name:{' '}
                                         <a
                                             href={URL.createObjectURL(file)}
+                                            rel="noopener noreferrer"
                                             target="_blank"
                                         >
                                             {fileMetadata?.filename}
