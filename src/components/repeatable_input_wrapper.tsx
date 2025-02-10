@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from 'react'
-import { StoreContext } from './store'
-import { useDatabase } from '../providers/database_provider'
-import { getProject } from '../utilities/database_utils'
+import React from 'react'
+
 import RepeatableInput from './repeatable_input'
+import { StoreContext } from './store'
 
 interface RepeatableInputWrapperProps {
     label: string
@@ -34,7 +33,7 @@ interface RepeatableInputWrapperProps {
  * @returns {JSX.Element} - A RepeatableInput component wrapped in context that automatically updates based on database changes.
  *
  */
-const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
+const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
     label,
     path,
     children,
@@ -42,40 +41,15 @@ const RepeatableInputWrapper: FC<RepeatableInputWrapperProps> = ({
     max = 5,
     count = 1,
     fixed = false,
-}: RepeatableInputWrapperProps): JSX.Element => {
-    const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDatabase()
-
-    useEffect(() => {
-        const changes = db
-            .changes({
-                live: true,
-                since: 'now',
-                include_docs: true,
-            })
-            .on('change', () => {
-                if (parent)
-                    getProject(db, parent._id).then(doc => setParentDoc(doc))
-            })
-            .on('error', (err: any) => {
-                console.error('Changes feed error:', err)
-            })
-
-        // Clean up the change listener when the component unmounts
-        return () => {
-            changes.cancel()
-        }
-    }, [])
-
+}) => {
     return (
         <StoreContext.Consumer>
             {({ data, docId }) => {
-                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
                     <RepeatableInput
                         path={path}
                         label={label}
-                        data={dataFromDoc}
+                        data={parent ? parent.data_ : data}
                         docId={parent ? parent?._id : docId}
                         max={max}
                         count={count}

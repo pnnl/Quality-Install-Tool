@@ -14,7 +14,7 @@ import {
     type FileMetadata,
     type PhotoMetadata,
 } from '../types/database.types'
-import { putNewProject, putNewInstallation } from '../utilities/database_utils'
+import { getProject, getInstallation } from '../utilities/database_utils'
 
 type JSONValue =
     | string
@@ -185,19 +185,13 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
     useEffect(() => {
         if (isInstallationDoc) {
-            putNewInstallation(
-                db,
-                parentId as string,
-                workflowName,
-                docName,
-                docId,
-            ).then(dbDoc => {
+            getInstallation(db, docId).then(dbDoc => {
                 revisionRef.current = dbDoc._rev
 
                 processDBDocChange(db, dbDoc)
             })
         } else {
-            putNewProject(db, docName, docId).then(dbDoc => {
+            getProject(db, docId).then(dbDoc => {
                 revisionRef.current = dbDoc._rev
 
                 processDBDocChange(db, dbDoc)
@@ -213,10 +207,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 doc_ids: [docId],
             })
             .on('change', change => {
-                if (
-                    change.doc != null &&
-                    change.doc._rev !== revisionRef.current
-                ) {
+                if (change.doc && change.doc._rev !== revisionRef.current) {
                     // The change must have originated from outside this component, so update component state
                     processDBDocChange(db, change.doc)
                 }
@@ -226,7 +217,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [])
+    }, [docId])
 
     /**
      * Updates (or inserts) data into the doc state and persists the new doc

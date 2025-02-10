@@ -232,47 +232,6 @@ export async function putInstallation(
     return [response, undefined]
 }
 
-export async function putNewInstallation(
-    db: PouchDB.Database<Base>,
-    projectId: PouchDB.Core.DocumentId,
-    workflowName: keyof typeof TEMPLATES,
-    docName: string,
-    id: PouchDB.Core.DocumentId | undefined = undefined,
-    getOptions: PouchDB.Core.GetOptions = {},
-    putOptions: PouchDB.Core.PutOptions = {},
-): Promise<PouchDB.Core.Document<Installation> & PouchDB.Core.GetMeta> {
-    // await db.info()
-
-    if (id) {
-        return await getInstallation(db, id, getOptions)
-    }
-
-    const doc: PouchDB.Core.PutDocument<Installation> = newInstallation(
-        docName,
-        workflowName,
-        id,
-    )
-
-    const [response, upsertResponse]: [
-        PouchDB.Core.Response,
-        PouchDB.UpsertResponse | undefined,
-    ] = await putInstallation(db, projectId, doc, putOptions)
-
-    if (response.ok) {
-        if (upsertResponse && upsertResponse.updated) {
-            return await getInstallation(db, response.id, getOptions)
-        } else {
-            throw new Error(
-                `putNewInstallation: Error upserting document with id '${projectId}'.`,
-            )
-        }
-    } else {
-        throw new Error(
-            `putNewInstallation: Error inserting document with id '${response.id}'.`,
-        )
-    }
-}
-
 export async function removeInstallation(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
@@ -461,36 +420,6 @@ export async function putProject(
     const response: PouchDB.Core.Response = await db.put<Project>(doc, options)
 
     return response
-}
-
-export async function putNewProject(
-    db: PouchDB.Database<Base>,
-    docName: string,
-    id: PouchDB.Core.DocumentId | undefined = undefined,
-    getOptions: PouchDB.Core.GetOptions = {},
-    putOptions: PouchDB.Core.PutOptions = {},
-): Promise<PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta> {
-    // await db.info()
-
-    if (id) {
-        return await getProject(db, id, getOptions)
-    }
-
-    const doc: PouchDB.Core.PutDocument<Project> = newProject(docName, id)
-
-    const response: PouchDB.Core.Response = await putProject(
-        db,
-        doc,
-        putOptions,
-    )
-
-    if (response.ok) {
-        return await getProject(db, response.id, getOptions)
-    } else {
-        throw new Error(
-            `putNewProject: Error inserting document with id '${response.id}'.`,
-        )
-    }
 }
 
 export async function removeProject(

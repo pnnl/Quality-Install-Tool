@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from 'react'
-import { StoreContext } from './store'
+import React from 'react'
+
 import Repeatable from './repeatable'
-import { useDatabase } from '../providers/database_provider'
-import { getProject } from '../utilities/database_utils'
+import { StoreContext } from './store'
 
 interface RepeatableWrapperProps {
     label: string
@@ -26,42 +25,21 @@ interface RepeatableWrapperProps {
  *
  * @returns {JSX.Element} - A Repeatable component wrapped in context that automatically updates based on database changes.
  */
-const RepeatableWrapper: FC<RepeatableWrapperProps> = ({
+const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
     label,
     path,
     children,
     parent,
-}: RepeatableWrapperProps): JSX.Element => {
-    const [parentDoc, setParentDoc] = useState(parent)
-    const db = useDatabase()
-
-    useEffect(() => {
-        const changes = db
-            .changes({
-                live: true,
-                since: 'now',
-                include_docs: true,
-            })
-            .on('change', () => {
-                if (parent)
-                    getProject(db, parent._id).then(doc => setParentDoc(doc))
-            })
-            .on('error', (err: any) => {
-                console.error('Changes feed error:', err)
-            })
-
-        // Clean up the change listener when the component unmounts
-        return () => {
-            changes.cancel()
-        }
-    }, [])
-
+}) => {
     return (
         <StoreContext.Consumer>
             {({ data }) => {
-                const dataFromDoc = parentDoc ? parentDoc.data_ : data
                 return (
-                    <Repeatable path={path} label={label} data={dataFromDoc}>
+                    <Repeatable
+                        path={path}
+                        label={label}
+                        data={parent ? parent.data_ : data}
+                    >
                         {children}
                     </Repeatable>
                 )
