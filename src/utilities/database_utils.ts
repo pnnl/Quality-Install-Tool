@@ -493,51 +493,6 @@ export async function putNewProject(
     }
 }
 
-export async function removeEmptyProjects(
-    db: PouchDB.Database<Base>,
-    options: PouchDB.Core.Options = {},
-): Promise<Array<PouchDB.Core.Response | PouchDB.Core.Error>> {
-    await db.info()
-
-    const findRequest: PouchDB.Find.FindRequest<Base> = {
-        selector: {
-            type: {
-                $eq: 'project',
-            },
-            metadata_: {
-                doc_name: {
-                    $eq: '',
-                },
-                status: {
-                    $eq: 'new',
-                },
-            },
-        },
-        fields: ['_id', '_rev'],
-    }
-
-    const findResponse: PouchDB.Find.FindResponse<Base> =
-        await db.find(findRequest)
-
-    const projectPutDocs: Array<PouchDB.Core.PutDocument<Project>> =
-        findResponse.docs.map((doc: PouchDB.Core.ExistingDocument<Base>) => {
-            return {
-                _deleted: true,
-                _id: doc._id,
-                _rev: doc._rev,
-            } as PouchDB.Core.PutDocument<Project>
-        })
-
-    const bulkDocsOptions: PouchDB.Core.BulkDocsOptions = {
-        ...options,
-    }
-
-    const projectResponses: Array<PouchDB.Core.Response | PouchDB.Core.Error> =
-        await db.bulkDocs<Project>(projectPutDocs, bulkDocsOptions)
-
-    return projectResponses
-}
-
 export async function removeProject(
     db: PouchDB.Database<Base>,
     id: PouchDB.Core.DocumentId,

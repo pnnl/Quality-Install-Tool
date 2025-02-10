@@ -32,10 +32,6 @@ const FileInputWrapper = React.lazy(() => import('./file_input_wrapper'))
 const PDFRendererWrapper = React.lazy(() => import('./pdf_renderer_wrapper'))
 const ShowOrHide = React.lazy(() => import('./show_or_hide'))
 const CheckBoxWrapper = React.lazy(() => import('./checkbox_wrapper'))
-const DocNameInputWrapper = React.lazy(() => import('./doc_name_input_wrapper'))
-const SaveCancelButtonWrapper = React.lazy(
-    () => import('./save_cancel_button_wrapper'),
-)
 const RepeatableInputWrapper = React.lazy(
     () => import('./repeatable_input_wrapper'),
 )
@@ -76,8 +72,6 @@ const components = {
     ShowOrHide: ShowOrHide,
     CombustionSafetyChecksLink: CombustionSafetyChecksLink,
     CombustionSafetyChecksReport: CombustionSafetyChecksReport,
-    DocNameInput: DocNameInputWrapper,
-    SaveCancelButton: SaveCancelButtonWrapper,
     RepeatableInput: RepeatableInputWrapper,
     Repeatable: RepeatableWrapper,
     LabelValue: LabelValueWrapper,

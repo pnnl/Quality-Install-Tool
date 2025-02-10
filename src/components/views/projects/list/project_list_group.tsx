@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
-import { TfiPencil, TfiTrash } from 'react-icons/tfi'
+import { TfiPencil, TfiSettings, TfiTrash } from 'react-icons/tfi'
 import { LinkContainer } from 'react-router-bootstrap'
 
 import ExportDoc from './export_document'
@@ -11,6 +11,7 @@ import { someLocation } from '../../../../utilities/location_utils'
 interface ProjectListGroupProps {
     onEdit?: () => void | Promise<void>
     onDelete?: () => void | Promise<void>
+    onSelect?: () => void | Promise<void>
     project: ProjectDocument
 }
 
@@ -18,6 +19,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     project,
     onEdit,
     onDelete,
+    onSelect,
 }) => {
     const handleEdit = useCallback(
         async (
@@ -47,14 +49,33 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
         [onDelete],
     )
 
+    const handleSelect = useCallback(
+        async (
+            event: React.MouseEvent<HTMLButtonElement>,
+        ): Promise<boolean> => {
+            event.stopPropagation()
+            event.preventDefault()
+
+            onSelect && (await onSelect())
+
+            return false
+        },
+        [onSelect],
+    )
+
     return (
         <ListGroup className="padding">
             <LinkContainer to={`/app/${project._id}/workflows`}>
                 <ListGroup.Item action={true}>
                     <span className="icon-container">
+                        {onSelect && (
+                            <Button variant="light" onClick={handleSelect}>
+                                <TfiPencil size={22} />
+                            </Button>
+                        )}
                         {onEdit && (
                             <Button variant="light" onClick={handleEdit}>
-                                <TfiPencil size={22} />
+                                <TfiSettings size={22} />
                             </Button>
                         )}
                         {onDelete && (

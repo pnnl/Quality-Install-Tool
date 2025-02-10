@@ -1,21 +1,25 @@
 import PouchDB from 'pouchdb'
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
 import ImportDoc from './import_document'
-import NewProjectButton from './new_project_button'
 import ProjectListGroup from './project_list_group'
 import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
+import StringInputModal from '../../shared/string_input_modal'
 import { useDatabase } from '../../../../providers/database_provider'
 import {
     type ProjectDocument,
     useProjects,
 } from '../../../../providers/projects_provider'
+import { type Project } from '../../../../types/database.types'
 import {
     getProject,
     putNewProject,
     removeProject,
+    setDocumentName,
 } from '../../../../utilities/database_utils'
+import { type Validator } from '../../../../utilities/validation_utils'
 
 interface HomeProps {}
 
@@ -24,32 +28,147 @@ const Home: React.FC<HomeProps> = () => {
 
     const navigate = useNavigate()
 
-    const [projects, setProjects] = useProjects()
+    const [projects, setProjects, reloadProjects] = useProjects()
 
-    const [selectedProject, setSelectedProject] = useState<
+    const [isProjectForAddModalVisible, setIsProjectForAddModalVisible] =
+        useState<boolean>(false)
+    const [projectForAddModalValue, setProjectForAddModalValue] =
+        useState<string>('')
+    const [projectForRenameModalValue, setProjectForRenameModalValue] =
+        useState<string>('')
+    const [selectedProjectForDelete, setSelectedProjectForDelete] = useState<
+        ProjectDocument | undefined
+    >(undefined)
+    const [selectedProjectForRename, setSelectedProjectForRename] = useState<
         ProjectDocument | undefined
     >(undefined)
 
+    const projectNameValidators = useMemo<Array<Validator<string>>>(() => {
+        const re = /^(?![\s-])[a-z0-9, -]{1,64}$/i
+
+        const projectNames = projects.map(project => {
+            return project.metadata_.doc_name
+        })
+
+        return [
+            input => {
+                if (re.test(input)) {
+                    return undefined
+                } else {
+                    return 'The project name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.'
+                }
+            },
+            input => {
+                if (projectNames.includes(input.trim())) {
+                    return 'Project name already exists. Please choose a different name.'
+                } else {
+                    return undefined
+                }
+            },
+        ]
+    }, [projects])
+
+    const handleConfirmProjectForAdd = useCallback(async () => {
+        const project = await putNewProject(
+            db,
+            projectForAddModalValue.trim(),
+            undefined,
+        )
+
+        // setProjects(previousProjects => {
+        //     return [project, ...previousProjects]
+        // })
+        //
+        // setProjectForAddModalValue('')
+        //
+        // setIsProjectForAddModalVisible(false)
+
+        navigate(`app/${project._id}`, {
+            replace: true,
+        })
+    }, [projectForAddModalValue])
+
+    const handleConfirmProjectForRename = useCallback(async () => {
+        if (selectedProjectForRename) {
+            await setDocumentName<Project>(
+                db,
+                selectedProjectForRename._id,
+                projectForRenameModalValue.trim(),
+            )
+
+            reloadProjects()
+
+            setProjectForRenameModalValue('')
+
+            setSelectedProjectForRename(undefined)
+        }
+    }, [projectForRenameModalValue, reloadProjects, selectedProjectForRename])
+
     return (
         <>
+            <StringInputModal
+                title="Enter new project name"
+                cancelLabel="Cancel"
+                confirmLabel="Add"
+                value={projectForAddModalValue}
+                validators={projectNameValidators}
+                show={isProjectForAddModalVisible}
+                onHide={() => {
+                    setIsProjectForAddModalVisible(false)
+
+                    setProjectForAddModalValue('')
+                }}
+                onCancel={() => {
+                    setIsProjectForAddModalVisible(false)
+
+                    setProjectForAddModalValue('')
+                }}
+                onConfirm={handleConfirmProjectForAdd}
+                onChange={value => {
+                    setProjectForAddModalValue(value)
+                }}
+            />
+            <StringInputModal
+                title="Enter new project name"
+                cancelLabel="Cancel"
+                confirmLabel="Rename"
+                value={projectForRenameModalValue}
+                validators={projectNameValidators}
+                show={selectedProjectForRename !== undefined}
+                onHide={() => {
+                    setSelectedProjectForRename(undefined)
+
+                    setProjectForRenameModalValue('')
+                }}
+                onCancel={() => {
+                    setSelectedProjectForRename(undefined)
+
+                    setProjectForRenameModalValue('')
+                }}
+                onConfirm={handleConfirmProjectForRename}
+                onChange={value => {
+                    setProjectForRenameModalValue(value)
+                }}
+            />
             <DeleteConfirmationModal
-                label={selectedProject?.metadata_?.doc_name ?? ''}
-                show={selectedProject !== undefined}
-                onHide={() => setSelectedProject(undefined)}
-                onCancel={() => setSelectedProject(undefined)}
+                label={selectedProjectForDelete?.metadata_?.doc_name ?? ''}
+                show={selectedProjectForDelete !== undefined}
+                onHide={() => setSelectedProjectForDelete(undefined)}
+                onCancel={() => setSelectedProjectForDelete(undefined)}
                 onConfirm={async () => {
-                    if (selectedProject) {
-                        await removeProject(db, selectedProject._id)
+                    if (selectedProjectForDelete) {
+                        await removeProject(db, selectedProjectForDelete._id)
 
                         setProjects(previousProjects => {
                             return previousProjects.filter(previousProject => {
                                 return (
-                                    previousProject._id !== selectedProject._id
+                                    previousProject._id !==
+                                    selectedProjectForDelete._id
                                 )
                             })
                         })
 
-                        setSelectedProject(undefined)
+                        setSelectedProjectForDelete(undefined)
                     }
                 }}
             />
@@ -76,22 +195,15 @@ const Home: React.FC<HomeProps> = () => {
                             <br />
                             For quality assurance reporting
                         </p>
+                        <br />
                         <div className="button-container-center">
-                            <NewProjectButton
-                                label="Add a New Project"
-                                altText="Add a New Project"
-                                onClick={async () => {
-                                    const project = await putNewProject(
-                                        db,
-                                        '',
-                                        undefined,
-                                    )
-
-                                    navigate(`app/${project._id}`, {
-                                        replace: true,
-                                    })
+                            <Button
+                                onClick={() => {
+                                    setIsProjectForAddModalVisible(true)
                                 }}
-                            />
+                            >
+                                Add a New Project
+                            </Button>
                             &nbsp;&nbsp;
                             <ImportDoc
                                 label="Import a Project"
@@ -114,21 +226,13 @@ const Home: React.FC<HomeProps> = () => {
             ) : (
                 <div>
                     <div className="align-right padding">
-                        <NewProjectButton
-                            label="Add a New Project"
-                            altText="Add a New Project"
-                            onClick={async () => {
-                                const project = await putNewProject(
-                                    db,
-                                    '',
-                                    undefined,
-                                )
-
-                                navigate(`app/${project._id}`, {
-                                    replace: true,
-                                })
+                        <Button
+                            onClick={() => {
+                                setIsProjectForAddModalVisible(true)
                             }}
-                        />
+                        >
+                            Add a New Project
+                        </Button>
                         &nbsp;&nbsp;
                         <ImportDoc
                             label="Import Project"
@@ -153,7 +257,16 @@ const Home: React.FC<HomeProps> = () => {
                                         replace: true,
                                     })
                                 }
-                                onDelete={() => setSelectedProject(project)}
+                                onDelete={() =>
+                                    setSelectedProjectForDelete(project)
+                                }
+                                onSelect={() => {
+                                    setSelectedProjectForRename(project)
+
+                                    setProjectForRenameModalValue(
+                                        project.metadata_.doc_name,
+                                    )
+                                }}
                             />
                         ))}
                     </div>

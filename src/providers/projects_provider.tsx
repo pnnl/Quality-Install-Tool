@@ -10,7 +10,7 @@ import React, {
 import { useDatabase } from './database_provider'
 import { type Project } from '../types/database.types'
 import { type Comparator } from '../utilities/comparison_utils'
-import { getProjects, removeEmptyProjects } from '../utilities/database_utils'
+import { getProjects } from '../utilities/database_utils'
 
 export type ProjectDocument = PouchDB.Core.ExistingDocument<Project> &
     PouchDB.Core.AllDocsMeta
@@ -50,8 +50,6 @@ const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
 
     const reloadProjects = useCallback(async () => {
         try {
-            await removeEmptyProjects(db)
-
             const projects = await getProjects(db)
 
             setError(undefined)

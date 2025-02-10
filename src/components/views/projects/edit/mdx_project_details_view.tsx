@@ -15,18 +15,23 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
 
     if (project) {
         return (
-            <StoreProvider
-                db={db}
-                docId={project._id}
-                workflowName=""
-                docName={project.metadata_.doc_name}
-                type={project.type}
-            >
-                <MdxWrapper
-                    Component={DOEProjectDetailsTemplate}
-                    Project={project}
-                />
-            </StoreProvider>
+            <>
+                <h1>Edit Project Information</h1>
+                <h2>{project.metadata_.doc_name}</h2>
+                <br />
+                <StoreProvider
+                    db={db}
+                    docId={project._id}
+                    workflowName=""
+                    docName={project.metadata_.doc_name}
+                    type={project.type}
+                >
+                    <MdxWrapper
+                        Component={DOEProjectDetailsTemplate}
+                        Project={project}
+                    />
+                </StoreProvider>
+            </>
         )
     } else {
         return null

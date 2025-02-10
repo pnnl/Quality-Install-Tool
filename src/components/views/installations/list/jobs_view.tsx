@@ -84,7 +84,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 db,
                 project._id,
                 workflowName,
-                installationForAddModalValue,
+                installationForAddModalValue.trim(),
                 undefined,
             )
 
@@ -134,7 +134,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             await setDocumentName<Installation>(
                 db,
                 selectedInstallationForRename._id,
-                installationForRenameModalValue,
+                installationForRenameModalValue.trim(),
             )
 
             reloadInstallations()
