@@ -22,7 +22,12 @@ const View: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Layout>
-                <ProjectProvider projectId={projectId}>
+                <ProjectProvider
+                    projectId={projectId}
+                    attachments={
+                        workflowName === 'doe_combustion_appliance_safety_tests'
+                    }
+                >
                     <WorkflowProvider workflowName={workflowName}>
                         {workflowName ===
                         'doe_combustion_appliance_safety_tests' ? (
