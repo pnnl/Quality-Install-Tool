@@ -7,7 +7,7 @@ import React, {
     useState,
 } from 'react'
 
-import { isEmpty, isObject, toPath } from 'lodash'
+import { isEmpty } from 'lodash'
 import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
 import {
     type Base,
@@ -15,6 +15,7 @@ import {
     type PhotoMetadata,
 } from '../types/database.types'
 import { getProject, getInstallation } from '../utilities/database_utils'
+import { immutableUpsert } from '../utilities/path_utils'
 
 type JSONValue =
     | string
@@ -22,8 +23,6 @@ type JSONValue =
     | boolean
     | { [x: string]: JSONValue }
     | Array<JSONValue>
-
-export type NonEmptyArray<T> = [T, ...Array<T>]
 
 interface Metadata {
     created_at: Date
@@ -232,11 +231,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertDoc: UpsertDoc = (pathStr, data) => {
         // Update doc state
 
-        const newDoc = immutableUpsert(
-            doc,
-            toPath(pathStr) as NonEmptyArray<string>,
-            data,
-        )
+        const newDoc = immutableUpsert(pathStr, doc, data)
         setDoc(newDoc)
 
         // Persist the doc
@@ -434,37 +429,4 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             {children}
         </StoreContext.Provider>
     )
-}
-
-/**
- * Immutably updates/inserts a target value at a given path
- * @param recipient
- * @param path
- * @param target
- * @returns A shallow copy of recipient that additionally has the value at path set to target
- */
-export function immutableUpsert(
-    recipient: any,
-    path: NonEmptyArray<string>,
-    target: any,
-): any {
-    const [propName, ...newPath] = path
-    const newRecipient: any = isObject(recipient)
-        ? Array.isArray(recipient)
-            ? [...recipient]
-            : ({ ...recipient } satisfies Record<string, any>)
-        : isNaN(parseInt(propName))
-          ? {}
-          : []
-
-    if (newPath.length === 0) {
-        newRecipient[propName] = target
-    } else {
-        newRecipient[propName] = immutableUpsert(
-            newRecipient[propName as keyof unknown],
-            newPath as any,
-            target,
-        )
-    }
-    return newRecipient
 }
