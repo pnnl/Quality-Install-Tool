@@ -50,13 +50,15 @@ const Photo: React.FC<PhotoProps> = ({
     >([])
 
     useEffect(() => {
-        const objectURLs = photos.map(photoData => {
-            if (photoData.photo) {
-                return URL.createObjectURL(photoData.photo)
-            } else {
-                return undefined
-            }
-        })
+        const objectURLs = Array.isArray(photos)
+            ? photos.map(photoData => {
+                  if (photoData.photo) {
+                      return URL.createObjectURL(photoData.photo)
+                  } else {
+                      return undefined
+                  }
+              })
+            : []
 
         setPhotoObjectURLs(objectURLs)
 
@@ -66,8 +68,6 @@ const Photo: React.FC<PhotoProps> = ({
                     URL.revokeObjectURL(objectURL)
                 }
             })
-
-            setPhotoObjectURLs([])
         }
     }, [photos])
 
