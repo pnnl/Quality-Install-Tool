@@ -49,7 +49,7 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
                     <Suspense fallback={<div>Loading...</div>}>
                         <MdxWrapper
                             Component={workflow.template}
-                            Project={project}
+                            project={project}
                         />
                     </Suspense>
                 </StoreProvider>

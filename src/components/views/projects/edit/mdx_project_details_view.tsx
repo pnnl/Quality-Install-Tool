@@ -28,7 +28,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 >
                     <MdxWrapper
                         Component={DOEProjectDetailsTemplate}
-                        Project={project}
+                        project={project}
                     />
                 </StoreProvider>
             </>

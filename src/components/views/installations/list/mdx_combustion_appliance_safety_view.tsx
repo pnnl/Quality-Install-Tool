@@ -40,7 +40,10 @@ const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
                     type={project.type}
                 >
                     <Suspense fallback={<div>Loading...</div>}>
-                        <MdxWrapper Component={workflow.template} />
+                        <MdxWrapper
+                            Component={workflow.template}
+                            project={project}
+                        />
                     </Suspense>
                 </StoreProvider>
             </>
