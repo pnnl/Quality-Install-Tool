@@ -33,17 +33,43 @@
     <LabelValue path="label-value-test-number-input" type="number" />
 </div>
 
+<h2>LabelValue with number type prop + decimal places:</h2>
+<code>
+    `<LabelValue path="label-value-test-number-input" type="number" decimalPlaces={2} prefix="$" suffix=" per day"/>` 
+</code>
+<div className="label-value-container">
+    <LabelValue
+        path="label-value-test-number-input"
+        type="number"
+        decimalPlaces={2}
+        prefix="$"
+        suffix= " per day"
+    />
+</div>
+
+<h2>LabelValue with number type prop + decimal places:</h2>
+<code>
+    `<LabelValue path="label-value-test-number-input" type="number" decimalPlaces={4}/>` 
+</code>
+<div className="label-value-container">
+    <LabelValue
+        path="label-value-test-number-input"
+        type="number"
+        decimalPlaces={4}
+    />
+</div>
+
 <h2>
     LabelValue with number type prop and string value (Will console.log an error
     message)
 </h2>
 <code>
 
-    <LabelValue
+    `<LabelValue
         path="label-value-test-text-input"
         type="number"
         decimalPlaces={2}
-    />
+    />`
 
 </code>
 <div className="label-value-container">
