@@ -1,6 +1,5 @@
-import React from 'react'
-import type { FC } from 'react'
-import { Card, Image, Row, Col } from 'react-bootstrap'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Card, Col, Image, Row } from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
@@ -31,14 +30,47 @@ interface PhotoProps {
  * will always show and the Photo component will indicate when the photo is missing.
  * @param noteValue The value to be displayed as the note for the photos
  */
-const Photo: FC<PhotoProps> = ({
+const Photo: React.FC<PhotoProps> = ({
     description,
     label,
     photos,
     required,
     noteValue,
 }) => {
-    const noteValueArray = noteValue?.split(`\n`)
+    const noteValueArray = useMemo<string[]>(() => {
+        if (noteValue) {
+            return noteValue.split(/\r?\n/)
+        } else {
+            return []
+        }
+    }, [noteValue])
+
+    const [photoObjectURLs, setPhotoObjectURLs] = useState<
+        (string | undefined)[]
+    >([])
+
+    useEffect(() => {
+        const objectURLs = photos.map(photoData => {
+            if (photoData.photo) {
+                return URL.createObjectURL(photoData.photo)
+            } else {
+                return undefined
+            }
+        })
+
+        setPhotoObjectURLs(objectURLs)
+
+        return () => {
+            objectURLs.forEach(objectURL => {
+                if (objectURL) {
+                    URL.revokeObjectURL(objectURL)
+                }
+            })
+
+            setPhotoObjectURLs([])
+        }
+    }, [photos])
+
     return (photos && photos.length > 0) || required ? (
         <Card className="photo-card">
             <Card.Body>
@@ -47,16 +79,18 @@ const Photo: FC<PhotoProps> = ({
                 {photos && photos.length > 0
                     ? Array.isArray(photos) && (
                           <Row className="photo-row">
-                              {photos.map(photoData => (
+                              {photos.map((photoData, index) => (
                                   <Col key={photoData.id}>
-                                      {photoData.photo ? (
+                                      {photoData.photo && (
                                           <div className="photo-report-container">
-                                              <Image
-                                                  src={URL.createObjectURL(
-                                                      photoData.photo,
-                                                  )}
-                                                  thumbnail
-                                              />
+                                              {photoObjectURLs[index] && (
+                                                  <Image
+                                                      src={
+                                                          photoObjectURLs[index]
+                                                      }
+                                                      thumbnail
+                                                  />
+                                              )}
                                               <div>
                                                   <small>
                                                       Timestamp:{' '}
@@ -89,23 +123,19 @@ const Photo: FC<PhotoProps> = ({
                                                   </small>
                                               </div>
                                           </div>
-                                      ) : null}
+                                      )}
                                   </Col>
                               ))}
                           </Row>
                       )
                     : required && <em>Missing Photo</em>}
-                {noteValue && (
+                {noteValueArray.length > 0 && (
                     <div className="photo-notes">
-                        <h3>Notes: </h3>
+                        <h3>Notes:</h3>
                         <div>
-                            {noteValueArray
-                                ? noteValueArray.map(string => (
-                                      <p className="photo-note-string">
-                                          {string}
-                                      </p>
-                                  ))
-                                : null}
+                            {noteValueArray.map(string => (
+                                <p className="photo-note-string">{string}</p>
+                            ))}
                         </div>
                     </div>
                 )}
