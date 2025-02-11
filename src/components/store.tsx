@@ -51,11 +51,7 @@ type UpsertMetadata = (pathStr: string, value: any) => void
 
 type UpsertDoc = (pathStr: string, data: any) => void
 
-type Attachments = Record<
-    string,
-    | Attachment
-    | { blob: Blob; digest: string; metadata: Record<string, JSONValue> }
->
+type Attachments = Record<string, Attachment>
 
 export const StoreContext = React.createContext({
     docId: '' satisfies string,
@@ -73,13 +69,9 @@ export const StoreContext = React.createContext({
 })
 
 interface StoreProviderProps {
-    children: ReactNode
     db: PouchDB.Database<Base>
     docId: string
-    workflowName: string
-    docName: string
-    type: string
-    parentId?: string | undefined
+    children: ReactNode
 }
 
 /**
@@ -90,13 +82,9 @@ interface StoreProviderProps {
  * @param docId - Document instance id
  */
 export const StoreProvider: FC<StoreProviderProps> = ({
-    children,
     db,
     docId,
-    workflowName,
-    docName,
-    type,
-    parentId,
+    children,
 }) => {
     const revisionRef = useRef<string>()
     // The attachments state will have the form: {[att_id]: {blob, digest, metadata}, ...}
@@ -105,9 +93,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     )
     // The doc state could be anything that is JSON-compatible
     const [doc, setDoc] = useState<any>({})
-
-    // Determining the doc type for updating it accordingly
-    const isInstallationDoc = type === 'installation'
 
     /**
      * Updates component state based on a database document change
@@ -183,19 +168,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
-        if (isInstallationDoc) {
-            getInstallation(db, docId).then(dbDoc => {
-                revisionRef.current = dbDoc._rev
+        db.get<Base>(docId).then(dbDoc => {
+            revisionRef.current = dbDoc._rev
 
-                processDBDocChange(db, dbDoc)
-            })
-        } else {
-            getProject(db, docId).then(dbDoc => {
-                revisionRef.current = dbDoc._rev
-
-                processDBDocChange(db, dbDoc)
-            })
-        }
+            processDBDocChange(db, dbDoc)
+        })
 
         // Subscribe to DB document changes
         const changes = db

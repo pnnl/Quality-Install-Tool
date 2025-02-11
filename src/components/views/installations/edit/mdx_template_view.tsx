@@ -38,14 +38,7 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
                     <b>{installation.metadata_.doc_name}</b>
                 </center>
                 <br />
-                <StoreProvider
-                    db={db}
-                    docId={installation._id}
-                    workflowName={installation.metadata_.template_name}
-                    docName={installation.metadata_.doc_name}
-                    type={installation.type}
-                    parentId={project._id}
-                >
+                <StoreProvider db={db} docId={installation._id}>
                     <Suspense fallback={<div>Loading...</div>}>
                         <MdxWrapper
                             Component={workflow.template}

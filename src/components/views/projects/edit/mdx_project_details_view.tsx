@@ -19,13 +19,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 <h1>Edit Project Information</h1>
                 <h2>{project.metadata_.doc_name}</h2>
                 <br />
-                <StoreProvider
-                    db={db}
-                    docId={project._id}
-                    workflowName=""
-                    docName={project.metadata_.doc_name}
-                    type={project.type}
-                >
+                <StoreProvider db={db} docId={project._id}>
                     <MdxWrapper
                         Component={DOEProjectDetailsTemplate}
                         project={project}

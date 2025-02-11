@@ -32,13 +32,7 @@ const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
                         </p>
                     )}
                 <br />
-                <StoreProvider
-                    db={db}
-                    docId={project._id}
-                    workflowName=""
-                    docName={project.metadata_.doc_name}
-                    type={project.type}
-                >
+                <StoreProvider db={db} docId={project._id}>
                     <Suspense fallback={<div>Loading...</div>}>
                         <MdxWrapper
                             Component={workflow.template}
