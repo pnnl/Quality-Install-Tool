@@ -21,7 +21,10 @@ const View: React.FC = () => {
             <Layout>
                 <ProjectProvider projectId={projectId}>
                     <WorkflowProvider workflowName={workflowName}>
-                        <InstallationProvider installationId={installationId}>
+                        <InstallationProvider
+                            installationId={installationId}
+                            attachments={true}
+                        >
                             <MdxTemplateView />
                         </InstallationProvider>
                     </WorkflowProvider>

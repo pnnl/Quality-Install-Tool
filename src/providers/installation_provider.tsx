@@ -32,11 +32,13 @@ export function useInstallation(): [
 
 interface InstallationProviderProps {
     installationId: PouchDB.Core.DocumentId | undefined
+    attachments?: boolean | undefined
     children: React.ReactNode
 }
 
 const InstallationProvider: React.FC<InstallationProviderProps> = ({
     installationId,
+    attachments,
     children,
 }) => {
     const db = useDatabase()
@@ -52,7 +54,9 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
     const reloadInstallation = useCallback(async () => {
         if (installationId) {
             try {
-                const installation = await getInstallation(db, installationId)
+                const installation = await getInstallation(db, installationId, {
+                    attachments,
+                })
 
                 setError(undefined)
 

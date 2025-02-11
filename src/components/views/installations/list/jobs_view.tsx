@@ -89,9 +89,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
             await putInstallation(db, project._id, installation)
 
-            reloadInstallations()
+            await reloadInstallations()
 
-            reloadProject()
+            await reloadProject()
         }
 
         setInstallationForAddModalValue('')
@@ -117,7 +117,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 })
             })
 
-            reloadProject()
+            await reloadProject()
 
             setSelectedInstallationForDelete(undefined)
         }
@@ -136,7 +136,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 installationForRenameModalValue.trim(),
             )
 
-            reloadInstallations()
+            await reloadInstallations()
 
             setInstallationForRenameModalValue('')
 

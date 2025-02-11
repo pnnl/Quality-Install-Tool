@@ -32,11 +32,13 @@ export function useProject(): [
 
 interface ProjectProviderProps {
     projectId: PouchDB.Core.DocumentId | undefined
+    attachments?: boolean | undefined
     children: React.ReactNode
 }
 
 const ProjectProvider: React.FC<ProjectProviderProps> = ({
     projectId,
+    attachments,
     children,
 }) => {
     const db = useDatabase()
@@ -52,7 +54,9 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
     const reloadProject = useCallback(async () => {
         if (projectId) {
             try {
-                const project = await getProject(db, projectId)
+                const project = await getProject(db, projectId, {
+                    attachments,
+                })
 
                 setError(undefined)
 

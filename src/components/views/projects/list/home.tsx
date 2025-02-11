@@ -74,7 +74,7 @@ const Home: React.FC<HomeProps> = () => {
 
         await putProject(db, project)
 
-        // reloadProjects()
+        // await reloadProjects()
         //
         // setProjectForAddModalValue('')
         //
@@ -96,7 +96,7 @@ const Home: React.FC<HomeProps> = () => {
                 projectForRenameModalValue.trim(),
             )
 
-            reloadProjects()
+            await reloadProjects()
 
             setProjectForRenameModalValue('')
 

@@ -14,7 +14,7 @@ const View: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Layout>
-                <ProjectProvider projectId={projectId}>
+                <ProjectProvider projectId={projectId} attachments={true}>
                     <MdxProjectView />
                 </ProjectProvider>
             </Layout>

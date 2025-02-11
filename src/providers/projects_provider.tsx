@@ -33,11 +33,13 @@ export function useProjects(): [
 
 interface ProjectsProviderProps {
     projectComparator?: Comparator<ProjectDocument>
+    attachments?: boolean | undefined
     children: React.ReactNode
 }
 
 const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
     projectComparator,
+    attachments,
     children,
 }) => {
     const db = useDatabase()
@@ -50,7 +52,9 @@ const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
 
     const reloadProjects = useCallback(async () => {
         try {
-            const projects = await getProjects(db)
+            const projects = await getProjects(db, {
+                attachments,
+            })
 
             setError(undefined)
 

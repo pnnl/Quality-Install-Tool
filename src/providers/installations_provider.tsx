@@ -36,6 +36,7 @@ interface InstallationsProviderProps {
     projectId: PouchDB.Core.DocumentId | undefined
     workflowName?: keyof typeof TEMPLATES
     installationComparator?: Comparator<InstallationDocument>
+    attachments?: boolean | undefined
     children: React.ReactNode
 }
 
@@ -43,6 +44,7 @@ const InstallationsProvider: React.FC<InstallationsProviderProps> = ({
     projectId,
     workflowName,
     installationComparator,
+    attachments,
     children,
 }) => {
     const db = useDatabase()
@@ -62,6 +64,9 @@ const InstallationsProvider: React.FC<InstallationsProviderProps> = ({
                     db,
                     projectId,
                     workflowName,
+                    {
+                        attachments,
+                    },
                 )
 
                 setError(undefined)
