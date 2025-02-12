@@ -40,10 +40,7 @@ const TextInputWrapper: FC<TextInputWrapperProps> = ({
                     <TextInput
                         id={id}
                         label={label}
-                        updateValue={(value: any) => {
-                            debugger
-                            upsertData(path, value)
-                        }}
+                        updateValue={(value: any) => upsertData(path, value)}
                         value={get(data, path)}
                         min={min}
                         max={max}

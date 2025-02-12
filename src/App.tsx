@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import React, { Suspense, lazy } from 'react'
-import { Sandbox } from './components/sandbox'
 
 // Lazily initializes the views, rendering them only when requested.
 const RootLayout = lazy(() => import('./components/root_layout'))
@@ -97,17 +96,6 @@ const routes = [
             <Suspense fallback={<div>Loading...</div>}>
                 <RootLayout>
                     <MdxTemplateView />
-                </RootLayout>
-            </Suspense>
-        ),
-    },
-    {
-        path: `/sandbox/:projectId/:workflowName/:jobId`,
-        // Jobs View: Gathering and displaying information pertinent to individual installations
-        element: (
-            <Suspense fallback={<div>Loading...</div>}>
-                <RootLayout>
-                    <Sandbox />
                 </RootLayout>
             </Suspense>
         ),

@@ -64,6 +64,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                 const data_object = parent ? parentData : data
                 const key = path == null ? '' : path
                 const value = get(data_object, key)
+                // debugger
                 return (
                     <LabelValue
                         label={label}
