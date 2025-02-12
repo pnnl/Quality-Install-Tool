@@ -97,6 +97,8 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
                     setProject(undefined)
                 } else if (value.doc?._id === projectId) {
+                    setError(undefined)
+
                     setProject(value.doc)
                 }
             })

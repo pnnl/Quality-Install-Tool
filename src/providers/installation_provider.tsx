@@ -97,6 +97,8 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
 
                     setInstallation(undefined)
                 } else if (value.doc?._id === installationId) {
+                    setError(undefined)
+
                     setInstallation(value.doc)
                 }
             })
