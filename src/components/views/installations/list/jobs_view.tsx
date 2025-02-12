@@ -66,12 +66,12 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 if (re.test(input)) {
                     return undefined
                 } else {
-                    return 'The job or task name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.'
+                    return 'The installation name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.'
                 }
             },
             input => {
                 if (installationDocumentNames.includes(input.trim())) {
-                    return 'Job name already exists. Please choose a different name.'
+                    return 'Installation name already exists. Please choose a different name.'
                 } else {
                     return undefined
                 }
