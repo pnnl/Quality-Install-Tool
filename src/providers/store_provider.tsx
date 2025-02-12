@@ -1,9 +1,23 @@
 import PouchDB from 'pouchdb'
 import React, { createContext, useCallback } from 'react'
 
+import { useDatabase } from './database_provider'
 import { type Base } from '../types/database.types'
 import { immutableUpsert } from '../utilities/path_utils'
 import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
+
+export function useChangeEventHandler(): (
+    doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
+) => Promise<void> {
+    const db = useDatabase()
+
+    return useCallback(
+        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
+            await db.put<Base>(doc)
+        },
+        [],
+    )
+}
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined

@@ -1,25 +1,19 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import MdxWrapper from '../../../mdx_wrapper'
-import { useDatabase } from '../../../../providers/database_provider'
 import { useProject } from '../../../../providers/project_provider'
-import StoreProvider from '../../../../providers/store_provider'
+import StoreProvider, {
+    useChangeEventHandler,
+} from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 import { type Base } from '../../../../types/database.types'
 
 interface MdxProjectViewProps {}
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
-    const db = useDatabase()
-
     const [project] = useProject()
 
-    const handleChange = useCallback(
-        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
-            await db.put<Base>(doc)
-        },
-        [],
-    )
+    const handleChange = useChangeEventHandler()
 
     if (project) {
         return (

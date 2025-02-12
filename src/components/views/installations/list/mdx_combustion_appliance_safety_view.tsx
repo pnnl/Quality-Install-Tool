@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import LocationStr from '../../../location_str'
 import MdxWrapper from '../../../mdx_wrapper'
-import { useDatabase } from '../../../../providers/database_provider'
 import { useProject } from '../../../../providers/project_provider'
-import StoreProvider from '../../../../providers/store_provider'
+import StoreProvider, {
+    useChangeEventHandler,
+} from '../../../../providers/store_provider'
 import { useWorkflow } from '../../../../providers/workflow_provider'
 import { type Base } from '../../../../types/database.types'
 import { someLocation } from '../../../../utilities/location_utils'
@@ -12,18 +13,11 @@ import { someLocation } from '../../../../utilities/location_utils'
 interface MdxCombustionSafetyViewProps {}
 
 const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
-    const db = useDatabase()
-
     const [project] = useProject()
 
     const workflow = useWorkflow()
 
-    const handleChange = useCallback(
-        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
-            await db.put<Base>(doc)
-        },
-        [],
-    )
+    const handleChange = useChangeEventHandler()
 
     if (project && workflow) {
         return (
