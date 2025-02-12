@@ -25,7 +25,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     step,
     hint,
     onChange,
-}): any => {
+}) => {
     const id = useId()
 
     const valueValidators = useMemo<Validator<number>[]>(() => {

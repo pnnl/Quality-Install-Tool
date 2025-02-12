@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+import PouchDB from 'pouchdb'
 import React, { useEffect, useState } from 'react'
 
 import Photo from './photo'
@@ -87,7 +88,7 @@ interface PhotoWrapperProps {
     label: string
     required: boolean
     docId: string
-    parent?: any
+    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
 }
 
 /**

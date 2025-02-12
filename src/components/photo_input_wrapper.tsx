@@ -139,10 +139,10 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
 
                     try {
                         if (imgFile.type === 'image/heic') {
-                            const jpegBlob: any = await heic2any({
+                            const jpegBlob = (await heic2any({
                                 blob: imgFile,
                                 toType: 'image/jpeg',
-                            })
+                            })) as Blob
                             const compressedFile = await compressPhoto(jpegBlob)
                             await handleImageUpsert(compressedFile)
                         } else {

@@ -1,8 +1,10 @@
 import { get } from 'lodash'
+import PouchDB from 'pouchdb'
 import React from 'react'
 
 import LabelValue from './label_value'
 import { StoreContext } from '../providers/store_provider'
+import { type Base } from '../types/database.types'
 
 interface LabelValueWrapperProps {
     label: string
@@ -10,7 +12,7 @@ interface LabelValueWrapperProps {
     prefix?: string
     suffix?: string
     required?: boolean
-    parent?: any
+    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
 }
 
 const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({

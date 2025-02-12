@@ -1,11 +1,13 @@
 import { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import React from 'react'
 
+import { type BaseData } from '../types/database.types'
+
 interface RepeatableProps {
     label: string
     path: string
     children: any
-    data?: any
+    data?: BaseData
 }
 
 // Define an extended props type that includes the `id` prop
@@ -15,7 +17,7 @@ interface CustomProps {
     label?: string
     children?: ReactNode
     fromParent?: string
-    docId?: string
+    docId?: string | undefined
 }
 
 const Repeatable: FC<RepeatableProps> = ({
@@ -30,7 +32,7 @@ const Repeatable: FC<RepeatableProps> = ({
 
     const fetchAppliances = async () => {
         try {
-            const appliances_data = dbData[path]
+            const appliances_data = (dbData as any)?.[path]
             if (appliances_data && Object.keys(appliances_data).length > 0) {
                 setItems(appliances_data)
                 setItemsKeys(Object.keys(appliances_data))

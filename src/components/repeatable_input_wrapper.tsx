@@ -1,13 +1,15 @@
+import PouchDB from 'pouchdb'
 import React from 'react'
 
 import RepeatableInput from './repeatable_input'
 import { StoreContext } from '../providers/store_provider'
+import { type Base } from '../types/database.types'
 
 interface RepeatableInputWrapperProps {
     label: string
     path: string
-    children: any
-    parent?: any
+    children: React.ReactNode
+    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
     max?: number
     count?: number
     fixed?: boolean

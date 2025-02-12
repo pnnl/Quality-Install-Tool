@@ -1,15 +1,17 @@
 import { get } from 'lodash'
+import PouchDB from 'pouchdb'
 import React from 'react'
 
 import ShowOrHide, { type MatchConditions } from './show_or_hide'
 import { StoreContext } from '../providers/store_provider'
+import { type Base } from '../types/database.types'
 
 interface ShowOrHideWrapperProps {
     children: React.ReactNode
     visible: boolean
     path?: string
     value?: string | string[] // value can be a single string or an array of strings
-    parent?: any
+    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
     matchCondition?: MatchConditions // Optional condition (default: 'Equals')
 }
 

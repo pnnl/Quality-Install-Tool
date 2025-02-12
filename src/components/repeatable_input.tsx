@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap'
 import Collapsible from './collapsible'
 import React from 'react'
 import { useDatabase } from '../providers/database_provider'
+import { type Base, type BaseData } from '../types/database.types'
 
 interface RepeatableProps {
     label: string
@@ -11,8 +12,8 @@ interface RepeatableProps {
     count: number // Default number of repetition
     children: any
     fixed: boolean
-    data?: any
-    docId: string
+    data?: BaseData | undefined
+    docId: string | undefined
 }
 
 // Define an extended props type that includes the `id` prop
@@ -90,7 +91,7 @@ const RepeatableInput: FC<RepeatableProps> = ({
 
     const fetchItems = async () => {
         try {
-            const dataFromDB = data[path]
+            const dataFromDB = (data as any)?.[path]
             if (dataFromDB && Object.keys(dataFromDB).length > 0) {
                 if (!fixed) {
                     // When fixed is false, directly set items from the database
@@ -132,12 +133,19 @@ const RepeatableInput: FC<RepeatableProps> = ({
 
     // Handler to remove an item
     const removeAnItem = async (item_key: string) => {
+        if (!docId) {
+            return
+        }
+
         const updatedItems = Object.fromEntries(
             Object.entries(items).filter(([key, _]) => key !== item_key),
         )
 
         try {
-            const doc: any = await db.get(docId)
+            const doc = await db.get<Base>(docId, {
+                attachments: true,
+                binary: true,
+            })
             const updatedData = { ...doc.data_, [path]: updatedItems }
 
             const attachments = doc._attachments
@@ -154,14 +162,14 @@ const RepeatableInput: FC<RepeatableProps> = ({
                 Object.keys(attachments).map(attachmentId => {
                     if (
                         attachmentId.includes(path + '.' + item_key) &&
-                        doc._attachments[attachmentId]
+                        attachments[attachmentId]
                     ) {
-                        delete doc._attachments[attachmentId]
+                        delete attachments[attachmentId]
                     }
                 })
             if (updatedDoc)
                 // Save the updated document back to the database
-                await db.put(updatedDoc)
+                await db.put<Base>(updatedDoc)
             fetchItems()
         } catch (err) {
             console.error('Failed to remove an element:', err)
