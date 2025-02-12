@@ -57,7 +57,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     const installationNameValidators = useMemo<Array<Validator<string>>>(() => {
         const re = /^(?![\s-])[a-z0-9, -]{1,64}$/i
 
-        const installationNames = installations.map(installation => {
+        const installationDocumentNames = installations.map(installation => {
             return installation.metadata_.doc_name
         })
 
@@ -70,7 +70,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 }
             },
             input => {
-                if (installationNames.includes(input.trim())) {
+                if (installationDocumentNames.includes(input.trim())) {
                     return 'Job name already exists. Please choose a different name.'
                 } else {
                     return undefined

@@ -47,7 +47,7 @@ const Home: React.FC<HomeProps> = () => {
     const projectNameValidators = useMemo<Array<Validator<string>>>(() => {
         const re = /^(?![\s-])[a-z0-9, -]{1,64}$/i
 
-        const projectNames = projects.map(project => {
+        const projectDocumentNames = projects.map(project => {
             return project.metadata_.doc_name
         })
 
@@ -60,7 +60,7 @@ const Home: React.FC<HomeProps> = () => {
                 }
             },
             input => {
-                if (projectNames.includes(input.trim())) {
+                if (projectDocumentNames.includes(input.trim())) {
                     return 'Project name already exists. Please choose a different name.'
                 } else {
                     return undefined

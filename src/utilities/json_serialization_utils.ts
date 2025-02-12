@@ -3,7 +3,7 @@ import PouchDB from 'pouchdb'
 import {
     getInstallations,
     getProject,
-    getProjectDocNames,
+    getProjectDocumentNames,
     putInstallation,
     putProject,
 } from './database_utils'
@@ -110,7 +110,7 @@ export async function importJSONDocument(
             const createdAt: Date = new Date()
             const lastModifiedAt: Date = createdAt
 
-            const projectDocNames = await getProjectDocNames(db)
+            const projectDocNames = await getProjectDocumentNames(db)
 
             const projectId: PouchDB.Core.DocumentId = crypto.randomUUID()
 

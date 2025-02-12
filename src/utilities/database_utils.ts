@@ -325,7 +325,7 @@ export async function getProject(
     return doc
 }
 
-export async function getProjectDocNames(
+export async function getProjectDocumentNames(
     db: PouchDB.Database<Base>,
 ): Promise<Array<string>> {
     await db.info()
