@@ -14,16 +14,16 @@ export function comparator<T extends Base>(
         case 'created_at':
             switch (order) {
                 case 'asc':
-                    return (a: T, b: T): number => {
-                        const aDate: Date = new Date(a.metadata_.created_at)
-                        const bDate: Date = new Date(b.metadata_.created_at)
+                    return (a, b) => {
+                        const aDate = new Date(a.metadata_.created_at)
+                        const bDate = new Date(b.metadata_.created_at)
 
                         return aDate.getTime() - bDate.getTime()
                     }
                 case 'desc':
-                    return (a: T, b: T): number => {
-                        const aDate: Date = new Date(a.metadata_.created_at)
-                        const bDate: Date = new Date(b.metadata_.created_at)
+                    return (a, b) => {
+                        const aDate = new Date(a.metadata_.created_at)
+                        const bDate = new Date(b.metadata_.created_at)
 
                         return bDate.getTime() - aDate.getTime()
                     }
@@ -31,24 +31,16 @@ export function comparator<T extends Base>(
         case 'last_modified_at':
             switch (order) {
                 case 'asc':
-                    return (a: T, b: T): number => {
-                        const aDate: Date = new Date(
-                            a.metadata_.last_modified_at,
-                        )
-                        const bDate: Date = new Date(
-                            b.metadata_.last_modified_at,
-                        )
+                    return (a, b) => {
+                        const aDate = new Date(a.metadata_.last_modified_at)
+                        const bDate = new Date(b.metadata_.last_modified_at)
 
                         return aDate.getTime() - bDate.getTime()
                     }
                 case 'desc':
-                    return (a: T, b: T): number => {
-                        const aDate: Date = new Date(
-                            a.metadata_.last_modified_at,
-                        )
-                        const bDate: Date = new Date(
-                            b.metadata_.last_modified_at,
-                        )
+                    return (a, b) => {
+                        const aDate = new Date(a.metadata_.last_modified_at)
+                        const bDate = new Date(b.metadata_.last_modified_at)
 
                         return bDate.getTime() - aDate.getTime()
                     }

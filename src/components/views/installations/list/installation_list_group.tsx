@@ -17,9 +17,7 @@ const InstallationListGroup: React.FC<InstallationListGroupProps> = ({
     children,
 }) => {
     const handleEdit = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -31,9 +29,7 @@ const InstallationListGroup: React.FC<InstallationListGroupProps> = ({
     )
 
     const handleDelete = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 

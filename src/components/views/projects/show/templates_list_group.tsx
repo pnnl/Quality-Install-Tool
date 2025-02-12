@@ -32,7 +32,7 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
         }, new Map())
     }, [installations])
 
-    const workflowNames: Array<keyof typeof TEMPLATES> = Object.keys(TEMPLATES)
+    const workflowNames = Object.keys(TEMPLATES)
 
     if (workflowNames.length === 0) {
         return null
@@ -40,9 +40,9 @@ const TemplatesListGroup: React.FC<TemplatesListGroupProps> = ({
         return (
             <ListGroup>
                 {workflowNames.map(workflowName => {
-                    const workflowTitle: string = TEMPLATES[workflowName].title
+                    const workflowTitle = TEMPLATES[workflowName].title
 
-                    const installationDocsCount: number =
+                    const installationDocsCount =
                         installationsByWorkflowName.get(workflowName)?.length ??
                         0
 

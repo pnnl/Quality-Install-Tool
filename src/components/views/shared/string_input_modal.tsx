@@ -35,9 +35,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     }, [value, validators])
 
     const handleCancel = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -49,16 +47,14 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     )
 
     const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
             onChange && (await onChange(event.target.value))
         },
         [onChange],
     )
 
     const handleConfirm = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -69,12 +65,12 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
         [onConfirm],
     )
 
-    const handleHide = useCallback(async (): Promise<void> => {
+    const handleHide = useCallback(async () => {
         onHide && (await onHide())
     }, [onHide])
 
     const handleKeyUp = useCallback(
-        async (event: React.KeyboardEvent<HTMLInputElement>): Promise<void> => {
+        async (event: React.KeyboardEvent<HTMLInputElement>) => {
             if (event.key === 'Enter' && errorMessages.length === 0) {
                 onConfirm && (await onConfirm())
             }

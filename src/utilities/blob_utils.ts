@@ -1,5 +1,5 @@
 export function sendBlob(blob: Blob, fileName: string): void {
-    const url: string = URL.createObjectURL(blob)
+    const url = URL.createObjectURL(blob)
 
     const el: HTMLAnchorElement = document.createElement('a')
 

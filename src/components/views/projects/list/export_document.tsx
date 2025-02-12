@@ -4,11 +4,9 @@ import { Button } from 'react-bootstrap'
 import { TfiImport } from 'react-icons/tfi'
 
 import { useDatabase } from '../../../../providers/database_provider'
-import { type Base, type Project } from '../../../../types/database.types'
 import { sendBlob } from '../../../../utilities/blob_utils'
 import { getProject } from '../../../../utilities/database_utils'
 import {
-    type JSONDocument,
     JSON_DOCUMENT_CONTENT_TYPE,
     JSON_DOCUMENT_FILE_EXTENSION,
     exportJSONDocument,
@@ -19,25 +17,22 @@ interface ExportDocProps {
 }
 
 const ExportDoc: React.FC<ExportDocProps> = ({ projectId }) => {
-    const db: PouchDB.Database<Base> = useDatabase()
+    const db = useDatabase()
 
     const handleClick = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
-            const projectDoc: PouchDB.Core.Document<Project> &
-                PouchDB.Core.GetMeta = await getProject(db, projectId)
+            const projectDoc = await getProject(db, projectId)
 
-            const data: JSONDocument = await exportJSONDocument(db, projectId)
+            const data = await exportJSONDocument(db, projectId)
 
-            const blob: Blob = new Blob([JSON.stringify(data)], {
+            const blob = new Blob([JSON.stringify(data)], {
                 type: JSON_DOCUMENT_CONTENT_TYPE,
             })
 
-            const fileName: string = `${projectDoc.metadata_.doc_name} ${new Date().toUTCString()}${JSON_DOCUMENT_FILE_EXTENSION}`
+            const fileName = `${projectDoc.metadata_.doc_name} ${new Date().toUTCString()}${JSON_DOCUMENT_FILE_EXTENSION}`
 
             sendBlob(blob, fileName)
 

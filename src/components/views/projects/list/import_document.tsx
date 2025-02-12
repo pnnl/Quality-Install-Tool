@@ -3,7 +3,6 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
 import { useDatabase } from '../../../../providers/database_provider'
-import { type Base } from '../../../../types/database.types'
 import {
     type JSONDocument,
     JSON_DOCUMENT_FILE_EXTENSION,
@@ -16,22 +15,20 @@ interface ImportDocProps {
 }
 
 const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
-    const db: PouchDB.Database<Base> = useDatabase()
+    const db = useDatabase()
 
     const ref = useRef<HTMLInputElement>(null)
 
     const [error, setError] = useState<string | undefined>(undefined)
 
     const reader = useMemo<FileReader>(() => {
-        const _reader: FileReader = new FileReader()
+        const _reader = new FileReader()
 
-        _reader.onload = async (
-            event: ProgressEvent<FileReader>,
-        ): Promise<void> => {
-            const text: string = (event.target as FileReader).result as string
+        _reader.onload = async (event: ProgressEvent<FileReader>) => {
+            const text = (event.target as FileReader).result as string
 
             try {
-                const data: JSONDocument = JSON.parse(text)
+                const data = JSON.parse(text)
 
                 try {
                     const [projectResponse, installationResponses] =
@@ -56,9 +53,9 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
     }, [])
 
     const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
             if (event.target.files) {
-                const file: File = event.target.files[0]
+                const file = event.target.files[0]
 
                 if (file) {
                     if (file.name.endsWith(JSON_DOCUMENT_FILE_EXTENSION)) {

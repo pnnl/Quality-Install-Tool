@@ -17,9 +17,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     onHide,
 }) => {
     const handleCancel = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -31,9 +29,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     )
 
     const handleConfirm = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -44,7 +40,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         [onConfirm],
     )
 
-    const handleHide = useCallback(async (): Promise<void> => {
+    const handleHide = useCallback(async () => {
         onHide && (await onHide())
     }, [onHide])
 

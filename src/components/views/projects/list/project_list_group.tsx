@@ -22,9 +22,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     onSelect,
 }) => {
     const handleEdit = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -36,9 +34,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     )
 
     const handleDelete = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
@@ -50,9 +46,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     )
 
     const handleSelect = useCallback(
-        async (
-            event: React.MouseEvent<HTMLButtonElement>,
-        ): Promise<boolean> => {
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
