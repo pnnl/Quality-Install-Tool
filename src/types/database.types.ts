@@ -7,7 +7,6 @@ import { type Timestamp, type TimestampSource } from './timestamp.type'
 import TEMPLATES from '../templates'
 
 export interface Base {
-    id: PouchDB.Core.DocumentId
     type: string
     children: PouchDB.Core.DocumentId[]
     data_: BaseData

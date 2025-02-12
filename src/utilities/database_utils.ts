@@ -71,7 +71,6 @@ export function newInstallation(
         _rev,
         _attachments,
 
-        id: _id,
         type: 'installation',
         children: [],
         data_: {},
@@ -296,7 +295,6 @@ export function newProject(
         _rev,
         _attachments,
 
-        id: _id,
         type: 'project',
         children: [],
         data_: {},
