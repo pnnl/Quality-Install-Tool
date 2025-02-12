@@ -15,15 +15,15 @@ import {
 // BASE
 //
 
-export async function setDocumentName<Model>(
+export async function setDocumentName<Model extends Base>(
     db: PouchDB.Database<Base>,
     id: PouchDB.Core.DocumentId,
     docName: string,
 ): Promise<PouchDB.UpsertResponse> {
     const lastModifiedAt = new Date()
 
-    const diffFun: PouchDB.UpsertDiffCallback<Base & Model> = (
-        doc: Partial<PouchDB.Core.Document<Base & Model>>,
+    const diffFun: PouchDB.UpsertDiffCallback<Model> = (
+        doc: Partial<PouchDB.Core.Document<Model>>,
     ) => {
         if (doc) {
             return {
@@ -33,15 +33,16 @@ export async function setDocumentName<Model>(
                     doc_name: docName,
                     last_modified_at: lastModifiedAt,
                 },
-            } as Base & Model & Partial<PouchDB.Core.IdMeta>
+            } as Model & Partial<PouchDB.Core.IdMeta>
         } else {
             return null as PouchDB.CancelUpsert
         }
     }
 
-    const upsertResponse: PouchDB.UpsertResponse = await db.upsert<
-        Base & Model
-    >(id, diffFun)
+    const upsertResponse: PouchDB.UpsertResponse = await db.upsert<Model>(
+        id,
+        diffFun,
+    )
 
     return upsertResponse
 }
