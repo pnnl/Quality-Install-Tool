@@ -78,6 +78,34 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
         reloadProject()
     }, [reloadProject])
 
+    useEffect(() => {
+        const changes = db
+            .changes<Project>({
+                live: true,
+                since: 'now',
+                include_docs: true,
+                attachments,
+                binary: attachments ? true : undefined,
+                doc_ids: projectId ? [projectId] : undefined,
+            })
+            .on('change', value => {
+                if (value.deleted) {
+                    setError({
+                        id: value.id,
+                        status: 404,
+                    })
+
+                    setProject(undefined)
+                } else if (value.doc?._id === projectId) {
+                    setProject(value.doc)
+                }
+            })
+
+        return () => {
+            changes.cancel()
+        }
+    }, [projectId])
+
     if (error) {
         return (
             <div className="container">

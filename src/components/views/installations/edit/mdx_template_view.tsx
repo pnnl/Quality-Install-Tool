@@ -19,16 +19,13 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
 
     const workflow = useWorkflow()
 
-    const [installation, setInstallation, reloadInstallation] =
-        useInstallation()
+    const [installation] = useInstallation()
 
     const handleChange = useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             await db.put<Base>(doc)
-
-            await reloadInstallation()
         },
-        [installation, reloadInstallation],
+        [],
     )
 
     if (project && installation && workflow) {

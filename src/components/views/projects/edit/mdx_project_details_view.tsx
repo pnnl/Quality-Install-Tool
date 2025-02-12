@@ -12,15 +12,13 @@ interface MdxProjectViewProps {}
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
 
-    const [project, setProject, reloadProject] = useProject()
+    const [project] = useProject()
 
     const handleChange = useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             await db.put<Base>(doc)
-
-            await reloadProject()
         },
-        [reloadProject],
+        [],
     )
 
     if (project) {

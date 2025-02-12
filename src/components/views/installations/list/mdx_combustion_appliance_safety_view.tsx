@@ -14,17 +14,15 @@ interface MdxCombustionSafetyViewProps {}
 const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
     const db = useDatabase()
 
-    const [project, setProject, reloadProject] = useProject()
+    const [project] = useProject()
 
     const workflow = useWorkflow()
 
     const handleChange = useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             await db.put<Base>(doc)
-
-            await reloadProject()
         },
-        [reloadProject],
+        [],
     )
 
     if (project && workflow) {
