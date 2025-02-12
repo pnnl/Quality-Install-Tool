@@ -77,7 +77,9 @@ const RepeatableWrapper = React.lazy(
     () => import('../components/repeatable_wrapper'),
 )
 const SelectWrapper = React.lazy(() => import('../components/select_wrapper'))
-const ShowOrHide = React.lazy(() => import('../components/show_or_hide'))
+const ShowOrHideWrapper = React.lazy(
+    () => import('../components/show_or_hide_wrapper'),
+)
 const StringInputWrapper = React.lazy(
     () => import('../components/string_input_wrapper'),
 )
@@ -119,7 +121,7 @@ export const COMPONENTS = {
     Repeatable: RepeatableWrapper,
     RepeatableInput: RepeatableInputWrapper,
     Select: SelectWrapper,
-    ShowOrHide: ShowOrHide,
+    ShowOrHide: ShowOrHideWrapper,
     StringInput: StringInputWrapper,
     Tab,
     Tabs,

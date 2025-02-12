@@ -1,13 +1,10 @@
-import { get } from 'lodash'
 import React from 'react'
-
-import { StoreContext } from '../providers/store_provider'
 
 // The type for the match conditions (Excludes, Includes, Equals)
 // 'Equals': This condition checks if the value at the specified path is exactly equal to the value.
 // 'Excludes': This condition checks if the value at the specified path does not contain any of the values specified in the value prop.
 // 'Includes': This condition checks if the value at the specified path contains any of the values in the value prop.
-type MatchConditions = 'Equals' | 'Excludes' | 'Includes'
+export type MatchConditions = 'Equals' | 'Excludes' | 'Includes'
 
 // Helper function for handling of both single value and array
 function toArray<T>(val: T | T[] | undefined): T[] {
@@ -47,9 +44,8 @@ function checkCondition<T>(
 interface ShowOrHideProps {
     children: React.ReactNode
     visible: boolean
-    path?: string
+    pathValue?: string
     value?: string | string[] // value can be a single string or an array of strings
-    parent?: any
     matchCondition?: MatchConditions // Optional condition (default: 'Equals')
 }
 
@@ -95,36 +91,19 @@ interface ShowOrHideProps {
 const ShowOrHide: React.FC<ShowOrHideProps> = ({
     children,
     visible,
-    path,
+    pathValue,
     value,
-    parent,
     matchCondition = 'Equals',
 }) => {
-    return (
-        <StoreContext.Consumer>
-            {({ doc }) => {
-                const currentData = parent
-                    ? parent.data_
-                    : doc
-                      ? doc.data_
-                      : undefined
-
-                const pathValue = path ? get(currentData, path) : undefined
-
-                const isVisible =
-                    visible ||
-                    (path &&
-                        checkCondition(
-                            pathValue,
-                            toArray(pathValue),
-                            toArray(value),
-                            matchCondition,
-                        ))
-
-                return isVisible ? children : null
-            }}
-        </StoreContext.Consumer>
-    )
+    return visible ||
+        checkCondition(
+            pathValue,
+            toArray(pathValue),
+            toArray(value),
+            matchCondition,
+        )
+        ? children
+        : null
 }
 
 export default ShowOrHide
