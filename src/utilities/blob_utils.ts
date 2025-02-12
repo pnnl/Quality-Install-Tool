@@ -11,7 +11,7 @@ export function sendBlob(blob: Blob, fileName: string): void {
         document.body.appendChild(el)
 
         el.click()
-    } catch (cause: unknown) {
+    } catch (cause) {
         throw new Error('sendBlob: Failed to send Blob.', {
             cause,
         })

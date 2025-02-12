@@ -1,8 +1,85 @@
-import React, { FC, useEffect, useState } from 'react'
 import { get } from 'lodash'
-import { StoreContext } from './store'
+import React, { useEffect, useState } from 'react'
+
 import Photo from './photo'
 import { useDatabase } from '../providers/database_provider'
+import { StoreContext } from '../providers/store_provider'
+import { type Base, type PhotoMetadata } from '../types/database.types'
+
+async function getMatchingAttachmentsFromParent(
+    db: PouchDB.Database<Base>,
+    projectDocId: PouchDB.Core.DocumentId,
+    id: PouchDB.Core.AttachmentId,
+): Promise<
+    {
+        id: string
+        photo: Blob | undefined
+        metadata: PhotoMetadata | undefined
+    }[]
+> {
+    const doc = await db.get(projectDocId, { attachments: true, binary: true })
+
+    const attachments = (doc._attachments ?? {}) as PouchDB.Core.Attachments
+
+    // Filter attachments whose IDs start with given 'id;
+    return Object.keys(attachments)
+        .filter(attachmentId => attachmentId.startsWith(id))
+        .map(attachmentId => {
+            const attachment = attachments[
+                attachmentId
+            ] as PouchDB.Core.FullAttachment
+
+            const photoBlob = attachment.data as Blob
+
+            const attachmentIdParts = attachmentId.split('.')
+
+            /* Fetching location metadata for objects stored in as nested objects
+             *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
+             */
+            let location_metadata = doc.metadata_?.attachments[
+                attachmentId
+            ] as PhotoMetadata
+
+            if (attachmentIdParts.length === 3) {
+                // Access nested attachment metadata using the split parts
+                const [firstPart, secondPart, thirdPart] = attachmentIdParts
+                location_metadata = (
+                    doc.metadata_.attachments[firstPart] as any
+                )?.[secondPart]?.[thirdPart]
+            }
+
+            return {
+                id: attachmentId,
+                photo: photoBlob, // Blob data
+                metadata: location_metadata, // Metadata if available
+            }
+        })
+}
+
+function getMatchingAttachments(
+    doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined,
+    id: PouchDB.Core.AttachmentId,
+): {
+    id: string
+    photo: Blob | undefined
+    metadata: PhotoMetadata | undefined
+}[] {
+    if (doc && doc._attachments) {
+        return Object.keys(doc._attachments)
+            .filter(key => key.startsWith(id))
+            .map(key => {
+                return {
+                    id: key,
+                    photo: (
+                        doc?._attachments?.[key] as PouchDB.Core.FullAttachment
+                    )?.data as Blob,
+                    metadata: doc?.metadata_.attachments[key] as PhotoMetadata,
+                }
+            })
+    } else {
+        return []
+    }
+}
 
 interface PhotoWrapperProps {
     children: React.ReactNode
@@ -26,7 +103,7 @@ interface PhotoWrapperProps {
  * will always show and the Photo component will indicate when the photo is missing.
  * @param project Optional field. Project doc, for Building number photo
  */
-const PhotoWrapper: FC<PhotoWrapperProps> = ({
+const PhotoWrapper: React.FC<PhotoWrapperProps> = ({
     children,
     id,
     label,
@@ -34,115 +111,44 @@ const PhotoWrapper: FC<PhotoWrapperProps> = ({
     docId,
     parent,
 }) => {
-    const [matchingAttachments, setMatchingAttachments] = useState<any>({})
     const db = useDatabase()
+
+    const [matchingAttachments, setMatchingAttachments] = useState<
+        {
+            id: string
+            photo: Blob | undefined
+            metadata: PhotoMetadata | undefined
+        }[]
+    >([])
 
     useEffect(() => {
         if (parent) {
-            const projectId = parent?._id || docId
-            getMatchingAttachmentsFromParent(projectId)
+            getMatchingAttachmentsFromParent(db, parent._id, id).then(
+                matchingAttachments => {
+                    setMatchingAttachments(matchingAttachments)
+                },
+            )
         }
     }, [parent])
 
-    const getMatchingAttachmentsFromParent = (projectDocId: any) => {
-        db.get(projectDocId, { attachments: true })
-            .then(doc => {
-                // Filter attachments whose IDs start with given 'id;
-                // @ts-ignore: TS2769
-                const matchingAttachments = Object.keys(doc._attachments)
-                    .filter(attachmentId => attachmentId.startsWith(id))
-                    .map(attachmentId => {
-                        // @ts-ignore: TS18048
-                        const attachment = doc._attachments[attachmentId]
-
-                        // Decode the Base64 data to a Blob
-                        const byteCharacters = Uint8Array.from(
-                            // @ts-ignore: TS2339
-                            window.atob(attachment.data),
-                            c => c.charCodeAt(0),
-                        )
-                        const photoBlob = new Blob([byteCharacters], {
-                            type: attachment.content_type,
-                        })
-
-                        const attachmentIdParts = attachmentId.split('.')
-                        /* Fetching location metadata for objects stored in as nested objects
-                         *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
-                         */
-                        let location_metadata =
-                            doc.metadata_?.attachments?.[attachmentId]
-                        if (attachmentIdParts.length > 1) {
-                            // Access nested attachment metadata using the split parts
-                            const [firstPart, secondPart, thirdPart] =
-                                attachmentIdParts
-                            location_metadata =
-                                // @ts-ignore: TS7053
-                                doc?.metadata_?.attachments[firstPart]?.[
-                                    secondPart
-                                ]?.[thirdPart]
-                        }
-
-                        return {
-                            id: attachmentId,
-                            photo: photoBlob, // Blob data
-                            metadata: location_metadata, // Metadata if available
-                        }
-                    })
-
-                setMatchingAttachments(matchingAttachments)
-                // Set the filtered attachments in state
-            })
-            .catch((err: any) => {
-                console.error('Failed to get matching attachments:', err)
-            })
-    }
-    const getMatchingAttachments = (attachments: {}, id: string) => {
-        const matchingAttachments: {
-            id: string
-            photo: any
-            metadata: any
-        }[] = []
-
-        Object.keys(attachments).forEach(key => {
-            // If the attachment name starts with the specified prefix
-            if (key.startsWith(id)) {
-                // Add the attachment information to the result array
-                const attachment_data = Object.getOwnPropertyDescriptor(
-                    attachments,
-                    key,
-                )?.value
-
-                matchingAttachments.push({
-                    id: key,
-                    photo: attachment_data?.blob,
-                    metadata: attachment_data?.metadata,
-                })
-            }
-        })
-        return matchingAttachments
-    }
-
     return (
         <StoreContext.Consumer>
-            {({ attachments, data }) => {
-                if (data)
-                    return (
-                        <Photo
-                            description={children}
-                            label={label}
-                            photos={
-                                parent
-                                    ? matchingAttachments
-                                    : getMatchingAttachments(attachments, id)
-                            }
-                            required={required}
-                            noteValue={
-                                get(data, `${id}_note`)
-                                    ? get(data, `${id}_note`)
-                                    : ''
-                            }
-                        />
-                    )
+            {({ doc }) => {
+                const noteValue = doc && get(doc.data_, `${id}_note`)
+
+                return (
+                    <Photo
+                        description={children}
+                        label={label}
+                        photos={
+                            parent
+                                ? matchingAttachments
+                                : getMatchingAttachments(doc, id)
+                        }
+                        required={required}
+                        noteValue={noteValue ?? ''}
+                    />
+                )
             }}
         </StoreContext.Consumer>
     )

@@ -1,11 +1,12 @@
-import React, { Suspense } from 'react'
+import React, { useCallback } from 'react'
 
 import LocationStr from '../../../location_str'
 import MdxWrapper from '../../../mdx_wrapper'
-import { StoreProvider } from '../../../store'
 import { useDatabase } from '../../../../providers/database_provider'
 import { useProject } from '../../../../providers/project_provider'
+import StoreProvider from '../../../../providers/store_provider'
 import { useWorkflow } from '../../../../providers/workflow_provider'
+import { type Base } from '../../../../types/database.types'
 import { someLocation } from '../../../../utilities/location_utils'
 
 interface MdxCombustionSafetyViewProps {}
@@ -13,9 +14,18 @@ interface MdxCombustionSafetyViewProps {}
 const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
     const db = useDatabase()
 
-    const [project] = useProject()
+    const [project, setProject, reloadProject] = useProject()
 
     const workflow = useWorkflow()
+
+    const handleChange = useCallback(
+        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
+            await db.put<Base>(doc)
+
+            await reloadProject()
+        },
+        [reloadProject],
+    )
 
     if (project && workflow) {
         return (
@@ -32,13 +42,11 @@ const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
                         </p>
                     )}
                 <br />
-                <StoreProvider db={db} docId={project._id}>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <MdxWrapper
-                            Component={workflow.template}
-                            project={project}
-                        />
-                    </Suspense>
+                <StoreProvider doc={project} onChange={handleChange}>
+                    <MdxWrapper
+                        Component={workflow.template}
+                        project={project}
+                    />
                 </StoreProvider>
             </>
         )

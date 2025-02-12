@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useId, useMemo } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 
 import { type Validator, validate } from '../../../utilities/validation_utils'
@@ -28,6 +28,8 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     onHide,
     onChange,
 }) => {
+    const id = useId()
+
     const errorMessages = useMemo<Array<string>>(() => {
         return validate(value, validators)
     }, [value, validators])
@@ -87,6 +89,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
             </Modal.Header>
             <Modal.Body>
                 <input
+                    id={id}
                     type="text"
                     value={value}
                     onChange={handleChange}

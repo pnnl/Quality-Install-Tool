@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Repeatable from './repeatable'
-import { StoreContext } from './store'
+import { StoreContext } from '../providers/store_provider'
 
 interface RepeatableWrapperProps {
     label: string
@@ -10,21 +10,6 @@ interface RepeatableWrapperProps {
     parent?: any
 }
 
-/**
- * A wrapper component for rendering repeatable elements that are linked to a database document.
- *
- * This component listens for changes in a database and automatically updates its content when the
- * associated document changes. It can either render data from a parent document (if provided) or
- * fetch data from the installation document. The component ensures that updates are reflected in real-time.
- *
- * @param {string} label - The label for the repeatable element, typically used for display or identification.
- * @param {string} path - The path used to access data in the context or database document.
- * @param {React.ReactNode} children - The child components that will be rendered inside the Repeatable component.
- * @param {any} [parent] - An optional parent document that can be used to override the default data source.
- *                        If provided, the parent (i.e., project) document will be fetched and its data will be used.
- *
- * @returns {JSX.Element} - A Repeatable component wrapped in context that automatically updates based on database changes.
- */
 const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
     label,
     path,
@@ -33,12 +18,14 @@ const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ data }) => {
+            {({ doc }) => {
                 return (
                     <Repeatable
                         path={path}
                         label={label}
-                        data={parent ? parent.data_ : data}
+                        data={
+                            parent ? parent.data_ : doc ? doc.data_ : undefined
+                        }
                     >
                         {children}
                     </Repeatable>

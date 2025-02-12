@@ -56,6 +56,7 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
             try {
                 const installation = await getInstallation(db, installationId, {
                     attachments,
+                    binary: attachments ? true : undefined,
                 })
 
                 setError(undefined)

@@ -1,94 +1,116 @@
-import type { FC } from 'react'
-import { useState } from 'react'
-import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import Form from 'react-bootstrap/Form'
-import InputGroup from 'react-bootstrap/InputGroup'
+import React, { useCallback, useId, useMemo } from 'react'
+import { FloatingLabel, Form, InputGroup } from 'react-bootstrap'
+
+import { type Validator, validate } from '../utilities/validation_utils'
 
 interface NumberInputProps {
-    id: string
-    label: string
-    prefix: string
-    suffix: string
-    updateValue: (inputValue: string) => void
-    value: number
-    min: number
-    max: number
-    hint: string
+    label: React.ReactNode
+    prefix: React.ReactNode
+    suffix: React.ReactNode
+    value: string
+    min?: number
+    max?: number
+    step?: number
+    hint: React.ReactNode
+    onChange: (value: string) => Promise<void>
 }
 
-/**
- * A component for inputing a number
- *
- * @param id The id for the underlying html input
- * @param label The component label
- * @param prefix Text to appear as a prefix to the NumberInput (e.g. '$' if the input
- * represents a number of dollars)
- * @param suffix Text to appear as a suffix to the NumberInput (e.g. 'SqFt')
- * @param updateValue A function called whenever the user changes the
- * input value. The function has the new input value as the sole arguement.
- * @param value The input value
- * @param min The minimum allowed value for the input field.
- * @param max The maximum allowed value for the input field.
- * @param hint Displays hint text for the component.
- */
-const NumberInput: FC<NumberInputProps> = ({
-    id,
+const NumberInput: React.FC<NumberInputProps> = ({
     label,
     prefix = '',
     suffix = '',
-    updateValue,
     value,
     min,
     max,
+    step,
     hint,
+    onChange,
 }): any => {
-    const validateInput = (inputValue: number): string => {
-        if (inputValue < min) {
-            return 'Input must be at least ' + String(min)
-        } else if (inputValue > max) {
-            return 'Input must be at most ' + String(max)
-        } else {
-            return ''
-        }
-    }
+    const id = useId()
 
-    const [error, setError] = useState<string>(validateInput(value))
-    const [localValue, setLocalValue] = useState<string>(
-        value as unknown as string,
+    const valueValidators = useMemo<Validator<number>[]>(() => {
+        return [
+            input => {
+                if (min && parseFloat(value) < min) {
+                    return `Input must be at least ${min}.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (max && parseFloat(value) > max) {
+                    return `Input must be at most ${max}.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (step && parseFloat(value) % step !== 0) {
+                    return `Input must be a multiple of ${step}.`
+                } else {
+                    return undefined
+                }
+            },
+        ]
+    }, [min, max, step, value])
+
+    const errorMessages = useMemo<string[]>(() => {
+        if (value) {
+            if (value.trim().length === 0) {
+                return []
+            } else {
+                const valueNumber = parseFloat(value)
+
+                if (isNaN(valueNumber)) {
+                    return ['Input must be a number.']
+                } else {
+                    return validate(valueNumber, valueValidators)
+                }
+            }
+        } else {
+            return []
+        }
+    }, [value, valueValidators])
+
+    const handleChange = useCallback(
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
+            await onChange(event.target.value)
+        },
+        [onChange],
     )
 
-    const handleChange = (inputValue: string): any => {
-        const inputValueNum: number = parseFloat(inputValue)
-        if (isNaN(inputValueNum)) {
-            setError('Input must be a number')
-        } else {
-            updateValue(inputValue)
-            setError(validateInput(inputValueNum))
-        }
-    }
+    const floatingLabel = (
+        <FloatingLabel controlId={id} label={label}>
+            <Form.Control
+                onChange={handleChange}
+                type="number"
+                min={min}
+                max={max}
+                step={step}
+                value={value ?? ''}
+                isInvalid={errorMessages.length > 0}
+            />
+        </FloatingLabel>
+    )
 
     return (
-        <InputGroup>
-            {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
-            <FloatingLabel className="mb-3" controlId={id} label={label}>
-                <Form.Control
-                    onChange={event => {
-                        setLocalValue(event.target.value)
-                        handleChange(event.target.value)
-                    }}
-                    type="number"
-                    value={localValue ?? ''}
-                    isInvalid={Boolean(error)}
-                />
-                {hint && <Form.Text>{hint}</Form.Text>}
-                {error && (
-                    <Form.Control.Feedback type="invalid">
-                        {error}
-                    </Form.Control.Feedback>
-                )}
-            </FloatingLabel>
-            {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
-        </InputGroup>
+        <div className="mb-3">
+            {prefix || suffix ? (
+                <InputGroup>
+                    {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}
+                    {floatingLabel}
+                    {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
+                </InputGroup>
+            ) : (
+                floatingLabel
+            )}
+            {hint && <Form.Text>{hint}</Form.Text>}
+            {errorMessages.length > 0 && (
+                <Form.Control.Feedback type="invalid">
+                    {errorMessages.join(' ')}
+                </Form.Control.Feedback>
+            )}
+        </div>
     )
 }
 

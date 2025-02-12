@@ -52,7 +52,7 @@ export interface ProjectMetadata extends BaseMetadata {
 }
 
 export interface FileMetadata {
-    filename: string
+    filename?: string
     timestamp: Timestamp
 }
 

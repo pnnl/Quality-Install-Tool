@@ -44,10 +44,10 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                     } else {
                         setError('Failed to save product document.')
                     }
-                } catch (cause: unknown) {
+                } catch (cause) {
                     setError('Failed to import JSON.')
                 }
-            } catch (cause: unknown) {
+            } catch (cause) {
                 setError('Failed to parse as JSON.')
             }
         }

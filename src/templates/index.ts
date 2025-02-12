@@ -1,5 +1,6 @@
 import { MDXProps } from 'mdx/types'
 import React from 'react'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 
 import DOECombustionApplianceSafetyTests from './doe_workflow_combustion_appliance_safety_tests.mdx'
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
@@ -24,9 +25,119 @@ import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
 // import Playground from './playground.mdx'
 
+const CheckboxWrapper = React.lazy(
+    () => import('../components/checkbox_wrapper'),
+)
+const ClimateZoneSelectWrapper = React.lazy(
+    () => import('../components/climate_zone_select_wrapper'),
+)
+const Collapsible = React.lazy(() => import('../components/collapsible'))
+const CombustionSafetyChecksLink = React.lazy(
+    () => import('./reusable/combustion_safety_checks_input.mdx'),
+)
+const CombustionSafetyChecksReport = React.lazy(
+    () => import('./reusable/combustion_safety_checks_report.mdx'),
+)
+const DateInputWrapper = React.lazy(
+    () => import('../components/date_input_wrapper'),
+)
+const DateStr = React.lazy(() => import('../components/date_str'))
+const FigureWrapper = React.lazy(() => import('../components/figure_wrapper'))
+const FileInputWrapper = React.lazy(
+    () => import('../components/file_input_wrapper'),
+)
+const LabelValueWrapper = React.lazy(
+    () => import('../components/label_value_wrapper'),
+)
+const NumberInputWrapper = React.lazy(
+    () => import('../components/number_input_wrapper'),
+)
+const PDFRendererWrapper = React.lazy(
+    () => import('../components/pdf_renderer_wrapper'),
+)
+const PageBreak = React.lazy(() => import('../components/page_break'))
+const PhotoInputWrapper = React.lazy(
+    () => import('../components/photo_input_wrapper'),
+)
+const PhotoWrapper = React.lazy(() => import('../components/photo_wrapper'))
+const PrintSectionWrapper = React.lazy(
+    () => import('../components/print_section wrapper'),
+)
+const ProjectInfoInputs = React.lazy(
+    () => import('./reusable/project_info_inputs.mdx'),
+)
+const ProjectInfoReport = React.lazy(
+    () => import('./reusable/project_info_report.mdx'),
+)
+const RadioWrapper = React.lazy(() => import('../components/radio_wrapper'))
+const RepeatableInputWrapper = React.lazy(
+    () => import('../components/repeatable_input_wrapper'),
+)
+const RepeatableWrapper = React.lazy(
+    () => import('../components/repeatable_wrapper'),
+)
+const SelectWrapper = React.lazy(() => import('../components/select_wrapper'))
+const ShowOrHide = React.lazy(() => import('../components/show_or_hide'))
+const StringInputWrapper = React.lazy(
+    () => import('../components/string_input_wrapper'),
+)
+const TableWrapper = React.lazy(() => import('../components/table_wrapper'))
+const TextInputWrapper = React.lazy(
+    () => import('../components/text_input_wrapper'),
+)
+const USStateSelectWrapper = React.lazy(
+    () => import('../components/us_state_select_wrapper'),
+)
+
+import {
+    type BaseData,
+    type BaseMetadata,
+    type Project,
+} from '../types/database.types'
+
+export const COMPONENTS = {
+    Button,
+    Checkbox: CheckboxWrapper,
+    ClimateZoneSelect: ClimateZoneSelectWrapper,
+    Collapsible,
+    CombustionSafetyChecksLink: CombustionSafetyChecksLink,
+    CombustionSafetyChecksReport: CombustionSafetyChecksReport,
+    DateInput: DateInputWrapper,
+    DateStr: DateStr,
+    Figure: FigureWrapper,
+    FileInput: FileInputWrapper,
+    LabelValue: LabelValueWrapper,
+    NumberInput: NumberInputWrapper,
+    PDFRenderer: PDFRendererWrapper,
+    PageBreak: PageBreak,
+    Photo: PhotoWrapper,
+    PhotoInput: PhotoInputWrapper,
+    PrintSection: PrintSectionWrapper,
+    ProjectInfoInputs: ProjectInfoInputs,
+    ProjectInfoReport: ProjectInfoReport,
+    Radio: RadioWrapper,
+    Repeatable: RepeatableWrapper,
+    RepeatableInput: RepeatableInputWrapper,
+    Select: SelectWrapper,
+    ShowOrHide: ShowOrHide,
+    StringInput: StringInputWrapper,
+    Tab,
+    Tabs,
+    TextInput: TextInputWrapper,
+    USStateSelect: USStateSelectWrapper,
+    Table: TableWrapper,
+}
+
+export interface TemplateProps {
+    components: typeof COMPONENTS
+    project?: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta
+    data: BaseData
+    metadata: BaseMetadata
+}
+
 export interface TemplateConfiguration {
     title: string
-    template: React.FC<MDXProps>
+    template: React.FC<MDXProps & TemplateProps>
 }
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {

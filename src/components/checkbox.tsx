@@ -1,14 +1,10 @@
-import React from 'react'
-import { FC, useCallback, useEffect, useState } from 'react'
-import { FloatingLabel } from 'react-bootstrap'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
+import React, { useCallback, useId } from 'react'
+import { Card, FloatingLabel, Form } from 'react-bootstrap'
 
 interface CheckboxProps {
-    id: string
     label: string
     options: string[]
-    updateValue: (values: string[]) => void
+    onChange: (values: string[]) => Promise<void>
     value: string[]
     hidden?: boolean
 }
@@ -23,45 +19,42 @@ interface CheckboxProps {
  * input value. The function has the new input value as the sole argument.
  * @param value The current value of the input
  */
-const Checkbox: FC<CheckboxProps> = ({
-    id,
+const Checkbox: React.FC<CheckboxProps> = ({
     label,
     options,
-    updateValue,
+    onChange,
     value: initialValue,
     hidden,
 }) => {
-    const [selectedValues, setSelectedValues] = useState<string[]>(initialValue)
+    const id = useId()
 
     const handleChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
             const { value, checked } = event.target
 
-            const newSelectedValues = checked
-                ? [...selectedValues, value]
-                : selectedValues.filter(item => item !== value)
+            const selectedValues = checked
+                ? [...initialValue, value]
+                : initialValue.filter(item => item !== value)
 
-            setSelectedValues(newSelectedValues)
-
-            updateValue(newSelectedValues)
+            await onChange(selectedValues)
         },
-        [selectedValues],
+        [initialValue, onChange],
     )
 
     return (
         <Card className="input-card" hidden={hidden}>
             <Card.Body>
-                <label className="mb-3 custom-label">{label}</label>
-                <Form.Group className="mb-3" controlId={id}>
-                    {options.map(option => (
+                {label && <p className="mb-3 custom-label">{label}</p>}
+                <Form.Group>
+                    {options.map((option, index) => (
                         <Form.Check
+                            key={index}
+                            id={`${id}_${index}`}
                             type="checkbox"
                             label={option}
-                            name={label}
                             value={option}
-                            checked={selectedValues.includes(option)}
+                            checked={initialValue.includes(option)}
                             onChange={handleChange}
-                            key={option}
                         />
                     ))}
                 </Form.Group>

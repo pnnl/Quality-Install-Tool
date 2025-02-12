@@ -1,6 +1,13 @@
 import exifr from 'exifr'
+import imageCompression from 'browser-image-compression'
 
 import { type PhotoMetadata } from '../types/database.types'
+
+const MAX_IMAGE_DIM_WIDTH: number = 800
+
+const MAX_IMAGE_DIM_HEIGHT: number = 500
+
+const MAX_SIZE_IN_MB: number = 0.2
 
 export const PHOTO_MIME_TYPES: string[] = [
     // 'image/avif',
@@ -11,6 +18,25 @@ export const PHOTO_MIME_TYPES: string[] = [
     // 'image/png',
     // 'image/tiff',
 ]
+
+/**
+ * Compresses an image file (Blob) while maintaining its aspect ratio and
+ * ensuring it does not exceed specified size limits.
+ *
+ * @param {Blob} imageBlob - The original image file as a Blob object that needs
+ *     to be compressed.
+ * @returns {Promise<Blob | undefined>} A Promise that resolves to the
+ *     compressed image file as a Blob. If an error occurs during compression,
+ *     it will be caught, and the function may return undefined.
+ * @throws {Error} - Throws an error if the compression process fails.
+ */
+export async function compressPhoto(blob: Blob) {
+    return await imageCompression(blob as File, {
+        maxSizeMB: MAX_SIZE_IN_MB,
+        useWebWorker: true,
+        maxWidthOrHeight: Math.max(MAX_IMAGE_DIM_HEIGHT, MAX_IMAGE_DIM_WIDTH),
+    })
+}
 
 /**
  * Retrieves EXIF metadata for the given photo, including the GPS coordinates
@@ -77,7 +103,7 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
             timestamp,
             timestampSource,
         }
-    } catch (cause: unknown) {
+    } catch (cause) {
         return {
             geolocation: {
                 altitude: null,

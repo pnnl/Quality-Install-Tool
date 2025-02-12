@@ -1,6 +1,7 @@
-import React, { FC, ReactNode } from 'react'
-import { StoreContext } from './store'
 import { get } from 'lodash'
+import React from 'react'
+
+import { StoreContext } from '../providers/store_provider'
 
 // The type for the match conditions (Excludes, Includes, Equals)
 // 'Equals': This condition checks if the value at the specified path is exactly equal to the value.
@@ -8,8 +9,43 @@ import { get } from 'lodash'
 // 'Includes': This condition checks if the value at the specified path contains any of the values in the value prop.
 type MatchConditions = 'Equals' | 'Excludes' | 'Includes'
 
+// Helper function for handling of both single value and array
+function toArray<T>(val: T | T[] | undefined): T[] {
+    if (val) {
+        return Array.isArray(val) ? val : [val]
+    } else {
+        return []
+    }
+}
+
+// Helper function for handling match condition checks
+function checkCondition<T>(
+    pathValue: T,
+    pathValueArray: T[],
+    valueArray: T[],
+    condition: MatchConditions,
+): boolean {
+    if (!pathValue || pathValueArray.length == 0) {
+        return false
+    }
+
+    switch (condition) {
+        case 'Includes':
+            // Check if all values in pathValue are included in valueArray
+            return pathValueArray.every(val => valueArray.includes(val))
+        case 'Excludes':
+            // Check if none of the values in pathValue are included in valueArray
+            return pathValueArray.every(val => !valueArray.includes(val))
+        case 'Equals':
+            // Check if all values in valueArray are included in pathValueArray
+            return valueArray.every(val => pathValueArray.includes(val))
+        default:
+            return false
+    }
+}
+
 interface ShowOrHideProps {
-    children: ReactNode
+    children: React.ReactNode
     visible: boolean
     path?: string
     value?: string | string[] // value can be a single string or an array of strings
@@ -56,69 +92,39 @@ interface ShowOrHideProps {
  *   <p>This content is visible if the role is not 'admin' or 'manager'.</p>
  * </ShowOrHide>
  */
-const ShowOrHide: FC<ShowOrHideProps> = React.memo(
-    ({
-        children,
-        visible,
-        path,
-        value,
-        parent,
-        matchCondition = 'Equals', // Default condition is 'Equals'
-    }: ShowOrHideProps): React.ReactElement => {
-        // Helper function for handling of both single value and array
-        const toArray = (val: string | string[] | undefined): string[] => {
-            if (!val) return []
-            return Array.isArray(val) ? val : [val]
-        }
+const ShowOrHide: React.FC<ShowOrHideProps> = ({
+    children,
+    visible,
+    path,
+    value,
+    parent,
+    matchCondition = 'Equals',
+}) => {
+    return (
+        <StoreContext.Consumer>
+            {({ doc }) => {
+                const currentData = parent
+                    ? parent.data_
+                    : doc
+                      ? doc.data_
+                      : undefined
 
-        // data from parent, if parent object is present
-        const dataObject = parent ? parent.data_ : null
+                const pathValue = path ? get(currentData, path) : undefined
 
-        return (
-            <StoreContext.Consumer>
-                {({ data }) => {
-                    const currentData = dataObject || data
-                    const pathValue = path ? get(currentData, path) : undefined
+                const isVisible =
+                    visible ||
+                    (path &&
+                        checkCondition(
+                            pathValue,
+                            toArray(pathValue),
+                            toArray(value),
+                            matchCondition,
+                        ))
 
-                    // Convert values to arrays for comparison
-                    const valueArray = toArray(value)
-                    const pathValueArray = toArray(pathValue)
-
-                    // Helper function for handling match condition checks
-                    const checkCondition = (condition: MatchConditions) => {
-                        if (!pathValue || pathValueArray.length == 0)
-                            return false
-
-                        switch (condition) {
-                            case 'Includes':
-                                // Check if all values in pathValue are included in valueArray
-                                return pathValueArray.every(val =>
-                                    valueArray.includes(val),
-                                )
-                            case 'Excludes':
-                                // Check if none of the values in pathValue are included in valueArray
-                                return pathValueArray.every(
-                                    val => !valueArray.includes(val),
-                                )
-                            case 'Equals':
-                                // Check if all values in valueArray are included in pathValueArray
-                                return valueArray.every(val =>
-                                    pathValueArray.includes(val),
-                                )
-                            default:
-                                return false
-                        }
-                    }
-
-                    // displays the children if matches the condition
-                    const isVisible =
-                        visible || (path && checkCondition(matchCondition))
-
-                    return isVisible ? <>{children}</> : null
-                }}
-            </StoreContext.Consumer>
-        )
-    },
-)
+                return isVisible ? children : null
+            }}
+        </StoreContext.Consumer>
+    )
+}
 
 export default ShowOrHide

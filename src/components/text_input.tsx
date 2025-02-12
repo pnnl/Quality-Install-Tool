@@ -1,92 +1,105 @@
-import { FC, useEffect, useState } from 'react'
-import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import Form from 'react-bootstrap/Form'
+import React, { useCallback, useId, useMemo, useState } from 'react'
+import { FloatingLabel, Form } from 'react-bootstrap'
+
+import { type Validator, validate } from '../utilities/validation_utils'
 
 interface TextInputProps {
-    id: string
     label: string
-    updateValue: (inputValue: string) => void
+    onChange: (value: string) => Promise<void>
     value: string
     min: number
     max: number
     regexp: RegExp
 }
 
-/**
- * A component for inputing multiline text
- *
- * @param id The id for the underlying html input
- * @param label The component label
- * @param updateValue A function called whenever the user changes the
- * input value. The function has the new input value as the sole arguement.
- * @param value The input value
- * @param min The minimum allowed number of characters for the input field.
- * @param max The maximum allowed number of characters for the input field.
- * @param regexp The regular expression pattern to validate the input string.
- */
-const TextInput: FC<TextInputProps> = ({
-    id,
+const TextInput: React.FC<TextInputProps> = ({
     label,
-    updateValue,
+    onChange,
     value,
     min,
     max,
     regexp,
 }) => {
-    const [floatingLabelClasses, setFloatingLabelClasses] =
-        useState<any>('mb-3')
+    const id = useId()
 
-    const [textAreaFocused, setTextAreaFocused] = useState<boolean>(false)
+    const [isFocused, setIsFocused] = useState<boolean>(false)
 
-    const [error, setError] = useState<string>('')
+    const floatingLabelClassName = useMemo<string>(() => {
+        const classNames = ['mb-3']
 
-    const handleChange = (inputValue: string) => {
-        if (typeof inputValue !== 'string') {
-            setError('Input must be a string')
-        } else if (inputValue.length < min) {
-            setError('Input must be at least ' + min + ' characters long')
-        } else if (inputValue.length > max) {
-            setError('Input must be at most ' + max + ' characters long')
-        } else if (!regexp.test(inputValue)) {
-            setError('Input must match' + regexp)
+        if (isFocused || value) {
+            classNames.push('text-area-expanded')
+        }
+
+        if (value) {
+            classNames.push('label-hidden')
+        }
+
+        return classNames.join(' ')
+    }, [isFocused, value])
+
+    const valueValidators = useMemo<Validator<string>[]>(() => {
+        return [
+            input => {
+                if (input.length < min) {
+                    return `Input must be at least ${min} character${min === 1 ? '' : 's'} long.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (input.length > max) {
+                    return `Input must be at most ${max} character${max === 1 ? '' : 's'} long.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (regexp.test(input)) {
+                    return undefined
+                } else {
+                    return 'Input must match the pattern.'
+                }
+            },
+        ]
+    }, [min, max, regexp])
+
+    const errorMessages = useMemo<string[]>(() => {
+        if (value) {
+            return validate(value, valueValidators)
         } else {
-            setError('')
-            updateValue(inputValue)
+            return []
         }
-    }
+    }, [value, valueValidators])
 
-    useEffect(() => {
-        let floatingLabelClasses = 'mb-3'
-        if (value || textAreaFocused) {
-            floatingLabelClasses += ' label-hidden'
-        }
-
-        if (textAreaFocused) {
-            floatingLabelClasses += ' text-area-expanded'
-        }
-
-        setFloatingLabelClasses(floatingLabelClasses)
-    }, [value, textAreaFocused])
+    const handleChange = useCallback(
+        async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            await onChange(event.target.value)
+        },
+        [onChange],
+    )
 
     return (
-        <>
-            <FloatingLabel className={floatingLabelClasses} label={label}>
-                <Form.Control
-                    as="textarea"
-                    onChange={event => handleChange(event.target.value)}
-                    placeholder="A placeholder"
-                    value={value || ''}
-                    isInvalid={Boolean(error)}
-                    onFocus={() => setTextAreaFocused(true)}
-                    onBlur={() => setTextAreaFocused(false)}
-                />
-                {error && (
-                    <Form.Control.Feedback type="invalid">
-                        {error}
-                    </Form.Control.Feedback>
-                )}
-            </FloatingLabel>
-        </>
+        <FloatingLabel
+            controlId={id}
+            className={floatingLabelClassName}
+            label={label}
+        >
+            <Form.Control
+                as="textarea"
+                onChange={handleChange}
+                placeholder="A placeholder"
+                value={value || ''}
+                isInvalid={errorMessages.length > 0}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+            />
+            {errorMessages.length > 0 && (
+                <Form.Control.Feedback type="invalid">
+                    {errorMessages.join(' ')}
+                </Form.Control.Feedback>
+            )}
+        </FloatingLabel>
     )
 }
 

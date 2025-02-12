@@ -66,6 +66,7 @@ const InstallationsProvider: React.FC<InstallationsProviderProps> = ({
                     workflowName,
                     {
                         attachments,
+                        binary: attachments ? true : undefined,
                     },
                 )
 

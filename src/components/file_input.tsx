@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { Button, Card } from 'react-bootstrap'
 
 import Collapsible from './collapsible'
@@ -6,21 +6,13 @@ import DateTimeStr from './date_time_str'
 import { type FileMetadata } from '../types/database.types'
 
 interface FileInputProps {
-    children: React.ReactNode
-    label: string
-    fileMetadata: FileMetadata
+    label: React.ReactNode
     file: Blob | undefined
-    upsertFile: (file: Blob, fileName: string) => void
+    fileMetadata: FileMetadata | undefined
+    upsertFile: (file: Blob, fileName: string) => Promise<void>
+    children: React.ReactNode
 }
 
-/**
- * Component for File input
- *
- * @param children Content (most commonly markdown text) describing the File requirement
- * @param label Label for the File requirement
- * @param file Blob containing the File itself
- * @param upsertFile Function used to update/insert a file into the store
- */
 const FileInput: React.FC<FileInputProps> = ({
     children,
     label,
@@ -28,6 +20,8 @@ const FileInput: React.FC<FileInputProps> = ({
     fileMetadata,
     upsertFile,
 }) => {
+    const id = useId()
+
     const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
 
     const handleFileInputButtonClick = useCallback(
@@ -39,14 +33,14 @@ const FileInput: React.FC<FileInputProps> = ({
     )
 
     const handleFileInputChange = useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
             if (event.target.files && event.target.files.length > 0) {
                 const file = event.target.files[0]
 
-                upsertFile(file, file.name)
+                await upsertFile(file, file.name)
             }
         },
-        [],
+        [upsertFile],
     )
 
     const [fileObjectURL, setFileObjectURL] = useState<string | undefined>(
@@ -88,23 +82,19 @@ const FileInput: React.FC<FileInputProps> = ({
                                 <br />
                                 <small>
                                     Timestamp:{' '}
-                                    {fileMetadata?.timestamp ? (
+                                    {fileMetadata?.timestamp && (
                                         <DateTimeStr
                                             date={fileMetadata.timestamp}
                                         />
-                                    ) : (
-                                        ''
                                     )}
                                 </small>
                                 <br />
                             </Card.Body>
                         </Card>
                     )}
-                    <div>
-                        <label className="mb-3 custom-label">
-                            File Types Accepted: PDF
-                        </label>
-                    </div>
+                    <p className="mb-3 custom-label">
+                        File Types Accepted: PDF
+                    </p>
                     <Button
                         onClick={handleFileInputButtonClick}
                         variant="outline-primary"
@@ -113,6 +103,7 @@ const FileInput: React.FC<FileInputProps> = ({
                     </Button>
                 </div>
                 <input
+                    id={id}
                     accept="application/pdf"
                     onChange={handleFileInputChange}
                     ref={hiddenFileUploadInputRef}

@@ -26,7 +26,7 @@
         </PhotoInput>
 
 
-        <CheckBox options={['No cooling appliance']} path="no_cooling_appliance"/>
+        <Checkbox options={['No cooling appliance']} path="no_cooling_appliance"/>
 
         <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
             <PhotoInput id="existing_cooling_appliance_photo" label="Existing Cooling Appliance – Photo">

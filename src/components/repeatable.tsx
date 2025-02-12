@@ -18,30 +18,6 @@ interface CustomProps {
     docId?: string
 }
 
-/**
- * `Repeatable` is a React FC that allows rendering a collection of repeatable elements based on data from a parent component or a database.
- * The component receives an array of children and dynamically clones them with updated props for each item in the data collection.
- * The data collection is expected to be an object, where each key represents a repeatable item.
- *
- * @param {string} label - A label to be used within the component (could be displayed as a title or header).
- * @param {string} path - A path that helps identify the specific data structure in the parent component or database.
- * @param {ReactNode} children - The child elements to be rendered and repeated based on the items in the data collection.
- * @param {any} [data] - Optional. A data object containing the items to be rendered, structured based on the path provided.
- *
- * @returns {JSX.Element} - A React element that renders the repeated elements based on the `data` prop,
- *                          with updated `path` and `id` for each child component.
- *
- * @example
- * ```tsx
- * <Repeatable label="Appliances" path="appliances" data={applianceData}>
- *   <StringInput label="Appliance Name" path="name" />
- *   <StringInput label="Appliance Type" path="type" />
- * </Repeatable>
- * ```
- * In this example, the `StringInput` will be cloned for each item in the `applianceData` object,
- * with the `path` prop dynamically updated to access each item's respective properties.
- */
-
 const Repeatable: FC<RepeatableProps> = ({
     label,
     path,

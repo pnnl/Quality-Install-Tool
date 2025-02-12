@@ -1,4 +1,3 @@
-import { isNull } from 'lodash'
 import React from 'react'
 
 interface GpsCoordStrProps {
@@ -7,41 +6,24 @@ interface GpsCoordStrProps {
     longitude: number | null
 }
 
-/**
- *
- * @param dec Geographic degrees
- * @returns
- */
 const GpsCoordStr: React.FC<GpsCoordStrProps> = ({
     altitude,
     latitude,
     longitude,
 }) => {
-    const geoStr =
-        !isNull(latitude) && !isNull(longitude)
-            ? Number(latitude).toFixed(4) + ',' + Number(longitude).toFixed(4)
-            : null
-
-    return (
-        <>
-            {!isNull(geoStr) ? (
-                <>
-                    <a
-                        href={
-                            'https://www.google.com/maps/search/?api=1&query=' +
-                            geoStr
-                        }
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        {geoStr}
-                    </a>
-                </>
-            ) : (
-                <span>Missing</span>
-            )}
-        </>
-    )
+    if (latitude === null || longitude === null) {
+        return <span>Missing</span>
+    } else {
+        return (
+            <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(String(latitude))},${encodeURIComponent(String(longitude))}`}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                {latitude.toFixed(4)}, {longitude.toFixed(4)}
+            </a>
+        )
+    }
 }
 
 export default GpsCoordStr

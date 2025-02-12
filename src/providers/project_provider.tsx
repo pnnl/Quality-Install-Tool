@@ -56,6 +56,7 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
             try {
                 const project = await getProject(db, projectId, {
                     attachments,
+                    binary: attachments ? true : undefined,
                 })
 
                 setError(undefined)

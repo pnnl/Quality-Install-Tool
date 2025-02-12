@@ -5,12 +5,12 @@
         This workflow covers the scenario of insulating an existing slab foundation from the exterior.
       </Figure>
     </Collapsible>
-    
-    ## Existing Conditions
-    
-    <CheckBox label="What is the foundation type?" path="slab_foundation_type" options={["Slab"]} value="Slab" hidden />
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
+    ## Existing Conditions
+
+    <Checkbox label="What is the foundation type?" path="slab_foundation_type" options={["Slab"]} value="Slab" hidden />
+
+    <Checkbox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="air_leakage_rate" />
 
@@ -60,7 +60,7 @@
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
   </Tab>
-  
+
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
@@ -95,9 +95,9 @@
       * Take this photo prior to the reinstallation of baseboard moulding.
     </PhotoInput>
 
-  </Tab>  
+  </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
-  
+
   ## Final Conditions
 
 <Select
@@ -119,26 +119,26 @@
     path="postinstall_foundation_r_value"
 />
 
-  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
-  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
+  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />
+  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}>
     <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
     <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
         Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
     </PhotoInput>
   </ShowOrHide>
   <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
-  
+
   <CombustionSafetyChecksLink {...props} />
-  
+
   ## Ventilation
   <Collapsible header="Post-retrofit mechanical ventialtion calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
-  ## Project Invoice 
+  ## Project Invoice
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
       Take a photo of the project invoice if your program requires it.
   </PhotoInput>

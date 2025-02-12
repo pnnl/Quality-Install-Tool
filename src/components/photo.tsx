@@ -7,11 +7,16 @@ import { type PhotoMetadata } from '../types/database.types'
 
 interface PhotoProps {
     description: React.ReactNode
-    label: string
-    photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Array of photo objects with metadata
+    label: React.ReactNode
+    photos: {
+        id: string
+        photo: Blob | undefined
+        metadata: PhotoMetadata | undefined
+    }[] // Array of photo objects with metadata
     required: boolean
     noteValue: string | undefined
 }
+
 /**
  * A component that displays a photo, timestamp, geolocation, label, and description
  * Displays multiple photos (2 per row) with metadata in a grid layout

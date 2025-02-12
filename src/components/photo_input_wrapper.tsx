@@ -1,17 +1,39 @@
-import React, { FC, useState } from 'react'
+import heic2any from 'heic2any'
+import PouchDB from 'pouchdb'
+import React, { useState } from 'react'
 
-import imageCompression from 'browser-image-compression'
-
-import { StoreContext } from './store'
 import PhotoInput from './photo_input'
+import { StoreContext } from '../providers/store_provider'
+import { type PhotoMetadata } from '../types/database.types'
+import { compressPhoto, getPhotoMetadata } from '../utilities/photo_utils'
 
-import { getPhotoMetadata } from '../utilities/photo_utils'
-
-const MAX_IMAGE_DIM_WIDTH: number = 800
-
-const MAX_IMAGE_DIM_HEIGHT: number = 500
-
-const MAX_SIZE_IN_MB: number = 0.2
+// Function to find the max number at the end of the attachment name, and return the new  attachment name with max number
+function getMaxKeyWithNumberSuffix(
+    keys: (string | any[])[],
+    id: string,
+): string {
+    let maxNumber = -1
+    let maxKey: string | any[] = ''
+    // Loop through each key
+    keys.forEach((key: string | any[]) => {
+        const lastChar = key[key.length - 1] // Get the last character of the key
+        if (!isNaN(lastChar)) {
+            // Check if the last character is a number
+            const number = parseInt(lastChar, 10) // Convert last character to a number
+            if (number > maxNumber) {
+                maxNumber = number
+                maxKey = key
+            }
+        }
+    })
+    // return the new key with the incremented number
+    if (maxNumber > -1) {
+        const newKey = `${maxKey.substring(0, maxKey.length - 1)}${maxNumber + 1}`
+        return newKey
+    }
+    // else return first key with '_0'
+    return `${id}_0`
+}
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -34,7 +56,7 @@ interface PhotoInputWrapperProps {
  *                   When unset, the PhotoInput component will use device camera for taking new photo.
  * @param notes Boolean from the mdx component that indicates whether the notes field will be available
  */
-const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
+const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
     children,
     id,
     label,
@@ -42,120 +64,62 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
     count = 10,
     notes,
 }) => {
-    const [loading, setLoading] = useState(false) // Loading state
-    const [error, setError] = useState('') // Loading state
-
-    /**
-     * Compresses an image file (Blob) while maintaining its aspect ratio and ensuring it does not exceed specified size limits.
-     *
-     * @param {Blob} imageBlob - The original image file as a Blob object that needs to be compressed.
-     *
-     * @returns {Promise<Blob | undefined>} - A Promise that resolves to the compressed image file as a Blob.
-     *                                         If an error occurs during compression, it will be caught,
-     *                                         and the function may return undefined.
-     *
-     * @throws {Error} - Throws an error if the compression process fails.
-     *
-     */
-    async function compressFile(imageBlob: Blob) {
-        /*The compressed file will have a maximum size of `maxSizeMB`
-         and dimensions constrained by`maxWidthOrHeight`. */
-        const options = {
-            maxSizeMB: MAX_SIZE_IN_MB,
-            useWebWorker: true,
-            maxWidthOrHeight: Math.max(
-                MAX_IMAGE_DIM_HEIGHT,
-                MAX_IMAGE_DIM_WIDTH,
-            ),
-        }
-        const compressedFile = await imageCompression(
-            imageBlob as File,
-            options,
-        )
-        return compressedFile
-    }
-
-    // Function to find the max number at the end of the attachment name, and return the new  attachment name with max number
-    function getMaxKeyWithNumberSuffix(keys: (string | any[])[], id: string) {
-        let maxNumber = -1
-        let maxKey: string | any[] = ''
-        // Loop through each key
-        keys.forEach((key: string | any[]) => {
-            const lastChar = key[key.length - 1] // Get the last character of the key
-            if (!isNaN(lastChar)) {
-                // Check if the last character is a number
-                const number = parseInt(lastChar, 10) // Convert last character to a number
-                if (number > maxNumber) {
-                    maxNumber = number
-                    maxKey = key
-                }
-            }
-        })
-        // return the new key with the incremented number
-        if (maxNumber > -1) {
-            const newKey = `${maxKey.substring(0, maxKey.length - 1)}${
-                maxNumber + 1
-            }`
-            return newKey
-        }
-        // else return first key with '_0'
-        return id + '_' + 0
-    }
-
-    // Dynamically imports the `heic2any` module.
-    // This helps to reduce initial bundle size and improve
-    // performance by only loading the library when needed.
-    async function loadHeic2Any() {
-        const { default: heic2any } = await import('heic2any')
-        return heic2any
-    }
+    const [loading, setLoading] = useState<boolean>(false) // Loading state
+    const [error, setError] = useState<string>('') // Loading state
 
     return (
         <StoreContext.Consumer>
-            {({
-                metadata,
-                attachments,
-                upsertAttachment,
-                deleteAttachment,
-            }) => {
+            {({ doc, putAttachment, removeAttachment }) => {
                 const deletePhoto = (photoId: string) => {
-                    deleteAttachment(photoId)
+                    removeAttachment(photoId)
                 }
+
                 const matchingAttachments: {
                     id: string
-                    photo: any
-                    metadata: any
+                    photo: Blob
+                    metadata: PhotoMetadata | undefined
                 }[] = []
 
-                Object.keys(attachments).forEach(key => {
+                Object.keys(
+                    doc && doc._attachments ? doc._attachments : {},
+                ).forEach(key => {
                     // If the attachment name starts with the specified prefix
                     if (key.startsWith(id)) {
                         // Add the attachment information to the result array
-                        const attachment_data = Object.getOwnPropertyDescriptor(
-                            attachments,
-                            key,
-                        )?.value
+                        const attachment_data =
+                            doc &&
+                            doc._attachments &&
+                            (doc._attachments[
+                                key
+                            ] as PouchDB.Core.FullAttachment)
 
-                        let location_metadata = attachment_data?.metadata
+                        let location_metadata =
+                            doc &&
+                            (doc.metadata_.attachments[key] as PhotoMetadata)
+
                         if (!location_metadata) {
                             /* Fetching location metadata for objects stored in as nested objects
                              *  Example: Combustion safety testing photos are stored as 'combustion_safety_tests.A1.water_heater_photo_0'
                              */
                             const attachmentIdParts = key.split('.')
-                            if (attachmentIdParts.length > 1) {
+
+                            if (attachmentIdParts.length === 3) {
                                 // Access nested attachment metadata using the split parts
                                 const [firstPart, secondPart, thirdPart] =
                                     attachmentIdParts
-                                location_metadata = (metadata as any)
-                                    ?.attachments[firstPart]?.[secondPart]?.[
-                                    thirdPart
-                                ]
+                                location_metadata =
+                                    doc &&
+                                    (
+                                        doc.metadata_.attachments[
+                                            firstPart
+                                        ] as any
+                                    )?.[secondPart]?.[thirdPart]
                             }
                         }
 
                         matchingAttachments.push({
                             id: key,
-                            photo: attachment_data?.blob,
+                            photo: attachment_data?.data as Blob,
                             metadata: location_metadata,
                         })
                     }
@@ -169,28 +133,21 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                     )
 
                     const handleImageUpsert = async (file: Blob) => {
-                        const photoMetadata = await getPhotoMetadata(imgFile)
-                        upsertAttachment(
-                            file,
-                            nextKey,
-                            undefined,
-                            photoMetadata,
-                        )
+                        putAttachment(nextKey, file, undefined)
                         setError('')
                     }
 
                     try {
                         if (imgFile.type === 'image/heic') {
-                            const heic2any = await loadHeic2Any()
                             const jpegBlob: any = await heic2any({
                                 blob: imgFile,
                                 toType: 'image/jpeg',
                             })
-                            const compressedFile = await compressFile(jpegBlob)
+                            const compressedFile = await compressPhoto(jpegBlob)
                             await handleImageUpsert(compressedFile)
                         } else {
                             const compressedPhotoBlob =
-                                await compressFile(imgFile)
+                                await compressPhoto(imgFile)
                             await handleImageUpsert(compressedPhotoBlob)
                         }
                     } catch (error) {
@@ -202,25 +159,23 @@ const PhotoInputWrapper: FC<PhotoInputWrapperProps> = ({
                 }
 
                 return (
-                    <>
-                        <PhotoInput
-                            label={label}
-                            metadata={matchingAttachments.map(
-                                item => item.metadata,
-                            )}
-                            photos={matchingAttachments}
-                            upsertPhoto={upsertPhoto}
-                            uploadable={uploadable}
-                            deletePhoto={deletePhoto}
-                            loading={loading}
-                            error={error}
-                            count={count}
-                            id={id}
-                            notes={notes}
-                        >
-                            {children}
-                        </PhotoInput>
-                    </>
+                    <PhotoInput
+                        label={label}
+                        metadata={matchingAttachments.map(
+                            item => item.metadata,
+                        )}
+                        photos={matchingAttachments}
+                        upsertPhoto={upsertPhoto}
+                        uploadable={uploadable}
+                        deletePhoto={deletePhoto}
+                        loading={loading}
+                        error={error}
+                        count={count}
+                        id={id}
+                        notes={notes}
+                    >
+                        {children}
+                    </PhotoInput>
                 )
             }}
         </StoreContext.Consumer>
