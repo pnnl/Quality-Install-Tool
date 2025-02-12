@@ -33,6 +33,7 @@ const TextInput: FC<TextInputProps> = ({
     max,
     regexp,
 }) => {
+    console.log('Regexp:', regexp)
     const [floatingLabelClasses, setFloatingLabelClasses] =
         useState<any>('mb-3')
 
@@ -41,6 +42,7 @@ const TextInput: FC<TextInputProps> = ({
     const [error, setError] = useState<string>('')
 
     const handleChange = (inputValue: string) => {
+        console.log('Regexp:', regexp)
         if (typeof inputValue !== 'string') {
             setError('Input must be a string')
         } else if (inputValue.length < min) {
