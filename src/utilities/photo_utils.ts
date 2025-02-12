@@ -3,11 +3,25 @@ import imageCompression from 'browser-image-compression'
 
 import { type PhotoMetadata } from '../types/database.types'
 
-const MAX_IMAGE_DIM_WIDTH: number = 800
+const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
+    process.env.REACT_APP_GEOLOCATION_MAXIMUM_AGE,
+)
 
-const MAX_IMAGE_DIM_HEIGHT: number = 500
+const GEOLOCATION_TIMEOUT_MILLIS: number = parseInt(
+    process.env.REACT_APP_GEOLOCATION_TIMEOUT_MILLIS,
+)
 
-const MAX_SIZE_IN_MB: number = 0.2
+const MAXIMUM_WIDTH_PX: number = parseInt(
+    process.env.REACT_APP_PHOTO_MAXIMUM_WIDTH_PX,
+)
+
+const MAXIMUM_HEIGHT_PX: number = parseInt(
+    process.env.REACT_APP_PHOTO_MAXIMUM_HEIGHT_PX,
+)
+
+const MAXIMUM_SIZE_MB: number = parseFloat(
+    process.env.REACT_APP_PHOTO_MAXIMUM_SIZE_MB,
+)
 
 export const PHOTO_MIME_TYPES: string[] = [
     // 'image/avif',
@@ -32,9 +46,9 @@ export const PHOTO_MIME_TYPES: string[] = [
  */
 export async function compressPhoto(blob: Blob) {
     return await imageCompression(blob as File, {
-        maxSizeMB: MAX_SIZE_IN_MB,
+        maxSizeMB: MAXIMUM_SIZE_MB,
         useWebWorker: true,
-        maxWidthOrHeight: Math.max(MAX_IMAGE_DIM_HEIGHT, MAX_IMAGE_DIM_WIDTH),
+        maxWidthOrHeight: Math.max(MAXIMUM_HEIGHT_PX, MAXIMUM_WIDTH_PX),
     })
 }
 
@@ -85,10 +99,8 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
         const geolocationPosition = await new Promise<GeolocationPosition>(
             (resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    // Allow a cached GPS value to be used for up to 1 minute.
-                    maximumAge: 0,
-                    // Assume that GPS is unavailable after 1 minute.
-                    timeout: 60 * 1000,
+                    maximumAge: GEOLOCATION_MAXIMUM_AGE,
+                    timeout: GEOLOCATION_TIMEOUT_MILLIS,
                 })
             },
         )

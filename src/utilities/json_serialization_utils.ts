@@ -13,9 +13,11 @@ import {
     type Project,
 } from '../types/database.types'
 
-export const JSON_DOCUMENT_CONTENT_TYPE: string = 'application/json'
+export const JSON_DOCUMENT_CONTENT_TYPE: string =
+    process.env.REACT_APP_JSON_DOCUMENT_CONTENT_TYPE
 
-export const JSON_DOCUMENT_FILE_EXTENSION: string = '.qit.json'
+export const JSON_DOCUMENT_FILE_EXTENSION: string =
+    process.env.REACT_APP_JSON_DOCUMENT_FILE_EXTENSION
 
 export type JSONDocument = {
     all_docs: JSONDocumentObject | Array<JSONDocumentObject>
