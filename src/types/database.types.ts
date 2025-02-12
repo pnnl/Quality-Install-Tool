@@ -46,9 +46,7 @@ export interface ProjectData extends BaseData {
     location?: Location
 }
 
-export interface ProjectMetadata extends BaseMetadata {
-    status: 'new' | 'created' | 'deleted'
-}
+export interface ProjectMetadata extends BaseMetadata {}
 
 export interface FileMetadata {
     filename?: string

@@ -303,7 +303,6 @@ export function newProject(
             created_at: createdAt,
             last_modified_at: lastModifiedAt,
             attachments: {},
-            status: 'new',
         },
     }
 
