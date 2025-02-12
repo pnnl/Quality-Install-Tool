@@ -1,4 +1,5 @@
 import React from 'react'
+import DateStr from './date_str'
 
 /**
  * LabelValueProps defines the props for the LabelValue component.
@@ -66,6 +67,18 @@ const LabelValue: React.FC<LabelValueProps> = ({
         )
     }
 
+    if (type === 'boolean' && typeof value === 'boolean') {
+        if (value) {
+            value = 'YES'
+        } else {
+            value = 'NO'
+        }
+    } else if (type === 'boolean' && typeof value !== 'boolean') {
+        console.log(
+            `You are trying to set the type of a non-boolean value to 'yes' or 'no'. Value is : ${value} and typeof value is: ${typeof value}`,
+        )
+    }
+
     return required || value ? (
         label ? (
             <div className="top-bottom-padding">
@@ -75,7 +88,11 @@ const LabelValue: React.FC<LabelValueProps> = ({
         ) : (
             <>
                 {prefix}
-                {value}
+                {type === 'date' && typeof value === 'string' ? (
+                    <DateStr date={value} />
+                ) : (
+                    value
+                )}
                 {suffix}
             </>
         )

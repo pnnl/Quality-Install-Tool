@@ -59,24 +59,28 @@
     />
 </div>
 
-<h2>
+{/* <h2>
     LabelValue with number type prop and string value (Will console.log an error
     message)
 </h2>
-<code>
-
-    `<LabelValue
-        path="label-value-test-text-input"
-        type="number"
-        decimalPlaces={2}
-    />`
-
-</code>
+<code>`<LabelValue path="label-value-test-text-input" type="number" decimalPlaces={2}/>`</code>
 <div className="label-value-container">
     <LabelValue
         path="label-value-test-text-input"
         type="number"
         decimalPlaces={2}
+    />
+</div> */}
+
+<DateInput label="Pick a date:" path="label-value-test-date-input" />
+<h2>
+    LabelValue with date type
+</h2>
+<code>`<LabelValue path="label-value-test-date-input" type="date"/>`</code>
+<div className="label-value-container">
+    <LabelValue
+        path="label-value-test-date-input"
+        type="date"
     />
 </div>
 
