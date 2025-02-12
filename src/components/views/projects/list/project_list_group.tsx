@@ -83,10 +83,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
                                 <TfiTrash size={22} />
                             </Button>
                         )}
-                        <ExportDoc
-                            projectId={project._id}
-                            includeInstallations={true}
-                        />
+                        <ExportDoc projectId={project._id} />
                     </span>
                     <b>{project.metadata_.doc_name}</b>
                     {project.data_.location &&

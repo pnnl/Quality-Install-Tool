@@ -16,13 +16,9 @@ import {
 
 interface ExportDocProps {
     projectId: PouchDB.Core.DocumentId
-    includeInstallations: boolean
 }
 
-const ExportDoc: React.FC<ExportDocProps> = ({
-    projectId,
-    includeInstallations,
-}) => {
+const ExportDoc: React.FC<ExportDocProps> = ({ projectId }) => {
     const db: PouchDB.Database<Base> = useDatabase()
 
     const handleClick = useCallback(
@@ -35,11 +31,7 @@ const ExportDoc: React.FC<ExportDocProps> = ({
             const projectDoc: PouchDB.Core.Document<Project> &
                 PouchDB.Core.GetMeta = await getProject(db, projectId)
 
-            const data: JSONDocument = await exportJSONDocument(
-                db,
-                projectId,
-                includeInstallations,
-            )
+            const data: JSONDocument = await exportJSONDocument(db, projectId)
 
             const blob: Blob = new Blob([JSON.stringify(data)], {
                 type: JSON_DOCUMENT_CONTENT_TYPE,
@@ -51,7 +43,7 @@ const ExportDoc: React.FC<ExportDocProps> = ({
 
             return false
         },
-        [projectId, includeInstallations],
+        [projectId],
     )
 
     return (

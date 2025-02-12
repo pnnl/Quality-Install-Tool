@@ -35,7 +35,6 @@ export interface AttachmentsMeta {
 export async function exportJSONDocument(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    includeInstallations: boolean = true,
 ): Promise<JSONDocument> {
     // await db.info()
 
@@ -45,26 +44,17 @@ export async function exportJSONDocument(
             revs_info: false,
         })
 
-    if (includeInstallations) {
-        const installationDocs: Array<
-            PouchDB.Core.ExistingDocument<Installation> &
-                PouchDB.Core.AllDocsMeta
-        > = await getInstallations(db, projectId, undefined, {
-            attachments: true,
-        })
+    const installationDocs: Array<
+        PouchDB.Core.ExistingDocument<Installation> & PouchDB.Core.AllDocsMeta
+    > = await getInstallations(db, projectId, undefined, {
+        attachments: true,
+    })
 
-        const data: JSONDocument = {
-            all_docs: [projectDoc, ...installationDocs],
-        }
-
-        return data
-    } else {
-        const data: JSONDocument = {
-            all_docs: projectDoc,
-        }
-
-        return data
+    const data: JSONDocument = {
+        all_docs: [projectDoc, ...installationDocs],
     }
+
+    return data
 }
 
 export async function importJSONDocument(
