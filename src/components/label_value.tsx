@@ -15,7 +15,7 @@ export interface LabelValueProps {
     required?: boolean
     prefix?: string
     suffix?: string
-    type: 'string' | 'number' | 'date' | 'boolean'
+    type: 'string' | 'number' | 'date'
     decimalPlaces?: number
 }
 
@@ -44,11 +44,9 @@ const LabelValue: React.FC<LabelValueProps> = ({
 }: LabelValueProps): JSX.Element | null => {
     //If type is "number" and decimalPlaces, round the value
     if (type === 'number' && typeof value === 'number') {
-        // debugger
         //check that value is actually a number
-        //Need to do this because TS can't do its job in MDX files and there's a chance that
-        //someone could pass bad values in via props
-
+        //Need to do this because TS not currently configured for MDX files and there's a chance that
+        //someone could try to .toFixed("some string") and cause an error
         if (
             typeof value === 'number' &&
             !isNaN(value) &&
@@ -64,18 +62,6 @@ const LabelValue: React.FC<LabelValueProps> = ({
     } else if (type === 'number' && typeof value !== 'number') {
         console.log(
             `You are trying to set the type of a non-number value to 'number'. Value is : ${value} and typeof value is: ${typeof value}`,
-        )
-    }
-
-    if (type === 'boolean' && typeof value === 'boolean') {
-        if (value) {
-            value = 'YES'
-        } else {
-            value = 'NO'
-        }
-    } else if (type === 'boolean' && typeof value !== 'boolean') {
-        console.log(
-            `You are trying to set the type of a non-boolean value to 'yes' or 'no'. Value is : ${value} and typeof value is: ${typeof value}`,
         )
     }
 

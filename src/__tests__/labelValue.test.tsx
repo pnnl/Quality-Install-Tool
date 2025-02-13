@@ -1,5 +1,5 @@
-// src/LabelValue.test.tsx
-import React from 'react'
+//to run this test: npm test -- src/__tests__/labelValue.test.tsx
+
 import { render, screen } from '@testing-library/react'
 import { StoreContext } from '../components/store'
 import LabelValue, { LabelValueProps } from '../components/label_value'

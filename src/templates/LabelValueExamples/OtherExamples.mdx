@@ -1,7 +1,6 @@
-import DateInput from '../../components/date_input_wrapper'
-import LabelValue from '../../components/label_value_wrapper'
-import NumberInput from '../../components/number_input_wrapper'
-import TextInput from '../../components/text_input_wrapper'
+import LabelValue from '../../components/label_value_wrapper';
+import NumberInput from '../../components/number_input_wrapper';
+import TextInput from '../../components/text_input_wrapper';
 
 <div className="playground-section">
         <h1>Other Examples</h1>
@@ -23,33 +22,35 @@ import TextInput from '../../components/text_input_wrapper'
             message)
         </h2>
         <code>
-            `<LabelValue path="label-value-other-text-input" type="number" decimalPlaces={2}/>`
+            `<LabelValue label="String Value as Number" path="label-value-other-text-input" type="number" decimalPlaces={2}/>`
         </code>
         <div className="label-value-container">
             <LabelValue
+                label="String Value as Number"
                 path="label-value-other-text-input"
                 type="number"
                 decimalPlaces={2}
             />
         </div>
 
-        <p style={{paddingTop: `10px`}}> Enter a number value to be retrieved by the LabelValues below</p>
+        <p style={{paddingTop: `10px`}}> 
+        Enter a number value to be retrieved by the LabelValues below
+        </p>
 
         <NumberInput label="Other Number Value:" path="label-value-other-number-input" />
+
         <h2>
             LabelValue with string type prop and number value (Will show the string value of number with no rounding)
         </h2>
         <code>
-            `<LabelValue path="label-value-other-number-input" type="string" decimalPlaces={2}/>`
+            `<LabelValue label="String Type" path="label-value-other-number-input" type="string" decimalPlaces={2}/>`
         </code>
         <div className="label-value-container">
             <LabelValue
+                label="String Type"
                 path="label-value-other-number-input"
                 type="string"
                 decimalPlaces={2}
             />
         </div>
-
-
-
 </div>
