@@ -4,12 +4,16 @@ import { get } from 'lodash'
 import LabelValue from './label_value'
 
 interface LabelValueWrapperProps {
-    label: string
-    path: string
+    label?: string
+    path?: string
     prefix?: string
     suffix?: string
     required?: boolean
     parent?: any
+    value?: string | number | boolean
+    type?: 'string' | 'number' | 'date'
+    decimalPlaces?: number
+    dateOptions?: Intl.DateTimeFormatOptions
 }
 
 /**
@@ -40,6 +44,9 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     suffix,
     parent = null,
     required = false,
+    decimalPlaces,
+    type = 'string',
+    dateOptions,
 }: LabelValueWrapperProps): JSX.Element | null => {
     const [parentData, _] = useState<any>(parent?.data_)
     return (
@@ -55,6 +62,9 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                         required={required}
                         prefix={prefix}
                         suffix={suffix}
+                        decimalPlaces={decimalPlaces}
+                        type={type}
+                        dateOptions={dateOptions}
                     />
                 )
             }}

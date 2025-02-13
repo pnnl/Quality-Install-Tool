@@ -1,3 +1,19 @@
+.playground-section {
+    background-color: lightgrey;
+    margin: 10px;
+    padding: 20px;
+}
+
+.playground-section > h1,
+.playground-section > h2 {
+    text-align: left;
+    justify-self: unset;
+}
+
+.playground-section .label-value-container {
+    border: 1px solid black;
+    padding: 10px;
+}
 .App {
     text-align: center;
 }
