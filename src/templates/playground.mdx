@@ -1,6 +1,28 @@
+import TextLabelValues from './LabelValueExamples/TextLabelValues.mdx'
+import NumberLabelValues from './LabelValueExamples/NumberLabelValues.mdx'
+import LabelValueExamplesStyles from './LabelValueExamples/LabelValueExamplesStyles.css'
 
 # Playground
 
-<StringInput label="Grade" path="student.grade" />
+<Tabs>
 
-Grade: {props.doc.student.grade}
+    <Tab eventKey="label-value-section" title="<LabelValue/> Examples" >
+        <div class="label-value-section">
+            <nav>
+                <ul>
+                    <a href="#text-examples">Text Value Examples</a>
+                    <a href="#number-examples">Number Value Examples</a>
+                    <a href="#">Back to Top</a>
+                </ul>
+            </nav>
+            <section id="text-examples" >
+                <TextLabelValues />
+            </section>
+            <section id="number-examples">
+                <NumberLabelValues />
+            </section>
+        </div>
+    </Tab>
+
+</Tabs>
+

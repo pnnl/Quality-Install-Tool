@@ -19,7 +19,7 @@ import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
 import DOECombustionApplianceSafetyTests from './doe_workflow_combustion_appliance_safety_tests.mdx'
-
+import Playground from './playground.mdx'
 import { MDXProps } from 'mdx/types'
 
 interface TemplatesConfig {
@@ -116,6 +116,10 @@ const templatesConfig: TemplatesConfig = {
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,
+    },
+    playground: {
+        title: 'Playground',
+        template: Playground,
     },
 }
 
