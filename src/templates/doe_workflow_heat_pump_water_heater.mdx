@@ -1,8 +1,10 @@
-
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
-    
+
     ## Old Water Heater
     <PhotoInput id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       For some jurisdictions, rebates for an HPWH might be conditioned on not only the
@@ -34,7 +36,7 @@
       of the HPWH to an adjacent space. It is also possible to install a condensate pump where
       a drain located below the elevation of the HPWH’s condensate outlet is not available.
 
-      You may find the following Space Air Volume Calculator useful in determining the volume to be 
+      You may find the following Space Air Volume Calculator useful in determining the volume to be
       entered in the "Space Air Volume" input below.
 
 | Space Air Volume Calculator                                                                                                                                                                                                                                            |
@@ -54,23 +56,23 @@
     </PhotoInput>
 
     <PhotoInput id="adjacent_space_photo" label="Adjacent Space – Photo">
-      If adjacent space will be used to supply air to meet the minimum air volume requirement for the HPWH, then provide 
+      If adjacent space will be used to supply air to meet the minimum air volume requirement for the HPWH, then provide
       a photo of the adjacent space.
-      This is applicable to HPWH installations that will utilize a louvered door or ducting to meet the minimum air volume 
+      This is applicable to HPWH installations that will utilize a louvered door or ducting to meet the minimum air volume
       requirement.
     </PhotoInput>
 
     <Collapsible header="HPWH & Building Science">
-      Be mindful about the effects of pressurizing or depressurizing a zone from supply only 
-      ducting or exhaust only ducting a HPWH. Pressurizing or depressurizing a zone could result 
-      in pulling air containing moisture into walls or rim/band joists where the air reaches 
-      dewpoint and condenses to cause water damage or mold problems. Depressurizing a zone 
-      could also cause a naturally drafted combustion appliance in the same zone to fail to 
+      Be mindful about the effects of pressurizing or depressurizing a zone from supply only
+      ducting or exhaust only ducting a HPWH. Pressurizing or depressurizing a zone could result
+      in pulling air containing moisture into walls or rim/band joists where the air reaches
+      dewpoint and condenses to cause water damage or mold problems. Depressurizing a zone
+      could also cause a naturally drafted combustion appliance in the same zone to fail to
       draft properly.
-  
-      Also be mindful about the humidity levels of the space the HPWH is located in. For example, 
-      if the exhaust air stream is directed against a wall or window on a hot and humid day, 
-      the cool air could possibly lower the temperature of the surface to the point of dewpoint 
+
+      Also be mindful about the humidity levels of the space the HPWH is located in. For example,
+      if the exhaust air stream is directed against a wall or window on a hot and humid day,
+      the cool air could possibly lower the temperature of the surface to the point of dewpoint
       and cause moisture damage.
     </Collapsible>
   </Tab>
@@ -87,11 +89,11 @@
       This is especially important if the HPWH selected has a larger storage capacity than
       the original one.
 
-  | Capcity (gal)| Filled Weight (lbs) | 
-  | --- | --- | 
-  | 50  | 573 | 
-  | 66  | 796 | 
-  | 80  | 921 | 
+  | Capcity (gal)| Filled Weight (lbs) |
+  | --- | --- |
+  | 50  | 573 |
+  | 66  | 796 |
+  | 80  | 921 |
 
       - Install the HPWH into a drain pan to protect the surrounding location from water
       damage if a leak occurs. Install the leak detection sensor into the drain pan if the
@@ -180,7 +182,7 @@
       to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
       one is present, and reopen the cold water main shutoff valve.
     </Collapsible>
-    
+
     <CombustionSafetyChecksLink {...props} />
 
 
@@ -194,19 +196,19 @@
     <ProjectInfoReport {...props} />
 
     ## About the Report
-    
-    The photos in this report are intended to document the critical details of upgrading to a heat pump water heater, from 
-    pre-installation steps to the completed HPWH 
-    installation. 
 
-    *The photos and information in this report use timestamps and geotags to prevent the reuse of photos 
-    from an unrelated project.  The customer is encouraged 
-    to retain a copy of this report which could help add value to a home sale and foster buyer confidence in 
-    the quality of the energy efficiency upgrade work that was performed.*  
+    The photos in this report are intended to document the critical details of upgrading to a heat pump water heater, from
+    pre-installation steps to the completed HPWH
+    installation.
 
-    The report includes the following quality installation photos:    
+    *The photos and information in this report use timestamps and geotags to prevent the reuse of photos
+    from an unrelated project.  The customer is encouraged
+    to retain a copy of this report which could help add value to a home sale and foster buyer confidence in
+    the quality of the energy efficiency upgrade work that was performed.*
+
+    The report includes the following quality installation photos:
     1. A (wide-angle) photo of the space where the HPWH is/will be installed
-    2. A photo of the adjacent space if an adjacent space supplying air to meet the air volume 
+    2. A photo of the adjacent space if an adjacent space supplying air to meet the air volume
        requirement of the HPWH is used via a louvered door, high and low air grill, or ducting
     3. A photo of the nameplate of the old water heater.
     4. A wide-angle photo of the completed HPWH installation
@@ -238,30 +240,30 @@
     <p>What is the fuel type of your existing water heater? <strong>{props.data?.existing_water_heater_fuel_type}</strong> </p>
     <p>What is the type of your water heating system before upgrading to a heat pump water heater? <strong>{props.data?.existing_water_heater_type}</strong> </p>
     <p>What is the storage capacity of the existing system? <strong>{props.data?.water_heater_storage_capacity}</strong> </p>
-    
+
     <Photo id="hpwh_location_photo" label="HPWH Location – Photo" required>
       This wide-angle photo helps document that the HPWH Space Evaluation conditions 1-8 have been met.
     </Photo>
 
     <Photo id="adjacent_space_photo" label="Adjacent Space – Photo">
-      This photo shows the adjacent space that will supply air to meet the air volume requirement 
-      for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting 
+      This photo shows the adjacent space that will supply air to meet the air volume requirement
+      for the HPWH. This is applicable to HPWH installations that will utilize a louvered door or ducting
       to meet air volume requirements.
     </Photo>
 
     {
       props.data.space_air_volume
-      ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p> 
+      ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p>
       : null
     }
-       
+
     <h2>Old Hot Water Heater</h2>
     <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
       This photo shows the name plate of the old water heater. It may be used for rebate purposes
       or to determine the energy savings.
     </Photo>
-        
-   
+
+
     ## Installation
     <Photo id="completed_installed_photo" label="Completed Installation – Photo" required>
       This wide-angle photo shows the completed HPWH installation including the exhaust,
@@ -284,10 +286,10 @@
     </Photo>
 
     ## Post-Installation
-    
+
     <CombustionSafetyChecksReport {...props} />
 
-    The HPWH has an air filter that must be checked and cleaned every 3 months. 
+    The HPWH has an air filter that must be checked and cleaned every 3 months.
     If dirty, clean the air filter by
     vacuuming the dust and washing with mild soap and detergent. Thoroughly dry before
     reinstalling.
@@ -308,7 +310,7 @@
     checking the pre-charge with a tire pressure gauge. Adjust as needed using a tire pump
     to match the pressure written on the tank. Reinstall the cap on the Schrader valve if
     one is present, and reopen the cold water main shutoff valve.
-  
+
     ## General HPWH Information
     An illustration of how a HPWH works is shown below.
 
@@ -326,7 +328,7 @@
     or slower but much more
     efficiently using the heat pump.
 
-    
+
     </PrintSection>
   </Tab>
 </Tabs>

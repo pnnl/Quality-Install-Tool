@@ -429,7 +429,7 @@ module.exports = async function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
@@ -463,7 +463,7 @@ module.exports = async function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -564,7 +564,7 @@ module.exports = async function (webpackEnv) {
                 {
                   loader: '@mdx-js/loader',
                   options: {
-                    // providerImportSource: '@mdx-js/react',
+                    providerImportSource: '@mdx-js/react',
                     remarkPlugins: [remarkGfm]
                   },
                 },
@@ -594,7 +594,7 @@ module.exports = async function (webpackEnv) {
       // Added by PNNL
       // 'webpack-license-plugin' outputs the dependecy pacakges license information to 'build/third_party_license.json' file.
       isEnvProduction && new LicensePlugin({outputFilename: "third_party_license.json"}),
-      
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

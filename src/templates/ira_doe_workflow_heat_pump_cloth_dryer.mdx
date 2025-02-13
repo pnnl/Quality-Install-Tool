@@ -1,16 +1,18 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
   ## Existing Condition
   <Radio label="What is the existing dryer fuel type?" path="existing_dryer_fuel_type" options={["Gas", "Electric" , "None"]} />
   </Tab>
   <Tab eventKey="installation" title="Installation">
-      
+
     ## Installation
     Reminder: Remove the shipping/transportation bolts from the appliance prior to pushing the appliance into the final location.
     <DateInput label="Installation Date" path="install_date" />
 
     <PhotoInput id="nameplate_photo" label="Nameplate of the Heat Pump Dryer  – Photo">
-        Please take a photo of the nameplate of the heat pump dryer showing the model number and serial number.   
+        Please take a photo of the nameplate of the heat pump dryer showing the model number and serial number.
     </PhotoInput>
     <PhotoInput id="condensate_management_photo" label="Condensate Management – Photo">
         Please take a picture of the condensate drain location for the heat pump clothes dryer.
@@ -44,9 +46,9 @@
     <p> What is the existing dryer fuel type?   <strong> <LabelValue path="existing_dryer_fuel_type" /> </strong> </p>
 
     ## Installation
-    
+
     <Photo id="nameplate_photo" label="Nameplate of the Heat Pump Dryer  – Photo" required>
-        Photo of the nameplate of the heat pump dryer showing the model number and serial number   
+        Photo of the nameplate of the heat pump dryer showing the model number and serial number
     </Photo>
     <Photo id="condensate_management_photo" label="Condensate Management – Photo" required>
         Photo of the condensate drain location for the heat pump clothes dryer

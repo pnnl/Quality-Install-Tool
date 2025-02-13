@@ -1,21 +1,23 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
     ## Existing Conditions
      <NumberInput label="What is the existing electrical panel’s max amps to the home?"  path="existing_electrical_panel_max_amps" />
      <NumberInput label="How many open breaker spots are there in the existing electrical panel?"  path="existing_electrical_panel_open_breaker_spots" />
   </Tab>
-  <Tab eventKey="installation" title="Installation">  
+  <Tab eventKey="installation" title="Installation">
 
     ## Installation
-    A project that involves replacing an electrical panel may include adding electrical wiring upgrades/additions 
-    to future proof the home such adding wires for a future electric heat pump water heater, heat pump, 
-    whole house mechanical ventilation, induction cooktop/range, electric heat pump clothes dryer, solar 
-    PV + batteries, and a Level 2 electric vehicle charger even if the home currently doesn’t have these 
-    electrical appliances. At minimum the upgraded electrical panel should have enough open breaker spots 
+    A project that involves replacing an electrical panel may include adding electrical wiring upgrades/additions
+    to future proof the home such adding wires for a future electric heat pump water heater, heat pump,
+    whole house mechanical ventilation, induction cooktop/range, electric heat pump clothes dryer, solar
+    PV + batteries, and a Level 2 electric vehicle charger even if the home currently doesn’t have these
+    electrical appliances. At minimum the upgraded electrical panel should have enough open breaker spots
     to support the future full electrification of the home.
     <DateInput label="Installation Date" path="install_date" />
 
-    
+
     <PhotoInput id="old_electrical_panel_photo" label="Old Electrical Panel – Photo">
         Take a photo of the old electrical panel.
     </PhotoInput>
@@ -24,7 +26,7 @@
     </PhotoInput>
 
   </Tab>
-  <Tab eventKey="post-installation" title="Post-Installation">  
+  <Tab eventKey="post-installation" title="Post-Installation">
     <NumberInput label="What is the new electrical panel’s max amps to the home?"  path="postinstall_electrical_panel_max_amps" />
     <NumberInput label="How many open breaker spots are there in the new electrical panel?"  path="postinstall_electrical_panel_open_breaker_spots" />
   </Tab>
@@ -40,9 +42,9 @@
 
     <p> What is the existing electrical panel’s max amps to the home?   <strong> { props.data.existing_electrical_panel_max_amps ? props.data.existing_electrical_panel_max_amps : null } </strong> </p>
     <p> How many open breaker spots are there in the existing electrical panel?  <strong> { props.data.existing_electrical_panel_open_breaker_spots ? props.data.existing_electrical_panel_open_breaker_spots : null } </strong> </p>
-   
+
     ## Installation
-    
+
     <Photo id="old_electrical_panel_photo" label="Old Electrical Panel – Photo" required>
         Photo of the old electrical panel.
     </Photo>
