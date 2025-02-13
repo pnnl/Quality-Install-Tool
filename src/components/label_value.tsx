@@ -17,6 +17,7 @@ export interface LabelValueProps {
     suffix?: string
     type: 'string' | 'number' | 'date'
     decimalPlaces?: number
+    dateOptions?: Intl.DateTimeFormatOptions
 }
 
 /**
@@ -41,6 +42,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
     suffix = '',
     decimalPlaces = 1,
     type = 'string',
+    dateOptions,
 }: LabelValueProps): JSX.Element | null => {
     //If type is "number" and decimalPlaces, round the value
     if (type === 'number' && typeof value === 'number') {
@@ -72,7 +74,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
                 <strong>
                     {prefix}
                     {type === 'date' && typeof value === 'string' ? (
-                        <DateStr date={value} />
+                        <DateStr date={value} options={dateOptions} />
                     ) : (
                         value
                     )}
@@ -83,7 +85,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
             <>
                 {prefix}
                 {type === 'date' && typeof value === 'string' ? (
-                    <DateStr date={value} />
+                    <DateStr date={value} options={dateOptions} />
                 ) : (
                     value
                 )}

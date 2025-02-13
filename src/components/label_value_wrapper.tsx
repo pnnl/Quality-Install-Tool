@@ -13,6 +13,7 @@ interface LabelValueWrapperProps {
     value?: string | number | boolean
     type?: 'string' | 'number' | 'date'
     decimalPlaces?: number
+    dateOptions?: Intl.DateTimeFormatOptions
 }
 
 /**
@@ -45,6 +46,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     required = false,
     decimalPlaces,
     type = 'string',
+    dateOptions,
 }: LabelValueWrapperProps): JSX.Element | null => {
     const [parentData, _] = useState<any>(parent?.data_)
     return (
@@ -62,6 +64,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                         suffix={suffix}
                         decimalPlaces={decimalPlaces}
                         type={type}
+                        dateOptions={dateOptions}
                     />
                 )
             }}
