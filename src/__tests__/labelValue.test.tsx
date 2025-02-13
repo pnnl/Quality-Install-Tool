@@ -96,6 +96,14 @@ describe('LabelValue Component', () => {
         expect(container.firstChild).toBeNull()
     })
 
+    test('Should not render when value is empty', () => {
+        const { container } = renderWithContext({
+            label: 'Label Text',
+            type: 'string',
+        })
+        expect(container.firstChild).toBeNull()
+    })
+
     test('Should render when required is true and value is empty', () => {
         renderWithContext({
             label: 'Label Text',
