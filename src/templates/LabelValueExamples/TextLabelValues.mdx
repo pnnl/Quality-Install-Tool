@@ -7,20 +7,11 @@ import TextInput from '../../components/text_input_wrapper'
         <h1>Text Value Examples</h1>
         <p> Enter a text value to be retrieved by the LabelValue components below</p>
         <TextInput path="label-value-test-text-input" />
-
-        <h2>LabelValue with no props:</h2>
+        <h2>Text LabelValue:</h2>
         <code>
-            `<LabelValue />`
-        </code>
-        <div className="label-value-container" type="string">
-            <LabelValue />
-        </div>
-
-        <h2>LabelValue with path prop:</h2>
-        <code>
-            `<LabelValue path="label-value-test-text-input" />`
+            `<LabelValue label="Text LabelValue with path prop" path="label-value-test-text-input" />`
         </code>
         <div className="label-value-container">
-            <LabelValue path="label-value-test-text-input" />
+            <LabelValue label="Text LabelValue with path prop" path="label-value-test-text-input" />
         </div>
 </div>

@@ -9,7 +9,7 @@ import DateStr from './date_str'
  * @property {string} value - The value to display.
  * @property {boolean} [required=false] - A flag to determine if the label-value pair should be rendered.
  */
-interface LabelValueProps {
+export interface LabelValueProps {
     label?: string
     value?: string | number | boolean
     required?: boolean
@@ -83,7 +83,15 @@ const LabelValue: React.FC<LabelValueProps> = ({
         label ? (
             <div className="top-bottom-padding">
                 <span>{label}: </span>
-                <strong>{value}</strong>
+                <strong>
+                    {prefix}
+                    {type === 'date' && typeof value === 'string' ? (
+                        <DateStr date={value} />
+                    ) : (
+                        value
+                    )}
+                    {suffix}
+                </strong>
             </div>
         ) : (
             <>
