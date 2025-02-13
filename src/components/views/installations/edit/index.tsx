@@ -19,7 +19,7 @@ const View: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Layout>
-                <ProjectProvider projectId={projectId}>
+                <ProjectProvider projectId={projectId} attachments={true}>
                     <WorkflowProvider workflowName={workflowName}>
                         <InstallationProvider
                             installationId={installationId}
