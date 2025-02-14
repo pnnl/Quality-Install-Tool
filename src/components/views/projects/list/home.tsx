@@ -76,9 +76,9 @@ const Home: React.FC<HomeProps> = () => {
 
         // await reloadProjects()
         //
-        // setProjectForAddModalValue('')
-        //
         // setIsProjectForAddModalVisible(false)
+        //
+        // setProjectForAddModalValue('')
 
         navigate(`app/${project._id}`, {
             replace: true,
@@ -98,9 +98,9 @@ const Home: React.FC<HomeProps> = () => {
 
             await reloadProjects()
 
-            setProjectForRenameModalValue('')
-
             setSelectedProjectForRename(undefined)
+
+            setProjectForRenameModalValue('')
         }
     }, [projectForRenameModalValue, reloadProjects, selectedProjectForRename])
 

@@ -94,9 +94,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             await reloadProject()
         }
 
-        setInstallationForAddModalValue('')
-
         setIsInstallationForAddModalVisible(false)
+
+        setInstallationForAddModalValue('')
     }, [installationForAddModalValue, reloadProject, project, workflowName])
 
     const handleConfirmInstallationForDelete = useCallback(async () => {
@@ -138,9 +138,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
             await reloadInstallations()
 
-            setInstallationForRenameModalValue('')
-
             setSelectedInstallationForRename(undefined)
+
+            setInstallationForRenameModalValue('')
         }
     }, [
         installationForRenameModalValue,
