@@ -3,10 +3,11 @@
         "browser": true,
         "es2021": true
     },
-    "extends": ["plugin:mdx/recommended", "prettier"],
+    "extends": ["prettier"],
     "overrides": [
         {
             "files": ["*.mdx"],
+            "extends": ["plugin:mdx/recommended"],
             "globals": {
                 "Button": false,
                 "Checkbox": false,
