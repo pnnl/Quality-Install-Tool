@@ -227,7 +227,13 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   * If the ASHRAE 62.2 mechanical ventilation calculator finds that the home should have a whole-house mechanical ventilation system installed, please use the mechanical ventilation workflow to document.
-  <Button variant='primary' href={`/app/${props.project._id}/doe_workflow_mechanical_ventilation`}> Document Mechanical Ventilation</Button>
+
+<Button
+    variant="primary"
+    href={`/app/${props.project._id}/doe_workflow_mechanical_ventilation`}
+>
+    <span>Document Mechanical Ventilation</span>
+</Button>
 
   </Collapsible>
   <Radio label="Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
