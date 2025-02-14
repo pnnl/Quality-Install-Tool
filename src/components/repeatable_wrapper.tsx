@@ -1,22 +1,17 @@
-import PouchDB from 'pouchdb'
+import { get } from 'lodash'
 import React from 'react'
 
 import Repeatable from './repeatable'
 import { StoreContext } from '../providers/store_provider'
-import { type Base } from '../types/database.types'
 
 interface RepeatableWrapperProps {
-    label: string
     path: string
     children: React.ReactNode
-    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
 }
 
 const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
-    label,
     path,
     children,
-    parent,
 }) => {
     return (
         <StoreContext.Consumer>
@@ -24,10 +19,7 @@ const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
                 return (
                     <Repeatable
                         path={path}
-                        label={label}
-                        data={
-                            parent ? parent.data_ : doc ? doc.data_ : undefined
-                        }
+                        keys={Object.keys((doc && get(doc.data_, path)) ?? [])}
                     >
                         {children}
                     </Repeatable>

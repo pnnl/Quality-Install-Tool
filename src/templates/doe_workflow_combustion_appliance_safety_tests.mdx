@@ -25,7 +25,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         </Collapsible>
         <DateInput label="Assessment Date" path="assessment_date" />
 
-        <RepeatableInput path="combustion_safety_tests" label="Appliance: ">
+        <RepeatableInput path="combustion_safety_tests" label="Appliance" labelPath="appliance_type" maxValuesCount={5}>
             <Radio
                 label="Appliance Type:"
                 options={['Gas/Oil Water Heater', 'Gas/Oil Furnace/Boiler']}

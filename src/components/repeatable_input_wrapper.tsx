@@ -1,43 +1,52 @@
-import PouchDB from 'pouchdb'
+import { get } from 'lodash'
 import React from 'react'
 
 import RepeatableInput from './repeatable_input'
 import { StoreContext } from '../providers/store_provider'
-import { type Base } from '../types/database.types'
 
 interface RepeatableInputWrapperProps {
-    label: string
     path: string
+    label: string
+    labelPath?: string
     children: React.ReactNode
-    parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
-    max?: number
-    count?: number
-    fixed?: boolean
+    maxValuesCount: number
 }
 
 const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
-    label,
     path,
+    label,
+    labelPath,
     children,
-    parent,
-    max = 5,
-    count = 1,
-    fixed = false,
+    maxValuesCount,
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ doc }) => {
+            {({ doc, upsertData }) => {
                 return (
                     <RepeatableInput
                         path={path}
                         label={label}
-                        data={
-                            parent ? parent.data_ : doc ? doc.data_ : undefined
-                        }
-                        docId={parent ? parent?._id : doc ? doc._id : undefined}
-                        max={max}
-                        count={count}
-                        fixed={fixed}
+                        labelPath={labelPath}
+                        maxValuesCount={maxValuesCount}
+                        values={(doc && get(doc.data_, path)) ?? []}
+                        onAdd={async () => {
+                            if (doc) {
+                                const values = [...(get(doc.data_, path) ?? [])]
+
+                                values.splice(values.length, 0, {})
+
+                                await upsertData(path, values)
+                            }
+                        }}
+                        onRemove={async (index: number) => {
+                            if (doc) {
+                                const values = [...(get(doc.data_, path) ?? [])]
+
+                                values.splice(index, 1)
+
+                                await upsertData(path, values)
+                            }
+                        }}
                     >
                         {children}
                     </RepeatableInput>
