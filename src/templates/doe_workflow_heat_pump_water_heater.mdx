@@ -26,7 +26,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       3. Where the cooled air exhausted from the HPWH (approximately a half-ton) is acceptable or desirable
       4. More than 8 ft line-of-sight from a thermostat to prevent the cool air from affecting the thermostat
       5. Not dusty, or where a significant amount of dust is generated
-      6. Tall enough (~12” taller than the tank height, ~76” if < 65 gals to ~86” if &ge; 80
+      6. Tall enough (~12" taller than the tank height, ~76" if &lt; 65 gals to ~86" if &ge; 80
       gals) to allow the filter in the HPWH to be periodically accessed for cleaning
       7. Where there is access to a drain, drain line, or utility sink for condensate
       8. In the 40°F–125°F (4.4°C–51°C) temperature range year-round
@@ -34,17 +34,17 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       It is possible to also meet the air volume requirement of the HPWH by installing it next
       to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
       of the HPWH to an adjacent space. It is also possible to install a condensate pump where
-      a drain located below the elevation of the HPWH’s condensate outlet is not available.
+      a drain located below the elevation of the HPWH's condensate outlet is not available.
 
       You may find the following Space Air Volume Calculator useful in determining the volume to be
       entered in the "Space Air Volume" input below.
 
-| Space Air Volume Calculator                                                                                                                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <NumberInput label="Length (ft)" min={0} path="volume_calculator.length"  />                                                                                                                                                            |
-| <NumberInput label="Width (ft)" min={0} path="volume_calculator.width"  />                                                                                                                                                                                      |
-| <NumberInput label="height (ft)" min={0} path="volume_calculator.height" />                                                                                                                                                                                    |
-| Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup> |
+    | Space Air Volume Calculator |
+    | --- |
+    | <NumberInput label="Length (ft)" min={0} path="volume_calculator.length" /> |
+    | <NumberInput label="Width (ft)" min={0} path="volume_calculator.width" /> |
+    | <NumberInput label="height (ft)" min={0} path="volume_calculator.height" /> |
+    | Air Volume = {props.data.volume_calculator?.length} x {props.data.volume_calculator?.width} x {props.data.volume_calculator?.height} = {props.data.volume_calculator?.length * props.data.volume_calculator?.width * props.data.volume_calculator?.height} ft<sup>3</sup> |
 
     </Collapsible>
 
@@ -75,6 +75,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       the cool air could possibly lower the temperature of the surface to the point of dewpoint
       and cause moisture damage.
     </Collapsible>
+
   </Tab>
   <Tab eventKey="installation" title="Installation">
     ## HPWH Installation
@@ -89,25 +90,25 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       This is especially important if the HPWH selected has a larger storage capacity than
       the original one.
 
-  | Capcity (gal)| Filled Weight (lbs) |
-  | --- | --- |
-  | 50  | 573 |
-  | 66  | 796 |
-  | 80  | 921 |
+      | Capcity (gal)| Filled Weight (lbs) |
+      | --- | --- |
+      | 50  | 573 |
+      | 66  | 796 |
+      | 80  | 921 |
 
       - Install the HPWH into a drain pan to protect the surrounding location from water
       damage if a leak occurs. Install the leak detection sensor into the drain pan if the
       HPWH includes one.
       - Rotate the HPWH during installation so that the exhaust does not face a solid wall.
-      The exhaust of the HPWH must be more than the HPWH manufacturer’s minimum required
+      The exhaust of the HPWH must be more than the HPWH manufacturer's minimum required
       distance from a solid wall, usually 7 inches. If installing into a closet with a
       louvered door or high and low air grill, there is a maximum distance, typically around
-      12 inches, between the exhaust and the louvers, refer to the manufacturer’s specific
+      12 inches, between the exhaust and the louvers, refer to the manufacturer's specific
       instructions. The louvers on the door must extend to the bottom of the door to allow
       the cold air to fall out.
       - Replace the thermal expansion tank when replacing the water heater, expansion tanks
       typically last 5 to 10 years. Adjust the pre-charge pressure of the thermal expansion
-      tank to match the home’s water pressure using a tire pump. This 2009 Watts Water video
+      tank to match the home's water pressure using a tire pump. This 2009 Watts Water video
       shows how to do this step. Write down the pre-charge pressure onto the tank. A thermal
       expansion tank is not needed if the water heater is connected to a well pressure tank
       and there are no check valves to prevent backflow.
@@ -185,7 +186,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <CombustionSafetyChecksLink {...props} />
 
-
   </Tab>
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
@@ -226,7 +226,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     3. Where the cooled air exhausted from the HPWH (approximately a half-ton) is acceptable or desirable
     4. More than 8 ft line-of-sight from a thermostat to prevent the cool air from affecting the thermostat
     5. Not dusty, or where a significant amount of dust is generated
-    7. Tall enough (~12” taller than the tank height, ~76” if < 65 gals to ~86” if &ge; 80
+    7. Tall enough (~12" taller than the tank height, ~76" if &lt; 65 gals to ~86" if &ge; 80
     gals) to allow the filter in the HPWH to be periodically accessed for cleaning
     7. Where there is access to a drain, drain line, or utility sink for condensate
     8. In the 40°F–125°F (4.4°C–51°C) temperature range year-round
@@ -234,7 +234,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     It is possible to also meet the air volume requirement of the HPWH by installing it next
     to a louvered door, or ducting the supply, exhaust, or both the supply and the exhaust
     of the HPWH to an adjacent space. It is also possible to install a condensate pump where
-    a drain located below the elevation of the HPWH’s condensate outlet is not available.
+    a drain located below the elevation of the HPWH's condensate outlet is not available.
 
     ## Existing Condition
     <p>What is the fuel type of your existing water heater? <strong>{props.data?.existing_water_heater_fuel_type}</strong> </p>
@@ -330,5 +330,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 
     </PrintSection>
+
   </Tab>
 </Tabs>

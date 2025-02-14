@@ -3,10 +3,43 @@
         "browser": true,
         "es2021": true
     },
-    "extends": [
-        "prettier"
+    "extends": ["plugin:mdx/recommended", "prettier"],
+    "overrides": [
+        {
+            "files": ["*.mdx"],
+            "globals": {
+                "Button": false,
+                "Checkbox": false,
+                "ClimateZoneSelect": false,
+                "Collapsible": false,
+                "DateInput": false,
+                "DateStr": false,
+                "DateTimeStr": false,
+                "Figure": false,
+                "FileInput": false,
+                "GpsCoordStr": false,
+                "LabelValue": false,
+                "LocationStr": false,
+                "NumberInput": false,
+                "PDFRenderer": false,
+                "PageBreak": false,
+                "Photo": false,
+                "PhotoInput": false,
+                "PrintSection": false,
+                "Radio": false,
+                "Repeatable": false,
+                "RepeatableInput": false,
+                "Select": false,
+                "ShowOrHide": false,
+                "StringInput": false,
+                "Tab": false,
+                "Tabs": false,
+                "TextInput": false,
+                "USStateSelect": false,
+                "Table": false
+            }
+        }
     ],
-    "overrides": [],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
@@ -16,11 +49,7 @@
             "experimentalObjectRestSpread": true
         }
     },
-    "plugins": [
-        "react",
-        "prettier",
-        "typescript"
-    ],
+    "plugins": ["react", "prettier", "typescript"],
     "rules": {
         "prettier/prettier": "error"
     },

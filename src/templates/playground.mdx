@@ -1,48 +1,61 @@
-# Playground
+<>
+    # Playground
 
-<Button variant='primary' href={process.env.REACT_APP_HOMEPAGE}>Button</Button>
+    <Button className="mb-3" variant="primary" href={process.env.REACT_APP_HOMEPAGE} rel="noopener noreferrer" target="_blank">
+        <span>Button</span>
+    </Button>
 
-<Checkbox options={['Checkbox']} path="check_box" />
+    <Checkbox options={['Checkbox']} path="check_box" />
 
-<ClimateZoneSelect label="ClimateZoneSelect" path="climate_zone_select" />
+    <ClimateZoneSelect label="ClimateZoneSelect" path="climate_zone_select" />
 
-<Collapsible header="Collapsible">
-    Collapsible
-</Collapsible>
+    <Collapsible header="Collapsible">Collapsible</Collapsible>
 
-<DateInput label="DateInput" path="date_input" />
+    <DateInput label="DateInput" path="date_input" />
 
-**DateStr:** <DateStr date={props.data.date_input}/>
+    **DateStr:** <DateStr date={props.data.date_input}/>
 
-<Figure src="/logo192.png" />
+    **DateTimeStr:** <DateTimeStr date={props.data.date_input}/>
 
-<FileInput id="file_input" label="File Input">FileInput</FileInput>
+    <Figure src="/logo192.png" />
 
-<LabelValue label="LabelValue" path="doc_name" parent={props.project} />
+    <FileInput id="file_input" label="File Input">
+        FileInput
+    </FileInput>
 
-<NumberInput label="NumberInput" min={0} max={100} path="number_input" />
+    <LabelValue label="LabelValue" path="doc_name" parent={props.project} />
 
-<PhotoInput id="photo_input" label="PhotoInput">PhotoInput</PhotoInput>
+    <NumberInput label="NumberInput" min={0} max={100} path="number_input" suffix="%" />
 
-<Radio label="Radio" options={['Yes','No']} path="radio" />
+    <PhotoInput id="photo_input" label="PhotoInput">
+        PhotoInput
+    </PhotoInput>
 
-<Select label="Select" options={["Yes", "No"]} path="select" />
+    <Photo id="photo_input" />
 
-<StringInput label="StringInput" path="string_input" />
+    <Radio label="Radio" options={['Yes', 'No']} path="radio" />
 
-<TextInput label="TextInput" path="text_input" />
+    <Select label="Select" options={['Yes', 'No']} path="select" />
 
-<USStateSelect label="USStateSelect" path="u_s_state_select" />
+    <StringInput label="StringInput" path="string_input" />
 
-## TODO
+    <TextInput label="TextInput" path="text_input" />
 
-* PDFRenderer
-* PageBreak
-* Photo
-* PrintSection
-* Repeatable
-* RepeatableInput
-* ShowOrHide
-* Tab
-* Tabs
-* Table
+    <USStateSelect label="USStateSelect" path="us_state_select" />
+
+    ## TODO
+
+    -   GpsCoordStr
+    -   LocationStr
+    -   PDFRenderer
+    -   PageBreak
+    -   Photo
+    -   PrintSection
+    -   Repeatable
+    -   RepeatableInput
+    -   ShowOrHide
+    -   Tab
+    -   Tabs
+    -   Table
+
+</>

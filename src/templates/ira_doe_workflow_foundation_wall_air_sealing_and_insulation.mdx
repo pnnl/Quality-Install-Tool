@@ -128,7 +128,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
 
-  ## Final Conditions
+## Final Conditions
 
 <Select
     label="What percent of the foundation perimeter was insulated?"
@@ -136,19 +136,51 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     path="postinstall_foundation_perimeter_percent"
 />
 
-  <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
-  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />
-  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}>
-  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
-  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-  </PhotoInput>
-  </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
+<Select
+    label="What R-value was added to the foundation perimeter?"
+    options={[
+        'Less than R-10',
+        'R-10',
+        'R-13',
+        'R-19',
+        'R-30',
+        'More than R-30',
+    ]}
+    path="postinstall_foundation_r_value"
+/>
+<Radio
+    label="What is the post air sealing and insulation air leakage rate?"
+    options={['Not Measured', 'CFM at 50Pa']}
+    path="postinstall_foundation_air_leakage_level"
+/>
+<ShowOrHide
+    visible={
+        props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'
+    }
+>
+    <NumberInput
+        label="CFM at 50Pa"
+        min={0}
+        path="postinstall_foundation_air_leakage_cfm50"
+    />
+    <PhotoInput
+        id="postinstall_cfm50_photo"
+        label="Final blower door manometer showing the CFM50 value – Photo"
+    >
+        Photo of the manometer showing CFM50 of air leakage after air sealing
+        and insulation work was performed
+    </PhotoInput>
+</ShowOrHide>
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_combustion_safety_to_homeowner"
+/>
 
-  <CombustionSafetyChecksLink {...props} />
+<CombustionSafetyChecksLink {...props} />
 
-  ## Ventilation
+## Ventilation
+
   <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc

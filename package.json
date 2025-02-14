@@ -115,9 +115,9 @@
     "start": "node scripts/start.js",
     "build": "TSC_COMPILE_ON_ERROR=true node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,ts,tsx}'",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,mdx,ts,tsx}'",
+    "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,mdx,ts,tsx}'",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,mdx,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -145,6 +145,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "eslint-config-standard-with-typescript": "^36.1.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-mdx": "^3.1.5",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-promise": "^6.0.0",
@@ -157,7 +158,7 @@
       "<rootDir>/src"
     ],
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
+      "src/**/*.{js,jsx,mdx,ts,tsx}",
       "!src/**/*.d.ts"
     ],
     "setupFiles": [
@@ -172,12 +173,12 @@
     ],
     "testEnvironment": "jsdom",
     "transform": {
-      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx|mdx)$": "<rootDir>/config/jest/babelTransform.js",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|mdx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx|mdx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "modulePaths": [],
@@ -195,6 +196,8 @@
       "json",
       "web.jsx",
       "jsx",
+      "web.mdx",
+      "mdx",
       "node"
     ],
     "watchPlugins": [

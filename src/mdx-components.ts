@@ -5,9 +5,12 @@ import ClimateZoneSelectWrapper from './components/climate_zone_select_wrapper'
 import Collapsible from './components/collapsible'
 import DateInputWrapper from './components/date_input_wrapper'
 import DateStr from './components/date_str'
+import DateTimeStr from './components/date_time_str'
 import FigureWrapper from './components/figure_wrapper'
 import FileInputWrapper from './components/file_input_wrapper'
+import GpsCoordStr from './components/gps_coord_str'
 import LabelValueWrapper from './components/label_value_wrapper'
+import LocationStr from './components/location_str'
 import NumberInputWrapper from './components/number_input_wrapper'
 import PDFRendererWrapper from './components/pdf_renderer_wrapper'
 import PageBreak from './components/page_break'
@@ -30,13 +33,16 @@ export default {
     ClimateZoneSelect: ClimateZoneSelectWrapper,
     Collapsible,
     DateInput: DateInputWrapper,
-    DateStr: DateStr,
+    DateStr,
+    DateTimeStr,
     Figure: FigureWrapper,
     FileInput: FileInputWrapper,
+    GpsCoordStr,
     LabelValue: LabelValueWrapper,
+    LocationStr,
     NumberInput: NumberInputWrapper,
     PDFRenderer: PDFRendererWrapper,
-    PageBreak: PageBreak,
+    PageBreak,
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
     PrintSection: PrintSectionWrapper,
@@ -47,8 +53,8 @@ export default {
     ShowOrHide: ShowOrHideWrapper,
     StringInput: StringInputWrapper,
     Tab,
+    Table: TableWrapper,
     Tabs,
     TextInput: TextInputWrapper,
     USStateSelect: USStateSelectWrapper,
-    Table: TableWrapper,
 }
