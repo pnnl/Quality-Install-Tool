@@ -4,7 +4,6 @@ import { type Geolocation, type GeolocationSource } from './geolocation.type'
 import { type Installer } from './installer.type'
 import { type Location } from './location.type'
 import { type Timestamp, type TimestampSource } from './timestamp.type'
-import TEMPLATES from '../templates'
 
 export interface Base {
     type: string
@@ -32,7 +31,7 @@ export interface InstallationData extends BaseData {}
 
 export interface InstallationMetadata extends BaseMetadata {
     template_title: string
-    template_name: keyof typeof TEMPLATES
+    template_name: string
 }
 
 export interface Project extends Base {

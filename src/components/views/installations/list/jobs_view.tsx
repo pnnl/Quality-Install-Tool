@@ -14,7 +14,6 @@ import {
 } from '../../../../providers/installations_provider'
 import { useProject } from '../../../../providers/project_provider'
 import { useWorkflow } from '../../../../providers/workflow_provider'
-import TEMPLATES from '../../../../templates'
 import { type Installation } from '../../../../types/database.types'
 import {
     newInstallation,
@@ -26,7 +25,7 @@ import { someLocation } from '../../../../utilities/location_utils'
 import { type Validator } from '../../../../utilities/validation_utils'
 
 interface JobListProps {
-    workflowName: keyof typeof TEMPLATES | undefined
+    workflowName: string | undefined
 }
 
 const JobList: React.FC<JobListProps> = ({ workflowName }) => {
