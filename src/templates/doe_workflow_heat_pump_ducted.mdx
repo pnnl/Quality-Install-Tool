@@ -90,7 +90,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             | CFM25 per 100 ft<sup>2</sup> Calculator
             | ---------------------------------------
             | <NumberInput label="CFM25" min={0} path="cfm25_calculator.cfm25"  />
-            | <NumberInput label="Conditioned Floor Area (ft&#178;)" min={0} path="cfm25_calculator.conditioned_floor_area"  />
+            | <NumberInput label={<>Conditioned Floor Area (ft<sup>2</sup>)</>} min={0} path="cfm25_calculator.conditioned_floor_area"  />
             | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null }
 
             ## Type Of Test
@@ -167,9 +167,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         <PhotoInput id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" uploadable>
             Upload a photo of the manufacturer's extended heating performance table.
         </PhotoInput>
-        <NumberInput label="Aux Heat Lockout Above This Temperature (&deg;F)" min={0} path="aux_heat_lockout_temperature" />
-        <NumberInput label="Compresser Lockout Below This Temperature (&deg;F)" min={0} path="compresser_lockout_temperature" />
-        <NumberInput label="Dual Fuel Switch Over Temperature (&deg;F)" min={0} path="dual_fuel_switch_over_temperature" />
+        <NumberInput label={<>Aux Heat Lockout Above This Temperature (&deg;F)</>} min={0} path="aux_heat_lockout_temperature" />
+        <NumberInput label={<>Compressor Lockout Below This Temperature (&deg;F)</>} min={0} path="compresser_lockout_temperature" />
+        <NumberInput label={<>Dual Fuel Switch Over Temperature (&deg;F)</>} min={0} path="dual_fuel_switch_over_temperature" />
 
         <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="Mfr's cooling performance table – Photo" uploadable>
             Upload a photo of the manufacturer's extended cooling performance table showing sensible, latent, or SHR.
@@ -530,7 +530,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             }
             {
                 props.data.compresser_lockout_temperature
-                ? <p><strong>Compresser Lockout Below This Temperature (&deg;F): </strong> {props.data.compresser_lockout_temperature}</p>
+                ? <p><strong>Compressor Lockout Below This Temperature (&deg;F): </strong> {props.data.compresser_lockout_temperature}</p>
                 : null
             }
             {
