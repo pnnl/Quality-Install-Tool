@@ -117,7 +117,7 @@
     "test": "node scripts/test.js",
     "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,mdx,ts,tsx}'",
     "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,mdx,ts,tsx}'",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,mdx,json}' --config ./.prettierrc"
+    "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,mdx,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [

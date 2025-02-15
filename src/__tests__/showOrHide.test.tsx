@@ -6,7 +6,7 @@ describe('ShowOrHide Component', () => {
         render(
             <ShowOrHide visible={true}>
                 <div>Visible Content</div>
-            </ShowOrHide>
+            </ShowOrHide>,
         )
 
         // Assert that the content is rendered
@@ -17,7 +17,7 @@ describe('ShowOrHide Component', () => {
         render(
             <ShowOrHide visible={false}>
                 <div>Invisible Content</div>
-            </ShowOrHide>
+            </ShowOrHide>,
         )
 
         // Assert that the content is not rendered
@@ -28,7 +28,7 @@ describe('ShowOrHide Component', () => {
         render(
             <ShowOrHide visible={false} value="WA" pathValue="WA">
                 <div>Location is WA</div>
-            </ShowOrHide>
+            </ShowOrHide>,
         )
 
         // Assert that the content is rendered because the path and value match
@@ -39,7 +39,7 @@ describe('ShowOrHide Component', () => {
         render(
             <ShowOrHide visible={false} value="CA" pathValue="CA">
                 <div>Content Visible with Parent Data</div>
-            </ShowOrHide>
+            </ShowOrHide>,
         )
 
         const content = screen.getByText('Content Visible with Parent Data')
@@ -51,7 +51,7 @@ describe('ShowOrHide Component', () => {
         render(
             <ShowOrHide visible={false} value="CA" pathValue="NY">
                 <div>Content Visible with Parent Data</div>
-            </ShowOrHide>
+            </ShowOrHide>,
         )
 
         // Assert that the content is not rendered because the path and value do not match in parent data
