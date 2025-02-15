@@ -11,7 +11,9 @@ import {
 
 interface ImportDocProps {
     label: string
-    onImport: (projectId: PouchDB.Core.DocumentId) => void | Promise<void>
+    onImport: (
+        responses: Array<PouchDB.Core.Response | PouchDB.Core.Error>,
+    ) => void | Promise<void>
 }
 
 const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
@@ -31,21 +33,16 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                 const data = JSON.parse(text)
 
                 try {
-                    const [projectResponse, installationResponses] =
-                        await importJSONDocument(db, data)
+                    const responses = await importJSONDocument(db, data)
 
-                    if (projectResponse.ok) {
-                        setError(undefined)
+                    setError(undefined)
 
-                        onImport && (await onImport(projectResponse.id))
-                    } else {
-                        setError('Failed to save product document.')
-                    }
+                    onImport && (await onImport(responses))
                 } catch (cause) {
-                    setError('Failed to import JSON.')
+                    setError(`Failed to import JSON: ${cause}`)
                 }
             } catch (cause) {
-                setError('Failed to parse as JSON.')
+                setError(`Failed to parse as JSON: ${cause}`)
             }
         }
 
@@ -66,6 +63,8 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                         )
                     }
                 }
+
+                event.target.value = ''
             }
         },
         [reader],

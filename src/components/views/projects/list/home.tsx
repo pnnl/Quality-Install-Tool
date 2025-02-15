@@ -207,17 +207,8 @@ const Home: React.FC<HomeProps> = () => {
                             &nbsp;&nbsp;
                             <ImportDoc
                                 label="Import a Project"
-                                onImport={async (
-                                    projectId: PouchDB.Core.DocumentId,
-                                ) => {
-                                    const project = await getProject(
-                                        db,
-                                        projectId,
-                                    )
-
-                                    setProjects(previousProjects => {
-                                        return [project, ...previousProjects]
-                                    })
+                                onImport={async () => {
+                                    await reloadProjects()
                                 }}
                             />
                         </div>
@@ -236,14 +227,8 @@ const Home: React.FC<HomeProps> = () => {
                         &nbsp;&nbsp;
                         <ImportDoc
                             label="Import Project"
-                            onImport={async (
-                                projectId: PouchDB.Core.DocumentId,
-                            ) => {
-                                const project = await getProject(db, projectId)
-
-                                setProjects(previousProjects => {
-                                    return [project, ...previousProjects]
-                                })
+                            onImport={async () => {
+                                await reloadProjects()
                             }}
                         />
                     </div>

@@ -57,147 +57,176 @@ export async function exportJSONDocument(
 export async function importJSONDocument(
     db: PouchDB.Database<Base>,
     data: JSONDocument,
-): Promise<
-    [
-        PouchDB.Core.Response,
-        (
-            | Array<[PouchDB.Core.Response, PouchDB.UpsertResponse | undefined]>
-            | undefined
-        ),
-    ]
-> {
-    // await db.info()
+): Promise<Array<PouchDB.Core.Response | PouchDB.Core.Error>> {
+    await db.info()
 
-    const projectDocs: Array<PouchDB.Core.PutDocument<Project>> = []
-    const installationDocs: Array<PouchDB.Core.PutDocument<Installation>> = []
+    const docIds: Map<PouchDB.Core.DocumentId, PouchDB.Core.DocumentId> =
+        new Map()
+
+    let docs: Array<PouchDB.Core.PutDocument<Base>> = []
 
     const values: Array<JSONDocumentObject> = Array.isArray(data.all_docs)
         ? data.all_docs
         : [data.all_docs]
 
-    values.forEach(value => {
-        switch (value.type) {
-            case 'project':
-                projectDocs.push(value as PouchDB.Core.PutDocument<Project>)
+    values.forEach((value, index) => {
+        const doc = value as PouchDB.Core.PutDocument<Base>
 
-                break
-            case 'installation':
-                installationDocs.push(
-                    value as PouchDB.Core.PutDocument<Installation>,
+        if (doc._id) {
+            docIds.set(doc._id, crypto.randomUUID())
+        } else {
+            throw new Error(
+                `Document at index ${index} is missing "_id" property.`,
+            )
+        }
+
+        docs.push(doc)
+    })
+
+    const createdAt = new Date()
+    const lastModifiedAt = createdAt
+
+    docs = docs.map((doc, index) => {
+        if (doc._id) {
+            if (docIds.has(doc._id)) {
+                const parentDocId = docIds.get(doc._id)
+
+                if (parentDocId) {
+                    return {
+                        ...doc,
+                        _id: parentDocId,
+                        _rev: undefined,
+                        children: (doc.children ?? []).map(
+                            (child, childIndex) => {
+                                if (typeof child === 'string') {
+                                    if (docIds.has(child)) {
+                                        const childDocId = docIds.get(child)
+
+                                        if (childDocId) {
+                                            return childDocId
+                                        } else {
+                                            throw new Error(
+                                                `Child at index ${childIndex} of document at index ${index} was assigned an "_id" property, but it is falsey.`,
+                                            )
+                                        }
+                                    } else {
+                                        throw new Error(
+                                            `Child at index ${childIndex} of document at index ${index} has not been assigned an "_id" property.`,
+                                        )
+                                    }
+                                } else {
+                                    throw new Error(
+                                        `Child at index ${childIndex} of document at index ${index} is invalid (expected: \`string\`; received \`${typeof child}\`).`,
+                                    )
+                                }
+                            },
+                        ),
+                        metadata_: {
+                            ...doc.metadata_,
+                            created_at: createdAt,
+                            last_modified_at: lastModifiedAt,
+                        },
+                    }
+                } else {
+                    throw new Error(
+                        `Document at index ${index} was assigned an "_id" property, but it is falsey.`,
+                    )
+                }
+            } else {
+                throw new Error(
+                    `Document at index ${index} has not been assigned an "_id" property.`,
                 )
-
-                break
+            }
+        } else {
+            throw new Error(
+                `Document at index ${index} is missing "_id" property.`,
+            )
         }
     })
 
-    switch (projectDocs.length) {
-        case 0:
-            throw new Error(`importJSONDocument: No projects found.`)
-        case 1:
-            const createdAt = new Date()
-            const lastModifiedAt = createdAt
+    const projectDocNames = await getProjectDocumentNames(db)
 
-            const projectDocNames = await getProjectDocumentNames(db)
+    const projectDocNameAppender = new Appender()
 
-            const projectId = crypto.randomUUID()
+    projectDocNameAppender.put(...projectDocNames)
 
-            const projectResponse = await putProject(db, {
-                ...projectDocs[0],
-                _id: projectId,
-                _rev: undefined,
-                children: [],
+    docs = docs.map(doc => {
+        if (doc.type === 'project') {
+            const doc_name = projectDocNameAppender.get(doc.metadata_.doc_name)
+
+            projectDocNameAppender.put(doc_name)
+
+            return {
+                ...doc,
                 metadata_: {
-                    ...projectDocs[0].metadata_,
-                    doc_name: _appendSuffix(
-                        projectDocNames,
-                        projectDocs[0].metadata_.doc_name,
-                    ),
-                    created_at: createdAt,
-                    last_modified_at: lastModifiedAt,
+                    ...doc.metadata_,
+                    doc_name,
                 },
-            })
-
-            if (projectResponse.ok) {
-                const installationResponses = await Promise.all(
-                    installationDocs.map(installationDoc => {
-                        const installationId = crypto.randomUUID()
-
-                        return putInstallation(db, projectId, {
-                            ...installationDoc,
-                            _id: installationId,
-                            _rev: undefined,
-                            children: [],
-                            metadata_: {
-                                ...installationDoc.metadata_,
-                                created_at: createdAt,
-                                last_modified_at: lastModifiedAt,
-                            },
-                        })
-                    }),
-                )
-
-                return [projectResponse, installationResponses]
-            } else {
-                return [projectResponse, undefined]
             }
-        default:
-            throw new Error('importJSONDocument: More than one project found.')
-    }
+        } else {
+            return doc
+        }
+    })
+
+    const responses = await db.bulkDocs<Base>(docs)
+
+    return responses
 }
 
-function _appendSuffix(sources: string[], target: string) {
-    type MaxIndexByKey = {
+class Appender {
+    private _maxIndexByKey: {
         [key: string]: number
-    }
+    } = {}
 
-    const maxIndexByKey: MaxIndexByKey = sources.reduce(
-        (accumulator: MaxIndexByKey, source) => {
-            const [strippedSource, sourceIndexes] = _stripSuffixes(source)
+    private _reSuffix: RegExp = /\s*\(\s*(\d+)\s*\)\s*$/i
 
-            if (!(strippedSource in accumulator)) {
-                accumulator[strippedSource] = 0
+    private _stripSuffixes(source: string): [string, number[]] {
+        const indexes = []
+
+        let previous = undefined
+        let current = source.trim()
+
+        while (previous !== current) {
+            previous = current
+
+            const result = current.match(this._reSuffix)
+
+            if (result) {
+                const index = parseInt(result[1])
+
+                indexes.push(index)
+
+                current = current.replace(this._reSuffix, '')
             }
+        }
 
-            accumulator[strippedSource] = Math.max(
-                accumulator[strippedSource],
-                ...sourceIndexes,
-            )
-
-            return accumulator
-        },
-        {},
-    )
-
-    const [strippedTarget, targetIndexes] = _stripSuffixes(target)
-
-    if (strippedTarget in maxIndexByKey) {
-        return `${strippedTarget} (${maxIndexByKey[strippedTarget] + 1})`
-    } else {
-        return strippedTarget
+        return [previous, indexes]
     }
-}
 
-const RE_SUFFIX: RegExp = new RegExp(/\s*\(\s*(\d+)\s*\)\s*$/, 'i')
+    constructor() {}
 
-function _stripSuffixes(source: string): [string, number[]] {
-    const indexes = []
+    get(target: string): string {
+        const [strippedTarget, targetIndexes] = this._stripSuffixes(target)
 
-    let previous = undefined
-    let current = source.trim()
-
-    while (previous !== current) {
-        previous = current
-
-        const result = current.match(RE_SUFFIX)
-
-        if (result) {
-            const index = parseInt(result[1])
-
-            indexes.push(index)
-
-            current = current.replace(RE_SUFFIX, '')
+        if (strippedTarget in this._maxIndexByKey) {
+            return `${strippedTarget} (${this._maxIndexByKey[strippedTarget] + 1})`
+        } else {
+            return strippedTarget
         }
     }
 
-    return [previous, indexes]
+    put(...sources: string[]): void {
+        sources.forEach(source => {
+            const [strippedSource, sourceIndexes] = this._stripSuffixes(source)
+
+            if (!(strippedSource in this._maxIndexByKey)) {
+                this._maxIndexByKey[strippedSource] = 0
+            }
+
+            this._maxIndexByKey[strippedSource] = Math.max(
+                this._maxIndexByKey[strippedSource],
+                ...sourceIndexes,
+            )
+        })
+    }
 }
