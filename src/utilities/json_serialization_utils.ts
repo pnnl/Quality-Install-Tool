@@ -4,8 +4,6 @@ import {
     getInstallations,
     getProject,
     getProjectDocumentNames,
-    putInstallation,
-    putProject,
 } from './database_utils'
 import {
     type Base,
