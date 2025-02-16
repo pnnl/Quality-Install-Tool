@@ -85,6 +85,20 @@ export async function importJSONDocument(
     const lastModifiedAt = createdAt
 
     docs = docs.map((doc, index) => {
+        if (doc.type) {
+            if (['installation', 'project'].includes(doc.type)) {
+                // Do nothing.
+            } else {
+                throw new Error(
+                    `Document at index ${index} has invalid value for "type" property (expected: "installation" or "project"; received: ${JSON.stringify(doc.type)}).`,
+                )
+            }
+        } else {
+            throw new Error(
+                `Document at index ${index} is missing "type" property.`,
+            )
+        }
+
         if (doc._id) {
             if (docIds.has(doc._id)) {
                 const parentDocId = docIds.get(doc._id)
