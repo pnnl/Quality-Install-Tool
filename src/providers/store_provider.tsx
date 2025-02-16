@@ -6,16 +6,25 @@ import { type Base } from '../types/database.types'
 import { immutableUpsert } from '../utilities/path_utils'
 import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
 
-export function useChangeEventHandler(): (
-    doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
-) => Promise<void> {
+export function useChangeEventHandler(
+    callback?: (
+        error: PouchDB.Core.Error | null,
+        result: PouchDB.Core.Response | null,
+    ) => void | Promise<void>,
+): (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => Promise<void> {
     const db = useDatabase()
 
     return useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
-            await db.put<Base>(doc)
+            try {
+                const result = await db.put<Base>(doc)
+
+                callback && (await callback(null, result))
+            } catch (error) {
+                callback && (await callback(error as PouchDB.Core.Error, null))
+            }
         },
-        [],
+        [callback],
     )
 }
 
