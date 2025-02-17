@@ -86,7 +86,7 @@ const InstallationsProvider: React.FC<InstallationsProviderProps> = ({
 
             setInstallations([])
         }
-    }, [installationComparator, projectId, workflowName])
+    }, [attachments, db, installationComparator, projectId, workflowName])
 
     useEffect(() => {
         reloadInstallations()

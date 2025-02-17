@@ -72,7 +72,7 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
 
             setInstallation(undefined)
         }
-    }, [attachments, installationId])
+    }, [attachments, db, installationId])
 
     useEffect(() => {
         reloadInstallation()
@@ -106,7 +106,7 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [attachments, installationId])
+    }, [attachments, db, installationId])
 
     if (error) {
         return (

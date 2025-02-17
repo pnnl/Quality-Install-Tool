@@ -50,9 +50,11 @@
             "experimentalObjectRestSpread": true
         }
     },
-    "plugins": ["react", "prettier", "typescript"],
+    "plugins": ["react", "react-hooks", "prettier", "typescript"],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     },
     "parser": "@babel/eslint-parser"
 }

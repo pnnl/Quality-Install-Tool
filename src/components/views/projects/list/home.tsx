@@ -95,6 +95,8 @@ const Home: React.FC<HomeProps> = () => {
             replace: true,
         })
     }, [
+        db,
+        navigate,
         projectForAddModalValue,
         // reloadProjects
     ])
@@ -113,7 +115,12 @@ const Home: React.FC<HomeProps> = () => {
 
             setProjectForRenameModalValue('')
         }
-    }, [projectForRenameModalValue, reloadProjects, selectedProjectForRename])
+    }, [
+        db,
+        projectForRenameModalValue,
+        reloadProjects,
+        selectedProjectForRename,
+    ])
 
     return (
         <>

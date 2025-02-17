@@ -24,7 +24,7 @@ export function useChangeEventHandler(
                 callback && (await callback(error as PouchDB.Core.Error, null))
             }
         },
-        [callback],
+        [db, callback],
     )
 }
 

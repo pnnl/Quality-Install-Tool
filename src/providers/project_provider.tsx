@@ -72,7 +72,7 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
 
             setProject(undefined)
         }
-    }, [attachments, projectId])
+    }, [attachments, db, projectId])
 
     useEffect(() => {
         reloadProject()
@@ -106,7 +106,7 @@ const ProjectProvider: React.FC<ProjectProviderProps> = ({
         return () => {
             changes.cancel()
         }
-    }, [attachments, projectId])
+    }, [attachments, db, projectId])
 
     if (error) {
         return (

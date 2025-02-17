@@ -75,7 +75,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
                 onConfirm && (await onConfirm())
             }
         },
-        [onConfirm],
+        [errorMessages.length, onConfirm],
     )
 
     return (

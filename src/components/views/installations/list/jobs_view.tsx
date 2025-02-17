@@ -96,7 +96,14 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
         setIsInstallationForAddModalVisible(false)
 
         setInstallationForAddModalValue('')
-    }, [installationForAddModalValue, reloadProject, project, workflowName])
+    }, [
+        db,
+        installationForAddModalValue,
+        project,
+        reloadInstallations,
+        reloadProject,
+        workflowName,
+    ])
 
     const handleConfirmInstallationForDelete = useCallback(async () => {
         if (project && selectedInstallationForDelete) {
@@ -121,10 +128,11 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             setSelectedInstallationForDelete(undefined)
         }
     }, [
-        reloadInstallations,
-        reloadProject,
+        db,
         project,
+        reloadProject,
         selectedInstallationForDelete,
+        setInstallations,
     ])
 
     const handleConfirmInstallationForRename = useCallback(async () => {
@@ -142,6 +150,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             setInstallationForRenameModalValue('')
         }
     }, [
+        db,
         installationForRenameModalValue,
         reloadInstallations,
         selectedInstallationForRename,

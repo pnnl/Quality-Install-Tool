@@ -38,7 +38,7 @@ const ExportDoc: React.FC<ExportDocProps> = ({ projectId }) => {
 
             return false
         },
-        [projectId],
+        [db, projectId],
     )
 
     return (

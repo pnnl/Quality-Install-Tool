@@ -69,7 +69,7 @@ const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
 
             setProjects([])
         }
-    }, [projectComparator])
+    }, [attachments, db, projectComparator])
 
     useEffect(() => {
         reloadProjects()

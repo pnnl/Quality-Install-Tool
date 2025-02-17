@@ -47,7 +47,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
         }
 
         return _reader
-    }, [])
+    }, [db, onImport])
 
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {
