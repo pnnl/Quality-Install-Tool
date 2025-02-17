@@ -69,6 +69,17 @@ const Home: React.FC<HomeProps> = () => {
         ]
     }, [projects])
 
+    // @note Implementation of {handleConfirmProjectForAdd} function.
+    //     After the PouchDB document for the new project has been inserted into
+    //     the database, there are 2 possible behaviors: reload the current list
+    //     of projects, or navigate to the new project. Both behaviors are
+    //     implemented. Currently, the code for the first behavior is commented
+    //     out.
+    //
+    //     To revert to the first behavior, uncomment the lines for the 3
+    //     function calls and the dependency on the {reloadProjects} function in
+    //     the call to {React.useCallback} function, and then comment out the
+    //     call to the {nagigate} function.
     const handleConfirmProjectForAdd = useCallback(async () => {
         const project = newProject(projectForAddModalValue.trim(), undefined)
 

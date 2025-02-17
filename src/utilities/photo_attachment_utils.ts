@@ -25,6 +25,12 @@ export function getPhotoAttachments(
                 }
             }
 
+            // @note Retained for backwards compatibility.
+            //     The following code for "parts" is retained for backwards
+            //     compatibility with PouchDB documents that were generated
+            //     prior to the refactor in pull request #267.
+            //
+            //     It is not known if the following code actually needed...
             const parts = key.split('.')
 
             if (parts.length === 3) {

@@ -43,6 +43,7 @@ export async function exportJSONDocument(
 
     const installationDocs = await getInstallations(db, projectId, undefined, {
         attachments: true,
+        binary: false,
     })
 
     const data = {

@@ -39,6 +39,17 @@ const FileInput: React.FC<FileInputProps> = ({
 
                 await upsertFile(file, file.name)
             }
+
+            // @note Change detection for `<input type="file" />` elements.
+            //     The "value" attribute is set to the empty string to
+            //     account for the situation when the user attempts to
+            //     import the same JSON document more than once without
+            //     reloading the page.
+            //
+            //     If the "value" attribute is not set to the empty string,
+            //     then the second attempt will not trigger a change event
+            //     (because the "value" attribute has not changed).
+            event.target.value = ''
         },
         [upsertFile],
     )

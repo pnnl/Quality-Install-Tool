@@ -33,6 +33,14 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                             if (doc) {
                                 const values = [...(get(doc.data_, path) ?? [])]
 
+                                // @note Initial value for "repeatable" object.
+                                //     Currently, the initial value is an empty
+                                //     object `{}`.
+                                //
+                                //     A suggested improvement is to refactor
+                                //     this into a prop for this component. This
+                                //     would enable template authors to
+                                //     prepopulate the values for form fields.
                                 values.splice(values.length, 0, {})
 
                                 await upsertData(path, values)
