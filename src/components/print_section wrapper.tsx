@@ -11,7 +11,7 @@ const PrintSectionWrapper: React.FC<PrintSectionWrapperProps> = ({
     children,
     label,
 }) => {
-    return <PrintSection children={children} label={label} />
+    return <PrintSection label={label}>{children}</PrintSection>
 }
 
 export default PrintSectionWrapper

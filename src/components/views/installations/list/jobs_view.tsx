@@ -243,9 +243,6 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                                     <InstallationListGroup
                                         key={installation._id}
                                         to={`/app/${project._id}/${installation.metadata_.template_name}/${installation._id}`}
-                                        children={
-                                            installation.metadata_.doc_name
-                                        }
                                         onEdit={() => {
                                             setSelectedInstallationForRename(
                                                 installation,
@@ -260,7 +257,9 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                                                 installation,
                                             )
                                         }}
-                                    />
+                                    >
+                                        {installation.metadata_.doc_name}
+                                    </InstallationListGroup>
                                 ))}
                             </div>
                         </>

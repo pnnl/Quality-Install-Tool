@@ -34,12 +34,13 @@ const ShowOrHideWrapper: React.FC<ShowOrHideWrapperProps> = ({
 
                 return (
                     <ShowOrHide
-                        children={children}
                         visible={visible}
                         pathValue={path ? get(currentData, path) : undefined}
                         value={value}
                         matchCondition={matchCondition}
-                    />
+                    >
+                        {children}
+                    </ShowOrHide>
                 )
             }}
         </StoreContext.Consumer>

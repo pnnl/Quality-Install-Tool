@@ -106,8 +106,11 @@ const Photo: React.FC<PhotoProps> = ({
                         <div className="photo-notes">
                             <h3>Notes:</h3>
                             <div>
-                                {noteValueLines.map(noteValueLine => (
-                                    <p className="photo-note-string">
+                                {noteValueLines.map((noteValueLine, index) => (
+                                    <p
+                                        key={index}
+                                        className="photo-note-string"
+                                    >
                                         {noteValueLine}
                                     </p>
                                 ))}

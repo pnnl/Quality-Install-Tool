@@ -86,7 +86,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
                                 <br />
                                 <LocationStr
                                     location={project.data_.location}
-                                    separators={[<br />, ', ', ' ']}
+                                    separators={[<br key={0} />, ', ', ' ']}
                                 />
                             </>
                         )}
