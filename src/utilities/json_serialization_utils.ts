@@ -38,6 +38,7 @@ export async function exportJSONDocument(
 
     const projectDoc = await getProject(db, projectId, {
         attachments: true,
+        binary: false,
         revs_info: false,
     })
 
