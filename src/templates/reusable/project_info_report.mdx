@@ -44,23 +44,13 @@
         </>
     </ShowOrHide>
 
-    <ShowOrHide visible={props.project}>
-        **Installation Address:**{' '}
-        <LabelValue
-            path="location.street_address"
-            parent={props.project}
-            suffix=", "
-        />{' '}
-        <LabelValue path="location.city" parent={props.project} suffix=", " />{' '}
-        <LabelValue path="location.state" parent={props.project} suffix=", " />
-        <LabelValue path="location.zip_code" parent={props.project} />
-    </ShowOrHide>
-    <ShowOrHide visible={props.project == null}>
-        **Installation Address:**{' '}
-        <LabelValue path="location.street_address" suffix=", " />
-        <LabelValue path="location.city" suffix=", " />
-        <LabelValue path="location.state" suffix=", " />{' '}
-        <LabelValue path="location.zip_code" />
+    <ShowOrHide visible={props.project?.data_.location}>
+        **Installation Address:**
+
+        <LocationStr
+            location={props.project.data_.location}
+            separators={[', ', ', ', ' ']}
+        />
     </ShowOrHide>
 
     <Photo
