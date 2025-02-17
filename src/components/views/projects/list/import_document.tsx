@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap'
 
 import { useDatabase } from '../../../../providers/database_provider'
 import {
-    type JSONDocument,
     JSON_DOCUMENT_FILE_EXTENSION,
     importJSONDocument,
 } from '../../../../utilities/json_serialization_utils'

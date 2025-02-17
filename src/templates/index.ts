@@ -134,7 +134,7 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
 
 const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
 
-const RE_TEMPLATE_KEY: RegExp = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/i
+const RE_TEMPLATE_KEY = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/i
 
 Object.keys(TEMPLATES).forEach(key => {
     if (RESERVED_TEMPLATE_KEYS.includes(key) || !RE_TEMPLATE_KEY.test(key)) {

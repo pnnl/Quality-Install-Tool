@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import React, { useCallback } from 'react'
+import React from 'react'
 
 import Checkbox from './checkbox'
 import { StoreContext } from '../providers/store_provider'

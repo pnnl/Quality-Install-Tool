@@ -479,7 +479,10 @@ export async function removeProject(
 
             const installationResponses: Array<
                 PouchDB.Core.Response | PouchDB.Core.Error
-            > = await db.bulkDocs<Installation>(installationPutDocs, options)
+            > = await db.bulkDocs<Installation>(
+                installationPutDocs,
+                installationBulkDocsOptions,
+            )
 
             const response: PouchDB.Core.Response = await db.remove(
                 projectRemoveDoc,

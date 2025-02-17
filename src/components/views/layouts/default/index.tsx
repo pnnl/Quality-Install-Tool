@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react'
-import { Button, Container, Image, Navbar } from 'react-bootstrap'
+import { Button, Container, Navbar } from 'react-bootstrap'
 import { TfiAngleLeft } from 'react-icons/tfi'
 import { Link, useLocation } from 'react-router-dom'
 
-const RE_PATH: RegExp = /^\/(?:app\/([^\/]+)(?:\/([^\/]+)(?:\/([^\/]+))?)?)?$/i
+const RE_PATH = /^\/(?:app\/([^/]+)(?:\/([^/]+)(?:\/([^/]+))?)?)?$/i
 
 function getBackPathname(pathname: string): string | undefined {
     const result = pathname.match(RE_PATH)
 
     if (result) {
-        const [_pathname, projectId, workflowName, installationId] = result
+        const [, projectId, workflowName, installationId] = result
 
         if (projectId) {
             if (workflowName) {

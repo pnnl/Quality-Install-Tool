@@ -10,7 +10,7 @@ interface RepeatableProps {
     label: string
     labelPath?: string
     maxValuesCount?: number
-    values: any[]
+    values: object[]
     onAdd?: () => Promise<void>
     onRemove?: (index: number) => Promise<void>
     children: React.ReactNode

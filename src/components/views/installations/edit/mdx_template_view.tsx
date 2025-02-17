@@ -8,7 +8,6 @@ import StoreProvider, {
     useChangeEventHandler,
 } from '../../../../providers/store_provider'
 import { useWorkflow } from '../../../../providers/workflow_provider'
-import { type Base } from '../../../../types/database.types'
 import { someLocation } from '../../../../utilities/location_utils'
 
 interface MdxTemplateViewProps {}

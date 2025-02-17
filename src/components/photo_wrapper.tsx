@@ -5,10 +5,7 @@ import React from 'react'
 import Photo from './photo'
 import { StoreContext } from '../providers/store_provider'
 import { type Base } from '../types/database.types'
-import {
-    type PhotoAttachment,
-    getPhotoAttachments,
-} from '../utilities/photo_attachment_utils'
+import { getPhotoAttachments } from '../utilities/photo_attachment_utils'
 
 interface PhotoWrapperProps {
     children: React.ReactNode

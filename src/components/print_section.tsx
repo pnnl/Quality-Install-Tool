@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef } from 'react'
+import React, { useId } from 'react'
 import { Button } from 'react-bootstrap'
 import print from 'print-js'
 
@@ -26,7 +26,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({ children, label }) => {
     return (
         <>
             <Button
-                onClick={event => {
+                onClick={() => {
                     addSafariHeader()
                     print({
                         maxWidth: 2000,

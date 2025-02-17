@@ -1,5 +1,5 @@
 import React, { useCallback, useId } from 'react'
-import { Card, FloatingLabel, Form } from 'react-bootstrap'
+import { Card, Form } from 'react-bootstrap'
 
 interface CheckboxProps {
     label: string

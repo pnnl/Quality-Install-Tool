@@ -1,15 +1,10 @@
 import heic2any from 'heic2any'
-import PouchDB from 'pouchdb'
 import React, { useState } from 'react'
 
 import PhotoInput from './photo_input'
 import { StoreContext } from '../providers/store_provider'
-import { type PhotoMetadata } from '../types/database.types'
-import {
-    type PhotoAttachment,
-    getPhotoAttachments,
-} from '../utilities/photo_attachment_utils'
-import { compressPhoto, getPhotoMetadata } from '../utilities/photo_utils'
+import { getPhotoAttachments } from '../utilities/photo_attachment_utils'
+import { compressPhoto } from '../utilities/photo_utils'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode

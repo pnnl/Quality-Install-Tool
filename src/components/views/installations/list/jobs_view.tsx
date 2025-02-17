@@ -1,7 +1,5 @@
-import PouchDB from 'pouchdb'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Button } from 'react-bootstrap'
 
 import InstallationListGroup from './installation_list_group'
 import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
@@ -31,7 +29,7 @@ interface JobListProps {
 const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     const db = useDatabase()
 
-    const [project, setProject, reloadProject] = useProject()
+    const [project, , reloadProject] = useProject()
 
     const workflow = useWorkflow()
 

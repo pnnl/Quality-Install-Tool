@@ -13,7 +13,7 @@ export function getPhotoAttachments(
     attachmentId: PouchDB.Core.AttachmentId,
 ): Array<PhotoAttachment> {
     return Object.entries(doc._attachments ?? {})
-        .filter(([key, value]) => {
+        .filter(([key]) => {
             return key.startsWith(attachmentId)
         })
         .map(([key, value]) => {
@@ -40,9 +40,13 @@ export function getPhotoAttachments(
                     return {
                         attachmentId: key,
                         attachment: value,
-                        metadata: (doc.metadata_.attachments[firstPart] as any)[
-                            secondPart
-                        ]?.[thirdPart],
+                        metadata: (
+                            doc.metadata_.attachments[firstPart] as unknown as {
+                                [secondPart: string]: {
+                                    [thirdPart: string]: PhotoMetadata
+                                }
+                            }
+                        )[secondPart]?.[thirdPart],
                     }
                 }
             }

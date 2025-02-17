@@ -192,7 +192,7 @@ class Appender {
         [key: string]: number
     } = {}
 
-    private _reSuffix: RegExp = /\s*\(\s*(\d+)\s*\)\s*$/i
+    private _reSuffix = /\s*\(\s*(\d+)\s*\)\s*$/i
 
     private _stripSuffixes(source: string): [string, number[]] {
         const indexes = []
@@ -217,10 +217,10 @@ class Appender {
         return [previous, indexes]
     }
 
-    constructor() {}
+    // constructor() {}
 
     get(target: string): string {
-        const [strippedTarget, targetIndexes] = this._stripSuffixes(target)
+        const [strippedTarget] = this._stripSuffixes(target)
 
         if (strippedTarget in this._maxIndexByKey) {
             return `${strippedTarget} (${this._maxIndexByKey[strippedTarget] + 1})`

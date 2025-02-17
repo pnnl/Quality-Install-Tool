@@ -6,7 +6,6 @@ import StoreProvider, {
     useChangeEventHandler,
 } from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
-import { type Base } from '../../../../types/database.types'
 
 interface MdxProjectViewProps {}
 

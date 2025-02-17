@@ -1,4 +1,3 @@
-import PouchDB from 'pouchdb'
 import React, { useCallback, useMemo, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +13,6 @@ import {
 } from '../../../../providers/projects_provider'
 import { type Project } from '../../../../types/database.types'
 import {
-    getProject,
     newProject,
     putProject,
     removeProject,

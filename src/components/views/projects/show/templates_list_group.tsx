@@ -5,7 +5,6 @@ import { LinkContainer } from 'react-router-bootstrap'
 
 import { type InstallationDocument } from '../../../../providers/installations_provider'
 import templates from '../../../../templates'
-import { type Installation } from '../../../../types/database.types'
 
 interface TemplatesListGroupProps {
     projectId: PouchDB.Core.DocumentId

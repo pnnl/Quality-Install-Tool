@@ -4,14 +4,12 @@ import { Tab } from 'react-bootstrap'
 interface TabWrapperProps {
     children: React.ReactNode
     eventKey: string
-    printPdf: boolean
     title: React.ReactNode
 }
 
 const TabWrapper: React.FC<TabWrapperProps> = ({
     children,
     eventKey,
-    printPdf,
     title,
 }) => {
     return (

@@ -24,13 +24,10 @@ const FileInput: React.FC<FileInputProps> = ({
 
     const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
 
-    const handleFileInputButtonClick = useCallback(
-        (event: React.MouseEvent<HTMLButtonElement>) => {
-            hiddenFileUploadInputRef.current &&
-                hiddenFileUploadInputRef.current.click()
-        },
-        [],
-    )
+    const handleFileInputButtonClick = useCallback(() => {
+        hiddenFileUploadInputRef.current &&
+            hiddenFileUploadInputRef.current.click()
+    }, [])
 
     const handleFileInputChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {

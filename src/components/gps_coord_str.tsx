@@ -6,11 +6,7 @@ interface GpsCoordStrProps {
     longitude: number | null
 }
 
-const GpsCoordStr: React.FC<GpsCoordStrProps> = ({
-    altitude,
-    latitude,
-    longitude,
-}) => {
+const GpsCoordStr: React.FC<GpsCoordStrProps> = ({ latitude, longitude }) => {
     if (latitude === null || longitude === null) {
         return <span>Missing</span>
     } else {

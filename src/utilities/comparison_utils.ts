@@ -28,6 +28,8 @@ export function comparator<T extends Base>(
                         return bDate.getTime() - aDate.getTime()
                     }
             }
+
+            break
         case 'last_modified_at':
             switch (order) {
                 case 'asc':
@@ -45,5 +47,7 @@ export function comparator<T extends Base>(
                         return bDate.getTime() - aDate.getTime()
                     }
             }
+
+            break
     }
 }

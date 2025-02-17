@@ -31,28 +31,28 @@ const NumberInput: React.FC<NumberInputProps> = ({
     const valueValidators = useMemo<Validator<number>[]>(() => {
         return [
             input => {
-                if (min && parseFloat(value) < min) {
+                if (min && input < min) {
                     return `Input must be at least ${min}.`
                 } else {
                     return undefined
                 }
             },
             input => {
-                if (max && parseFloat(value) > max) {
+                if (max && input > max) {
                     return `Input must be at most ${max}.`
                 } else {
                     return undefined
                 }
             },
             input => {
-                if (step && parseFloat(value) % step !== 0) {
+                if (step && input % step !== 0) {
                     return `Input must be a multiple of ${step}.`
                 } else {
                     return undefined
                 }
             },
         ]
-    }, [min, max, step, value])
+    }, [min, max, step])
 
     const errorMessages = useMemo<string[]>(() => {
         if (value) {

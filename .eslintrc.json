@@ -3,12 +3,19 @@
         "browser": true,
         "es2021": true
     },
-    "extends": ["prettier", "plugin:react/recommended"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:react/recommended"
+    ],
     "overrides": [
         {
             "files": ["*.mdx"],
             "extends": ["plugin:mdx/recommended"],
             "globals": {
+                "process": false,
+                "props": false,
                 "Button": false,
                 "Checkbox": false,
                 "ClimateZoneSelect": false,
@@ -41,6 +48,7 @@
             }
         }
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
@@ -48,10 +56,21 @@
             "jsx": true,
             "modules": true,
             "experimentalObjectRestSpread": true
-        }
+        },
+        "project": ["./tsconfig.json"]
     },
-    "plugins": ["react", "react-hooks", "prettier", "typescript"],
+    "plugins": [
+        "@typescript-eslint",
+        "prettier",
+        "react",
+        "react-hooks",
+        "typescript"
+    ],
     "rules": {
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-empty-interface": "off",
+        "@typescript-eslint/triple-slash-reference": "off",
         "prettier/prettier": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn"
@@ -60,6 +79,5 @@
         "react": {
             "version": "18.2.0"
         }
-    },
-    "parser": "@babel/eslint-parser"
+    }
 }
