@@ -67,7 +67,6 @@
         "typescript"
     ],
     "rules": {
-        "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/triple-slash-reference": "off",
         "prettier/prettier": "error",
         "react-hooks/exhaustive-deps": "warn",

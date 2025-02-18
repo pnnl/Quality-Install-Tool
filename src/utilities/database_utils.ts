@@ -170,20 +170,16 @@ export async function getInstallations(
 
     const installationDocs: Array<
         PouchDB.Core.ExistingDocument<Installation> & PouchDB.Core.AllDocsMeta
-    > = allDocsWithKeysResponse.rows
-        .filter(row => {
-            return (
-                !('error' in row && row.error === 'not_found') &&
-                'doc' in row &&
-                row.doc !== null &&
-                row.doc !== undefined
+    > = []
+
+    allDocsWithKeysResponse.rows.forEach(row => {
+        if ('doc' in row && row.doc) {
+            installationDocs.push(
+                row.doc as PouchDB.Core.ExistingDocument<Installation> &
+                    PouchDB.Core.AllDocsMeta,
             )
-        })
-        .map(row => {
-            // @ts-ignore: TS2339
-            return row.doc as PouchDB.Core.ExistingDocument<Installation> &
-                PouchDB.Core.AllDocsMeta
-        })
+        }
+    })
 
     return installationDocs
 }
@@ -390,20 +386,16 @@ export async function getProjects(
 
     const projectDocs: Array<
         PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta
-    > = allDocsWithKeysResponse.rows
-        .filter(row => {
-            return (
-                !('error' in row && row.error === 'not_found') &&
-                'doc' in row &&
-                row.doc !== null &&
-                row.doc !== undefined
+    > = []
+
+    allDocsWithKeysResponse.rows.forEach(row => {
+        if ('doc' in row && row.doc) {
+            projectDocs.push(
+                row.doc as PouchDB.Core.ExistingDocument<Project> &
+                    PouchDB.Core.AllDocsMeta,
             )
-        })
-        .map(row => {
-            // @ts-ignore: TS2339
-            return row.doc as PouchDB.Core.ExistingDocument<Project> &
-                PouchDB.Core.AllDocsMeta
-        })
+        }
+    })
 
     return projectDocs
 }
@@ -450,27 +442,17 @@ export async function removeProject(
 
         const installationPutDocs: Array<
             PouchDB.Core.PutDocument<Installation>
-        > = allDocsWithKeysResponse.rows
-            .filter(row => {
-                return (
-                    !('error' in row && row.error === 'not_found') &&
-                    'doc' in row &&
-                    row.doc !== null &&
-                    row.doc !== undefined
-                )
-            })
-            .map(row => {
-                const doc =
-                    // @ts-ignore: TS2339
-                    row.doc as PouchDB.Core.ExistingDocument<Installation> &
-                        PouchDB.Core.AllDocsMeta
+        > = []
 
-                return {
+        allDocsWithKeysResponse.rows.forEach(row => {
+            if ('doc' in row && row.doc) {
+                installationPutDocs.push({
                     _deleted: true,
-                    _id: doc._id,
-                    _rev: doc._rev,
-                } as PouchDB.Core.PutDocument<Installation>
-            })
+                    _id: row.doc._id,
+                    _rev: row.doc._rev,
+                } as PouchDB.Core.PutDocument<Installation>)
+            }
+        })
 
         if (installationPutDocs.length > 0) {
             const installationBulkDocsOptions: PouchDB.Core.BulkDocsOptions = {
