@@ -1,6 +1,4 @@
-/// <reference types="node" />
-/// <reference types="react" />
-/// <reference types="react-dom" />
+import { type NodeJS } from 'node'
 
 declare namespace NodeJS {
     interface ProcessEnv {
