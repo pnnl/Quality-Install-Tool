@@ -40,10 +40,18 @@ export const StoreContext = createContext<{
     removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
 }>({
     doc: undefined,
-    upsertData: async () => {},
-    upsertMetadata: async () => {},
-    putAttachment: async () => {},
-    removeAttachment: async () => {},
+    upsertData: async () => {
+        return
+    },
+    upsertMetadata: async () => {
+        return
+    },
+    putAttachment: async () => {
+        return
+    },
+    removeAttachment: async () => {
+        return
+    },
 })
 
 interface StoreProviderProps {

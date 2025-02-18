@@ -21,7 +21,15 @@ export const InstallationsContext = createContext<
         React.Dispatch<React.SetStateAction<Array<InstallationDocument>>>,
         () => Promise<void>,
     ]
->([[], () => {}, async () => {}])
+>([
+    [],
+    () => {
+        return
+    },
+    async () => {
+        return
+    },
+])
 
 export function useInstallations(): [
     Array<InstallationDocument>,

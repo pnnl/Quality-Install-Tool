@@ -21,7 +21,15 @@ export const ProjectsContext = createContext<
         React.Dispatch<React.SetStateAction<Array<ProjectDocument>>>,
         () => Promise<void>,
     ]
->([[], () => {}, async () => {}])
+>([
+    [],
+    () => {
+        return
+    },
+    async () => {
+        return
+    },
+])
 
 export function useProjects(): [
     Array<ProjectDocument>,

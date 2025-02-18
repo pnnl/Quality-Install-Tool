@@ -20,7 +20,15 @@ export const ProjectContext = createContext<
         React.Dispatch<React.SetStateAction<ProjectDocument | undefined>>,
         () => Promise<void>,
     ]
->([undefined, () => {}, async () => {}])
+>([
+    undefined,
+    () => {
+        return
+    },
+    async () => {
+        return
+    },
+])
 
 export function useProject(): [
     ProjectDocument | undefined,

@@ -20,7 +20,15 @@ export const InstallationContext = createContext<
         React.Dispatch<React.SetStateAction<InstallationDocument | undefined>>,
         () => Promise<void>,
     ]
->([undefined, () => {}, async () => {}])
+>([
+    undefined,
+    () => {
+        return
+    },
+    async () => {
+        return
+    },
+])
 
 export function useInstallation(): [
     InstallationDocument | undefined,
