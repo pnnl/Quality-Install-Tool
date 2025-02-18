@@ -218,11 +218,11 @@ const Home: React.FC<HomeProps> = () => {
                                     setIsProjectForAddModalVisible(true)
                                 }}
                             >
-                                Add a New Project
+                                New Project
                             </Button>
                             &nbsp;&nbsp;
                             <ImportDoc
-                                label="Import a Project"
+                                label="Import Project"
                                 onImport={async () => {
                                     await reloadProjects()
                                 }}
@@ -238,7 +238,7 @@ const Home: React.FC<HomeProps> = () => {
                                 setIsProjectForAddModalVisible(true)
                             }}
                         >
-                            Add a New Project
+                            New Project
                         </Button>
                         &nbsp;&nbsp;
                         <ImportDoc
