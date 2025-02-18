@@ -205,11 +205,11 @@ const Home: React.FC<HomeProps> = () => {
                             <br />
                             <br />
                             <br />
-                            For your records
+                            For your records.
                             <br />
-                            For your clients
+                            For your clients.
                             <br />
-                            For quality assurance reporting
+                            For quality assurance reporting.
                         </p>
                         <br />
                         <div className="button-container-center">
