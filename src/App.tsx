@@ -37,7 +37,9 @@ const router = createBrowserRouter([
     },
 ])
 
-const App: React.FC = () => {
+type AppProps = Record<string, never>
+
+const App: React.FC<AppProps> = () => {
     return (
         <DatabaseProvider>
             <RouterProvider router={router} />

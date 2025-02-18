@@ -12,7 +12,7 @@ export interface Base {
     metadata_: BaseMetadata
 }
 
-export interface BaseData {}
+export type BaseData = object
 
 export interface BaseMetadata {
     created_at: Date
@@ -27,7 +27,7 @@ export interface Installation extends Base {
     metadata_: BaseMetadata & InstallationMetadata
 }
 
-export interface InstallationData extends BaseData {}
+export type InstallationData = BaseData
 
 export interface InstallationMetadata extends BaseMetadata {
     template_title: string
@@ -45,7 +45,7 @@ export interface ProjectData extends BaseData {
     location?: Location
 }
 
-export interface ProjectMetadata extends BaseMetadata {}
+export type ProjectMetadata = BaseMetadata
 
 export interface FileMetadata {
     filename?: string

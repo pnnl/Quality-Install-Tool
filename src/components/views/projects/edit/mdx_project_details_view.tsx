@@ -7,7 +7,7 @@ import StoreProvider, {
 } from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 
-interface MdxProjectViewProps {}
+type MdxProjectViewProps = Record<string, never>
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const [project] = useProject()

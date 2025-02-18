@@ -20,7 +20,7 @@ import {
 } from '../../../../utilities/database_utils'
 import { type Validator } from '../../../../utilities/validation_utils'
 
-interface HomeProps {}
+type HomeProps = Record<string, never>
 
 const Home: React.FC<HomeProps> = () => {
     const db = useDatabase()

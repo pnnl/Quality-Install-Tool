@@ -10,7 +10,7 @@ import StoreProvider, {
 import { useWorkflow } from '../../../../providers/workflow_provider'
 import { someLocation } from '../../../../utilities/location_utils'
 
-interface MdxTemplateViewProps {}
+type MdxTemplateViewProps = Record<string, never>
 
 const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
     const [project] = useProject()

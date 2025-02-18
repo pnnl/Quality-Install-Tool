@@ -6,7 +6,7 @@ import { useInstallations } from '../../../../providers/installations_provider'
 import { useProject } from '../../../../providers/project_provider'
 import { someLocation } from '../../../../utilities/location_utils'
 
-interface WorkflowViewProps {}
+type WorkflowViewProps = Record<string, never>
 
 const WorkflowView: React.FC<WorkflowViewProps> = () => {
     const [project] = useProject()
