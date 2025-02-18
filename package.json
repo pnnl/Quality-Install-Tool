@@ -1,6 +1,7 @@
 {
   "name": "quality_install_tool",
   "version": "0.1.0",
+  "license": "BSD-2-Clause",
   "private": true,
   "dependencies": {
     "@mdx-js/react": "^2.3.0",
