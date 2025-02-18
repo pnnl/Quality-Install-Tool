@@ -20,6 +20,7 @@ import {
     useDB,
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
+import { fetchAccessToken, getAuthToken } from '../auth/keycloak'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -299,6 +300,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
         upsertDoc(pathStr, value)
+
+        autoSaveToRDS()
     }
 
     /**
@@ -314,6 +317,49 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertMetadata: UpsertMetadata = (pathStr, value) => {
         pathStr = 'metadata_.' + pathStr
         upsertDoc(pathStr, value)
+    }
+
+    const autoSaveToRDS = async () => {
+        if (!docId || isEmpty(doc.data_)) return // Ensure docId and data exist
+
+        // Fetch a new token if not available
+        if (!getAuthToken()) {
+            await fetchAccessToken()
+        }
+
+        const token = getAuthToken() // Get the latest token
+        if (!token) {
+            console.error('Cannot auto-save: Missing Keycloak token.')
+            return
+        }
+
+        const formData = {
+            user_id: docId,
+            form_data: doc.data_,
+        }
+
+        try {
+            const response = await fetch(
+                'http://localhost:5000/api/form-save',
+                {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+
+            const result = await response.json()
+            if (result.success) {
+                console.log('Auto-Save Success:', result)
+            } else {
+                console.error('Auto-Save Failed:', result)
+            }
+        } catch (error) {
+            console.error('Auto-Save Error:', error)
+        }
     }
 
     /**
