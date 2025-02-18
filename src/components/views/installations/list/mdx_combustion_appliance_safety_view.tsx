@@ -10,7 +10,7 @@ import { useWorkflow } from '../../../../providers/workflow_provider'
 import { type Base } from '../../../../types/database.types'
 import { someLocation } from '../../../../utilities/location_utils'
 
-interface MdxCombustionSafetyViewProps {}
+type MdxCombustionSafetyViewProps = Record<string, never>
 
 const MdxCombustionSafetyView: React.FC<MdxCombustionSafetyViewProps> = () => {
     const [project] = useProject()
