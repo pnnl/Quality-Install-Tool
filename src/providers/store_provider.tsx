@@ -30,8 +30,8 @@ export function useChangeEventHandler(
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
-    upsertData: (path: string, value: any) => Promise<void>
-    upsertMetadata: (path: string, value: any) => Promise<void>
+    upsertData: (path: string, value: unknown) => Promise<void>
+    upsertMetadata: (path: string, value: unknown) => Promise<void>
     putAttachment: (
         attachmentId: PouchDB.Core.AttachmentId,
         blob: Blob,
@@ -68,7 +68,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     children,
 }) => {
     const upsertData = useCallback(
-        async (path: string, value: any) => {
+        async (path: string, value: unknown) => {
             if (onChange) {
                 const lastModifiedAt = new Date()
 
@@ -91,7 +91,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     )
 
     const upsertMetadata = useCallback(
-        async (path: string, value: any) => {
+        async (path: string, value: unknown) => {
             if (onChange) {
                 const lastModifiedAt = new Date()
 
