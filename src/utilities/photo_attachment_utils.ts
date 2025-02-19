@@ -17,44 +17,12 @@ export function getPhotoAttachments(
             return key.startsWith(attachmentId)
         })
         .map(([key, value]) => {
-            if (key in doc.metadata_.attachments) {
-                return {
-                    attachmentId: key,
-                    attachment: value,
-                    metadata: doc.metadata_.attachments[key] as PhotoMetadata,
-                }
-            }
-
-            // @note Retained for backwards compatibility.
-            //     The following code for "parts" is retained for backwards
-            //     compatibility with PouchDB documents that were generated
-            //     prior to the refactor in pull request #267.
-            //
-            //     It is not known if the following code actually needed...
-            const parts = key.split('.')
-
-            if (parts.length === 3) {
-                const [firstPart, secondPart, thirdPart] = parts
-
-                if (firstPart in doc.metadata_.attachments) {
-                    return {
-                        attachmentId: key,
-                        attachment: value,
-                        metadata: (
-                            doc.metadata_.attachments[firstPart] as unknown as {
-                                [secondPart: string]: {
-                                    [thirdPart: string]: PhotoMetadata
-                                }
-                            }
-                        )[secondPart]?.[thirdPart],
-                    }
-                }
-            }
-
             return {
                 attachmentId: key,
                 attachment: value,
-                metadata: undefined,
+                metadata: doc.metadata_.attachments[key] as
+                    | PhotoMetadata
+                    | undefined,
             }
         })
 }
