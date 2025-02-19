@@ -38,6 +38,9 @@ export const StoreContext = createContext<{
         filename?: string,
     ) => Promise<void>
     removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
+    replaceDoc: (
+        doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
+    ) => Promise<void>
 }>({
     doc: undefined,
     upsertData: async () => {
@@ -50,6 +53,9 @@ export const StoreContext = createContext<{
         return
     },
     removeAttachment: async () => {
+        return
+    },
+    replaceDoc: async () => {
         return
     },
 })
@@ -183,6 +189,13 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [doc, onChange],
     )
 
+    const replaceDoc = useCallback(
+        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
+            onChange && (await onChange(doc))
+        },
+        [onChange],
+    )
+
     return (
         <StoreContext.Provider
             value={{
@@ -191,6 +204,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 upsertMetadata,
                 putAttachment,
                 removeAttachment,
+                replaceDoc,
             }}
         >
             {children}
