@@ -3,7 +3,6 @@ import React, { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 
 import JobsView from './jobs_view'
-import MdxCombustionSafetyView from './mdx_combustion_appliance_safety_view'
 import Layout from '../../layouts/default'
 import InstallationsProvider, {
     type InstallationDocument,
@@ -21,28 +20,18 @@ const View: React.FC = () => {
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <Layout>
-                <ProjectProvider
-                    projectId={projectId}
-                    attachments={
-                        workflowName === 'doe_combustion_appliance_safety_tests'
-                    }
-                >
+                <ProjectProvider projectId={projectId} attachments={true}>
                     <WorkflowProvider workflowName={workflowName}>
-                        {workflowName ===
-                        'doe_combustion_appliance_safety_tests' ? (
-                            <MdxCombustionSafetyView />
-                        ) : (
-                            <InstallationsProvider
-                                projectId={projectId}
-                                workflowName={workflowName}
-                                installationComparator={comparator<InstallationDocument>(
-                                    'last_modified_at',
-                                    'desc',
-                                )}
-                            >
-                                <JobsView workflowName={workflowName} />
-                            </InstallationsProvider>
-                        )}
+                        <InstallationsProvider
+                            projectId={projectId}
+                            workflowName={workflowName}
+                            installationComparator={comparator<InstallationDocument>(
+                                'last_modified_at',
+                                'desc',
+                            )}
+                        >
+                            <JobsView workflowName={workflowName} />
+                        </InstallationsProvider>
                     </WorkflowProvider>
                 </ProjectProvider>
             </Layout>
