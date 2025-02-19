@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 import InstallationListGroup from './installation_list_group'
 import DeleteConfirmationModal from '../../shared/delete_confirmation_modal'
@@ -28,6 +29,8 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     const db = useDatabase()
+
+    const navigate = useNavigate()
 
     const [project, , reloadProject] = useProject()
 
@@ -76,6 +79,17 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
         ]
     }, [installations])
 
+    // @note Implementation of {handleConfirmInstallationForAdd} function.
+    //     After the PouchDB document for the new installation has been inserted
+    //     into the database, there are 2 possible behaviors: reload the current
+    //     list of installations, or navigate to the new installation. Both
+    //     behaviors are implemented. Currently, the code for the first behavior
+    //     is commented out.
+    //
+    //     To revert to the first behavior, uncomment the lines for the 4
+    //     function calls and the dependencies on the {reloadProject} and
+    //     {reloadInstallations} functions in the call to {React.useCallback}
+    //     function, and then comment out the call to the {navigate} function.
     const handleConfirmInstallationForAdd = useCallback(async () => {
         if (project && workflowName) {
             const installation = newInstallation(
@@ -86,20 +100,28 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
             await putInstallation(db, project._id, installation)
 
-            await reloadInstallations()
+            // await reloadInstallations()
+            //
+            // await reloadProject()
+            //
+            // setIsInstallationForAddModalVisible(false)
+            //
+            // setInstallationForAddModalValue('')
 
-            await reloadProject()
+            navigate(
+                `/app/${project._id}/${workflowName}/${installation._id}`,
+                {
+                    replace: true,
+                },
+            )
         }
-
-        setIsInstallationForAddModalVisible(false)
-
-        setInstallationForAddModalValue('')
     }, [
         db,
         installationForAddModalValue,
+        navigate,
         project,
-        reloadInstallations,
-        reloadProject,
+        // reloadInstallations,
+        // reloadProject,
         workflowName,
     ])
 

@@ -77,7 +77,7 @@ const Home: React.FC<HomeProps> = () => {
     //     To revert to the first behavior, uncomment the lines for the 3
     //     function calls and the dependency on the {reloadProjects} function in
     //     the call to {React.useCallback} function, and then comment out the
-    //     call to the {nagigate} function.
+    //     call to the {navigate} function.
     const handleConfirmProjectForAdd = useCallback(async () => {
         const project = newProject(projectForAddModalValue.trim(), undefined)
 
@@ -89,7 +89,7 @@ const Home: React.FC<HomeProps> = () => {
         //
         // setProjectForAddModalValue('')
 
-        navigate(`app/${project._id}`, {
+        navigate(`/app/${project._id}`, {
             replace: true,
         })
     }, [
@@ -254,7 +254,7 @@ const Home: React.FC<HomeProps> = () => {
                                 key={project._id}
                                 project={project}
                                 onEdit={() =>
-                                    navigate(`app/${project._id}`, {
+                                    navigate(`/app/${project._id}`, {
                                         replace: true,
                                     })
                                 }
