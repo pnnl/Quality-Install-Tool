@@ -40,51 +40,57 @@ function _removeAttachmentsAt(
                 | PouchDB.Core.FullAttachment
                 | undefined
 
-            const result = attachmentId.match(reAttachmentId)
+            if (attachmentId.startsWith(`${path}.${index}.`)) {
+                // If the attachment ID starts with the path and index for the
+                // "repeatable" component that is being removed, then do
+                // nothing.
+            } else {
+                const result = attachmentId.match(reAttachmentId)
 
-            if (result) {
-                // If the current attachment ID matches the regular expression,
-                // then the second capture group is the index for the
-                // "repeatable" component.
+                if (result) {
+                    // If the current attachment ID matches the regular expression,
+                    // then the second capture group is the index for the
+                    // "repeatable" component.
 
-                const attachmentIndex = parseInt(result[2])
+                    const attachmentIndex = parseInt(result[2])
 
-                if (attachmentIndex < index) {
-                    // If the index for the attachment is less than the index
-                    // for the "repeatable" component that is being removed,
-                    // then keep the attachment ID.
+                    if (attachmentIndex < index) {
+                        // If the index for the attachment is less than the index
+                        // for the "repeatable" component that is being removed,
+                        // then keep the attachment ID.
+
+                        if (attachment) {
+                            _attachments[attachmentId] = attachment
+                        }
+
+                        attachments[attachmentId] = attachmentMetadata
+                    } else if (attachmentIndex > index) {
+                        // If the index for the attachment is greater than the index
+                        // for the "repeatable" component that is being removed,
+                        // then construct a new attachment ID.
+
+                        const newAttachmentId = `${result[1]}.${attachmentIndex - 1}.${result[3]}`
+
+                        if (attachment) {
+                            _attachments[newAttachmentId] = attachment
+                        }
+
+                        attachments[newAttachmentId] = attachmentMetadata
+                    } else {
+                        // If the index for the attachment is equal to the index for
+                        // the "repeatable" component that is being removed, then
+                        // do nothing.
+                    }
+                } else {
+                    // If the current attachment ID does not match the regular
+                    // expression, then the attachment is for a different component.
 
                     if (attachment) {
                         _attachments[attachmentId] = attachment
                     }
 
                     attachments[attachmentId] = attachmentMetadata
-                } else if (attachmentIndex > index) {
-                    // If the index for the attachment is greater than the index
-                    // for the "repeatable" component that is being removed,
-                    // then construct a new attachment ID.
-
-                    const newAttachmentId = `${result[1]}.${attachmentIndex - 1}.${result[3]}`
-
-                    if (attachment) {
-                        _attachments[newAttachmentId] = attachment
-                    }
-
-                    attachments[newAttachmentId] = attachmentMetadata
-                } else {
-                    // If the index for the attachment is equal to the index for
-                    // the "repeatable" component that is being removed, then
-                    // do nothing.
                 }
-            } else {
-                // If the current attachment ID does not match the regular
-                // expression, then the attachment is for a different component.
-
-                if (attachment) {
-                    _attachments[attachmentId] = attachment
-                }
-
-                attachments[attachmentId] = attachmentMetadata
             }
         },
     )
