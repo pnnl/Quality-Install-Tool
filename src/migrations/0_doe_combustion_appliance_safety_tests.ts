@@ -55,7 +55,9 @@ export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
 export function shouldMigrateCombustionSafetyTestsProject(
     project: PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta,
 ): boolean {
-    return 'combustion_safety_tests' in project.data_
+    return ['assessment_date', 'combustion_safety_tests'].some(key => {
+        return key in project.data_
+    })
 }
 
 /**
