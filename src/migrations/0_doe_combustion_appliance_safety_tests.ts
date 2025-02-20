@@ -119,7 +119,8 @@ export function shouldMigrateCombustionSafetyTestsProject(
  *     ]
  *   },
  *   "metadata_": {
- *     "doc_name": "doe_combustion_appliance_safety_tests",
+ *     "template_name": "doe_combustion_appliance_safety_tests",
+ *     "template_title": "Combustion Appliance Safety Testing",
  *     "attachments": {
  *       "combustion_safety_tests.0.attachment_0": { ... }, // Metadata for first attachment for first appliance.
  *       "combustion_safety_tests.1.attachment_0": { ... }  // Metadata for first attachment for second appliance.
