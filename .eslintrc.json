@@ -12,7 +12,11 @@
     "overrides": [
         {
             "files": ["*.mdx"],
-            "extends": ["plugin:mdx/recommended"],
+            "extends": [
+                "plugin:mdx/code-blocks",
+                "plugin:mdx/overrides",
+                "plugin:mdx/recommended"
+            ],
             "globals": {
                 "process": false,
                 "props": false,
@@ -61,6 +65,7 @@
     },
     "plugins": [
         "@typescript-eslint",
+        "mdx",
         "prettier",
         "react",
         "react-hooks",
@@ -72,6 +77,7 @@
         "react-hooks/rules-of-hooks": "error"
     },
     "settings": {
+        "mdx/code-blocks": true,
         "react": {
             "version": "18.2.0"
         }
