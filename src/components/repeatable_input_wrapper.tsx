@@ -24,6 +24,8 @@ function _removeAttachmentsAt(
         `^(${escapeRegExp(path)}).(0|[1-9][0-9]*).([.]+)$`,
     )
 
+    const prefixAttachmentId = `${path}.${index}.`
+
     const _attachments: Record<
         PouchDB.Core.AttachmentId,
         PouchDB.Core.FullAttachment
@@ -40,7 +42,7 @@ function _removeAttachmentsAt(
                 | PouchDB.Core.FullAttachment
                 | undefined
 
-            if (attachmentId.startsWith(`${path}.${index}.`)) {
+            if (attachmentId.startsWith(prefixAttachmentId)) {
                 // If the attachment ID starts with the path and index for the
                 // "repeatable" component that is being removed, then do
                 // nothing.
