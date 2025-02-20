@@ -6,6 +6,10 @@ import {
     getProjectDocumentNames,
 } from './database_utils'
 import {
+    shouldMigrateCombustionSafetyTestsProject,
+    transformCombustionSafetyTestsProject,
+} from '../migrations/0_doe_combustion_appliance_safety_tests'
+import {
     type Base,
     type Installation,
     type Project,
@@ -179,6 +183,28 @@ export async function importJSONDocument(
             }
         } else {
             return doc
+        }
+    })
+
+    docs.forEach((doc, index) => {
+        if (doc.type === 'project') {
+            const origProject = doc as PouchDB.Core.ExistingDocument<Project> &
+                PouchDB.Core.AllDocsMeta
+
+            if (shouldMigrateCombustionSafetyTestsProject(origProject)) {
+                const [newProject, newInstallation] =
+                    transformCombustionSafetyTestsProject(origProject)
+
+                docs[index] = {
+                    ...newProject,
+                    children: [
+                        ...(newProject.children ?? []),
+                        newInstallation._id as string,
+                    ],
+                }
+
+                docs.push(newInstallation)
+            }
         }
     })
 

@@ -8,6 +8,8 @@ declare namespace NodeJS {
 
         readonly REACT_APP_POUCHDB_DATABASE_NAME: string
 
+        readonly REACT_APP_POUCHDB_MIGRATIONS_DATABASE_NAME: string
+
         readonly REACT_APP_GEOLOCATION_MAXIMUM_AGE: string
         readonly REACT_APP_GEOLOCATION_TIMEOUT_MILLIS: string
 

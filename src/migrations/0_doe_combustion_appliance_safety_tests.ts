@@ -3,8 +3,10 @@ import PouchDB from 'pouchdb'
 import {
     type Base,
     type FileMetadata,
+    type Installation,
     type InstallationData,
     type PhotoMetadata,
+    type Project,
     type ProjectData,
 } from '../types/database.types'
 import {
@@ -24,8 +26,40 @@ interface CombustionSafetyTestsProjectData extends ProjectData {
     combustion_safety_tests?: Record<string, Record<string, unknown>>
 }
 
+export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
+    // await db.info()
+
+    const projects = await getProjects(db, {
+        attachments: true,
+        binary: true,
+    })
+
+    projects
+        .filter(project => {
+            return shouldMigrateCombustionSafetyTestsProject(project)
+        })
+        .forEach(async project => {
+            const [transformedProject, transformedInstallation] =
+                transformCombustionSafetyTestsProject(project)
+
+            await putProject(db, transformedProject)
+
+            await putInstallation(
+                db,
+                transformedProject._id,
+                transformedInstallation,
+            )
+        })
+}
+
+export function shouldMigrateCombustionSafetyTestsProject(
+    project: PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta,
+): boolean {
+    return 'combustion_safety_tests' in project.data_
+}
+
 /**
- * The purpose of this function is to transform existing PouchDB "project"
+ * The purpose of this function is to transformCombustionSafetyTestsProject existing PouchDB "project"
  * documents of the form
  *
  * ```json
@@ -102,95 +136,80 @@ interface CombustionSafetyTestsProjectData extends ProjectData {
  * @param {PouchDB.Database<Base>} db - The database.
  * @returns {PromiseLike<void>}
  */
-async function migrate(db: PouchDB.Database<Base>): Promise<void> {
-    // await db.info()
 
-    const projects = await getProjects(db, {
-        attachments: true,
-        binary: true,
-    })
+export function transformCombustionSafetyTestsProject(
+    project: PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta,
+): [
+    PouchDB.Core.ExistingDocument<Project> & PouchDB.Core.AllDocsMeta,
+    PouchDB.Core.PutDocument<Installation> & PouchDB.Core.AllDocsMeta,
+] {
+    const projectData = project.data_ as CombustionSafetyTestsProjectData
 
-    projects
-        .filter(project => {
-            return ['assessment_date', 'combustion_safety_tests'].some(prop => {
-                return prop in project.data_
-            })
-        })
-        .forEach(async project => {
-            const projectData =
-                project.data_ as CombustionSafetyTestsProjectData
+    const installation = newInstallation(
+        project.metadata_.doc_name,
+        'doe_combustion_appliance_safety_tests',
+        undefined,
+    )
 
-            const installation = newInstallation(
-                project.metadata_.doc_name,
-                'doe_combustion_appliance_safety_tests',
-                undefined,
-            )
+    const installationData =
+        installation.data_ as CombustionSafetyTestsInstallationData
 
-            const installationData =
-                installation.data_ as CombustionSafetyTestsInstallationData
+    installationData.combustion_safety_tests = []
 
-            installationData.combustion_safety_tests = []
+    if (projectData.assessment_date) {
+        installationData.assessment_date = projectData.assessment_date
+    }
 
-            if (projectData.assessment_date) {
-                installationData.assessment_date = projectData.assessment_date
-            }
+    Object.entries(projectData.combustion_safety_tests ?? {}).forEach(
+        ([key, value], index) => {
+            installationData.combustion_safety_tests.push(value)
 
-            Object.entries(projectData.combustion_safety_tests ?? {}).forEach(
-                ([key, value], index) => {
-                    installationData.combustion_safety_tests.push(value)
+            Object.entries(
+                (
+                    project.metadata_.attachments[
+                        'combustion_safety_tests'
+                    ] as unknown as Record<
+                        string,
+                        Record<string, FileMetadata | PhotoMetadata>
+                    >
+                )?.[key],
+            ).forEach(([attachmentId, attachmentMetadata]) => {
+                const origAttachmentId = `combustion_safety_tests.${key}.${attachmentId}`
 
-                    Object.entries(
-                        (
-                            project.metadata_.attachments[
-                                'combustion_safety_tests'
-                            ] as unknown as Record<
-                                string,
-                                Record<string, FileMetadata | PhotoMetadata>
-                            >
-                        )?.[key],
-                    ).forEach(([attachmentId, attachmentMetadata]) => {
-                        const origAttachmentId = `combustion_safety_tests.${key}.${attachmentId}`
+                const newAttachmentId = `combustion_safety_tests.${index}.${attachmentId}`
 
-                        const newAttachmentId = `combustion_safety_tests.${index}.${attachmentId}`
+                if (project._attachments) {
+                    const attachment = project._attachments[
+                        origAttachmentId
+                    ] as PouchDB.Core.FullAttachment | undefined
 
-                        if (project._attachments) {
-                            const attachment = project._attachments[
-                                origAttachmentId
-                            ] as PouchDB.Core.FullAttachment | undefined
-
-                            if (attachment) {
-                                if (!installation._attachments) {
-                                    installation._attachments = {}
-                                }
-
-                                installation._attachments[newAttachmentId] = {
-                                    content_type: attachment.content_type,
-                                    data: attachment.data,
-                                }
-
-                                installation.metadata_.attachments[
-                                    newAttachmentId
-                                ] = attachmentMetadata as
-                                    | FileMetadata
-                                    | PhotoMetadata
-
-                                delete project._attachments[origAttachmentId]
-                            }
+                    if (attachment) {
+                        if (!installation._attachments) {
+                            installation._attachments = {}
                         }
-                    })
-                },
-            )
 
-            delete projectData['assessment_date']
+                        installation._attachments[newAttachmentId] = {
+                            content_type: attachment.content_type,
+                            data: attachment.data,
+                        }
 
-            delete projectData['combustion_safety_tests']
+                        installation.metadata_.attachments[newAttachmentId] =
+                            attachmentMetadata as FileMetadata | PhotoMetadata
 
-            delete project.metadata_.attachments['combustion_safety_tests']
+                        delete project._attachments[origAttachmentId]
+                    }
+                }
+            })
+        },
+    )
 
-            await putProject(db, project)
+    delete projectData['assessment_date']
 
-            await putInstallation(db, project._id, installation)
-        })
+    delete projectData['combustion_safety_tests']
+
+    delete project.metadata_.attachments['combustion_safety_tests']
+
+    return [project, installation]
 }
 
 export default migrate
