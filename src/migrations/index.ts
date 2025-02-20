@@ -43,8 +43,6 @@ export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
                 migrated_at: new Date(),
             })
         }
-
-        return
     })
 }
 
