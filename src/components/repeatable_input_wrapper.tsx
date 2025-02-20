@@ -21,7 +21,7 @@ function _removeAttachmentsAt(
     // path. The path is escaped so that this method is safe to use with nested
     // "repeatable" components.
     const reAttachmentId = new RegExp(
-        `^(${escapeRegExp(path)}).(0|[1-9][0-9]*).([^.]+)$`,
+        `^(${escapeRegExp(path)}).(0|[1-9][0-9]*).([.]+)$`,
     )
 
     const _attachments: Record<
