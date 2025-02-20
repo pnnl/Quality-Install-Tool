@@ -25,17 +25,22 @@ const migrations: Record<MigrationName, Migration> = {
 }
 
 export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
-    Object.entries(migrations).forEach(async ([migrationName, migration]) => {
-        const findResponse = await dbMigrations.find({
-            selector: {
-                migration_name: {
-                    $eq: migrationName,
-                },
-            },
-            fields: ['migration_name'],
+    await dbMigrations.info()
+
+    const allDocsResponse = await dbMigrations.allDocs<MigrationRecord>({
+        include_docs: true,
+    })
+
+    const migrationNames = allDocsResponse.rows
+        .map(row => {
+            return row.doc?.migration_name
+        })
+        .filter(migrationName => {
+            return migrationName
         })
 
-        if (findResponse.docs.length === 0) {
+    Object.entries(migrations).forEach(async ([migrationName, migration]) => {
+        if (!migrationNames.includes(migrationName)) {
             await migration(db)
 
             await dbMigrations.post<MigrationRecord>({
