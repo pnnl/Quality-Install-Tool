@@ -1,127 +1,128 @@
-import React from 'react'
-import type { FC } from 'react'
-import { Card, Image, Row, Col } from 'react-bootstrap'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Card, Col, Image, Row } from 'react-bootstrap'
 
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
-import type PhotoMetadata from '../types/photo_metadata.type'
+import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 
 interface PhotoProps {
     description: React.ReactNode
-    label: string
-    photos: { id: string; photo: Blob; metadata: PhotoMetadata }[] // Array of photo objects with metadata
+    label: React.ReactNode
+    photoAttachments: PhotoAttachment[]
     required: boolean
     noteValue: string | undefined
 }
-/**
- * A component that displays a photo, timestamp, geolocation, label, and description
- * Displays multiple photos (2 per row) with metadata in a grid layout
- *
- * @param description Content (most commonly markdown text) used to describe the photo
- * @param label Label for the component
- * @param metadata Photo metadata including timestamp and geolocation
- * @param photos Array of photo objects with photo Blob and metadata for each photo
- *         {
- *         id attachment id for the photo and metadata
- *         photo A Blob for the photo image
- *         metadata Photo metadata including timestamp and geolocation
- *         }[]
- * @param required When unset, the Photo component will only show if there is a
- * photo attachment in the data store with the given id. When set, the Photo component
- * will always show and the Photo component will indicate when the photo is missing.
- * @param noteValue The value to be displayed as the note for the photos
- */
-const Photo: FC<PhotoProps> = ({
+
+const Photo: React.FC<PhotoProps> = ({
     description,
     label,
-    photos,
+    photoAttachments,
     required,
     noteValue,
 }) => {
-    const noteValueArray = noteValue?.split(`\n`)
-    return (photos && photos.length > 0) || required ? (
-        <Card className="photo-card">
-            <Card.Body>
-                <Card.Title>{label}</Card.Title>
-                <Card.Text as="div">{description}</Card.Text>
-                {photos && photos.length > 0
-                    ? Array.isArray(photos) && (
-                          <Row className="photo-row">
-                              {photos.map(photoData => (
-                                  <Col key={photoData.id}>
-                                      {photoData.photo ? (
-                                          <div className="photo-report-container">
-                                              <Image
-                                                  src={URL.createObjectURL(
-                                                      photoData.photo,
-                                                  )}
-                                                  thumbnail
-                                              />
-                                              <div>
-                                                  <small>
-                                                      Timestamp:{' '}
-                                                      {photoData.metadata
-                                                          ?.timestamp ? (
-                                                          <DateTimeStr
-                                                              date={
-                                                                  photoData
-                                                                      .metadata
-                                                                      .timestamp
-                                                              }
-                                                              source={
-                                                                  photoData
-                                                                      .metadata
-                                                                      .timestampSource
-                                                              }
-                                                          />
-                                                      ) : (
-                                                          <span>Missing</span>
-                                                      )}
-                                                      <br />
-                                                      Geolocation:{' '}
-                                                      {photoData.metadata
-                                                          ?.geolocation ? (
-                                                          <span>
-                                                              <GpsCoordStr
-                                                                  source={
-                                                                      photoData
-                                                                          .metadata
-                                                                          .geolocationSource
-                                                                  }
-                                                                  {...photoData
-                                                                      .metadata
-                                                                      .geolocation}
-                                                              />{' '}
-                                                          </span>
-                                                      ) : (
-                                                          <span>Missing</span>
-                                                      )}
-                                                  </small>
-                                              </div>
-                                          </div>
-                                      ) : null}
-                                  </Col>
-                              ))}
-                          </Row>
-                      )
-                    : required && <em>Missing Photo</em>}
-                {noteValue && (
-                    <div className="photo-notes">
-                        <h3>Notes: </h3>
-                        <div>
-                            {noteValueArray
-                                ? noteValueArray.map(string => (
-                                      <p className="photo-note-string">
-                                          {string}
-                                      </p>
-                                  ))
-                                : null}
+    const noteValueLines = useMemo<string[]>(() => {
+        if (noteValue) {
+            return noteValue.split(/\r?\n/i)
+        } else {
+            return []
+        }
+    }, [noteValue])
+
+    const [objectURLs, setObjectURLs] = useState<string[]>([])
+
+    useEffect(() => {
+        const objectURLs = photoAttachments.map(photoAttachment => {
+            return URL.createObjectURL(
+                (photoAttachment.attachment as PouchDB.Core.FullAttachment)
+                    .data as Blob,
+            )
+        })
+
+        setObjectURLs(objectURLs)
+
+        return () => {
+            objectURLs.forEach(objectURL => {
+                if (objectURL) {
+                    URL.revokeObjectURL(objectURL)
+                }
+            })
+        }
+    }, [photoAttachments])
+
+    if (photoAttachments.length > 0 || required) {
+        return (
+            <Card className="photo-card">
+                <Card.Body>
+                    <Card.Title>{label}</Card.Title>
+                    <Card.Text as="div">{description}</Card.Text>
+                    {photoAttachments.length > 0 ? (
+                        <Row className="photo-row">
+                            {photoAttachments.map((photoAttachment, index) => (
+                                <Col key={index}>
+                                    <div className="photo-report-container">
+                                        {objectURLs[index] && (
+                                            <Image
+                                                src={objectURLs[index]}
+                                                thumbnail
+                                            />
+                                        )}
+                                        <div>
+                                            <small>
+                                                Timestamp:{' '}
+                                                {photoAttachment.metadata
+                                                    ?.timestamp ? (
+                                                    <DateTimeStr
+                                                        date={
+                                                            photoAttachment
+                                                                .metadata
+                                                                .timestamp
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <span>Missing</span>
+                                                )}
+                                                <br />
+                                                Geolocation:{' '}
+                                                {photoAttachment.metadata
+                                                    ?.geolocation ? (
+                                                    <GpsCoordStr
+                                                        {...photoAttachment
+                                                            .metadata
+                                                            .geolocation}
+                                                    />
+                                                ) : (
+                                                    <span>Missing</span>
+                                                )}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>
+                    ) : (
+                        required && <em>Missing Photo</em>
+                    )}
+                    {noteValueLines.length > 0 && (
+                        <div className="photo-notes">
+                            <h3>Notes:</h3>
+                            <div>
+                                {noteValueLines.map((noteValueLine, index) => (
+                                    <p
+                                        key={index}
+                                        className="photo-note-string"
+                                    >
+                                        {noteValueLine}
+                                    </p>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </Card.Body>
-        </Card>
-    ) : null
+                    )}
+                </Card.Body>
+            </Card>
+        )
+    } else {
+        return null
+    }
 }
 
 export default Photo

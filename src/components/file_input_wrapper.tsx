@@ -1,42 +1,40 @@
-import React, { FC } from 'react'
-import { StoreContext } from './store'
+import PouchDB from 'pouchdb'
+import React from 'react'
+
 import FileInput from './file_input'
+import { StoreContext } from '../providers/store_provider'
+import { type FileMetadata } from '../types/database.types'
 
 interface FileInputWrapperProps {
-    children: React.ReactNode
     id: string
-    label: string
+    label: React.ReactNode
+    children: React.ReactNode
 }
 
-/**
- * A component that wraps a FileInput component in order to tie it to the data store
- *
- * @param children Content (most commonly markdown text) to be passed on as the FileInput children
- * @param id An identifier for the store attachment that represents the information of the file
- * @param label The label of the PhotoInput component
- */
-const FileInputWrapper: FC<FileInputWrapperProps> = ({
-    children,
+const FileInputWrapper: React.FC<FileInputWrapperProps> = ({
     id,
     label,
+    children,
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ attachments, upsertAttachment }) => {
-                const attachment = Object.getOwnPropertyDescriptor(
-                    attachments,
-                    id,
-                )?.value
+            {({ doc, putAttachment }) => {
+                const attachment =
+                    doc &&
+                    doc._attachments &&
+                    (doc._attachments[id] as PouchDB.Core.FullAttachment)
 
-                const upsertFile = (img_file: Blob, fileName: string) => {
-                    upsertAttachment(img_file, id, fileName)
-                }
+                const attachmentMetadata =
+                    doc && (doc.metadata_.attachments[id] as FileMetadata)
+
                 return (
                     <FileInput
                         label={label}
-                        fileMetadata={attachment?.metadata}
-                        file={attachment?.blob}
-                        upsertFile={upsertFile}
+                        file={attachment?.data as Blob}
+                        fileMetadata={attachmentMetadata}
+                        upsertFile={async (blob, filename) =>
+                            putAttachment(id, blob, filename)
+                        }
                     >
                         {children}
                     </FileInput>

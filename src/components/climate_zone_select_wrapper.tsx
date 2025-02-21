@@ -1,43 +1,20 @@
-import type { FC } from 'react'
-import SelectWrapper from './select_wrapper'
+import React from 'react'
 
-const CLIMATE_ZONES = [
-    '1A - Very Hot Humid',
-    '1B - Very Hot Dry',
-    '2A - Hot Humid',
-    '2B - Hot Dry',
-    '3A - Warm Humid',
-    '3B - Warm Dry',
-    '3C - Warm Marine',
-    '4A - Mixed Humid',
-    '4B - Mixed Dry',
-    '4C - Mixed Marine',
-    '5A - Cool Humid',
-    '5B - Cool Dry',
-    '5C - Cool Marine',
-    '6A - Cold Humid',
-    '6B - Cold Dry',
-    '7 - Very Cold',
-    '8 - Subarctic / Arctic',
-]
+import SelectWrapper from './select_wrapper'
+import { IECC_CLIMATE_ZONES } from '../types/iecc_climate_zone.type'
 
 interface ClimateZoneSelectWrapperProps {
-    label: string
+    label: React.ReactNode
     path: string
 }
 
-/**
- * A component that *ultimately* wraps a Select component in order to tie it to the data store
- * and set its options to the IECC Climate Zones
- * @param label The label of the Select component
- * @param path The path (consistent with the path provided to the lodash
- * get() method) to the datum within the data store for the Select component
- */
-const ClimateZoneSelectWrapper: FC<ClimateZoneSelectWrapperProps> = ({
+const ClimateZoneSelectWrapper: React.FC<ClimateZoneSelectWrapperProps> = ({
     label,
     path,
 }) => {
-    return <SelectWrapper label={label} options={CLIMATE_ZONES} path={path} />
+    return (
+        <SelectWrapper label={label} path={path} options={IECC_CLIMATE_ZONES} />
+    )
 }
 
 export default ClimateZoneSelectWrapper

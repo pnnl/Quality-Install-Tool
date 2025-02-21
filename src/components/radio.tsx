@@ -1,52 +1,42 @@
-import React from 'react'
-import { FC, useEffect, useState } from 'react'
-import { FloatingLabel } from 'react-bootstrap'
-import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
+import React, { useCallback, useId } from 'react'
+import { Card, Form } from 'react-bootstrap'
 
 interface RadioProps {
-    id: string
-    label: string
+    label: React.ReactNode
     options: string[]
-    updateValue: (inputValue: string) => void
     value: string
+    onChange: (value: string) => Promise<void>
 }
 
-/**
- * Component for a radio input
- *
- * @param id The id for the underlying html input
- * @param label The component label
- * @param options An array of strings representing the options for the underlying radio input
- * @param updateValue A function called whenever the user changes the
- * input value. The function has the new input value as the sole argument.
- * @param value The current value of the input
- */
-const Radio: FC<RadioProps> = ({ id, label, options, updateValue, value }) => {
-    const handleOptionChange = (event: React.FormEvent<HTMLInputElement>) => {
-        updateValue(event.currentTarget.value)
-    }
+const Radio: React.FC<RadioProps> = ({ label, options, value, onChange }) => {
+    const id = useId()
+
+    const handleChange = useCallback(
+        async (event: React.FormEvent<HTMLInputElement>) => {
+            await onChange(event.currentTarget.value)
+        },
+        [onChange],
+    )
+
     return (
-        <>
-            <Card className="input-card">
-                <Card.Body>
-                    <label className="mb-3 custom-label">{label}</label>
-                    <Form.Group className="mb-3" controlId={label}>
-                        {options.map(option => (
-                            <Form.Check
-                                type="radio"
-                                label={option}
-                                name={id + label}
-                                value={option}
-                                checked={option === value}
-                                onChange={handleOptionChange}
-                                key={option}
-                            />
-                        ))}
-                    </Form.Group>
-                </Card.Body>
-            </Card>
-        </>
+        <Card className="input-card">
+            <Card.Body>
+                <p className="mb-3 custom-label">{label}</p>
+                <Form.Group className="mb-3">
+                    {options.map((option, index) => (
+                        <Form.Check
+                            key={index}
+                            id={`${id}_${index}`}
+                            type="radio"
+                            label={option}
+                            value={option}
+                            checked={option === value}
+                            onChange={handleChange}
+                        />
+                    ))}
+                </Form.Group>
+            </Card.Body>
+        </Card>
     )
 }
 

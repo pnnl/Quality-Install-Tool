@@ -1,19 +1,23 @@
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
-    <Tab eventKey="test"  title="Appliance Safety Tests" >
+    <Tab eventKey="test" title="Appliance Safety Tests" >
         <Collapsible header="Combustion Appliance Safety Testing Details">
             If the home upgrades will result in a barometric draft
             controlled or Category I appliances equipped with a draft hood
             or connected to a natural draft venting system remaining in the
             conditioned envelope of the home, combustion safety checks are
             required to be performed at the completion of the project.
-            
+
             If the tests fail, a combustion air opening connecting the
             combustion appliance area to the outdoors may need to be added
             or some other remediation may be required. The combustion safety
             tests performed and documented in this report follows the{' '}
             <a
+                href="https://www.bpi.org/__cms/docs/ANSI%20BPI-1200-S-2017%20Standard%20Practice%20for%20Basic%20Analysis%20of%20Buildings.pdf"
+                rel="noopener noreferrer"
                 target="_blank"
-                href="http://www.bpi.org/sites/default/files/ANSI BPI-1200-S-2017 Standard Practice for Basic Analysis of Buildings.pdf"
             >
                 ANSI /BPI-1200-S-2017 Standard Practice for Basic Analysis
                 of Buildings Technical Standard.
@@ -21,7 +25,7 @@
         </Collapsible>
         <DateInput label="Assessment Date" path="assessment_date" />
 
-        <RepeatableInput path="combustion_safety_tests" label="Appliance: ">
+        <RepeatableInput path="combustion_safety_tests" label="Appliance" labelPath="appliance_type" maxValuesCount={5}>
             <Radio
                 label="Appliance Type:"
                 options={['Gas/Oil Water Heater', 'Gas/Oil Furnace/Boiler']}
@@ -58,7 +62,6 @@
                 >
                     <ul>
                         <li>
-                            {' '}
                             For gas pipping, take a photo of the combustion gas detector
                             checking an accessible gas pipe connection, read out visible
                             in the photo. Or if a leak is found, take a photo of the
@@ -103,7 +106,7 @@
                 />
                 <PhotoInput
                     id="water_heater_co_measurement_photo"
-                    label="Water heater CO measurement – Photo "
+                    label="Water heater CO measurement – Photo"
                     uploadable={false}
                 >
                     Take a photo of the combustion analyzer readouts. Perform test under
@@ -115,12 +118,12 @@
                     label="Does the undiluted CO test pass?"
                     options={['Passed', 'Failed']}
                     path="water_heater_undiluted_CO_test"
-                />{' '}
+                />
             </ShowOrHide>
             <ShowOrHide path="appliance_type" value="Gas/Oil Furnace/Boiler">
                 <PhotoInput
                     id="space_heating_appliance_photo"
-                    label="Space Heating Appliance - Photo "
+                    label="Space Heating Appliance - Photo"
                     uploadable={false}
                 >
                     Take a photo of the space heating appliance. In the photo
@@ -134,7 +137,6 @@
                 >
                     <ul>
                         <li>
-                            {' '}
                             For gas pipping, take a photo of the combustion gas
                             detector checking an accessible gas pipe connection,
                             read out visible in the photo. Or if a leak is found,
@@ -180,7 +182,7 @@
                 />
                 <PhotoInput
                     id="space_heating_appliance_co_measurement_photo"
-                    label="Space heating Appliance CO measurement – Photo "
+                    label="Space heating Appliance CO measurement – Photo"
                     uploadable={false}
                 >
                     Take a photo of the combustion analyzer readouts. Perform test
@@ -192,7 +194,7 @@
                     label="Does the undiluted CO test pass?"
                     options={['Passed', 'Failed']}
                     path="space_heating_undiluted_CO_test"
-                />{' '}
+                />
             </ShowOrHide>
         </RepeatableInput>
     </Tab>
@@ -206,4 +208,5 @@
             <CombustionSafetyChecksReport {...props} />
         </PrintSection>
     </Tab>
+
 </Tabs>

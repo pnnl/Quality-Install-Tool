@@ -1,17 +1,19 @@
-import { FC } from 'react'
-import Tab from 'react-bootstrap/Tab'
+import React from 'react'
+import { Tab } from 'react-bootstrap'
 
 interface TabWrapperProps {
     children: React.ReactNode
-    printPdf: boolean
-    title: string
+    eventKey: string
+    title: React.ReactNode
 }
 
-// Note: This is not currently being used.
-// TODO: Create a wrapper for the Tabs component instead
-const TabWrapper: FC<TabWrapperProps> = ({ children, printPdf, title }) => {
+const TabWrapper: React.FC<TabWrapperProps> = ({
+    children,
+    eventKey,
+    title,
+}) => {
     return (
-        <Tab eventKey={title} style={{ paddingTop: '1rem' }} title="Fooo">
+        <Tab style={{ paddingTop: '1rem' }} eventKey={eventKey} title={title}>
             {children}
         </Tab>
     )
