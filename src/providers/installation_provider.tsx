@@ -87,32 +87,34 @@ const InstallationProvider: React.FC<InstallationProviderProps> = ({
     }, [reloadInstallation])
 
     useEffect(() => {
-        const changes = db
-            .changes<Installation>({
-                live: true,
-                since: 'now',
-                include_docs: true,
-                attachments,
-                binary: attachments ? true : undefined,
-                doc_ids: installationId ? [installationId] : undefined,
-            })
-            .on('change', value => {
-                if (value.deleted) {
-                    setError({
-                        id: value.id,
-                        status: 404,
-                    })
+        const changes = installationId
+            ? db
+                  .changes<Installation>({
+                      live: true,
+                      since: 'now',
+                      include_docs: true,
+                      attachments,
+                      binary: attachments ? true : undefined,
+                      doc_ids: [installationId],
+                  })
+                  .on('change', value => {
+                      if (value.deleted) {
+                          setError({
+                              id: value.id,
+                              status: 404,
+                          })
 
-                    setInstallation(undefined)
-                } else if (value.doc?._id === installationId) {
-                    setError(undefined)
+                          setInstallation(undefined)
+                      } else if (value.doc?._id === installationId) {
+                          setError(undefined)
 
-                    setInstallation(value.doc)
-                }
-            })
+                          setInstallation(value.doc)
+                      }
+                  })
+            : undefined
 
         return () => {
-            changes.cancel()
+            changes && changes.cancel()
         }
     }, [attachments, db, installationId])
 
