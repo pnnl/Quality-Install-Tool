@@ -124,7 +124,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ doc, upsertData, replaceDoc }) => {
+            {({ doc, putDoc, upsertData }) => {
                 return (
                     <RepeatableInput
                         path={path}
@@ -181,29 +181,18 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                                 //     modified PouchDB document into the
                                 //     database. This means that the caller is
                                 //     responsible for _upserting_ the new
-                                //     values and for updating the "last
-                                //     modified at" timestamp.
-                                const newDoc = _removeAttachmentsAt(
-                                    doc,
-                                    path,
-                                    index,
-                                )
-
-                                const lastModifiedAt = new Date()
-
-                                await replaceDoc(
+                                //     values.
+                                await putDoc(
                                     immutableUpsert(
                                         `data_.${path}`,
-                                        {
-                                            ...newDoc,
-                                            metadata_: {
-                                                ...newDoc.metadata_,
-                                                last_modified_at:
-                                                    lastModifiedAt,
-                                            },
-                                        },
+                                        _removeAttachmentsAt(
+                                            doc,
+                                            path,
+                                            index,
+                                        ) as unknown as Record<string, unknown>,
                                         values,
-                                    ),
+                                    ) as unknown as PouchDB.Core.Document<Base> &
+                                        PouchDB.Core.GetMeta,
                                 )
                             }
                         }}

@@ -37,10 +37,10 @@ export const StoreContext = createContext<{
         blob: Blob,
         filename?: string,
     ) => Promise<void>
-    removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
-    replaceDoc: (
+    putDoc: (
         doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     ) => Promise<void>
+    removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
 }>({
     doc: undefined,
     upsertData: async () => {
@@ -52,10 +52,10 @@ export const StoreContext = createContext<{
     putAttachment: async () => {
         return
     },
-    removeAttachment: async () => {
+    putDoc: async () => {
         return
     },
-    replaceDoc: async () => {
+    removeAttachment: async () => {
         return
     },
 })
@@ -158,6 +158,23 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [doc, onChange],
     )
 
+    const putDoc = useCallback(
+        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
+            if (onChange) {
+                const lastModifiedAt = new Date()
+
+                await onChange({
+                    ...doc,
+                    metadata_: {
+                        ...doc.metadata_,
+                        last_modified_at: lastModifiedAt,
+                    },
+                })
+            }
+        },
+        [onChange],
+    )
+
     const removeAttachment = useCallback(
         async (attachmentId: PouchDB.Core.AttachmentId) => {
             if (onChange) {
@@ -189,13 +206,6 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [doc, onChange],
     )
 
-    const replaceDoc = useCallback(
-        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
-            onChange && (await onChange(doc))
-        },
-        [onChange],
-    )
-
     return (
         <StoreContext.Provider
             value={{
@@ -203,8 +213,8 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 upsertData,
                 upsertMetadata,
                 putAttachment,
+                putDoc,
                 removeAttachment,
-                replaceDoc,
             }}
         >
             {children}
