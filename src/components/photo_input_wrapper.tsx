@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 
 import PhotoInput from './photo_input'
 import { StoreContext } from '../providers/store_provider'
-import { getPhotoAttachments } from '../utilities/photo_attachment_utils'
+import {
+    getNextPhotoAttachmentId,
+    getPhotoAttachments,
+} from '../utilities/photo_attachment_utils'
 import { compressPhoto } from '../utilities/photo_utils'
 
 interface PhotoInputWrapperProps {
@@ -32,27 +35,10 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
             {({ doc, putAttachment, removeAttachment }) => {
                 const photoAttachments = doc ? getPhotoAttachments(doc, id) : []
 
-                const photoAttachmentId = `${id}_${
-                    1 +
-                    Math.max(
-                        -1,
-                        ...photoAttachments
-                            .map(({ attachmentId }) => {
-                                return attachmentId.match(
-                                    /^(.*?)_(0|[1-9][0-9]*)$/i,
-                                )
-                            })
-                            .filter(result => {
-                                return result !== null
-                            })
-                            .map(result => {
-                                return parseInt(result[2])
-                            })
-                            .filter(num => {
-                                return !isNaN(num)
-                            }),
-                    )
-                }`
+                const photoAttachmentId = getNextPhotoAttachmentId(
+                    id,
+                    photoAttachments,
+                )
 
                 return (
                     <PhotoInput
