@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb'
 
 import { type Base, type PhotoMetadata } from '../types/database.types'
+import { escapeRegExp } from '../utilities/regexp_utils'
 
 export interface PhotoAttachment {
     attachmentId: PouchDB.Core.AttachmentId
@@ -12,9 +13,13 @@ export function getPhotoAttachments(
     doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     attachmentId: PouchDB.Core.AttachmentId,
 ): Array<PhotoAttachment> {
+    const rePhotoAttachmentId = new RegExp(
+        `^(${escapeRegExp(attachmentId)})_(0|[1-9][0-9]*)$`,
+    )
+
     return Object.entries(doc._attachments ?? {})
         .filter(([key]) => {
-            return key.startsWith(attachmentId)
+            return key.match(rePhotoAttachmentId)
         })
         .map(([key, value]) => {
             return {
