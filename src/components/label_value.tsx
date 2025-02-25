@@ -5,9 +5,14 @@ import DateStr from './date_str'
  * LabelValueProps defines the props for the LabelValue component.
  *
  * @interface LabelValueProps
- * @property {string} label - The label to display next to the value.
- * @property {string} value - The value to display.
+ * @property {string} [label] - The label to display next to the value.
+ * @property {string} [value] - The value to display.
  * @property {boolean} [required=false] - A flag to determine if the label-value pair should be rendered.
+ * @property {string} [prefix] - A prefix to display before the value.
+ * @property {string} [suffix] - A suffix to display after the value.
+ * @property {'string' | 'number' | 'date'} type - The type of value to display.
+ * @property {number} [decimalPlaces] - Number of decimal places to round the value if type is 'number'.
+ * @property {Intl.DateTimeFormatOptions} [dateOptions] - Options for date formatting if type is 'date'.
  */
 export interface LabelValueProps {
     label?: string

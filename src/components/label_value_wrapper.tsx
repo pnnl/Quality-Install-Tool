@@ -22,10 +22,16 @@ interface LabelValueWrapperProps {
  * The component conditionally renders the label-value pair based on the `required` prop.
  *
  * @param {LabelValueWrapperProps} props - The props for the `LabelValueWrapper` component.
- * @param {string} props.label - The label to display next to the value.
- * @param {string} props.path - The path in the data where the value can be found.
+ * @param {string} [props.label] - The label to display next to the value.
+ * @param {string} [props.path] - The path in the data where the value can be found.
+ * @param {string} [props.prefix] - A prefix to display before the value.
+ * @param {string} [props.suffix] - A suffix to display after the value.
  * @param {boolean} [props.required=false] - A flag to determine if the label-value pair should be rendered.
  * @param {any} [props.parent=null] - Optional. A custom parent object to retrieve the data from, instead of the global store context.
+ * @param {string | number | boolean} [props.value] - The value to display.
+ * @param {'string' | 'number' | 'date'} [props.type='string'] - The type of value to display.
+ * @param {number} [props.decimalPlaces] - Number of decimal places to round the value if type is 'number'.
+ * @param {Intl.DateTimeFormatOptions} [props.dateOptions] - Options for date formatting if type is 'date'.
  *
  * @returns {JSX.Element | null} - A JSX element containing the label and value if `required` is true, or null if `required` is false.
  *
