@@ -270,8 +270,22 @@
   # IRA Limited Assessment
 
 **Installer:**<br/>
-{props.project.data.installer?.name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data.installer?.name}</span> : null} {props.project.data.installer?.name ? <br/> : null}
-{props.project.data.installer?.company_name ? <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data.installer?.company_name}</span> : null}{props.project.data.installer?.company_name ? <br/> : null}
+{/* prettier-ignore */}
+{props.project.data_.installer?.name && (
+
+<>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer.name}</span>
+    <br />
+</>
+)}
+{props.project.data_.installer?.company_name && (
+    <>
+        <span>
+            &nbsp;&nbsp;&nbsp;&nbsp;{props.project.data_.installer.company_name}
+        </span>
+        <br />
+    </>
+)}
 
 **Assessment Date:** <DateStr date={props.data.assessment_date}/>
 
