@@ -1,37 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Button, Container, Navbar } from 'react-bootstrap'
 import { TfiAngleLeft } from 'react-icons/tfi'
-import { Link, useLocation } from 'react-router-dom'
-
-const RE_PATH = /^\/(?:app\/([^/]+)(?:\/([^/]+)(?:\/([^/]+))?)?)?$/i
-
-function getBackPathname(pathname: string): string | undefined {
-    const result = pathname.match(RE_PATH)
-
-    if (result) {
-        const [, projectId, workflowName, installationId] = result
-
-        if (projectId) {
-            if (workflowName) {
-                if (workflowName === 'workflows') {
-                    return '/'
-                } else {
-                    if (installationId) {
-                        return `/app/${projectId}/${workflowName}`
-                    } else {
-                        return `/app/${projectId}/workflows`
-                    }
-                }
-            } else {
-                return '/'
-            }
-        } else {
-            return undefined
-        }
-    } else {
-        return undefined
-    }
-}
+import { useLocation, useNavigate } from 'react-router-dom'
 
 interface LayoutProps {
     children: React.ReactNode
@@ -40,20 +10,32 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const location = useLocation()
 
-    const backPathname = useMemo<string | undefined>(() => {
-        return getBackPathname(location.pathname)
-    }, [location.pathname])
+    const navigate = useNavigate()
+
+    const handleClick = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.stopPropagation()
+            event.preventDefault()
+
+            navigate(-1)
+
+            return false
+        },
+        [navigate],
+    )
 
     return (
         <div id="root-background">
             <Navbar id="root-banner">
-                {backPathname && (
+                {location.pathname !== '/' && (
                     <div id="back-button-container">
-                        <Link to={backPathname} id="back-button-link">
-                            <Button variant="outline-light" id="back-button">
-                                <TfiAngleLeft id="back-button-logo" />
-                            </Button>
-                        </Link>
+                        <Button
+                            variant="outline-light"
+                            id="back-button"
+                            onClick={handleClick}
+                        >
+                            <TfiAngleLeft id="back-button-logo" />
+                        </Button>
                     </div>
                 )}
                 <Container id="root-flex-layout">
@@ -63,7 +45,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         </span>
                     </Navbar.Brand>
                 </Container>
-                {backPathname && <div id="settings-button-container"></div>}
+                {location.pathname !== '/' && (
+                    <div id="settings-button-container"></div>
+                )}
             </Navbar>
             <div id="root-body">{children}</div>
         </div>
