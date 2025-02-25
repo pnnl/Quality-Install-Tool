@@ -10,6 +10,7 @@ interface TextInputWrapperProps {
     min: number
     max: number
     regexp: RegExp
+    placeholder?: string
 }
 
 const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
@@ -18,6 +19,7 @@ const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
     min = 0,
     max = 10240,
     regexp = /.*/,
+    placeholder,
 }) => {
     return (
         <StoreContext.Consumer>
@@ -29,6 +31,7 @@ const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
                         min={min}
                         max={max}
                         regexp={regexp}
+                        placeholder={placeholder}
                         onChange={async value => upsertData(path, value)}
                     />
                 )

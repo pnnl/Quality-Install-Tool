@@ -10,6 +10,7 @@ interface TextInputProps {
     min: number
     max: number
     regexp: RegExp
+    placeholder?: string
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -19,6 +20,7 @@ const TextInput: React.FC<TextInputProps> = ({
     min,
     max,
     regexp,
+    placeholder,
 }) => {
     const id = useId()
 
@@ -88,7 +90,7 @@ const TextInput: React.FC<TextInputProps> = ({
             <Form.Control
                 as="textarea"
                 onChange={handleChange}
-                placeholder="A placeholder"
+                placeholder={placeholder}
                 value={value || ''}
                 isInvalid={errorMessages.length > 0}
                 onFocus={() => setIsFocused(true)}
