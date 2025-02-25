@@ -1,12 +1,12 @@
 import { get } from 'lodash'
-import React, { useId } from 'react'
+import React from 'react'
 
 import Select from './select'
 import { StoreContext } from '../providers/store_provider'
 
 interface SelectWrapperProps {
     label: React.ReactNode
-    options: string[]
+    options: string[] | [string, string][]
     path: string
 }
 
@@ -24,14 +24,11 @@ const SelectWrapper: React.FC<SelectWrapperProps> = ({
     options,
     path,
 }) => {
-    const id = useId()
-
     return (
         <StoreContext.Consumer>
             {({ doc, upsertData }) => {
                 return (
                     <Select
-                        id={id}
                         label={label}
                         options={options}
                         value={doc && get(doc.data_, path)}

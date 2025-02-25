@@ -13,6 +13,7 @@ import DateTimeStr from './date_time_str'
 import FigureWrapper from './figure_wrapper'
 import FileInputWrapper from './file_input_wrapper'
 import GpsCoordStr from './gps_coord_str'
+import InstallationSelectWrapper from './installation_select_wrapper'
 import LabelValueWrapper from './label_value_wrapper'
 import LocationStr from './location_str'
 import NumberInputWrapper from './number_input_wrapper'
@@ -30,7 +31,10 @@ import StringInputWrapper from './string_input_wrapper'
 import TableWrapper from './table_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import USStateSelectWrapper from './us_state_select_wrapper'
-import { StoreContext } from '../providers/store_provider'
+import InstallationProvider, {
+    InstallationContext,
+} from '../providers/installation_provider'
+import StoreProvider, { StoreContext } from '../providers/store_provider'
 import { type TemplateProps } from '../templates'
 import { type Project } from '../types/database.types'
 
@@ -45,6 +49,9 @@ const components = {
     Figure: FigureWrapper,
     FileInput: FileInputWrapper,
     GpsCoordStr,
+    InstallationConsumer: InstallationContext.Consumer,
+    InstallationProvider: InstallationProvider,
+    InstallationSelect: InstallationSelectWrapper,
     LabelValue: LabelValueWrapper,
     LocationStr,
     NumberInput: NumberInputWrapper,
@@ -58,6 +65,7 @@ const components = {
     RepeatableInput: RepeatableInputWrapper,
     Select: SelectWrapper,
     ShowOrHide: ShowOrHideWrapper,
+    StoreProvider: StoreProvider,
     StringInput: StringInputWrapper,
     Tab,
     Table: TableWrapper,

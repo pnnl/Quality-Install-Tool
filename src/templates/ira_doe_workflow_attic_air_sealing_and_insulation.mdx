@@ -398,7 +398,35 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> What R-value was added to the ceiling? <strong>{props.data?.postinstall_ceiling_r_value}</strong> </p>
     <p> What percentage of ceiling area received additional insulation? <strong>{props.data?.postinstall_insulated_ceiling_area}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    {props.data.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data?.post_retrofit_ashrae_62_2_calculation} </p>

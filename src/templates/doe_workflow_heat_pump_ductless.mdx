@@ -441,7 +441,35 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
-            <CombustionSafetyChecksReport {...props} />
+            {props.data.doe_combustion_appliance_safety_test_doc_id && (
+                <InstallationProvider
+                    installationId={props.data.doe_combustion_appliance_safety_test_doc_id}
+                    attachments={true}
+                >
+                    <InstallationConsumer>
+                        {([installation]) => {
+                            if (installation) {
+                                return (
+                                    <StoreProvider
+                                        doc={installation}
+                                        onChange={async () => {
+                                            return
+                                        }}
+                                    >
+                                        <CombustionSafetyChecksReport
+                                            project={props.project}
+                                            data={installation.data_}
+                                            metadata={installation.metadata_}
+                                        />
+                                    </StoreProvider>
+                                )
+                            } else {
+                                return null
+                            }
+                        }}
+                    </InstallationConsumer>
+                </InstallationProvider>
+            )}
 
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>

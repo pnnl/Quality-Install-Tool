@@ -246,7 +246,35 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    {props.data.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>
