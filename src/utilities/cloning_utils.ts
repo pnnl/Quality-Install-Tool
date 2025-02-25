@@ -1,5 +1,18 @@
 import React from 'react'
 
+// @note Excluded components.
+//     If a component name is excluded, then its `path` prop is not accumulated
+//     when its child elements are cloned.
+const EXCLUDED_COMPONENT_NAMES: string[] = [
+    'Collapsible',
+    'FigureWrapper',
+    'PrintSectionWrapper',
+    'ShowOrHideWrapper',
+    'TabWrapper',
+    'TableWrapper',
+    'Tabs',
+]
+
 export interface CloneableProps {
     id?: string
     path?: string
@@ -13,6 +26,11 @@ export function cloneElement<T extends CloneableProps>(
     parentPath?: string,
 ): React.ReactNode {
     if (React.isValidElement(el)) {
+        const isExcludedComponent =
+            typeof el.type === 'function'
+                ? EXCLUDED_COMPONENT_NAMES.includes(el.type.name)
+                : false
+
         const key = `${parentKey}-${index}`
 
         const id =
@@ -22,7 +40,7 @@ export function cloneElement<T extends CloneableProps>(
 
         const path =
             el.props.path && parentPath
-                ? `${parentPath}[${parentKey}].${el.props.path}`
+                ? `${parentPath}.${el.props.path}`
                 : undefined
 
         return React.cloneElement(el, {
@@ -37,7 +55,7 @@ export function cloneElement<T extends CloneableProps>(
                         child as React.ReactElement<T>,
                         childIndex,
                         key,
-                        path,
+                        isExcludedComponent ? parentPath : path,
                     ),
             ),
         })

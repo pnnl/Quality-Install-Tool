@@ -80,7 +80,7 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                                     child as React.ReactElement<CloneableProps>,
                                     childIndex,
                                     index,
-                                    path,
+                                    `${path}[${index}]`,
                                 ),
                             )}
                         </div>

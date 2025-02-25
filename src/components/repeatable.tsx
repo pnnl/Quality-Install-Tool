@@ -16,7 +16,7 @@ const Repeatable: React.FC<RepeatableProps> = ({ path, keys, children }) => {
                     child as React.ReactElement<CloneableProps>,
                     childIndex,
                     key,
-                    path,
+                    `${path}[${key}]`,
                 )
             })}
             <br />
