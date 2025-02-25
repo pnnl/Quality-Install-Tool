@@ -56,7 +56,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 
     const errorMessages = useMemo<string[]>(() => {
         if (value) {
-            if (value.trim().length === 0) {
+            if (typeof value === 'string' && value.trim().length === 0) {
                 return []
             } else {
                 const valueNumber = parseFloat(value)
