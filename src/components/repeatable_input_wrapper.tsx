@@ -18,7 +18,7 @@ function _removeAttachmentsAt(
     index: number,
 ): PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta {
     const pathWithoutArrayIndex = path.replace(
-        new RegExp('^(.+)\\[(?:0|[1-9][0-9]*)\\]$', 'i'),
+        new RegExp(`^(.+)\\[${escapeRegExp(index.toString())}\\]$`, 'i'),
         '$1',
     )
 
