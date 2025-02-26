@@ -8,7 +8,9 @@ const db = new PouchDB<Base>(process.env.REACT_APP_POUCHDB_DATABASE_NAME, {
     auto_compaction: true,
 })
 
-await migrate(db)
+if (process.env.JEST_WORKER_ID === undefined) {
+    await migrate(db)
+}
 
 const DatabaseContext = createContext<PouchDB.Database<Base>>(db)
 
