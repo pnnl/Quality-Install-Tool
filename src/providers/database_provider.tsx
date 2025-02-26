@@ -30,4 +30,8 @@ export function useDatabase(): PouchDB.Database<Base> {
     return useContext(DatabaseContext)
 }
 
+export async function UNSAFE_close(): Promise<void> {
+    await db.close()
+}
+
 export default DatabaseProvider
