@@ -1,6 +1,9 @@
 /node_modules
 /build
+/coverage
 .vscode
 .DS_Store
 yarn-error.log
 /public/print.css
+/quality-install-tool
+/quality-install-tool-migrations

@@ -159,6 +159,7 @@
       "!src/**/*.d.ts"
     ],
     "setupFiles": [
+      "dotenv/config",
       "react-app-polyfill/jsdom"
     ],
     "setupFilesAfterEnv": [

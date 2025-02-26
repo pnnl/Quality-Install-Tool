@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import ShowOrHide from '../components/show_or_hide'
+import ShowOrHide from '../../components/show_or_hide'
 
 describe('ShowOrHide Component', () => {
     test('renders children when "visible" prop is true', () => {

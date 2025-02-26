@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client'
 import { MemoryRouter } from 'react-router-dom'
 
 import ProjectsListView from '../components/views/projects/list'
-import DatabaseProvider from '../providers/database_provider'
+import DatabaseProvider, { UNSAFE_close } from '../providers/database_provider'
+
+afterAll(async () => {
+    await UNSAFE_close()
+})
 
 it('renders without crashing', () => {
     const div = document.createElement('div')

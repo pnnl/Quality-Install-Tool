@@ -3,6 +3,8 @@ declare namespace NodeJS {
         readonly NODE_ENV: 'development' | 'production' | 'test'
         readonly PUBLIC_URL: string
 
+        readonly JEST_WORKER_ID: string | undefined
+
         readonly REACT_APP_NAME: string
         readonly REACT_APP_HOMEPAGE: string
 
