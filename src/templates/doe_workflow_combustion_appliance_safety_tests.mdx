@@ -205,35 +205,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 ## Photo Report
             **Assessment Date:**&nbsp; <DateStr date={props.data.assessment_date} />
             <ProjectInfoReport {...props} />
-            {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
-                <InstallationProvider
-                    installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
-                    attachments={true}
-                >
-                    <InstallationConsumer>
-                        {([installation]) => {
-                            if (installation) {
-                                return (
-                                    <StoreProvider
-                                        doc={installation}
-                                        onChange={async () => {
-                                            return
-                                        }}
-                                    >
-                                        <CombustionSafetyChecksReport
-                                            project={props.project}
-                                            data={installation.data_}
-                                            metadata={installation.metadata_}
-                                        />
-                                    </StoreProvider>
-                                )
-                            } else {
-                                return null
-                            }
-                        }}
-                    </InstallationConsumer>
-                </InstallationProvider>
-            )}
+            <CombustionSafetyChecksReport {...props} />
         </PrintSection>
     </Tab>
 
