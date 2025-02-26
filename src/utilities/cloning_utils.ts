@@ -38,7 +38,7 @@ export function cloneElement<T extends CloneableProps>(
 
         const id =
             el.props.id && parentPath
-                ? `${parentPath}.${parentKey}.${el.props.id}`
+                ? `${parentPath}.${el.props.id}`
                 : undefined
 
         const path =

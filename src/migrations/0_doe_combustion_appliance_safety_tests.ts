@@ -114,21 +114,21 @@ export function shouldMigrateCombustionSafetyTestsProject(
  *   "data_": {
  *     "assessment_date": "...",
  *     "combustion_safety_tests": [
- *       { ... },                                           // Data for first appliance.
- *       { ... }                                            // Data for second appliance.
+ *       { ... },                                            // Data for first appliance.
+ *       { ... }                                             // Data for second appliance.
  *     ]
  *   },
  *   "metadata_": {
  *     "template_name": "doe_combustion_appliance_safety_tests",
  *     "template_title": "Combustion Appliance Safety Testing",
  *     "attachments": {
- *       "combustion_safety_tests.0.attachment_0": { ... }, // Metadata for first attachment for first appliance.
- *       "combustion_safety_tests.1.attachment_0": { ... }  // Metadata for first attachment for second appliance.
+ *       "combustion_safety_tests.0.attachment_0": { ... },  // Metadata for first attachment for first appliance.
+ *       "combustion_safety_tests.1.attachment_0": { ... }   // Metadata for first attachment for second appliance.
  *     }
  *   },
  *   "_attachments": {
- *     "combustion_safety_tests.0.attachment_0": { ... },   // First attachment for first appliance.
- *     "combustion_safety_tests.1.attachment_0": { ... }    // First attachment for second appliance.
+ *     "combustion_safety_tests[0].attachment_0": { ... },   // First attachment for first appliance.
+ *     "combustion_safety_tests[1].attachment_0": { ... }    // First attachment for second appliance.
  *   }
  * }
  * ```
@@ -179,7 +179,7 @@ export function transformCombustionSafetyTestsProject(
             ).forEach(([attachmentId, attachmentMetadata]) => {
                 const origAttachmentId = `combustion_safety_tests.${key}.${attachmentId}`
 
-                const newAttachmentId = `combustion_safety_tests.${index}.${attachmentId}`
+                const newAttachmentId = `combustion_safety_tests[${index}].${attachmentId}`
 
                 if (project._attachments) {
                     const attachment = project._attachments[
