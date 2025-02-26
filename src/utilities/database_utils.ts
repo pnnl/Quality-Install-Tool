@@ -4,7 +4,6 @@ PouchDB.plugin(PouchDBFind)
 import PouchDBUpsert from 'pouchdb-upsert'
 PouchDB.plugin(PouchDBUpsert)
 
-import templates from '../templates'
 import {
     type Base,
     type Installation,
@@ -53,14 +52,12 @@ export async function setDocumentName<Model extends Base>(
 
 export function newInstallation(
     docName: string,
-    workflowName: string,
+    templateName: string,
+    templateTitle: string,
     id: PouchDB.Core.DocumentId | undefined = undefined,
 ): PouchDB.Core.PutDocument<Installation> {
     const createdAt: Date = new Date()
     const lastModifiedAt: Date = createdAt
-
-    const templateName: string = workflowName
-    const templateTitle: string = templates[workflowName]?.title ?? ''
 
     const _id: PouchDB.Core.DocumentId = id ?? crypto.randomUUID()
     const _rev: PouchDB.Core.RevisionId | undefined = undefined
@@ -76,7 +73,7 @@ export function newInstallation(
         data_: {},
         metadata_: {
             doc_name: docName,
-            template_name: String(templateName),
+            template_name: templateName,
             template_title: templateTitle,
             created_at: createdAt,
             last_modified_at: lastModifiedAt,
@@ -121,7 +118,7 @@ export async function getInstallationIds(
                 },
                 metadata_: {
                     template_name: {
-                        $eq: String(workflowName),
+                        $eq: workflowName,
                     },
                 },
             },

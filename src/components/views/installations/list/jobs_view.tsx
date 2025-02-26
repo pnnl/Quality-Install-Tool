@@ -13,6 +13,7 @@ import {
 } from '../../../../providers/installations_provider'
 import { useProject } from '../../../../providers/project_provider'
 import { useWorkflow } from '../../../../providers/workflow_provider'
+import templates from '../../../../templates'
 import { type Installation } from '../../../../types/database.types'
 import {
     newInstallation,
@@ -95,6 +96,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             const installation = newInstallation(
                 installationForAddModalValue.trim(),
                 workflowName,
+                templates[workflowName]?.title || '',
                 undefined,
             )
 

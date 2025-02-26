@@ -151,6 +151,7 @@ export function transformCombustionSafetyTestsProject(
     const installation = newInstallation(
         project.metadata_.doc_name,
         'doe_combustion_appliance_safety_tests',
+        'Combustion Appliance Safety Testing',
         undefined,
     )
 
