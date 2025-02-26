@@ -17,14 +17,19 @@ function _removeAttachmentsAt(
     path: string,
     index: number,
 ): PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta {
+    const pathWithoutArrayIndex = path.replace(
+        new RegExp('^(.+)\\[(?:0|[1-9][0-9]*)\\]$', 'i'),
+        '$1',
+    )
+
     // Construct a regular expression to match the attachment IDs for the given
     // path. The path is escaped so that this method is safe to use with nested
     // "repeatable" components.
     const reAttachmentId = new RegExp(
-        `^(${escapeRegExp(path)})\\.(0|[1-9][0-9]*)\\.(.+)$`,
+        `^(${escapeRegExp(pathWithoutArrayIndex)})\\[(0|[1-9][0-9]*)\\]\\.(.+)$`,
     )
 
-    const prefixAttachmentId = `${path}.${index}.`
+    const prefixAttachmentId = `${path}.`
 
     const _attachments: Record<
         PouchDB.Core.AttachmentId,
@@ -71,7 +76,7 @@ function _removeAttachmentsAt(
                         // for the "repeatable" component that is being removed,
                         // then construct a new attachment ID.
 
-                        const newAttachmentId = `${result[1]}.${attachmentIndex - 1}.${result[3]}`
+                        const newAttachmentId = `${result[1]}[${attachmentIndex - 1}].${result[3]}`
 
                         if (attachment) {
                             _attachments[newAttachmentId] = attachment
