@@ -12,7 +12,9 @@ export interface Base {
     metadata_: BaseMetadata
 }
 
-export type BaseData = object
+export interface BaseData {
+    links?: Record<string, PouchDB.Core.DocumentId>
+}
 
 export interface BaseMetadata {
     created_at: Date

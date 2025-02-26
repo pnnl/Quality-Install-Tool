@@ -657,9 +657,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 </Photo> </>
             )}
 
-            {props.data.doe_combustion_appliance_safety_test_doc_id && (
+            {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
                 <InstallationProvider
-                    installationId={props.data.doe_combustion_appliance_safety_test_doc_id}
+                    installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
                     attachments={true}
                 >
                     <InstallationConsumer>

@@ -317,9 +317,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    {props.data.doe_combustion_appliance_safety_test_doc_id && (
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
         <InstallationProvider
-            installationId={props.data.doe_combustion_appliance_safety_test_doc_id}
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
             attachments={true}
         >
             <InstallationConsumer>

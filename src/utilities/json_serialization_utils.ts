@@ -139,6 +139,32 @@ export async function importJSONDocument(
                                 }
                             },
                         ),
+                        data_: {
+                            ...doc.data_,
+                            links: Object.entries(doc.data_.links ?? {}).reduce(
+                                (accumulator, [link, linkDocId]) => {
+                                    if (docIds.has(linkDocId)) {
+                                        const newLinkDocId =
+                                            docIds.get(linkDocId)
+
+                                        if (newLinkDocId) {
+                                            accumulator[link] = newLinkDocId
+
+                                            return accumulator
+                                        } else {
+                                            throw new Error(
+                                                `Link at key ${link} of document at index ${index} was assigned an "_id" property, but it is falsey.`,
+                                            )
+                                        }
+                                    } else {
+                                        throw new Error(
+                                            `Link at key ${link} of document at index ${index} has not been assigned an "_id" property.`,
+                                        )
+                                    }
+                                },
+                                {} as Record<string, PouchDB.Core.DocumentId>,
+                            ),
+                        },
                         metadata_: {
                             ...doc.metadata_,
                             created_at: createdAt,
