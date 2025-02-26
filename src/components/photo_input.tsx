@@ -11,7 +11,7 @@ import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
-interface PhotoInputProps {
+export interface PhotoInputProps {
     label: string
     uploadable: boolean
     loading: boolean
