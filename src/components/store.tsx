@@ -20,7 +20,11 @@ import {
     useDB,
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
-import { fetchAccessToken, getAuthToken } from '../auth/keycloak'
+import {
+    initializeMockSession,
+    getAuthToken,
+    getUserId,
+} from '../auth/keycloak'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -42,6 +46,12 @@ type Attachments = Record<
     | Attachment
     | { blob: Blob; digest: string; metadata: Record<string, JSONValue> }
 >
+
+declare global {
+    interface Window {
+        docData: any
+    }
+}
 
 export const StoreContext = React.createContext({
     docId: '' satisfies string,
@@ -173,6 +183,47 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             }
         }
     }
+
+    useEffect(() => {
+        let savedFormId = localStorage.getItem('form_id')
+
+        if (savedFormId) {
+            console.log('Restoring form ID from storage:', savedFormId)
+            if (!doc.data_) doc.data_ = {}
+
+            doc.data_.form_id = savedFormId
+            window.docData = doc.data_
+        } else {
+            console.log('No stored form found. Fetching from API...')
+            fetch(`http://localhost:5000/api/forms?user_id=${getUserId()}`) // NEED TO UPDATE TO DB URL
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.forms.length > 0) {
+                        const latestForm = data.forms[0]
+                        console.log('Found existing form:', latestForm.id)
+
+                        if (!doc.data_) doc.data_ = {}
+
+                        doc.data_.form_id = latestForm.id
+                        localStorage.setItem('form_id', latestForm.id)
+                        window.docData = doc.data_
+                    }
+                })
+                .catch(error => console.error('Error fetching form:', error))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (!doc) {
+            console.warn('`doc` is not initialized!')
+        } else {
+            console.log('`doc` is initialized:', doc)
+            window.docData = doc.data_
+            console.log(
+                '`doc.data_` is now accessible in DevTools as `window.docData`',
+            )
+        }
+    }, [])
 
     useEffect(() => {
         /**
@@ -320,42 +371,67 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     const autoSaveToRDS = async () => {
-        if (!docId || isEmpty(doc.data_)) return // Ensure docId and data exist
+        await initializeMockSession() // Ensure session is ready
 
-        // Fetch a new token if not available
-        if (!getAuthToken()) {
-            await fetchAccessToken()
-        }
+        const userId = getUserId()
+        const token = getAuthToken()
 
-        const token = getAuthToken() // Get the latest token
-        if (!token) {
-            console.error('Cannot auto-save: Missing Keycloak token.')
+        if (!userId || !token) {
+            console.error('Cannot auto-save: Missing user session.')
             return
         }
 
+        let formId = localStorage.getItem('form_id') || doc.data_.form_id
+
+        doc.data_.form_id = formId
+        localStorage.setItem('form_id', formId)
+
+        console.log('Using Form ID:', formId)
+
         const formData = {
-            user_id: docId,
-            form_data: doc.data_,
+            user_id: userId,
+            name: doc.data_.doc_name || 'Untitled Project',
+            installer: doc.data_.installer || {},
+            location: doc.data_.location || {},
+            status: doc.data_.status || 'in_progress',
+            building_number_photo: doc.data_.building_number_photo || null,
         }
 
         try {
-            const response = await fetch(
-                'http://localhost:5000/api/form-save',
-                {
+            let response
+            if (formId) {
+                console.log(`Updating form ${formId}...`)
+                response = await fetch(
+                    `http://localhost:5000/api/forms/${formId}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    },
+                )
+            } else {
+                console.log('Creating new form...')
+                response = await fetch('http://localhost:5000/api/forms', {
+                    // WILL NEED TO UPDATE TO DB URL
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData),
-                },
-            )
+                })
 
-            const result = await response.json()
-            if (result.success) {
-                console.log('Auto-Save Success:', result)
-            } else {
-                console.error('Auto-Save Failed:', result)
+                const result = await response.clone().json()
+                console.log('API Response:', result)
+
+                if (result.success && result.form_id) {
+                    console.log('Storing new form ID:', result.form_id)
+                    window.docData.form_id = result.form_id
+                    localStorage.setItem('form_id', result.form_id)
+                }
             }
         } catch (error) {
             console.error('Auto-Save Error:', error)
