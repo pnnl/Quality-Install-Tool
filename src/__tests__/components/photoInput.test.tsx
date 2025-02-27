@@ -12,7 +12,6 @@ global.URL.createObjectURL = jest.fn()
 const mockStoreContext = {
     docId: 'TestDocID123',
     attachments: {},
-    data: { location: { state: 'WA', zip_code: '99354' } },
     metadata: {},
 }
 
