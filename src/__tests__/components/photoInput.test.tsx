@@ -1,4 +1,4 @@
-//Command to run this test: yarn test path/to/test_file.test.tsx
+//Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
 
 // Test suite for PhotoInput component
 import { render, screen, fireEvent } from '@testing-library/react'
@@ -81,17 +81,22 @@ describe('PhotoInput Component', () => {
             photoAttachments: [mockAttachment],
             onRemovePhotoAttachment,
         })
-        const deleteButton = screen.getByTestId('photo-delete-button')
-        fireEvent.click(deleteButton)
+        // const deleteButton = screen.getByTestId('photo-delete-button')
+        const deleteButton = document.querySelector('.photo-delete-button')
+        if (deleteButton) {
+            fireEvent.click(deleteButton)
 
-        await screen.findAllByText(/permanently delete/i) // Wait for modal to appear
+            await screen.findAllByText(/permanently delete/i) // Wait for modal to appear
 
-        const confirmDeleteButton = screen.getByTestId(
-            'permanently-delete-button',
-        )
-        fireEvent.click(confirmDeleteButton)
+            const confirmDeleteButton = screen.getByTestId(
+                'permanently-delete-button',
+            )
+            fireEvent.click(confirmDeleteButton)
 
-        expect(onRemovePhotoAttachment).toHaveBeenCalledTimes(1)
+            expect(onRemovePhotoAttachment).toHaveBeenCalledTimes(1)
+        } else {
+            throw new Error('Delete button not found')
+        }
     })
 
     test('renders loading indicator', () => {
