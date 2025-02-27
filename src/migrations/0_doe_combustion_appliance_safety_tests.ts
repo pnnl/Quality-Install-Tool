@@ -62,25 +62,23 @@ export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
                 transformedInstallation,
             )
 
-            combustionSafetyTestsWorkflowNames.forEach(async workflowName => {
-                const installations = await getInstallations(
-                    db,
-                    transformedProject._id,
-                    workflowName,
-                )
+            const installations = await getInstallations(
+                db,
+                transformedProject._id,
+                combustionSafetyTestsWorkflowNames,
+            )
 
-                installations.forEach(async installation => {
-                    await putInstallation(db, transformedProject._id, {
-                        ...installation,
-                        data_: {
-                            ...installation.data_,
-                            links: {
-                                ...installation.data_.links,
-                                doe_combustion_appliance_safety_test_doc_id:
-                                    transformedInstallation._id as PouchDB.Core.DocumentId,
-                            },
+            installations.forEach(async installation => {
+                await putInstallation(db, transformedProject._id, {
+                    ...installation,
+                    data_: {
+                        ...installation.data_,
+                        links: {
+                            ...installation.data_.links,
+                            doe_combustion_appliance_safety_test_doc_id:
+                                transformedInstallation._id as PouchDB.Core.DocumentId,
                         },
-                    })
+                    },
                 })
             })
         })

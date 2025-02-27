@@ -100,7 +100,7 @@ export async function getInstallation(
 export async function getInstallationIds(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: string | undefined = undefined,
+    workflowName: string[] | string | undefined = undefined,
 ): Promise<Array<PouchDB.Core.DocumentId>> {
     // await db.info()
 
@@ -118,7 +118,8 @@ export async function getInstallationIds(
                 },
                 metadata_: {
                     template_name: {
-                        $eq: workflowName,
+                        [Array.isArray(workflowName) ? '$in' : '$eq']:
+                            workflowName,
                     },
                 },
             },
@@ -144,7 +145,7 @@ export async function getInstallationIds(
 export async function getInstallations(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: string | undefined = undefined,
+    workflowName: string[] | string | undefined = undefined,
     options: PouchDB.Core.AllDocsOptions = {},
 ): Promise<
     Array<
