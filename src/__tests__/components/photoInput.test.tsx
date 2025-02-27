@@ -1,8 +1,11 @@
 // Test suite for PhotoInput component
 import { render, screen, fireEvent } from '@testing-library/react'
-import { StoreContext } from '../providers/store_provider'
-import PhotoInput, { PhotoInputProps } from '../components/photo_input'
-import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
+import { StoreContext } from '../../providers/store_provider'
+import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
+import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
+
+// Mock URL.createObjectURL
+global.URL.createObjectURL = jest.fn()
 
 const mockStoreContext = {
     docId: 'TestDocID123',
@@ -82,14 +85,22 @@ describe('PhotoInput Component', () => {
             photoAttachments: [mockAttachment],
             onRemovePhotoAttachment,
         })
-        const deleteButton = screen.getByRole('button', { name: /delete/i })
+        const deleteButton = screen.getByTestId('photo-delete-button')
         fireEvent.click(deleteButton)
-        expect(onRemovePhotoAttachment).toHaveBeenCalled()
+
+        await screen.findAllByText(/permanently delete/i) // Wait for modal to appear
+
+        const confirmDeleteButton = screen.getByTestId(
+            'permanently-delete-button',
+        )
+        fireEvent.click(confirmDeleteButton)
+
+        expect(onRemovePhotoAttachment).toHaveBeenCalledTimes(1)
     })
 
     test('renders loading indicator', () => {
         renderWithProps({ loading: true })
-        expect(screen.getByText(/loading/i)).toBeInTheDocument()
+        expect(document.querySelector('.loader')).toBeInTheDocument()
     })
 
     test('renders error message', () => {

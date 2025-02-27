@@ -125,6 +125,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                     <Button
                         variant="danger"
+                        data-testid="permanently-delete-button"
                         onClick={async () => {
                             if (selectedPhotoAttachmentForDelete) {
                                 onRemovePhotoAttachment &&
@@ -193,6 +194,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                     <Button
                                         variant="danger"
                                         className="photo-delete-button"
+                                        data-testid="photo-delete-button"
                                         onClick={event => {
                                             event.stopPropagation()
                                             event.preventDefault()
