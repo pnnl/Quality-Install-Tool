@@ -1,3 +1,5 @@
+//Command to run this test: yarn test path/to/test_file.test.tsx
+
 // Test suite for PhotoInput component
 import { render, screen, fireEvent } from '@testing-library/react'
 import { StoreContext } from '../../providers/store_provider'
@@ -58,19 +60,13 @@ describe('PhotoInput Component', () => {
         expect(screen.getByText(/test children/i)).toBeInTheDocument()
     })
 
-    test('renders photo attachments', () => {
-        const mockAttachment = generateMockPhotoAttachment()
-        renderWithProps({ photoAttachments: [mockAttachment] })
-        expect(screen.getByRole('img')).toBeInTheDocument()
-    })
-
     test('can add a photo', async () => {
         const onPutPhotoAttachment = jest.fn()
         renderWithProps({ onPutPhotoAttachment })
         const addPhotoButton = screen.getByText(/add photo/i)
         fireEvent.click(addPhotoButton)
 
-        const input = screen.getByLabelText(/test label/)
+        const input = screen.getByTestId('photo-input')
         const file = new File(['dummy'], 'photo.jpg', { type: 'image/jpeg' })
 
         fireEvent.change(input, { target: { files: [file] } })

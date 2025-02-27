@@ -148,6 +148,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Collapsible>
                     <input
                         ref={ref}
+                        data-testid="photo-input"
                         type="file"
                         accept={PHOTO_MIME_TYPES.join(',')}
                         capture={uploadable ? undefined : 'environment'}
