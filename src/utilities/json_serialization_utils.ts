@@ -6,6 +6,7 @@ import {
     getProjectDocumentNames,
 } from './database_utils'
 import {
+    combustionSafetyTestsWorkflowNames,
     shouldMigrateCombustionSafetyTestsProject,
     transformCombustionSafetyTestsProject,
 } from '../migrations/0_doe_combustion_appliance_safety_tests'
@@ -221,15 +222,47 @@ export async function importJSONDocument(
                 const [newProject, newInstallation] =
                     transformCombustionSafetyTestsProject(origProject)
 
+                const children: PouchDB.Core.DocumentId[] = [
+                    ...(newProject.children ?? []),
+                    newInstallation._id as PouchDB.Core.DocumentId,
+                ]
+
                 docs[index] = {
                     ...newProject,
-                    children: [
-                        ...(newProject.children ?? []),
-                        newInstallation._id as string,
-                    ],
+                    children,
                 }
 
                 docs.push(newInstallation)
+
+                children.forEach(childDocId => {
+                    docs.forEach((childDoc, childIndex) => {
+                        if (
+                            childDoc._id === childDocId &&
+                            childDoc.type === 'installation'
+                        ) {
+                            const installation =
+                                childDoc as PouchDB.Core.PutDocument<Installation>
+
+                            if (
+                                combustionSafetyTestsWorkflowNames.includes(
+                                    installation.metadata_.template_name,
+                                )
+                            ) {
+                                docs[childIndex] = {
+                                    ...childDoc,
+                                    data_: {
+                                        ...childDoc.data_,
+                                        links: {
+                                            ...childDoc.data_.links,
+                                            doe_combustion_appliance_safety_test_doc_id:
+                                                newInstallation._id as PouchDB.Core.DocumentId,
+                                        },
+                                    },
+                                }
+                            }
+                        }
+                    })
+                })
             }
         }
     })
