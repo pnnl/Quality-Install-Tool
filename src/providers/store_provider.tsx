@@ -38,7 +38,7 @@ export const StoreContext = createContext<{
         filename?: string,
     ) => Promise<void>
     removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
-    UNSAFE_putDoc: (
+    UNSAFE_put: (
         doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     ) => Promise<void>
 }>({
@@ -55,7 +55,7 @@ export const StoreContext = createContext<{
     removeAttachment: async () => {
         return
     },
-    UNSAFE_putDoc: async () => {
+    UNSAFE_put: async () => {
         return
     },
 })
@@ -189,7 +189,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [doc, onChange],
     )
 
-    const UNSAFE_putDoc = useCallback(
+    const UNSAFE_put = useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             if (onChange) {
                 const lastModifiedAt = new Date()
@@ -214,7 +214,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 upsertMetadata,
                 putAttachment,
                 removeAttachment,
-                UNSAFE_putDoc,
+                UNSAFE_put,
             }}
         >
             {children}

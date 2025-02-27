@@ -129,7 +129,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ doc, upsertData, UNSAFE_putDoc }) => {
+            {({ doc, upsertData, UNSAFE_put }) => {
                 return (
                     <RepeatableInput
                         path={path}
@@ -187,7 +187,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                                 //     database. This means that the caller is
                                 //     responsible for _upserting_ the new
                                 //     values.
-                                await UNSAFE_putDoc(
+                                await UNSAFE_put(
                                     immutableUpsert(
                                         `data_.${path}`,
                                         _removeAttachmentsAt(
