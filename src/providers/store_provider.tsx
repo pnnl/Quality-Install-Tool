@@ -1,10 +1,19 @@
+import heic2any from 'heic2any'
 import PouchDB from 'pouchdb'
 import React, { createContext, useCallback } from 'react'
 
 import { useDatabase } from './database_provider'
-import { type Base } from '../types/database.types'
+import {
+    type Base,
+    type FileMetadata,
+    type PhotoMetadata,
+} from '../types/database.types'
 import { immutableUpsert } from '../utilities/path_utils'
-import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
+import {
+    compressPhoto,
+    getPhotoMetadata,
+    isPhoto,
+} from '../utilities/photo_utils'
 
 export function useChangeEventHandler(
     callback?: (
@@ -128,12 +137,23 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
             if (onChange) {
                 const lastModifiedAt = new Date()
 
-                const attachmentMetadata = isPhoto(blob)
-                    ? await getPhotoMetadata(blob)
-                    : {
-                          filename,
-                          timestamp: lastModifiedAt.toISOString(),
-                      }
+                let attachmentMetadata: FileMetadata | PhotoMetadata = {
+                    filename,
+                    timestamp: lastModifiedAt.toISOString(),
+                }
+
+                if (isPhoto(blob)) {
+                    attachmentMetadata = await getPhotoMetadata(blob)
+
+                    if (blob.type === 'image/heic') {
+                        blob = (await heic2any({
+                            blob,
+                            toType: 'image/jpeg',
+                        })) as Blob
+                    }
+
+                    blob = await compressPhoto(blob)
+                }
 
                 await onChange({
                     ...doc,
