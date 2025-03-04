@@ -94,7 +94,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                             ...doc,
                             metadata_: {
                                 ...doc.metadata_,
-                                last_modified_at: lastModifiedAt,
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
@@ -117,7 +117,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                             ...doc,
                             metadata_: {
                                 ...doc.metadata_,
-                                last_modified_at: lastModifiedAt,
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
@@ -166,7 +166,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                     metadata_: {
                         ...doc.metadata_,
-                        last_modified_at: lastModifiedAt,
+                        last_modified_at: lastModifiedAt.toISOString(),
                         attachments: {
                             ...doc.metadata_.attachments,
                             [attachmentId]: attachmentMetadata,
@@ -191,7 +191,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
 
                 const metadata_ = {
                     ...doc.metadata_,
-                    last_modified_at: lastModifiedAt,
+                    last_modified_at: lastModifiedAt.toISOString(),
                     attachments: {
                         ...doc.metadata_.attachments,
                     },
@@ -218,7 +218,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     ...doc,
                     metadata_: {
                         ...doc.metadata_,
-                        last_modified_at: lastModifiedAt,
+                        last_modified_at: lastModifiedAt.toISOString(),
                     },
                 })
             }

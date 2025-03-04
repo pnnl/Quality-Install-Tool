@@ -168,8 +168,8 @@ export async function importJSONDocument(
                         },
                         metadata_: {
                             ...doc.metadata_,
-                            created_at: createdAt,
-                            last_modified_at: lastModifiedAt,
+                            created_at: createdAt.toISOString(),
+                            last_modified_at: lastModifiedAt.toISOString(),
                         },
                     }
                 } else {

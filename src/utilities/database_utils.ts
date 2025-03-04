@@ -30,7 +30,7 @@ export async function setDocumentName<Model extends Base>(
                 metadata_: {
                     ...doc.metadata_,
                     doc_name: docName,
-                    last_modified_at: lastModifiedAt,
+                    last_modified_at: lastModifiedAt.toISOString(),
                 },
             } as Model & Partial<PouchDB.Core.IdMeta>
         } else {
@@ -75,8 +75,8 @@ export function newInstallation(
             doc_name: docName,
             template_name: templateName,
             template_title: templateTitle,
-            created_at: createdAt,
-            last_modified_at: lastModifiedAt,
+            created_at: createdAt.toISOString(),
+            last_modified_at: lastModifiedAt.toISOString(),
             attachments: {},
         },
     }
@@ -294,8 +294,8 @@ export function newProject(
         data_: {},
         metadata_: {
             doc_name: docName,
-            created_at: createdAt,
-            last_modified_at: lastModifiedAt,
+            created_at: createdAt.toISOString(),
+            last_modified_at: lastModifiedAt.toISOString(),
             attachments: {},
         },
     }
