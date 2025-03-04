@@ -357,7 +357,7 @@
 
 
             ## Pre-Upgrade Tests
-            <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
+            <LabelValue label="This heat pump will" path="heat_pump_purpose"/>
 
             <Photo
                 id="existing_heating_appliance_photo"
@@ -374,7 +374,7 @@
             >
             Photo of existing heating appliance’s nameplate
             </Photo>
-            <p><strong>Cooling appliance exists: </strong>{props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}</p>
+            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}/>
             <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
                 <Photo
                     id="existing_cooling_appliance_photo"

@@ -53,14 +53,17 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     decimalPlaces,
     type = 'string',
     dateOptions,
+    value,
 }: LabelValueWrapperProps): JSX.Element | null => {
     const [parentData, _] = useState<any>(parent?.data_)
     return (
         <StoreContext.Consumer>
             {({ data }) => {
                 const data_object = parent ? parentData : data
-                const key = path == null ? '' : path
-                const value = get(data_object, key)
+                if (!value) {
+                    const key = path == null ? '' : path
+                    value = get(data_object, key)
+                }
                 return (
                     <LabelValue
                         label={label}
