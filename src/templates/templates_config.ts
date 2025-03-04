@@ -117,10 +117,10 @@ const templatesConfig: TemplatesConfig = {
         title: 'IRA Limited Assessment',
         template: IRADOEWorkflowLimitedAssessment,
     },
-    // playground: {
-    //     title: 'Playground',
-    //     template: Playground,
-    // },
+    playground: {
+        title: 'Playground',
+        template: Playground,
+    },
 }
 
 // Assuming TemplatesConfig is defined somewhere as a type or interface

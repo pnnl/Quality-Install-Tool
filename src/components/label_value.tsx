@@ -75,16 +75,16 @@ const LabelValue: React.FC<LabelValueProps> = ({
     return required || value ? (
         label ? (
             <div className="top-bottom-padding">
-                <span>{label}: </span>
-                <strong>
-                    {prefix}
-                    {type === 'date' && typeof value === 'string' ? (
-                        <DateStr date={value} options={dateOptions} />
-                    ) : (
-                        value
-                    )}
-                    {suffix}
-                </strong>
+                <span>
+                    <strong>{label}: </strong>
+                </span>
+                {prefix}
+                {type === 'date' && typeof value === 'string' ? (
+                    <DateStr date={value} options={dateOptions} />
+                ) : (
+                    value
+                )}
+                {suffix}
             </div>
         ) : (
             <>
