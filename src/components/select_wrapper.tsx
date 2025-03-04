@@ -32,7 +32,7 @@ const SelectWrapper: React.FC<SelectWrapperProps> = ({
                         label={label}
                         options={options}
                         value={doc && get(doc.data_, path)}
-                        onChange={async value => upsertData(path, value)}
+                        onChange={async value => await upsertData(path, value)}
                     />
                 )
             }}

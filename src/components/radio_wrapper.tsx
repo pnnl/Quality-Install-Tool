@@ -22,7 +22,7 @@ const RadioWrapper: React.FC<RadioWrapperProps> = ({
                     <Radio
                         label={label}
                         options={options}
-                        onChange={async value => upsertData(path, value)}
+                        onChange={async value => await upsertData(path, value)}
                         value={doc && get(doc.data_, path)}
                     />
                 )

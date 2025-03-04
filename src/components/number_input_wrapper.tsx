@@ -38,7 +38,7 @@ const NumberInputWrapper: React.FC<NumberInputWrapperProps> = ({
                         max={max}
                         step={step}
                         hint={hint}
-                        onChange={async value => upsertData(path, value)}
+                        onChange={async value => await upsertData(path, value)}
                     />
                 )
             }}

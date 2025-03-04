@@ -33,7 +33,7 @@ const FileInputWrapper: React.FC<FileInputWrapperProps> = ({
                         file={attachment?.data as Blob}
                         fileMetadata={attachmentMetadata}
                         upsertFile={async (blob, filename) =>
-                            putAttachment(id, blob, filename)
+                            await putAttachment(id, blob, filename)
                         }
                     >
                         {children}

@@ -32,7 +32,7 @@ const StringInputWrapper: React.FC<StringInputWrapperProps> = ({
                         max={max}
                         regexp={regexp}
                         hint={hint}
-                        onChange={async value => upsertData(path, value)}
+                        onChange={async value => await upsertData(path, value)}
                     />
                 )
             }}
