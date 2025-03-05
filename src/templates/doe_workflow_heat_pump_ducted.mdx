@@ -395,7 +395,7 @@
             </Photo>
             {
                 props.data.comment_ductwork
-                ? <p><strong>Ductwork Comments:</strong> {props.data.comment_ductwork}</p>
+                ?  <LabelValue label="Ductwork Comments" value={props.data?.comment_ductwork}/>
                 : null
             }
 
@@ -410,7 +410,7 @@
             </Photo>
             {
                 props.data.comment_pre_upgrade_static_pressure_test
-                ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comment_pre_upgrade_static_pressure_test}</p>
+                ? <LabelValue label="Pre-Upgrade Static Pressure Test Notes" value={props.data.comment_pre_upgrade_static_pressure_test}/>
                 : null
             }
 
@@ -426,11 +426,11 @@
             </Photo>
             {
                 props.data.comment_pre_upgrade_air_flow_test
-                ? <p><strong>Pre-Upgrade Airflow Test Notes: </strong> {props.data.comment_pre_upgrade_air_flow_test}</p>
+                ? <LabelValue label="Pre-Upgrade Airflow Test Notes" value={props.data.comment_pre_upgrade_air_flow_test}/>
                 : null
             }
 
-             ## Duck Leakage Test Results
+             ## Duct Leakage Test Results
              Leaky ducts mean the conditioned air doesn't make it to the rooms where the conditioned air is needed.
              The worse kind of duct leakage is leakage to outside because that means the air you paid to conditioned
              is leaking outside the house. The duct leakage test measures how leaky
@@ -438,7 +438,7 @@
              In existing construction it is highly recommended that action be taken to reduce duct leakage if
              the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area.
 
-            <p><strong>Test method used: </strong> {props.data?.duct_leakage_test_method}</p>
+            <LabelValue label="Test method used" value={props.data?.duct_leakage_test_method}/>
             <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}>
                 <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
                     Photo of duct test setup showing ring size and how it is attached to the duct system
@@ -453,7 +453,9 @@
                     : null
                 }
 
-                <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
+                <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
+                <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
+
                 <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
                 <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
             </ShowOrHide>
