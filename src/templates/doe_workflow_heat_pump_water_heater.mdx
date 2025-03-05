@@ -251,7 +251,7 @@
 
     {
       props.data.space_air_volume
-      ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p> 
+     ? <LabelValue label="Air Volume of the Space" value={<span>{props.data.space_air_volume}<sup>3</sup></span>}/>
       : null
     }
        
