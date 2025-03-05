@@ -449,15 +449,18 @@
 
                 {
                     props.data.type_of_duct_leakage_radio
-                    ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p>
+                    ? 
+                    <LabelValue label="Type Of Duct Leakage Test Performed" value={props.data.type_of_duct_leakage_radio}/>
                     : null
                 }
 
                 <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
-                <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
-
-                <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
-                <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
+                <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>} 
+                    value={props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null}/>
+                <LabelValue label={<span>Duct CFM25 per 100 per ft<sup>2</sup></span>} 
+                    type={props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? "number" : "string"}
+                    decimalPlaces={2}
+                    value={ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100) : null }/>
             </ShowOrHide>
 
             <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}>
@@ -484,17 +487,17 @@
             </Photo>
             {
                 props.data?.outdoor_unit?.odu_mounting_style
-                ? <p><strong>ODU Mounting Style: </strong> {props.data.outdoor_unit.odu_mounting_style}</p>
+                ? <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit.odu_mounting_style}/>
                 : null
             }
             {
                 props.data.outdoor_unit?.odu_inches_above_ground
-                ? <p><strong>ODU Inches Above The Ground (elevated above the snow): </strong> {props.data.outdoor_unit.odu_inches_above_ground}</p>
-                : null
+                 ? <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit.odu_inches_above_ground}/>
+                 : null
             }
             {
                 props.data.outdoor_unit?.snow_ice_protection
-                ? <p><strong>Overhead Snow & Ice Protection: </strong> {props.data.outdoor_unit.snow_ice_protection}</p>
+                ? <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit.snow_ice_protection}/>
                 : null
             }
 
@@ -508,11 +511,8 @@
             }
             <PDFRenderer id="manual_j_file" label="" />
 
-
-
             { props.data.comment_manual_j
-                && (<p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p>
-                )
+                && <LabelValue label="Manual J Notes or Comments" value={props.data.comment_manual_j}/>
             }
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating
@@ -523,17 +523,17 @@
 
             {
                 props.data.aux_heat_lockout_temperature
-                ? <p><strong>Aux Heat Lockout Above This Temperature (&deg;F): </strong> {props.data.aux_heat_lockout_temperature}</p>
+                ? <LabelValue label={<span>Aux Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
                 : null
             }
             {
                 props.data.compresser_lockout_temperature
-                ? <p><strong>Compresser Lockout Below This Temperature (&deg;F): </strong> {props.data.compresser_lockout_temperature}</p>
+                ? <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
                 : null
             }
             {
                 props.data.dual_fuel_switch_over_temperature
-                ? <p><strong>Dual Fuel Switch Over Temperature (&deg;F): </strong> {props.data.dual_fuel_switch_over_temperature}</p>
+                ? <LabelValue label={<span>Dual Fuel Switch Over Temperature (&deg;F)</span>} value={props.data.dual_fuel_switch_over_temperature}/>
                 : null
             }
 
@@ -543,7 +543,7 @@
 
             {
                 props.data.comment_ductwork_concluding_summary
-                ? <p><strong>Pre-Installation Comments: </strong> {props.data.comment_ductwork_concluding_summary}</p>
+                ? <LabelValue label="Pre-Installation Comments" value={props.data.comment_ductwork_concluding_summary}/>
                 : null
             }
 
@@ -571,7 +571,7 @@
             <Photo id="idu_circuit_breaker_photo" label="Indoor Unit Circuit Breaker – Photo" required />
             {
                 props.data.comment_circuit_breaker_notes
-                ? <p><strong>Circuit Breaker Notes: </strong> {props.data.comment_circuit_breaker_notes}</p>
+                ? <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>
                 : null
             }
 
@@ -602,8 +602,9 @@
             | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             {
                 props.data.comment_refrigerant_quantity_adjustments_or_weigh_in
-                ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}</p>
-                : null
+                    ? <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In" 
+                        value={props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}/>
+                    : null
             }
 
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
@@ -644,7 +645,8 @@
 
             {
                 props.data.comment_about_thermostat_settings
-                ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p>
+                ? <LabelValue label="Post-Installation Notes About Thermostat Settings" 
+                        value={props.data.comment_about_thermostat_settings}/>
                 : null
             }
 
