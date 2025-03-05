@@ -284,14 +284,14 @@
 
 
             ## Pre-Installation
-            <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
+            <LabelValue label="This heat pump will" value={props.data?.heat_pump_purpose}/>
 
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
                 Photo of the proposed heat pump outdoor unit (ODU) installation location
             </Photo>
             {
                 props.data.comment_odu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_odu_install_location}</p>
+                ? <LabelValue label="Notes" value={props.data.comment_odu_install_location}/>
                 : null
             }
 
@@ -305,7 +305,7 @@
 
             {
                 props.data.comment_idu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_idu_install_location}</p>
+                ? <LabelValue label="Notes" value={props.data.comment_idu_install_location}/>
                 : null
             }
 
@@ -416,7 +416,7 @@
 
             {
                 props.data.comment_refridgerant_adjustment
-                ? <p><strong>Notes About Refridgerant Adjustment:</strong> {props.data.comment_refridgerant_adjustment}</p>
+                ? <LabelValue label="Notes About Refrigerant Adjustment" value={props.data.comment_refridgerant_adjustment}/>
                 : null
             }
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
