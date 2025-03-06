@@ -201,8 +201,8 @@
 
   <p>
   {props.data.assessment_for === 'Whole multifamily building' 
-    ? <span><strong>Multifamily Building Conditioned Area (ft<sup>2</sup>):</strong> {props.data.mf_conditioned_floor_area_sq_ft}</span>
-    : <span><strong>Single-family/unit Conditioned Area (ft<sup>2</sup>):</strong> {props.data.sf_conditioned_floor_area_sq_ft}</span>
+    ? <LabelValue label={<span>Multifamily Building Conditioned Area (ft<sup>2</sup>)</span>} value={props.data.mf_conditioned_floor_area_sq_ft}/>
+    : <LabelValue label={<span>Single-family/unit Conditioned Area  (ft<sup>2</sup>)</span>} value={props.data.sf_conditioned_floor_area_sq_ft}/>
   }
   </p>
 
@@ -236,42 +236,41 @@
       <>
         <h3>Heating System 1</h3>
 
-        <p><strong>Fuel and System Type: </strong>{props.data.heating_systems[0].fuel_and_system_type}</p>
+        <LabelValue label="Fuel and System Type" value={props.data.heating_systems[0].fuel_and_system_type}/>
+
 
         {props.data.heating_systems[0].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP' 
-          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_afue : "NOT_KNOWN"}</p>
+          ?  <LabelValue label="Heating Efficiency (HSPF)" value={props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_hspf : "NOT_KNOWN"}/>
+          :  <LabelValue label="Heating Efficiency (AFUE)" value={props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_afue : "NOT_KNOWN"}/>
         }
-
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[0].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+       <LabelValue label="Percent Conditioned Area Served" value={props.data.heating_systems[0].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>
       </>
     }
     {Number(props.data.num_heating_systems) > 1 && props.data.heating_systems[1] &&
       <>
         <h3>Heating System 2</h3>
-
-        <p><strong>Fuel and System Type: </strong>{props.data.heating_systems[1].fuel_and_system_type}</p>
+        <LabelValue label="Fuel and System Type" value={props.data.heating_systems[1].fuel_and_system_type}/>
 
         {props.data.heating_systems[1].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP' 
-          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_afue : "NOT_KNOWN"}</p>
+          ?  <LabelValue label="Heating Efficiency (HSPF)" value={props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_hspf : "NOT_KNOWN"}/>
+          :  <LabelValue label="Heating Efficiency (AFUE)" value={props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_afue : "NOT_KNOWN"}/>
         }
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+      <LabelValue label="Percent Conditioned Area Served" value={props.data.heating_systems[1].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>      
       </>
     }
     {Number(props.data.num_heating_systems) > 2 && props.data.heating_systems[2] &&
       <>
         <h3>Heating System 3</h3>
 
-        <p><strong>Fuel and System Type: </strong>{props.data.heating_systems[2].fuel_and_system_type}</p>
+        <LabelValue label="Fuel and System Type" value={props.data.heating_systems[2].fuel_and_system_type}/>
 
         {props.data.heating_systems[2].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP' 
-          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_afue : "NOT_KNOWN"}</p>
+          ?  <LabelValue label="Heating Efficiency (HSPF)" value={props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_hspf : "NOT_KNOWN"}/>
+          :  <LabelValue label="Heating Efficiency (AFUE)" value={props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_afue : "NOT_KNOWN"}/>
         }
 
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+      <LabelValue label="Percent Conditioned Area Served" value={props.data.heating_systems[2].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>
       </>
     }
     </>
@@ -282,28 +281,22 @@
     {Number(props.data.num_cooling_systems) > 0 && props.data.cooling_systems[0] &&
       <>
         <h3>Cooling System 1</h3>
-
-        <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[0].is_efficiency_known === 'YES' ? props.data.cooling_systems[0].efficiency_seer : "NOT_KNOWN"}</p>
-
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[0].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <LabelValue label="Cooling Efficiency (SEER)" value={props.data.cooling_systems[0].is_efficiency_known === 'YES' ? props.data.cooling_systems[0].efficiency_seer : "NOT_KNOWN"}/>
+        <LabelValue label="Percent Conditioned Area Served" value={props.data.cooling_systems[0].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>
       </>
     }
     {Number(props.data.num_cooling_systems) > 1 && props.data.cooling_systems[1] &&
       <>
         <h3>Cooling System 2</h3>
-
-        <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[1].is_efficiency_known === 'YES' ? props.data.cooling_systems[1].efficiency_seer : "NOT_KNOWN"}</p>
-
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <LabelValue label="Cooling Efficiency (SEER)" value={props.data.cooling_systems[1].is_efficiency_known === 'YES' ? props.data.cooling_systems[1].efficiency_seer : "NOT_KNOWN"}/>
+        <LabelValue label="Percent Conditioned Area Served" value={props.data.cooling_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>
       </>
     }
     {Number(props.data.num_cooling_systems) > 2 && props.data.cooling_systems[2] &&
       <>
         <h3>Cooling System 3</h3>
-
-        <p><strong>Cooling Efficiency (SEER): </strong>{props.data.cooling_systems[2].is_efficiency_known === 'YES' ? props.data.cooling_systems[2].efficiency_seer : "NOT_KNOWN"}</p>
-
-        <p><strong>Percent Conditioned Area Served: </strong>{props.data.cooling_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
+        <LabelValue label="Cooling Efficiency (SEER)" value={props.data.cooling_systems[2].is_efficiency_known === 'YES' ? props.data.cooling_systems[2].efficiency_seer : "NOT_KNOWN"}/>
+        <LabelValue label="Percent Conditioned Area Served" value={props.data.cooling_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.cooling_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}/>
       </>
     }
     </>
