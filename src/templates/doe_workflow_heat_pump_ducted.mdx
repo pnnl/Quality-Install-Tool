@@ -393,12 +393,9 @@
             <Photo id="existing_ductwork_photo" label="Ductwork – Photo" required>
                 Photo of existing ductwork condition
             </Photo>
-            {
-                props.data.comment_ductwork
-                ?  <LabelValue label="Ductwork Comments" value={props.data?.comment_ductwork}/>
-                : null
-            }
 
+            <LabelValue label="Ductwork Comments" value={props.data?.comment_ductwork}/>
+           
             ## Static Pressure Test Results
             Total external static pressure measurement: This measurement is akin to taking the blood pressure of a person.
             Having high blood pressure is an indicator of poor health. The same is true for a HVAC system. For an HVAC system,
@@ -408,12 +405,8 @@
             <Photo id="preupgrade_static_pressure_test_photo" label="Pre-Upgrade Static Pressure Test – Photo" required>
                 Photo of the manometer readout or screenshot from digital instrument app
             </Photo>
-            {
-                props.data.comment_pre_upgrade_static_pressure_test
-                ? <LabelValue label="Pre-Upgrade Static Pressure Test Notes" value={props.data.comment_pre_upgrade_static_pressure_test}/>
-                : null
-            }
-
+            <LabelValue label="Pre-Upgrade Static Pressure Test Notes" value={props.data.comment_pre_upgrade_static_pressure_test}/>
+          
             ## Airflow Test Results
             In order for a heat pump to efficiently and effectively deliver the conditioned air to the house,
             the ducts need to be able to move enough air. This test uses the home's existing air handler to measure how much air the ducts can move.
@@ -424,11 +417,8 @@
             <Photo id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" required>
                 Photo of the manometer CFM or screenshot of the instrument app or the manometer and fan curve chart/table.
             </Photo>
-            {
-                props.data.comment_pre_upgrade_air_flow_test
-                ? <LabelValue label="Pre-Upgrade Airflow Test Notes" value={props.data.comment_pre_upgrade_air_flow_test}/>
-                : null
-            }
+
+            <LabelValue label="Pre-Upgrade Airflow Test Notes" value={props.data.comment_pre_upgrade_air_flow_test}/>
 
              ## Duct Leakage Test Results
              Leaky ducts mean the conditioned air doesn't make it to the rooms where the conditioned air is needed.
@@ -485,23 +475,13 @@
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
             </Photo>
-            {
-                props.data?.outdoor_unit?.odu_mounting_style
-                ? <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit.odu_mounting_style}/>
-                : null
-            }
-            {
-                props.data.outdoor_unit?.odu_inches_above_ground
-                 ? <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit.odu_inches_above_ground}/>
-                 : null
-            }
-            {
-                props.data.outdoor_unit?.snow_ice_protection
-                ? <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit.snow_ice_protection}/>
-                : null
-            }
 
+            <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit.odu_mounting_style}/>
+            
+            <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit.odu_inches_above_ground}/>
 
+            <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit.snow_ice_protection}/>
+            
             {
                 props.metadata.attachments?.manual_j_file && (
                 <>
@@ -511,9 +491,8 @@
             }
             <PDFRenderer id="manual_j_file" label="" />
 
-            { props.data.comment_manual_j
-                && <LabelValue label="Manual J Notes or Comments" value={props.data.comment_manual_j}/>
-            }
+            <LabelValue label="Manual J Notes or Comments" value={props.data.comment_manual_j}/>
+
             ## Equipment Selection
             The selected heat pump's extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating
             and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home's heating and cooling needs. Please see comment below if decisions needed to be made regarding whether to size the heat pump to the existing duct capacity or the ducts were replaced to accommodate the heat pump’s air flow requirements.
@@ -521,31 +500,17 @@
             The selected heat pump's extended heating performance table
             </Photo>
 
-            {
-                props.data.aux_heat_lockout_temperature
-                ? <LabelValue label={<span>Aux Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
-                : null
-            }
-            {
-                props.data.compresser_lockout_temperature
-                ? <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
-                : null
-            }
-            {
-                props.data.dual_fuel_switch_over_temperature
-                ? <LabelValue label={<span>Dual Fuel Switch Over Temperature (&deg;F)</span>} value={props.data.dual_fuel_switch_over_temperature}/>
-                : null
-            }
+            <LabelValue label={<span>Aux Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
+
+            <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
+
+            <LabelValue label={<span>Dual Fuel Switch Over Temperature (&deg;F)</span>} value={props.data.dual_fuel_switch_over_temperature}/>
 
             <Photo id="mfg_extended_cooling_performance_table_photo" label="Mfr's cooling performance table – Photo" required>
                 The selected heat pump's extended cooling performance table
             </Photo>
 
-            {
-                props.data.comment_ductwork_concluding_summary
-                ? <LabelValue label="Pre-Installation Comments" value={props.data.comment_ductwork_concluding_summary}/>
-                : null
-            }
+            <LabelValue label="Pre-Installation Comments" value={props.data.comment_ductwork_concluding_summary}/>
 
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
@@ -569,11 +534,8 @@
             <Photo id="idu_nameplate_photo" label="Indoor Unit Nameplate – Photo" required />
             <Photo id="odu_circuit_breaker_photo" label="Outdoor Unit Circuit Breaker – Photo" required />
             <Photo id="idu_circuit_breaker_photo" label="Indoor Unit Circuit Breaker – Photo" required />
-            {
-                props.data.comment_circuit_breaker_notes
-                ? <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>
-                : null
-            }
+
+            <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>
 
             ## Installation Tests
             <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
@@ -600,12 +562,9 @@
             | Feet of line set beyond factory charge = {props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge : null}
             | Ounce of refrigerant per foot of line set = {props.data?.refrigerant_calculator?.oz_per_ft_refrigerant? props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
-            {
-                props.data.comment_refrigerant_quantity_adjustments_or_weigh_in
-                    ? <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In" 
+            
+            <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In" 
                         value={props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}/>
-                    : null
-            }
 
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
                 Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
@@ -643,12 +602,8 @@
                 Compare these values to the planned values in the equipment selection section of the report.
             </Photo>
 
-            {
-                props.data.comment_about_thermostat_settings
-                ? <LabelValue label="Post-Installation Notes About Thermostat Settings" 
+            <LabelValue label="Post-Installation Notes About Thermostat Settings" 
                         value={props.data.comment_about_thermostat_settings}/>
-                : null
-            }
 
             {props.metadata?.attachments?.project_invoice_photo && (<>
                 <h2>Project Invoice</h2>

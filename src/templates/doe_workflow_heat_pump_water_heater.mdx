@@ -249,11 +249,7 @@
       to meet air volume requirements.
     </Photo>
 
-    {
-      props.data.space_air_volume
-     ? <LabelValue label="Air Volume of the Space" value={<span>{props.data.space_air_volume}<sup>3</sup></span>}/>
-      : null
-    }
+    <LabelValue label="Air Volume of the Space" value={<span>{props.data.space_air_volume}<sup>3</sup></span>}/>
        
     <h2>Old Hot Water Heater</h2>
     <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
