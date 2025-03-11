@@ -1,7 +1,8 @@
-//Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
+// Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
 
 // Test suite for PhotoInput component
 import { render, screen, fireEvent } from '@testing-library/react'
+import { act } from 'react'
 import { StoreContext } from '../../providers/store_provider'
 import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
 import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
@@ -62,13 +63,17 @@ describe('PhotoInput Component', () => {
     test('can add a photo', async () => {
         const onPutPhotoAttachment = jest.fn()
         renderWithProps({ onPutPhotoAttachment })
+
         const addPhotoButton = screen.getByText(/add photo/i)
-        fireEvent.click(addPhotoButton)
 
-        const input = screen.getByTestId('photo-input')
-        const file = new File(['dummy'], 'photo.jpg', { type: 'image/jpeg' })
-
-        fireEvent.change(input, { target: { files: [file] } })
+        await act(async () => {
+            fireEvent.click(addPhotoButton)
+            const input = screen.getByTestId('photo-input')
+            const file = new File(['dummy'], 'photo.jpg', {
+                type: 'image/jpeg',
+            })
+            fireEvent.change(input, { target: { files: [file] } })
+        })
 
         expect(onPutPhotoAttachment).toHaveBeenCalled()
     })
@@ -80,22 +85,26 @@ describe('PhotoInput Component', () => {
             photoAttachments: [mockAttachment],
             onRemovePhotoAttachment,
         })
-        // const deleteButton = screen.getByTestId('photo-delete-button')
-        const deleteButton = document.querySelector('.photo-delete-button')
-        if (deleteButton) {
+
+        const deleteButton = screen.getByRole('button', {
+            name: /delete photo/i,
+        })
+
+        await act(async () => {
             fireEvent.click(deleteButton)
+        })
 
-            await screen.findAllByText(/permanently delete/i) // Wait for modal to appear
+        await screen.findAllByText(/confirm delete photo/i) // Wait for modal to appear
 
-            const confirmDeleteButton = screen.getByTestId(
-                'permanently-delete-button',
-            )
+        const confirmDeleteButton = screen.getByRole('button', {
+            name: /Confirm permanent photo deletion/i,
+        })
+
+        await act(async () => {
             fireEvent.click(confirmDeleteButton)
+        })
 
-            expect(onRemovePhotoAttachment).toHaveBeenCalledTimes(1)
-        } else {
-            throw new Error('Delete button not found')
-        }
+        expect(onRemovePhotoAttachment).toHaveBeenCalledTimes(1)
     })
 
     test('renders loading indicator', () => {
