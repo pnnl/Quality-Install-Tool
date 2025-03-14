@@ -186,30 +186,55 @@ export const StoreProvider: FC<StoreProviderProps> = ({
 
     useEffect(() => {
         let savedFormId = localStorage.getItem('form_id')
+        let processId = localStorage.getItem('process_id')
+        let processStepId = localStorage.getItem('process_step_id')
 
-        if (savedFormId) {
-            console.log('Restoring form ID from storage:', savedFormId)
-            if (!doc.data_) doc.data_ = {}
+        console.log('🟢 Initial values:')
+        console.log('🔹 processId:', processId)
+        console.log('🔹 processStepId:', processStepId)
 
-            doc.data_.form_id = savedFormId
-            window.docData = doc.data_
-        } else {
-            console.log('No stored form found. Fetching from API...')
-            fetch(`http://localhost:5000/api/forms?user_id=${getUserId()}`) // NEED TO UPDATE TO DB URL
+        if (!processStepId && processId) {
+            console.log('Fetching process_step_id for process:', processId)
+            fetch(`http://localhost:5000/api/process/${processId}/steps`, {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${getAuthToken()}` },
+            })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success && data.forms.length > 0) {
-                        const latestForm = data.forms[0]
-                        console.log('Found existing form:', latestForm.id)
+                    console.log('API Response for process steps:', data)
+                    if (data.processId && data.steps.length > 0) {
+                        const qualityInstallStep = data.steps.find(
+                            (step: { description: string; id: string }) =>
+                                step.description.includes('quality install'),
+                        )
 
-                        if (!doc.data_) doc.data_ = {}
-
-                        doc.data_.form_id = latestForm.id
-                        localStorage.setItem('form_id', latestForm.id)
-                        window.docData = doc.data_
+                        if (qualityInstallStep) {
+                            processStepId = qualityInstallStep.id ?? '' // Ensure it's always a string
+                            if (processStepId) {
+                                localStorage.setItem(
+                                    'process_step_id',
+                                    processStepId,
+                                )
+                                console.log(
+                                    'Stored process_step_id:',
+                                    processStepId,
+                                )
+                            } else {
+                                console.warn(
+                                    '⚠️ Process Step ID is null or empty, not storing in localStorage.',
+                                )
+                            }
+                        } else {
+                            console.warn(
+                                'No quality install step found for process:',
+                                processId,
+                            )
+                        }
                     }
                 })
-                .catch(error => console.error('Error fetching form:', error))
+                .catch(error =>
+                    console.error('Error fetching process_step_id:', error),
+                )
         }
     }, [])
 
@@ -371,70 +396,69 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     const autoSaveToRDS = async () => {
-        await initializeMockSession() // Ensure session is ready
-
         const userId = getUserId()
-        const token = getAuthToken()
+        const processStepId = localStorage.getItem('process_step_id')
 
-        if (!userId || !token) {
-            console.error('Cannot auto-save: Missing user session.')
+        if (!userId || !processStepId) {
+            console.warn(
+                'Cannot auto-save: Missing user_id or process_step_id.',
+            )
             return
         }
 
-        let formId = localStorage.getItem('form_id') || doc.data_.form_id
-
-        doc.data_.form_id = formId
-        localStorage.setItem('form_id', formId)
-
-        console.log('Using Form ID:', formId)
+        console.log('🔄 Auto-saving with:')
+        console.log('🟢 user_id:', userId)
+        console.log('🟢 process_step_id:', processStepId)
 
         const formData = {
             user_id: userId,
-            name: doc.data_.doc_name || 'Untitled Project',
-            installer: doc.data_.installer || {},
-            location: doc.data_.location || {},
-            status: doc.data_.status || 'in_progress',
-            building_number_photo: doc.data_.building_number_photo || null,
+            process_step_id: processStepId,
+            form_data: window.docData || {},
         }
 
         try {
             let response
+            const formId = localStorage.getItem('form_id')
+
             if (formId) {
-                console.log(`Updating form ${formId}...`)
+                console.log('✏️ Updating existing form:', formId)
                 response = await fetch(
-                    `http://localhost:5000/api/forms/${formId}`,
+                    `http://localhost:5000/api/quality-install/${formId}`,
                     {
                         method: 'PUT',
                         headers: {
-                            Authorization: `Bearer ${token}`,
                             'Content-Type': 'application/json',
+                            Authorization: `Bearer ${getAuthToken()}`,
                         },
                         body: JSON.stringify(formData),
                     },
                 )
             } else {
-                console.log('Creating new form...')
-                response = await fetch('http://localhost:5000/api/forms', {
-                    // WILL NEED TO UPDATE TO DB URL
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
+                console.log('🆕 Creating a new quality install form...')
+                response = await fetch(
+                    'http://localhost:5000/api/quality-install',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${getAuthToken()}`,
+                        },
+                        body: JSON.stringify(formData),
                     },
-                    body: JSON.stringify(formData),
-                })
+                )
+            }
 
-                const result = await response.clone().json()
-                console.log('API Response:', result)
-
-                if (result.success && result.form_id) {
-                    console.log('Storing new form ID:', result.form_id)
-                    window.docData.form_id = result.form_id
-                    localStorage.setItem('form_id', result.form_id)
+            const data = await response.json()
+            if (data.success) {
+                console.log('Auto-save successful:', data)
+                if (!formId) {
+                    localStorage.setItem('form_id', data.form_id)
                 }
+            } else {
+                console.error('Auto-Save Failed:', data)
             }
         } catch (error) {
-            console.error('Auto-Save Error:', error)
+            console.error('Error auto-saving:', error)
         }
     }
 
