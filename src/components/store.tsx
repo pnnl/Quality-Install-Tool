@@ -185,16 +185,35 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
+        console.log('Initializing Quality Install Tool...')
+
+        // Retrieve process ID and user ID from formData_prequalification if available
+        const prequalificationData = localStorage.getItem(
+            'formData_prequalification',
+        )
+        let processId = null
+        let userId = null
+
+        if (prequalificationData) {
+            try {
+                const parsedData = JSON.parse(prequalificationData)
+                processId = parsedData.process_id || null
+                userId = parsedData.user?.user_id || null
+            } catch (error) {
+                console.error('Error parsing formData_prequalification:', error)
+            }
+        }
+
+        // Retrieve stored values
         let savedFormId = localStorage.getItem('form_id')
-        let processId = localStorage.getItem('process_id')
         let processStepId = localStorage.getItem('process_step_id')
 
-        console.log('🟢 Initial values:')
-        console.log('🔹 processId:', processId)
-        console.log('🔹 processStepId:', processStepId)
+        console.log('Initial values:', { processId, processStepId, userId })
 
+        // Fetch process_step_id from API if not stored
         if (!processStepId && processId) {
-            console.log('Fetching process_step_id for process:', processId)
+            console.log(`Fetching process_step_id for process: ${processId}`)
+
             fetch(`http://localhost:5000/api/process/${processId}/steps`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${getAuthToken()}` },
@@ -202,41 +221,113 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 .then(response => response.json())
                 .then(data => {
                     console.log('API Response for process steps:', data)
-                    if (data.processId && data.steps.length > 0) {
+
+                    if (data.steps && data.steps.length > 0) {
                         const qualityInstallStep = data.steps.find(
-                            (step: { description: string; id: string }) =>
+                            (step: { description?: string }) =>
+                                step.description &&
                                 step.description.includes('quality install'),
                         )
 
                         if (qualityInstallStep) {
-                            processStepId = qualityInstallStep.id ?? '' // Ensure it's always a string
-                            if (processStepId) {
-                                localStorage.setItem(
-                                    'process_step_id',
-                                    processStepId,
-                                )
-                                console.log(
-                                    'Stored process_step_id:',
-                                    processStepId,
-                                )
-                            } else {
-                                console.warn(
-                                    '⚠️ Process Step ID is null or empty, not storing in localStorage.',
-                                )
-                            }
+                            let processStepId = qualityInstallStep.id
+                            localStorage.setItem(
+                                'process_step_id',
+                                processStepId,
+                            )
+                            console.log(
+                                'Stored process_step_id:',
+                                processStepId,
+                            )
                         } else {
                             console.warn(
                                 'No quality install step found for process:',
                                 processId,
                             )
                         }
+                    } else {
+                        console.warn('No steps found for process:', processId)
                     }
                 })
                 .catch(error =>
                     console.error('Error fetching process_step_id:', error),
                 )
         }
+
+        // Ensure user ID and process step ID exist before proceeding
+        if (!userId || !processStepId) {
+            console.error('Cannot proceed: Missing user_id or process_step_id.')
+            return
+        }
+
+        console.log(
+            `Fetching quality install form for user: ${userId} and process_step: ${processStepId}`,
+        )
+
+        // Fetch the quality install form using user ID and process step ID
+        fetch(
+            `http://localhost:5000/api/quality-install?user_id=${userId}&process_step_id=${processStepId}`,
+            {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${getAuthToken()}` },
+            },
+        )
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.form) {
+                    console.log(
+                        'Found existing quality install form:',
+                        data.form.id,
+                    )
+                    if (!doc.data_) doc.data_ = {}
+                    doc.data_.form_id = data.form.id
+                    localStorage.setItem('form_id', data.form.id)
+                    window.docData = doc.data_
+                } else {
+                    console.warn('No existing form found. Creating new form.')
+                    createQualityInstallForm(userId, processStepId)
+                }
+            })
+            .catch(error =>
+                console.error('Error fetching quality install form:', error),
+            )
     }, [])
+
+    const createQualityInstallForm = (
+        userId: string,
+        processStepId: string,
+    ) => {
+        fetch(`http://localhost:5000/api/quality-install`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getAuthToken()}`,
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                process_step_id: processStepId,
+                form_data: {},
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(
+                        'Created new quality install form:',
+                        data.form_id,
+                    )
+                    localStorage.setItem('form_id', data.form_id)
+                } else {
+                    console.error(
+                        'Error creating new quality install form:',
+                        data.error,
+                    )
+                }
+            })
+            .catch(error =>
+                console.error('Error in createQualityInstallForm:', error),
+            )
+    }
 
     useEffect(() => {
         if (!doc) {
@@ -373,10 +464,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
      * @param value The value that is to be updated/inserted
      */
+
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
         upsertDoc(pathStr, value)
-
         autoSaveToRDS()
     }
 
@@ -396,19 +487,25 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     const autoSaveToRDS = async () => {
-        const userId = getUserId()
-        const processStepId = localStorage.getItem('process_step_id')
+        const prequalificationData = localStorage.getItem(
+            'formData_prequalification',
+        )
+        let processId = null
+        let userId = null
+        let processStepId = localStorage.getItem('process_step_id')
 
-        if (!userId || !processStepId) {
-            console.warn(
-                'Cannot auto-save: Missing user_id or process_step_id.',
-            )
-            return
+        if (prequalificationData) {
+            try {
+                const parsedData = JSON.parse(prequalificationData)
+                processId = parsedData.process_id || null
+                userId = parsedData.user?.user_id || null
+            } catch (error) {
+                console.error('Error parsing formData_prequalification:', error)
+            }
         }
-
-        console.log('🔄 Auto-saving with:')
-        console.log('🟢 user_id:', userId)
-        console.log('🟢 process_step_id:', processStepId)
+        console.log('Auto-saving with:')
+        console.log('user_id:', userId)
+        console.log('process_step_id:', processStepId)
 
         const formData = {
             user_id: userId,
