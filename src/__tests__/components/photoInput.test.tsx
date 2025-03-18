@@ -130,4 +130,42 @@ describe('PhotoInput Component', () => {
             screen.queryByLabelText(/optional note about photo\(s\)/i),
         ).toBeNull()
     })
+    test('renders timestamp and geolocation correctly', () => {
+        function formatDateTime(dateTimeStr: string): string {
+            const options: Intl.DateTimeFormatOptions = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                timeZoneName: 'short',
+            }
+            const date = new Date(dateTimeStr)
+            const formattedDate = date.toLocaleDateString('en-US', options)
+            return formattedDate
+        }
+        const mockAttachment = generateMockPhotoAttachment()
+        renderWithProps({
+            photoAttachments: [mockAttachment],
+        })
+
+        // Check if timestamp is displayed correctly
+        const timestamp = mockAttachment.metadata?.timestamp
+            ? formatDateTime(
+                  new Date(mockAttachment.metadata.timestamp).toLocaleString(),
+              )
+            : 'Missing'
+
+        expect(
+            screen.getByText(new RegExp(`${timestamp}`, 'i')),
+        ).toBeInTheDocument()
+
+        // Check if geolocation is displayed correctly
+        const geolocation = mockAttachment.metadata?.geolocation
+            ? `${mockAttachment.metadata.geolocation.latitude}, ${mockAttachment.metadata.geolocation.longitude}`
+            : 'Missing'
+        expect(
+            screen.getByText(new RegExp(`${geolocation}`, 'i')),
+        ).toBeInTheDocument()
+    })
 })
