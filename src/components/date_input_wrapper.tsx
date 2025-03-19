@@ -16,8 +16,10 @@ const DateInputWrapper: React.FC<DateInputWrapperProps> = ({ label, path }) => {
                 return (
                     <DateInput
                         label={label}
-                        value={doc && get(doc.data_, path)}
-                        onChange={async value => await upsertData(path, value)}
+                        value={(doc && get(doc.data_, path)) ?? ''}
+                        onChange={async value =>
+                            await upsertData(path, value, [])
+                        }
                     />
                 )
             }}

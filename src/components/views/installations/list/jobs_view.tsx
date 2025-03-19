@@ -45,7 +45,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     const [
         installationForRenameModalValue,
         setInstallationForRenameModalValue,
-    ] = useState<string>('')
+    ] = useState<string | undefined>(undefined)
     const [
         isInstallationForAddModalVisible,
         setIsInstallationForAddModalVisible,
@@ -55,12 +55,14 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     const [selectedInstallationForRename, setSelectedInstallationForRename] =
         useState<InstallationDocument | undefined>(undefined)
 
-    const installationNameValidators = useMemo<Array<Validator<string>>>(() => {
-        const re = /^(?![\s-])[a-z0-9, -]{1,64}$/i
-
-        const installationDocumentNames = installations.map(installation => {
+    const installationDocumentNames = useMemo<Array<string>>(() => {
+        return installations.map(installation => {
             return installation.metadata_.doc_name
         })
+    }, [installations])
+
+    const installationNameValidators = useMemo<Array<Validator<string>>>(() => {
+        const re = /^(?![\s-])[a-z0-9, -]{1,64}$/i
 
         return [
             input => {
@@ -78,7 +80,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 }
             },
         ]
-    }, [installations])
+    }, [installationDocumentNames])
 
     // @note Implementation of {handleConfirmInstallationForAdd} function.
     //     After the PouchDB document for the new installation has been inserted
@@ -158,7 +160,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     ])
 
     const handleConfirmInstallationForRename = useCallback(async () => {
-        if (selectedInstallationForRename) {
+        if (selectedInstallationForRename && installationForRenameModalValue) {
             await setDocumentName<Installation>(
                 db,
                 selectedInstallationForRename._id,
@@ -169,7 +171,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
 
             setSelectedInstallationForRename(undefined)
 
-            setInstallationForRenameModalValue('')
+            setInstallationForRenameModalValue(undefined)
         }
     }, [
         db,
@@ -212,12 +214,12 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 onHide={() => {
                     setSelectedInstallationForRename(undefined)
 
-                    setInstallationForRenameModalValue('')
+                    setInstallationForRenameModalValue(undefined)
                 }}
                 onCancel={() => {
                     setSelectedInstallationForRename(undefined)
 
-                    setInstallationForRenameModalValue('')
+                    setInstallationForRenameModalValue(undefined)
                 }}
                 onConfirm={handleConfirmInstallationForRename}
                 onChange={value => {

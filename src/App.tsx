@@ -10,6 +10,7 @@ import InstallationsListView from './components/views/installations/list'
 
 import ProjectsEditView from './components/views/projects/edit'
 import ProjectsListView from './components/views/projects/list'
+import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
 
 import DatabaseProvider from './providers/database_provider'
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
     {
         path: `/app/:projectId`,
         element: <ProjectsEditView />,
+    },
+    {
+        path: `/app/new`,
+        element: <ProjectsNewView />,
     },
     {
         path: `/app/:projectId/workflows`,

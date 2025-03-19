@@ -34,6 +34,13 @@ import USStateSelectWrapper from './us_state_select_wrapper'
 import InstallationProvider, {
     InstallationContext,
 } from '../providers/installation_provider'
+import InstallationsProvider, {
+    InstallationsContext,
+} from '../providers/installations_provider'
+import ProjectProvider, { ProjectContext } from '../providers/project_provider'
+import ProjectsProvider, {
+    ProjectsContext,
+} from '../providers/projects_provider'
 import StoreProvider, { StoreContext } from '../providers/store_provider'
 import { type TemplateProps } from '../templates'
 import { type Project } from '../types/database.types'
@@ -50,8 +57,10 @@ const components = {
     FileInput: FileInputWrapper,
     GpsCoordStr,
     InstallationConsumer: InstallationContext.Consumer,
-    InstallationProvider: InstallationProvider,
+    InstallationProvider,
     InstallationSelect: InstallationSelectWrapper,
+    InstallationsConsumer: InstallationsContext.Consumer,
+    InstallationsProvider,
     LabelValue: LabelValueWrapper,
     LocationStr,
     NumberInput: NumberInputWrapper,
@@ -60,6 +69,10 @@ const components = {
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
     PrintSection: PrintSectionWrapper,
+    ProjectConsumer: ProjectContext.Consumer,
+    ProjectProvider,
+    ProjectsConsumer: ProjectsContext.Consumer,
+    ProjectsProvider,
     Radio: RadioWrapper,
     Repeatable: RepeatableWrapper,
     RepeatableInput: RepeatableInputWrapper,

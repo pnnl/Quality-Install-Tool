@@ -129,7 +129,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ doc, upsertData, UNSAFE_put }) => {
+            {({ doc, UNSAFE_put }) => {
                 return (
                     <RepeatableInput
                         path={path}
@@ -151,7 +151,30 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                                 //     prepopulate the values for form fields.
                                 values.splice(values.length, 0, {})
 
-                                await upsertData(path, values)
+                                const errors = [
+                                    ...((get(
+                                        doc.metadata_.errors?.data_ ?? {},
+                                        path,
+                                    ) as Array<Record<string, unknown>>) ?? []),
+                                ]
+
+                                errors.splice(errors.length, 0, {})
+
+                                await UNSAFE_put(
+                                    immutableUpsert(
+                                        `data_.${path}`,
+                                        immutableUpsert(
+                                            `metadata_.errors.data_.${path}`,
+                                            doc as unknown as Record<
+                                                string,
+                                                unknown
+                                            >,
+                                            errors,
+                                        ),
+                                        values,
+                                    ) as unknown as PouchDB.Core.Document<Base> &
+                                        PouchDB.Core.GetMeta,
+                                )
                             }
                         }}
                         onRemove={async (index: number) => {
@@ -160,7 +183,14 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
 
                                 values.splice(index, 1)
 
-                                // await upsertData(path, values)
+                                const errors = [
+                                    ...((get(
+                                        doc.metadata_.errors?.data_ ?? {},
+                                        path,
+                                    ) as Array<Record<string, unknown>>) ?? []),
+                                ]
+
+                                errors.splice(index, 1)
 
                                 // @note Removing attachments.
                                 //     When values are removed, any attachments
@@ -190,10 +220,17 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                                 await UNSAFE_put(
                                     immutableUpsert(
                                         `data_.${path}`,
-                                        _removeAttachmentsAt(
-                                            doc,
-                                            path,
-                                            index,
+                                        immutableUpsert(
+                                            `metadata_.errors.data_.${path}`,
+                                            _removeAttachmentsAt(
+                                                doc,
+                                                path,
+                                                index,
+                                            ) as unknown as Record<
+                                                string,
+                                                unknown
+                                            >,
+                                            errors,
                                         ) as unknown as Record<string, unknown>,
                                         values,
                                     ) as unknown as PouchDB.Core.Document<Base> &

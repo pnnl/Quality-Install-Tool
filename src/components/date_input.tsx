@@ -14,7 +14,7 @@ const DateInput: React.FC<DateInputProps> = ({ label, value, onChange }) => {
         <FloatingLabel className="mb-3" controlId={id} label={label}>
             <Form.Control
                 type="date"
-                value={value ?? ''}
+                value={value}
                 onChange={async event => onChange(event.target.value)}
             />
         </FloatingLabel>

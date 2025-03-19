@@ -1,13 +1,12 @@
-import React, { useCallback, useId, useMemo } from 'react'
+import React, { useCallback, useId } from 'react'
 import { FloatingLabel, Form, InputGroup } from 'react-bootstrap'
-
-import { type Validator, validate } from '../utilities/validation_utils'
 
 interface NumberInputProps {
     label: React.ReactNode
     prefix: React.ReactNode
     suffix: React.ReactNode
     value: string
+    errorMessages: Array<string>
     min?: number
     max?: number
     step?: number
@@ -20,6 +19,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     prefix = '',
     suffix = '',
     value,
+    errorMessages,
     min,
     max,
     step,
@@ -27,50 +27,6 @@ const NumberInput: React.FC<NumberInputProps> = ({
     onChange,
 }) => {
     const id = useId()
-
-    const valueValidators = useMemo<Validator<number>[]>(() => {
-        return [
-            input => {
-                if (min && input < min) {
-                    return `Input must be at least ${min}.`
-                } else {
-                    return undefined
-                }
-            },
-            input => {
-                if (max && input > max) {
-                    return `Input must be at most ${max}.`
-                } else {
-                    return undefined
-                }
-            },
-            input => {
-                if (step && input % step !== 0) {
-                    return `Input must be a multiple of ${step}.`
-                } else {
-                    return undefined
-                }
-            },
-        ]
-    }, [min, max, step])
-
-    const errorMessages = useMemo<string[]>(() => {
-        if (value) {
-            if (typeof value === 'string' && value.trim().length === 0) {
-                return []
-            } else {
-                const valueNumber = parseFloat(value)
-
-                if (isNaN(valueNumber)) {
-                    return ['Input must be a number.']
-                } else {
-                    return validate(valueNumber, valueValidators)
-                }
-            }
-        } else {
-            return []
-        }
-    }, [value, valueValidators])
 
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +43,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
                 min={min}
                 max={max}
                 step={step}
-                value={value ?? ''}
+                value={value}
                 isInvalid={errorMessages.length > 0}
             />
         </FloatingLabel>
