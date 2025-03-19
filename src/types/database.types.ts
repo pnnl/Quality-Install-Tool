@@ -21,6 +21,10 @@ export interface BaseMetadata {
     last_modified_at: Timestamp
     attachments: Record<PouchDB.Core.AttachmentId, FileMetadata | PhotoMetadata>
     doc_name: string
+    errors?: {
+        data_: Record<string, unknown>
+        metadata_: Record<string, unknown>
+    }
 }
 
 export interface Installation extends Base {

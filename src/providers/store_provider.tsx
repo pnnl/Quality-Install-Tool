@@ -39,8 +39,16 @@ export function useChangeEventHandler(
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
-    upsertData: (path: string, value: unknown) => Promise<void>
-    upsertMetadata: (path: string, value: unknown) => Promise<void>
+    upsertData: (
+        path: string,
+        value: unknown,
+        errors: string[],
+    ) => Promise<void>
+    upsertMetadata: (
+        path: string,
+        value: unknown,
+        errors: string[],
+    ) => Promise<void>
     putAttachment: (
         attachmentId: PouchDB.Core.AttachmentId,
         blob: Blob,
@@ -83,17 +91,32 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     children,
 }) => {
     const upsertData = useCallback(
-        async (path: string, value: unknown) => {
+        async (path: string, value: unknown, errors: string[]) => {
             if (onChange) {
+                const docWithErrors = immutableUpsert(
+                    `metadata_.errors.data_.${path}`,
+                    {
+                        ...doc,
+                        metadata_: {
+                            ...doc.metadata_,
+                            errors: doc.metadata_.errors ?? {
+                                data_: {},
+                                metadata_: {},
+                            },
+                        },
+                    } as unknown as Record<string, unknown>,
+                    errors,
+                ) as unknown as typeof doc
+
                 const lastModifiedAt = new Date()
 
                 await onChange(
                     immutableUpsert(
                         `data_.${path}`,
                         {
-                            ...doc,
+                            ...docWithErrors,
                             metadata_: {
-                                ...doc.metadata_,
+                                ...docWithErrors.metadata_,
                                 last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
@@ -106,17 +129,32 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     )
 
     const upsertMetadata = useCallback(
-        async (path: string, value: unknown) => {
+        async (path: string, value: unknown, errors: string[]) => {
             if (onChange) {
+                const docWithErrors = immutableUpsert(
+                    `metadata_.errors.metadata_.${path}`,
+                    {
+                        ...doc,
+                        metadata_: {
+                            ...doc.metadata_,
+                            errors: doc.metadata_.errors ?? {
+                                data_: {},
+                                metadata_: {},
+                            },
+                        },
+                    } as unknown as Record<string, unknown>,
+                    errors,
+                ) as unknown as typeof doc
+
                 const lastModifiedAt = new Date()
 
                 await onChange(
                     immutableUpsert(
                         `metadata_.${path}`,
                         {
-                            ...doc,
+                            ...docWithErrors,
                             metadata_: {
-                                ...doc.metadata_,
+                                ...docWithErrors.metadata_,
                                 last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },

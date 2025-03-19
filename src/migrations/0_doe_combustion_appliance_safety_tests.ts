@@ -33,6 +33,14 @@ interface CombustionSafetyTestsInstallationData extends InstallationData {
     combustion_safety_tests: Array<Record<string, unknown>>
 }
 
+interface CombustionSafetyTestsInstallationMetadata {
+    errors?: {
+        data_: {
+            combustion_safety_tests: Array<Record<string, unknown>>
+        }
+    }
+}
+
 interface CombustionSafetyTestsProjectData extends ProjectData {
     assessment_date?: string
     combustion_safety_tests?: Record<string, Record<string, unknown>>
@@ -187,8 +195,18 @@ export function transformCombustionSafetyTestsProject(
         undefined,
     )
 
+    installation.metadata_.errors = {
+        data_: {
+            combustion_safety_tests: [],
+        },
+        metadata_: {},
+    }
+
     const installationData =
         installation.data_ as CombustionSafetyTestsInstallationData
+
+    const installationMetadata =
+        installation.metadata_ as CombustionSafetyTestsInstallationMetadata
 
     installationData.combustion_safety_tests = []
 
@@ -199,6 +217,8 @@ export function transformCombustionSafetyTestsProject(
     Object.entries(projectData.combustion_safety_tests ?? {}).forEach(
         ([key, value], index) => {
             installationData.combustion_safety_tests.push(value)
+
+            installationMetadata.errors?.data_.combustion_safety_tests.push({})
 
             Object.entries(
                 (

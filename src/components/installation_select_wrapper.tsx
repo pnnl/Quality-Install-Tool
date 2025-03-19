@@ -56,7 +56,7 @@ const InstallationSelect: React.FC<InstallationSelectProps> = ({
                                         options={options}
                                         value={doc && get(doc.data_, path)}
                                         onChange={async value =>
-                                            await upsertData(path, value)
+                                            await upsertData(path, value, [])
                                         }
                                     />
                                 )

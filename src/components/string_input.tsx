@@ -1,14 +1,10 @@
-import React, { useCallback, useId, useMemo } from 'react'
+import React, { useCallback, useId } from 'react'
 import { FloatingLabel, Form } from 'react-bootstrap'
-
-import { type Validator, validate } from '../utilities/validation_utils'
 
 interface StringInputProps {
     label: string
     value: string
-    min: number
-    max: number
-    regexp: RegExp
+    errorMessages: Array<string>
     hint: string
     onChange: (value: string) => Promise<void>
 }
@@ -16,47 +12,11 @@ interface StringInputProps {
 const StringInput: React.FC<StringInputProps> = ({
     label,
     value,
-    min,
-    max,
-    regexp,
+    errorMessages,
     hint,
     onChange,
 }) => {
     const id = useId()
-
-    const valueValidators = useMemo<Validator<string>[]>(() => {
-        return [
-            input => {
-                if (input.length < min) {
-                    return `Input must be at least ${min} character${min === 1 ? '' : 's'} long.`
-                } else {
-                    return undefined
-                }
-            },
-            input => {
-                if (input.length > max) {
-                    return `Input must be at most ${max} character${max === 1 ? '' : 's'} long.`
-                } else {
-                    return undefined
-                }
-            },
-            input => {
-                if (regexp.test(input)) {
-                    return undefined
-                } else {
-                    return 'Input must match the pattern.'
-                }
-            },
-        ]
-    }, [min, max, regexp])
-
-    const errorMessages = useMemo<string[]>(() => {
-        if (value) {
-            return validate(value, valueValidators)
-        } else {
-            return []
-        }
-    }, [value, valueValidators])
 
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +30,7 @@ const StringInput: React.FC<StringInputProps> = ({
             <Form.Control
                 onChange={handleChange}
                 type="text"
-                value={value || ''}
+                value={value}
                 isInvalid={errorMessages.length > 0}
             />
             {hint && <Form.Text>{hint}</Form.Text>}
