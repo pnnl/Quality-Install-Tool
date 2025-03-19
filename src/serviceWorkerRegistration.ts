@@ -35,11 +35,7 @@ export function register(config?: Config) {
             // serve assets; see https://github.com/facebook/create-react-app/issues/2374
             return
         }
-        if (document.readyState === 'complete') {
-            const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
-            registerValidSW(swUrl, config)
-        }
-        window.addEventListener('load', () => {
+        const handleLoad = () => {
             const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
             if (isLocalhost) {
                 // This is running on localhost. Let's check if a service worker still exists or not.
@@ -57,7 +53,15 @@ export function register(config?: Config) {
                 // Is not localhost. Just register service worker
                 registerValidSW(swUrl, config)
             }
-        })
+        }
+
+        if (document.readyState === 'complete') {
+            // If the window is already loaded, run handleLoad immediately.
+            handleLoad()
+        } else {
+            // Otherwise, wait for the load event.
+            window.addEventListener('load', handleLoad)
+        }
     }
 }
 
