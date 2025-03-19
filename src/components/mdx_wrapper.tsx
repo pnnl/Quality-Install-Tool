@@ -90,9 +90,14 @@ const components = {
 interface MdxWrapperProps {
     Component: React.FC<MDXProps & TemplateProps>
     project?: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta
+    isNewProject?: boolean
 }
 
-const MdxWrapper: React.FC<MdxWrapperProps> = ({ Component, project }) => {
+const MdxWrapper: React.FC<MdxWrapperProps> = ({
+    Component,
+    project,
+    isNewProject,
+}) => {
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
@@ -105,6 +110,7 @@ const MdxWrapper: React.FC<MdxWrapperProps> = ({ Component, project }) => {
                                         project={project}
                                         data={doc.data_}
                                         metadata={doc.metadata_}
+                                        isNewProject={isNewProject}
                                     />
                                 </MDXProvider>
                             </Suspense>
