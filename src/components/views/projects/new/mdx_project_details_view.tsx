@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details
 import { type Project } from '../../../../types/database.types'
 import { newProject, putProject } from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
+import { isProject } from '../../../../types/database.types'
 
 type MdxProjectViewProps = Record<string, never>
 
@@ -37,6 +38,9 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             }
         },
     )
+    const [installerData, setInstallerData] = useState<
+        Project['data_']['installer'] | null
+    >(null)
 
     const isProjectValid = useMemo<boolean>(() => {
         return !hasErrors(
@@ -70,6 +74,35 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
         [db, navigate, project],
     )
 
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                const allDocs = await db.allDocs({ include_docs: true })
+
+                // Filter projects that have installer data and type 'project'
+                const projects = allDocs.rows
+                    .filter(row => isProject(row.doc))
+                    .map(row => row.doc as Project)
+
+                if (projects.length > 0) {
+                    // Find the most recently modified project
+                    const mostRecentProject = projects.reduce(
+                        (latest, current) =>
+                            new Date(current.metadata_.last_modified_at) >
+                            new Date(latest.metadata_.last_modified_at)
+                                ? current
+                                : latest,
+                    )
+                    setInstallerData(mostRecentProject.data_.installer)
+                }
+            } catch (error) {
+                console.error('Error fetching documents from PouchDB:', error)
+            }
+        }
+
+        fetchProjects()
+    }, [db])
+
     return (
         <>
             <h1>New Project</h1>
@@ -95,7 +128,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                         project as PouchDB.Core.Document<Project> &
                             PouchDB.Core.GetMeta
                     }
-                    isNewProject={true}
+                    installerData={installerData}
                 />
             </StoreProvider>
             <center>

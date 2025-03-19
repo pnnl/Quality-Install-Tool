@@ -44,6 +44,7 @@ import ProjectsProvider, {
 import StoreProvider, { StoreContext } from '../providers/store_provider'
 import { type TemplateProps } from '../templates'
 import { type Project } from '../types/database.types'
+import { type Installer } from '../types/installer.type'
 
 const components = {
     Button,
@@ -90,14 +91,15 @@ const components = {
 interface MdxWrapperProps {
     Component: React.FC<MDXProps & TemplateProps>
     project?: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta
-    isNewProject?: boolean
+    installerData?: Installer | null
 }
 
 const MdxWrapper: React.FC<MdxWrapperProps> = ({
     Component,
     project,
-    isNewProject,
+    installerData,
 }) => {
+    console.log('installerData', installerData)
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
@@ -110,7 +112,7 @@ const MdxWrapper: React.FC<MdxWrapperProps> = ({
                                         project={project}
                                         data={doc.data_}
                                         metadata={doc.metadata_}
-                                        isNewProject={isNewProject}
+                                        installerData={installerData}
                                     />
                                 </MDXProvider>
                             </Suspense>
