@@ -36,7 +36,7 @@ export function register(config?: Config) {
             return
         }
 
-        window.addEventListener('load', () => {
+        const handleLoad = () => {
             const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
 
             if (isLocalhost) {
@@ -55,7 +55,15 @@ export function register(config?: Config) {
                 // Is not localhost. Just register service worker
                 registerValidSW(swUrl, config)
             }
-        })
+        }
+
+        if (document.readyState === 'complete') {
+            // If the window is already loaded, run handleLoad immediately.
+            handleLoad()
+        } else {
+            // Otherwise, wait for the load event.
+            window.addEventListener('load', handleLoad)
+        }
     }
 }
 
