@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,11 @@ import MdxWrapper from '../../../mdx_wrapper'
 import { useDatabase } from '../../../../providers/database_provider'
 import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
-import { type Project } from '../../../../types/database.types'
+import {
+    type Project,
+    type ProjectWithId,
+} from '../../../../types/database.types'
+import { type Installer } from '../../../../types/installer.type'
 import { newProject, putProject } from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
 
@@ -16,50 +20,81 @@ type MdxProjectViewProps = Record<string, never>
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
-
     const navigate = useNavigate()
+    const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>()
 
-    const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>(
-        () => {
-            const projectDefaults = {
-                installer: {
+    useEffect(() => {
+        const fetchAndInitializeProject = async () => {
+            try {
+                const result = await db.allDocs({ include_docs: true })
+                const projects = result.rows
+                    .map(row => row.doc)
+                    .filter(doc => doc?.type === 'project') as ProjectWithId[]
+
+                const validProjects = projects.filter(p => {
+                    return (
+                        p.data_?.installer?.name &&
+                        p.data_?.installer?.company_name &&
+                        p.data_?.installer?.mailing_address &&
+                        p.data_?.installer?.phone &&
+                        p.data_?.installer?.email
+                    )
+                })
+
+                let installerDefaults: Installer = {
                     name: 'Default Name',
                     company_name: 'Default Company',
                     mailing_address: 'Default Address',
                     phone: '123-456-7890',
                     email: 'default@example.com',
-                },
-            }
-            const project = newProject('', undefined, projectDefaults)
+                }
 
-            return {
-                ...project,
-                metadata_: {
-                    ...project.metadata_,
-                    errors: {
-                        data_: {},
-                        metadata_: {
-                            doc_name: [''],
+                if (validProjects.length > 0) {
+                    const mostRecentProject = validProjects.reduce((a, b) => {
+                        return new Date(a.metadata_.last_modified_at) >
+                            new Date(b.metadata_.last_modified_at)
+                            ? a
+                            : b
+                    })
+
+                    installerDefaults = mostRecentProject.data_.installer!
+                }
+
+                const newProjectData = newProject('', undefined, {
+                    installer: installerDefaults,
+                })
+
+                setProject({
+                    ...newProjectData,
+                    metadata_: {
+                        ...newProjectData.metadata_,
+                        errors: {
+                            data_: {},
+                            metadata_: {
+                                doc_name: [''],
+                            },
                         },
                     },
-                },
+                })
+            } catch (error) {
+                console.error('Error fetching projects:', error)
             }
-        },
-    )
+        }
 
-    const isProjectValid = useMemo<boolean>(() => {
-        return !hasErrors(
-            project as PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta,
-        )
-    }, [project])
+        fetchAndInitializeProject()
+    }, [db])
+
+    const isProjectValid = project
+        ? !hasErrors(
+              project as PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta,
+          )
+        : false
 
     const handleClickCancel = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
-
             navigate('/')
-
             return false
         },
         [navigate],
@@ -70,16 +105,19 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             event.stopPropagation()
             event.preventDefault()
 
-            await putProject(db, project)
-
-            navigate(`/app/${project._id}/workflows`)
+            if (project) {
+                await putProject(db, project)
+                navigate(`/app/${project._id}/workflows`)
+            }
 
             return false
         },
         [db, navigate, project],
     )
 
-    console.log('project', project)
+    if (!project) {
+        return <div>Loading...</div>
+    }
 
     return (
         <>
@@ -98,7 +136,9 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 }
             >
                 <div className="container">
-                    <DocNameInputWrapper currentValue={''} />
+                    <DocNameInputWrapper
+                        currentValue={project.metadata_.doc_name}
+                    />
                 </div>
                 <MdxWrapper
                     Component={DOEProjectDetailsTemplate}
@@ -123,8 +163,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             </center>
         </>
     )
-
-    return null
 }
 
 export default MdxProjectView
