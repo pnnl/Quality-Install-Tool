@@ -63,11 +63,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     metadata_: {
                         ...newProjectData.metadata_,
                         errors: {
-                            data_: {
-                                // installer: {
-                                //     company_name: [''],
-                                // },
-                            },
+                            data_: {},
                             metadata_: {
                                 doc_name: [''],
                             },
