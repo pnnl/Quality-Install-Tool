@@ -21,7 +21,16 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
 
     const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>(
         () => {
-            const project = newProject('')
+            const projectDefaults = {
+                installer: {
+                    name: 'Default Name',
+                    company_name: 'Default Company',
+                    mailing_address: 'Default Address',
+                    phone: '123-456-7890',
+                    email: 'default@example.com',
+                },
+            }
+            const project = newProject('', undefined, projectDefaults)
 
             return {
                 ...project,
@@ -69,6 +78,8 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
         },
         [db, navigate, project],
     )
+
+    console.log('project', project)
 
     return (
         <>
