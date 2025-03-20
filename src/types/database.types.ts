@@ -64,13 +64,3 @@ export interface PhotoMetadata {
     timestamp: Timestamp
     timestampSource?: TimestampSource | null
 }
-
-// Type guard to check if a document is a Project
-export function isProject(doc: any): doc is Project {
-    return (
-        doc &&
-        doc.type === 'project' &&
-        doc.data_ &&
-        typeof doc.data_.installer === 'object'
-    )
-}

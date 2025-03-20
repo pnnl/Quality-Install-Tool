@@ -3,7 +3,7 @@
 
     _Installer information is optional, but we recommend filling in at least one field for reference in the final report._
 
-    <StringInput label="Technician Name" path="installer.name" value={props.installerData ?  props.installerData.name : ""}/>
+    <StringInput label="Technician Name" path="installer.name" value={props.isNewProject ?  "NEW" : ""}/>
     <StringInput label="Installation Company" path="installer.company_name" value="" />
     <StringInput label="Company Address" path="installer.mailing_address" value="" />
     <StringInput label="Company Phone" path="installer.phone" value=""/>
