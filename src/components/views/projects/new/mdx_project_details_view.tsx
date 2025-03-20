@@ -32,13 +32,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     .filter(doc => doc?.type === 'project') as ProjectWithId[]
 
                 const validProjects = projects.filter(p => {
-                    return (
-                        p.data_?.installer?.name &&
-                        p.data_?.installer?.company_name &&
-                        p.data_?.installer?.mailing_address &&
-                        p.data_?.installer?.phone &&
-                        p.data_?.installer?.email
-                    )
+                    return p.data_?.installer?.company_name
                 })
 
                 let installerDefaults: Installer = {
@@ -69,7 +63,11 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     metadata_: {
                         ...newProjectData.metadata_,
                         errors: {
-                            data_: {},
+                            data_: {
+                                // installer: {
+                                //     company_name: [''],
+                                // },
+                            },
                             metadata_: {
                                 doc_name: [''],
                             },
