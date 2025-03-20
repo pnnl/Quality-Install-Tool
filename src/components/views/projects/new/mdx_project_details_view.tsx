@@ -95,7 +95,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                         project as PouchDB.Core.Document<Project> &
                             PouchDB.Core.GetMeta
                     }
-                    isNewProject={true}
                 />
             </StoreProvider>
             <center>

@@ -12,7 +12,6 @@ interface StringInputWrapperProps {
     max: number
     regexp: RegExp
     hint: string
-    value?: string
 }
 
 const StringInputWrapper: React.FC<StringInputWrapperProps> = ({
@@ -22,7 +21,6 @@ const StringInputWrapper: React.FC<StringInputWrapperProps> = ({
     max = 1024,
     regexp = /.*/,
     hint,
-    value,
 }) => {
     const valueValidators = useMemo<Validator<string>[]>(() => {
         return [
@@ -56,11 +54,7 @@ const StringInputWrapper: React.FC<StringInputWrapperProps> = ({
                 return (
                     <StringInput
                         label={label}
-                        value={
-                            value
-                                ? value
-                                : ((doc && get(doc.data_, path)) ?? '')
-                        }
+                        value={(doc && get(doc.data_, path)) ?? ''}
                         errorMessages={
                             (doc &&
                                 (get(
