@@ -8,10 +8,7 @@ import MdxWrapper from '../../../mdx_wrapper'
 import { useDatabase } from '../../../../providers/database_provider'
 import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
-import {
-    type Project,
-    type ProjectWithId,
-} from '../../../../types/database.types'
+import { type Project } from '../../../../types/database.types'
 import { type Installer } from '../../../../types/installer.type'
 import { newProject, putProject } from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
@@ -29,7 +26,9 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 const result = await db.allDocs({ include_docs: true })
                 const projects = result.rows
                     .map(row => row.doc)
-                    .filter(doc => doc?.type === 'project') as ProjectWithId[]
+                    .filter(
+                        doc => doc?.type === 'project',
+                    ) as PouchDB.Core.PutDocument<Project>[]
 
                 const validProjects = projects.filter(p => {
                     return p.data_?.installer?.company_name
@@ -130,9 +129,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 }
             >
                 <div className="container">
-                    <DocNameInputWrapper
-                        currentValue={project.metadata_.doc_name}
-                    />
+                    <DocNameInputWrapper currentValue={''} />
                 </div>
                 <MdxWrapper
                     Component={DOEProjectDetailsTemplate}

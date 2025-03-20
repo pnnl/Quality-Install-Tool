@@ -64,8 +64,3 @@ export interface PhotoMetadata {
     timestamp: Timestamp
     timestampSource?: TimestampSource | null
 }
-
-export interface ProjectWithId extends Project {
-    _id: string
-    _rev: string
-}
