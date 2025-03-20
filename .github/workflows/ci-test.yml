@@ -25,4 +25,4 @@ jobs:
       run: yarn install  # Installs dependencies using Yarn
 
     - name: Run Jest tests
-      run: yarn test --coverage  # Runs Jest tests with coverage
+      run: yarn test  # Runs Jest tests 
