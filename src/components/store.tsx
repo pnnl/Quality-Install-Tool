@@ -25,6 +25,7 @@ import {
     getAuthToken,
     getUserId,
 } from '../auth/keycloak'
+import jsPDF from 'jspdf'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -185,9 +186,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
-        console.log('Initializing Quality Install Tool...')
-
-        // Retrieve process ID and user ID from formData_prequalification if available
         const prequalificationData = localStorage.getItem(
             'formData_prequalification',
         )
@@ -204,13 +202,10 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             }
         }
 
-        // Retrieve stored values
-        let savedFormId = localStorage.getItem('form_id')
         let processStepId = localStorage.getItem('process_step_id')
 
         console.log('Initial values:', { processId, processStepId, userId })
 
-        // Fetch process_step_id from API if not stored
         if (!processStepId && processId) {
             console.log(`Fetching process_step_id for process: ${processId}`)
 
@@ -254,9 +249,8 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 )
         }
 
-        // Ensure user ID and process step ID exist before proceeding
         if (!userId || !processStepId) {
-            console.error('Cannot proceed: Missing user_id or process_step_id.')
+            console.error('Missing user_id or process_step_id.')
             return
         }
 
@@ -328,18 +322,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 console.error('Error in createQualityInstallForm:', error),
             )
     }
-
-    useEffect(() => {
-        if (!doc) {
-            console.warn('`doc` is not initialized!')
-        } else {
-            console.log('`doc` is initialized:', doc)
-            window.docData = doc.data_
-            console.log(
-                '`doc.data_` is now accessible in DevTools as `window.docData`',
-            )
-        }
-    }, [])
 
     useEffect(() => {
         /**
@@ -732,4 +714,140 @@ export function immutableUpsert(
         )
     }
     return newRecipient
+}
+
+export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
+    try {
+        const prequalificationData = localStorage.getItem(
+            'formData_prequalification',
+        )
+        let processId = null
+        let userId = null
+        let processStepId = localStorage.getItem('process_step_id')
+
+        if (prequalificationData) {
+            try {
+                const parsedData = JSON.parse(prequalificationData)
+                processId = parsedData.process_id || null
+                userId = parsedData.user?.user_id || null
+            } catch (error) {
+                console.error('Error parsing formData_prequalification:', error)
+                return
+            }
+        }
+
+        if (!userId || !processStepId) {
+            console.error('Missing user_id or process_step_id.')
+            return
+        }
+
+        console.log('Saving project and uploading to S3 for:', {
+            userId,
+            processStepId,
+        })
+
+        if (!window.docData || !isFormComplete(window.docData)) {
+            console.error('Cannot save project: Some form fields are missing.')
+            alert(
+                'Please complete all required fields before saving the project.',
+            )
+            return
+        }
+
+        const pdf = new jsPDF()
+        pdf.text('Quality Install Tool Report', 10, 10)
+        pdf.text(JSON.stringify(window.docData, null, 2), 10, 20)
+        const pdfBlob = pdf.output('blob')
+
+        const s3Response = await fetch(
+            'http://localhost:5000/api/s3/FILL_ME_IN', // CHANGE TO S# URL
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({
+                    file_name: `quality_install_${Date.now()}.pdf`,
+                    file_type: 'application/pdf',
+                }),
+            },
+        )
+
+        const s3Data = await s3Response.json()
+        if (!s3Data.success) {
+            console.error('Failed to get S3 presigned URL:', s3Data)
+            return
+        }
+
+        console.log('Uploading PDF to S3:', s3Data.url)
+
+        // Upload the PDF to S3
+        const uploadResponse = await fetch(s3Data.url, {
+            method: 'PUT',
+            body: pdfBlob,
+            headers: { 'Content-Type': 'application/pdf' },
+        })
+
+        if (!uploadResponse.ok) {
+            console.error('Failed to upload PDF to S3:', uploadResponse)
+            return
+        }
+
+        const formId = localStorage.getItem('form_id')
+        const updateResponse = await fetch(
+            `http://localhost:5000/api/quality-install/${formId}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ s3_file_url: s3Data.url }),
+            },
+        )
+
+        const updateData = await updateResponse.json()
+        if (updateData.success) {
+            console.log(
+                'Successfully saved project and updated DB with S3 URL:',
+                updateData,
+            )
+        } else {
+            console.error('Failed to update DB with S3 file URL:', updateData)
+        }
+    } catch (error) {
+        console.error('Error in saveProjectAndUploadToS3:', error)
+    }
+}
+
+const isFormComplete = (formData: any): boolean => {
+    if (!formData) return false
+
+    const requiredFields = [
+        'name',
+        'installer.name',
+        'installer.company_name',
+        'installer.mailing_address',
+        'installer.phone',
+        'installer.email',
+        'location.street_address',
+        'location.city',
+        'location.state',
+        'location.zip_code',
+        'status',
+        'building_number_photo',
+    ]
+
+    for (const field of requiredFields) {
+        const value = field
+            .split('.')
+            .reduce((obj, key) => obj?.[key], formData)
+        if (!value || (typeof value === 'string' && value.trim() === '')) {
+            console.warn(`Missing required field: ${field}`)
+            return false
+        }
+    }
+
+    return true
 }

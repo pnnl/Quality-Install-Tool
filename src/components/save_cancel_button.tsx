@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDB } from '../utilities/database_utils'
+import { saveProjectAndUploadToS3 } from './store'
 
 interface SaveCancelButtonProps {
     id: string
@@ -52,9 +53,46 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
         deleteEmptyProject()
     }
 
-    const saveProject = () => {
-        updateValue('created')
-        navigate('/', { replace: true })
+    const saveProject = async (projectDoc: any) => {
+        try {
+            const projectDoc: any = await db.get(id)
+
+            if (!projectDoc || !validateFormCompletion(projectDoc)) {
+                alert('Please complete all required fields before saving.')
+                return
+            }
+
+            await saveProjectAndUploadToS3(projectDoc)
+
+            updateValue('created')
+            navigate('/', { replace: true })
+        } catch (error) {
+            console.error('Error saving project:', error)
+        }
+    }
+
+    const handleSaveClick = async () => {
+        const savedProject = localStorage.getItem("formData_prequalification");
+    
+        if (!savedProject) {
+            console.error("No project data found in local storage.");
+            return;
+        }
+    
+        const projectDoc = JSON.parse(savedProject);
+        await saveProjectAndUploadToS3(projectDoc);
+    };
+
+    const validateFormCompletion = (projectDoc: any) => {
+        return (
+            projectDoc.metadata_?.doc_name &&
+            projectDoc.metadata_?.installer?.name &&
+            projectDoc.metadata_?.installer?.company_name &&
+            projectDoc.metadata_?.location?.street_address &&
+            projectDoc.metadata_?.location?.city &&
+            projectDoc.metadata_?.location?.state &&
+            projectDoc.metadata_?.location?.zip_code
+        )
     }
 
     useEffect(() => {
@@ -102,7 +140,7 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
                 &nbsp;
                 <Button
                     variant="primary"
-                    onClick={handleSaveButtonClick}
+                    onClick={handleSaveClick}
                     disabled={disableSave}
                 >
                     {buttonLabel}
