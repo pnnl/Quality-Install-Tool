@@ -42,11 +42,11 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 })
 
                 let installerDefaults: Installer = {
-                    name: 'Default Name',
-                    company_name: 'Default Company',
-                    mailing_address: 'Default Address',
-                    phone: '123-456-7890',
-                    email: 'default@example.com',
+                    name: '',
+                    company_name: '',
+                    mailing_address: '',
+                    phone: '',
+                    email: '',
                 }
 
                 if (validProjects.length > 0) {
