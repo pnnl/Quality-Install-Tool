@@ -1,0 +1,28 @@
+name: Run Jest Tests on PR targeting ira-test
+
+on:
+  pull_request:
+    branches:
+      - 'ira-test'  # This triggers the action for PRs targeting the 'ira-test' branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2  # Checks out your repository's code
+
+    - name: Set up Node.js v22.1.0
+      uses: actions/setup-node@v2  
+      with:
+        node-version: '22.1.0'  
+
+    - name: Install Yarn
+      run: npm install -g yarn  # Installs Yarn 
+
+    - name: Install dependencies with Yarn
+      run: yarn install  # Installs dependencies using Yarn
+
+    - name: Run Jest tests
+      run: yarn test --coverage  # Runs Jest tests with coverage
