@@ -15,39 +15,51 @@ import ProjectsShowView from './components/views/projects/show'
 
 import DatabaseProvider from './providers/database_provider'
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
+        {
+            path: '/',
+            element: <ProjectsListView />,
+        },
+        {
+            path: `/app/:projectId`,
+            element: <ProjectsEditView />,
+        },
+        {
+            path: `/app/new`,
+            element: <ProjectsNewView />,
+        },
+        {
+            path: `/app/:projectId/workflows`,
+            element: <ProjectsShowView />,
+        },
+        {
+            path: `/app/:projectId/:workflowName`,
+            element: <InstallationsListView />,
+        },
+        {
+            path: `/app/:projectId/:workflowName/:installationId`,
+            element: <InstallationsEditView />,
+        },
+    ],
     {
-        path: '/',
-        element: <ProjectsListView />,
+        future: {
+            v7_relativeSplatPath: true,
+        },
     },
-    {
-        path: `/app/:projectId`,
-        element: <ProjectsEditView />,
-    },
-    {
-        path: `/app/new`,
-        element: <ProjectsNewView />,
-    },
-    {
-        path: `/app/:projectId/workflows`,
-        element: <ProjectsShowView />,
-    },
-    {
-        path: `/app/:projectId/:workflowName`,
-        element: <InstallationsListView />,
-    },
-    {
-        path: `/app/:projectId/:workflowName/:installationId`,
-        element: <InstallationsEditView />,
-    },
-])
+)
 
 type AppProps = Record<string, never>
 
 const App: React.FC<AppProps> = () => {
     return (
         <DatabaseProvider>
-            <RouterProvider router={router} />
+            <RouterProvider
+                future={{
+                    v7_startTransition: true,
+                }}
+                router={router}
+            />
         </DatabaseProvider>
     )
 }
