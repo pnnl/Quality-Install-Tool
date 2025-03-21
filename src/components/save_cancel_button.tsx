@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDB } from '../utilities/database_utils'
-import { saveProjectAndUploadToS3 } from './store'
+import { saveProjectAndUploadToS3, isFormComplete } from './store'
 
 interface SaveCancelButtonProps {
     id: string
@@ -53,7 +53,7 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
         deleteEmptyProject()
     }
 
-    const saveProject = async (projectDoc: any) => {
+    const saveProject = async () => {
         try {
             const projectDoc: any = await db.get(id)
 
@@ -72,16 +72,35 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     }
 
     const handleSaveClick = async () => {
-        const savedProject = localStorage.getItem("formData_prequalification");
-    
-        if (!savedProject) {
-            console.error("No project data found in local storage.");
-            return;
+        try {
+            const projectDoc: any = await db.get(id)
+
+            console.log('Project document being saved:', projectDoc)
+            console.log('Data fields:', projectDoc.data_)
+            console.log('Metadata fields:', projectDoc.metadata_)
+
+            // First check if project name exists in metadata
+            if (!projectDoc.metadata_ || !projectDoc.metadata_.doc_name) {
+                console.error('Project name missing in metadata')
+                alert('Please enter a project name before saving.')
+                return
+            }
+
+            // Then check if form data is complete
+            if (!projectDoc.data_ || !isFormComplete(projectDoc.data_)) {
+                console.error('Form data incomplete')
+                alert('Please complete all required form fields before saving.')
+                return
+            }
+
+            // If both checks pass, save the project
+            await saveProjectAndUploadToS3(projectDoc)
+            updateValue('created')
+            navigate('/', { replace: true })
+        } catch (error) {
+            console.error('Error saving project:', error)
         }
-    
-        const projectDoc = JSON.parse(savedProject);
-        await saveProjectAndUploadToS3(projectDoc);
-    };
+    }
 
     const validateFormCompletion = (projectDoc: any) => {
         return (

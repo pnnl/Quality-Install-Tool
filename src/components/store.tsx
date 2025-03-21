@@ -450,6 +450,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
         upsertDoc(pathStr, value)
+        window.docData = doc.data_
         autoSaveToRDS()
     }
 
@@ -718,49 +719,24 @@ export function immutableUpsert(
 
 export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
     try {
-        const prequalificationData = localStorage.getItem(
-            'formData_prequalification',
-        )
-        let processId = null
-        let userId = null
-        let processStepId = localStorage.getItem('process_step_id')
-
-        if (prequalificationData) {
-            try {
-                const parsedData = JSON.parse(prequalificationData)
-                processId = parsedData.process_id || null
-                userId = parsedData.user?.user_id || null
-            } catch (error) {
-                console.error('Error parsing formData_prequalification:', error)
-                return
-            }
-        }
-
-        if (!userId || !processStepId) {
-            console.error('Missing user_id or process_step_id.')
-            return
-        }
-
-        console.log('Saving project and uploading to S3 for:', {
-            userId,
-            processStepId,
-        })
-
-        if (!window.docData || !isFormComplete(window.docData)) {
-            console.error('Cannot save project: Some form fields are missing.')
-            alert(
-                'Please complete all required fields before saving the project.',
-            )
-            return
-        }
-
         const pdf = new jsPDF()
-        pdf.text('Quality Install Tool Report', 10, 10)
-        pdf.text(JSON.stringify(window.docData, null, 2), 10, 20)
+        pdf.text(
+            `Project: ${projectDoc.metadata_.doc_name || 'Untitled Project'}`,
+            10,
+            10,
+        )
+        pdf.text('Quality Install Tool Report', 10, 20)
+
+        const reportData = {
+            projectName: projectDoc.metadata_.doc_name,
+            ...projectDoc.data_,
+        }
+
+        pdf.text(JSON.stringify(reportData, null, 2), 10, 30)
         const pdfBlob = pdf.output('blob')
 
         const s3Response = await fetch(
-            'http://localhost:5000/api/s3/FILL_ME_IN', // CHANGE TO S# URL
+            'http://localhost:5000/api/s3/FILL_ME_IN', // CHANGE TO S3 URL
             {
                 method: 'POST',
                 headers: {
@@ -768,7 +744,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
                     Authorization: `Bearer ${getAuthToken()}`,
                 },
                 body: JSON.stringify({
-                    file_name: `quality_install_${Date.now()}.pdf`,
+                    file_name: `quality_install_${projectDoc.metadata_.doc_name || 'Untitled Project'}_${Date.now()}.pdf`,
                     file_type: 'application/pdf',
                 }),
             },
@@ -782,7 +758,6 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
 
         console.log('Uploading PDF to S3:', s3Data.url)
 
-        // Upload the PDF to S3
         const uploadResponse = await fetch(s3Data.url, {
             method: 'PUT',
             body: pdfBlob,
@@ -821,30 +796,50 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
     }
 }
 
-const isFormComplete = (formData: any): boolean => {
+// Export this function so it can be imported in save_cancel_button.tsx
+export const isFormComplete = (formData: any, metadata?: any): boolean => {
     if (!formData) return false
 
-    const requiredFields = [
-        'name',
-        'installer.name',
-        'installer.company_name',
-        'installer.mailing_address',
-        'installer.phone',
-        'installer.email',
-        'location.street_address',
-        'location.city',
-        'location.state',
-        'location.zip_code',
-        'status',
-        'building_number_photo',
-    ]
+    console.log('Checking form data:', formData)
 
-    for (const field of requiredFields) {
-        const value = field
-            .split('.')
-            .reduce((obj, key) => obj?.[key], formData)
-        if (!value || (typeof value === 'string' && value.trim() === '')) {
-            console.warn(`Missing required field: ${field}`)
+    // Check installer data exists and has required fields
+    if (!formData.installer) {
+        console.warn('Missing required installer data')
+        return false
+    }
+
+    // Check all required installer fields
+    const installerFields = [
+        'name',
+        'company_name',
+        'mailing_address',
+        'phone',
+        'email',
+    ]
+    for (const field of installerFields) {
+        if (
+            !formData.installer[field] ||
+            formData.installer[field].trim() === ''
+        ) {
+            console.warn(`Missing required installer field: ${field}`)
+            return false
+        }
+    }
+
+    // Check location data exists and has required fields
+    if (!formData.location) {
+        console.warn('Missing required location data')
+        return false
+    }
+
+    // Check all required location fields
+    const locationFields = ['street_address', 'city', 'state', 'zip_code']
+    for (const field of locationFields) {
+        if (
+            !formData.location[field] ||
+            formData.location[field].trim() === ''
+        ) {
+            console.warn(`Missing required location field: ${field}`)
             return false
         }
     }

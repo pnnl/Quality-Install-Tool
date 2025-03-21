@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+
+  vapor-quality:
+    build: 
+      context: .
+    container_name: vapor-quality
+    ports:
+      - "3000:3000"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=us-east-1  # or your preferred region
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
