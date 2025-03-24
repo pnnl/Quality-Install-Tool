@@ -736,7 +736,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
         const pdfBlob = pdf.output('blob')
 
         const s3Response = await fetch(
-            'http://localhost:5000/api/s3/FILL_ME_IN', // CHANGE TO S3 URL
+            'http://localhost:5000/api/s3/FILL_ME_IN', // CHANGE TO S3 PRSIGNED URL - need to generate on backend to make put
             {
                 method: 'POST',
                 headers: {
@@ -749,26 +749,21 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
                 }),
             },
         )
-
         const s3Data = await s3Response.json()
         if (!s3Data.success) {
             console.error('Failed to get S3 presigned URL:', s3Data)
             return
         }
-
         console.log('Uploading PDF to S3:', s3Data.url)
-
         const uploadResponse = await fetch(s3Data.url, {
             method: 'PUT',
             body: pdfBlob,
             headers: { 'Content-Type': 'application/pdf' },
         })
-
         if (!uploadResponse.ok) {
             console.error('Failed to upload PDF to S3:', uploadResponse)
             return
         }
-
         const formId = localStorage.getItem('form_id')
         const updateResponse = await fetch(
             `http://localhost:5000/api/quality-install/${formId}`,
@@ -781,7 +776,6 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
                 body: JSON.stringify({ s3_file_url: s3Data.url }),
             },
         )
-
         const updateData = await updateResponse.json()
         if (updateData.success) {
             console.log(
@@ -791,24 +785,60 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
         } else {
             console.error('Failed to update DB with S3 file URL:', updateData)
         }
+        const prequalificationData = localStorage.getItem(
+            'formData_prequalification',
+        )
+        let processId = null
+        let userId = null
+        let processStepId = localStorage.getItem('process_step_id')
+        if (prequalificationData) {
+            try {
+                const parsedData = JSON.parse(prequalificationData)
+                processId = parsedData.process_id || null
+                userId = parsedData.user?.user_id || null
+            } catch (error) {
+                console.error('Error parsing formData_prequalification:', error)
+            }
+        }
+        if (!processId || !processStepId) {
+            console.warn('No processId or processStepId found in localStorage')
+            return
+        }
+        console.log(
+            `Updating step condition for process ${processId}, step ${processStepId}`,
+        )
+        const conditionResponse = await fetch(
+            `http://localhost:5000/api/process/${processId}/step/${processStepId}/condition`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAuthToken()}`,
+                },
+                body: JSON.stringify({ condition: 'CLOSED' }),
+            },
+        )
+        if (!conditionResponse.ok) {
+            console.error(
+                'Failed to update step condition to CLOSED:',
+                conditionResponse,
+            )
+            return
+        }
+        const conditionData = await conditionResponse.json()
+        console.log('Step condition updated:', conditionData)
     } catch (error) {
         console.error('Error in saveProjectAndUploadToS3:', error)
     }
 }
 
-// Export this function so it can be imported in save_cancel_button.tsx
 export const isFormComplete = (formData: any, metadata?: any): boolean => {
     if (!formData) return false
-
-    console.log('Checking form data:', formData)
-
-    // Check installer data exists and has required fields
     if (!formData.installer) {
         console.warn('Missing required installer data')
         return false
     }
 
-    // Check all required installer fields
     const installerFields = [
         'name',
         'company_name',
@@ -825,14 +855,10 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
             return false
         }
     }
-
-    // Check location data exists and has required fields
     if (!formData.location) {
         console.warn('Missing required location data')
         return false
     }
-
-    // Check all required location fields
     const locationFields = ['street_address', 'city', 'state', 'zip_code']
     for (const field of locationFields) {
         if (
@@ -843,6 +869,5 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
             return false
         }
     }
-
     return true
 }
