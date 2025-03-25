@@ -1,11 +1,15 @@
 import React from 'react'
+import DateStr from './date_str'
 
-interface LabelValueProps {
+export interface LabelValueProps {
     label?: React.ReactNode
     value: React.ReactNode
     required?: boolean
     prefix?: React.ReactNode
     suffix?: React.ReactNode
+    decimalPlaces?: number
+    type?: 'string' | 'number' | 'date'
+    dateOptions?: Intl.DateTimeFormatOptions
 }
 
 const LabelValue: React.FC<LabelValueProps> = ({
@@ -14,27 +18,59 @@ const LabelValue: React.FC<LabelValueProps> = ({
     required = false,
     prefix = '',
     suffix = '',
-}) => {
-    if (required || value) {
-        if (label) {
-            return (
-                <div className="top-bottom-padding">
-                    <span>{label}: </span>
-                    <strong>{value}</strong>
-                </div>
-            )
+    decimalPlaces = 1,
+    type = 'string',
+    dateOptions,
+}: LabelValueProps): JSX.Element | null => {
+    //If type is "number" and decimalPlaces, round the value
+    if (type === 'number' && typeof value === 'number') {
+        //check that value is actually a number
+        //Need to do this because TS not currently configured for MDX files and there's a chance that
+        //someone could try to .toFixed("some string") and cause an error
+        if (
+            typeof value === 'number' &&
+            !isNaN(value) &&
+            typeof decimalPlaces === 'number' &&
+            !isNaN(decimalPlaces)
+        ) {
+            value = value.toFixed(decimalPlaces)
         } else {
-            return (
-                <>
-                    {prefix}
-                    {value}
-                    {suffix}
-                </>
+            console.log(
+                'Make sure that your value and decimalPlaces params are actually numbers.',
             )
         }
-    } else {
-        return null
+    } else if (type === 'number' && typeof value !== 'number') {
+        console.log(
+            `You are trying to set the type of a non-number value to 'number'. Value is : ${value} and typeof value is: ${typeof value}`,
+        )
     }
+
+    return required || value ? (
+        label ? (
+            <div className="top-bottom-padding">
+                <span>
+                    <strong>{label}: </strong>
+                </span>
+                {prefix}
+                {type === 'date' && typeof value === 'string' ? (
+                    <DateStr date={value} options={dateOptions} />
+                ) : (
+                    value
+                )}
+                {suffix}
+            </div>
+        ) : (
+            <>
+                {prefix}
+                {type === 'date' && typeof value === 'string' ? (
+                    <DateStr date={value} options={dateOptions} />
+                ) : (
+                    value
+                )}
+                {suffix}
+            </>
+        )
+    ) : null
 }
 
 export default LabelValue

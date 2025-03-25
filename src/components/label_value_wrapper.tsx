@@ -1,5 +1,4 @@
 import { get } from 'lodash'
-import PouchDB from 'pouchdb'
 import React from 'react'
 
 import LabelValue from './label_value'
@@ -13,6 +12,10 @@ interface LabelValueWrapperProps {
     suffix?: string
     required?: boolean
     parent?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
+    value?: string | number | boolean
+    type?: 'string' | 'number' | 'date'
+    decimalPlaces?: number
+    dateOptions?: Intl.DateTimeFormatOptions
 }
 
 const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
@@ -22,14 +25,20 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     suffix,
     parent = null,
     required = false,
+    decimalPlaces,
+    type = 'string',
+    dateOptions,
+    value,
 }) => {
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
-                const value = get(
-                    parent ? parent.data_ : doc ? doc.data_ : undefined,
-                    path,
-                )
+                value = value
+                    ? value
+                    : get(
+                          parent ? parent.data_ : doc ? doc.data_ : undefined,
+                          path,
+                      )
 
                 return (
                     <LabelValue
@@ -38,6 +47,9 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                         required={required}
                         prefix={prefix}
                         suffix={suffix}
+                        decimalPlaces={decimalPlaces}
+                        type={type}
+                        dateOptions={dateOptions}
                     />
                 )
             }}
