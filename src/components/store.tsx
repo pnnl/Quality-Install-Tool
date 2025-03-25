@@ -764,7 +764,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
             console.error('Failed to upload PDF to S3:', uploadResponse)
             return
         }
-        const formId = localStorage.getItem('form_id')
+        let formId = localStorage.getItem('form_id')
         const updateResponse = await fetch(
             `http://localhost:5000/api/quality-install/${formId}`,
             {
@@ -795,7 +795,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
             try {
                 const parsedData = JSON.parse(prequalificationData)
                 processId = parsedData.process_id || null
-                userId = parsedData.user?.user_id || null
+                userId = parsedData.user_id || null
             } catch (error) {
                 console.error('Error parsing formData_prequalification:', error)
             }
@@ -825,11 +825,44 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
             )
             return
         }
+        const projectDocName = projectDoc.metadata_.doc_name
         const conditionData = await conditionResponse.json()
         console.log('Step condition updated:', conditionData)
+        const NewQualityInstallSubmissionData =
+            await storeNewQualityInstallSubmission(
+                projectDocName,
+                [],
+                formId,
+                userId,
+                processId,
+                processStepId,
+            )
+        console.log('Local Storage Updated:', NewQualityInstallSubmissionData)
     } catch (error) {
         console.error('Error in saveProjectAndUploadToS3:', error)
     }
+}
+
+function storeNewQualityInstallSubmission(
+    submissionName: string,
+    formData: any,
+    applicationId: any, // need to update
+    userId: string,
+    processId: string,
+    stepId: string,
+    localStorageKey = 'quality_install_submission',
+) {
+    const newObject = {
+        [submissionName]: {
+            form_data: formData,
+            application_id: applicationId,
+            user_id: userId,
+            process_id: processId,
+            step_id: stepId,
+        },
+    }
+
+    localStorage.setItem(localStorageKey, JSON.stringify(newObject))
 }
 
 export const isFormComplete = (formData: any, metadata?: any): boolean => {
