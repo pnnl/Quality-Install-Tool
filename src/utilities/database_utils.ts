@@ -10,6 +10,8 @@ import {
     type ProjectData,
     type ProjectMetadata,
 } from '../types/database.types'
+import { type Installer } from '../types/installer.type'
+import { Timestamp } from '../types/timestamp.type'
 
 //
 // BASE
@@ -501,4 +503,54 @@ export async function removeProject(
 
         return [response, []]
     }
+}
+
+export async function getLastModifiedInstaller(
+    db: PouchDB.Database<Base>,
+): Promise<Installer | null> {
+    await db.info()
+
+    // Create the index
+    await db.createIndex({
+        index: {
+            fields: [
+                'type',
+                'metadata_.last_modified_at',
+                'data_.installer.company_name',
+            ],
+        },
+    })
+
+    const findRequest: PouchDB.Find.FindRequest<Base> = {
+        selector: {
+            type: { $eq: 'project' },
+            'metadata_.last_modified_at': { $ne: '' },
+            'data_.installer.company_name': { $ne: '' },
+        },
+        fields: ['data_.installer', 'metadata_.last_modified_at'],
+    }
+
+    const findResponse: PouchDB.Find.FindResponse<any> =
+        await db.find(findRequest)
+
+    if (findResponse.docs.length > 0) {
+        const lastModifiedProject = findResponse.docs.sort((a, b) => {
+            const dateA = new Date(a.metadata_.last_modified_at)
+            const dateB = new Date(b.metadata_.last_modified_at)
+            return dateB.getTime() - dateA.getTime()
+        })[0]
+
+        const installer = lastModifiedProject.data_.installer
+        if (installer) {
+            return {
+                name: installer.name ?? '',
+                company_name: installer.company_name ?? '',
+                mailing_address: installer.mailing_address ?? '',
+                phone: installer.phone ?? '',
+                email: installer.email ?? '',
+            }
+        }
+    }
+
+    return null
 }

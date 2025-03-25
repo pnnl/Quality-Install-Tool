@@ -10,7 +10,11 @@ import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 import { type Project } from '../../../../types/database.types'
 import { type Installer } from '../../../../types/installer.type'
-import { newProject, putProject } from '../../../../utilities/database_utils'
+import {
+    newProject,
+    putProject,
+    getLastModifiedInstaller,
+} from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
 
 type MdxProjectViewProps = Record<string, never>
@@ -23,17 +27,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     useEffect(() => {
         const fetchAndInitializeProject = async () => {
             try {
-                const result = await db.allDocs({ include_docs: true })
-                const projects = result.rows
-                    .map(row => row.doc)
-                    .filter(
-                        doc => doc?.type === 'project',
-                    ) as PouchDB.Core.PutDocument<Project>[]
-
-                const validProjects = projects.filter(p => {
-                    return p.data_?.installer?.company_name
-                })
-
                 let installerDefaults: Installer = {
                     name: '',
                     company_name: '',
@@ -42,15 +35,9 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     email: '',
                 }
 
-                if (validProjects.length > 0) {
-                    const mostRecentProject = validProjects.reduce((a, b) => {
-                        return new Date(a.metadata_.last_modified_at) >
-                            new Date(b.metadata_.last_modified_at)
-                            ? a
-                            : b
-                    })
-
-                    installerDefaults = mostRecentProject.data_.installer!
+                const mostRecentInstaller = await getLastModifiedInstaller(db)
+                if (mostRecentInstaller) {
+                    installerDefaults = mostRecentInstaller
                 }
 
                 const newProjectData = newProject('', undefined, {
