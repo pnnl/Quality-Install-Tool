@@ -39,8 +39,7 @@
     </p>
     <ShowOrHide visible={props.data.install_date}>
         <>
-            <strong>Installation Date:&nbsp;</strong>{' '}
-            <DateStr date={props.data.install_date} />
+            <LabelValue value={props.data.install_date} label="Installation Date" type="date" />
         </>
     </ShowOrHide>
 
