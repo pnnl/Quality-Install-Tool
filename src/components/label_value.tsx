@@ -3,7 +3,7 @@ import DateStr from './date_str'
 
 export interface LabelValueProps {
     label?: React.ReactNode
-    value: React.ReactNode
+    value?: React.ReactNode
     required?: boolean
     prefix?: React.ReactNode
     suffix?: React.ReactNode
@@ -24,13 +24,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
 }: LabelValueProps): JSX.Element | null => {
     function convertStringToNumber(input: string): number | null {
         const parsedNumber = Number(input)
-
-        // Check if the parsed value is a valid number
-        if (!isNaN(parsedNumber)) {
-            return parsedNumber
-        } else {
-            return null
-        }
+        return isNaN(parsedNumber) ? null : parsedNumber
     }
 
     //Numbers are being stored as strings right now in DB, so we can try to fix them
@@ -41,27 +35,21 @@ const LabelValue: React.FC<LabelValueProps> = ({
         }
     }
 
-    //If type is "number" and decimalPlaces, round the value
-    if (type === 'number' && typeof value === 'number') {
-        //check that value is actually a number
-        //Need to do this because TS not currently configured for MDX files and there's a chance that
-        //someone could try to .toFixed("some string") and cause an error
-        if (
-            typeof value === 'number' &&
-            !isNaN(value) &&
-            typeof decimalPlaces === 'number' &&
-            !isNaN(decimalPlaces)
-        ) {
-            value = value.toFixed(decimalPlaces)
+    // If type is "number" and decimalPlaces, round the value
+    if (type === 'number') {
+        if (typeof value === 'number' && !isNaN(value)) {
+            if (typeof decimalPlaces === 'number' && !isNaN(decimalPlaces)) {
+                value = value.toFixed(decimalPlaces)
+            } else {
+                console.log(
+                    'Make sure that your decimalPlaces param is actually a number.',
+                )
+            }
         } else {
             console.log(
-                'Make sure that your value and decimalPlaces params are actually numbers.',
+                `You are trying to set the type of a non-number value to 'number'. Value is: ${value} and typeof value is: ${typeof value}`,
             )
         }
-    } else if (type === 'number' && typeof value !== 'number') {
-        console.log(
-            `You are trying to set the type of a non-number value to 'number'. Value is : ${value} and typeof value is: ${typeof value}`,
-        )
     }
 
     return required || value ? (

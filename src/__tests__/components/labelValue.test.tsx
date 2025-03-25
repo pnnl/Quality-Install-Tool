@@ -1,4 +1,4 @@
-// src/__tests__/labelValue.test.tsx
+// Command to run this test: yarn test -- src/__tests__/components/labelValue.test.tsx
 
 import { render, screen } from '@testing-library/react'
 import { StoreContext } from '../../providers/store_provider'
