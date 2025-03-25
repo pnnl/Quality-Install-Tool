@@ -22,18 +22,19 @@ const LabelValue: React.FC<LabelValueProps> = ({
     type = 'string',
     dateOptions,
 }: LabelValueProps): JSX.Element | null => {
+    function convertStringToNumber(input: string): number | null {
+        const parsedNumber = Number(input)
+
+        // Check if the parsed value is a valid number
+        if (!isNaN(parsedNumber)) {
+            return parsedNumber
+        } else {
+            return null
+        }
+    }
+
     //Numbers are being stored as strings right now in DB, so we can try to fix them
     if (type === 'number' && typeof value === 'string') {
-        function convertStringToNumber(input: string): number | null {
-            const parsedNumber = Number(input)
-
-            // Check if the parsed value is a valid number
-            if (!isNaN(parsedNumber)) {
-                return parsedNumber
-            } else {
-                return null
-            }
-        }
         const convertedValue = convertStringToNumber(value)
         if (convertedValue !== null) {
             value = convertedValue
