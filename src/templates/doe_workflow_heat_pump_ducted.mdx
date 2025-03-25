@@ -361,7 +361,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 
             ## Pre-Upgrade Tests
-            <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
+            <LabelValue label="This heat pump will" path="heat_pump_purpose"/>
 
             <Photo
                 id="existing_heating_appliance_photo"
@@ -378,7 +378,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             >
             Photo of existing heating appliance’s nameplate
             </Photo>
-            <p><strong>Cooling appliance exists: </strong>{props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}</p>
+            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}/> 
             <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
                 <Photo
                     id="existing_cooling_appliance_photo"
@@ -397,11 +397,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="existing_ductwork_photo" label="Ductwork – Photo" required>
                 Photo of existing ductwork condition
             </Photo>
-            {
-                props.data.comment_ductwork
-                ? <p><strong>Ductwork Comments:</strong> {props.data.comment_ductwork}</p>
-                : null
-            }
+            <LabelValue label="Ductwork Comments" value={props.data?.comment_ductwork}/>
 
             ## Static Pressure Test Results
             Total external static pressure measurement: This measurement is akin to taking the blood pressure of a person.
@@ -412,11 +408,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="preupgrade_static_pressure_test_photo" label="Pre-Upgrade Static Pressure Test – Photo" required>
                 Photo of the manometer readout or screenshot from digital instrument app
             </Photo>
-            {
-                props.data.comment_pre_upgrade_static_pressure_test
-                ? <p><strong>Pre-Upgrade Static Pressure Test Notes: </strong> {props.data.comment_pre_upgrade_static_pressure_test}</p>
-                : null
-            }
+            <LabelValue label="Pre-Upgrade Static Pressure Test Notes" value={props.data.comment_pre_upgrade_static_pressure_test}/>
 
             ## Airflow Test Results
             In order for a heat pump to efficiently and effectively deliver the conditioned air to the house,
@@ -428,13 +420,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" required>
                 Photo of the manometer CFM or screenshot of the instrument app or the manometer and fan curve chart/table.
             </Photo>
-            {
-                props.data.comment_pre_upgrade_air_flow_test
-                ? <p><strong>Pre-Upgrade Airflow Test Notes: </strong> {props.data.comment_pre_upgrade_air_flow_test}</p>
-                : null
-            }
+            <LabelValue label="Pre-Upgrade Airflow Test Notes" value={props.data.comment_pre_upgrade_air_flow_test}/>
 
-             ## Duck Leakage Test Results
+             ## Duct Leakage Test Results
              Leaky ducts mean the conditioned air doesn&apos;t make it to the rooms where the conditioned air is needed.
              The worse kind of duct leakage is leakage to outside because that means the air you paid to conditioned
              is leaking outside the house. The duct leakage test measures how leaky
@@ -442,7 +430,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
              In existing construction it is highly recommended that action be taken to reduce duct leakage if
              the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area.
 
-            <p><strong>Test method used: </strong> {props.data?.duct_leakage_test_method}</p>
+            <LabelValue label="Test method used" value={props.data?.duct_leakage_test_method}/>
             <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}>
                 <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
                     Photo of duct test setup showing ring size and how it is attached to the duct system
@@ -451,15 +439,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                     Photo of duct leakage test manometer, CFM at 25 Pa
                 </Photo>
 
-                {
-                    props.data.type_of_duct_leakage_radio
-                    ? <p><strong> Type Of Duct Leakage Test Performed: </strong> {props.data.type_of_duct_leakage_radio}</p>
-                    : null
-                }
+                <LabelValue label="Type Of Duct Leakage Test Performed" value={props.data.type_of_duct_leakage_radio}/>
 
-                <p><strong>CFM25 =</strong>{props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}</p>
-                <p><strong>Conditioned Floor Area (ft<sup>2</sup>) = </strong>{props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null} </p>
-                <p><strong>Duct CFM25 per 100 per ft<sup>2</sup> = </strong>{ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null } </p>
+                <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
+                <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>} 
+                    value={props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null}/>
+                <LabelValue label={<span>Duct CFM25 per 100 per ft<sup>2</sup></span>} 
+                    type={props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? "number" : "string"}
+                    decimalPlaces={2}
+                    value={ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100) : null }/>
             </ShowOrHide>
 
             <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}>
@@ -484,22 +472,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
             </Photo>
-            {
-                props.data?.outdoor_unit?.odu_mounting_style
-                ? <p><strong>ODU Mounting Style: </strong> {props.data.outdoor_unit.odu_mounting_style}</p>
-                : null
-            }
-            {
-                props.data.outdoor_unit?.odu_inches_above_ground
-                ? <p><strong>ODU Inches Above The Ground (elevated above the snow): </strong> {props.data.outdoor_unit.odu_inches_above_ground}</p>
-                : null
-            }
-            {
-                props.data.outdoor_unit?.snow_ice_protection
-                ? <p><strong>Overhead Snow & Ice Protection: </strong> {props.data.outdoor_unit.snow_ice_protection}</p>
-                : null
-            }
+            <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit.odu_mounting_style}/>
 
+            <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit.odu_inches_above_ground}/>
+
+            <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit.snow_ice_protection}/>
 
             {
                 props.metadata.attachments?.manual_j_file && (
@@ -510,12 +487,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             }
             <PDFRenderer id="manual_j_file" label="" />
 
-
-
-            { props.data.comment_manual_j
-                && (<p><strong>Manual J Notes or Comments: </strong> {props.data.comment_manual_j}</p>
-                )
-            }
+            <LabelValue label="Manual J Notes or Comments" value={props.data.comment_manual_j}/>
             ## Equipment Selection
             The selected heat pump&apos;s extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating
             and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home&apos;s heating and cooling needs. Please see comment below if decisions needed to be made regarding whether to size the heat pump to the existing duct capacity or the ducts were replaced to accommodate the heat pump&apos;s air flow requirements.
@@ -523,31 +495,17 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 The selected heat pump&apos;s extended heating performance table
             </Photo>
 
-            {
-                props.data.aux_heat_lockout_temperature
-                ? <p><strong>Aux Heat Lockout Above This Temperature (&deg;F): </strong> {props.data.aux_heat_lockout_temperature}</p>
-                : null
-            }
-            {
-                props.data.compresser_lockout_temperature
-                ? <p><strong>Compressor Lockout Below This Temperature (&deg;F): </strong> {props.data.compresser_lockout_temperature}</p>
-                : null
-            }
-            {
-                props.data.dual_fuel_switch_over_temperature
-                ? <p><strong>Dual Fuel Switch Over Temperature (&deg;F): </strong> {props.data.dual_fuel_switch_over_temperature}</p>
-                : null
-            }
+            <LabelValue label={<span>Aux Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
+
+            <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
+
+            <LabelValue label={<span>Dual Fuel Switch Over Temperature (&deg;F)</span>} value={props.data.dual_fuel_switch_over_temperature}/>
 
             <Photo id="mfg_extended_cooling_performance_table_photo" label="Mfr's cooling performance table – Photo" required>
                 The selected heat pump&apos;s extended cooling performance table
             </Photo>
 
-            {
-                props.data.comment_ductwork_concluding_summary
-                ? <p><strong>Pre-Installation Comments: </strong> {props.data.comment_ductwork_concluding_summary}</p>
-                : null
-            }
+            <LabelValue label="Pre-Installation Comments" value={props.data.comment_ductwork_concluding_summary}/>
 
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
@@ -571,11 +529,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="idu_nameplate_photo" label="Indoor Unit Nameplate – Photo" required />
             <Photo id="odu_circuit_breaker_photo" label="Outdoor Unit Circuit Breaker – Photo" required />
             <Photo id="idu_circuit_breaker_photo" label="Indoor Unit Circuit Breaker – Photo" required />
-            {
-                props.data.comment_circuit_breaker_notes
-                ? <p><strong>Circuit Breaker Notes: </strong> {props.data.comment_circuit_breaker_notes}</p>
-                : null
-            }
+            <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>
 
             ## Installation Tests
             <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
@@ -602,12 +556,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             | Feet of line set beyond factory charge = {props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge : null}
             | Ounce of refrigerant per foot of line set = {props.data?.refrigerant_calculator?.oz_per_ft_refrigerant? props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
-            {
-                props.data.comment_refrigerant_quantity_adjustments_or_weigh_in
-                ? <p><strong>Notes About Refrigerant Quantity Adjustments Or Weigh In: </strong> {props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}</p>
-                : null
-            }
-
+            <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In" 
+                        value={props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}/>
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
                 Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
             </Photo>
@@ -644,11 +594,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 Compare these values to the planned values in the equipment selection section of the report.
             </Photo>
 
-            {
-                props.data.comment_about_thermostat_settings
-                ? <p><strong>Post-Installation Notes About Thermostat Settings: </strong> {props.data.comment_about_thermostat_settings}</p>
-                : null
-            }
+            <LabelValue label="Post-Installation Notes About Thermostat Settings" 
+                        value={props.data.comment_about_thermostat_settings}/>
 
             {props.metadata?.attachments?.project_invoice_photo && (<>
                 <h2>Project Invoice</h2>

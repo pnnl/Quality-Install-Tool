@@ -251,11 +251,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       to meet air volume requirements.
     </Photo>
 
-    {
-      props.data.space_air_volume
-      ? <p><strong>Air Volume of the Space:</strong> {props.data.space_air_volume} ft<sup>3</sup></p>
-      : null
-    }
+    <LabelValue label="Air Volume of the Space" value={<span>{props.data.space_air_volume}<sup>3</sup></span>}/>
 
     <h2>Old Hot Water Heater</h2>
     <Photo id="old_nameplate_photo" label="Old Water Heater Nameplate – Photo">
