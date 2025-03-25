@@ -509,18 +509,6 @@ export async function getLastModifiedInstaller(
     db: PouchDB.Database<Base>,
 ): Promise<Installer | null> {
     await db.info()
-
-    // Create the index
-    await db.createIndex({
-        index: {
-            fields: [
-                'type',
-                'metadata_.last_modified_at',
-                'data_.installer.company_name',
-            ],
-        },
-    })
-
     const findRequest: PouchDB.Find.FindRequest<Base> = {
         selector: {
             type: { $eq: 'project' },
