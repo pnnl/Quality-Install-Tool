@@ -1,8 +1,12 @@
-//to run this test: npm test -- src/__tests__/labelValue.test.tsx
+// src/__tests__/labelValue.test.tsx
 
 import { render, screen } from '@testing-library/react'
-import { StoreContext } from '../components/store'
-import LabelValue, { LabelValueProps } from '../components/label_value'
+import { StoreContext } from '../../providers/store_provider'
+import LabelValue, { LabelValueProps } from '../../components/label_value'
+import heic2any from '../__mocks__/heic2any'
+
+// Mock `heic2any` module
+jest.mock('heic2any')
 
 // Mock StoreContext data
 const mockStoreContext = {
