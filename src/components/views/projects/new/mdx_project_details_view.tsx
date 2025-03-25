@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -64,11 +64,14 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
         fetchAndInitializeProject()
     }, [db])
 
-    const isProjectValid = project
-        ? !hasErrors(
-              project as PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta,
-          )
-        : false
+    const isProjectValid = useMemo(() => {
+        return project
+            ? !hasErrors(
+                  project as PouchDB.Core.Document<Project> &
+                      PouchDB.Core.GetMeta,
+              )
+            : false
+    }, [project])
 
     const handleClickCancel = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
