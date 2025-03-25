@@ -509,13 +509,31 @@ export async function getLastModifiedInstaller(
     db: PouchDB.Database<Base>,
 ): Promise<Installer | null> {
     await db.info()
+
+    // Create the index required to sort
+    await db.createIndex({
+        index: {
+            fields: [
+                'type',
+                'metadata_.last_modified_at',
+                'data_.installer.company_name',
+            ],
+        },
+    })
+
     const findRequest: PouchDB.Find.FindRequest<Base> = {
         selector: {
             type: { $eq: 'project' },
-            'metadata_.last_modified_at': { $ne: '' },
             'data_.installer.company_name': { $ne: '' },
+            $and: [
+                { 'metadata_.last_modified_at': { $ne: null } },
+                { 'metadata_.last_modified_at': { $ne: '' } },
+                { 'metadata_.last_modified_at': { $exists: true } },
+            ],
         },
         fields: ['data_.installer', 'metadata_.last_modified_at'],
+        sort: [{ 'metadata_.last_modified_at': 'desc' }],
+        limit: 1,
     }
 
     const findResponse: PouchDB.Find.FindResponse<any> =

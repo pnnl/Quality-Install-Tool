@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useMemo, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -11,9 +11,9 @@ import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details
 import { type Project } from '../../../../types/database.types'
 import { type Installer } from '../../../../types/installer.type'
 import {
+    getLastModifiedInstaller,
     newProject,
     putProject,
-    getLastModifiedInstaller,
 } from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
 
