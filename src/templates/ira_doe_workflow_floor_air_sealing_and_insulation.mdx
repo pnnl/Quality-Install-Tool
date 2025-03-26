@@ -169,7 +169,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
       <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3}</strong></p>
       <LabelValue 
-          labe="ACH50"
+          label="ACH50"
           decimalPlaces={1} 
           type={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string"} label="ACH50" 
           value={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3) : 'N/A'}/>
