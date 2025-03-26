@@ -33,7 +33,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
-                value = value
+                const computedValue = value
                     ? value
                     : get(
                           parent ? parent.data_ : doc ? doc.data_ : undefined,
@@ -43,7 +43,7 @@ const LabelValueWrapper: React.FC<LabelValueWrapperProps> = ({
                 return (
                     <LabelValue
                         label={label}
-                        value={value}
+                        value={computedValue}
                         required={required}
                         prefix={prefix}
                         suffix={suffix}
