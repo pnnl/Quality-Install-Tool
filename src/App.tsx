@@ -42,8 +42,13 @@ const router = createBrowserRouter(
             element: <InstallationsEditView />,
         },
     ],
-    { future: { v7_relativeSplatPath: true } },
+    {
+        future: {
+            v7_relativeSplatPath: true,
+        },
+    },
 )
+
 type AppProps = Record<string, never>
 
 const App: React.FC<AppProps> = () => {

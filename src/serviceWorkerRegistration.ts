@@ -35,6 +35,7 @@ export function register(config?: Config) {
             // serve assets; see https://github.com/facebook/create-react-app/issues/2374
             return
         }
+
         const handleLoad = () => {
             const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
             if (isLocalhost) {
