@@ -3,7 +3,11 @@ import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDB } from '../utilities/database_utils'
-import { saveProjectAndUploadToS3, isFormComplete } from './store'
+import {
+    saveProjectAndUploadToS3,
+    isFormComplete,
+    autoSaveToRDS,
+} from './store'
 
 interface SaveCancelButtonProps {
     id: string
@@ -38,10 +42,6 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     const [buttonLabel, setButtonLabel] = useState<String>('Save Project')
     const db = useDB()
 
-    const handleSaveButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-        saveProject()
-    }
-
     const handleCancelButtonClick = async (
         event: MouseEvent<HTMLButtonElement>,
     ) => {
@@ -53,48 +53,21 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
         deleteEmptyProject()
     }
 
-    const saveProject = async () => {
-        try {
-            const projectDoc: any = await db.get(id)
-
-            if (!projectDoc || !validateFormCompletion(projectDoc)) {
-                alert('Please complete all required fields before saving.')
-                return
-            }
-
-            await saveProjectAndUploadToS3(projectDoc)
-
-            updateValue('created')
-            navigate('/', { replace: true })
-        } catch (error) {
-            console.error('Error saving project:', error)
-        }
-    }
-
     const handleSaveClick = async () => {
         try {
             const projectDoc: any = await db.get(id)
 
-            console.log('Project document being saved:', projectDoc)
-            console.log('Data fields:', projectDoc.data_)
-            console.log('Metadata fields:', projectDoc.metadata_)
-
-            // First check if project name exists in metadata
             if (!projectDoc.metadata_ || !projectDoc.metadata_.doc_name) {
                 console.error('Project name missing in metadata')
                 alert('Please enter a project name before saving.')
                 return
             }
 
-            // Then check if form data is complete
             if (!projectDoc.data_ || !isFormComplete(projectDoc.data_)) {
-                console.error('Form data incomplete')
-                alert('Please complete all required form fields before saving.')
-                return
+                await autoSaveToRDS()
+            } else {
+                await saveProjectAndUploadToS3(projectDoc)
             }
-
-            // If both checks pass, save the project
-            await saveProjectAndUploadToS3(projectDoc)
             updateValue('created')
             navigate('/', { replace: true })
         } catch (error) {

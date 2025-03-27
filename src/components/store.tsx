@@ -469,78 +469,78 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         upsertDoc(pathStr, value)
     }
 
-    const autoSaveToRDS = async () => {
-        const prequalificationData = localStorage.getItem(
-            'formData_prequalification',
-        )
-        let processId = null
-        let userId = null
-        let processStepId = localStorage.getItem('process_step_id')
+    // const autoSaveToRDS = async () => {
+    //     const prequalificationData = localStorage.getItem(
+    //         'formData_prequalification',
+    //     )
+    //     let processId = null
+    //     let userId = null
+    //     let processStepId = localStorage.getItem('process_step_id')
 
-        if (prequalificationData) {
-            try {
-                const parsedData = JSON.parse(prequalificationData)
-                processId = parsedData.process_id || null
-                userId = parsedData.user?.user_id || null
-            } catch (error) {
-                console.error('Error parsing formData_prequalification:', error)
-            }
-        }
-        console.log('Auto-saving with:')
-        console.log('user_id:', userId)
-        console.log('process_step_id:', processStepId)
+    //     if (prequalificationData) {
+    //         try {
+    //             const parsedData = JSON.parse(prequalificationData)
+    //             processId = parsedData.process_id || null
+    //             userId = parsedData.user?.user_id || null
+    //         } catch (error) {
+    //             console.error('Error parsing formData_prequalification:', error)
+    //         }
+    //     }
+    //     console.log('Auto-saving with:')
+    //     console.log('user_id:', userId)
+    //     console.log('process_step_id:', processStepId)
 
-        const formData = {
-            user_id: userId,
-            process_step_id: processStepId,
-            form_data: window.docData || {},
-        }
+    //     const formData = {
+    //         user_id: userId,
+    //         process_step_id: processStepId,
+    //         form_data: window.docData || {},
+    //     }
 
-        try {
-            let response
-            const formId = localStorage.getItem('form_id')
+    //     try {
+    //         let response
+    //         const formId = localStorage.getItem('form_id')
 
-            if (formId) {
-                console.log('✏️ Updating existing form:', formId)
-                response = await fetch(
-                    `http://localhost:5000/api/quality-install/${formId}`,
-                    {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${getAuthToken()}`,
-                        },
-                        body: JSON.stringify(formData),
-                    },
-                )
-            } else {
-                console.log('🆕 Creating a new quality install form...')
-                response = await fetch(
-                    'http://localhost:5000/api/quality-install',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${getAuthToken()}`,
-                        },
-                        body: JSON.stringify(formData),
-                    },
-                )
-            }
+    //         if (formId) {
+    //             console.log('✏️ Updating existing form:', formId)
+    //             response = await fetch(
+    //                 `http://localhost:5000/api/quality-install/${formId}`,
+    //                 {
+    //                     method: 'PUT',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         Authorization: `Bearer ${getAuthToken()}`,
+    //                     },
+    //                     body: JSON.stringify(formData),
+    //                 },
+    //             )
+    //         } else {
+    //             console.log('🆕 Creating a new quality install form...')
+    //             response = await fetch(
+    //                 'http://localhost:5000/api/quality-install',
+    //                 {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                         Authorization: `Bearer ${getAuthToken()}`,
+    //                     },
+    //                     body: JSON.stringify(formData),
+    //                 },
+    //             )
+    //         }
 
-            const data = await response.json()
-            if (data.success) {
-                console.log('Auto-save successful:', data)
-                if (!formId) {
-                    localStorage.setItem('form_id', data.form_id)
-                }
-            } else {
-                console.error('Auto-Save Failed:', data)
-            }
-        } catch (error) {
-            console.error('Error auto-saving:', error)
-        }
-    }
+    //         const data = await response.json()
+    //         if (data.success) {
+    //             console.log('Auto-save successful:', data)
+    //             if (!formId) {
+    //                 localStorage.setItem('form_id', data.form_id)
+    //             }
+    //         } else {
+    //             console.error('Auto-Save Failed:', data)
+    //         }
+    //     } catch (error) {
+    //         console.error('Error auto-saving:', error)
+    //     }
+    // }
 
     /**
      * Deletes an attachment (file/photo blob) and its associated metadata from a document in the database.
@@ -903,4 +903,77 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
         }
     }
     return true
+}
+
+export const autoSaveToRDS = async () => {
+    const prequalificationData = localStorage.getItem(
+        'formData_prequalification',
+    )
+    let processId = null
+    let userId = null
+    let processStepId = localStorage.getItem('process_step_id')
+
+    if (prequalificationData) {
+        try {
+            const parsedData = JSON.parse(prequalificationData)
+            processId = parsedData.process_id || null
+            userId = parsedData.user?.user_id || null
+        } catch (error) {
+            console.error('Error parsing formData_prequalification:', error)
+        }
+    }
+    console.log('Auto-saving with:')
+    console.log('user_id:', userId)
+    console.log('process_step_id:', processStepId)
+
+    const formData = {
+        user_id: userId,
+        process_step_id: processStepId,
+        form_data: window.docData || {},
+    }
+
+    try {
+        let response
+        const formId = localStorage.getItem('form_id')
+
+        if (formId) {
+            console.log('✏️ Updating existing form:', formId)
+            response = await fetch(
+                `http://localhost:5000/api/quality-install/${formId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAuthToken()}`,
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+        } else {
+            console.log('🆕 Creating a new quality install form...')
+            response = await fetch(
+                'http://localhost:5000/api/quality-install',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAuthToken()}`,
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+        }
+
+        const data = await response.json()
+        if (data.success) {
+            console.log('Auto-save successful:', data)
+            if (!formId) {
+                localStorage.setItem('form_id', data.form_id)
+            }
+        } else {
+            console.error('Auto-Save Failed:', data)
+        }
+    } catch (error) {
+        console.error('Error auto-saving:', error)
+    }
 }
