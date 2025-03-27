@@ -201,11 +201,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                 console.error('Error parsing formData_prequalification:', error)
             }
         }
-
-        let processStepId = localStorage.getItem('process_step_id')
-
-        console.log('Initial values:', { processId, processStepId, userId })
-
+        let processStepId = localStorage.getItem('process_step_id') || ''
         if (!processStepId && processId) {
             console.log(`Fetching process_step_id for process: ${processId}`)
 
@@ -230,15 +226,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                                 'process_step_id',
                                 processStepId,
                             )
-                            console.log(
-                                'Stored process_step_id:',
-                                processStepId,
-                            )
-                        } else {
-                            console.warn(
-                                'No quality install step found for process:',
-                                processId,
-                            )
                         }
                     } else {
                         console.warn('No steps found for process:', processId)
@@ -248,17 +235,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
                     console.error('Error fetching process_step_id:', error),
                 )
         }
-
-        if (!userId || !processStepId) {
-            console.error('Missing user_id or process_step_id.')
-            return
-        }
-
-        console.log(
-            `Fetching quality install form for user: ${userId} and process_step: ${processStepId}`,
-        )
-
-        // Fetch the quality install form using user ID and process step ID
         fetch(
             `http://localhost:5000/api/quality-install?user_id=${userId}&process_step_id=${processStepId}`,
             {
@@ -269,16 +245,11 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             .then(response => response.json())
             .then(data => {
                 if (data.success && data.form) {
-                    console.log(
-                        'Found existing quality install form:',
-                        data.form.id,
-                    )
                     if (!doc.data_) doc.data_ = {}
                     doc.data_.form_id = data.form.id
                     localStorage.setItem('form_id', data.form.id)
                     window.docData = doc.data_
                 } else {
-                    console.warn('No existing form found. Creating new form.')
                     createQualityInstallForm(userId, processStepId)
                 }
             })
@@ -306,16 +277,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log(
-                        'Created new quality install form:',
-                        data.form_id,
-                    )
                     localStorage.setItem('form_id', data.form_id)
-                } else {
-                    console.error(
-                        'Error creating new quality install form:',
-                        data.error,
-                    )
                 }
             })
             .catch(error =>
@@ -468,79 +430,6 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         pathStr = 'metadata_.' + pathStr
         upsertDoc(pathStr, value)
     }
-
-    // const autoSaveToRDS = async () => {
-    //     const prequalificationData = localStorage.getItem(
-    //         'formData_prequalification',
-    //     )
-    //     let processId = null
-    //     let userId = null
-    //     let processStepId = localStorage.getItem('process_step_id')
-
-    //     if (prequalificationData) {
-    //         try {
-    //             const parsedData = JSON.parse(prequalificationData)
-    //             processId = parsedData.process_id || null
-    //             userId = parsedData.user?.user_id || null
-    //         } catch (error) {
-    //             console.error('Error parsing formData_prequalification:', error)
-    //         }
-    //     }
-    //     console.log('Auto-saving with:')
-    //     console.log('user_id:', userId)
-    //     console.log('process_step_id:', processStepId)
-
-    //     const formData = {
-    //         user_id: userId,
-    //         process_step_id: processStepId,
-    //         form_data: window.docData || {},
-    //     }
-
-    //     try {
-    //         let response
-    //         const formId = localStorage.getItem('form_id')
-
-    //         if (formId) {
-    //             console.log('✏️ Updating existing form:', formId)
-    //             response = await fetch(
-    //                 `http://localhost:5000/api/quality-install/${formId}`,
-    //                 {
-    //                     method: 'PUT',
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                         Authorization: `Bearer ${getAuthToken()}`,
-    //                     },
-    //                     body: JSON.stringify(formData),
-    //                 },
-    //             )
-    //         } else {
-    //             console.log('🆕 Creating a new quality install form...')
-    //             response = await fetch(
-    //                 'http://localhost:5000/api/quality-install',
-    //                 {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Content-Type': 'application/json',
-    //                         Authorization: `Bearer ${getAuthToken()}`,
-    //                     },
-    //                     body: JSON.stringify(formData),
-    //                 },
-    //             )
-    //         }
-
-    //         const data = await response.json()
-    //         if (data.success) {
-    //             console.log('Auto-save successful:', data)
-    //             if (!formId) {
-    //                 localStorage.setItem('form_id', data.form_id)
-    //             }
-    //         } else {
-    //             console.error('Auto-Save Failed:', data)
-    //         }
-    //     } catch (error) {
-    //         console.error('Error auto-saving:', error)
-    //     }
-    // }
 
     /**
      * Deletes an attachment (file/photo blob) and its associated metadata from a document in the database.
@@ -846,7 +735,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
 function storeNewQualityInstallSubmission(
     submissionName: string,
     formData: any,
-    applicationId: any, // need to update
+    applicationId: any,
     userId: string,
     processId: string,
     stepId: string,
@@ -884,12 +773,10 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
             !formData.installer[field] ||
             formData.installer[field].trim() === ''
         ) {
-            console.warn(`Missing required installer field: ${field}`)
             return false
         }
     }
     if (!formData.location) {
-        console.warn('Missing required location data')
         return false
     }
     const locationFields = ['street_address', 'city', 'state', 'zip_code']
@@ -898,7 +785,6 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
             !formData.location[field] ||
             formData.location[field].trim() === ''
         ) {
-            console.warn(`Missing required location field: ${field}`)
             return false
         }
     }
@@ -912,7 +798,6 @@ export const autoSaveToRDS = async () => {
     let processId = null
     let userId = null
     let processStepId = localStorage.getItem('process_step_id')
-
     if (prequalificationData) {
         try {
             const parsedData = JSON.parse(prequalificationData)
@@ -922,22 +807,15 @@ export const autoSaveToRDS = async () => {
             console.error('Error parsing formData_prequalification:', error)
         }
     }
-    console.log('Auto-saving with:')
-    console.log('user_id:', userId)
-    console.log('process_step_id:', processStepId)
-
     const formData = {
         user_id: userId,
         process_step_id: processStepId,
         form_data: window.docData || {},
     }
-
     try {
         let response
         const formId = localStorage.getItem('form_id')
-
         if (formId) {
-            console.log('✏️ Updating existing form:', formId)
             response = await fetch(
                 `http://localhost:5000/api/quality-install/${formId}`,
                 {
@@ -950,7 +828,6 @@ export const autoSaveToRDS = async () => {
                 },
             )
         } else {
-            console.log('🆕 Creating a new quality install form...')
             response = await fetch(
                 'http://localhost:5000/api/quality-install',
                 {
@@ -963,15 +840,11 @@ export const autoSaveToRDS = async () => {
                 },
             )
         }
-
         const data = await response.json()
         if (data.success) {
-            console.log('Auto-save successful:', data)
             if (!formId) {
                 localStorage.setItem('form_id', data.form_id)
             }
-        } else {
-            console.error('Auto-Save Failed:', data)
         }
     } catch (error) {
         console.error('Error auto-saving:', error)
