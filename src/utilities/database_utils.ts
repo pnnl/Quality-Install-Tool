@@ -8,7 +8,11 @@ import {
     type Base,
     type Installation,
     type Project,
+    type ProjectData,
+    type ProjectMetadata,
 } from '../types/database.types'
+import { type Installer } from '../types/installer.type'
+import { comparator } from './comparison_utils'
 
 //
 // BASE
@@ -276,9 +280,15 @@ export async function removeInstallation(
 export function newProject(
     docName: string,
     id: PouchDB.Core.DocumentId | undefined = undefined,
+    data: Partial<ProjectData> = {},
+    metadata: Partial<ProjectMetadata> = {},
 ): PouchDB.Core.PutDocument<Project> {
-    const createdAt: Date = new Date()
-    const lastModifiedAt: Date = createdAt
+    const createdAt: Date = metadata.created_at
+        ? new Date(metadata.created_at)
+        : new Date()
+    const lastModifiedAt: Date = metadata.last_modified_at
+        ? new Date(metadata.last_modified_at)
+        : createdAt
 
     const _id: PouchDB.Core.DocumentId = id ?? crypto.randomUUID()
     const _rev: PouchDB.Core.RevisionId | undefined = undefined
@@ -291,12 +301,20 @@ export function newProject(
 
         type: 'project',
         children: [],
-        data_: {},
+        data_: {
+            ...data,
+        },
         metadata_: {
             doc_name: docName,
             created_at: createdAt.toISOString(),
             last_modified_at: lastModifiedAt.toISOString(),
-            attachments: {},
+            attachments: metadata.attachments ?? {},
+            errors: metadata.errors ?? {
+                data_: {},
+                metadata_: {
+                    doc_name: [''],
+                },
+            },
         },
     }
 
@@ -486,4 +504,30 @@ export async function removeProject(
 
         return [response, []]
     }
+}
+
+export async function getLastModifiedInstaller(
+    db: PouchDB.Database<Base>,
+): Promise<Installer | null> {
+    const projects = await getProjects(db, {
+        attachments: false,
+        binary: true,
+    })
+    const sortByLastModifiedDesc = comparator<Base>('last_modified_at', 'desc')
+    const lastModifiedProject = projects.sort(sortByLastModifiedDesc)
+
+    if (lastModifiedProject.length > 0) {
+        const installer = lastModifiedProject[0].data_.installer
+        if (installer) {
+            return {
+                name: installer.name ?? '',
+                company_name: installer.company_name ?? '',
+                mailing_address: installer.mailing_address ?? '',
+                phone: installer.phone ?? '',
+                email: installer.email ?? '',
+            }
+        }
+    }
+
+    return null
 }
