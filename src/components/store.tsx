@@ -21,9 +21,7 @@ import {
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
 import {
-    initializeMockSession,
-    getAuthToken,
-    getUserId,
+    getAuthToken
 } from '../auth/keycloak'
 import jsPDF from 'jspdf'
 
