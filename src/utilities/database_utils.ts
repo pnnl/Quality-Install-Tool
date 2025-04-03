@@ -507,17 +507,42 @@ export async function removeProject(
 }
 
 export async function getLastModifiedInstaller(
-    db: PouchDB.Database<Base>,
+    db: PouchDB.Database<Project>,
 ): Promise<Installer | null> {
-    const projects = await getProjects(db, {
-        attachments: false,
-        binary: true,
-    })
-    const sortByLastModifiedDesc = comparator<Base>('last_modified_at', 'desc')
-    const lastModifiedProject = projects.sort(sortByLastModifiedDesc)
+    await db.info()
 
-    if (lastModifiedProject.length > 0) {
-        const installer = lastModifiedProject[0].data_.installer
+    // Create the index required to sort
+    await db.createIndex({
+        index: {
+            fields: [
+                'type',
+                'metadata_.last_modified_at',
+                'data_.installer.company_name',
+            ],
+        },
+    })
+
+    const findRequest: PouchDB.Find.FindRequest<Base> = {
+        selector: {
+            type: { $eq: 'project' },
+            'data_.installer.company_name': { $ne: '' },
+            $and: [
+                { 'metadata_.last_modified_at': { $ne: null } },
+                { 'metadata_.last_modified_at': { $ne: '' } },
+                { 'metadata_.last_modified_at': { $exists: true } },
+            ],
+        },
+        fields: ['data_.installer', 'metadata_.last_modified_at'],
+        sort: [{ 'metadata_.last_modified_at': 'desc' }],
+        limit: 1,
+    }
+
+    const findResponse: PouchDB.Find.FindResponse<Project> =
+        await db.find(findRequest)
+
+    if (findResponse.docs.length > 0) {
+        const installer = findResponse.docs[0]?.data_?.installer || null
+
         if (installer) {
             return {
                 name: installer.name ?? '',

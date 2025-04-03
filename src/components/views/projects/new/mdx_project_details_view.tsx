@@ -35,7 +35,9 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     email: '',
                 }
 
-                const mostRecentInstaller = await getLastModifiedInstaller(db)
+                const mostRecentInstaller = await getLastModifiedInstaller(
+                    db as PouchDB.Database<Project>,
+                )
                 if (mostRecentInstaller) {
                     installerDefaults = mostRecentInstaller
                 }
