@@ -56,13 +56,10 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
     const handleSaveClick = async () => {
         try {
             const projectDoc: any = await db.get(id)
-
             if (!projectDoc.metadata_ || !projectDoc.metadata_.doc_name) {
-                console.error('Project name missing in metadata')
                 alert('Please enter a project name before saving.')
                 return
             }
-
             if (!projectDoc.data_ || !isFormComplete(projectDoc.data_)) {
                 await autoSaveToRDS()
             } else {
@@ -73,18 +70,6 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
         } catch (error) {
             console.error('Error saving project:', error)
         }
-    }
-
-    const validateFormCompletion = (projectDoc: any) => {
-        return (
-            projectDoc.metadata_?.doc_name &&
-            projectDoc.metadata_?.installer?.name &&
-            projectDoc.metadata_?.installer?.company_name &&
-            projectDoc.metadata_?.location?.street_address &&
-            projectDoc.metadata_?.location?.city &&
-            projectDoc.metadata_?.location?.state &&
-            projectDoc.metadata_?.location?.zip_code
-        )
     }
 
     useEffect(() => {

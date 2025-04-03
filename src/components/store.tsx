@@ -186,22 +186,7 @@ export const StoreProvider: FC<StoreProviderProps> = ({
     }
 
     useEffect(() => {
-        const prequalificationData = localStorage.getItem(
-            'formData_prequalification',
-        )
-        let processId = null
-        let userId = null
-
-        if (prequalificationData) {
-            try {
-                const parsedData = JSON.parse(prequalificationData)
-                processId = parsedData.process_id || null
-                userId = parsedData.user?.user_id || null
-            } catch (error) {
-                console.error('Error parsing formData_prequalification:', error)
-            }
-        }
-        let processStepId = localStorage.getItem('process_step_id') || ''
+        const { processId, userId, processStepId } = extractLocalStorageData()
         if (!processStepId && processId) {
             console.log(`Fetching process_step_id for process: ${processId}`)
 
@@ -674,28 +659,7 @@ export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
         } else {
             console.error('Failed to update DB with S3 file URL:', updateData)
         }
-        const prequalificationData = localStorage.getItem(
-            'formData_prequalification',
-        )
-        let processId = null
-        let userId = null
-        let processStepId = localStorage.getItem('process_step_id')
-        if (prequalificationData) {
-            try {
-                const parsedData = JSON.parse(prequalificationData)
-                processId = parsedData.process_id || null
-                userId = parsedData.user_id || null
-            } catch (error) {
-                console.error('Error parsing formData_prequalification:', error)
-            }
-        }
-        if (!processId || !processStepId) {
-            console.warn('No processId or processStepId found in localStorage')
-            return
-        }
-        console.log(
-            `Updating step condition for process ${processId}, step ${processStepId}`,
-        )
+        const { processId, userId, processStepId } = extractLocalStorageData()
         const conditionResponse = await fetch(
             `http://localhost:5000/api/process/${processId}/step/${processStepId}/condition`,
             {
@@ -754,6 +718,30 @@ function storeNewQualityInstallSubmission(
     localStorage.setItem(localStorageKey, JSON.stringify(newObject))
 }
 
+function extractLocalStorageData() {
+    const prequalificationData = localStorage.getItem(
+        'formData_prequalification',
+    )
+    let processId = null
+    let userId = null
+
+    if (prequalificationData) {
+        try {
+            const parsedData = JSON.parse(prequalificationData)
+            processId = parsedData.process_id || null
+            userId = parsedData.user?.user_id || null
+        } catch (error) {
+            console.error('Error parsing formData_prequalification:', error)
+        }
+    }
+    let processStepId = localStorage.getItem('process_step_id') || ''
+    return {
+        "processId"    : processId,
+        "userId"       : userId,
+        "processStepId": processStepId
+    }
+}
+
 export const isFormComplete = (formData: any, metadata?: any): boolean => {
     if (!formData) return false
     if (!formData.installer) {
@@ -792,21 +780,7 @@ export const isFormComplete = (formData: any, metadata?: any): boolean => {
 }
 
 export const autoSaveToRDS = async () => {
-    const prequalificationData = localStorage.getItem(
-        'formData_prequalification',
-    )
-    let processId = null
-    let userId = null
-    let processStepId = localStorage.getItem('process_step_id')
-    if (prequalificationData) {
-        try {
-            const parsedData = JSON.parse(prequalificationData)
-            processId = parsedData.process_id || null
-            userId = parsedData.user?.user_id || null
-        } catch (error) {
-            console.error('Error parsing formData_prequalification:', error)
-        }
-    }
+    const { processId, userId, processStepId } = extractLocalStorageData()
     const formData = {
         user_id: userId,
         process_step_id: processStepId,
