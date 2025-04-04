@@ -12,7 +12,6 @@ import {
     type ProjectMetadata,
 } from '../types/database.types'
 import { type Installer } from '../types/installer.type'
-import { comparator } from './comparison_utils'
 
 //
 // BASE
