@@ -10,6 +10,7 @@ import {
     shouldMigrateCombustionSafetyTestsProject,
     transformCombustionSafetyTestsProject,
 } from '../migrations/0_doe_combustion_appliance_safety_tests'
+import { transformPhotoAttachmentIdSuffixes } from '../migrations/1_photo_attachment_id_suffixes'
 import {
     type Base,
     type Installation,
@@ -265,6 +266,13 @@ export async function importJSONDocument(
                 })
             }
         }
+    })
+
+    docs = docs.map(doc => {
+        return transformPhotoAttachmentIdSuffixes<Base>(
+            doc as PouchDB.Core.ExistingDocument<Base> &
+                PouchDB.Core.AllDocsMeta,
+        )
     })
 
     const responses = await db.bulkDocs<Base>(docs)
