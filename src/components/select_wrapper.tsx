@@ -1,13 +1,12 @@
 import { get } from 'lodash'
-import React, { FC } from 'react'
+import React from 'react'
 
-import { StoreContext } from './store'
 import Select from './select'
-import { pathToId } from '../utilities/paths_utils'
+import { StoreContext } from '../providers/store_provider'
 
 interface SelectWrapperProps {
-    label: string
-    options: string[]
+    label: React.ReactNode
+    options: string[] | [string, string][]
     path: string
 }
 
@@ -20,20 +19,22 @@ interface SelectWrapperProps {
  * @param path The path (consistent with the path provided to the lodash
  * get() method) to the datum within the data store for the Select component
  */
-const SelectWrapper: FC<SelectWrapperProps> = ({ label, options, path }) => {
-    // Generate an id for the input
-
-    const id = pathToId(path, 'input')
+const SelectWrapper: React.FC<SelectWrapperProps> = ({
+    label,
+    options,
+    path,
+}) => {
     return (
         <StoreContext.Consumer>
-            {({ data, upsertData }) => {
+            {({ doc, upsertData }) => {
                 return (
                     <Select
-                        id={id}
                         label={label}
                         options={options}
-                        updateValue={(value: any) => upsertData(path, value)}
-                        value={get(data, path)}
+                        value={doc && get(doc.data_, path)}
+                        onChange={async value =>
+                            await upsertData(path, value, [])
+                        }
                     />
                 )
             }}

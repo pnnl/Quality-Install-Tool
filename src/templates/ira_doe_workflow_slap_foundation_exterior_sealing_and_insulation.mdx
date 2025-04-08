@@ -1,3 +1,7 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre-installation" title="Pre-Installation">
     <Collapsible header="Insulating an existing slab foundation from the exterior">
@@ -5,12 +9,12 @@
         This workflow covers the scenario of insulating an existing slab foundation from the exterior.
       </Figure>
     </Collapsible>
-    
-    ## Existing Conditions
-    
-    <CheckBox label="What is the foundation type?" path="slab_foundation_type" options={["Slab"]} value="Slab" hidden />
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
+    ## Existing Conditions
+
+    <Checkbox label="What is the foundation type?" path="slab_foundation_type" options={["Slab"]} value="Slab" hidden />
+
+    <Checkbox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="air_leakage_rate" />
 
@@ -24,7 +28,7 @@
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
-    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation – Photo">
         Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
     </PhotoInput>
     </ShowOrHide>
@@ -60,7 +64,7 @@
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
   </Tab>
-  
+
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
@@ -86,7 +90,7 @@
        * In regions with medium or high termite risk the protective details should meet best practices or local jurisdiction requirements for termite risk mitigation.
     </PhotoInput>
 
-    <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " >
+    <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo" >
       Photo showing the backfill and gutter downspouts reinstalled
     </PhotoInput>
 
@@ -95,10 +99,10 @@
       * Take this photo prior to the reinstallation of baseboard moulding.
     </PhotoInput>
 
-  </Tab>  
+  </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
-  
-  ## Final Conditions
+
+## Final Conditions
 
 <Select
     label="What percent of the foundation perimeter was insulated?"
@@ -119,26 +123,47 @@
     path="postinstall_foundation_r_value"
 />
 
-  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
-  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
-    <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
-    <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-        Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+<Radio
+    label="What is the post air sealing and insulation air leakage rate?"
+    options={['Not Measured', 'CFM at 50Pa']}
+    path="postinstall_foundation_air_leakage_level"
+/>
+<ShowOrHide
+    visible={
+        props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'
+    }
+>
+    <NumberInput
+        label="CFM at 50Pa"
+        min={0}
+        path="postinstall_foundation_air_leakage_cfm50"
+    />
+    <PhotoInput
+        id="postinstall_cfm50_photo"
+        label="Final blower door manometer showing the CFM50 value – Photo"
+    >
+        Photo of the manometer showing CFM50 of air leakage after air sealing
+        and insulation work was performed
     </PhotoInput>
-  </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
-  
-  <CombustionSafetyChecksLink {...props} />
-  
-  ## Ventilation
-  <Collapsible header="Post-retrofit mechanical ventialtion calculation">
+</ShowOrHide>
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_combustion_safety_to_homeowner"
+/>
+
+<CombustionSafetyChecksLink {...props} />
+
+## Ventilation
+
+  <Collapsible header="Post-retrofit mechanical ventilation calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
-  ## Project Invoice 
+  ## Project Invoice
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
       Take a photo of the project invoice if your program requires it.
   </PhotoInput>
@@ -166,7 +191,7 @@
       </Photo>
       <Photo
         id="conditioned_volume_photo"
-        label="Conditioned floor area and air volume calculation– Photo"
+        label="Conditioned floor area and air volume calculation – Photo"
         required>
         Photo of the math used to determine the conditioned floor area and
         volume, label the rooms/sections and the corresponding length, width,
@@ -195,7 +220,7 @@
        Photo showing the insulation and protective details prior to backfilling
     </Photo>
 
-    <Photo id="final_exterior_condition_photo" label="Final Exterior Condition – Photo " required>
+    <Photo id="final_exterior_condition_photo" label="Final Exterior Condition – Photo" required>
       Photo showing the backfill and gutter downspouts reinstalled
     </Photo>
 
@@ -221,7 +246,35 @@
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>

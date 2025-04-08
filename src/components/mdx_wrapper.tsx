@@ -1,116 +1,114 @@
-import React, { FC, Suspense } from 'react'
-import Button from 'react-bootstrap/Button'
-import { StoreContext } from './store'
-import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
-import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
+import { MDXProvider } from '@mdx-js/react'
+import { MDXProps } from 'mdx/types'
+import PouchDB from 'pouchdb'
+import React, { Suspense } from 'react'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 
-// Lazily initializes the components, rendering them only when requested.
-// This reduces the bundle size when the app is loaded, improving initial load time
-const Tab = React.lazy(() => import('react-bootstrap/Tab'))
-const Tabs = React.lazy(() => import('react-bootstrap/Tabs'))
-const Collapsible = React.lazy(() => import('./collapsible'))
-const DateInputWrapper = React.lazy(() => import('./date_input_wrapper'))
-const DateStr = React.lazy(() => import('./date_str'))
-const FigureWrapper = React.lazy(() => import('./figure_wrapper'))
-const NumberInputWrapper = React.lazy(() => import('./number_input_wrapper'))
-const PhotoWrapper = React.lazy(() => import('./photo_wrapper'))
-const PhotoInputWrapper = React.lazy(() => import('./photo_input_wrapper'))
-const PrintSectionWrapper = React.lazy(() => import('./print_section wrapper'))
-const SelectWrapper = React.lazy(() => import('./select_wrapper'))
-const StringInputWrapper = React.lazy(() => import('./string_input_wrapper'))
-const TableWrapper = React.lazy(() => import('./table_wrapper'))
-const TextInputWrapper = React.lazy(() => import('./text_input_wrapper'))
-const USStateSelectWrapper = React.lazy(
-    () => import('./us_state_select_wrapper'),
-)
-const ClimateZoneSelectWrapper = React.lazy(
-    () => import('./climate_zone_select_wrapper'),
-)
-const RadioWrapper = React.lazy(() => import('./radio_wrapper'))
-const PageBreak = React.lazy(() => import('./page_break'))
-const FileInputWrapper = React.lazy(() => import('./file_input_wrapper'))
-const PDFRendererWrapper = React.lazy(() => import('./pdf_renderer_wrapper'))
-const ShowOrHide = React.lazy(() => import('./show_or_hide'))
-const CheckBoxWrapper = React.lazy(() => import('./checkbox_wrapper'))
-const DocNameInputWrapper = React.lazy(() => import('./doc_name_input_wrapper'))
-const SaveCancelButtonWrapper = React.lazy(
-    () => import('./save_cancel_button_wrapper'),
-)
-const RepeatableInputWrapper = React.lazy(
-    () => import('./repeatable_input_wrapper'),
-)
-const RepeatableWrapper = React.lazy(() => import('./repeatable_wrapper'))
-const CombustionSafetyChecksLink = React.lazy(
-    () => import('../templates/reusable/combustion_safety_checks_input.mdx'),
-)
-const CombustionSafetyChecksReport = React.lazy(
-    () => import('../templates/reusable/combustion_safety_checks_report.mdx'),
-)
-const LabelValueWrapper = React.lazy(() => import('./label_value_wrapper'))
+import CheckboxWrapper from './checkbox_wrapper'
+import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
+import Collapsible from './collapsible'
+import DateInputWrapper from './date_input_wrapper'
+import DateStr from './date_str'
+import DateTimeStr from './date_time_str'
+import FigureWrapper from './figure_wrapper'
+import FileInputWrapper from './file_input_wrapper'
+import GpsCoordStr from './gps_coord_str'
+import InstallationSelectWrapper from './installation_select_wrapper'
+import LabelValueWrapper from './label_value_wrapper'
+import LocationStr from './location_str'
+import NumberInputWrapper from './number_input_wrapper'
+import PDFRendererWrapper from './pdf_renderer_wrapper'
+import PageBreak from './page_break'
+import PhotoInputWrapper from './photo_input_wrapper'
+import PhotoWrapper from './photo_wrapper'
+import PrintSectionWrapper from './print_section wrapper'
+import RadioWrapper from './radio_wrapper'
+import RepeatableInputWrapper from './repeatable_input_wrapper'
+import RepeatableWrapper from './repeatable_wrapper'
+import SelectWrapper from './select_wrapper'
+import ShowOrHideWrapper from './show_or_hide_wrapper'
+import StringInputWrapper from './string_input_wrapper'
+import TableWrapper from './table_wrapper'
+import TextInputWrapper from './text_input_wrapper'
+import USStateSelectWrapper from './us_state_select_wrapper'
+import InstallationProvider, {
+    InstallationContext,
+} from '../providers/installation_provider'
+import InstallationsProvider, {
+    InstallationsContext,
+} from '../providers/installations_provider'
+import ProjectProvider, { ProjectContext } from '../providers/project_provider'
+import ProjectsProvider, {
+    ProjectsContext,
+} from '../providers/projects_provider'
+import StoreProvider, { StoreContext } from '../providers/store_provider'
+import { type TemplateProps } from '../templates'
+import { type Project } from '../types/database.types'
 
 const components = {
-    Collapsible,
+    Button,
+    Checkbox: CheckboxWrapper,
     ClimateZoneSelect: ClimateZoneSelectWrapper,
-    CheckBox: CheckBoxWrapper,
-    Button: Button,
+    Collapsible,
     DateInput: DateInputWrapper,
+    DateStr,
+    DateTimeStr,
     Figure: FigureWrapper,
+    FileInput: FileInputWrapper,
+    GpsCoordStr,
+    InstallationConsumer: InstallationContext.Consumer,
+    InstallationProvider,
+    InstallationSelect: InstallationSelectWrapper,
+    InstallationsConsumer: InstallationsContext.Consumer,
+    InstallationsProvider,
+    LabelValue: LabelValueWrapper,
+    LocationStr,
     NumberInput: NumberInputWrapper,
+    PDFRenderer: PDFRendererWrapper,
+    PageBreak,
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
     PrintSection: PrintSectionWrapper,
+    ProjectConsumer: ProjectContext.Consumer,
+    ProjectProvider,
+    ProjectsConsumer: ProjectsContext.Consumer,
+    ProjectsProvider,
     Radio: RadioWrapper,
+    Repeatable: RepeatableWrapper,
+    RepeatableInput: RepeatableInputWrapper,
     Select: SelectWrapper,
+    ShowOrHide: ShowOrHideWrapper,
+    StoreProvider: StoreProvider,
     StringInput: StringInputWrapper,
-    table: TableWrapper,
+    Tab,
+    Table: TableWrapper,
+    Tabs,
     TextInput: TextInputWrapper,
     USStateSelect: USStateSelectWrapper,
-    DateStr: DateStr,
-    Tab: Tab,
-    Tabs: Tabs,
-    PageBreak: PageBreak,
-    ProjectInfoInputs: ProjectInfoInputs,
-    ProjectInfoReport: ProjectInfoReport,
-    FileInput: FileInputWrapper,
-    PDFRenderer: PDFRendererWrapper,
-    ShowOrHide: ShowOrHide,
-    CombustionSafetyChecksLink: CombustionSafetyChecksLink,
-    CombustionSafetyChecksReport: CombustionSafetyChecksReport,
-    DocNameInput: DocNameInputWrapper,
-    SaveCancelButton: SaveCancelButtonWrapper,
-    RepeatableInput: RepeatableInputWrapper,
-    Repeatable: RepeatableWrapper,
-    LabelValue: LabelValueWrapper,
 }
 
 interface MdxWrapperProps {
-    Component: React.ComponentType<any>
-    Project?: any
+    Component: React.FC<MDXProps & TemplateProps>
+    project?: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta
 }
 
-/**
- * A component that wraps an MDX component instance in order to tie it to the data store
- * and place it inside a bootstrap container
- *
- * @param Component An MDX component instance
- */
-const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
+const MdxWrapper: React.FC<MdxWrapperProps> = ({ Component, project }) => {
     return (
         <StoreContext.Consumer>
-            {({ metadata, data }) => {
+            {({ doc }) => {
                 return (
                     <div className="container" id="mdx-container">
-                        {/* metadata and data will be undefined for the very first render */}
-                        {metadata && data ? (
+                        {doc && (
                             <Suspense fallback={<div>Loading...</div>}>
-                                <Component
-                                    components={components}
-                                    metadata={metadata}
-                                    data={data}
-                                    project={Project}
-                                />
+                                <MDXProvider components={components}>
+                                    <Component
+                                        project={project}
+                                        data={doc.data_}
+                                        metadata={doc.metadata_}
+                                    />
+                                </MDXProvider>
                             </Suspense>
-                        ) : null}
+                        )}
                     </div>
                 )
             }}

@@ -1,21 +1,25 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre-installation" title="Pre-Installation">
     ## Existing Conditions
     <Collapsible header="Existing Conditions">
-    Prior to air sealing and insulating a foundation wall, look for signs of water damage, pest damage, missing or 
-    inadequate lateral/shear bracing, missing or inadequate hold downs, and improper utility penetrations through 
-    the foundation wall. Look for mold. Look for appliances that are venting into the crawlspace/basement and not 
-    to outside. If these problems are found, please remediate them prior to air sealing and insulation. Check if 
-    the home is in a location where high levels of radon is likely, if so, a radon test should be done prior to 
-    air sealing and insulation work. Check the gutters and grade slope around the house and remediate issues 
-    that would result in water flowing back towards the house. Lastly check the foundation floor. If it is a 
-    slab look for significant cracks, if the floor is a vapor barrier look for any significant damage that 
-    would warrant repair or replacement. 
+    Prior to air sealing and insulating a foundation wall, look for signs of water damage, pest damage, missing or
+    inadequate lateral/shear bracing, missing or inadequate hold downs, and improper utility penetrations through
+    the foundation wall. Look for mold. Look for appliances that are venting into the crawlspace/basement and not
+    to outside. If these problems are found, please remediate them prior to air sealing and insulation. Check if
+    the home is in a location where high levels of radon is likely, if so, a radon test should be done prior to
+    air sealing and insulation work. Check the gutters and grade slope around the house and remediate issues
+    that would result in water flowing back towards the house. Lastly check the foundation floor. If it is a
+    slab look for significant cracks, if the floor is a vapor barrier look for any significant damage that
+    would warrant repair or replacement.
     </Collapsible>
 
     <Select label="What is the foundation type?" options={['Conditioned crawlspace', 'Unconditioned crawlspace to be encapsulated', 'Conditioned basement']} path="wall_airsealing_foundation_type" />
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="wall_airsealing_location" hidden />
+    <Checkbox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors','Floor/Foundation']} default_value={['Walls/Windows/Doors','Floor/Foundation']} path="wall_airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
 
@@ -30,7 +34,7 @@
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
-    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation – Photo">
         Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
     </PhotoInput>
     </ShowOrHide>
@@ -48,7 +52,7 @@
     <p>Remember to check the indoor radon levels and the condition of the radon mitigation system.</p>
     </ShowOrHide>
 
-    <CheckBox label="What is the material of the foundation wall?" options={['Wood','Concrete/CMU']} path="wall_air_sealing_material" />
+    <Checkbox label="What is the material of the foundation wall?" options={['Wood','Concrete/CMU']} path="wall_air_sealing_material" />
 
     ## General Safety
     <Collapsible header="General Safety">
@@ -79,7 +83,7 @@
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
   </Tab>
-  
+
   <Tab eventKey="installation" title="Installation">
 
     <DateInput label="Installation Date" path="install_date" />
@@ -102,7 +106,7 @@
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </PhotoInput>
 
-    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo " >
+    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo" >
       Crawlspace vents blocked and sealed with spray foam
     </PhotoInput>
 
@@ -121,10 +125,10 @@
       * If the exterior dampproofing or waterproofing layer needs repair, installing the foundation on the exterior can provide long-term protection of the dampproofing or waterproofing layer.
     </PhotoInput>
 
-  </Tab>  
+  </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
-  
-  ## Final Conditions
+
+## Final Conditions
 
 <Select
     label="What percent of the foundation perimeter was insulated?"
@@ -132,27 +136,59 @@
     path="postinstall_foundation_perimeter_percent"
 />
 
-  <Select label="What R-value was added to the foundation perimeter?" options={["Less than R-10", "R-10","R-13","R-19","R-30","more than R-30"]} path="postinstall_foundation_r_value" />
-  <Radio label="What is the post air sealing and insulation air leakage rate?" options={['Not Measured','CFM at 50Pa']} path="postinstall_foundation_air_leakage_level" />  
-  <ShowOrHide visible={props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'}> 
-  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_foundation_air_leakage_cfm50"  />
-  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-  </PhotoInput>
-  </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
-  
-  <CombustionSafetyChecksLink {...props} />
-  
-  ## Ventilation
+<Select
+    label="What R-value was added to the foundation perimeter?"
+    options={[
+        'Less than R-10',
+        'R-10',
+        'R-13',
+        'R-19',
+        'R-30',
+        'More than R-30',
+    ]}
+    path="postinstall_foundation_r_value"
+/>
+<Radio
+    label="What is the post air sealing and insulation air leakage rate?"
+    options={['Not Measured', 'CFM at 50Pa']}
+    path="postinstall_foundation_air_leakage_level"
+/>
+<ShowOrHide
+    visible={
+        props.data?.postinstall_foundation_air_leakage_level === 'CFM at 50Pa'
+    }
+>
+    <NumberInput
+        label="CFM at 50Pa"
+        min={0}
+        path="postinstall_foundation_air_leakage_cfm50"
+    />
+    <PhotoInput
+        id="postinstall_cfm50_photo"
+        label="Final blower door manometer showing the CFM50 value – Photo"
+    >
+        Photo of the manometer showing CFM50 of air leakage after air sealing
+        and insulation work was performed
+    </PhotoInput>
+</ShowOrHide>
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_combustion_safety_to_homeowner"
+/>
+
+<CombustionSafetyChecksLink {...props} />
+
+## Ventilation
+
   <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
-  ## Project Invoice 
+  ## Project Invoice
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
       Take a photo of the project invoice if your program requires it.
   </PhotoInput>
@@ -183,7 +219,7 @@
         </Photo>
         <Photo
           id="conditioned_volume_photo"
-          label="Conditioned floor area and air volume calculation– Photo"
+          label="Conditioned floor area and air volume calculation – Photo"
           required>
           Photo of the math used to determine the conditioned floor area and
           volume, label the rooms/sections and the corresponding length, width,
@@ -218,7 +254,7 @@
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </Photo>
 
-    <Photo id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo " required>
+    <Photo id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo" required>
       Photo of Crawlspace vents blocked and sealed with spray foam
     </Photo>
 
@@ -249,7 +285,35 @@
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>

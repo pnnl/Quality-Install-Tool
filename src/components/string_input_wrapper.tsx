@@ -1,9 +1,9 @@
 import { get } from 'lodash'
-import React, { FC } from 'react'
+import React, { useMemo } from 'react'
 
-import { StoreContext } from './store'
 import StringInput from './string_input'
-import { pathToId } from '../utilities/paths_utils'
+import { StoreContext } from '../providers/store_provider'
+import { type Validator, validate } from '../utilities/validation_utils'
 
 interface StringInputWrapperProps {
     label: string
@@ -14,18 +14,7 @@ interface StringInputWrapperProps {
     hint: string
 }
 
-/**
- * A component that wraps a StringInput component in order to tie it to the data store
- *
- * @param label The label of the StringInput component
- * @param path The path (consistent with the path provided to the lodash
- * get() method) to the datum within the data store for the StringInput component
- * @param min The minimum allowed value for the input field, defult to 0.
- * @param max The maximum allowed value for the input field, defult to 1024.
- * @param regexp The regular expression pattern to validate the input string, defult to take anything.
- * @param hint Displays hint text for the StringInput component.
- */
-const StringInputWrapper: FC<StringInputWrapperProps> = ({
+const StringInputWrapper: React.FC<StringInputWrapperProps> = ({
     label,
     path,
     min = 0,
@@ -33,22 +22,55 @@ const StringInputWrapper: FC<StringInputWrapperProps> = ({
     regexp = /.*/,
     hint,
 }) => {
-    // Generate an id for the input
-    const id = pathToId(path, 'input')
+    const valueValidators = useMemo<Validator<string>[]>(() => {
+        return [
+            input => {
+                if (input.length < min) {
+                    return `Input must be at least ${min} character${min === 1 ? '' : 's'} long.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (input.length > max) {
+                    return `Input must be at most ${max} character${max === 1 ? '' : 's'} long.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (regexp.test(input)) {
+                    return undefined
+                } else {
+                    return 'Input must match the pattern.'
+                }
+            },
+        ]
+    }, [min, max, regexp])
 
     return (
         <StoreContext.Consumer>
-            {({ data, upsertData }) => {
+            {({ doc, upsertData }) => {
                 return (
                     <StringInput
-                        id={id}
                         label={label}
-                        updateValue={(value: any) => upsertData(path, value)}
-                        value={get(data, path)}
-                        min={min}
-                        max={max}
-                        regexp={regexp}
+                        value={(doc && get(doc.data_, path)) ?? ''}
+                        errorMessages={
+                            (doc &&
+                                (get(
+                                    doc.metadata_.errors?.data_ ?? {},
+                                    path,
+                                ) as string[])) ??
+                            []
+                        }
                         hint={hint}
+                        onChange={async value =>
+                            await upsertData(
+                                path,
+                                value,
+                                validate(value, valueValidators),
+                            )
+                        }
                     />
                 )
             }}

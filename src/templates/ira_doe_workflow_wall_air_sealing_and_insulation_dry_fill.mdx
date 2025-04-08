@@ -1,22 +1,26 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre-installation" title="Pre-Installation">
     ## Existing Conditions
     <Collapsible header="Existing Conditions">
-    The application of air permeable insulation without first air sealing is not an acceptable practice. 
-    E.g. just blowing in insulation into the walls without first blocking off and air sealing open top 
-    plates and bottom plate. Best practice requires air sealing efforts to precede insulation work 
-    unless the insulation is spray foam which functions both as an air sealing product and insulation. 
-    The air sealing and insulation don’t have to be done by the same contractor. Prior to air sealing 
-    and insulating the walls check for signs of water intrusion, mold, pests, unsafe electrical wiring, 
-    polybutylene pipe, and exterior wall cavities used as a duct. Make necessary repairs prior to or at 
-    the same time as air sealing and insulating the walls. Inspect the windows and doors, if they are due 
-    for replacement, discuss with the customer the benefits of upgrading the windows and/or doors and then 
-    doing the wall air sealing and insulation. It is strongly recommended to discuss with the customer whether, 
-    electrical or HVAC upgrades, or remodeling work are in the near-term plans as these upgrades could damage 
-    the wall air sealing and insulation. 
+    The application of air permeable insulation without first air sealing is not an acceptable practice.
+    E.g. just blowing in insulation into the walls without first blocking off and air sealing open top
+    plates and bottom plate. Best practice requires air sealing efforts to precede insulation work
+    unless the insulation is spray foam which functions both as an air sealing product and insulation.
+    The air sealing and insulation don’t have to be done by the same contractor. Prior to air sealing
+    and insulating the walls check for signs of water intrusion, mold, pests, unsafe electrical wiring,
+    polybutylene pipe, and exterior wall cavities used as a duct. Make necessary repairs prior to or at
+    the same time as air sealing and insulating the walls. Inspect the windows and doors, if they are due
+    for replacement, discuss with the customer the benefits of upgrading the windows and/or doors and then
+    doing the wall air sealing and insulation. It is strongly recommended to discuss with the customer whether,
+    electrical or HVAC upgrades, or remodeling work are in the near-term plans as these upgrades could damage
+    the wall air sealing and insulation.
     </Collapsible>
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" hidden />
+    <Checkbox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} value={['Walls/Windows/Doors']} default_value={['Walls/Windows/Doors']} path="wall_airsealing_location" hidden />
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
 
@@ -30,7 +34,7 @@
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
-    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation– Photo">
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation – Photo">
         Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
     </PhotoInput>
     </ShowOrHide>
@@ -64,7 +68,7 @@
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
   </Tab>
-  
+
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
@@ -93,7 +97,7 @@
        against the rim/band joist cavity.
     </PhotoInput>
 
-    <PhotoInput id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo " >
+    <PhotoInput id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo" >
       * Use a borescope camera to see if there is an interior air barrier for tub/shower installed against
           an exterior wall. Take a picture of the camera’s screen. If there is an air barrier, good.
       * If not, when drilling and filling the walls with insulation, the tub/shower wall becomes the wall
@@ -131,7 +135,7 @@
     *	Provide one representative photo.
     </PhotoInput>
 
-    <PhotoInput id="through_wall_vent_penetration_photo" label="TThrough-wall vent penetration Air Sealed – Photo" >
+    <PhotoInput id="through_wall_vent_penetration_photo" label="Through-wall vent penetration Air Sealed – Photo" >
       * Air seal exhaust and intake penetrations to the drywall that go through the exterior wall. Check kitchen range hood,
       dryer vent, bath fans, and whole house mechanical ventilation, and barometric dampers.
       * Provide one representative photo.
@@ -150,8 +154,9 @@
   </Tab>
 
   <Tab eventKey="post_installation"  title="Post-Installation">
-  
-  ## Final Conditions
+
+## Final Conditions
+
 <Select
     label="Select one of the Cavity Insulation Improvement:"
     path="cavity_insulation_type"
@@ -181,32 +186,50 @@
     path="postinstall_wall_area_insulated_percent"
 />
 
-  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_air_leakage_level" />  
-  <ShowOrHide visible={props.data?.postinstall_air_leakage_level === 'CFM at 50Pa'}> 
-  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
-  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-  </PhotoInput>
-  </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_combustion_safety_to_homeowner" />
-  
-  <CombustionSafetyChecksLink {...props} />
-  
-  ## Ventilation
+<Radio
+    label="What is the air sealing level you have achieved?"
+    options={['Not Measured', 'CFM at 50Pa']}
+    path="postinstall_air_leakage_level"
+/>
+<ShowOrHide
+    visible={props.data?.postinstall_air_leakage_level === 'CFM at 50Pa'}
+>
+    <NumberInput
+        label="CFM at 50Pa"
+        min={0}
+        path="postinstall_air_leakage_cfm50"
+    />
+    <PhotoInput
+        id="postinstall_cfm50_photo"
+        label="Final blower door manometer showing the CFM50 value – Photo"
+    >
+        Photo of the manometer showing CFM50 of air leakage after air sealing
+        and insulation work was performed
+    </PhotoInput>
+</ShowOrHide>
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_combustion_safety_to_homeowner"
+/>
+
+<CombustionSafetyChecksLink {...props} />
+
+## Ventilation
+
   <Collapsible header="Post-retrofit mechanical ventilation calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   </Collapsible>
   <Radio label="Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
-  ## Project Invoice 
+  ## Project Invoice
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
       Take a photo of the project invoice if your program requires it.
   </PhotoInput>
   </Tab>
- 
- 
+
  <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
@@ -228,7 +251,7 @@
       </Photo>
       <Photo
         id="conditioned_volume_photo"
-        label="Conditioned floor area and air volume calculation– Photo"
+        label="Conditioned floor area and air volume calculation – Photo"
         required>
         Photo of the math used to determine the conditioned floor area and
         volume, label the rooms/sections and the corresponding length, width,
@@ -254,7 +277,7 @@
 
     <Photo id="rim_joist_air_sealed_photo" label="Rim/band joist between floors air sealed – Photo" />
 
-    <Photo id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo " />
+    <Photo id="tub_shower_exterior_wall_photo" label="Tub/Shower on exterior wall – Photo" />
 
     <Photo id="prefabricated_metal_fireplace_exterior_wall_photo" label="Prefabricated metal fireplaces on exterior wall – Photo" />
 
@@ -264,7 +287,7 @@
 
     <Photo id="through_wall_pipe_penetration_photo" label="Through-wall pipe penetration Air Sealed – Photo"  />
 
-    <Photo id="through_wall_vent_penetration_photo" label="TThrough-wall vent penetration Air Sealed – Photo"  />
+    <Photo id="through_wall_vent_penetration_photo" label="Through-wall vent penetration Air Sealed – Photo"  />
 
 ## Installation - Insulation Details
 
@@ -294,7 +317,35 @@
 
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_combustion_safety_to_homeowner}</strong> </p>
 
-    <CombustionSafetyChecksReport {...props} />
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an ASHRAE 62.2 calculation been performed post-retrofit to ensure proper indoor air quality?  <strong>{ props.data?.post_retrofit_ashrae_62_2_calculation }</strong> </p>

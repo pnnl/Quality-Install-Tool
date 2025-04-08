@@ -181,11 +181,11 @@ h1 + h3 {
     margin-right: 0.5rem;
 }
 
-/* editor-flexbox.tsx */
-.editor-textarea {
-    height: auto;
-    min-height: 700px;
-    resize: none;
+#settings-button-container {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 60px !important;
+    height: 58px !important;
 }
 
 /* photo_input.tsx */
@@ -222,11 +222,6 @@ h1 + h3 {
 
 .photo-notes .photo-note-string {
     margin-bottom: unset;
-}
-
-/* stylizes tab component here to avoid putting styles in editor*/
-.tab-content {
-    margin-top: 1rem;
 }
 
 /* styling for PDFRenderer component  */

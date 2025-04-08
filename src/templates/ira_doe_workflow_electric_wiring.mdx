@@ -1,42 +1,45 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="installation" title="Installation">
 
     <Collapsible header="Existing Condition">
-      The presence of knob and tube wiring, cloth insulated wiring, or ungrounded electrical 
-      systems (two prong receptacles) are often reasons to upgrade the wiring in a home. 
-      Electrical wiring upgrades should be done prior to air sealing and insulation. 
-      Many new holes will be drilled into top plates and/or bottom plates to fish the new wires 
-      to electrical outlet and switches. Some drywall will need to be cut to gain access 
-      to pull the new wires to electrical outlet and switches. 
+      The presence of knob and tube wiring, cloth insulated wiring, or ungrounded electrical
+      systems (two prong receptacles) are often reasons to upgrade the wiring in a home.
+      Electrical wiring upgrades should be done prior to air sealing and insulation.
+      Many new holes will be drilled into top plates and/or bottom plates to fish the new wires
+      to electrical outlet and switches. Some drywall will need to be cut to gain access
+      to pull the new wires to electrical outlet and switches.
     </Collapsible>
-      
+
     ## Installation
-    A project that involves replacing old electrical wiring will also include the installation 
-    of a new circuit breaker panel as well as upgrading/adding circuits to power new electrical 
-    appliance and to future proof the home such as adding wires for an electric heat pump water 
-    heater, heat pump, whole house mechanical ventilation, induction cooktop/range, electric 
-    heat pump clothes dryer, solar PV + batteries, and a Level 2 electric vehicle charger even 
+    A project that involves replacing old electrical wiring will also include the installation
+    of a new circuit breaker panel as well as upgrading/adding circuits to power new electrical
+    appliance and to future proof the home such as adding wires for an electric heat pump water
+    heater, heat pump, whole house mechanical ventilation, induction cooktop/range, electric
+    heat pump clothes dryer, solar PV + batteries, and a Level 2 electric vehicle charger even
     if the home currently doesn’t have these electrical appliances.
     <DateInput label="Installation Date" path="install_date" />
 
     <PhotoInput id="old_electrical_wiring_photo" label="Old Electrical Wiring – Photo">
-        Take a photo of the old electrical wiring.   
+        Take a photo of the old electrical wiring.
     </PhotoInput>
     <PhotoInput id="old_electrical_panel_photo" label="Old Electrical Panel – Photo">
         Take a photo of the old electrical panel.
     </PhotoInput>
-    <PhotoInput id="old_circuitry_plan_photo" label="Old Circuitry Plan  – Photo ">
+    <PhotoInput id="old_circuitry_plan_photo" label="Old Circuitry Plan  – Photo">
         Take a photo of the old circuit plan.
     </PhotoInput>
     <PhotoInput id="new_circuitry_plan_photo" label="New Circuitry Plan – Photo">
       Please provide a photo or upload a PDF of the new circuitry plan
     </PhotoInput>
-    <PhotoInput id="new_wires_in_the_circuit_breaker_panel_photo" label="New wires in the Circuit Breaker Panel  – Photo ">
+    <PhotoInput id="new_wires_in_the_circuit_breaker_panel_photo" label="New wires in the Circuit Breaker Panel  – Photo">
         Take a photo of the new wires in the circuit breaker panel.
     </PhotoInput>
     <PhotoInput id="new_electrical_panel_photo" label="New Electrical Panel – Photo">
         Take a photo of the new electrical panel.
     </PhotoInput>
+
   </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
     ## Post Installation
@@ -56,21 +59,21 @@
     <p> What is the fuel type of the existing stovetop/oven/range?   <strong> { props.data.existing_cooking_appliance_type ? props.data.existing_cooking_appliance_type : null } </strong> </p>
 
     ## Installation
-    
+
     <Photo id="old_electrical_wiring_photo" label="Old Electrical Wiring – Photo" required>
-        Photo of the old electrical wiring  
+        Photo of the old electrical wiring
     </Photo>
     <Photo id="old_electrical_panel_photo" label="Old Electrical Panel – Photo" required>
         Photo of the old electrical panel.
     </Photo>
     <Photo id="old_circuitry_plan_photo" label="Old Circuitry Plan  – Photo" required>
-        photo of the old circuit plan.
+        Photo of the old circuit plan.
     </Photo>
     <Photo id="new_circuitry_plan_photo" label="New Circuitry Plan – Photo" required>
       Photo or a PDF of the new circuitry plan
     </Photo>
     <Photo id="new_wires_in_the_circuit_breaker_panel_photo" label="New wires in the Circuit Breaker Panel  – Photo" required>
-        Photo of the new wires in teh circuit breaker panel
+        Photo of the new wires in the circuit breaker panel
     </Photo>
     <Photo id="new_electrical_panel_photo" label="New Electrical Panel – Photo" required>
         Photo of the new electrical panel
@@ -82,5 +85,6 @@
     <p> How many open breaker spots are there in the new electrical panel?  <strong> { props.data.electrical_panel_open_breaker_spots ? props.data.electrical_panel_open_breaker_spots : null } </strong> </p>
 
     </PrintSection>
+
   </Tab>
 </Tabs>

@@ -1,3 +1,7 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
 
     <Tab eventKey="planning" title="Planning">
@@ -5,7 +9,7 @@
 
         ## Existing Heating and Cooling Equipment
 
-        <Select label="This heat pump will…" options={[
+        <Select label="This heat pump will..." options={[
             "Replace electric resistance heat",
             "Replace natural gas heat",
             "Replace fuel oil heat",
@@ -21,7 +25,7 @@
 
         ## Proposed Outdoor Unit
 
-        Enter how the outdoor unit (ODU) will be installed and the location's average snow depth, the outdoor unit
+        Enter how the outdoor unit (ODU) will be installed and the location&apos;s average snow depth, the outdoor unit
         should be installed above the snow depth. The customer may also have knowledge on how high the snow
         typically gets at the planned heat pump location.
 
@@ -75,7 +79,7 @@
 
         ## Equipment Selection
         You are encouraged to use the Cold Climate Heat Pump Decision Tool which can help assist in selecting the right
-        heat pump for this home. The <a href="#" target="__new__">Cold Climate Heat Pump Decision Tool</a> will make use of the Manual J load values and
+        heat pump for this home. The <a href="https://basc.pnnl.gov/cchp_decision_tool" target="_blank" rel="noopener noreferrer">Cold Climate Heat Pump Decision Tool</a> will make use of the Manual J load values and
         the duct air flow capability test result data.
 
         <Collapsible header="Equipment Selection Details">
@@ -146,7 +150,7 @@
         </PhotoInput>
 
         <PhotoInput id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo">
-            Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer's recommended test pressure.
+            Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer&apos;s recommended test pressure.
         </PhotoInput>
 
         <PhotoInput id="pressure_test_result_photo" label="Nitrogen Pressure Test Results – Photo">
@@ -187,7 +191,7 @@
             refrigerant to add (if applicable).
         </PhotoInput>
 
-        <StringInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
+        <StringInput  label="Notes About Refrigerant Adjustment" path="comment_refridgerant_adjustment" />
 
         <PhotoInput id="condensate_line_photo" label="Condensate Line – Photo">
             Take a photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
@@ -233,7 +237,7 @@
             central system, be sure to not run the ductless heat pump in heating mode while the central
             system is in cooling mode or vice versa. Make sure every household member knows to check
             the mode of both the thermostat of the central system and the ductless heat pump remote
-            when changing from heating to cooling or vice versa. The same applies to muti-split heat pumps
+            when changing from heating to cooling or vice versa. The same applies to multi-split heat pumps
             (one outdoor unit serving multiple indoor units), make sure to not set one indoor unit to
             heating mode while the others are in cooling mode.
 
@@ -380,12 +384,12 @@
             </Photo>
 
             <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
-                The test is conducted at 500 PSI or the manufacturer's recommended test pressure.
+                The test is conducted at 500 PSI or the manufacturer&apos;s recommended test pressure.
             </Photo>
 
             <Photo id="pressure_test_result_photo" label="Nitrogen Pressure Test Results – Photo" required>
                 A passing temperature-compensated nitrogen pressure decay test will show zero or almost zero pressure decay after 10 minutes.
-              This means the system's connections have been tested to withstand the maximum operating pressures and there are no leaks in the system.
+              This means the system&apos;s connections have been tested to withstand the maximum operating pressures and there are no leaks in the system.
             </Photo>
 
             <Photo id="vacuum_setup_photo" label="Vacuum Setup – Photo" required>
@@ -394,7 +398,7 @@
             </Photo>
 
             <Photo id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo" required>
-                 A passing vacuum decay test is one where the system's vacuum does not rise above 500 microns in 10 minutes with the vacuum pump and
+                A passing vacuum decay test is one where the system&apos;s vacuum does not rise above 500 microns in 10 minutes with the vacuum pump and
                 vacuum hose isolated from the system. This indicates the system contains no moisture and is leak free.
             </Photo>
 
@@ -437,7 +441,35 @@
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
-            <CombustionSafetyChecksReport {...props} />
+            {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+                <InstallationProvider
+                    installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+                    attachments={true}
+                >
+                    <InstallationConsumer>
+                        {([installation]) => {
+                            if (installation) {
+                                return (
+                                    <StoreProvider
+                                        doc={installation}
+                                        onChange={async () => {
+                                            return
+                                        }}
+                                    >
+                                        <CombustionSafetyChecksReport
+                                            project={props.project}
+                                            data={installation.data_}
+                                            metadata={installation.metadata_}
+                                        />
+                                    </StoreProvider>
+                                )
+                            } else {
+                                return null
+                            }
+                        }}
+                    </InstallationConsumer>
+                </InstallationProvider>
+            )}
 
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>

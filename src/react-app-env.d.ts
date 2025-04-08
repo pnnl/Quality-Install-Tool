@@ -1,11 +1,28 @@
-/// <reference types="node" />
-/// <reference types="react" />
-/// <reference types="react-dom" />
-
 declare namespace NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production' | 'test'
         readonly PUBLIC_URL: string
+
+        readonly JEST_WORKER_ID: string | undefined
+
+        readonly REACT_APP_NAME: string
+        readonly REACT_APP_HOMEPAGE: string
+
+        readonly REACT_APP_POUCHDB_DATABASE_NAME: string
+
+        readonly REACT_APP_POUCHDB_MIGRATIONS_DATABASE_NAME: string
+
+        readonly REACT_APP_GEOLOCATION_MAXIMUM_AGE: string
+        readonly REACT_APP_GEOLOCATION_TIMEOUT_MILLIS: string
+
+        readonly REACT_APP_JSON_DOCUMENT_CONTENT_TYPE: string
+        readonly REACT_APP_JSON_DOCUMENT_FILE_EXTENSION: string
+
+        readonly REACT_APP_PHOTO_MAXIMUM_WIDTH_PX: string
+        readonly REACT_APP_PHOTO_MAXIMUM_HEIGHT_PX: string
+        readonly REACT_APP_PHOTO_MAXIMUM_SIZE_MB: string
+
+        readonly REACT_APP_PRINT_TITLE: string
     }
 }
 
