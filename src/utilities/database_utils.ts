@@ -513,11 +513,7 @@ export async function getLastModifiedInstaller(
     // Create the index required to sort
     await db.createIndex({
         index: {
-            fields: [
-                'type',
-                'metadata_.last_modified_at',
-                'data_.installer.company_name',
-            ],
+            fields: ['metadata_.last_modified_at'],
         },
     })
 
