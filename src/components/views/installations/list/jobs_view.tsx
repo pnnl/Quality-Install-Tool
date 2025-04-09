@@ -257,7 +257,12 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                             setIsInstallationForAddModalVisible(true)
                         }}
                     >
-                        Add Installation
+                        {[
+                            'combustion_appliance_safety_tests',
+                            'limited_assessment',
+                        ].some(type => workflowName?.trim().includes(type))
+                            ? 'Add Assessment'
+                            : 'Add Installation'}
                     </Button>
                     {installations.length > 0 && (
                         <>
