@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import React, { useId, useMemo } from 'react'
+import React, { useId, useMemo, useState } from 'react'
 import { FloatingLabel, Form } from 'react-bootstrap'
 
 import ProjectsProvider, {
@@ -16,6 +16,7 @@ interface DocNameInputProps {
 
 const DocNameInput: React.FC<DocNameInputProps> = ({ currentValue }) => {
     const id = useId()
+    const [touched, setTouched] = useState(false)
 
     const [projects] = useProjects()
 
@@ -65,19 +66,22 @@ const DocNameInput: React.FC<DocNameInputProps> = ({ currentValue }) => {
                         <Form.Control
                             onChange={async (
                                 event: React.ChangeEvent<HTMLInputElement>,
-                            ) =>
+                            ) => {
+                                setTouched(true)
                                 await upsertMetadata(
                                     path,
                                     event.target.value,
                                     validate(event.target.value, validators),
                                 )
-                            }
+                            }}
                             type="text"
                             value={value}
-                            isInvalid={errorMessages.length > 0}
+                            isInvalid={touched && errorMessages.length > 0}
                         />
                         {errorMessages.length > 0 && (
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Control.Feedback
+                                type={touched ? 'invalid' : 'valid'}
+                            >
                                 {errorMessages.join(' ')}
                             </Form.Control.Feedback>
                         )}
