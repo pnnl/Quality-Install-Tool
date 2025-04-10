@@ -150,6 +150,7 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     },
     // playground: {
     //     title: 'Playground',
+    //     sub_title: 'Assessment',
     //     template: Playground,
     // },
 }
