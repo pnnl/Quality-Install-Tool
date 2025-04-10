@@ -38,92 +38,114 @@ export interface TemplateProps {
 
 export interface TemplateConfiguration {
     title: string
+    sub_title: string
     template: React.FC<MDXProps & TemplateProps>
 }
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
+        sub_title: 'Installation',
         template: DOEWorkflowAtticAirSealingAndInsulation,
     },
     doe_combustion_appliance_safety_tests: {
         title: 'Combustion Appliance Safety Testing',
+        sub_title: 'Assessment',
         template: DOECombustionApplianceSafetyTests,
     },
     doe_workflow_duct_air_sealing: {
         title: 'Duct Air Sealing and Insulation',
+        sub_title: 'Installation',
         template: DOEWorkflowDuctAirSealTemplate,
     },
     doe_workflow_electric_cooking_appliances: {
         title: 'Electric Cooking Appliances',
+        sub_title: 'Installation',
         template: DOEWorkflowElectricCookTemplate,
     },
     doe_workflow_electric_wiring: {
         title: 'Electric Wiring',
+        sub_title: 'Installation',
         template: DOEWorkflowElectricWiringTemplate,
     },
     doe_workflow_electric_load_service_center: {
         title: 'Electric Load Service Center',
+        sub_title: 'Installation',
         template: DOEWorkflowElectricLoadServiceTemplate,
     },
     doe_workflow_floor_airsealing_and_insulation: {
         title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
+        sub_title: 'Installation',
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
     doe_workflow_foundation_airsealing_and_insulation: {
         title: 'Foundation Wall Air Sealing and Insulation',
+        sub_title: 'Installation',
         template: DOEWorkflowFoundationAirSealingAndInsulation,
     },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
+        sub_title: 'Installation',
         template: DOEWorkflowFullFrameReplacementWindows,
     },
     doe_workflow_heat_pump_cloth_dryer: {
         title: 'Heat Pump Clothes Dryer ',
+        sub_title: 'Installation',
         template: DOEWorkflowHPClothDyer,
     },
     doe_workflow_central_ducted_split_heat_pump: {
         title: 'Heat Pump Ducted',
+        sub_title: 'Installation',
         template: DOEWorkflowDuctedHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
         title: 'Heat Pump Ductless',
+        sub_title: 'Installation',
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
     doe_workflow_heat_pump_water_heater: {
         title: 'Heat Pump Water Heater',
+        sub_title: 'Installation',
         template: DOEWorkflowHeatPumpWaterHeaterTemplate,
     },
     doe_workflow_high_efficiency_gas_furnace: {
         title: 'High Efficiency Gas Furnace',
+        sub_title: 'Installation',
         template: DOEWorkflowHighEfficiencyGasFurnace,
     },
     doe_workflow_high_efficiency_modulating_boiler: {
         title: 'High Efficiency Modulating Boiler',
+        sub_title: 'Installation',
         template: DOEWorkflowHighEfficiencyModulatingBoiler,
     },
     doe_workflow_high_efficiency_water_heater: {
         title: 'High Efficiency Water Heater',
+        sub_title: 'Installation',
         template: DOEWorkflowHighEfficiencyWaterHeater,
     },
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
+        sub_title: 'Installation',
         template: DOEWorkflowInsertReplacementWindows,
     },
     doe_workflow_mechanical_ventilation: {
         title: 'Mechanical Ventilation',
+        sub_title: 'Installation',
         template: DOEWorkflowMechanicalVentilation,
     },
     doe_workflow_slab_foundation_exterior: {
         title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
+        sub_title: 'Installation',
         template: DOEWorkflowSlapFoundationExterior,
     },
     doe_workflow_wall_air_sealing_and_insulation_exterior: {
         title: 'Wall Air Sealing and Insulation (Drill and Fill)',
+        sub_title: 'Installation',
         template: DOEWorkflowWallAirSealingAndInsulation,
     },
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
+        sub_title: 'Assessment',
         template: IRADOEWorkflowLimitedAssessment,
     },
     // playground: {
