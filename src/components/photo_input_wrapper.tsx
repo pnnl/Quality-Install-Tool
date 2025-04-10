@@ -1,4 +1,3 @@
-import heic2any from 'heic2any'
 import React, { useState } from 'react'
 
 import PhotoInput from './photo_input'
@@ -7,7 +6,6 @@ import {
     getNextPhotoAttachmentId,
     getPhotoAttachments,
 } from '../utilities/photo_attachment_utils'
-import { compressPhoto } from '../utilities/photo_utils'
 
 interface PhotoInputWrapperProps {
     children: React.ReactNode
@@ -54,15 +52,6 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                             setIsLoading(true)
 
                             try {
-                                if (blob.type === 'image/heic') {
-                                    blob = (await heic2any({
-                                        blob,
-                                        toType: 'image/jpeg',
-                                    })) as Blob
-                                }
-
-                                blob = await compressPhoto(blob)
-
                                 await putAttachment(
                                     photoAttachmentId,
                                     blob,

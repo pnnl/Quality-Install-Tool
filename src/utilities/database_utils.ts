@@ -8,7 +8,10 @@ import {
     type Base,
     type Installation,
     type Project,
+    type ProjectData,
+    type ProjectMetadata,
 } from '../types/database.types'
+import { type Installer } from '../types/installer.type'
 
 //
 // BASE
@@ -30,7 +33,7 @@ export async function setDocumentName<Model extends Base>(
                 metadata_: {
                     ...doc.metadata_,
                     doc_name: docName,
-                    last_modified_at: lastModifiedAt,
+                    last_modified_at: lastModifiedAt.toISOString(),
                 },
             } as Model & Partial<PouchDB.Core.IdMeta>
         } else {
@@ -75,8 +78,8 @@ export function newInstallation(
             doc_name: docName,
             template_name: templateName,
             template_title: templateTitle,
-            created_at: createdAt,
-            last_modified_at: lastModifiedAt,
+            created_at: createdAt.toISOString(),
+            last_modified_at: lastModifiedAt.toISOString(),
             attachments: {},
         },
     }
@@ -100,7 +103,7 @@ export async function getInstallation(
 export async function getInstallationIds(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: string | undefined = undefined,
+    workflowName: string[] | string | undefined = undefined,
 ): Promise<Array<PouchDB.Core.DocumentId>> {
     // await db.info()
 
@@ -118,7 +121,8 @@ export async function getInstallationIds(
                 },
                 metadata_: {
                     template_name: {
-                        $eq: workflowName,
+                        [Array.isArray(workflowName) ? '$in' : '$eq']:
+                            workflowName,
                     },
                 },
             },
@@ -144,7 +148,7 @@ export async function getInstallationIds(
 export async function getInstallations(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
-    workflowName: string | undefined = undefined,
+    workflowName: string[] | string | undefined = undefined,
     options: PouchDB.Core.AllDocsOptions = {},
 ): Promise<
     Array<
@@ -275,9 +279,15 @@ export async function removeInstallation(
 export function newProject(
     docName: string,
     id: PouchDB.Core.DocumentId | undefined = undefined,
+    data: Partial<ProjectData> = {},
+    metadata: Partial<ProjectMetadata> = {},
 ): PouchDB.Core.PutDocument<Project> {
-    const createdAt: Date = new Date()
-    const lastModifiedAt: Date = createdAt
+    const createdAt: Date = metadata.created_at
+        ? new Date(metadata.created_at)
+        : new Date()
+    const lastModifiedAt: Date = metadata.last_modified_at
+        ? new Date(metadata.last_modified_at)
+        : createdAt
 
     const _id: PouchDB.Core.DocumentId = id ?? crypto.randomUUID()
     const _rev: PouchDB.Core.RevisionId | undefined = undefined
@@ -290,12 +300,20 @@ export function newProject(
 
         type: 'project',
         children: [],
-        data_: {},
+        data_: {
+            ...data,
+        },
         metadata_: {
             doc_name: docName,
-            created_at: createdAt,
-            last_modified_at: lastModifiedAt,
-            attachments: {},
+            created_at: createdAt.toISOString(),
+            last_modified_at: lastModifiedAt.toISOString(),
+            attachments: metadata.attachments ?? {},
+            errors: metadata.errors ?? {
+                data_: {},
+                metadata_: {
+                    doc_name: [''],
+                },
+            },
         },
     }
 
@@ -485,4 +503,51 @@ export async function removeProject(
 
         return [response, []]
     }
+}
+
+export async function getLastModifiedInstaller(
+    db: PouchDB.Database<Project>,
+): Promise<Installer | null> {
+    await db.info()
+
+    // Create the index required to sort
+    await db.createIndex({
+        index: {
+            fields: ['metadata_.last_modified_at'],
+        },
+    })
+
+    const findRequest: PouchDB.Find.FindRequest<Base> = {
+        selector: {
+            type: { $eq: 'project' },
+            'data_.installer.company_name': { $ne: '' },
+            $and: [
+                { 'metadata_.last_modified_at': { $ne: null } },
+                { 'metadata_.last_modified_at': { $ne: '' } },
+                { 'metadata_.last_modified_at': { $exists: true } },
+            ],
+        },
+        fields: ['data_.installer', 'metadata_.last_modified_at'],
+        sort: [{ 'metadata_.last_modified_at': 'desc' }],
+        limit: 1,
+    }
+
+    const findResponse: PouchDB.Find.FindResponse<Project> =
+        await db.find(findRequest)
+
+    if (findResponse.docs.length > 0) {
+        const installer = findResponse.docs[0]?.data_?.installer || null
+
+        if (installer) {
+            return {
+                name: installer.name ?? '',
+                company_name: installer.company_name ?? '',
+                mailing_address: installer.mailing_address ?? '',
+                phone: installer.phone ?? '',
+                email: installer.email ?? '',
+            }
+        }
+    }
+
+    return null
 }

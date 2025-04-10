@@ -23,7 +23,7 @@ function getBackPathname(pathname: string): string | undefined {
                     }
                 }
             } else {
-                return '/'
+                return undefined
             }
         } else {
             return undefined

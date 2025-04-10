@@ -1,10 +1,19 @@
+import heic2any from 'heic2any'
 import PouchDB from 'pouchdb'
 import React, { createContext, useCallback } from 'react'
 
 import { useDatabase } from './database_provider'
-import { type Base } from '../types/database.types'
+import {
+    type Base,
+    type FileMetadata,
+    type PhotoMetadata,
+} from '../types/database.types'
 import { immutableUpsert } from '../utilities/path_utils'
-import { getPhotoMetadata, isPhoto } from '../utilities/photo_utils'
+import {
+    compressPhoto,
+    getPhotoMetadata,
+    isPhoto,
+} from '../utilities/photo_utils'
 
 export function useChangeEventHandler(
     callback?: (
@@ -30,17 +39,25 @@ export function useChangeEventHandler(
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
-    upsertData: (path: string, value: unknown) => Promise<void>
-    upsertMetadata: (path: string, value: unknown) => Promise<void>
+    upsertData: (
+        path: string,
+        value: unknown,
+        errors: string[],
+    ) => Promise<void>
+    upsertMetadata: (
+        path: string,
+        value: unknown,
+        errors: string[],
+    ) => Promise<void>
     putAttachment: (
         attachmentId: PouchDB.Core.AttachmentId,
         blob: Blob,
         filename?: string,
     ) => Promise<void>
-    putDoc: (
+    removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
+    UNSAFE_put: (
         doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     ) => Promise<void>
-    removeAttachment: (attachmentId: PouchDB.Core.AttachmentId) => Promise<void>
 }>({
     doc: undefined,
     upsertData: async () => {
@@ -52,10 +69,10 @@ export const StoreContext = createContext<{
     putAttachment: async () => {
         return
     },
-    putDoc: async () => {
+    removeAttachment: async () => {
         return
     },
-    removeAttachment: async () => {
+    UNSAFE_put: async () => {
         return
     },
 })
@@ -74,18 +91,33 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     children,
 }) => {
     const upsertData = useCallback(
-        async (path: string, value: unknown) => {
+        async (path: string, value: unknown, errors: string[]) => {
             if (onChange) {
+                const docWithErrors = immutableUpsert(
+                    `metadata_.errors.data_.${path}`,
+                    {
+                        ...doc,
+                        metadata_: {
+                            ...doc.metadata_,
+                            errors: doc.metadata_.errors ?? {
+                                data_: {},
+                                metadata_: {},
+                            },
+                        },
+                    } as unknown as Record<string, unknown>,
+                    errors,
+                ) as unknown as typeof doc
+
                 const lastModifiedAt = new Date()
 
                 await onChange(
                     immutableUpsert(
                         `data_.${path}`,
                         {
-                            ...doc,
+                            ...docWithErrors,
                             metadata_: {
-                                ...doc.metadata_,
-                                last_modified_at: lastModifiedAt,
+                                ...docWithErrors.metadata_,
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
@@ -97,18 +129,33 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     )
 
     const upsertMetadata = useCallback(
-        async (path: string, value: unknown) => {
+        async (path: string, value: unknown, errors: string[]) => {
             if (onChange) {
+                const docWithErrors = immutableUpsert(
+                    `metadata_.errors.metadata_.${path}`,
+                    {
+                        ...doc,
+                        metadata_: {
+                            ...doc.metadata_,
+                            errors: doc.metadata_.errors ?? {
+                                data_: {},
+                                metadata_: {},
+                            },
+                        },
+                    } as unknown as Record<string, unknown>,
+                    errors,
+                ) as unknown as typeof doc
+
                 const lastModifiedAt = new Date()
 
                 await onChange(
                     immutableUpsert(
                         `metadata_.${path}`,
                         {
-                            ...doc,
+                            ...docWithErrors,
                             metadata_: {
-                                ...doc.metadata_,
-                                last_modified_at: lastModifiedAt,
+                                ...docWithErrors.metadata_,
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
@@ -128,12 +175,23 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
             if (onChange) {
                 const lastModifiedAt = new Date()
 
-                const attachmentMetadata = isPhoto(blob)
-                    ? await getPhotoMetadata(blob)
-                    : {
-                          filename,
-                          timestamp: lastModifiedAt.toISOString(),
-                      }
+                let attachmentMetadata: FileMetadata | PhotoMetadata = {
+                    filename,
+                    timestamp: lastModifiedAt.toISOString(),
+                }
+
+                if (isPhoto(blob)) {
+                    attachmentMetadata = await getPhotoMetadata(blob)
+
+                    if (blob.type === 'image/heic') {
+                        blob = (await heic2any({
+                            blob,
+                            toType: 'image/jpeg',
+                        })) as Blob
+                    }
+
+                    blob = await compressPhoto(blob)
+                }
 
                 await onChange({
                     ...doc,
@@ -146,7 +204,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                     metadata_: {
                         ...doc.metadata_,
-                        last_modified_at: lastModifiedAt,
+                        last_modified_at: lastModifiedAt.toISOString(),
                         attachments: {
                             ...doc.metadata_.attachments,
                             [attachmentId]: attachmentMetadata,
@@ -156,23 +214,6 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
             }
         },
         [doc, onChange],
-    )
-
-    const putDoc = useCallback(
-        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
-            if (onChange) {
-                const lastModifiedAt = new Date()
-
-                await onChange({
-                    ...doc,
-                    metadata_: {
-                        ...doc.metadata_,
-                        last_modified_at: lastModifiedAt,
-                    },
-                })
-            }
-        },
-        [onChange],
     )
 
     const removeAttachment = useCallback(
@@ -188,7 +229,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
 
                 const metadata_ = {
                     ...doc.metadata_,
-                    last_modified_at: lastModifiedAt,
+                    last_modified_at: lastModifiedAt.toISOString(),
                     attachments: {
                         ...doc.metadata_.attachments,
                     },
@@ -206,6 +247,23 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [doc, onChange],
     )
 
+    const UNSAFE_put = useCallback(
+        async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
+            if (onChange) {
+                const lastModifiedAt = new Date()
+
+                await onChange({
+                    ...doc,
+                    metadata_: {
+                        ...doc.metadata_,
+                        last_modified_at: lastModifiedAt.toISOString(),
+                    },
+                })
+            }
+        },
+        [onChange],
+    )
+
     return (
         <StoreContext.Provider
             value={{
@@ -213,8 +271,8 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 upsertData,
                 upsertMetadata,
                 putAttachment,
-                putDoc,
                 removeAttachment,
+                UNSAFE_put,
             }}
         >
             {children}

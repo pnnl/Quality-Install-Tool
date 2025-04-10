@@ -10,15 +10,35 @@ import {
     type ProjectData,
 } from '../types/database.types'
 import {
+    getInstallations,
     getProjects,
     newInstallation,
     putInstallation,
     putProject,
 } from '../utilities/database_utils'
 
+export const combustionSafetyTestsWorkflowNames: string[] = [
+    'doe_workflow_attic_air_sealing_and_insulation',
+    'doe_workflow_central_ducted_split_heat_pump',
+    'doe_workflow_ductless_heat_pump',
+    'doe_workflow_foundation_airsealing_and_insulation',
+    'doe_workflow_heat_pump_water_heater',
+    'doe_workflow_mechanical_ventilation',
+    'doe_workflow_slab_foundation_exterior',
+    'doe_workflow_wall_air_sealing_and_insulation_exterior',
+]
+
 interface CombustionSafetyTestsInstallationData extends InstallationData {
     assessment_date?: string
     combustion_safety_tests: Array<Record<string, unknown>>
+}
+
+interface CombustionSafetyTestsInstallationMetadata {
+    errors?: {
+        data_: {
+            combustion_safety_tests: Array<Record<string, unknown>>
+        }
+    }
 }
 
 interface CombustionSafetyTestsProjectData extends ProjectData {
@@ -49,6 +69,26 @@ export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
                 transformedProject._id,
                 transformedInstallation,
             )
+
+            const installations = await getInstallations(
+                db,
+                transformedProject._id,
+                combustionSafetyTestsWorkflowNames,
+            )
+
+            installations.forEach(async installation => {
+                await putInstallation(db, transformedProject._id, {
+                    ...installation,
+                    data_: {
+                        ...installation.data_,
+                        links: {
+                            ...installation.data_.links,
+                            doe_combustion_appliance_safety_test_doc_id:
+                                transformedInstallation._id as PouchDB.Core.DocumentId,
+                        },
+                    },
+                })
+            })
         })
 }
 
@@ -155,8 +195,18 @@ export function transformCombustionSafetyTestsProject(
         undefined,
     )
 
+    installation.metadata_.errors = {
+        data_: {
+            combustion_safety_tests: [],
+        },
+        metadata_: {},
+    }
+
     const installationData =
         installation.data_ as CombustionSafetyTestsInstallationData
+
+    const installationMetadata =
+        installation.metadata_ as CombustionSafetyTestsInstallationMetadata
 
     installationData.combustion_safety_tests = []
 
@@ -167,6 +217,8 @@ export function transformCombustionSafetyTestsProject(
     Object.entries(projectData.combustion_safety_tests ?? {}).forEach(
         ([key, value], index) => {
             installationData.combustion_safety_tests.push(value)
+
+            installationMetadata.errors?.data_.combustion_safety_tests.push({})
 
             Object.entries(
                 (

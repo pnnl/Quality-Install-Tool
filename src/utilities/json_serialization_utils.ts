@@ -6,9 +6,11 @@ import {
     getProjectDocumentNames,
 } from './database_utils'
 import {
+    combustionSafetyTestsWorkflowNames,
     shouldMigrateCombustionSafetyTestsProject,
     transformCombustionSafetyTestsProject,
 } from '../migrations/0_doe_combustion_appliance_safety_tests'
+import { transformPhotoAttachmentIdSuffixes } from '../migrations/1_photo_attachment_id_suffixes'
 import {
     type Base,
     type Installation,
@@ -167,8 +169,8 @@ export async function importJSONDocument(
                         },
                         metadata_: {
                             ...doc.metadata_,
-                            created_at: createdAt,
-                            last_modified_at: lastModifiedAt,
+                            created_at: createdAt.toISOString(),
+                            last_modified_at: lastModifiedAt.toISOString(),
                         },
                     }
                 } else {
@@ -221,17 +223,56 @@ export async function importJSONDocument(
                 const [newProject, newInstallation] =
                     transformCombustionSafetyTestsProject(origProject)
 
+                const children: PouchDB.Core.DocumentId[] = [
+                    ...(newProject.children ?? []),
+                    newInstallation._id as PouchDB.Core.DocumentId,
+                ]
+
                 docs[index] = {
                     ...newProject,
-                    children: [
-                        ...(newProject.children ?? []),
-                        newInstallation._id as string,
-                    ],
+                    children,
                 }
 
                 docs.push(newInstallation)
+
+                children.forEach(childDocId => {
+                    docs.forEach((childDoc, childIndex) => {
+                        if (
+                            childDoc._id === childDocId &&
+                            childDoc.type === 'installation'
+                        ) {
+                            const installation =
+                                childDoc as PouchDB.Core.PutDocument<Installation>
+
+                            if (
+                                combustionSafetyTestsWorkflowNames.includes(
+                                    installation.metadata_.template_name,
+                                )
+                            ) {
+                                docs[childIndex] = {
+                                    ...childDoc,
+                                    data_: {
+                                        ...childDoc.data_,
+                                        links: {
+                                            ...childDoc.data_.links,
+                                            doe_combustion_appliance_safety_test_doc_id:
+                                                newInstallation._id as PouchDB.Core.DocumentId,
+                                        },
+                                    },
+                                }
+                            }
+                        }
+                    })
+                })
             }
         }
+    })
+
+    docs = docs.map(doc => {
+        return transformPhotoAttachmentIdSuffixes<Base>(
+            doc as PouchDB.Core.ExistingDocument<Base> &
+                PouchDB.Core.AllDocsMeta,
+        )
     })
 
     const responses = await db.bulkDocs<Base>(docs)

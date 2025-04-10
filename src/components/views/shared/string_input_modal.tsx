@@ -7,7 +7,7 @@ interface StringInputModalProps {
     title: React.ReactNode
     cancelLabel: React.ReactNode
     confirmLabel: React.ReactNode
-    value: string
+    value: string | undefined
     validators: Array<Validator<string>>
     show: boolean
     onCancel?: () => void | Promise<void>
@@ -31,7 +31,11 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
     const id = useId()
 
     const errorMessages = useMemo<Array<string>>(() => {
-        return validate(value, validators)
+        if (value === undefined) {
+            return []
+        } else {
+            return validate(value, validators)
+        }
     }, [value, validators])
 
     const handleCancel = useCallback(
@@ -87,7 +91,7 @@ const StringInputModal: React.FC<StringInputModalProps> = ({
                 <input
                     id={id}
                     type="text"
-                    value={value}
+                    value={value ?? ''}
                     onChange={handleChange}
                     onKeyUp={handleKeyUp}
                     autoFocus

@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb'
 
 import migrate_0_doe_combustion_appliance_safety_tests from './0_doe_combustion_appliance_safety_tests'
+import migrate_1_photo_attachment_id_suffixes from './1_photo_attachment_id_suffixes'
 import { type Base } from '../types/database.types'
 
 type Migration = (db: PouchDB.Database<Base>) => Promise<void>
@@ -22,6 +23,7 @@ const dbMigrations = new PouchDB<MigrationRecord>(
 const migrations: Record<MigrationName, Migration> = {
     '0_doe_combustion_appliance_safety_tests':
         migrate_0_doe_combustion_appliance_safety_tests,
+    '1_photo_attachment_id_suffixes': migrate_1_photo_attachment_id_suffixes,
 }
 
 export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
