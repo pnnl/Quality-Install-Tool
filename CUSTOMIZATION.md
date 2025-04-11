@@ -25,6 +25,10 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     // ...
     example_template: {
         title: 'Example Template',
+        subtitle: {
+            upcase: 'Template',
+            downcase: 'template',
+        },
         template: ExampleTemplate,
     },
     // ...
