@@ -16,7 +16,7 @@ Image files for &ldquo;favicons&rdquo; are located in the `public/` directory.
 
 MDX templates are located in the `templates/` directory.
 
-MDX templates are registered in the `templates/index.ts` source file. To register a template, import the `.mdx` source file and then add a new `TemplateConfiguration` record to the `TEMPLATES` variable. It is recommended that every MDX template has a unique title.
+MDX templates are registered in the `templates/index.ts` source file. To register a template, import the `.mdx` source file and then add a new `TemplateConfiguration` record to the `TEMPLATES` variable. It is recommended that each MDX template is assigned a unique `title`. The `sub_title` property is used to define the subtitle in different cases: *titleCase* is intended for display purposes (e.g., "Installation"), *lowerCase* is used for contexts requiring lowercase (e.g., "installation")
 
 ```ts
 import ExampleTemplate from './example_template.mdx'
@@ -25,6 +25,10 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     // ...
     example_template: {
         title: 'Example Template',
+        sub_title: {
+            titleCase: 'Installation',
+            lowerCase: 'installation',
+        }
         template: ExampleTemplate,
     },
     // ...
