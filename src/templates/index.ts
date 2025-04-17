@@ -174,7 +174,6 @@ const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
 
 const RE_TEMPLATE_KEY = /^(?!_)(?!.*_$)[a-z0-9_]{1,64}$/i
 
-// Validate template keys
 Object.keys(TEMPLATES).forEach(key => {
     if (RESERVED_TEMPLATE_KEYS.includes(key) || !RE_TEMPLATE_KEY.test(key)) {
         throw new Error(`Invalid template key: ${JSON.stringify(key)}`)
