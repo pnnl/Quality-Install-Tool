@@ -39,16 +39,20 @@ export interface TemplateProps {
 export interface TemplateConfiguration {
     title: string
     sub_title: {
-        titleCase: string // Title case (e.g., "Installation")
-        lowerCase: string // Lowercase (e.g., "installation")
+        singularTitleCase: string // Title case (e.g., "Installation")
+        singularLowerCase: string // Lowercase (e.g., "installation")
+        pluralTitleCase: string
+        pluralLowerCase: string
     }
     template: React.FC<MDXProps & TemplateProps>
 }
 
 // Default sub_title for templates
 const DEFAULT_SUB_TITLE = {
-    titleCase: 'Installation',
-    lowerCase: 'installation',
+    singularTitleCase: 'Installation',
+    singularLowerCase: 'installation',
+    pluralTitleCase: 'Installations',
+    pluralLowerCase: 'installations',
 }
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {
@@ -60,8 +64,10 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_combustion_appliance_safety_tests: {
         title: 'Combustion Appliance Safety Testing',
         sub_title: {
-            titleCase: 'Assessment',
-            lowerCase: 'assessment',
+            singularTitleCase: 'Assessment',
+            singularLowerCase: 'assessment',
+            pluralTitleCase: 'Assessments',
+            pluralLowerCase: 'assessments',
         },
         template: DOECombustionApplianceSafetyTests,
     },
@@ -158,8 +164,10 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
         sub_title: {
-            titleCase: 'Assessment',
-            lowerCase: 'assessment',
+            singularTitleCase: 'Assessment',
+            singularLowerCase: 'assessment',
+            pluralTitleCase: 'Assessments',
+            pluralLowerCase: 'assessments',
         },
         template: IRADOEWorkflowLimitedAssessment,
     },

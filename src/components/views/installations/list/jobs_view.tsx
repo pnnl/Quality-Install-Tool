@@ -69,12 +69,12 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 if (re.test(input)) {
                     return undefined
                 } else {
-                    return `The ${workflow?.sub_title.lowerCase} name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.`
+                    return `The ${workflow?.sub_title.singularLowerCase} name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.`
                 }
             },
             input => {
                 if (installationDocumentNames.includes(input.trim())) {
-                    return `${workflow?.sub_title.titleCase} name already exists. Please choose a different name.`
+                    return `${workflow?.sub_title.singularTitleCase} name already exists. Please choose a different name.`
                 } else {
                     return undefined
                 }
@@ -183,7 +183,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     return (
         <>
             <StringInputModal
-                title={`Enter new ${workflow?.sub_title.titleCase} name`}
+                title={`Enter new ${workflow?.sub_title.singularLowerCase} name`}
                 cancelLabel="Cancel"
                 confirmLabel="Add"
                 value={installationForAddModalValue}
@@ -205,7 +205,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 }}
             />
             <StringInputModal
-                title="Enter new installation name"
+                title={`Enter new ${workflow?.sub_title.singularLowerCase} name`}
                 cancelLabel="Cancel"
                 confirmLabel="Rename"
                 value={installationForRenameModalValue}
@@ -241,7 +241,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 <div className="container">
                     <h1>{workflow.title}</h1>
                     <h2>
-                        {workflow.sub_title.titleCase}s for{' '}
+                        {workflow.sub_title.pluralTitleCase} for{' '}
                         {project.metadata_.doc_name}
                     </h2>
                     {project.data_.location &&
@@ -260,7 +260,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                             setIsInstallationForAddModalVisible(true)
                         }}
                     >
-                        Add {workflow.sub_title.titleCase}
+                        Add {workflow.sub_title.singularTitleCase}
                     </Button>
                     {installations.length > 0 && (
                         <>

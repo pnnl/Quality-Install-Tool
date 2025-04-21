@@ -26,7 +26,7 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
             <>
                 <h1>{workflow.title}</h1>
                 <h2>
-                    {workflow.sub_title.titleCase} for{' '}
+                    {workflow.sub_title.singularTitleCase} for{' '}
                     {project.metadata_.doc_name}
                 </h2>
                 {project.data_.location &&
