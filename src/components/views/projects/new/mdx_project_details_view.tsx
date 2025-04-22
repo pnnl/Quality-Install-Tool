@@ -103,10 +103,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
         [db, navigate, project],
     )
 
-    if (!project) {
-        return <div>Loading...</div>
-    }
-
     return (
         <>
             <h1>New Project</h1>
