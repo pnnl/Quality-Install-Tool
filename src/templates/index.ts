@@ -173,7 +173,12 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     },
     // playground: {
     //     title: 'Playground',
-    //     sub_title: 'Assessment',
+    //     sub_title: {
+    //         singularTitleCase: 'Playground',
+    //         singularLowerCase: 'playground',
+    //         pluralTitleCase: 'Playgrounds',
+    //         pluralLowerCase: 'playgrounds',
+    //     },
     //     template: Playground,
     // },
 }
