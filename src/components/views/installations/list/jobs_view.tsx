@@ -69,18 +69,18 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 if (re.test(input)) {
                     return undefined
                 } else {
-                    return 'The installation name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.'
+                    return `The ${workflow?.subtitle.singularLowerCase} name must be no more than 64 characters consisting of letters, numbers, dashes, and single spaces. Single spaces can only appear between other characters.`
                 }
             },
             input => {
                 if (installationDocumentNames.includes(input.trim())) {
-                    return 'Installation name already exists. Please choose a different name.'
+                    return `${workflow?.subtitle.singularTitleCase} name already exists. Please choose a different name.`
                 } else {
                     return undefined
                 }
             },
         ]
-    }, [installationDocumentNames])
+    }, [installationDocumentNames, workflow])
 
     // @note Implementation of {handleConfirmInstallationForAdd} function.
     //     After the PouchDB document for the new installation has been inserted
@@ -183,7 +183,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
     return (
         <>
             <StringInputModal
-                title="Enter new installation name"
+                title={`Enter new ${workflow?.subtitle.singularLowerCase} name`}
                 cancelLabel="Cancel"
                 confirmLabel="Add"
                 value={installationForAddModalValue}
@@ -205,7 +205,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                 }}
             />
             <StringInputModal
-                title="Enter new installation name"
+                title={`Enter new ${workflow?.subtitle.singularLowerCase} name`}
                 cancelLabel="Cancel"
                 confirmLabel="Rename"
                 value={installationForRenameModalValue}
@@ -240,7 +240,10 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             {project && workflow && (
                 <div className="container">
                     <h1>{workflow.title}</h1>
-                    <h2>Installations for {project.metadata_.doc_name}</h2>
+                    <h2>
+                        {workflow.subtitle.pluralTitleCase} for{' '}
+                        {project.metadata_.doc_name}
+                    </h2>
                     {project.data_.location &&
                         someLocation(project.data_.location) && (
                             <p className="address">
@@ -257,7 +260,7 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                             setIsInstallationForAddModalVisible(true)
                         }}
                     >
-                        Add Installation
+                        Add {workflow.subtitle.singularTitleCase}
                     </Button>
                     {installations.length > 0 && (
                         <>
