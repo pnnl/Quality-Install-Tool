@@ -5,17 +5,17 @@ import { StoreContext } from '../providers/store_provider'
 
 interface CollapsibleTextWrapperProps {
     text: string
-    maxLength: number
+    title: string
 }
 
 const CollapsibleTextWrapper: React.FC<CollapsibleTextWrapperProps> = ({
     text,
-    maxLength,
+    title,
 }) => {
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
-                return <CollapsibleText text={text} maxLength={maxLength} />
+                return <CollapsibleText text={text} title={title} />
             }}
         </StoreContext.Consumer>
     )

@@ -473,6 +473,13 @@ btn-light:hover {
     font-size: 18px; /* Adjust the default font size */
 }
 
+.clickable-text {
+    color: #006100;
+    cursor: pointer;
+    font-weight: bold;
+    float: right;
+}
+
 /* Common font size for medium, small, and extra small devices */
 @media (max-width: 991.98px) {
     .modal-body-text {
