@@ -1,20 +1,12 @@
-import type { FC } from 'react'
-import Figure from 'react-bootstrap/Figure'
-import FigureImage from 'react-bootstrap/FigureImage'
-import FigureCaption from 'react-bootstrap/FigureCaption'
+import React from 'react'
+import { Figure, FigureCaption, FigureImage } from 'react-bootstrap'
 
 interface FigureWrapperProps {
-    children: React.ReactNode
     src: string
+    children: React.ReactNode
 }
 
-/**
- * A component that wraps a Figure component in order to set its child component structure
- *
- * @param children Content (most commonly markdown text) to be used as the figure caption
- * @param src The image source passed to an underlying img tag
- */
-const FigureWrapper: FC<FigureWrapperProps> = ({ children, src }) => {
+const FigureWrapper: React.FC<FigureWrapperProps> = ({ src, children }) => {
     return (
         <Figure>
             <FigureImage src={src} />

@@ -1,62 +1,105 @@
 import { get } from 'lodash'
-import type { FC } from 'react'
-import { StoreContext } from './store'
-import NumberInput from './number_input'
-import { pathToId } from '../utilities/paths_utils'
+import React, { useMemo } from 'react'
 
-interface NumberInputWrapperProps {
-    label: string
-    path: string
-    prefix: string
-    suffix: string
-    min: number
-    max: number
-    hint: string
+import NumberInput from './number_input'
+import { StoreContext } from '../providers/store_provider'
+import { type Validator, validate } from '../utilities/validation_utils'
+
+function _validate(
+    value: number | string,
+    valueValidators: Array<Validator<number>>,
+): string[] {
+    switch (typeof value) {
+        case 'string':
+            if (value.trim().length === 0) {
+                return []
+            } else {
+                return _validate(parseFloat(value), valueValidators)
+            }
+        case 'number':
+            if (isNaN(value)) {
+                return ['Input must be a number.']
+            } else {
+                return validate(value, valueValidators)
+            }
+    }
 }
 
-/**
- * A component that wraps a NumberInput component in order to tie it to the data store
- *
- * @param label The label of the NumberInput component
- * @param path The path (consistent with the path provided to the lodash
- * get() method) to the datum within the data store for the NumberInput
- * component
- * @param prefix Text to appear as a prefix to the NumberInput (e.g. '$' if the input
- * represents a number of dollars)
- * @param suffix Text to appear as a suffix to the NumberInput (e.g. 'SqFt')
- * @param min The minimum allowed value for the input field, defult to NEGATIVE_INFINITY.
- * @param max The maximum allowed value for the input field, defult to POSITIVE_INFINITY.
- * @param hint Displays hint text for the component.
- */
+interface NumberInputWrapperProps {
+    label: React.ReactNode
+    path: string
+    prefix: React.ReactNode
+    suffix: React.ReactNode
+    min?: number
+    max?: number
+    step?: number
+    hint: React.ReactNode
+}
 
-const NumberInputWrapper: FC<NumberInputWrapperProps> = ({
+const NumberInputWrapper: React.FC<NumberInputWrapperProps> = ({
     label,
     path,
     prefix,
     suffix,
-    min = Number.NEGATIVE_INFINITY,
-    max = Number.POSITIVE_INFINITY,
+    min,
+    max,
+    step,
     hint,
 }) => {
-    // Generate an id for the input
-    const id = pathToId(path, 'input')
+    const valueValidators = useMemo<Validator<number>[]>(() => {
+        return [
+            input => {
+                if (min && input < min) {
+                    return `Input must be at least ${min}.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (max && input > max) {
+                    return `Input must be at most ${max}.`
+                } else {
+                    return undefined
+                }
+            },
+            input => {
+                if (step && input % step !== 0) {
+                    return `Input must be a multiple of ${step}.`
+                } else {
+                    return undefined
+                }
+            },
+        ]
+    }, [min, max, step])
 
     return (
         <StoreContext.Consumer>
-            {({ data, upsertData }) => {
+            {({ doc, upsertData }) => {
                 return (
                     <NumberInput
-                        id={id}
                         label={label}
                         prefix={prefix}
                         suffix={suffix}
-                        updateValue={(value: any) => {
-                            upsertData(path, parseFloat(value))
-                        }}
-                        value={get(data, path)}
+                        value={(doc && get(doc.data_, path)) ?? ''}
+                        errorMessages={
+                            (doc &&
+                                (get(
+                                    doc.metadata_.errors?.data_ ?? {},
+                                    path,
+                                ) as string[])) ??
+                            []
+                        }
                         min={min}
                         max={max}
+                        step={step}
                         hint={hint}
+                        onChange={async value =>
+                            await upsertData(
+                                path,
+                                value,
+                                _validate(value, valueValidators),
+                            )
+                        }
                     />
                 )
             }}

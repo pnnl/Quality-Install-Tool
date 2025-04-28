@@ -1,115 +1,125 @@
-import React, { useEffect, useRef, useState } from 'react'
-import type { ChangeEvent, FC, MouseEvent } from 'react'
-import { Button, Card, Image } from 'react-bootstrap'
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { Button, Card } from 'react-bootstrap'
+
 import Collapsible from './collapsible'
-import type FileMetadata from '../types/file_metadata.types'
 import DateTimeStr from './date_time_str'
+import { type FileMetadata } from '../types/database.types'
 
 interface FileInputProps {
-    children: React.ReactNode
-    label: string
-    fileMetadata: FileMetadata
+    label: React.ReactNode
     file: Blob | undefined
-    upsertFile: (file: Blob, fileName: string) => void
+    fileMetadata: FileMetadata | undefined
+    upsertFile: (file: Blob, fileName: string) => Promise<void>
+    children: React.ReactNode
 }
 
-/**
- * Component for File input
- *
- * @param children Content (most commonly markdown text) describing the File requirement
- * @param label Label for the File requirement
- * @param file Blob containing the File itself
- * @param upsertFile Function used to update/insert a file into the store
- */
-const FileInput: FC<FileInputProps> = ({
+const FileInput: React.FC<FileInputProps> = ({
     children,
     label,
     file,
     fileMetadata,
     upsertFile,
 }) => {
-    // Create references to the hidden file inputs
+    const id = useId()
+
     const hiddenFileUploadInputRef = useRef<HTMLInputElement>(null)
 
-    const handleFileInputButtonClick = (
-        event: MouseEvent<HTMLButtonElement>,
-    ) => {
+    const handleFileInputButtonClick = useCallback(() => {
         hiddenFileUploadInputRef.current &&
             hiddenFileUploadInputRef.current.click()
-    }
+    }, [])
 
-    const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const file = event.target.files[0]
-            const fileName = file.name
-            upsertFile(file, fileName)
+    const handleFileInputChange = useCallback(
+        async (event: React.ChangeEvent<HTMLInputElement>) => {
+            if (event.target.files && event.target.files.length > 0) {
+                const file = event.target.files[0]
+
+                await upsertFile(file, file.name)
+            }
+
+            // @note Change detection for `<input type="file" />` elements.
+            //     The "value" attribute is set to the empty string to
+            //     account for the situation when the user attempts to
+            //     import the same JSON document more than once without
+            //     reloading the page.
+            //
+            //     If the "value" attribute is not set to the empty string,
+            //     then the second attempt will not trigger a change event
+            //     (because the "value" attribute has not changed).
+            event.target.value = ''
+        },
+        [upsertFile],
+    )
+
+    const [fileObjectURL, setFileObjectURL] = useState<string | undefined>(
+        undefined,
+    )
+
+    useEffect(() => {
+        const objectURL = file ? URL.createObjectURL(file) : undefined
+
+        setFileObjectURL(objectURL)
+
+        return () => {
+            if (objectURL) {
+                URL.revokeObjectURL(objectURL)
+            }
         }
-    }
-
-    // Button text based on whether there is a File or not
-    const buttonText = !file ? 'Add File' : 'Replace File'
+    }, [file])
 
     return (
-        <>
-            <Card className="input-card">
-                <Card.Body>
-                    <Collapsible header={label}>
-                        <Card.Text as="div">{children}</Card.Text>
-                    </Collapsible>
-                    <div>
-                        {file && (
-                            <>
-                                <Card className="input-card">
-                                    <Card.Body>
-                                        File Name:{' '}
-                                        <a
-                                            href={URL.createObjectURL(file)}
-                                            target="_blank"
-                                        >
-                                            {fileMetadata?.filename}
-                                        </a>
-                                        <br />
-                                        <small>
-                                            Timestamp:&nbsp;
-                                            {fileMetadata?.timestamp ? (
-                                                <DateTimeStr
-                                                    date={
-                                                        fileMetadata.timestamp
-                                                    }
-                                                />
-                                            ) : (
-                                                ''
-                                            )}
-                                        </small>
-                                        <br />
-                                    </Card.Body>
-                                </Card>
-                            </>
-                        )}
-                        <div>
-                            <label className="mb-3 custom-label">
-                                File Types Accepted: PDF
-                            </label>
-                        </div>
-
-                        <Button
-                            onClick={handleFileInputButtonClick}
-                            variant="outline-primary"
-                        >
-                            {buttonText}
-                        </Button>
-                    </div>
-
-                    <input
-                        accept="application/pdf"
-                        onChange={handleFileInputChange}
-                        ref={hiddenFileUploadInputRef}
-                        className="photo-upload-input"
-                        type="file"
-                    />
-                </Card.Body>
-            </Card>
-        </>
+        <Card className="input-card">
+            <Card.Body>
+                <Collapsible header={label}>
+                    <Card.Text as="div">{children}</Card.Text>
+                </Collapsible>
+                <div>
+                    {file && (
+                        <Card className="input-card">
+                            <Card.Body>
+                                File Name:{' '}
+                                {fileObjectURL && (
+                                    <a
+                                        href={fileObjectURL}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {fileMetadata?.filename}
+                                    </a>
+                                )}
+                                <br />
+                                <small>
+                                    Timestamp:{' '}
+                                    {fileMetadata?.timestamp && (
+                                        <DateTimeStr
+                                            date={fileMetadata.timestamp}
+                                        />
+                                    )}
+                                </small>
+                                <br />
+                            </Card.Body>
+                        </Card>
+                    )}
+                    <p className="mb-3 custom-label">
+                        File Types Accepted: PDF
+                    </p>
+                    <Button
+                        onClick={handleFileInputButtonClick}
+                        variant="outline-primary"
+                    >
+                        {file ? 'Replace File' : 'Add File'}
+                    </Button>
+                </div>
+                <input
+                    id={id}
+                    accept="application/pdf"
+                    onChange={handleFileInputChange}
+                    ref={hiddenFileUploadInputRef}
+                    className="photo-upload-input"
+                    type="file"
+                />
+            </Card.Body>
+        </Card>
     )
 }
 

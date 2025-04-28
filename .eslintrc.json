@@ -4,9 +4,59 @@
         "es2021": true
     },
     "extends": [
-        "prettier"
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended",
+        "plugin:react/recommended"
     ],
-    "overrides": [],
+    "overrides": [
+        {
+            "files": ["*.mdx"],
+            "extends": [
+                "plugin:mdx/code-blocks",
+                "plugin:mdx/overrides",
+                "plugin:mdx/recommended"
+            ],
+            "globals": {
+                "process": false,
+                "props": false,
+                "Button": false,
+                "Checkbox": false,
+                "ClimateZoneSelect": false,
+                "Collapsible": false,
+                "DateInput": false,
+                "DateStr": false,
+                "DateTimeStr": false,
+                "Figure": false,
+                "FileInput": false,
+                "GpsCoordStr": false,
+                "InstallationConsumer": false,
+                "InstallationProvider": false,
+                "InstallationSelect": false,
+                "LabelValue": false,
+                "LocationStr": false,
+                "NumberInput": false,
+                "PDFRenderer": false,
+                "PageBreak": false,
+                "Photo": false,
+                "PhotoInput": false,
+                "PrintSection": false,
+                "Radio": false,
+                "Repeatable": false,
+                "RepeatableInput": false,
+                "Select": false,
+                "ShowOrHide": false,
+                "StoreProvider": false,
+                "StringInput": false,
+                "Tab": false,
+                "Tabs": false,
+                "TextInput": false,
+                "USStateSelect": false,
+                "Table": false
+            }
+        }
+    ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module",
@@ -14,15 +64,26 @@
             "jsx": true,
             "modules": true,
             "experimentalObjectRestSpread": true
-        }
+        },
+        "project": ["./tsconfig.json"]
     },
     "plugins": [
-        "react",
+        "@typescript-eslint",
+        "mdx",
         "prettier",
+        "react",
+        "react-hooks",
         "typescript"
     ],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": "error"
     },
-    "parser": "@babel/eslint-parser"
+    "settings": {
+        "mdx/code-blocks": true,
+        "react": {
+            "version": "18.2.0"
+        }
+    }
 }
