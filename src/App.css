@@ -507,6 +507,15 @@ btn-light:hover {
     margin-top: 10px;
 }
 
+.collapsible-text-card .content .card {
+    border: none;
+    margin-bottom: 0;
+}
+
+.collapsible-text-card .content .card-body {
+    padding: 0;
+}
+
 /* Common font size for medium, small, and extra small devices */
 @media (max-width: 991.98px) {
     .modal-body-text {

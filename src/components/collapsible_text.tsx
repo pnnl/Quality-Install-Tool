@@ -18,7 +18,7 @@ const CollapsibleText = (props: CollapsibleTextProps) => {
     }
 
     return (
-        <Card className="collapsible-text-card">
+        <Card className="collapsible-text-card mb-3">
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
                 <div
