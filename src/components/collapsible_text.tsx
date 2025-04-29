@@ -6,10 +6,11 @@ import { Card, Button } from 'react-bootstrap'
 interface CollapsibleTextProps {
     text: string
     title: string
+    content?: React.ReactNode
 }
 
 const CollapsibleText = (props: CollapsibleTextProps) => {
-    const { text, title } = props
+    const { text, title, content } = props
     const [isCollapsed, setIsCollapsed] = useState(true)
 
     const toggleCollapse = () => {
@@ -17,37 +18,28 @@ const CollapsibleText = (props: CollapsibleTextProps) => {
     }
 
     return (
-        <Card>
-            {/* <Card.Body> */}
-            <div>
+        <Card className="collapsible-text-card">
+            <Card.Body>
                 <Card.Title>{title}</Card.Title>
-                <Card.Body
-                    style={{
-                        height: '69px',
-                        // backgroundColor: 'pink',
-                        overflow: 'hidden',
-                        position: 'relative',
-                    }}
+                <div
+                    className={`collapsible-text ${
+                        isCollapsed ? 'collapsed' : ''
+                    }`}
                 >
-                    <p className="truncate-two-lines">
+                    <p className="description">
                         {text}
                         <span
-                            style={{
-                                position: 'absolute',
-                                backgroundColor: 'white',
-                                padding: '0 0px 0px 5px',
-                                bottom: '5px',
-                                right: '10px',
-                            }}
-                            className="clickable-text"
+                            className={`clickable-text ${
+                                isCollapsed ? 'collapsed' : ''
+                            }`}
                             onClick={toggleCollapse}
                         >
-                            {isCollapsed ? '...see more' : 'See less'}
+                            {isCollapsed ? '...see more' : '...show less'}
                         </span>
                     </p>
-                </Card.Body>
-            </div>
-            {/* </Card.Body> */}
+                </div>
+                <div className="content">{content}</div>
+            </Card.Body>
         </Card>
     )
 }
