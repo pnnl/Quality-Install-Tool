@@ -20,9 +20,7 @@ import {
     useDB,
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
-import {
-    getAuthToken
-} from '../auth/keycloak'
+import { getAuthToken } from '../auth/keycloak'
 import jsPDF from 'jspdf'
 
 PouchDB.plugin(PouchDBUpsert)
@@ -734,9 +732,9 @@ function extractLocalStorageData() {
     }
     let processStepId = localStorage.getItem('process_step_id') || ''
     return {
-        "processId"    : processId,
-        "userId"       : userId,
-        "processStepId": processStepId
+        processId: processId,
+        userId: userId,
+        processStepId: processStepId,
     }
 }
 
@@ -821,4 +819,21 @@ export const autoSaveToRDS = async () => {
     } catch (error) {
         console.error('Error auto-saving:', error)
     }
+}
+
+export function persistSessionState({
+    userId,
+    applicationId,
+    processId,
+    processStepId,
+}: {
+    userId?: string | null
+    applicationId?: string | null
+    processId?: string | null
+    processStepId?: string | null
+}) {
+    if (userId) localStorage.setItem('user_id', userId)
+    if (applicationId) localStorage.setItem('application_id', applicationId)
+    if (processId) localStorage.setItem('process_id', processId)
+    if (processStepId) localStorage.setItem('process_step_id', processStepId)
 }
