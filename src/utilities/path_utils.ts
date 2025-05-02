@@ -32,9 +32,11 @@ function _immutableUpsert<T extends Array<unknown> | Record<string, unknown>>(
                     ? value
                     : _immutableUpsert(
                           nextPath as NonEmptyArray<string>,
-                          sender[propName] as
-                              | Array<unknown>
-                              | Record<string, unknown>,
+                          sender[propName] !== undefined
+                              ? (sender[propName] as
+                                    | Array<unknown>
+                                    | Record<string, unknown>)
+                              : {},
                           value,
                       ),
         }
