@@ -125,7 +125,7 @@
         {props.data.heating_systems[0]?.is_efficiency_known === "YES"
           ? props.data.heating_systems[0].fuel_and_system_type === "ELECTRIC_HEAT_PUMP"
             ? <NumberInput label="Heating efficiency (HSPF)" path="heating_systems[0].efficiency_hspf" min="0" />
-            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[0].efficiency_afue" min="0" max="1" />
+            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[0].efficiency_afue" min="0" max="99" />
           : null
         }
 
@@ -153,7 +153,7 @@
         {props.data.heating_systems[1]?.is_efficiency_known === "YES"
           ? props.data.heating_systems[1].fuel_and_system_type === "ELECTRIC_HEAT_PUMP"
             ? <NumberInput label="Heating efficiency (HSPF)" path="heating_systems[1].efficiency_hspf" min="0" />
-            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[1].efficiency_afue" min="0" max="1" />
+            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[1].efficiency_afue" min="0" max="99" />
           : null
         }
 
@@ -181,7 +181,7 @@
         {props.data.heating_systems[2]?.is_efficiency_known === "YES"
           ? props.data.heating_systems[2].fuel_and_system_type === "ELECTRIC_HEAT_PUMP"
             ? <NumberInput label="Heating efficiency (HSPF)" path="heating_systems[2].efficiency_hspf" min="0" />
-            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[2].efficiency_afue" min="0" max="1" />
+            : <NumberInput label="Heating efficiency (AFUE)" path="heating_systems[2].efficiency_afue" min="0" max="99" />
           : null
         }
 
@@ -343,8 +343,8 @@
         <p><strong>Fuel and System Type: </strong>{props.data.heating_systems[0].fuel_and_system_type}</p>
 
         {props.data.heating_systems[0].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP'
-          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0].efficiency_afue : "NOT_KNOWN"}</p>
+          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? props.data.heating_systems[0]?.efficiency_hspf : "NOT_KNOWN"}</p>
+            : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[0].is_efficiency_known === 'YES' ? (props.data.heating_systems[0]?.efficiency_afue < 1 ? props.data.heating_systems[0]?.efficiency_afue * 100  : props.data.heating_systems[0]?.efficiency_afue) || "" : "NOT_KNOWN"}</p>
         }
 
         <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[0].is_percent_conditioned_floor_area_served_known === 'YES' ? props.data.heating_systems[0].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
@@ -357,8 +357,8 @@
         <p><strong>Fuel and System Type: </strong>{props.data.heating_systems[1].fuel_and_system_type}</p>
 
         {props.data.heating_systems[1].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP'
-          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1].efficiency_afue : "NOT_KNOWN"}</p>
+          ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? props.data.heating_systems[1]?.efficiency_hspf : "NOT_KNOWN"}</p>
+          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[1].is_efficiency_known === 'YES' ? (props.data.heating_systems[1]?.efficiency_afue < 1 ? props.data.heating_systems[1]?.efficiency_afue * 100 : props.data.heating_systems[1]?.efficiency_afue) || "" : "NOT_KNOWN"}</p>
         }
 
         <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[1].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[1].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
@@ -372,7 +372,7 @@
 
         {props.data.heating_systems[2].fuel_and_system_type === 'ELECTRIC_HEAT_PUMP'
           ? <p><strong>Heating Efficiency (HSPF): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_hspf : "NOT_KNOWN"}</p>
-          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? props.data.heating_systems[2].efficiency_afue : "NOT_KNOWN"}</p>
+          : <p><strong>Heating Efficiency (AFUE): </strong>{props.data.heating_systems[2].is_efficiency_known === 'YES' ? (props.data.heating_systems[2].efficiency_afue < 1 ? props.data.heating_systems[2]?.efficiency_afue * 100 : props.data.heating_systems[2]?.efficiency_afue) ||  "" : "NOT_KNOWN"}</p>
         }
 
         <p><strong>Percent Conditioned Area Served: </strong>{props.data.heating_systems[2].is_percent_conditioned_floor_area_served_known === 'YES'  ? props.data.heating_systems[2].percent_conditioned_floor_area_served : "NOT_KNOWN"}</p>
