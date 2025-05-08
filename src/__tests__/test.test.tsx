@@ -14,7 +14,12 @@ it('renders without crashing', () => {
     const root = ReactDOM.createRoot(div)
     root.render(
         <DatabaseProvider>
-            <MemoryRouter>
+            <MemoryRouter
+                future={{
+                    v7_startTransition: true,
+                    v7_relativeSplatPath: true,
+                }}
+            >
                 <ProjectsListView />
             </MemoryRouter>
         </DatabaseProvider>,
