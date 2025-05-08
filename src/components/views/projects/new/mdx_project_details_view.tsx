@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,39 +9,71 @@ import { useDatabase } from '../../../../providers/database_provider'
 import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 import { type Project } from '../../../../types/database.types'
-import { newProject, putProject } from '../../../../utilities/database_utils'
+import { type Installer } from '../../../../types/installer.type'
+import {
+    getLastModifiedInstaller,
+    newProject,
+    putProject,
+} from '../../../../utilities/database_utils'
 import { hasErrors } from '../../../../utilities/validation_utils'
 
 type MdxProjectViewProps = Record<string, never>
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
-
     const navigate = useNavigate()
+    const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>()
 
-    const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>(
-        () => {
-            const project = newProject('')
+    useEffect(() => {
+        const fetchAndInitializeProject = async () => {
+            try {
+                let installerDefaults: Installer = {
+                    name: '',
+                    company_name: '',
+                    mailing_address: '',
+                    phone: '',
+                    email: '',
+                }
 
-            return {
-                ...project,
-                metadata_: {
-                    ...project.metadata_,
-                    errors: {
-                        data_: {},
-                        metadata_: {
-                            doc_name: [''],
+                const mostRecentInstaller = await getLastModifiedInstaller(
+                    db as PouchDB.Database<Project>,
+                )
+                if (mostRecentInstaller) {
+                    installerDefaults = mostRecentInstaller
+                }
+
+                const newProjectData = newProject('', undefined, {
+                    installer: installerDefaults,
+                })
+
+                setProject({
+                    ...newProjectData,
+                    metadata_: {
+                        ...newProjectData.metadata_,
+                        errors: {
+                            data_: {},
+                            metadata_: {
+                                doc_name: [''],
+                            },
                         },
                     },
-                },
+                })
+            } catch (error) {
+                console.error('Error fetching projects:', error)
             }
-        },
-    )
+        }
 
-    const isProjectValid = useMemo<boolean>(() => {
-        return !hasErrors(
-            project as PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta,
-        )
+        fetchAndInitializeProject()
+    }, [db])
+
+    const isProjectValid = useMemo(() => {
+        if (!project) {
+            return false
+        }
+
+        const projectWithMeta = project as PouchDB.Core.Document<Project> &
+            PouchDB.Core.GetMeta
+        return !hasErrors(projectWithMeta)
     }, [project])
 
     const handleClickCancel = useCallback(
@@ -61,9 +93,10 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             event.stopPropagation()
             event.preventDefault()
 
-            await putProject(db, project)
-
-            navigate(`/app/${project._id}/workflows`)
+            if (project) {
+                await putProject(db, project)
+                navigate(`/app/${project._id}/workflows`)
+            }
 
             return false
         },
@@ -112,8 +145,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             </center>
         </>
     )
-
-    return null
 }
 
 export default MdxProjectView

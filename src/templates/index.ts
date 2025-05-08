@@ -38,96 +38,147 @@ export interface TemplateProps {
 
 export interface TemplateConfiguration {
     title: string
+    subtitle: {
+        singularTitleCase: string // Singular title case (e.g., "Installation")
+        singularLowerCase: string // Singular lowercase (e.g., "installation")
+        pluralTitleCase: string // Plural title case (e.g., "Installations")
+        pluralLowerCase: string // Plural lowercase (e.g., "installations")
+    }
     template: React.FC<MDXProps & TemplateProps>
+}
+
+// Common subtitle structure used by templates that refer to "Installation"
+const INSTALLATION_SUB_TITLE = {
+    singularTitleCase: 'Installation',
+    singularLowerCase: 'installation',
+    pluralTitleCase: 'Installations',
+    pluralLowerCase: 'installations',
 }
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowAtticAirSealingAndInsulation,
     },
     doe_combustion_appliance_safety_tests: {
         title: 'Combustion Appliance Safety Testing',
+        subtitle: {
+            singularTitleCase: 'Assessment',
+            singularLowerCase: 'assessment',
+            pluralTitleCase: 'Assessments',
+            pluralLowerCase: 'assessments',
+        },
         template: DOECombustionApplianceSafetyTests,
     },
     doe_workflow_duct_air_sealing: {
         title: 'Duct Air Sealing and Insulation',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowDuctAirSealTemplate,
     },
     doe_workflow_electric_cooking_appliances: {
         title: 'Electric Cooking Appliances',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowElectricCookTemplate,
     },
     doe_workflow_electric_wiring: {
         title: 'Electric Wiring',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowElectricWiringTemplate,
     },
     doe_workflow_electric_load_service_center: {
         title: 'Electric Load Service Center',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowElectricLoadServiceTemplate,
     },
     doe_workflow_floor_airsealing_and_insulation: {
         title: 'Floor Air Sealing and Insulation Above Unconditioned Space',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowFloorAirSealingAndInsulation,
     },
     doe_workflow_foundation_airsealing_and_insulation: {
         title: 'Foundation Wall Air Sealing and Insulation',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowFoundationAirSealingAndInsulation,
     },
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowFullFrameReplacementWindows,
     },
     doe_workflow_heat_pump_cloth_dryer: {
-        title: 'Heat Pump Clothes Dryer ',
+        title: 'Heat Pump Clothes Dryer',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowHPClothDyer,
     },
     doe_workflow_central_ducted_split_heat_pump: {
         title: 'Heat Pump Ducted',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowDuctedHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
         title: 'Heat Pump Ductless',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowDuctlessHeatPumpTemplate,
     },
     doe_workflow_heat_pump_water_heater: {
         title: 'Heat Pump Water Heater',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowHeatPumpWaterHeaterTemplate,
     },
     doe_workflow_high_efficiency_gas_furnace: {
         title: 'High Efficiency Gas Furnace',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowHighEfficiencyGasFurnace,
     },
     doe_workflow_high_efficiency_modulating_boiler: {
         title: 'High Efficiency Modulating Boiler',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowHighEfficiencyModulatingBoiler,
     },
     doe_workflow_high_efficiency_water_heater: {
         title: 'High Efficiency Water Heater',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowHighEfficiencyWaterHeater,
     },
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowInsertReplacementWindows,
     },
     doe_workflow_mechanical_ventilation: {
         title: 'Mechanical Ventilation',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowMechanicalVentilation,
     },
     doe_workflow_slab_foundation_exterior: {
         title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowSlapFoundationExterior,
     },
     doe_workflow_wall_air_sealing_and_insulation_exterior: {
         title: 'Wall Air Sealing and Insulation (Drill and Fill)',
+        subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowWallAirSealingAndInsulation,
     },
     ira_doe_workflow_limited_assessment: {
         title: 'IRA Limited Assessment',
+        subtitle: {
+            singularTitleCase: 'Assessment',
+            singularLowerCase: 'assessment',
+            pluralTitleCase: 'Assessments',
+            pluralLowerCase: 'assessments',
+        },
         template: IRADOEWorkflowLimitedAssessment,
     },
     // playground: {
     //     title: 'Playground',
+    //     subtitle: {
+    //         singularTitleCase: 'Playground',
+    //         singularLowerCase: 'playground',
+    //         pluralTitleCase: 'Playgrounds',
+    //         pluralLowerCase: 'playgrounds',
+    //     },
     //     template: Playground,
     // },
 }
