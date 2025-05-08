@@ -210,7 +210,6 @@
   },
   "resolutions": {
     "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "wrap-ansi": "^7.0.0"
+    "@types/react-dom": "^18.2.0"
   }
 }
