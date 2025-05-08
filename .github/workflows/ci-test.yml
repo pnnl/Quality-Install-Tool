@@ -1,9 +1,11 @@
 name: Run Jest Tests on PR targeting ira-test
 
 on:
-  pull_request:
+  push:        
+    branches: ['**'] 
+  pull_request: 
     branches:
-      - 'ira-test'  # This triggers the action for PRs targeting the 'ira-test' branch
+      - 'ira-test'
 
 jobs:
   test:
