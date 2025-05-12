@@ -11,7 +11,7 @@ import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
-interface PhotoInputProps {
+export interface PhotoInputProps {
     label: string
     uploadable: boolean
     loading: boolean
@@ -125,6 +125,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                     <Button
                         variant="danger"
+                        aria-label="Confirm permanent photo deletion"
                         onClick={async () => {
                             if (selectedPhotoAttachmentForDelete) {
                                 onRemovePhotoAttachment &&
@@ -147,6 +148,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Collapsible>
                     <input
                         ref={ref}
+                        data-testid="photo-input"
                         type="file"
                         accept={PHOTO_MIME_TYPES.join(',')}
                         capture={uploadable ? undefined : 'environment'}
@@ -193,6 +195,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                     <Button
                                         variant="danger"
                                         className="photo-delete-button"
+                                        aria-label="Delete photo"
                                         onClick={event => {
                                             event.stopPropagation()
                                             event.preventDefault()

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
+export const DEFAULT_OPTIONS: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
