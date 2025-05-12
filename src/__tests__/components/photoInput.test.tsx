@@ -6,9 +6,12 @@ import { act } from 'react'
 import { StoreContext } from '../../providers/store_provider'
 import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
 import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
+import { DEFAULT_OPTIONS } from '../../components/date_time_str'
 
 // Mock URL.createObjectURL
 global.URL.createObjectURL = jest.fn()
+// Mock heic2any
+jest.mock('heic2any', () => ({ window: jest.fn() }))
 
 const mockStoreContext = {
     docId: 'TestDocID123',
@@ -132,16 +135,8 @@ describe('PhotoInput Component', () => {
     })
     test('renders timestamp and geolocation correctly', () => {
         function formatDateTime(dateTimeStr: string): string {
-            const options: Intl.DateTimeFormatOptions = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                timeZoneName: 'short',
-            }
             const date = new Date(dateTimeStr)
-            const formattedDate = date.toLocaleDateString('en-US', options)
+            const formattedDate = date.toLocaleString('en-US', DEFAULT_OPTIONS)
             return formattedDate
         }
         const mockAttachment = generateMockPhotoAttachment()
@@ -156,8 +151,10 @@ describe('PhotoInput Component', () => {
               )
             : 'Missing'
 
+        console.log('Formatted Timestamp:', timestamp) // Log the formatted timestamp
+
         expect(
-            screen.getByText(new RegExp(`${timestamp}`, 'i')),
+            screen.getByText(new RegExp(`${timestamp}`, 'i')), //BROKEN!
         ).toBeInTheDocument()
 
         // Check if geolocation is displayed correctly
