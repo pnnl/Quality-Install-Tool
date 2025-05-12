@@ -151,10 +151,8 @@ describe('PhotoInput Component', () => {
               )
             : 'Missing'
 
-        console.log('Formatted Timestamp:', timestamp) // Log the formatted timestamp
-
         expect(
-            screen.getByText(new RegExp(`${timestamp}`, 'i')), //BROKEN!
+            screen.getByText(new RegExp(`${timestamp}`, 'i')),
         ).toBeInTheDocument()
 
         // Check if geolocation is displayed correctly
