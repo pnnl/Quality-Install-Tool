@@ -155,17 +155,21 @@ h1 + h3 {
 }
 
 #root-banner {
-  background-color: #006100;
+  background-color: #344575;
 }
 
 #root-title {
-  color: gold;
+  color: #ffffff;
   font-size: 2rem;
 }
 
 #root-body {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #344575;
 }
 
 #back-button-logo {
@@ -175,7 +179,7 @@ h1 + h3 {
 
 #back-button {
   padding: 1rem;
-  background-color: #006100;
+  background-color: #344575;
 }
 
 #back-button-link {
@@ -287,8 +291,8 @@ h1 + h3 {
 /* Primary Button - with background color */
 .btn-primary {
   color: #fff; /* Text color */
-  background-color: #006100; /* Base background color */
-  border: 2px solid #006100; 
+  background-color: #3d70b7; /* Base background color */
+  border: 2px solid #3d70b7; 
   cursor: pointer; 
   text-align: center; 
   text-decoration: none; 
@@ -302,13 +306,13 @@ h1 + h3 {
 .btn-primary:focus, 
 .btn-primary:focus-visible, 
 .btn-primary:focus-within {
-  background-color: #004d00; 
-  border-color: #004d00; 
+  background-color: #344575; 
+  border-color: #344575; 
 }
 
 .btn-primary:disabled {
-  background-color: #4caf50; 
-  border-color: #4caf50; 
+  background-color: #93bce4; 
+  border-color: #93bce4; 
   cursor: not-allowed; /* Not-allowed cursor on disabled */
   opacity: 0.6; 
 }
@@ -318,8 +322,8 @@ h1 + h3 {
 .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff; 
-  background-color:  #005f00; 
-  border-color:  #005f00; 
+  background-color:  #344575; 
+  border-color:  #344575; 
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
@@ -331,17 +335,16 @@ h1 + h3 {
 .btn-outline-primary{
   background-color: transparent;
   cursor: pointer; 
-  border: 2px solid #006100;
-  color: #006100; 
+  border: 2px solid #344575;
+  color: #344575; 
 
 }
 
 .btn-outline-primary:hover{
   background-color: transparent; 
-  color: #006100; 
-  border-color: #006100;
+  color: #344575; 
+  border-color: #344575;
 }
-
 
 /* Light Button - for Icons */
 .btn-light {
@@ -357,7 +360,7 @@ btn-light:hover {
 .welcome-header {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #006100;
+  color: #344575;
   font-size: 28px;
   font-weight: bold;
 }
@@ -378,6 +381,10 @@ btn-light:hover {
     font-size: 12px;
     font-weight: bold;
   }
+}
+.link-blue{
+  color: #3d70b7;
+  /* text-decoration: none; */
 }
 
 
@@ -488,4 +495,12 @@ visibility: hidden;}
     page-break-before: always;
   }
 
+}
+
+.accordion-header .accordion-button.collapsed {
+  background-color: #ffffff;
+}
+
+.accordion-header .accordion-button {
+  background-color: #93bce4;
 }
