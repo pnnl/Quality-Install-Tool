@@ -101,11 +101,13 @@ export function transformPhotoAttachmentIdSuffixes<Model>(
         _attachments: Object.fromEntries(
             Object.entries(doc._attachments ?? {}).map(
                 ([attachmentId, attachment]) => {
-                    const newAttachmentId =
-                        targetPhotoAttachmentIdBySourcePhotoAttachmentId[
-                            attachmentId
-                        ]
-
+                    const newAttachmentId = attachmentId.match(
+                        RE_PHOTO_ATTACHMENT_ID,
+                    )
+                        ? targetPhotoAttachmentIdBySourcePhotoAttachmentId[
+                              attachmentId
+                          ]
+                        : attachmentId
                     if (newAttachmentId === undefined) {
                         throw new Error(
                             `Replacement attachment ID not found: ${attachmentId}`,
