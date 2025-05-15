@@ -1,0 +1,29 @@
+name: Run Jest Tests
+
+on:
+
+  pull_request: 
+    types: [opened, synchronize, reopened]
+    branches: [main] 
+
+jobs:
+  jest_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js v22.1.0
+      uses: actions/setup-node@v2  
+      with:
+        node-version: '22.1.0'  
+
+    - name: Install Yarn
+      run: npm install -g yarn
+
+    - name: Install dependencies with Yarn
+      run: yarn install --frozen-lockfile
+
+    - name: Run Jest tests
+      run: yarn test
