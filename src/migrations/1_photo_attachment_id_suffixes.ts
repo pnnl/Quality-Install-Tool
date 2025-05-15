@@ -101,8 +101,8 @@ export function transformPhotoAttachmentIdSuffixes<Model>(
         _attachments: Object.fromEntries(
             Object.entries(doc._attachments ?? {}).map(
                 ([attachmentId, attachment]) => {
-                    const newAttachmentId = !['manual_j_file'].includes(
-                        attachmentId,
+                    const newAttachmentId = attachmentId.match(
+                        RE_PHOTO_ATTACHMENT_ID,
                     )
                         ? targetPhotoAttachmentIdBySourcePhotoAttachmentId[
                               attachmentId
