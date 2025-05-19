@@ -14,7 +14,7 @@ import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
 import { persistSessionState } from './store'
 import { getAuthToken } from '../auth/keycloak'
-import { getConfig } from '../config'
+import { getConfig } from '../secrets-manager'
 
 /**
  * Home:  Renders the Home page for the APP

@@ -10,7 +10,7 @@ import {
     updateProcessStepWithMeasure,
 } from './store'
 import { getAuthToken } from '../auth/keycloak'
-import { getConfig } from '../config'
+import { getConfig } from '../secrets-manager'
 
 interface PrintSectionProps {
     children: ReactNode

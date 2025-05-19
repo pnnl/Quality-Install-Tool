@@ -1,7 +1,8 @@
+// config.ts
 let runtimeConfig: Record<string, string> = {}
 
 export async function loadRuntimeConfig(): Promise<void> {
-  const res = await fetch('/config.json')
+  const res = await fetch('/config') 
   runtimeConfig = await res.json()
 }
 

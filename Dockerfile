@@ -31,26 +31,33 @@ COPY . .
 # Build the React app
 RUN yarn run build
 
-# Stage 2: Serve the build
-FROM nginx:1.25-alpine
+# Final Stage: Node + NGINX
+FROM node:20-alpine
 
-# Set working directory
+# Install NGINX
+RUN apk add --no-cache nginx
+
+# Set working directory for frontend files
 WORKDIR /usr/share/nginx/html
 
-# Remove default nginx static assets
+# Remove default NGINX content
 RUN rm -rf ./*
 
 # Copy build output from Stage 1
 COPY --from=builder /app/build .
 
-# Copy entrypoint script 
-COPY nginx-entrypoint.sh /docker-entrypoint.d/config.sh
+# Copy custom nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Make script executable
-RUN chmod +x /docker-entrypoint.d/config.sh
+# Copy minimal backend
+COPY server.js /app/server.js
 
-# Expose port 80
-EXPOSE 80
+# Copy startup script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Start NGINX server
-CMD ["nginx", "-g", "daemon off;"]
+# Expose ports
+EXPOSE 80 3001
+
+# Start backend and NGINX
+CMD ["/start.sh"]
