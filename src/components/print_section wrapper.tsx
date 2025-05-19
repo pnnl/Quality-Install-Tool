@@ -2,10 +2,13 @@ import React, { FC } from 'react'
 
 import { StoreContext } from './store'
 import PrintSection from './print_section'
+import { useParams } from 'react-router-dom'
+import templatesConfig from '../templates/templates_config'
 
 interface PrintSectionWrapperProps {
     children: React.ReactNode
     label: string
+    measureName: string
 }
 
 /**
@@ -19,11 +22,28 @@ const PrintSectionWrapper: FC<PrintSectionWrapperProps> = ({
     children,
     label,
 }) => {
+    const { workflowName, jobId } = useParams<{
+        workflowName: string
+        jobId: string
+    }>()
+
+    const measureName =
+        templatesConfig[workflowName!]?.title ||
+        workflowName ||
+        'Unknown Measure'
+
     // Generate an id for the input
     return (
         <StoreContext.Consumer>
             {({ metadata }) => {
-                return <PrintSection children={children} label={label} />
+                return (
+                    <PrintSection
+                        children={children}
+                        label={label}
+                        measureName={measureName}
+                        jobId={jobId}
+                    />
+                )
             }}
         </StoreContext.Consumer>
     )

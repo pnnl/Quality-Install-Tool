@@ -1,7 +1,9 @@
 import { useState, type FC, useEffect } from 'react'
 import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
-import templatesConfig from '../templates/templates_config'
+import templatesConfig, {
+    mapMeasuresToTemplateValues,
+} from '../templates/templates_config'
 import {
     retrieveInstallationDocs,
     retrieveProjectSummary,
@@ -23,6 +25,25 @@ const WorkFlowView: FC = () => {
     const [projectInfo, setProjectInfo] = useState<any>({})
     const db = useDB()
 
+    const [allowedTemplates, setAllowedTemplates] = useState<string[]>([])
+
+    // Load allowed templates based on mapped measure types from vapor-flow
+    useEffect(() => {
+        const measures = localStorage.getItem('measures') || '[]'
+
+        try {
+            const measureNames: string[] = JSON.parse(measures)
+            //normalize measure names
+            const normalized = measureNames.map(m => m.toLowerCase())
+            // map normalized measures to template titles
+            const mappedTitles = mapMeasuresToTemplateValues(normalized)
+            setAllowedTemplates(mappedTitles)
+        } catch (err) {
+            console.warn('Failed to parse measures from localStorage:', err)
+            setAllowedTemplates([])
+        }
+    }, [])
+
     // Retrieves the installation details with the specific workflow name
     const retrieveJobs = async (workflowName: string): Promise<void> => {
         retrieveInstallationDocs(db, projectId as string, workflowName).then(
@@ -42,9 +63,10 @@ const WorkFlowView: FC = () => {
     }
 
     useEffect(() => {
-        Object.keys(templatesConfig).map(key => retrieveJobs(key))
+        if (allowedTemplates.length === 0) return
+        allowedTemplates.forEach(workflow => retrieveJobs(workflow))
         project_info()
-    }, [])
+    }, [allowedTemplates])
 
     const project_name = projectInfo?.project_name
         ? projectInfo?.project_name
@@ -55,14 +77,38 @@ const WorkFlowView: FC = () => {
     const city = projectInfo?.city ? projectInfo?.city : ''
     const state = projectInfo?.state ? projectInfo?.state : ''
     const zip_code = projectInfo?.zip_code ? projectInfo?.zip_code : ''
-    const templates = Object.keys(templatesConfig).map(key => (
-        <LinkContainer key={key} to={`/app/${projectId}/${key}`}>
-            <ListGroup.Item key={key} action={true}>
-                {templatesConfig[key as keyof typeof templatesConfig].title}{' '}
-                {workflowJobsCount[key] > 0 && `(${workflowJobsCount[key]})`}
-            </ListGroup.Item>
-        </LinkContainer>
-    ))
+    const templates = Object.entries(templatesConfig)
+        .filter(([_, val]) => allowedTemplates.includes(val.title))
+        .flatMap(([key, val]) => {
+            const jobCount = workflowJobsCount[key] || 0
+
+            // no jobs: show just the workflow
+            if (jobCount === 0) {
+                return [
+                    <LinkContainer
+                        key={`${key}-0`}
+                        to={`/app/${projectId}/${key}`}
+                    >
+                        <ListGroup.Item action={true}>
+                            {val.title}
+                        </ListGroup.Item>
+                    </LinkContainer>,
+                ]
+            }
+
+            // one or more jobs: list each job with its own link
+            return Array.from({ length: jobCount }).map((_, jobIndex) => (
+                <LinkContainer
+                    key={`${key}-${jobIndex}`}
+                    to={`/app/${projectId}/${key}/${jobIndex}`}
+                >
+                    <ListGroup.Item action={true}>
+                        {val.title} — Job {jobIndex + 1}
+                    </ListGroup.Item>
+                </LinkContainer>
+            ))
+        })
+
     return (
         <div>
             <h1>Choose an Installation Workflow</h1>

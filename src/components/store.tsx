@@ -18,8 +18,12 @@ import {
     putNewProject,
     putNewInstallation,
     useDB,
+    exportDocumentAsJSONObject,
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
+import { getAuthToken } from '../auth/keycloak'
+import jsPDF from 'jspdf'
+import { measureTypeMapping } from '../templates/templates_config'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -41,6 +45,12 @@ type Attachments = Record<
     | Attachment
     | { blob: Blob; digest: string; metadata: Record<string, JSONValue> }
 >
+
+declare global {
+    interface Window {
+        docData: any
+    }
+}
 
 export const StoreContext = React.createContext({
     docId: '' satisfies string,
@@ -173,6 +183,91 @@ export const StoreProvider: FC<StoreProviderProps> = ({
         }
     }
 
+    // useEffect(() => {
+    //     const { processId, userId, processStepId } = extractLocalStorageData()
+    //     if (!processStepId && processId) {
+    //         console.log(`Fetching process_step_id for process: ${processId}`)
+
+    //         fetch(`${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/steps`, {
+    //             method: 'GET',
+    //             headers: { Authorization: `Bearer ${getAuthToken()}` },
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log('API Response for process steps:', data)
+
+    //                 if (data.steps && data.steps.length > 0) {
+    //                     const qualityInstallStep = data.steps.find(
+    //                         (step: { description?: string }) =>
+    //                             step.description &&
+    //                             step.description.includes('quality install'),
+    //                     )
+
+    //                     if (qualityInstallStep) {
+    //                         let processStepId = qualityInstallStep.id
+    //                         localStorage.setItem(
+    //                             'process_step_id',
+    //                             processStepId,
+    //                         )
+    //                     }
+    //                 } else {
+    //                     console.warn('No steps found for process:', processId)
+    //                 }
+    //             })
+    //             .catch(error =>
+    //                 console.error('Error fetching process_step_id:', error),
+    //             )
+    //     }
+    //     fetch(
+    //         `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install?user_id=${userId}&process_step_id=${processStepId}`,
+    //         {
+    //             method: 'GET',
+    //             headers: { Authorization: `Bearer ${getAuthToken()}` },
+    //         },
+    //     )
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success && data.form) {
+    //                 if (!doc.data_) doc.data_ = {}
+    //                 doc.data_.form_id = data.form.id
+    //                 localStorage.setItem('form_id', data.form.id)
+    //                 window.docData = doc.data_
+    //             } else {
+    //                 createQualityInstallForm(userId, processStepId)
+    //             }
+    //         })
+    //         .catch(error =>
+    //             console.error('Error fetching quality install form:', error),
+    //         )
+    // }, [])
+
+    // const createQualityInstallForm = (
+    //     userId: string,
+    //     processStepId: string,
+    // ) => {
+    //     fetch(`${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: `Bearer ${getAuthToken()}`,
+    //         },
+    //         body: JSON.stringify({
+    //             user_id: userId,
+    //             process_step_id: processStepId,
+    //             form_data: {},
+    //         }),
+    //     })
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //                 localStorage.setItem('form_id', data.form_id)
+    //             }
+    //         })
+    //         .catch(error =>
+    //             console.error('Error in createQualityInstallForm:', error),
+    //         )
+    // }
+
     useEffect(() => {
         /**
          * Connects the store to the database document
@@ -187,17 +282,32 @@ export const StoreProvider: FC<StoreProviderProps> = ({
          */
         ;(async function connectStoreToDB() {
             try {
-                // Initialize the DB document as needed
-                const result = !isInstallationDoc
-                    ? ((await putNewProject(db, docName, docId)) as unknown)
-                    : ((await putNewInstallation(
-                          db,
-                          docId,
-                          workflowName,
-                          docName,
-                          parentId as string,
-                      )) as unknown)
-                revisionRef.current = (result as PouchDB.Core.Response).rev
+                const normalizedDocId = docId === '0' ? undefined : docId
+
+                // Check if the document already exists
+                let existingDoc: any = null
+                if (normalizedDocId) {
+                    existingDoc = await db
+                        .get(normalizedDocId)
+                        .catch(() => null)
+                }
+
+                if (!existingDoc) {
+                    const result = !isInstallationDoc
+                        ? await putNewProject(db, docName, docId)
+                        : await putNewInstallation(
+                              db,
+                              docId,
+                              workflowName,
+                              docName,
+                              parentId as string,
+                          )
+                    revisionRef.current = (
+                        result as unknown as PouchDB.Core.Response
+                    ).rev
+                } else {
+                    revisionRef.current = existingDoc._rev
+                }
             } catch (err) {
                 console.error('DB initialization error:', err)
                 // TODO: Rethink how best to handle errors
@@ -296,9 +406,12 @@ export const StoreProvider: FC<StoreProviderProps> = ({
      * @param pathStr A string path such as "foo.bar[2].biz" that represents a path into the doc state
      * @param value The value that is to be updated/inserted
      */
+
     const upsertData: UpsertData = (pathStr, value) => {
         pathStr = 'data_.' + pathStr
         upsertDoc(pathStr, value)
+        window.docData = doc.data_
+        // autoSaveToRDS()
     }
 
     /**
@@ -489,4 +602,464 @@ export function immutableUpsert(
         )
     }
     return newRecipient
+}
+
+// export const saveProjectAndUploadToS3 = async (projectDoc: any) => {
+//     try {
+//         const pdf = new jsPDF()
+//         pdf.text(
+//             `Project: ${projectDoc.metadata_.doc_name || 'Untitled Project'}`,
+//             10,
+//             10,
+//         )
+//         pdf.text('Quality Install Tool Report', 10, 20)
+
+//         const reportData = {
+//             projectName: projectDoc.metadata_.doc_name,
+//             ...projectDoc.data_,
+//         }
+
+//         pdf.text(JSON.stringify(reportData, null, 2), 10, 30)
+//         const pdfBlob = pdf.output('blob')
+
+//         const s3Response = await fetch(
+//             '${process.env.REACT_APP_VAPORCORE_URL}/api/s3/FILL_ME_IN', // CHANGE TO S3 PRSIGNED URL - need to generate on backend to make put
+//             {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: `Bearer ${getAuthToken()}`,
+//                 },
+//                 body: JSON.stringify({
+//                     file_name: `quality_install_${projectDoc.metadata_.doc_name || 'Untitled Project'}_${Date.now()}.pdf`,
+//                     file_type: 'application/pdf',
+//                 }),
+//             },
+//         )
+//         const s3Data = await s3Response.json()
+//         if (!s3Data.success) {
+//             console.error('Failed to get S3 presigned URL:', s3Data)
+//             return
+//         }
+//         console.log('Uploading PDF to S3:', s3Data.url)
+//         const uploadResponse = await fetch(s3Data.url, {
+//             method: 'PUT',
+//             body: pdfBlob,
+//             headers: { 'Content-Type': 'application/pdf' },
+//         })
+//         if (!uploadResponse.ok) {
+//             console.error('Failed to upload PDF to S3:', uploadResponse)
+//             return
+//         }
+//         let formId = localStorage.getItem('form_id')
+//         const updateResponse = await fetch(
+//             `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install/${formId}`,
+//             {
+//                 method: 'PUT',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: `Bearer ${getAuthToken()}`,
+//                 },
+//                 body: JSON.stringify({ s3_file_url: s3Data.url }),
+//             },
+//         )
+//         const updateData = await updateResponse.json()
+//         if (updateData.success) {
+//             console.log(
+//                 'Successfully saved project and updated DB with S3 URL:',
+//                 updateData,
+//             )
+//         } else {
+//             console.error('Failed to update DB with S3 file URL:', updateData)
+//         }
+//         const { processId, userId, processStepId } = extractLocalStorageData()
+//         const conditionResponse = await fetch(
+//             `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/condition`,
+//             {
+//                 method: 'PUT',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                     Authorization: `Bearer ${getAuthToken()}`,
+//                 },
+//                 body: JSON.stringify({ condition: 'CLOSED' }),
+//             },
+//         )
+//         if (!conditionResponse.ok) {
+//             console.error(
+//                 'Failed to update step condition to CLOSED:',
+//                 conditionResponse,
+//             )
+//             return
+//         }
+//         const projectDocName = projectDoc.metadata_.doc_name
+//         const conditionData = await conditionResponse.json()
+//         console.log('Step condition updated:', conditionData)
+//         const NewQualityInstallSubmissionData =
+//             await storeNewQualityInstallSubmission(
+//                 projectDocName,
+//                 [],
+//                 formId,
+//                 userId,
+//                 processId,
+//                 processStepId,
+//             )
+//         console.log('Local Storage Updated:', NewQualityInstallSubmissionData)
+//     } catch (error) {
+//         console.error('Error in saveProjectAndUploadToS3:', error)
+//     }
+// }
+
+// function storeNewQualityInstallSubmission(
+//     submissionName: string,
+//     formData: any,
+//     applicationId: any,
+//     userId: string,
+//     processId: string,
+//     stepId: string,
+//     localStorageKey = 'quality_install_submission',
+// ) {
+//     const newObject = {
+//         [submissionName]: {
+//             form_data: formData,
+//             application_id: applicationId,
+//             user_id: userId,
+//             process_id: processId,
+//             step_id: stepId,
+//         },
+//     }
+
+//     localStorage.setItem(localStorageKey, JSON.stringify(newObject))
+// }
+
+function extractLocalStorageData() {
+    const prequalificationData = localStorage.getItem(
+        'formData_prequalification',
+    )
+    let processId = null
+    let userId = null
+
+    if (prequalificationData) {
+        try {
+            const parsedData = JSON.parse(prequalificationData)
+            processId = parsedData.process_id || null
+            userId = parsedData.user?.user_id || null
+        } catch (error) {
+            console.error('Error parsing formData_prequalification:', error)
+        }
+    }
+    let processStepId = localStorage.getItem('process_step_id') || ''
+    return {
+        processId: processId,
+        userId: userId,
+        processStepId: processStepId,
+    }
+}
+
+export const isFormComplete = (formData: any, metadata?: any): boolean => {
+    if (!formData) return false
+    if (!formData.installer) {
+        console.warn('Missing required installer data')
+        return false
+    }
+
+    const installerFields = [
+        'name',
+        'company_name',
+        'mailing_address',
+        'phone',
+        'email',
+    ]
+    for (const field of installerFields) {
+        if (
+            !formData.installer[field] ||
+            formData.installer[field].trim() === ''
+        ) {
+            return false
+        }
+    }
+    if (!formData.location) {
+        return false
+    }
+    const locationFields = ['street_address', 'city', 'state', 'zip_code']
+    for (const field of locationFields) {
+        if (
+            !formData.location[field] ||
+            formData.location[field].trim() === ''
+        ) {
+            return false
+        }
+    }
+    return true
+}
+
+// export const autoSaveToRDS = async () => {
+//     const { processId, userId, processStepId } = extractLocalStorageData()
+//     const formData = {
+//         user_id: userId,
+//         process_step_id: processStepId,
+//         form_data: window.docData || {},
+//     }
+//     try {
+//         let response
+//         const formId = localStorage.getItem('form_id')
+//         if (formId) {
+//             response = await fetch(
+//                 `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install/${formId}`,
+//                 {
+//                     method: 'PUT',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         Authorization: `Bearer ${getAuthToken()}`,
+//                     },
+//                     body: JSON.stringify(formData),
+//                 },
+//             )
+//         } else {
+//             response = await fetch(
+//                 '${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install',
+//                 {
+//                     method: 'POST',
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         Authorization: `Bearer ${getAuthToken()}`,
+//                     },
+//                     body: JSON.stringify(formData),
+//                 },
+//             )
+//         }
+//         const data = await response.json()
+//         if (data.success) {
+//             if (!formId) {
+//                 localStorage.setItem('form_id', data.form_id)
+//             }
+//         }
+//     } catch (error) {
+//         console.error('Error auto-saving:', error)
+//     }
+// }
+
+export function persistSessionState({
+    userId,
+    applicationId,
+    processId,
+    processStepId,
+}: {
+    userId?: string | null
+    applicationId?: string | null
+    processId?: string | null
+    processStepId?: string | null
+}) {
+    if (userId) localStorage.setItem('user_id', userId)
+    if (applicationId) localStorage.setItem('application_id', applicationId)
+    if (processId) localStorage.setItem('process_id', processId)
+    if (processStepId) localStorage.setItem('process_step_id', processStepId)
+}
+
+export const saveToVaporCoreDB = async (
+    userId: string | null,
+    processStepId: string | null,
+    docId: string | null,
+    jsonExport: any,
+): Promise<string | undefined> => {
+    if (!userId || !processStepId) {
+        console.warn('Missing userId or processStepId in saveToVaporCoreDB')
+        return
+    }
+
+    const formData = {
+        id: docId,
+        user_id: userId,
+        process_step_id: processStepId,
+        form_data: jsonExport,
+    }
+
+    try {
+        if (docId) {
+            const putResponse = await fetch(
+                `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install/${docId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAuthToken()}`,
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+
+            if (putResponse.status === 404 || putResponse.status === 400) {
+                console.warn(`Form ID ${docId} not found, retrying as POST...`)
+                const postResponse = await fetch(
+                    `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${getAuthToken()}`,
+                        },
+                        body: JSON.stringify(formData),
+                    },
+                )
+
+                if (!postResponse.ok) {
+                    throw new Error(`Failed to create form with ID ${docId}`)
+                }
+
+                const responseData = await postResponse.json()
+                return responseData.form_data_id // <-- Return the created ID
+            } else if (!putResponse.ok) {
+                throw new Error(`Failed to update form with ID ${docId}`)
+            } else {
+                return docId // If PUT succeeds, return the original ID
+            }
+        } else {
+            // if no docId was provided, treat as new form creation
+            const postResponse = await fetch(
+                `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getAuthToken()}`,
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+
+            if (!postResponse.ok) {
+                throw new Error('Failed to create form (no docId provided)')
+            }
+
+            const responseData = await postResponse.json()
+            return responseData.form_data_id
+        }
+    } catch (error) {
+        console.error('Error saving to RDS:', error)
+    }
+}
+
+export const updateProcessStepWithMeasure = async ({
+    userId,
+    processId,
+    processStepId,
+    measureName,
+    finalReportDocumentId,
+    finalReportJSONId,
+    jobId,
+}: {
+    userId: string | null
+    processId: string
+    processStepId: string
+    measureName: string
+    finalReportDocumentId: string
+    finalReportJSONId: string
+    jobId?: string
+}) => {
+    const response = await fetch(
+        `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data`,
+        {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getAuthToken()}`,
+                'x-user-id': userId ?? '',
+            },
+            body: JSON.stringify({
+                add_measure: {
+                    name: measureName,
+                    jobs: [
+                        {
+                            job_id: jobId,
+                            status: 'completed',
+                            final_report_document_id: finalReportDocumentId,
+                            final_report_json_id: finalReportJSONId,
+                        },
+                    ],
+                },
+            }),
+        },
+    )
+
+    if (!response.ok) {
+        throw new Error('Failed to update process step with measure details')
+    }
+
+    return await response.json()
+}
+
+export const closeProcessStepIfAllMeasuresComplete = async (
+    processId: string | null,
+    processStepId: string | null,
+    userId: string | null,
+): Promise<void> => {
+    const expectedMeasureNames: string[] = JSON.parse(
+        localStorage.getItem('measures') || '[]',
+    )
+
+    if (!processId || !processStepId) {
+        console.warn('Missing required identifiers.')
+        return
+    }
+
+    try {
+        const formDataRes = await fetch(
+            `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${getAuthToken()}`,
+                },
+            },
+        )
+
+        if (!formDataRes.ok) {
+            console.error('Failed to fetch form data')
+            return
+        }
+
+        const formJson = await formDataRes.json()
+        const formData = formJson?.data ?? {}
+        const actualMeasures = formData?.measures || []
+
+        const allCompleted = expectedMeasureNames.every(expected => {
+            const actualNames = measureTypeMapping[expected.toLowerCase()] || []
+
+            return actualMeasures.some(
+                (actual: any) =>
+                    actualNames.includes(actual.name) &&
+                    Array.isArray(actual.jobs) &&
+                    actual.jobs.length > 0 &&
+                    actual.jobs.every(
+                        (job: any) => job.status?.toLowerCase() === 'completed',
+                    ),
+            )
+        })
+
+        if (!allCompleted) {
+            console.log('Not all expected measures are marked completed.')
+            return
+        }
+
+        const closeRes = await fetch(
+            `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/condition`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getAuthToken()}`,
+                    'x-user-id': userId ?? '',
+                },
+                body: JSON.stringify({ condition: 'CLOSED' }),
+            },
+        )
+
+        if (!closeRes.ok) {
+            const errorBody = await closeRes.text()
+            console.error('Failed to close step:', errorBody)
+        } else {
+            console.log('Process step closed successfully.')
+        }
+    } catch (error) {
+        console.error(' Error:', error)
+    }
 }

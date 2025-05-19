@@ -131,6 +131,8 @@ export async function putNewInstallation(
     docName: string,
     parentId: string,
 ) {
+    console.warn('putNewInstallation called with docId:', docId)
+
     // Get the current date
     const now = new Date()
     // TODO: Handle the error case better
@@ -138,6 +140,11 @@ export async function putNewInstallation(
     if (!dbInfo) {
         throw new Error('Database info should never be null')
     }
+
+    if (!docId || docId === '0') {
+        docId = crypto.randomUUID()
+    }
+
     const installationDoc = await putNewDoc(db, docName, docId, 'installation')
 
     if (!installationDoc || !installationDoc.id) {
@@ -145,17 +152,19 @@ export async function putNewInstallation(
         return doc // Document exists, returns the doc
     }
     // append the installation.id in the project doc
-    appendChildToProject(db, parentId, installationDoc.id)
+    await appendChildToProject(db, parentId, installationDoc.id)
 
     const template_name = workflowName
     let template_title = templatesConfig[workflowName].title
 
     // update installation doc to include template_name and template_title
-    return db.upsert(installationDoc.id, function (doc: any) {
+    await db.upsert(installationDoc.id, function (doc: any) {
         doc.metadata_.template_title = template_title
         doc.metadata_.template_name = template_name
         return doc
     })
+
+    return db.get(installationDoc.id)
 }
 
 /**
@@ -207,27 +216,40 @@ export async function retrieveProjectDocs(
 
 export async function retrieveInstallationDocs(
     db: PouchDB.Database<{}>,
-    parentId: string,
+    projectId: string,
     workflowName: string,
-): Promise<any> {
+): Promise<any[]> {
     try {
         const allDocs = await db.allDocs({ include_docs: true })
-        const installation_ids = allDocs.rows
-            .map(row => row.doc as any)
-            .filter(doc => doc.type === 'project' && doc._id === parentId)
-            .flatMap(doc => doc.children || [])
+        const all = allDocs.rows.map(row => row.doc as any)
 
-        const jobs = allDocs.rows
-            .map(row => row.doc as any)
-            .filter(
-                doc =>
-                    doc.type === 'installation' &&
-                    installation_ids.includes(doc._id) &&
-                    doc.metadata_.template_name === workflowName,
-            )
-        return jobs
+        // get installation group IDs from the project
+        const project = all.find(
+            doc => doc._id === projectId && doc.type === 'project',
+        )
+        if (!project || !Array.isArray(project.children)) return []
+
+        const jobDocs = all.filter(
+            doc =>
+                project.children.includes(doc._id) &&
+                doc.type === 'installation_group',
+        )
+
+        // for each job, get its installation IDs
+        const installationIds = jobDocs.flatMap(job => job.children || [])
+
+        // filter for actual installation docs matching the workflow
+        const installations = all.filter(
+            doc =>
+                installationIds.includes(doc._id) &&
+                doc.type === 'installation' &&
+                doc.metadata_?.template_name === workflowName,
+        )
+
+        return installations
     } catch (error) {
-        console.error('Error retrieving jobs:', error)
+        console.error('Error retrieving installations:', error)
+        return []
     }
 }
 
@@ -419,6 +441,21 @@ const updateProject = async (
     }
 }
 
+export async function updateDocChildren(
+    db: PouchDB.Database<{}>,
+    parentId: string,
+    childIds: string[],
+): Promise<void> {
+    try {
+        await db.upsert(parentId, (doc: any) => {
+            doc.children = childIds
+            return doc
+        })
+    } catch (error) {
+        console.error(`Error updating children for doc ${parentId}:`, error)
+    }
+}
+
 /**
  * Imports documents into the database.
  * @param db - The database instance where the documents will be imported.
@@ -433,35 +470,40 @@ export async function ImportDocumentIntoDB(
     docNames: string[],
 ): Promise<void> {
     let projectId: string | null = null
-    let installationIds: string[] = []
-    // Process each document in the JSON data
+    const installationDocs: any[] = []
+
     for (const input_doc of jsonData.all_docs) {
         if (!input_doc || !input_doc.metadata_) continue
 
-        // Clean the data for new doc creation
-        // remove the id and rev from the imported doc
         delete input_doc._id
         delete input_doc._rev
 
-        // Check if the document is a project and update its name
-        // if the name is already present in the DB
-        const updated_doc = await updateProjectName(input_doc, docNames)
-
         const now = new Date()
-        updated_doc.metadata_.created_at = now
-        updated_doc.metadata_.last_modified_at = now
+        input_doc.metadata_.created_at = now
+        input_doc.metadata_.last_modified_at = now
 
-        const result = await db.post(input_doc)
-        // create a lis of the installationIds and set projectId based on document type
-        if (updated_doc.type === 'installation') {
-            installationIds.push(result.id)
-        } else {
+        if (input_doc.type === 'project') {
+            const updated_doc = await updateProjectName(input_doc, docNames)
+            const result = await db.post(updated_doc)
             projectId = result.id
+        } else if (input_doc.type === 'installation') {
+            installationDocs.push(input_doc)
         }
     }
-    // Update the imported project with the newly created installation IDs
-    if (projectId && installationIds)
-        updateProject(db, projectId, installationIds)
+
+    if (!projectId) {
+        console.error('No project document found during import.')
+        return
+    }
+
+    const jobDocId = await getOrCreateJobForProject(db, projectId)
+
+    for (const inst of installationDocs) {
+        const result = await db.post(inst)
+        await appendChildToProject(db, jobDocId, result.id)
+    }
+
+    await updateDocChildren(db, projectId, [jobDocId]) // Project holds job
 }
 
 /**
@@ -539,4 +581,57 @@ export async function getStorage() {
     const totalSpace = quota.quota
     const usedSpace = quota.usage
     return { TotalSpace: totalSpace, UsedSpace: usedSpace }
+}
+
+interface ProjectDoc {
+    children?: string[]
+    [key: string]: any
+}
+
+interface InstallationGroupDoc {
+    _id: string
+    type: string
+    children?: string[]
+    [key: string]: any
+}
+
+export async function getOrCreateJobForProject(
+    db: PouchDB.Database<{}>,
+    projectId: string,
+): Promise<string> {
+    // check if a job already exists for this project by scanning all installation_group docs
+    const allDocs = await db.allDocs({ include_docs: true })
+
+    for (const row of allDocs.rows) {
+        const doc = row.doc as any
+        if (
+            doc?.type === 'installation_group' &&
+            Array.isArray(doc?.parent_ids) &&
+            doc.parent_ids.includes(projectId)
+        ) {
+            return doc._id
+        }
+    }
+
+    // if no job exists, create a new job and link it to the project
+    const newJobId = crypto.randomUUID()
+    const jobDoc = {
+        _id: newJobId,
+        type: 'installation_group',
+        metadata_: {
+            doc_name: 'Imported Job',
+            created_at: new Date(),
+            last_modified_at: new Date(),
+            attachments: {},
+            status: 'new',
+        },
+        children: [],
+        data_: {},
+        parent_ids: [projectId],
+    }
+
+    await db.put(jobDoc)
+    await appendChildToProject(db, projectId, newJobId)
+
+    return newJobId
 }

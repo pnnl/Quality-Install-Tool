@@ -119,6 +119,61 @@ const templatesConfig: TemplatesConfig = {
     },
 }
 
+// Measure Type to Template Mapping
+export const measureTypeMapping: Record<string, string[]> = {
+    'air sealing': ['Attic Air Sealing and Insulation'],
+    'appliance upgrade': [
+        'High Efficiency Water Heater',
+        'High Efficiency Gas Furnace',
+    ],
+    'ceiling insulation': ['Attic Air Sealing and Insulation'],
+    'cooling equipment': ['Heat Pump Ducted', 'Heat Pump Ductless'],
+    'duct insulation': ['Duct Air Sealing and Insulation'],
+    'duct sealing': ['Duct Air Sealing and Insulation'],
+    'floor insulation': [
+        'Floor Air Sealing and Insulation Above Unconditioned Space',
+    ],
+    'foundation insulation': ['Foundation Wall Air Sealing and Insulation'],
+    'heating equipment': [
+        'Heat Pump Ducted',
+        'Heat Pump Ductless',
+        'High Efficiency Gas Furnace',
+    ],
+    ventilation: ['Mechanical Ventilation'],
+    'wall insulation': ['Wall Air Sealing and Insulation (Drill and Fill)'],
+    'water heater': ['Heat Pump Water Heater', 'High Efficiency Water Heater'],
+    'window attachment': ['Insert Replacement Windows'],
+    'window replacement': ['Full Frame Replacement Windows'],
+    'electrical panel': ['Electric Load Service Center'],
+    'electric cooking appliance': ['Electric Cooking Appliances'],
+    'electric wiring': ['Electric Wiring'],
+    'heat pump clothes dryer': ['Heat Pump Clothes Dryer'],
+    'heat pump for space heating/cooling': [
+        'Heat Pump Ducted',
+        'Heat Pump Ductless',
+    ],
+    'heat pump water heater': ['Heat Pump Water Heater'],
+    'insulation, air sealing, and ventilation': [
+        'Attic Air Sealing and Insulation',
+        'Wall Air Sealing and Insulation (Drill and Fill)',
+        'Floor Air Sealing and Insulation Above Unconditioned Space',
+        'Foundation Wall Air Sealing and Insulation',
+        'Mechanical Ventilation',
+    ],
+}
+
+export const mapMeasuresToTemplateValues = (inputs: string[]): string[] => {
+    const result = new Set<string>()
+
+    for (const input of inputs) {
+        const matches = measureTypeMapping[input]
+        if (matches) {
+            matches.forEach(match => result.add(match))
+        }
+    }
+    return Array.from(result)
+}
+
 // Assuming TemplatesConfig is defined somewhere as a type or interface
 
 /**
