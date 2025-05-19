@@ -1,4 +1,4 @@
-import { getConfig } from "../secrets-manager"
+import { getConfig } from "../config"
 
 let token: string | null = null
 const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
