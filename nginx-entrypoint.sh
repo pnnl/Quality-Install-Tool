@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "Generating runtime config..."
 cat <<EOF > /usr/share/nginx/html/config.json
 {
   "REACT_APP_VAPORCORE_URL": "${REACT_APP_VAPORCORE_URL}",
@@ -11,3 +11,5 @@ cat <<EOF > /usr/share/nginx/html/config.json
   "REACT_APP_VAPORFLOW_URL": "${REACT_APP_VAPORFLOW_URL}",
 }
 EOF
+
+exec "$@"
