@@ -21,6 +21,12 @@ const Home: FC = () => {
         useState('')
     const db = useDB()
 
+    // listen for postMessage from the parent window (vapor-flow) to initialize form metadata
+    useEffect(() => {
+        console.log('inside useEffect!!!')
+        window.parent.postMessage({ type: 'REQUEST_INIT_FORM_DATA' }, '*')
+    }, [])
+
     const retrieveProjectInfo = async (): Promise<void> => {
         // Dynamically import the function when needed
         const { retrieveProjectDocs } = await import(
