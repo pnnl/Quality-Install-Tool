@@ -14,7 +14,7 @@ import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
 import { persistSessionState } from './store'
 import { getAuthToken } from '../auth/keycloak'
-import { getConfig } from '../secrets-manager'
+import { getConfig } from '../config'
 
 /**
  * Home:  Renders the Home page for the APP
@@ -39,7 +39,6 @@ const Home: FC = () => {
     const db = useDB()
 
     const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
-
 
     // listen for postMessage from the parent window (vapor-flow) to initialize form metadata
     useEffect(() => {

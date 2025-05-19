@@ -10,7 +10,7 @@ import {
     updateProcessStepWithMeasure,
 } from './store'
 import { getAuthToken } from '../auth/keycloak'
-import { getConfig } from '../secrets-manager'
+import { getConfig } from '../config'
 
 interface PrintSectionProps {
     children: ReactNode
@@ -52,7 +52,6 @@ const PrintSection: FC<PrintSectionProps> = ({
         /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
     const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
-
 
     const addSafariHeader = () => {
         if (isSafari()) {

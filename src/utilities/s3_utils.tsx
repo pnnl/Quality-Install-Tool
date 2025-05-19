@@ -7,12 +7,15 @@ import { getAuthToken } from '../auth/keycloak'
 import { getConfig } from '../config'
 
 const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
-const REACT_APP_AWS_S3_BUCKET_USER_KEY = getConfig('REACT_APP_AWS_S3_BUCKET_USER_KEY')
-const REACT_APP_AWS_S3_BUCKET_USER_SECRET = getConfig('REACT_APP_AWS_S3_BUCKET_USER_SECRET')
+const REACT_APP_AWS_S3_BUCKET_USER_KEY = getConfig(
+    'REACT_APP_AWS_S3_BUCKET_USER_KEY',
+)
+const REACT_APP_AWS_S3_BUCKET_USER_SECRET = getConfig(
+    'REACT_APP_AWS_S3_BUCKET_USER_SECRET',
+)
 const REACT_APP_AWS_REGION = getConfig('REACT_APP_AWS_REGION')
 const REACT_APP_AWS_S3_BUCKET = getConfig('REACT_APP_AWS_S3_BUCKET')
 const REACT_APP_AWS_S3_KMS_KEY_ID = getConfig('REACT_APP_AWS_S3_KMS_KEY_ID')
-
 
 export async function fetchDocumentTypes(documentType: string) {
     try {

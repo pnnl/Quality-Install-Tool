@@ -1,11 +1,9 @@
-import { getConfig } from "../config"
+import { getConfig } from '../config'
 
 let token: string | null = null
 const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
 
-
 export const generateToken = async () => {
-        
     if (token) return token
 
     try {
