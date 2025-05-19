@@ -1,0 +1,9 @@
+{
+    "name": "vapor-quality-config-server",
+    "version": "1.0.0",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^4.18.2",
+        "@aws-sdk/client-secrets-manager": "^3.535.0"
+    }
+}

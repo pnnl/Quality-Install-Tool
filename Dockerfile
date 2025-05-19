@@ -34,12 +34,20 @@ RUN yarn run build
 # Final Stage: Node + NGINX
 FROM node:20-alpine
 
-# Install NGINX and backend dependencies
-RUN apk add --no-cache nginx && \
-    npm install express @aws-sdk/client-secrets-manager
+# Install NGINX
+RUN apk add --no-cache nginx
 
+# Create working directory for backend
+WORKDIR /app
 
-# Set working directory for frontend files
+# Copy backend files
+COPY server.js .
+COPY server-package.json ./package.json
+
+# Install only backend deps
+RUN npm install
+
+# Copy frontend assets
 WORKDIR /usr/share/nginx/html
 
 # Remove default NGINX content
@@ -51,10 +59,7 @@ COPY --from=builder /app/build .
 # Copy custom nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copy minimal backend
-COPY server.js /app/server.js
-
-# Copy startup script
+# Copy start script
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
