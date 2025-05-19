@@ -43,6 +43,12 @@ RUN rm -rf ./*
 # Copy build output from Stage 1
 COPY --from=builder /app/build .
 
+# Copy entrypoint script 
+COPY nginx-entrypoint.sh /docker-entrypoint.d/config.sh
+
+# Make script executable
+RUN chmod +x /docker-entrypoint.d/config.sh
+
 # Expose port 80
 EXPOSE 80
 

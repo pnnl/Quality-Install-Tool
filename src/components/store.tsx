@@ -24,6 +24,7 @@ import EventEmitter from 'events'
 import { getAuthToken } from '../auth/keycloak'
 import jsPDF from 'jspdf'
 import { measureTypeMapping } from '../templates/templates_config'
+import { getConfig } from '../config'
 
 PouchDB.plugin(PouchDBUpsert)
 
@@ -76,6 +77,8 @@ interface StoreProviderProps {
     type: string
     parentId?: string | undefined
 }
+
+const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
 
 /**
  * A wrapper component that connects its children to a data store via React Context
@@ -876,7 +879,7 @@ export const saveToVaporCoreDB = async (
     try {
         if (docId) {
             const putResponse = await fetch(
-                `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install/${docId}`,
+                `${REACT_APP_VAPORCORE_URL}/api/quality-install/${docId}`,
                 {
                     method: 'PUT',
                     headers: {
@@ -890,7 +893,7 @@ export const saveToVaporCoreDB = async (
             if (putResponse.status === 404 || putResponse.status === 400) {
                 console.warn(`Form ID ${docId} not found, retrying as POST...`)
                 const postResponse = await fetch(
-                    `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install`,
+                    `${REACT_APP_VAPORCORE_URL}/api/quality-install`,
                     {
                         method: 'POST',
                         headers: {
@@ -915,7 +918,7 @@ export const saveToVaporCoreDB = async (
         } else {
             // if no docId was provided, treat as new form creation
             const postResponse = await fetch(
-                `${process.env.REACT_APP_VAPORCORE_URL}/api/quality-install`,
+                `${REACT_APP_VAPORCORE_URL}/api/quality-install`,
                 {
                     method: 'POST',
                     headers: {
@@ -956,7 +959,7 @@ export const updateProcessStepWithMeasure = async ({
     jobId?: string
 }) => {
     const response = await fetch(
-        `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data`,
+        `${REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data`,
         {
             method: 'PATCH',
             headers: {
@@ -1003,7 +1006,7 @@ export const closeProcessStepIfAllMeasuresComplete = async (
 
     try {
         const formDataRes = await fetch(
-            `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
+            `${REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
             {
                 method: 'GET',
                 headers: {
@@ -1041,7 +1044,7 @@ export const closeProcessStepIfAllMeasuresComplete = async (
         }
 
         const closeRes = await fetch(
-            `${process.env.REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/condition`,
+            `${REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/condition`,
             {
                 method: 'PUT',
                 headers: {
