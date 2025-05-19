@@ -34,8 +34,10 @@ RUN yarn run build
 # Final Stage: Node + NGINX
 FROM node:20-alpine
 
-# Install NGINX
-RUN apk add --no-cache nginx
+# Install NGINX and backend dependencies
+RUN apk add --no-cache nginx && \
+    npm install express @aws-sdk/client-secrets-manager
+
 
 # Set working directory for frontend files
 WORKDIR /usr/share/nginx/html
