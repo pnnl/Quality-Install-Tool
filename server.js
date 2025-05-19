@@ -4,11 +4,11 @@ const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client
 const app = express();
 const port = process.env.CONFIG_PORT || 3001;
 
-const client = new SecretsManagerClient({ region: process.env.AWS_REGION });
+const client = new SecretsManagerClient({ region: process.env.REACT_APP_AWS_REGION });
 
 app.get('/config', async (req, res) => {
   try {
-    const command = new GetSecretValueCommand({ SecretId: process.env.SECRET_ID });
+    const command = new GetSecretValueCommand({ SecretId: process.env.REACT_APP_SECRET_ID });
     const response = await client.send(command);
     const secrets = JSON.parse(response.SecretString);
     res.json({
