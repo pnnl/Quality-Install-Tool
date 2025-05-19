@@ -593,7 +593,8 @@ module.exports = async function (webpackEnv) {
 
       // Added by PNNL
       // 'webpack-license-plugin' outputs the dependecy pacakges license information to 'build/third_party_license.json' file.
-      isEnvProduction && new LicensePlugin({outputFilename: "third_party_license.json"}),
+      // COMMENTED OUT TO AVOID BUILD ERRORS IN VAPOR QUALITY
+      // isEnvProduction && new LicensePlugin({outputFilename: "third_party_license.json"}),
       
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
