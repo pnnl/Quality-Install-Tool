@@ -52,8 +52,8 @@ RUN rm -rf ./*
 # Copy build output from Stage 1
 COPY --from=builder /app/build .
 
-# Copy custom nginx.conf
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy nginx.conf.template
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 # Copy start script
 COPY start.sh /start.sh

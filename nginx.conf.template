@@ -16,7 +16,7 @@ http {
     
     server {
         listen 80;
-        server_name quality.dev.goeverblue.tech;
+        server_name ${SERVER_NAME};
 
         # Serve static files
         root /usr/share/nginx/html;
@@ -32,7 +32,7 @@ http {
         location / {
             if ($request_method = 'OPTIONS') {
                 # Preflight CORS
-                add_header 'Access-Control-Allow-Origin' 'https://vapor-flow.dev.goeverblue.tech';
+                add_header 'Access-Control-Allow-Origin' '${VAPOR_FLOW_ORIGIN}';
                 add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
                 add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept';
                 add_header 'Access-Control-Allow-Credentials' 'true';
@@ -81,17 +81,17 @@ http {
         gzip_comp_level 6;
 
         # Security Headers
-        add_header X-Frame-Options "ALLOW-FROM https://vapor-flow.dev.goeverblue.tech"; # Allow iframe embedding from vapor-flow
+        add_header X-Frame-Options "ALLOW-FROM ${VAPOR_FLOW_ORIGIN}"; # Allow iframe embedding from vapor-flow
         add_header X-Content-Type-Options "nosniff";
         add_header X-XSS-Protection "1; mode=block";
         add_header Referrer-Policy "no-referrer-when-downgrade";
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
 
         # Content Security Policy (CSP)
-        add_header Content-Security-Policy "frame-ancestors 'self' https://vapor-flow.dev.goeverblue.tech;";
+        add_header Content-Security-Policy "frame-ancestors 'self' ${VAPOR_FLOW_ORIGIN};";
 
         # CORS Headers
-        add_header 'Access-Control-Allow-Origin' 'https://vapor-flow.dev.goeverblue.tech';
+        add_header 'Access-Control-Allow-Origin' '${VAPOR_FLOW_ORIGIN}';
         add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
         add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept';
         add_header 'Access-Control-Allow-Credentials' 'true';
