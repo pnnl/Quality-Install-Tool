@@ -6,6 +6,7 @@
     "extends": [
         "prettier"
     ],
+    "ignorePatterns": ["server/"],
     "overrides": [],
     "parserOptions": {
         "ecmaVersion": "latest",
