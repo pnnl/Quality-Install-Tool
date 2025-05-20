@@ -39,6 +39,7 @@ const Home: FC = () => {
     const db = useDB()
 
     const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
+    const REACT_APP_VAPORFLOW_URL = getConfig('REACT_APP_VAPORFLOW_URL')
 
     // listen for postMessage from the parent window (vapor-flow) to initialize form metadata
     useEffect(() => {
@@ -46,11 +47,12 @@ const Home: FC = () => {
     }, [])
 
     useEffect(() => {
+        const allowedOrigin = REACT_APP_VAPORFLOW_URL
         function handleMessage(event: MessageEvent) {
             console.log('[vapor-quality] Message received:', event)
 
-            // TEMP ACCEPT ALL ORIGINS FOR DEBUGGING - NEED TO UPDATE TO ALLOWLIST
-            if (!event.origin.includes('vapor-flow.dev.goeverblue.tech')) {
+            // only allow messages from vapor-flow
+            if (event.origin !== allowedOrigin) {
                 console.warn(
                     '[vapor-quality] Rejected message from unexpected origin:',
                     event.origin,
