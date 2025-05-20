@@ -360,18 +360,20 @@ const Home: FC = () => {
                 )}
                 {Object.keys(projectList).length > 0 && (
                     <div>
-                        <div className="align-right padding">
-                            <Button
-                                onClick={handleAddJob}
-                                alt-text="Add a New Project"
-                            >
-                                Add a New Project
-                            </Button>
-                            <ImportDoc
-                                id="project_json"
-                                label="Import Project"
-                            />
-                        </div>
+                        {projectList.length === 0 && (
+                            <div className="align-right padding">
+                                <Button
+                                    onClick={handleAddJob}
+                                    alt-text="Add a New Project"
+                                >
+                                    Add a New Project
+                                </Button>
+                                <ImportDoc
+                                    id="project_json"
+                                    label="Import Project"
+                                />
+                            </div>
+                        )}
                         {projects_display}
                     </div>
                 )}

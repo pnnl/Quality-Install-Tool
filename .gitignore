@@ -1,5 +1,7 @@
 /node_modules
 /build
+/server/node_modules/
+/server/package-lock.json
 .vscode
 .DS_Store
 yarn-error.log

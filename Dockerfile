@@ -37,15 +37,11 @@ FROM node:20-alpine
 # Install NGINX
 RUN apk add --no-cache nginx
 
-# Create working directory for backend
-WORKDIR /app
-
-# Copy backend files
-COPY server.js .
-COPY server-package.json ./package.json
-
-# Install only backend deps
+# Set up backend
+WORKDIR /server
+COPY server/package.json ./
 RUN npm install
+COPY server/server.js .
 
 # Copy frontend assets
 WORKDIR /usr/share/nginx/html

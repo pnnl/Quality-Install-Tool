@@ -6,6 +6,10 @@ export async function loadRuntimeConfig(): Promise<void> {
     runtimeConfig = await res.json()
 }
 
-export function getConfig(key: string): string | undefined {
-    return runtimeConfig[key]
+export function getConfig(key: string): string {
+    const value = runtimeConfig[key]
+    if (!value) {
+        console.warn(`Missing config key: ${key}`)
+    }
+    return value
 }
