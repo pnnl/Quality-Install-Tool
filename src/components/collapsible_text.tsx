@@ -4,15 +4,18 @@ import { Card } from 'react-bootstrap'
 interface CollapsibleTextProps {
     text: string
     title: string
-    content?: React.ReactNode
+    children?: React.ReactNode
 }
 
-const CollapsibleText = (props: CollapsibleTextProps) => {
-    const { text, title, content } = props
+const CollapsibleText: React.FC<CollapsibleTextProps> = ({
+    text,
+    title,
+    children,
+}) => {
     const [isCollapsed, setIsCollapsed] = useState(true)
 
     const toggleCollapse = useCallback(() => {
-        setIsCollapsed(val => !val)
+        setIsCollapsed(prevState => !prevState)
     }, [])
 
     return (
@@ -20,23 +23,19 @@ const CollapsibleText = (props: CollapsibleTextProps) => {
             <Card.Body>
                 <Card.Title>{title}</Card.Title>
                 <div
-                    className={`collapsible-text ${
-                        isCollapsed ? 'collapsed' : ''
-                    }`}
+                    className={`collapsible-text ${isCollapsed ? 'collapsed' : ''}`}
                 >
                     <p className="description">
                         {text}
                         <span
-                            className={`clickable-text ${
-                                isCollapsed ? 'collapsed' : ''
-                            }`}
+                            className={`clickable-text ${isCollapsed ? 'collapsed' : ''}`}
                             onClick={toggleCollapse}
                         >
                             {isCollapsed ? '...see more' : '...show less'}
                         </span>
                     </p>
                 </div>
-                <div className="content">{content}</div>
+                {children && <div className="content">{children}</div>}
             </Card.Body>
         </Card>
     )

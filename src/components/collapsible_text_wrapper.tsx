@@ -6,23 +6,21 @@ import { StoreContext } from '../providers/store_provider'
 interface CollapsibleTextWrapperProps {
     text: string
     title: string
-    content?: React.ReactNode
+    children?: React.ReactNode
 }
 
 const CollapsibleTextWrapper: React.FC<CollapsibleTextWrapperProps> = ({
     text,
     title,
-    content,
+    children,
 }) => {
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
                 return (
-                    <CollapsibleText
-                        text={text}
-                        title={title}
-                        content={content}
-                    />
+                    <CollapsibleText text={text} title={title}>
+                        {children}
+                    </CollapsibleText>
                 )
             }}
         </StoreContext.Consumer>
