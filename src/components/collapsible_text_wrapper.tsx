@@ -4,8 +4,8 @@ import CollapsibleText from './collapsible_text'
 import { StoreContext } from '../providers/store_provider'
 
 interface CollapsibleTextWrapperProps {
-    text: string
-    title: string
+    text: React.ReactNode
+    title: React.ReactNode
     children?: React.ReactNode
 }
 

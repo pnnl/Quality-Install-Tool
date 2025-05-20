@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react'
 import { Card } from 'react-bootstrap'
 
 interface CollapsibleTextProps {
-    text: string
-    title: string
+    text: React.ReactNode
+    title: React.ReactNode
     children?: React.ReactNode
 }
 
