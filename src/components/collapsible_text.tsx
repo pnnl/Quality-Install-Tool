@@ -1,16 +1,16 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Card } from 'react-bootstrap'
 
 interface CollapsibleTextProps {
+    children?: React.ReactNode
     text: React.ReactNode
     title: React.ReactNode
-    children?: React.ReactNode
 }
 
 const CollapsibleText: React.FC<CollapsibleTextProps> = ({
+    children,
     text,
     title,
-    children,
 }) => {
     const [isCollapsed, setIsCollapsed] = useState(true)
 
