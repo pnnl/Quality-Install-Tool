@@ -1,7 +1,5 @@
-import { detectOverflow } from '@popperjs/core'
-import { over } from 'lodash'
-import React, { useState } from 'react'
-import { Card, Button } from 'react-bootstrap'
+import React, { useState, useCallback } from 'react'
+import { Card } from 'react-bootstrap'
 
 interface CollapsibleTextProps {
     text: string
@@ -13,9 +11,9 @@ const CollapsibleText = (props: CollapsibleTextProps) => {
     const { text, title, content } = props
     const [isCollapsed, setIsCollapsed] = useState(true)
 
-    const toggleCollapse = () => {
-        setIsCollapsed(!isCollapsed)
-    }
+    const toggleCollapse = useCallback(() => {
+        setIsCollapsed(val => !val)
+    }, [])
 
     return (
         <Card className="collapsible-text-card mb-3">
