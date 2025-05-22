@@ -2,7 +2,7 @@
 
 // Test suite for PhotoInput component
 import { render, screen, fireEvent } from '@testing-library/react'
-import { act } from 'react'
+import React, { act } from 'react'
 import { StoreContext } from '../../providers/store_provider'
 import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
 import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
@@ -51,7 +51,7 @@ describe('PhotoInput Component', () => {
         }
 
         return render(
-            <StoreContext.Provider value={mockStoreContext as any}>
+            <StoreContext.Provider value={mockStoreContext as never}>
                 <PhotoInput {...defaultProps} {...props} />
             </StoreContext.Provider>,
         )
