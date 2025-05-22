@@ -75,9 +75,6 @@ const PrintSection: FC<PrintSectionProps> = ({
                     `${REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
                     {
                         method: 'GET',
-                        headers: {
-                            Authorization: `Bearer ${getAuthToken()}`,
-                        },
                     },
                 )
 
