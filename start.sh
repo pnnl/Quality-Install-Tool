@@ -2,7 +2,7 @@
 set -e
 
 # Render nginx config from template using env vars
-envsubst '${VAPOR_FLOW_ORIGIN} ${SERVER_NAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+envsubst '${VAPOR_FLOW_ORIGIN} ${SERVER_NAME} ${VAPOR_CORE_ORIGIN}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 # Start Express
 echo "Starting Express server..."
