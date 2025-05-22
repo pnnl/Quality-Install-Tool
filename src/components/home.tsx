@@ -13,7 +13,6 @@ import { deleteEmptyProjects, useDB } from '../utilities/database_utils'
 import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
 import { persistSessionState } from './store'
-import { getAuthToken } from '../auth/keycloak'
 import { getConfig } from '../config'
 
 /**
