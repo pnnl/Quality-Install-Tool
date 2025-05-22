@@ -9,7 +9,6 @@ import {
     saveToVaporCoreDB,
     updateProcessStepWithMeasure,
 } from './store'
-import { getAuthToken } from '../auth/keycloak'
 import { getConfig } from '../config'
 
 interface PrintSectionProps {

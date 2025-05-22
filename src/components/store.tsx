@@ -21,7 +21,6 @@ import {
     exportDocumentAsJSONObject,
 } from '../utilities/database_utils'
 import EventEmitter from 'events'
-import { getAuthToken } from '../auth/keycloak'
 import jsPDF from 'jspdf'
 import { measureTypeMapping } from '../templates/templates_config'
 import { getConfig } from '../config'
@@ -884,7 +883,6 @@ export const saveToVaporCoreDB = async (
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${getAuthToken()}`,
                     },
                     body: JSON.stringify(formData),
                 },
@@ -898,7 +896,6 @@ export const saveToVaporCoreDB = async (
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: `Bearer ${getAuthToken()}`,
                         },
                         body: JSON.stringify(formData),
                     },
@@ -923,7 +920,6 @@ export const saveToVaporCoreDB = async (
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${getAuthToken()}`,
                     },
                     body: JSON.stringify(formData),
                 },
@@ -964,7 +960,6 @@ export const updateProcessStepWithMeasure = async ({
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${getAuthToken()}`,
                 'x-user-id': userId ?? '',
             },
             body: JSON.stringify({
@@ -1009,9 +1004,6 @@ export const closeProcessStepIfAllMeasuresComplete = async (
             `${REACT_APP_VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
             {
                 method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${getAuthToken()}`,
-                },
             },
         )
 
@@ -1049,7 +1041,6 @@ export const closeProcessStepIfAllMeasuresComplete = async (
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${getAuthToken()}`,
                     'x-user-id': userId ?? '',
                 },
                 body: JSON.stringify({ condition: 'CLOSED' }),

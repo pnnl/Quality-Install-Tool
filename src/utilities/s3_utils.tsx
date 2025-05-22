@@ -3,7 +3,6 @@ import {
     PutObjectCommand,
     GetObjectCommand,
 } from '@aws-sdk/client-s3'
-import { getAuthToken } from '../auth/keycloak'
 import { getConfig } from '../config'
 
 const REACT_APP_VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
@@ -109,7 +108,6 @@ export async function uploadImageToS3AndCreateDocument({
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${getAuthToken()}`,
             },
             body: JSON.stringify({
                 user_id: userId,
