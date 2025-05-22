@@ -35,7 +35,7 @@ RUN yarn run build
 FROM node:20-alpine
 
 # Install NGINX
-RUN apk add --no-cache nginx
+RUN apk add --no-cache nginx gettext
 
 # Set up backend
 WORKDIR /server
