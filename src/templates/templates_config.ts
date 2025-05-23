@@ -169,6 +169,8 @@ export const mapMeasuresToTemplateValues = (inputs: string[]): string[] => {
         const matches = measureTypeMapping[input]
         if (matches) {
             matches.forEach(match => result.add(match))
+        } else {
+            console.warn('No template mapping found for:', input)
         }
     }
     return Array.from(result)

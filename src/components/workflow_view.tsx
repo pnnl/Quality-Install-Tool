@@ -40,10 +40,10 @@ const WorkFlowView: FC = () => {
 
             try {
                 const measureNames: string[] = JSON.parse(measures)
-                // normalize measure names
                 const normalized = measureNames.map(m => m.toLowerCase())
-                // map normalized measures to template titles
+
                 const mappedTitles = mapMeasuresToTemplateValues(normalized)
+                console.log('[All Titles from Measures]', mappedTitles)
 
                 if (!userId || !processStepId || !processId) {
                     console.warn(
@@ -61,20 +61,23 @@ const WorkFlowView: FC = () => {
                 )
 
                 const json = await res.json()
-
-                // filter measures from process step data to identify those that have already been completed
                 const completed = new Set(
                     json?.data?.measures
                         ?.filter(
                             (m: any) => m.status?.toLowerCase() === 'completed',
                         )
-                        .map((m: any) => m.name.toLowerCase()),
+                        .map((m: any) => m.name.toLowerCase().trim()),
                 )
 
-                // filter completed values from process step data from measures in localStorage
+                console.log('[Completed Measure Names]', Array.from(completed))
+
+                // exclude only the completed ones from the full list
                 const filtered = normalized.filter(m => !completed.has(m))
-                // map measures to template values to be rendered in the UI
+                console.log('[Remaining Measure Names]', filtered)
+
                 const filteredTitles = mapMeasuresToTemplateValues(filtered)
+                console.log('[Remaining Titles]', filteredTitles)
+
                 setAllowedTemplates(filteredTitles)
             } catch (err) {
                 console.warn('Failed to filter completed measures:', err)
