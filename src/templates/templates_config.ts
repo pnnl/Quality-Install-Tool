@@ -176,6 +176,14 @@ export const mapMeasuresToTemplateValues = (inputs: string[]): string[] => {
     return Array.from(result)
 }
 
+// Build reverse mapping from template title => normalized measure name
+export const reverseTemplateMap: Record<string, string> = {}
+for (const [measureKey, titles] of Object.entries(measureTypeMapping)) {
+    for (const title of titles) {
+        reverseTemplateMap[title.toLowerCase()] = measureKey
+    }
+}
+
 // Assuming TemplatesConfig is defined somewhere as a type or interface
 
 /**

@@ -3,6 +3,7 @@ import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig, {
     mapMeasuresToTemplateValues,
+    reverseTemplateMap,
 } from '../templates/templates_config'
 import {
     retrieveInstallationDocs,
@@ -41,9 +42,7 @@ const WorkFlowView: FC = () => {
             try {
                 const measureNames: string[] = JSON.parse(measures)
                 const normalized = measureNames.map(m => m.toLowerCase())
-
                 const mappedTitles = mapMeasuresToTemplateValues(normalized)
-                console.log('[All Titles from Measures]', mappedTitles)
 
                 if (!userId || !processStepId || !processId) {
                     console.warn(
@@ -55,26 +54,44 @@ const WorkFlowView: FC = () => {
 
                 const res = await fetch(
                     `${VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
-                    {
-                        method: 'GET',
-                    },
+                    { method: 'GET' },
                 )
 
                 const json = await res.json()
-                const completed = new Set(
+
+                console.log('json', json)
+
+                // get completed titles (display names)
+                const completedTitles: string[] =
                     json?.data?.measures
                         ?.filter(
                             (m: any) => m.status?.toLowerCase() === 'completed',
                         )
-                        .map((m: any) => m.name.toLowerCase().trim()),
+                        .map((m: any) => m.name.toLowerCase().trim()) ?? []
+
+                console.log('[Completed Titles]', completedTitles)
+
+                // map completed titles back to normalized measure keys
+                const completedMeasureKeys = new Set<string>()
+                for (const title of completedTitles) {
+                    const key = reverseTemplateMap[title]
+                    if (key) completedMeasureKeys.add(key)
+                    else
+                        console.warn(
+                            'No reverse mapping for completed title:',
+                            title,
+                        )
+                }
+
+                console.log(
+                    '[Completed Normalized Keys]',
+                    Array.from(completedMeasureKeys),
                 )
 
-                console.log('[Completed Measure Names]', Array.from(completed))
-
-                // exclude only the completed ones from the full list
-                const filtered = normalized.filter(m => !completed.has(m))
-                console.log('[Remaining Measure Names]', filtered)
-
+                // filter out completed ones from normalized
+                const filtered = normalized.filter(
+                    m => !completedMeasureKeys.has(m),
+                )
                 const filteredTitles = mapMeasuresToTemplateValues(filtered)
                 console.log('[Remaining Titles]', filteredTitles)
 
