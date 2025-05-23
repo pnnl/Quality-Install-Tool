@@ -37,36 +37,40 @@ const WorkFlowView: FC = () => {
             const userId = localStorage.getItem('user_id')
             const processStepId = localStorage.getItem('process_step_id')
             const processId = localStorage.getItem('process_id')
-    
+
             try {
                 const measureNames: string[] = JSON.parse(measures)
                 // normalize measure names
                 const normalized = measureNames.map(m => m.toLowerCase())
                 // map normalized measures to template titles
                 const mappedTitles = mapMeasuresToTemplateValues(normalized)
-    
+
                 if (!userId || !processStepId || !processId) {
-                    console.warn('Missing identifiers for checking measure status')
+                    console.warn(
+                        'Missing identifiers for checking measure status',
+                    )
                     setAllowedTemplates(mappedTitles)
                     return
                 }
-    
+
                 const res = await fetch(
                     `${VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
                     {
                         method: 'GET',
                     },
                 )
-    
+
                 const json = await res.json()
 
                 // filter measures from process step data to identify those that have already been completed
                 const completed = new Set(
                     json?.data?.measures
-                        ?.filter((m: any) => m.status?.toLowerCase() === 'completed')
+                        ?.filter(
+                            (m: any) => m.status?.toLowerCase() === 'completed',
+                        )
                         .map((m: any) => m.name.toLowerCase()),
                 )
-                
+
                 // filter completed values from process step data from measures in localStorage
                 const filtered = normalized.filter(m => !completed.has(m))
                 // map measures to template values to be rendered in the UI
@@ -77,7 +81,7 @@ const WorkFlowView: FC = () => {
                 setAllowedTemplates([])
             }
         }
-    
+
         checkCompletedMeasuresAndFilter()
     }, [])
 
