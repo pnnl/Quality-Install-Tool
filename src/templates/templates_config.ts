@@ -70,7 +70,7 @@ const templatesConfig: TemplatesConfig = {
         template: DOEWorkflowFullFrameReplacementWindows,
     },
     doe_workflow_heat_pump_cloth_dryer: {
-        title: 'Heat Pump Clothes Dryer ',
+        title: 'Heat Pump Clothes Dryer',
         template: DOEWorkflowHPClothDyer,
     },
     doe_workflow_central_ducted_split_heat_pump: {
@@ -177,7 +177,7 @@ export const mapMeasuresToTemplateValues = (inputs: string[]): string[] => {
 }
 
 // Build reverse mapping from template title => normalized measure name
-const reverseTemplateMap: Record<string, string> = {}
+export const reverseTemplateMap: Record<string, string> = {}
 
 for (const [measureKey, titles] of Object.entries(measureTypeMapping)) {
     for (const title of titles) {

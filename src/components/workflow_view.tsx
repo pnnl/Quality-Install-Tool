@@ -42,13 +42,12 @@ const WorkFlowView: FC = () => {
             try {
                 const measureNames: string[] = JSON.parse(measures)
                 const normalized = measureNames.map(m => m.toLowerCase())
-                const mappedTitles = mapMeasuresToTemplateValues(normalized)
 
                 if (!userId || !processStepId || !processId) {
                     console.warn(
                         'Missing identifiers for checking measure status',
                     )
-                    setAllowedTemplates(mappedTitles)
+                    setAllowedTemplates(mapMeasuresToTemplateValues(normalized))
                     return
                 }
 
@@ -58,48 +57,35 @@ const WorkFlowView: FC = () => {
                 )
 
                 const json = await res.json()
-
-                console.log('json', json)
-
-                // get completed titles (display names)
-                const completedTitles = (json?.data?.measures || [])
-                    .filter(
-                        (m: any) =>
-                            Array.isArray(m.jobs) &&
-                            m.jobs.some(
+                const completedMeasureTitles: string[] =
+                    json?.data?.measures
+                        ?.filter((m: any) =>
+                            m.jobs?.some(
                                 (job: any) =>
                                     job.status?.toLowerCase() === 'completed',
                             ),
-                    )
-                    .map((m: any) => m.name)
+                        )
+                        .map((m: any) => m.name.trim().toLowerCase()) || []
 
-                console.log('[Completed Titles]', completedTitles)
+                console.log('[Completed Titles]', completedMeasureTitles)
 
-                // map completed titles back to normalized measure keys
-                const completedMeasureKeys = new Set<string>()
-                for (const title of completedTitles) {
-                    const key = reverseTemplateMap[title.trim().toLowerCase()]
-                    if (key) {
-                        completedMeasureKeys.add(key)
-                    } else {
-                        console.warn('[Unmapped Completed Title]', title)
-                    }
-                }
+                // convert completed template titles to normalized measure keys
+                const completedMeasureKeys = completedMeasureTitles
+                    .map(title => reverseTemplateMap[title])
+                    .filter(Boolean)
 
-                const remaining = normalized.filter(
-                    m => !completedMeasureKeys.has(m),
+                console.log('[Completed Normalized Keys]', completedMeasureKeys)
+
+                // remove completed measures from original list
+                const remainingMeasures = normalized.filter(
+                    name => !completedMeasureKeys.includes(name),
                 )
 
-                console.log(
-                    '[Completed Normalized Keys]',
-                    Array.from(completedMeasureKeys),
-                )
+                console.log('[Remaining Measure Keys]', remainingMeasures)
 
-                // filter out completed ones from normalized
-                const filtered = normalized.filter(
-                    m => !completedMeasureKeys.has(m),
-                )
-                const filteredTitles = mapMeasuresToTemplateValues(filtered)
+                const filteredTitles =
+                    mapMeasuresToTemplateValues(remainingMeasures)
+
                 console.log('[Remaining Titles]', filteredTitles)
 
                 setAllowedTemplates(filteredTitles)
