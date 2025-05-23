@@ -68,8 +68,6 @@ const WorkFlowView: FC = () => {
                         )
                         .map((m: any) => m.name.trim().toLowerCase()) || []
 
-                console.log('[Completed Titles]', completedTitles)
-
                 // remove any measure key that maps to any completed template title
                 const remainingMeasureKeys = normalized.filter(measureKey => {
                     const mappedTitles = measureTypeMapping[measureKey] || []
@@ -78,12 +76,9 @@ const WorkFlowView: FC = () => {
                     )
                 })
 
-                console.log('[Remaining Measure Keys]', remainingMeasureKeys)
-
                 const filteredTitles =
                     mapMeasuresToTemplateValues(remainingMeasureKeys)
 
-                console.log('[Remaining Titles]', filteredTitles)
                 setAllowedTemplates(filteredTitles)
             } catch (err) {
                 console.warn('Failed to filter completed measures:', err)
