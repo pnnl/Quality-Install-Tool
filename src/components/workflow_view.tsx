@@ -62,27 +62,33 @@ const WorkFlowView: FC = () => {
                 console.log('json', json)
 
                 // get completed titles (display names)
-                const completedTitles: string[] =
-                    json?.data?.measures
-                        ?.filter(
-                            (m: any) => m.status?.toLowerCase() === 'completed',
-                        )
-                        .map((m: any) => m.name.toLowerCase().trim()) ?? []
+                const completedTitles = (json?.data?.measures || [])
+                    .filter(
+                        (m: any) =>
+                            Array.isArray(m.jobs) &&
+                            m.jobs.some(
+                                (job: any) =>
+                                    job.status?.toLowerCase() === 'completed',
+                            ),
+                    )
+                    .map((m: any) => m.name)
 
                 console.log('[Completed Titles]', completedTitles)
 
                 // map completed titles back to normalized measure keys
                 const completedMeasureKeys = new Set<string>()
                 for (const title of completedTitles) {
-                    console.log('[Checking Title]', title)
                     const key = reverseTemplateMap[title.trim().toLowerCase()]
-                    if (key) completedMeasureKeys.add(key)
-                    else
-                        console.warn(
-                            'No reverse mapping for completed title:',
-                            title,
-                        )
+                    if (key) {
+                        completedMeasureKeys.add(key)
+                    } else {
+                        console.warn('[Unmapped Completed Title]', title)
+                    }
                 }
+
+                const remaining = normalized.filter(
+                    m => !completedMeasureKeys.has(m),
+                )
 
                 console.log(
                     '[Completed Normalized Keys]',
