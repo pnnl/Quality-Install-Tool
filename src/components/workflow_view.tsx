@@ -10,6 +10,7 @@ import {
     useDB,
 } from '../utilities/database_utils'
 import { useParams } from 'react-router-dom'
+import { getConfig } from '../config'
 
 /**
  * A component View to lists workflow names, facilitating the selection of workflows
@@ -27,21 +28,57 @@ const WorkFlowView: FC = () => {
 
     const [allowedTemplates, setAllowedTemplates] = useState<string[]>([])
 
-    // Load allowed templates based on mapped measure types from vapor-flow
-    useEffect(() => {
-        const measures = localStorage.getItem('measures') || '[]'
+    const VAPORCORE_URL = getConfig('REACT_APP_VAPORCORE_URL')
 
-        try {
-            const measureNames: string[] = JSON.parse(measures)
-            //normalize measure names
-            const normalized = measureNames.map(m => m.toLowerCase())
-            // map normalized measures to template titles
-            const mappedTitles = mapMeasuresToTemplateValues(normalized)
-            setAllowedTemplates(mappedTitles)
-        } catch (err) {
-            console.warn('Failed to parse measures from localStorage:', err)
-            setAllowedTemplates([])
+    // Load allowed templates based on mapped measure types from vapor-flow, filter out completed measures
+    useEffect(() => {
+        const checkCompletedMeasuresAndFilter = async () => {
+            const measures = localStorage.getItem('measures') || '[]'
+            const userId = localStorage.getItem('user_id')
+            const processStepId = localStorage.getItem('process_step_id')
+            const processId = localStorage.getItem('process_id')
+    
+            try {
+                const measureNames: string[] = JSON.parse(measures)
+                // normalize measure names
+                const normalized = measureNames.map(m => m.toLowerCase())
+                // map normalized measures to template titles
+                const mappedTitles = mapMeasuresToTemplateValues(normalized)
+    
+                if (!userId || !processStepId || !processId) {
+                    console.warn('Missing identifiers for checking measure status')
+                    setAllowedTemplates(mappedTitles)
+                    return
+                }
+    
+                const res = await fetch(
+                    `${VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
+                    {
+                        method: 'GET',
+                    },
+                )
+    
+                const json = await res.json()
+
+                // filter measures from process step data to identify those that have already been completed
+                const completed = new Set(
+                    json?.data?.measures
+                        ?.filter((m: any) => m.status?.toLowerCase() === 'completed')
+                        .map((m: any) => m.name.toLowerCase()),
+                )
+                
+                // filter completed values from process step data from measures in localStorage
+                const filtered = normalized.filter(m => !completed.has(m))
+                // map measures to template values to be rendered in the UI
+                const filteredTitles = mapMeasuresToTemplateValues(filtered)
+                setAllowedTemplates(filteredTitles)
+            } catch (err) {
+                console.warn('Failed to filter completed measures:', err)
+                setAllowedTemplates([])
+            }
         }
+    
+        checkCompletedMeasuresAndFilter()
     }, [])
 
     // Retrieves the installation details with the specific workflow name
