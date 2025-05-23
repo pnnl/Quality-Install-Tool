@@ -74,7 +74,8 @@ const WorkFlowView: FC = () => {
                 // map completed titles back to normalized measure keys
                 const completedMeasureKeys = new Set<string>()
                 for (const title of completedTitles) {
-                    const key = reverseTemplateMap[title]
+                    console.log('[Checking Title]', title)
+                    const key = reverseTemplateMap[title.trim().toLowerCase()]
                     if (key) completedMeasureKeys.add(key)
                     else
                         console.warn(
