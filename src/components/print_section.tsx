@@ -3,10 +3,9 @@ import print from 'print-js'
 import Button from 'react-bootstrap/Button'
 import jsPDF from 'jspdf'
 import { uploadImageToS3AndCreateDocument } from '../utilities/s3_utils'
-import { exportDocumentAsJSONObject, useDB } from '../utilities/database_utils'
+import { useDB } from '../utilities/database_utils'
 import {
     closeProcessStepIfAllMeasuresComplete,
-    saveToVaporCoreDB,
     updateProcessStepWithMeasure,
 } from './store'
 import { getConfig } from '../config'
@@ -63,7 +62,6 @@ const PrintSection: FC<PrintSectionProps> = ({
             }
         }
     }
-    console.log('JOBID', jobId)
 
     // option to update existing submission if found
     useEffect(() => {
@@ -150,21 +148,6 @@ const PrintSection: FC<PrintSectionProps> = ({
                 throw new Error('Upload to S3 failed')
             }
 
-            // export final report data as JSON
-            const rawExport = await exportDocumentAsJSONObject(db, docId!, true)
-            const jsonExport =
-                typeof rawExport === 'string'
-                    ? JSON.parse(rawExport)
-                    : rawExport
-
-            // save final report JSON data to RDS
-            response = await saveToVaporCoreDB(
-                userId,
-                processStepId,
-                docId,
-                jsonExport,
-            )
-
             // update process step with measure info
             await updateProcessStepWithMeasure({
                 userId: userId,
@@ -172,7 +155,6 @@ const PrintSection: FC<PrintSectionProps> = ({
                 processStepId: processStepId!,
                 measureName,
                 finalReportDocumentId: vaporCoreDocumentId,
-                finalReportJSONId: response,
                 jobId: jobId,
             })
 

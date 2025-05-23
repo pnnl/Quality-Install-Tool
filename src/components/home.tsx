@@ -48,8 +48,6 @@ const Home: FC = () => {
     useEffect(() => {
         const allowedOrigin = REACT_APP_VAPORFLOW_URL
         function handleMessage(event: MessageEvent) {
-            console.log('[vapor-quality] Message received:', event)
-
             // only allow messages from vapor-flow
             if (event.origin !== allowedOrigin) {
                 console.warn(
@@ -60,10 +58,6 @@ const Home: FC = () => {
             }
 
             if (event.data?.type === 'INIT_FORM_DATA') {
-                console.log(
-                    '[vapor-quality] Handling INIT_FORM_DATA:',
-                    event.data.payload,
-                )
                 const {
                     user_id,
                     application_id,
@@ -90,56 +84,6 @@ const Home: FC = () => {
         window.addEventListener('message', handleMessage)
         return () => window.removeEventListener('message', handleMessage)
     }, [])
-
-    useEffect(() => {
-        const fetchAndImportFromRDS = async () => {
-            if (hasHydratedRef.current) return
-            if (!userId || !processStepId) return
-
-            const hydrationKey = `hydrated_${userId}_${processStepId}`
-            if (localStorage.getItem(hydrationKey)) {
-                console.log('Already hydrated — skipping RDS import.')
-                return
-            }
-
-            hasHydratedRef.current = true
-            setIsHydrating(true)
-
-            try {
-                const res = await fetch(
-                    `${REACT_APP_VAPORCORE_URL}/api/quality-install?user_id=${userId}&process_step_id=${processStepId}`,
-                )
-                const data = await res.json()
-
-                if (data.success && Array.isArray(data.forms)) {
-                    const formEntry = data.forms[0]
-                    const jsonData = formEntry.form_data
-
-                    const existing = await db.allDocs({ include_docs: true })
-                    const projectNames = existing.rows
-                        .map((row: any) => row.doc)
-                        .filter((doc: any) => doc?.type === 'project')
-                        .map((doc: any) => doc.metadata_?.doc_name)
-
-                    const { ImportDocumentIntoDB } = await import(
-                        '../utilities/database_utils'
-                    )
-                    await ImportDocumentIntoDB(db, jsonData, projectNames)
-                    localStorage.setItem(hydrationKey, 'true')
-
-                    console.log('Imported form data from RDS into PouchDB.')
-                } else {
-                    console.warn('No form data found for user/process step.')
-                }
-            } catch (err) {
-                console.error('Error importing from RDS:', err)
-            } finally {
-                setIsHydrating(false)
-            }
-        }
-
-        fetchAndImportFromRDS()
-    }, [userId, processStepId])
 
     // persist session state to localStorage whenever metadata changes - helps retain values across navigation/refreshes
     useEffect(() => {
