@@ -3,6 +3,7 @@ import { ListGroup, Button } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import templatesConfig, {
     mapMeasuresToTemplateValues,
+    measureTypeMapping,
     reverseTemplateMap,
 } from '../templates/templates_config'
 import {
@@ -55,9 +56,9 @@ const WorkFlowView: FC = () => {
                     `${VAPORCORE_URL}/api/process/${processId}/step/${processStepId}/form-data?user_id=${userId}`,
                     { method: 'GET' },
                 )
-
                 const json = await res.json()
-                const completedMeasureTitles: string[] =
+
+                const completedTitles: string[] =
                     json?.data?.measures
                         ?.filter((m: any) =>
                             m.jobs?.some(
@@ -67,27 +68,22 @@ const WorkFlowView: FC = () => {
                         )
                         .map((m: any) => m.name.trim().toLowerCase()) || []
 
-                console.log('[Completed Titles]', completedMeasureTitles)
+                console.log('[Completed Titles]', completedTitles)
 
-                // convert completed template titles to normalized measure keys
-                const completedMeasureKeys = completedMeasureTitles
-                    .map(title => reverseTemplateMap[title])
-                    .filter(Boolean)
+                // remove any measure key that maps to any completed template title
+                const remainingMeasureKeys = normalized.filter(measureKey => {
+                    const mappedTitles = measureTypeMapping[measureKey] || []
+                    return !mappedTitles.some(title =>
+                        completedTitles.includes(title.trim().toLowerCase()),
+                    )
+                })
 
-                console.log('[Completed Normalized Keys]', completedMeasureKeys)
-
-                // remove completed measures from original list
-                const remainingMeasures = normalized.filter(
-                    name => !completedMeasureKeys.includes(name),
-                )
-
-                console.log('[Remaining Measure Keys]', remainingMeasures)
+                console.log('[Remaining Measure Keys]', remainingMeasureKeys)
 
                 const filteredTitles =
-                    mapMeasuresToTemplateValues(remainingMeasures)
+                    mapMeasuresToTemplateValues(remainingMeasureKeys)
 
                 console.log('[Remaining Titles]', filteredTitles)
-
                 setAllowedTemplates(filteredTitles)
             } catch (err) {
                 console.warn('Failed to filter completed measures:', err)
