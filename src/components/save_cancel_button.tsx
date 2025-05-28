@@ -2,7 +2,8 @@ import { FC, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import type { MouseEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDB } from '../utilities/database_utils'
+import { exportDocumentAsJSONObject, useDB } from '../utilities/database_utils'
+import { saveToVaporCoreDB } from './store'
 
 interface SaveCancelButtonProps {
     id: string
@@ -55,6 +56,20 @@ const SaveCancelButton: FC<SaveCancelButtonProps> = ({
                 alert('Please enter a project name before saving.')
                 return
             }
+
+            const userId = localStorage.getItem('user_id')
+            const processStepId = localStorage.getItem('process_step_id')
+
+            // Export form_data from local PouchDB
+            const form_data_json = await exportDocumentAsJSONObject(
+                db,
+                id,
+                false,
+            )
+            const form_data = JSON.parse(form_data_json)?.all_docs ?? {}
+
+            await saveToVaporCoreDB(userId, processStepId, form_data)
+
             updateValue('created')
             navigate('/', { replace: true })
         } catch (error) {

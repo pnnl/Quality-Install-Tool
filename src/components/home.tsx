@@ -12,7 +12,11 @@ import { useNavigate } from 'react-router-dom'
 import { deleteEmptyProjects, useDB } from '../utilities/database_utils'
 import ImportDoc from './import_document_wrapper'
 import ExportDoc from './export_document_wrapper'
-import { persistSessionState } from './store'
+import {
+    fetchExistingRDSForm,
+    hydrateFromRDS,
+    persistSessionState,
+} from './store'
 import { getConfig } from '../config'
 
 /**
@@ -85,6 +89,30 @@ const Home: FC = () => {
         return () => window.removeEventListener('message', handleMessage)
     }, [])
 
+    useEffect(() => {
+        const hydrateAndRetrieve = async () => {
+            if (!userId || !processStepId) return
+            try {
+                const rdsEntry = await fetchExistingRDSForm(
+                    userId,
+                    processStepId,
+                )
+                if (rdsEntry) {
+                    await hydrateFromRDS(rdsEntry, db)
+                    // refresh UI after hydration
+                    await retrieveProjectInfo()
+                } else {
+                    // still retrieve even if nothing to hydrate
+                    await retrieveProjectInfo()
+                }
+            } catch (error) {
+                console.error('Error during hydration:', error)
+            }
+        }
+
+        hydrateAndRetrieve()
+    }, [userId, processStepId])
+
     // persist session state to localStorage whenever metadata changes - helps retain values across navigation/refreshes
     useEffect(() => {
         persistSessionState({ userId, applicationId, processId, processStepId })
@@ -108,7 +136,7 @@ const Home: FC = () => {
 
     useEffect(() => {
         retrieveProjectInfo()
-    }, [projectList]) // Fetch the project details from DB as the state variable projectList is updated
+    }, []) // Only run once on mount
 
     const handleAddJob = async () => {
         // Dynamically import the function when needed

@@ -190,20 +190,18 @@ export async function retrieveDocFromDB(
  * @param db  - The PouchDB database instance.
  * @returns Promise that resolves list of projects from the database
  */
-export async function retrieveProjectDocs(
-    db: PouchDB.Database<{}>,
-): Promise<any> {
-    try {
-        const allDocs = await db.allDocs({ include_docs: true })
+export const retrieveProjectDocs = async (db: any) => {
+    const allDocs = await db.allDocs({ include_docs: true })
 
-        const projects = allDocs.rows
-            .map(row => row.doc as any)
-            .filter(doc => doc.type === 'project')
+    const projects = allDocs.rows.filter((doc: any) => {
+        return doc.doc && doc.doc._id?.startsWith('project_')
+    })
 
-        return projects
-    } catch (error) {
-        console.error('Error retrieving projects:', error)
-    }
+    return projects.map((p: any) => ({
+        _id: p.doc._id,
+        metadata_: p.doc.metadata_,
+        data_: p.doc.data_,
+    }))
 }
 
 /**

@@ -24,8 +24,18 @@ import EventEmitter from 'events'
 import jsPDF from 'jspdf'
 import { measureTypeMapping } from '../templates/templates_config'
 import { getConfig } from '../config'
+import { uploadImageToS3AndCreateDocument } from '../utilities/s3_utils'
 
 PouchDB.plugin(PouchDBUpsert)
+
+export type FormEntry = {
+    id: string
+    process_step_id: string
+    user_id: string
+    form_data: any
+    created_at: string
+    updated_at: string | null
+}
 
 type UpsertAttachment = (
     blob: Blob,
@@ -652,5 +662,262 @@ export const closeProcessStepIfAllMeasuresComplete = async (
         }
     } catch (error) {
         console.error(' Error:', error)
+    }
+}
+
+export const saveToVaporCoreDB = async (
+    userId: string | null,
+    processStepId: string | null,
+    form_data: any,
+    setSelectedFormId?: (id: string) => void,
+    handleFormSelect?: (form: FormEntry) => void,
+    fileToUpload?: Blob | File | null,
+): Promise<void> => {
+    if (!userId || !processStepId) {
+        console.warn('Missing userId or processStepId in saveToVaporCoreDB')
+        return
+    }
+
+    let formId = localStorage.getItem('form_id')
+
+    const formData = {
+        user_id: userId,
+        process_step_id: processStepId,
+        form_data: form_data,
+    }
+
+    let uploadedDocumentId
+
+    try {
+        // if file and valid s3Config provided, upload file to s3
+        if (fileToUpload) {
+            try {
+                const organizationId = localStorage.getItem('organization_id')
+                if (!organizationId) {
+                    console.error('Missing organizationId in localStorage')
+                } else {
+                    uploadedDocumentId = await uploadImageToS3AndCreateDocument(
+                        {
+                            file: fileToUpload,
+                            userId,
+                            organizationId,
+                            documentType: 'quality install photo',
+                            measureName: 'project-photo',
+                        },
+                    )
+                    if (uploadedDocumentId) {
+                        if (!form_data.documents) {
+                            form_data.documents = []
+                        }
+                        form_data.documents.push({
+                            document_id: uploadedDocumentId,
+                            documentType: 'quality install photo',
+                        })
+                    }
+                }
+            } catch (err) {
+                console.error(
+                    'Failed to upload photo to s3 and create document:',
+                    err,
+                )
+            }
+        }
+
+        let response: Response
+
+        if (formId) {
+            try {
+                const response = await fetch(
+                    `http://localhost:5000/api/quality-install/${formId}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    },
+                )
+
+                if (response.status === 404) {
+                    console.warn(
+                        `Form with id ${formId} not found. Attempting to create.`,
+                    )
+                    // Try POST to create it
+                    const createResponse = await fetch(
+                        `http://localhost:5000/api/quality-install`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id: formId,
+                                ...formData,
+                            }),
+                        },
+                    )
+                    if (!createResponse.ok) {
+                        throw new Error(
+                            `Failed to create form with id ${formId}`,
+                        )
+                    }
+                } else if (!response.ok) {
+                    throw new Error(`Failed to update form with id ${formId}`)
+                }
+            } catch (error) {
+                console.error('Error saving to Vapor Core DB:', error)
+                throw error
+            }
+        } else {
+            // no formId, create a new one
+            response = await fetch(
+                'http://localhost:5000/api/quality-install',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                },
+            )
+
+            const data = await response.json()
+            formId = data.form_data_id as string
+            localStorage.setItem('form_id', formId)
+
+            if (setSelectedFormId && handleFormSelect) {
+                const newEntry: FormEntry = {
+                    id: formId,
+                    user_id: userId!,
+                    process_step_id: processStepId!,
+                    form_data: formData.form_data,
+                    created_at: new Date().toISOString(),
+                    updated_at: null,
+                }
+
+                setSelectedFormId(formId)
+                handleFormSelect(newEntry)
+            }
+        }
+    } catch (error) {
+        console.error('Error saving to RDS:', error)
+    }
+}
+
+export const fetchExistingRDSForm = async (
+    userId: string,
+    processStepId: string,
+): Promise<any | null> => {
+    const response = await fetch(
+        `http://localhost:5000/api/quality-install?user_id=${userId}&process_step_id=${processStepId}`,
+        {
+            method: 'GET',
+        },
+    )
+
+    if (!response.ok) {
+        console.warn('No form data found or error fetching from RDS')
+        return null
+    }
+
+    const data = await response.json()
+    if (data.success && data.forms?.length > 0) {
+        return data.forms[0] // each process/process_step only has 1 project entry
+    }
+
+    return null
+}
+
+function base64ToBlob(base64: string, contentType: string): Blob {
+    const byteCharacters = atob(base64)
+    const byteNumbers = new Array(byteCharacters.length)
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i)
+    }
+    const byteArray = new Uint8Array(byteNumbers)
+    return new Blob([byteArray], { type: contentType })
+}
+
+export const hydrateFromRDS = async (rdsEntry: any, db: PouchDB.Database) => {
+    try {
+        if (!rdsEntry || !rdsEntry.form_data) {
+            console.warn('No form_data found in RDS entry, skipping hydration.')
+            return
+        }
+
+        // Check if project already exists
+        const existing = await db.allDocs({ include_docs: true })
+        const projectExists = existing.rows.some(doc =>
+            doc.id.startsWith('project_'),
+        )
+
+        if (projectExists) {
+            console.log(
+                'Local PouchDB already populated with project document.',
+            )
+            return
+        }
+
+        const RESERVED_KEYS = new Set(['_id', '_rev', '_attachments'])
+        const importedDocs: Record<string, any> = {}
+        const childrenIds: string[] = []
+
+        for (const [docId, docBody] of Object.entries(rdsEntry.form_data) as [
+            string,
+            Record<string, any>,
+        ][]) {
+            if (!docId || typeof docBody !== 'object' || docBody === null)
+                continue
+            if (RESERVED_KEYS.has(docId)) continue
+
+            const idToUse = docBody._id || docId
+            if (!idToUse) continue
+
+            const { _attachments, ...docWithoutAttachments } = docBody
+            await db.put({ ...docWithoutAttachments, _id: idToUse })
+            importedDocs[idToUse] = docBody
+
+            // Put attachments if they exist
+            if (_attachments) {
+                for (const [attachmentId, attachment] of Object.entries(
+                    _attachments,
+                ) as [string, { data: string; content_type: string }][]) {
+                    const blob = base64ToBlob(
+                        attachment.data,
+                        attachment.content_type,
+                    )
+                    await db.putAttachment(
+                        idToUse,
+                        attachmentId,
+                        blob,
+                        attachment.content_type,
+                    )
+                }
+            }
+
+            // track install docs (everything that's not metadata_ or data_)
+            if (!['metadata_', 'data_'].includes(idToUse)) {
+                childrenIds.push(idToUse)
+            }
+        }
+
+        // add top-level project document that links to metadata_ and data_
+        const projectId = `project_${rdsEntry.id}`
+        const projectDoc = {
+            _id: projectId,
+            metadata_: importedDocs['metadata_'],
+            data_: importedDocs['data_'],
+            children: childrenIds,
+        }
+
+        await db.put(projectDoc)
+
+        if (rdsEntry.id) {
+            localStorage.setItem('form_id', rdsEntry.id)
+        }
+
+        console.log(`Hydrated project into PouchDB: ${projectId}`)
+    } catch (err) {
+        console.error('Error hydrating from RDS:', err)
     }
 }
