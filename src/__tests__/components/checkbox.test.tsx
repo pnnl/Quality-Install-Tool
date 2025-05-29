@@ -1,6 +1,6 @@
-import React from 'react'
-import { render, fireEvent, RenderResult } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
+import { fireEvent, render, RenderResult } from '@testing-library/react'
+import React from 'react'
 import Checkbox from '../../components/checkbox'
 
 describe('Checkbox Component', () => {
@@ -15,11 +15,11 @@ describe('Checkbox Component', () => {
     ): RenderResult => {
         return render(
             <Checkbox
-                label={label}
-                options={options}
-                onChange={onChange}
-                value={value} // Correctly typed as string[]
                 hidden={hidden}
+                label={label}
+                onChange={onChange}
+                options={options}
+                value={value} // Correctly typed as string[]
             />,
         )
     }
@@ -44,8 +44,8 @@ describe('Checkbox Component', () => {
     test('checkbox checked state reflects initial value', () => {
         const value = ['Option 2']
         const { getByLabelText } = renderComponent(false, value)
-        expect(getByLabelText('Option 2')).toBeChecked()
         expect(getByLabelText('Option 1')).not.toBeChecked()
+        expect(getByLabelText('Option 2')).toBeChecked()
         expect(getByLabelText('Option 3')).not.toBeChecked()
     })
 
@@ -57,6 +57,7 @@ describe('Checkbox Component', () => {
         fireEvent.click(getByLabelText('Option 2'))
         expect(onChange).toHaveBeenNthCalledWith(1, ['Option 1', 'Option 2'])
     })
+
     test('calls onChange with empty array when all checkboxes are unchecked', () => {
         const value: string[] = ['Option 1']
         const { getByLabelText } = renderComponent(false, value)
