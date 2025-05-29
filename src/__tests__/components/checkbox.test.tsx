@@ -56,12 +56,13 @@ describe('Checkbox Component', () => {
         // Click on 'Option 2' checkbox
         fireEvent.click(getByLabelText('Option 2'))
         expect(onChange).toHaveBeenNthCalledWith(1, ['Option 1', 'Option 2'])
+    })
+    test('calls onChange with empty array when all checkboxes are unchecked', () => {
+        const value: string[] = ['Option 1']
+        const { getByLabelText } = renderComponent(false, value)
 
-        // Confirm current checkbox state reflects initial value
-        expect(onChange).toHaveBeenLastCalledWith(['Option 1', 'Option 2'])
-
-        // Untick 'Option 1' checkbox (simulating change)
+        // Click to uncheck 'Option 1'
         fireEvent.click(getByLabelText('Option 1'))
-        expect(onChange).toHaveBeenNthCalledWith(2, ['Option 2'])
+        expect(onChange).toHaveBeenNthCalledWith(1, [])
     })
 })
