@@ -7,6 +7,9 @@ describe('Checkbox Component', () => {
     const label = 'Select Options'
     const options = ['Option 1', 'Option 2', 'Option 3']
     const onChange = jest.fn()
+    beforeEach(() => {
+        onChange.mockClear()
+    })
 
     // Utility function to render the component
     const renderComponent = (
@@ -49,7 +52,7 @@ describe('Checkbox Component', () => {
         expect(getByLabelText('Option 3')).not.toBeChecked()
     })
 
-    test('updates checked state and calls onChange when checkbox is clicked', async () => {
+    test('updates checked state and calls onChange when checkbox is clicked', () => {
         const value: string[] = ['Option 1']
         const { getByLabelText } = renderComponent(false, value)
 
