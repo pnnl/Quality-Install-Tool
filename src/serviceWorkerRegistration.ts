@@ -86,6 +86,29 @@ function registerValidSW(swUrl: string, config?: Config) {
                                 'New content is available and will be used when all ' +
                                     'tabs for this page are closed. See https://cra.link/PWA.',
                             )
+                            showUpdateBanner(
+                                'A new version of this app is available! Click here or reload to update now.',
+                                () => {
+                                    if (registration.waiting) {
+                                        registration.waiting.postMessage({
+                                            type: 'SKIP_WAITING',
+                                        })
+                                        registration.waiting.addEventListener(
+                                            'statechange',
+                                            (event: Event) => {
+                                                const target =
+                                                    event.target as ServiceWorker | null
+                                                if (
+                                                    target &&
+                                                    target.state === 'activated'
+                                                ) {
+                                                    window.location.reload()
+                                                }
+                                            },
+                                        )
+                                    }
+                                },
+                            )
 
                             // Execute callback
                             if (config && config.onUpdate) {
@@ -151,5 +174,69 @@ export function unregister() {
             .catch(error => {
                 console.error(error.message)
             })
+    }
+}
+function showUpdateBanner(message: string, onClick?: () => void) {
+    let toast = document.getElementById('sw-update-toast')
+    if (!toast) {
+        toast = document.createElement('div')
+        toast.id = 'sw-update-toast'
+        // Device-friendly toast styles for top right
+        toast.style.position = 'fixed'
+        toast.style.top = '10px'
+        toast.style.right = '10px'
+        toast.style.left = '10px'
+        toast.style.maxWidth = 'calc(100vw - 32px)'
+        toast.style.background = '#fff9c4'
+        toast.style.color = '#222'
+        toast.style.padding = '6px 8px'
+        toast.style.borderRadius = '8px'
+        toast.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)'
+        toast.style.zIndex = '9999'
+        toast.style.display = 'flex'
+        toast.style.alignItems = 'center'
+        toast.style.fontSize = '16px'
+        toast.style.wordBreak = 'break-word'
+        toast.style.justifyContent = 'space-between'
+
+        // Responsive font and layout for small screens
+        toast.style.boxSizing = 'border-box'
+
+        const messageSpan = document.createElement('span')
+        messageSpan.textContent = message
+        messageSpan.style.flex = '1'
+        if (onClick) {
+            messageSpan.style.cursor = 'pointer'
+            messageSpan.onclick = onClick
+        }
+
+        const closeBtn = document.createElement('button')
+        closeBtn.textContent = '×'
+        closeBtn.style.marginLeft = '8px'
+        closeBtn.style.background = 'transparent'
+        closeBtn.style.border = 'none'
+        closeBtn.style.color = '#222'
+        closeBtn.style.fontSize = '18px'
+        closeBtn.style.cursor = 'pointer'
+        closeBtn.setAttribute('aria-label', 'Close update notification')
+        closeBtn.onclick = () => toast?.remove()
+
+        toast.appendChild(messageSpan)
+        toast.appendChild(closeBtn)
+        document.body.appendChild(toast)
+
+        // Optional: Auto-dismiss after 7 seconds
+        // setTimeout(() => {
+        //     toast?.remove()
+        // }, 7000)
+    } else {
+        // Update message if toast already exists
+        if (toast.firstChild) {
+            ;(toast.firstChild as HTMLElement).textContent = message
+            if (onClick) {
+                ;(toast.firstChild as HTMLElement).style.cursor = 'pointer'
+                ;(toast.firstChild as HTMLElement).onclick = onClick
+            }
+        }
     }
 }
