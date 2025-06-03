@@ -77,10 +77,6 @@ function registerValidSW(swUrl: string, config?: Config) {
                     return
                 }
                 installingWorker.onstatechange = () => {
-                    console.log(
-                        'Service worker state changed:',
-                        installingWorker.state,
-                    )
                     if (installingWorker.state === 'installed') {
                         if (navigator.serviceWorker.controller) {
                             // At this point, the updated precached content has been fetched,
@@ -91,7 +87,7 @@ function registerValidSW(swUrl: string, config?: Config) {
                                     'tabs for this page are closed. See https://cra.link/PWA.',
                             )
                             showUpdateBanner(
-                                'A new version of this app is available! Click here or reload to update now.',
+                                'A new version of this app is available! <b>Click here</b> or reload to update now.',
                                 () => {
                                     if (registration.waiting) {
                                         registration.waiting.postMessage({
@@ -191,7 +187,7 @@ function showUpdateBanner(message: string, onClick?: () => void) {
         toast.style.right = '10px'
         toast.style.left = '10px'
         toast.style.maxWidth = 'calc(100vw - 32px)'
-        toast.style.background = '#fff9c4'
+        toast.style.background = '#f7ec86'
         toast.style.color = '#222'
         toast.style.padding = '6px 8px'
         toast.style.borderRadius = '8px'
@@ -214,19 +210,8 @@ function showUpdateBanner(message: string, onClick?: () => void) {
             messageSpan.onclick = onClick
         }
 
-        const closeBtn = document.createElement('button')
-        closeBtn.textContent = '×'
-        closeBtn.style.marginLeft = '8px'
-        closeBtn.style.background = 'transparent'
-        closeBtn.style.border = 'none'
-        closeBtn.style.color = '#222'
-        closeBtn.style.fontSize = '18px'
-        closeBtn.style.cursor = 'pointer'
-        closeBtn.setAttribute('aria-label', 'Close update notification')
-        closeBtn.onclick = () => toast?.remove()
-
         toast.appendChild(messageSpan)
-        toast.appendChild(closeBtn)
+        // toast.appendChild(closeBtn)
         document.body.appendChild(toast)
 
         // Optional: Auto-dismiss after 7 seconds
