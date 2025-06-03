@@ -191,7 +191,6 @@ h1 + h3 {
 /* photo_input.tsx */
 .input-card {
     page-break-before: always;
-    margin-bottom: 1rem;
 } /*also in radio.tsx*/
 
 /* stylizes the hidden input for photo upload*/
@@ -202,8 +201,6 @@ h1 + h3 {
 /* photo.tsx */
 .photo-card {
     break-inside: avoid;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
 }
 
 .photo-card > .card-body > div {
