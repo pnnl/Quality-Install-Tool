@@ -184,6 +184,7 @@ function showUpdateBanner(message: string, onClick?: () => void) {
     // Helper to create or update the message span
     function setMessage(span: HTMLSpanElement) {
         span.innerHTML = message
+
         span.style.background = '#e3f2fd' // Light blue highlight
         span.style.color = '#0d47a1' // Dark blue text
         span.style.padding = '16px 32px'
