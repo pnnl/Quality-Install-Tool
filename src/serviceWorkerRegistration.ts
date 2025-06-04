@@ -87,7 +87,7 @@ function registerValidSW(swUrl: string, config?: Config) {
                                     'tabs for this page are closed. See https://cra.link/PWA.',
                             )
                             showUpdateBanner(
-                                'A new version of this app is available! <b>Click here</b> to update now.',
+                                'A new version of this app is available! <b>Click here</b> to update now. ',
                                 () => {
                                     if (registration.waiting) {
                                         registration.waiting.postMessage({
