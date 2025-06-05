@@ -21,7 +21,7 @@ const TextInput: React.FC<TextInputProps> = ({
     const [isFocused, setIsFocused] = useState<boolean>(false)
 
     const floatingLabelClassName = useMemo<string>(() => {
-        const classNames = ['mb-3']
+        const classNames = []
 
         if (isFocused || value) {
             classNames.push('text-area-expanded')

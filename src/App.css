@@ -69,6 +69,11 @@ h1 + h3 {
     text-align: center;
 }
 
+/* used in all Tab components */
+.tab-pane > *:not(.nav-tabs) {
+    margin-bottom: 0.5rem;
+}
+
 /* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
 .address {
     text-align: center;
@@ -189,9 +194,11 @@ h1 + h3 {
 }
 
 /* photo_input.tsx */
+.photo-input .card-body .accordion {
+    margin-bottom: 0.5rem;
+}
 .input-card {
     page-break-before: always;
-    margin-bottom: 1rem;
 } /*also in radio.tsx*/
 
 /* stylizes the hidden input for photo upload*/
@@ -202,8 +209,6 @@ h1 + h3 {
 /* photo.tsx */
 .photo-card {
     break-inside: avoid;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
 }
 
 .photo-card > .card-body > div {
@@ -500,4 +505,12 @@ btn-light:hover {
         display: block;
         page-break-before: always;
     }
+}
+
+.print-wrapper > .photo-card {
+    margin-bottom: 0.5rem;
+}
+
+.project-form > * {
+    margin-bottom: 0.5rem;
 }

@@ -58,11 +58,7 @@ const DocNameInput: React.FC<DocNameInputProps> = ({ currentValue }) => {
                 const errorMessages = validate(value, validators)
 
                 return (
-                    <FloatingLabel
-                        className="mb-3"
-                        controlId={id}
-                        label="Project Name"
-                    >
+                    <FloatingLabel controlId={id} label="Project Name">
                         <Form.Control
                             onChange={async (
                                 event: React.ChangeEvent<HTMLInputElement>,

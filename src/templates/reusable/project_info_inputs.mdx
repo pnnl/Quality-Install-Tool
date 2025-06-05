@@ -3,25 +3,27 @@
 
     _Apart from the Installation Company, installer information is optional. We recommend filling in as much as possible for reference in the final report._
 
-    <StringInput label="Installation Company" path="installer.company_name" min={1}/>
-    <StringInput label="Technician Name" path="installer.name" />
-    <StringInput label="Company Address" path="installer.mailing_address" />
-    <StringInput label="Company Phone" path="installer.phone" />
-    <StringInput label="Company Email" path="installer.email" />
+    <form className="project-form">
+        <StringInput label="Installation Company" path="installer.company_name" min={1}/>
+        <StringInput label="Technician Name" path="installer.name" />
+        <StringInput label="Company Address" path="installer.mailing_address" />
+        <StringInput label="Company Phone" path="installer.phone" />
+        <StringInput label="Company Email" path="installer.email" />
 
-    ## Project Address
+        ## Project Address
 
-    <StringInput label="Street Address" path="location.street_address" />
-    <StringInput label="City" path="location.city" />
-    <USStateSelect label="State" path="location.state" />
-    <StringInput label="Zip Code" path="location.zip_code" />
+        <StringInput label="Street Address" path="location.street_address" />
+        <StringInput label="City" path="location.city" />
+        <USStateSelect label="State" path="location.state" />
+        <StringInput label="Zip Code" path="location.zip_code" />
 
-    <PhotoInput
-        id="building_number_photo"
-        label="Building Number – Photo"
-        notes={false}
-    >
-        Provide a photo of the building that shows the building number.
-    </PhotoInput>
+        <PhotoInput
+            id="building_number_photo"
+            label="Building Number – Photo"
+            notes={false}
+        >
+            Provide a photo of the building that shows the building number.
+        </PhotoInput>
+    </form>
 
 </>

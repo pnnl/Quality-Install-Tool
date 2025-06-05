@@ -50,7 +50,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     )
 
     return (
-        <div className="mb-3">
+        <div>
             {prefix || suffix ? (
                 <InputGroup>
                     {prefix && <InputGroup.Text>{prefix}</InputGroup.Text>}

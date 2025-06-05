@@ -26,7 +26,7 @@ const StringInput: React.FC<StringInputProps> = ({
     )
 
     return (
-        <FloatingLabel className="mb-3" controlId={id} label={label}>
+        <FloatingLabel controlId={id} label={label}>
             <Form.Control
                 onChange={handleChange}
                 type="text"
