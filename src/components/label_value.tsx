@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import DateStr from './date_str'
 import convertStringToNumber from '../utilities/string_to_number_utils'
 
@@ -24,51 +24,59 @@ const LabelValue: React.FC<LabelValueProps> = ({
     dateOptions,
 }: LabelValueProps): JSX.Element | null => {
     //Numbers are being stored as strings right now in DB, so we can try to fix them
-    if (type === 'number' && typeof value === 'string') {
-        const convertedValue = convertStringToNumber(value)
-        if (convertedValue !== null) {
-            value = convertedValue
+    const convertedValue = useMemo(() => {
+        if (type === 'number' && typeof value === 'string') {
+            return convertStringToNumber(value)
         }
-    }
+        return value
+    }, [value, type])
 
-    // If type is "number" and decimalPlaces, round the value
-    if (type === 'number') {
-        if (typeof value === 'number' && !isNaN(value)) {
-            if (typeof decimalPlaces === 'number' && !isNaN(decimalPlaces)) {
-                value = value.toFixed(decimalPlaces)
+    const formattedValue = useMemo(() => {
+        let finalValue = convertedValue
+
+        // If type is "number" and decimalPlaces, round the value
+        if (type === 'number') {
+            if (typeof finalValue === 'number' && !isNaN(finalValue)) {
+                if (
+                    typeof decimalPlaces === 'number' &&
+                    !isNaN(decimalPlaces)
+                ) {
+                    finalValue = finalValue.toFixed(decimalPlaces)
+                } else {
+                    console.log(
+                        'Make sure that your decimalPlaces param is actually a number.',
+                    )
+                }
             } else {
                 console.log(
-                    'Make sure that your decimalPlaces param is actually a number.',
+                    `You are trying to set the type of a non-number value to 'number'. Value is: ${finalValue} and typeof value is: ${typeof finalValue}`,
                 )
             }
-        } else {
-            console.log(
-                `You are trying to set the type of a non-number value to 'number'. Value is: ${value} and typeof value is: ${typeof value}`,
-            )
         }
-    }
+        return finalValue
+    }, [convertedValue, decimalPlaces, type])
 
-    return required || value ? (
+    return required || formattedValue ? (
         label ? (
             <div className="top-bottom-padding">
                 <span>
                     <strong>{label}: </strong>
                 </span>
                 {prefix}
-                {type === 'date' && typeof value === 'string' ? (
-                    <DateStr date={value} options={dateOptions} />
+                {type === 'date' && typeof formattedValue === 'string' ? (
+                    <DateStr date={formattedValue} options={dateOptions} />
                 ) : (
-                    value
+                    formattedValue
                 )}
                 {suffix}
             </div>
         ) : (
             <>
                 {prefix}
-                {type === 'date' && typeof value === 'string' ? (
-                    <DateStr date={value} options={dateOptions} />
+                {type === 'date' && typeof formattedValue === 'string' ? (
+                    <DateStr date={formattedValue} options={dateOptions} />
                 ) : (
-                    value
+                    formattedValue
                 )}
                 {suffix}
             </>
