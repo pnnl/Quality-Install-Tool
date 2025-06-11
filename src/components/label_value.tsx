@@ -1,5 +1,6 @@
 import React from 'react'
 import DateStr from './date_str'
+import convertStringToNumber from '../utilities/string_to_number_utils'
 
 export interface LabelValueProps {
     label?: React.ReactNode
@@ -22,11 +23,6 @@ const LabelValue: React.FC<LabelValueProps> = ({
     type = 'string',
     dateOptions,
 }: LabelValueProps): JSX.Element | null => {
-    function convertStringToNumber(input: string): number | null {
-        const parsedNumber = Number(input)
-        return isNaN(parsedNumber) ? null : parsedNumber
-    }
-
     //Numbers are being stored as strings right now in DB, so we can try to fix them
     if (type === 'number' && typeof value === 'string') {
         const convertedValue = convertStringToNumber(value)
