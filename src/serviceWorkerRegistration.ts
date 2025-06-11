@@ -86,6 +86,29 @@ function registerValidSW(swUrl: string, config?: Config) {
                                 'New content is available and will be used when all ' +
                                     'tabs for this page are closed. See https://cra.link/PWA.',
                             )
+                            showUpdateBanner(
+                                'A new version of this app is available! <b>Click here</b> to update now. ',
+                                () => {
+                                    if (registration.waiting) {
+                                        registration.waiting.postMessage({
+                                            type: 'SKIP_WAITING',
+                                        })
+                                        registration.waiting.addEventListener(
+                                            'statechange',
+                                            (event: Event) => {
+                                                const target =
+                                                    event.target as ServiceWorker | null
+                                                if (
+                                                    target &&
+                                                    target.state === 'activated'
+                                                ) {
+                                                    window.location.reload()
+                                                }
+                                            },
+                                        )
+                                    }
+                                },
+                            )
 
                             // Execute callback
                             if (config && config.onUpdate) {
@@ -151,5 +174,65 @@ export function unregister() {
             .catch(error => {
                 console.error(error.message)
             })
+    }
+}
+function showUpdateBanner(message: string, onClick?: () => void) {
+    let toast = document.getElementById(
+        'sw-update-toast',
+    ) as HTMLDivElement | null
+
+    // Helper to create or update the message span
+    function setMessage(span: HTMLSpanElement) {
+        span.innerHTML = message
+
+        span.style.background = '#e3f2fd' // Light blue highlight
+        span.style.color = '#0d47a1' // Dark blue text
+        span.style.padding = '16px 32px'
+        span.style.borderRadius = '12px'
+        span.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)'
+        span.style.fontSize = '20px'
+        span.style.wordBreak = 'break-word'
+        span.style.pointerEvents = 'auto'
+        span.style.maxWidth = '600px'
+        span.style.display = 'inline-block'
+        if (onClick) {
+            span.style.cursor = 'pointer'
+            span.onclick = onClick
+        } else {
+            span.style.cursor = 'default'
+            span.onclick = null
+        }
+    }
+
+    if (!toast) {
+        toast = document.createElement('div')
+        toast.id = 'sw-update-toast'
+        toast.style.position = 'fixed'
+        toast.style.top = '50px'
+        toast.style.left = '50%'
+        toast.style.transform = 'translateX(-50%)'
+        toast.style.zIndex = '9999'
+        toast.style.display = 'flex'
+        toast.style.alignItems = 'center'
+        toast.style.justifyContent = 'center'
+        toast.style.background = 'transparent'
+        toast.style.boxShadow = 'none'
+        toast.style.width = 'auto'
+        toast.style.maxWidth = '90vw'
+        toast.style.pointerEvents = 'none'
+
+        const messageSpan = document.createElement('span')
+        setMessage(messageSpan)
+
+        toast.appendChild(messageSpan)
+        document.body.appendChild(toast)
+    } else {
+        // Update message if toast already exists
+        let messageSpan = toast.querySelector('span')
+        if (!messageSpan) {
+            messageSpan = document.createElement('span')
+            toast.appendChild(messageSpan)
+        }
+        setMessage(messageSpan as HTMLSpanElement)
     }
 }
