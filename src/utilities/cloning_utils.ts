@@ -14,6 +14,7 @@ const EXCLUDED_COMPONENT_NAMES: string[] = [
     'TabWrapper',
     'TableWrapper',
     'Tabs',
+    'CollapsibleTextWrapper',
 ]
 
 export interface CloneableProps {

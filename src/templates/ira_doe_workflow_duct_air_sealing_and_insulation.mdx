@@ -28,7 +28,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         | ----------------------------
         | <NumberInput label="CFM at 25Pa" min={0} path="duct_leakage_cfm25"  />
         | <NumberInput label="Conditioned Floor Area (ft2):" min={0} path="conditioned_floor_area_ft2" />
-        | <p><strong>Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present: </strong>{!isNaN(props.data?.duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100).toFixed(1) : 'N/A'} </p>
+        | <LabelValue decimalPlaces={1} type={!isNaN(props.data?.duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? "number" : "string"} label="Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present" value={!isNaN(props.data?.duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100) : 'N/A'}/>
 
     </ShowOrHide>
     <PhotoInput id="existing_area_of_significant_leakage_photo" label="Area of significant leakage – Photo">
@@ -100,8 +100,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}>
       <NumberInput label="CFM at 25Pa" min={0} path="post_install_duct_leakage_cfm25"  />
-      <p><strong>Conditioned Floor Area (ft2): </strong> {props.data?.conditioned_floor_area_ft2} </p>
-      <p><strong>Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present: </strong>{!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.post_install_duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100).toFixed(1) : 'N/A'}</p>
+      <LabelValue label="Conditioned Floor Area (ft2)" value={props.data?.conditioned_floor_area_ft2}/>
+      <LabelValue decimalPlaces={1} 
+          type={!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? "number" : "string"} 
+          label="Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present" 
+          value={!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.post_install_duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100) : 'N/A'}/>
     </ShowOrHide>
 
     <PhotoInput id="postinstall_floor_plan_sketch_with_numbers_photo" label="Flow rates to each supply register and zonal pressures post-work measurement – Photo">
