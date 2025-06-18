@@ -8,7 +8,7 @@ interface CollapsibleProps {
 
 const Collapsible: React.FC<CollapsibleProps> = ({ header, children }) => {
     return (
-        <Accordion className="bottom-margin">
+        <Accordion>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>{header}</Accordion.Header>
                 <Accordion.Body>{children}</Accordion.Body>
