@@ -168,7 +168,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         <PhotoInput id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" uploadable>
             Upload a photo of the manufacturer&apos;s extended heating performance table.
         </PhotoInput>
-        <NumberInput label={<>Aux Heat Lockout Above This Temperature (&deg;F)</>} min={0} path="aux_heat_lockout_temperature" />
+        <NumberInput label={<>Auxiliary Heat Lockout Above This Temperature (&deg;F)</>} min={0} path="aux_heat_lockout_temperature" />
         <NumberInput label={<>Compressor Lockout Below This Temperature (&deg;F)</>} min={0} path="compresser_lockout_temperature" />
         <NumberInput label={<>Dual Fuel Switch Over Temperature (&deg;F)</>} min={0} path="dual_fuel_switch_over_temperature" />
 
@@ -496,7 +496,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 The selected heat pump&apos;s extended heating performance table
             </Photo>
 
-            <LabelValue label={<span>Aux Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
+            <LabelValue label={<span>Auxiliary Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
 
             <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
 
