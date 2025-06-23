@@ -3,9 +3,9 @@
  * @param input - The input string to be converted.
  * @returns - The converted number, or null if the conversion fails.
  */
-function convertStringToNumber(input: string): number | null {
+function parseNumberOrNull(input: string): number | null {
     const parsedNumber = Number(input)
     return isNaN(parsedNumber) ? null : parsedNumber
 }
 
-export default convertStringToNumber
+export default parseNumberOrNull

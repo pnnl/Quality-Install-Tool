@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import DateStr from './date_str'
-import convertStringToNumber from '../utilities/string_to_number_utils'
+import parseNumberOrNull from '../utilities/string_to_number_utils'
 
 export interface LabelValueProps {
     label?: React.ReactNode
@@ -26,7 +26,7 @@ const LabelValue: React.FC<LabelValueProps> = ({
     //Numbers are being stored as strings right now in DB, so we can try to fix them
     const convertedValue = useMemo(() => {
         if (type === 'number' && typeof value === 'string') {
-            return convertStringToNumber(value)
+            return parseNumberOrNull(value)
         }
         return value
     }, [value, type])
