@@ -141,7 +141,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Card className="input-card">
+            <Card className="input-card photo-input">
                 <Card.Body>
                     <Collapsible header={label}>
                         <Card.Text as="div">{children}</Card.Text>
