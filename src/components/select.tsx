@@ -19,7 +19,7 @@ const Select: React.FC<SelectProps> = ({ label, options, onChange, value }) => {
     )
 
     return (
-        <FloatingLabel className="mb-3" controlId={id} label={label}>
+        <FloatingLabel controlId={id} label={label}>
             <Form.Select value={value || ''} onChange={handleChange}>
                 <option key="" value="" />
                 {options.map(option => {
