@@ -445,7 +445,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
                 <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>} 
                     value={props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null}/>
-                <LabelValue label={<span>Duct CFM25 per 100 per ft<sup>2</sup></span>} 
+                <LabelValue label={<span>Duct CFM25 per 100 ft<sup>2</sup></span>} 
                     type={props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? "number" : "string"}
                     decimalPlaces={2}
                     value={ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100) : null }/>
