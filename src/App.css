@@ -474,21 +474,23 @@ btn-light:hover {
 }
 
 /* Collapsible text card */
-.collapsible-text-card .collapsible-text {
+.collapsible-text {
     position: relative;
+    background-color: white;
 }
 
-.collapsible-text-card p.description {
+.collapsible-text p.description {
     color: gray;
+    margin-bottom: unset;
 }
 
-.collapsible-text-card .collapsible-text.collapsed {
+.collapsible-text.collapsed {
     height: 3.125rem;
     overflow: hidden;
     position: relative;
 }
 
-.collapsible-text-card .clickable-text {
+.collapsible-text .clickable-text {
     color: #006100;
     cursor: pointer;
     font-weight: bold;
@@ -496,23 +498,23 @@ btn-light:hover {
     padding: 0 5px 0px 5px;
 }
 
-.collapsible-text-card .clickable-text.collapsed {
+.collapsible-text .clickable-text.collapsed {
     position: absolute;
     background-color: white;
     bottom: 2px;
     right: 0px;
 }
 
-.collapsible-text-card .content {
+.collapsible-text-container .content {
     margin-top: 10px;
 }
 
-.collapsible-text-card .content .card {
+.collapsible-text-container .content .card {
     border: none;
     margin-bottom: 0;
 }
 
-.collapsible-text-card .content .card-body {
+.collapsible-text-container .content .card-body {
     padding: 0;
 }
 

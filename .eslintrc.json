@@ -25,6 +25,7 @@
                 "ClimateZoneSelect": false,
                 "Collapsible": false,
                 "CollapsibleText": false,
+                "CollapsibleTextContainer": false,
                 "DateInput": false,
                 "DateStr": false,
                 "DateTimeStr": false,
