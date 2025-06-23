@@ -16,7 +16,7 @@ const CollapsibleTextWrapper: React.FC<CollapsibleTextWrapperProps> = ({
 }) => {
     return (
         <StoreContext.Consumer>
-            {({ doc }) => {
+            {() => {
                 return (
                     <CollapsibleText text={text} title={title}>
                         {children}

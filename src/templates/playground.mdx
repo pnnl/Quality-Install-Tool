@@ -35,13 +35,15 @@
         title="No content"
         text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos."
     />
-        <CollapsibleText
-        title={<div style={{ backgroundColor: "pink", height: "200px" }}>React.Node Title</div>}
-        text={<div style={{ padding: "10px", height: "200px" }}>This is a React.Node instead of a string being passed. There is less control of the styling when we allow this. This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos.</div>}
-        />
+    <CollapsibleText
+    title={<div style={{ backgroundColor: "pink", height: "200px" }}>React.Node Title</div>}
+    text={<div style={{ padding: "10px", height: "200px" }}>This is a React.Node instead of a string being passed. There is less control of the styling when we allow this. This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos.</div>}
+    />
+    <CollapsibleText text="This is shorter than 75 chars." title="Title Town!">
+        <Radio label="Do you like this card?" options={['Yes', 'No']} path="radio" />
+    </CollapsibleText>
 
     <DateInput label="DateInput" path="date_input" />
-
     **DateStr:** <DateStr date={props.data.date_input}/>
 
     **DateTimeStr:** <DateTimeStr date={props.data.date_input}/>
