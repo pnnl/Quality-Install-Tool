@@ -129,7 +129,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Make and Model – Photo"
     required>
 
-      Photo of the make and model number of the LED lamp.
+      This information about the make and model is
+      useful for when it comes time to purchase replacement LED lamps.
 
 </Photo>
 
@@ -138,7 +139,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Color Temperature, Wattage, and Lumen – Photo"
     required>
 
-    Photo of the information about the color temperature, wattage, and lumen.
+    This information about the color temperature, wattage, and lumen of the
+    LED lamp is useful for when it comes time to purchase
+    replacement LED lamps to match the existing LED lamps.
 
 </Photo>
 
@@ -147,12 +150,18 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="Dimmer Make and Model – Photo"
     required>
 
-      Photo of the make and model of the dimmer, if used. Test the dimmer to ensure the light dimming works.
+      Photo of the make and model of the dimmer. Note, when replacing the LED lamp
+      or the dimmer in the distant future, some LED lamps and dimmers have compatibility
+      issues that could be in the form of light flickering and/or buzzing sounds.
+      Either purchase the same model equipment or purchase a small quantity of the new LED lamp and
+      test for compatibility issues before making a larger order.
 
 </Photo>
 
 <Photo id="project_invoice_photo" label="Project Invoice – Photo" required>
-    Photo of the project invoice.
+    If the project scope included other work such as adding,subtracting, or
+    moving lighting fixtures,or adding lighting controls, it would show up in
+    the project invoice.
 </Photo>
 
 </ShowOrHide>
@@ -160,8 +169,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 <ShowOrHide visible={props.data?.led_tube_type == 'Type B'} >
 
 <Photo id="fixture_rewired_photo_b" label="Fixture Rewired – Photo" required>
-    Photo of the rewired fixture. If there are more than one fixture being
-    retrofitted, take a representative photo.
+    Take note of this photo when it comes time to purchase replacement LED
+    lamps. Some direct drive LED lamps are designed to be powered from a single
+    end e.g. powered from a single non-shunted tombstone contact, while others
+    are designed to go into fixtures that power a LED lamp from both ends.
 </Photo>
 
 <Photo
@@ -169,7 +180,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Make and Model – Photo"
     required>
 
-    Photo of the make and model number of the LED lamp.
+    Take note of this photo when it comes time to purchase replacement LED lamps.
+    If a different make and model lamp is purchased, make a small order and test
+    for compatibility issues before making a larger order.
 
 </Photo>
 
@@ -178,7 +191,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Color Temperature, Wattage, and Lumen – Photo"
     required>
 
-    Photo of the information about the color temperature, wattage, and lumen.
+    Take note of this photo when it comes time to purchase replacement LED lamps.
+    If a different make and model lamp is purchased, consider the color temperature,
+    wattage, and lumens of the new make and model lamp.
 
 </Photo>
 
@@ -187,12 +202,19 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="Dimmer Make and Model – Photo"
     required>
 
-    Photo of the make and model of the dimmer, if used. Test the dimmer to ensure the light dimming works.
+    Take note of this photo when it comes time to purchase replacement LED lamps.
+    If a different make and model lamp is purchased, make a small order and test for
+    compatibility issues with this dimmer. Similarly, if a replacement dimmer of a
+    different make and model is purchased test for compatibility issues before making
+    a larger order.
 
 </Photo>
 
 <Photo id="project_invoice_photo_b" label="Project Invoice – Photo" required>
-    Photo of the project invoice.
+    If the project scope included other work such as adding, subtracting, or
+    moving lighting fixtures, or adding lighting controls, it would show up in
+    the project invoice.
+
 </Photo>
 
 </ShowOrHide>
@@ -200,20 +222,19 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 <ShowOrHide visible={props.data?.led_tube_type == 'Type C'} >
 
 <Photo id="fixture_rewired_photo_c" label="Fixture Rewired – Photo" required>
-    Photo of the rewired fixture. If there are more than one fixture being
-    retrofitted, take a representative photo.
+    Take note of this photo when it comes time to purchase replacement LED
+    lamps. Some direct drive LED lamps are designed to be powered from a single
+    end e.g. powered from a single non-shunted tombstone contact, while others
+    are designed to go into fixtures that power a LED lamp from both ends.
 </Photo>
 
 <Photo
     id="led_driver_photo_c"
     label="LED Driver – Photo"
     required>
-
-    Photo of the LED driver. If there is a label or markings detailing the
-    date of manufacturing, model number, maximum output current, etc.,
-    please photograph from close enough to read the information. This photo
-    will be very helpful for maintenance staff in the future for ordering
-    compatible replacement lamps.
+Take note of this photo when it comes time to purchase replacement LED lamps.
+Compatibility between the LED driver and the LED lamp is important for safety
+and the longevity of the LED lamp.
 
 </Photo>
 
@@ -222,7 +243,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Make and Model – Photo"
     required>
 
-    Photo of the make and model number of the LED lamp.
+Take note of this photo when it comes time to purchase replacement LED lamps.
+If a different make and model lamp is purchased, make a small order and test
+for compatibility issues before making a larger order.
 
 </Photo>
 
@@ -231,7 +254,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="LED Lamp Color Temperature, Wattage, and Lumen – Photo"
     required>
 
-    Photo of the information about the color temperature, wattage, and lumen.
+Take note of this photo when it comes time to purchase replacement LED lamps.
+If a different make and model lamp is purchased, consider the color temperature,
+wattage, and lumens of the new make and model lamp.
 
 </Photo>
 
@@ -240,12 +265,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     label="Dimmer Make and Model – Photo"
     required>
 
-    Photo of the make and model of the dimmer, if used. Test the dimmer to ensure the light dimming works.
+Take note of this photo. Type C LED fixtures use a 0-10 Vdc dimmer. Replace with
+only 0-10 Vdc dimmers, never use a line voltage dimmer.
 
 </Photo>
 
 <Photo id="project_invoice_photo_c" label="Project Invoice – Photo" required>
-    Photo of the project invoice.
+    If the project scope included other work such as adding, subtracting, or
+    moving lighting fixtures, or adding lighting controls, it would show up in
+    the project invoice.
 </Photo>
 
 </ShowOrHide>
