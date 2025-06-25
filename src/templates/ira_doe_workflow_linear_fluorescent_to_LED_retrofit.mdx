@@ -1,0 +1,319 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<Tabs>
+  <Tab eventKey="pre-installation" title="Pre-Installation">
+
+      When embarking on a linear fluorescent to LED retrofit job it is necessary to decide what type of LED tube to use, Type A, Type B, or Type C. Below is a table outlining the benefits and drawbacks of each type.
+      <div className='pre-installation-table'>
+      |        | Type A                                                             | Type B                                       | Type C                    |
+      |--------|--------------------------------------------------------------------|----------------------------------------------|---------------------------|
+      |        | LED tube with integrated driver wired to existing fluorescent ballast | LED tube with integrated driver wired to mains power | LED tube with external driver |
+      | **Benefits**   | - Lowest installation labor cost<br/>- No rewiring required       | - High efficiency<br/>- High reliability and longevity<br/>- No ballast compatibility issues or ballast failure issues<br/>- Simplicity | - High efficiency<br/>- High reliability and longevity<br/>- No ballast compatibility issues or ballast failure issues<br/>- Excellent dimming<br/>- Low voltage outputs to lamp and switch |
+      | **Drawbacks**  | - Reliability and longevity depend on the ballast<br/>- Possible compatibility issues with LED tube and existing ballast<br/>- Lowest efficiency of all three options<br/>- Limited dimming capabilities |  - High installation labor cost<br/>- Rewiring required<br/>- LED tube and dimmer compatibility<br/>- Most susceptible to flicker, careful selection needed | - High installation labor cost<br/>- Rewiring required<br/>- LED driver and LED lamp compatibility across brands |
+      </div>
+
+      Consider evaluating the age of the fixtures’ ballast and taking that information into consideration when choosing what type of LED to retrofit with. Magnetic ballasts are generally not compatible with LED tubes, even Type A LED tubes.
+
+      For Type B LED tubes evaluate the LED tube and dimmer compatibility, especially if the building’s existing dimmer will remain in use.
+
+      For Type C LED tubes evaluate the rewiring feasibility if dimmers are to be used.
+
+      Consider visually evaluating the condition of and testing the two tombstone contacts with a voltmeter to determine whether a closed or open circuit exists. A closed circuit will indicate shunted tombstones. This information could influence which make and model LED tube to purchase for the project.
+
+      Consider presenting all three options to the customer and discussing the advantages and drawbacks of each option.
+
+  </Tab>
+
+  <Tab eventKey="installation" title="Installation">
+    <DateInput label="Installation Date" path="install_date" />
+    <Radio label="LED Tube Type" options={['Type A', 'Type B', 'Type C']} path="led_tube_type" />
+    <ShowOrHide visible={props.data?.led_tube_type === 'Type A'}>
+      <PhotoInput id="fixture_ballast_photo" label="Fixture Ballast – Photo">
+        Take a photo of the fixture’s ballast. If there is more than one fixture being retrofitted,
+        take a representative photo. If there is a label/markings about the ballast type,
+        date of manufacturing, model number,
+        please photograph from close enough to read the information.
+      </PhotoInput>
+      <PhotoInput id="led_lamp_make_model_photo" label="LED Lamp Make and Model – Photo">
+        Take a photo of the make and model number of the LED lamp.
+      </PhotoInput>
+
+      <PhotoInput id="led_lamp_details_photo" label="LED Lamp Color Temperature, Wattage, and Lumen – Photo">
+        Take a photo of the information about the color temperature, wattage, and lumen.
+      </PhotoInput>
+
+      <PhotoInput id="dimmer_make_model_photo" label="Dimmer Make and Model – Photo">
+        If a dimmer is used, take a photo of the make and model of the dimmer. Test the dimmer to make sure the light dimming works.
+      </PhotoInput>
+
+      <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+        Take a photo of the project invoice.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.led_tube_type === 'Type B'}>
+      <PhotoInput id="fixture_rewired_photo" label="Fixture Rewired – Photo">
+        Take a photo of the rewired fixture. If there are more than one fixture being retrofitted, take a representative photo.
+      </PhotoInput>
+      <PhotoInput id="led_lamp_make_model_photo" label="LED Lamp Make and Model – Photo">
+        Take a photo of the make and model number of the LED lamp.
+      </PhotoInput>
+      <PhotoInput id="led_lamp_details_photo" label="LED Lamp Color Temperature, Wattage, and Lumen – Photo">
+        Take a photo of the information about the color temperature, wattage, and lumen.
+      </PhotoInput>
+      <PhotoInput id="dimmer_make_model_photo" label="Dimmer Make and Model – Photo">
+        If a dimmer is used, take a photo of the make and model of the dimmer. Test the dimmer to make sure the light dimming works.
+      </PhotoInput>
+      <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+        Take a photo of the project invoice.
+      </PhotoInput>
+    </ShowOrHide>
+    <ShowOrHide visible={props.data?.led_tube_type === 'Type C'}>
+      <PhotoInput id="fixture_rewired_photo" label="Fixture Rewired – Photo">
+        Take a photo of the rewired fixture. If there are more than one fixture being retrofitted, take a representative photo.
+      </PhotoInput>
+      <PhotoInput id="led_driver_photo" label="LED Driver – Photo">
+        Take a photo of the LED driver. If there is a label or markings detailing the date of manufacturing, model number, maximum output current, etc., please photograph from close enough to read the information. This photo will be very helpful for maintenance staff in the future for ordering compatible replacement lamps.
+      </PhotoInput>
+      <PhotoInput id="led_lamp_make_model_photo" label="LED Lamp Make and Model – Photo">
+        Take a photo of the make and model number of the LED lamp.
+      </PhotoInput>
+      <PhotoInput id="led_lamp_details_photo" label="LED Lamp Color Temperature, Wattage, and Lumen – Photo">
+        Take a photo of the information about the color temperature, wattage, and lumen.
+      </PhotoInput>
+      <PhotoInput id="dimmer_make_model_photo" label="Dimmer Make and Model – Photo">
+        If a dimmer is used, take a photo of the make and model of the dimmer. Test the dimmer to make sure the light dimming works.
+      </PhotoInput>
+      <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+        Take a photo of the project invoice.
+      </PhotoInput>
+    </ShowOrHide>
+
+</Tab>
+
+  <Tab eventKey="post_installation"  title="Post-Installation">
+  ## Final Conditions
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />
+
+  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
+    | <p><strong>Conditioned Volume (ft3): </strong> {props?.data?.conditioned_volume_ft3}</p>
+    | <p><strong>ACH50: </strong>{!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</p>
+
+    <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+    </PhotoInput>
+
+  </ShowOrHide>
+
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_safety_briefing_to_homeowner"
+/>
+<Select
+    label="What R-value was added to the ceiling?"
+    options={['Less than R-30', 'R-30', 'R-49', 'R-60', 'more than R-60']}
+    path="postinstall_ceiling_r_value"
+/>
+<Select
+    label="What percentage of ceiling area received additional insulation (choose the closest)? "
+    options={['10%', '25%', '50%', '75%', '100%']}
+    path="postinstall_insulated_ceiling_area"
+/>
+
+## Ventilation
+
+  <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
+  *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
+  * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
+  *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
+  * If the ASHRAE 62.2 mechanical ventilation calculator finds that the home should have a whole-house mechanical ventilation system installed, please use the mechanical ventilation workflow to document.
+
+<Button
+    variant="primary"
+    href={`/app/${props.project._id}/doe_workflow_mechanical_ventilation`}
+>
+    <span>Document Mechanical Ventilation</span>
+</Button>
+
+  </Collapsible>
+  <Radio label="Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
+  ## Project Invoice
+  <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+    Take a photo of the project invoice if your program requires it.
+  </PhotoInput>
+  </Tab>
+  <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Attic Air Sealing and Insulation Upgrade
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    ## Existing Conditions
+
+    <p> What part of the home are you air sealing?  <strong> { props.data?.airsealing_location} </strong> </p>
+    <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.attic_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50 + " " : null } { props.data?.attic_air_leakage_rate} </strong></p>
+
+<ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >
+
+    <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3}</strong></p>
+    <p>ACH50: <strong>{!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</strong></p>
+
+    <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
+        Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
+    </Photo>
+    <Photo
+      id="conditioned_volume_photo"
+      label="Conditioned floor area and air volume calculation – Photo"
+      required>
+      Photo of the math used to determine the conditioned floor area and
+      volume, label the rooms/sections and the corresponding length, width,
+      and height.
+    </Photo>
+
+</ShowOrHide>
+
+    <p> What is the existing insulation in the ceiling?  <strong> { props.data?.existing_insulation_type} </strong></p>
+    <p> What is the existing insulation R-value in the ceiling?  <strong>{ props?.data.airsealing_r_value} </strong></p>
+
+    ## General Safety
+    <p> What is the roof condition?   <strong>{ props.data?.roof_condition} </strong></p>
+    <p> Are there signs of mold or moisture in the attic?  <strong> { props.data?.signs_of_mold_or_moisture} </strong></p>
+    <p> Has an mechanical ventilation calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
+    <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
+
+    ## Installation - Air Sealing Details
+
+    <Photo id="drywall_to_topplate_photo" label="Drywall to Top Plate – Photo" required>
+      Photo of drywall to top plate seam sealed
+    </Photo>
+    <Photo id="soffit_air_baffels_photo" label="Soffit Air Baffles – Photo" >
+      Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam
+    </Photo>
+    <Photo id="leakage_recessed_light_photo" label="Leakage Recessed Light – Photo" >
+      Photo of a leaky recessed light fixture treatment.
+      The photo below could be showing a recessed light fixture sealed from the attic suing a recessed light cover or sealed from below using an airtight LED retrofit fixture.
+    </Photo>
+    <Photo id="chimney_dam_photo" label="Chimney Dam – Photo">
+       Photo of fire caulking and sheet metal dam around chimney
+    </Photo>
+    <Photo id="hot_flue_pipe_dam_photo" label="Hot Flue Pipe Dam – Photo">
+       Photo of fire caulking and sheet metal dam around hot flue pipes
+    </Photo>
+    <Photo id="wire_and_penetrations_photo" label="Wire and Pipe Penetrations – Photo">
+       Photo of electrical wire and pipe penetrations sealed
+    </Photo>
+    <Photo id="large_opening_sealed_photo" label="Large Opening Sealed – Photo">
+       Photo of large opening such as a dropped soffit, dropped ceiling, or chase sealed with rigid foam and spray foam.
+    </Photo>
+    <Photo id="duct_boot_to_drywall_photo" label="Duct Boot to Drywall – Photo">
+       Photo of duct boot to drywall connection sealed
+    </Photo>
+    <Photo id="exhaust_fan_sealed_to_drywall_photo" label="Exhaust Fan Sealed to Drywall – Photo">
+       Photo of exhaust fan sealed to drywall
+    </Photo>
+    <Photo id="knee_wall_sealed_photo" label="Knee Walls Sealed – Photo">
+       Photo of open back knee walls drywall sealed to studs. Install blocking if missing top or bottom plates. Install joist cavity blocking.
+    </Photo>
+    <Photo id="knee_wall_enclosed_photo" label="Knee Walls Enclosed – Photo">
+       Photo of open back knee wall enclosed with air barrier or foam board
+    </Photo>
+    <Photo id="skylight_wall_sealed_photo" label="Skylight Walls Sealed – Photo">
+      Photo of open back skylight shaft wall drywall air sealed to studs
+    </Photo>
+    <Photo id="skylight_wall_enclosed_photo" label="Skylight Walls Enclosed – Photo" >
+      Photo of open back skylight walls enclosed with air barrier or foam board
+    </Photo>
+    <Photo id="balloon_wall_sealed_photo" label="Balloon Walls Sealed – Photo">
+      Photo of balloon framed walls sealed with blocking and spray foam
+    </Photo>
+    <Photo id="stairwell_wall_sealed_photo" label="Stairwell Wall Sealed – Photo" >
+      Photo of open back stairwell wall sealed with air barrier or foam board
+    </Photo>
+    <Photo id="t_g_ceiling_sealed_photo" label="T&G Ceiling Sealed – Photo" >
+     Photo of tongue and groove ceiling sealed
+    </Photo>
+    <Photo id="storage_platform_preparation_photo" label="Storage Platform Preparation – Photo" >
+      Photo of storage platform prepared for blown in insulation using batts as blocking if no insulation underneath
+    </Photo>
+    <Photo id="overview_of_airsealed_attic_photo" label="Overview of Air Sealed Attic – Photo" required>
+      Overview photo of air sealed attic
+    </Photo>
+    <Photo id="attic_access_dam_photo" label="Attic Access Dam – Photo" required>
+      Photo of installed and sealed insulation dam around attic access
+    </Photo>
+    <Photo id="attic_access_weatherstrip_photo" label="Attic Access Weatherstrip – Photo" required>
+      Photo of weatherstrip air sealed attic access
+    </Photo>
+
+    ## Installation - Insulation Details
+    <Photo id="insulation_measuring_rulers_photo" label="Insulation Measuring Rulers  – Photo">
+        Overview of insulation measuring rulers, one installed every 300 sq. ft. visible
+        from attic entrance (photo taken from attic entrance).
+    </Photo>
+
+    <Photo id="rvalue_table_photo" label="R-value Per Inch – Photo" required>
+    Photo of insulation bag R-value per inch table
+    </Photo>
+
+    <Photo id="skylight_shaft_photo" label="Skylight Shaft – Photo">
+    Photo of skylight shaft insulation detail
+    </Photo>
+
+    <Photo id="knee_wall_photo" label="Knee Wall – Photo" >
+     Photo of knee wall insulation detail
+    </Photo>
+
+    <Photo id="stairwell_wall_photo" label="Stairwell Wall – Photo" >
+    Photo of stairwell wall insulation detail
+    </Photo>
+
+    <Photo id="storage_platform_photo" label="Storage Platform – Photo">
+    Photo of storage platform insulation detail
+    </Photo>
+
+    <Photo id="wide_angle_photo" label="Wide Angle – Photo" required>
+      Wide angle photo showing the installed insulation
+    </Photo>
+
+    <Photo id="attic_door_hatch_photo" label="Attic Access - Photo" required>
+      Photo of insulation on attic access
+    </Photo>
+
+    ## Final Conditions
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa"  ? props.data?.postinstall_air_leakage_cfm50 : null }{props.data?.postinstall_attic_air_leakage_rate }</strong> </p>
+
+
+    <ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >
+      <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>
+        Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
+      </Photo>
+
+      <p>Conditioned Volume (ft3): <strong>{props.data?.conditioned_volume_ft3}</strong> </p>
+      <p> ACH50 : <strong> {!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</strong></p>
+
+  </ShowOrHide>
+    <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_safety_briefing_to_homeowner}</strong> </p>
+    <p> What R-value was added to the ceiling? <strong>{props.data?.postinstall_ceiling_r_value}</strong> </p>
+    <p> What percentage of ceiling area received additional insulation? <strong>{props.data?.postinstall_insulated_ceiling_area}</strong> </p>
+
+    ## Ventilation
+    <p> Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data?.post_retrofit_ashrae_62_2_calculation} </p>
+
+    {props.metadata?.attachments?.project_invoice_photo && (
+            <><h2> Project Invoice</h2>
+            <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+            </Photo> </>
+            )}
+
+    </PrintSection>
+
+  </Tab>
+</Tabs>

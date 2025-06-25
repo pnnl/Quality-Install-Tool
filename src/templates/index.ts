@@ -18,6 +18,7 @@ import DOEWorkflowHighEfficiencyGasFurnace from './ira_doe_workflow_high_efficie
 import DOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
 import DOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_efficiency_water_heater.mdx'
 import DOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
+import DOEWorkflowLinearFlourescentToLEDRetrofit from './ira_doe_workflow_linear_fluorescent_to_LED_retrofit.mdx'
 import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_ventilation.mdx'
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
@@ -145,6 +146,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         title: 'Insert Replacement Windows',
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowInsertReplacementWindows,
+    },
+    doe_workflow_linear_fluorescent_to_led_retrofit: {
+        title: 'Linear Fluorescent to LED Retrofit',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowLinearFlourescentToLEDRetrofit,
     },
     doe_workflow_mechanical_ventilation: {
         title: 'Mechanical Ventilation',
