@@ -203,7 +203,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
               ---
                 # Combustion Appliance Safety Testing
                 ## Photo Report
-            **Assessment Date:**&nbsp; <DateStr date={props.data.assessment_date} />
+            <LabelValue value ={props.data.assessment_date} type="date" label="Assessment Date"/>
             <ProjectInfoReport {...props} />
             <CombustionSafetyChecksReport {...props} />
         </PrintSection>

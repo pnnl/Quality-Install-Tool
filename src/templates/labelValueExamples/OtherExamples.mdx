@@ -1,0 +1,64 @@
+import LabelValue from '../../components/label_value_wrapper'
+import NumberInput from '../../components/number_input_wrapper'
+import TextInput from '../../components/text_input_wrapper'
+
+<div className="playground-section">
+        <h1>Other Examples</h1>
+
+        <p> Enter a text value to be retrieved by the LabelValue components below</p>
+
+        <TextInput path="label-value-other-text-input" />
+
+        <h2>LabelValue with no props:</h2>
+        <code>
+            `<LabelValue />`
+        </code>
+        <div className="label-value-container">
+            <LabelValue />
+        </div>
+
+        <h2>
+            LabelValue with number type prop and string value (Will console.log an error
+            message)
+        </h2>
+        <code>
+            `<LabelValue label="String Value as Number" path="label-value-other-text-input" type="number" decimalPlaces={2}/>`
+        </code>
+        <div className="label-value-container">
+            <LabelValue
+                label="String Value as Number"
+                path="label-value-other-text-input"
+                type="number"
+                decimalPlaces={2}
+            />
+        </div>
+
+        <p className='pt-3'><span>Enter a number value to be retrieved by the LabelValues below</span> </p>
+
+        <NumberInput label="Other Number Value:" path="label-value-other-number-input" />
+
+        <h2>
+            LabelValue with string type prop and number value (Will show the string value of number with no rounding)
+        </h2>
+        <code>
+            `<LabelValue label="String Type" path="label-value-other-number-input" type="string" decimalPlaces={2}/>`
+        </code>
+        <div className="label-value-container">
+            <LabelValue
+                label="String Type"
+                path="label-value-other-number-input"
+                type="string"
+                decimalPlaces={2}
+            />
+        </div>
+
+        <h2>
+            LabelValue with no label
+        </h2>
+        <code>
+            `<LabelValue path="label-value-other-number-input"/>`
+        </code>
+        <div className="label-value-container">
+            <LabelValue path="label-value-other-number-input"/>
+        </div>
+</div>
