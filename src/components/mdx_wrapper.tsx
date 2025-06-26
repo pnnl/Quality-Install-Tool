@@ -7,6 +7,8 @@ import { Button, Tab, Tabs } from 'react-bootstrap'
 import CheckboxWrapper from './checkbox_wrapper'
 import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
 import Collapsible from './collapsible'
+import CollapsibleTextContainerWrapper from './collapsible_text_container_wrapper'
+import CollapsibleTextWrapper from './collapsible_text_wrapper'
 import DateInputWrapper from './date_input_wrapper'
 import DateStr from './date_str'
 import DateTimeStr from './date_time_str'
@@ -50,6 +52,8 @@ const components = {
     Checkbox: CheckboxWrapper,
     ClimateZoneSelect: ClimateZoneSelectWrapper,
     Collapsible,
+    CollapsibleTextContainer: CollapsibleTextContainerWrapper,
+    CollapsibleText: CollapsibleTextWrapper,
     DateInput: DateInputWrapper,
     DateStr,
     DateTimeStr,

@@ -478,6 +478,51 @@ btn-light:hover {
     font-size: 18px; /* Adjust the default font size */
 }
 
+/* Collapsible text card */
+.collapsible-text {
+    position: relative;
+    background-color: white;
+}
+
+.collapsible-text p.description {
+    color: gray;
+    margin-bottom: unset;
+}
+
+.collapsible-text.collapsed {
+    height: 3.125rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapsible-text .clickable-text {
+    color: #006100;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    padding: 0 5px 0px 5px;
+}
+
+.collapsible-text .clickable-text.collapsed {
+    position: absolute;
+    background-color: white;
+    bottom: 2px;
+    right: 0px;
+}
+
+.collapsible-text-container .content {
+    margin-top: 10px;
+}
+
+.collapsible-text-container .content .card {
+    border: none;
+    margin-bottom: 0;
+}
+
+.collapsible-text-container .content .card-body {
+    padding: 0;
+}
+
 /* Common font size for medium, small, and extra small devices */
 @media (max-width: 991.98px) {
     .modal-body-text {
