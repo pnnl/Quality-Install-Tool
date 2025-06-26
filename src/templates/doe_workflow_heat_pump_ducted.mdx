@@ -473,11 +473,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
                Photo of proposed ODU install location
             </Photo>
-            <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit.odu_mounting_style}/>
+            <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit?.odu_mounting_style}/>
 
-            <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit.odu_inches_above_ground}/>
+            <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit?.odu_inches_above_ground}/>
 
-            <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit.snow_ice_protection}/>
+            <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit?.snow_ice_protection}/>
 
             {
                 props.metadata.attachments?.manual_j_file && (
