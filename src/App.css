@@ -203,7 +203,7 @@ h1 + h3 {
     width: 100%;
 }
 .pre-installation-table th,
-td {
+.pre-installation-table td {
     border: 1px solid black;
     padding: 8px;
     vertical-align: top;
