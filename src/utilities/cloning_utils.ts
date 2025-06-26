@@ -6,6 +6,7 @@ import React from 'react'
 const EXCLUDED_COMPONENT_NAMES: string[] = [
     'Collapsible',
     'ColapsibleTextWrapper',
+    'CollapsibleTextContainerWrapper',
     'FigureWrapper',
     'InstallationConsumer',
     'InstallationProvider',
