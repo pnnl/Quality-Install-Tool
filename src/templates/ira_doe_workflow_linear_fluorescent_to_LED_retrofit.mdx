@@ -279,8 +279,21 @@ only 0-10 Vdc dimmers, never use a line voltage dimmer.
 
 </ShowOrHide>
 
-<LabelValue label="Number of Fixtures Retrofitted" path="num_fixtures_retrofitted" required={true}/>
-<LabelValue label="Number of Lamps/Bulbs Retrofitted" path="num_lamps_bulbs_retrofitted" required={true}/>
+<LabelValue
+    label="Number of Fixtures Retrofitted"
+    path="num_fixtures_retrofitted"
+    required={true}
+    decimalPlaces={0}
+    type="number"
+/>
+
+<LabelValue
+    label="Number of Lamps/Bulbs Retrofitted"
+    path="num_lamps_bulbs_retrofitted"
+    required={true}
+    decimalPlaces={0}
+    type="number"
+/>
 
 </PrintSection>
 
