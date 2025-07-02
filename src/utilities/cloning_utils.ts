@@ -5,6 +5,7 @@ import React from 'react'
 //     when its child elements are cloned.
 const EXCLUDED_COMPONENT_NAMES: string[] = [
     'Collapsible',
+    'CollapsibleTextWrapper',
     'FigureWrapper',
     'InstallationConsumer',
     'InstallationProvider',
