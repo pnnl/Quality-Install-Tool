@@ -24,7 +24,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="wall_air_leakage_rate" />
 
- <ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}>
+<ShowOrHide visible={props.data?.wall_air_leakage_rate === 'CFM at 50Pa'}>
     |                                                                                                                                                                                                                                           |
     | ----------------------------
     | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />

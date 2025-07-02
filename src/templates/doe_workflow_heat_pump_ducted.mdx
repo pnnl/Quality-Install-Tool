@@ -379,7 +379,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             >
             Photo of existing heating appliance’s nameplate
             </Photo>
-            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}/> 
+            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}/>
             <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
                 <Photo
                     id="existing_cooling_appliance_photo"
@@ -443,9 +443,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 <LabelValue label="Type Of Duct Leakage Test Performed" value={props.data.type_of_duct_leakage_radio}/>
 
                 <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
-                <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>} 
+                <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>}
                     value={props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null}/>
-                <LabelValue label={<span>Duct CFM25 per 100 ft<sup>2</sup></span>} 
+                <LabelValue label={<span>Duct CFM25 per 100 ft<sup>2</sup></span>}
                     type={props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? "number" : "string"}
                     decimalPlaces={2}
                     value={ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100) : null }/>
@@ -557,7 +557,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             | Feet of line set beyond factory charge = {props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge : null}
             | Ounce of refrigerant per foot of line set = {props.data?.refrigerant_calculator?.oz_per_ft_refrigerant? props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
             | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
-            <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In" 
+            <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In"
                         value={props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}/>
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
                 Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
@@ -595,7 +595,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 Compare these values to the planned values in the equipment selection section of the report.
             </Photo>
 
-            <LabelValue label="Post-Installation Notes About Thermostat Settings" 
+            <LabelValue label="Post-Installation Notes About Thermostat Settings"
                         value={props.data.comment_about_thermostat_settings}/>
 
             {props.metadata?.attachments?.project_invoice_photo && (<>
