@@ -12,11 +12,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       | **Drawbacks**  | - Reliability and longevity depend on the ballast<br/>- Possible compatibility issues with LED tube and existing ballast<br/>- Lowest efficiency of all three options<br/>- Limited dimming capabilities |  - High installation labor cost<br/>- Rewiring required<br/>- LED tube and dimmer compatibility<br/>- Most susceptible to flicker, careful selection needed | - High installation labor cost<br/>- Rewiring required<br/>- LED driver and LED lamp compatibility across brands |
       </div>
 
-      Consider evaluating the age of the fixtures’ ballast and taking that information into consideration when choosing what type of LED to retrofit with. Magnetic ballasts are generally not compatible with LED tubes, even Type A LED tubes.
+      Consider evaluating the age of the fixtures&apos; ballast and taking that information into consideration when choosing what type of LED to retrofit with. Magnetic ballasts are generally not compatible with LED tubes, even Type A LED tubes.
 
-      For Type B LED tubes evaluate the LED tube and dimmer compatibility, especially if the building’s existing dimmer will remain in use.
+      For Type B LED tubes, evaluate the LED tube and dimmer compatibility, especially if the building&apos;s existing dimmer will remain in use.
 
-      For Type C LED tubes evaluate the rewiring feasibility if dimmers are to be used.
+      For Type C LED tubes, evaluate the rewiring feasibility if dimmers are to be used.
 
       Consider visually evaluating the condition of and testing the two tombstone contacts with a voltmeter to determine whether a closed or open circuit exists. A closed circuit will indicate shunted tombstones. This information could influence which make and model LED tube to purchase for the project.
 
@@ -29,7 +29,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <Radio label="LED Tube Type" options={['Type A', 'Type B', 'Type C']} path="led_tube_type" />
     <ShowOrHide visible={props.data?.led_tube_type === 'Type A'}>
       <PhotoInput id="fixture_ballast_photo" label="Fixture Ballast – Photo">
-        Take a photo of the fixture’s ballast. If there is more than one fixture being retrofitted,
+        Take a photo of the fixture&apos;s ballast. If there is more than one fixture being retrofitted,
         take a representative photo. If there is a label/markings about the ballast type,
         date of manufacturing, model number,
         please photograph from close enough to read the information.
@@ -70,7 +70,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     </ShowOrHide>
     <ShowOrHide visible={props.data?.led_tube_type === 'Type C'}>
       <PhotoInput id="fixture_rewired_photo_c" label="Fixture Rewired – Photo">
-        Take a photo of the rewired fixture. If there are more than one fixture being retrofitted, take a representative photo.
+        Take a photo of the rewired fixture. If more than one fixture is being retrofitted, take a representative photo.
       </PhotoInput>
       <PhotoInput id="led_driver_photo_c" label="LED Driver – Photo">
         Take a photo of the LED driver. If there is a label or markings detailing the date of manufacturing, model number, maximum output current, etc., please photograph from close enough to read the information. This photo will be very helpful for maintenance staff in the future for ordering compatible replacement lamps.
@@ -108,7 +108,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     For the client/customer, this report contains information about the type of LED used
     in this project as well as photos showing the make and model number the LED tubes installed.
     This information is useful for when the time comes to purchase replacement LED tubes.
-    There are three ways to retrofit a fixture to LED, Type A, Type B, and Type C.
+    There are three ways to retrofit a fixture to LED: Type A, Type B, and Type C.
     Some replacement LED tubes are compatible with only Type A, others are only compatible with
     Type B, while some replacement LED tubes are compatible with both Type A and B fixtures.
     Type C LED tubes are never compatible with Type A or B fixtures.
@@ -225,7 +225,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 <Photo id="fixture_rewired_photo_c" label="Fixture Rewired – Photo" required>
     Take note of this photo when it comes time to purchase replacement LED
     lamps. Some direct drive LED lamps are designed to be powered from a single
-    end e.g. powered from a single non-shunted tombstone contact, while others
+    end, e.g. powered from a single, non-shunted tombstone contact, while others
     are designed to go into fixtures that power a LED lamp from both ends.
 </Photo>
 
