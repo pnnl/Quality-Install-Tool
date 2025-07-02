@@ -88,6 +88,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         Take a photo of the project invoice.
       </PhotoInput>
     </ShowOrHide>
+    <NumberInput step={1} min={0}label="Number of Fixtures Retrofitted" path="num_fixtures_retrofitted" />
+    <NumberInput step={1} min={0} label="Number of Lamps/Bulbs Retrofitted" path="num_lamps_bulbs_retrofitted" />
 
 </Tab>
 
@@ -277,7 +279,10 @@ only 0-10 Vdc dimmers, never use a line voltage dimmer.
 
 </ShowOrHide>
 
-    </PrintSection>
+<LabelValue label="Number of Fixtures Retrofitted" path="num_fixtures_retrofitted" required={true}/>
+<LabelValue label="Number of Lamps/Bulbs Retrofitted" path="num_lamps_bulbs_retrofitted" required={true}/>
+
+</PrintSection>
 
   </Tab>
 </Tabs>
