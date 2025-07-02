@@ -1,0 +1,20 @@
+import LabelValue from '../../components/label_value_wrapper'
+import TextInput from '../../components/text_input_wrapper'
+
+<div className="playground-section">
+    <h1>Text Value Examples</h1>
+    <p>
+        Enter a text value to be retrieved by the LabelValue components below:
+    </p>
+    <TextInput path="label-value-test-text-input" />
+    <h2>Text LabelValue:</h2>
+    <p>
+        The default type is &quot;string&quot; so it does not need to be provided.
+    </p>
+    <code>
+        `<LabelValue label="Text LabelValue with path prop" path="label-value-test-text-input" />`
+    </code>
+    <div className="label-value-container">
+        <LabelValue label="Text LabelValue with path prop" path="label-value-test-text-input" />
+    </div>
+</div>

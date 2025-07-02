@@ -1,0 +1,32 @@
+import NumberInput from '../../components/number_input_wrapper'
+import LabelValue from '../../components/label_value_wrapper'
+
+<div className="playground-section">
+        <h1>Number Value Examples</h1>
+        <p> Enter a number value to be retrieved by the LabelValues below</p>
+        <NumberInput label="Number Value" path="label-value-test-number-input" />
+
+        <h2>LabelValue with number type prop:</h2>
+        <p>Default is to round to 1 decimal place.</p>
+        <code>
+            `<LabelValue label="Number Value" path="label-value-test-number-input" type="number" />`
+        </code>
+        <div className="label-value-container">
+            <LabelValue label="Number Value" path="label-value-test-number-input" type="number" />
+        </div>
+
+        <h2>LabelValue with number type prop + decimal places + prefix + suffix:</h2>
+        <code>
+            `<LabelValue label="Number Value with Decimals and Prefix and Suffix" path="label-value-test-number-input" type="number" decimalPlaces={2} prefix="$" suffix=" per day"/>`
+        </code>
+        <div className="label-value-container">
+            <LabelValue
+                label="Number Value with Prefix and Suffix"
+                path="label-value-test-number-input"
+                type="number"
+                decimalPlaces={2}
+                prefix="$"
+                suffix=" per day"
+            />
+        </div>
+</div>
