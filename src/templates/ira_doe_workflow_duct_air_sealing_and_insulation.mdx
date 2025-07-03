@@ -101,9 +101,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <ShowOrHide visible={props.data?.postinstall_duct_leakage_rate === 'CFM at 25Pa'}>
       <NumberInput label="CFM at 25Pa" min={0} path="post_install_duct_leakage_cfm25"  />
       <LabelValue label="Conditioned Floor Area (ft2)" value={props.data?.conditioned_floor_area_ft2}/>
-      <LabelValue decimalPlaces={1} 
-          type={!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? "number" : "string"} 
-          label="Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present" 
+      <LabelValue decimalPlaces={1}
+          type={!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? "number" : "string"}
+          label="Cubic feet per minute (CFM) per 100 sq. ft. of conditioned floor area when the air handler is present"
           value={!isNaN(props.data?.post_install_duct_leakage_cfm25) && !isNaN(props.data?.conditioned_floor_area_ft2) ? (props.data.post_install_duct_leakage_cfm25 / props.data.conditioned_floor_area_ft2 * 100) : 'N/A'}/>
     </ShowOrHide>
 
