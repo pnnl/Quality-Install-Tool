@@ -193,6 +193,22 @@ h1 + h3 {
     height: 58px !important;
 }
 
+/* used in linear-flourescent-to-LED-workflow */
+.pre-installation-table {
+    /*forces the table to be scrollable on narrow screens*/
+    overflow-x: scroll;
+}
+.pre-installation-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.pre-installation-table th,
+.pre-installation-table td {
+    border: 1px solid black;
+    padding: 8px;
+    vertical-align: top;
+}
+
 /* photo_input.tsx */
 .photo-input .card-body .accordion {
     margin-bottom: 0.5rem;
