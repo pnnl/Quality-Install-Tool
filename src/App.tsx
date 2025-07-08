@@ -1,98 +1,67 @@
+import React from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
 import 'bootstrap/dist/css/bootstrap.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import './App.css'
-import TemplateEditor from './components/editor'
-import WorkFlowView from './components/workflow_view'
-import JobsView from './components/jobs_view'
-import JsonStoreView from './components/json_store_view'
-import MdxTemplateView from './components/mdx_template_view'
-import RootLayout from './components/root_layout'
-import Home from './components/home'
-import MdxProjectView from './components/mdx_project_details_view'
-import MdxCombustionSafetyView from './components/mdx_combustion_appliance_safety_view'
 
-// Routes to be used by React Router, which handles all the
-// browser routing within this domain.
+import InstallationsEditView from './components/views/installations/edit'
+import InstallationsListView from './components/views/installations/list'
 
-const routes = [
-    {
-        path: '/',
-        // App Home page : Lists existing projects provides functionality to create new one
-        element: (
-            <RootLayout>
-                <Home />
-            </RootLayout>
-        ),
-    },
-    // TODO: This route will be revisited and revised in the future
-    // {
-    //     path: '/template_editor',
-    //     element: <TemplateEditor />,
-    // },
-    {
-        path: `/app/:projectId/workflows`,
-        // Workflow list view:  List the names of workflows available for generating installation report.
-        element: (
-            <RootLayout>
-                <WorkFlowView />
-            </RootLayout>
-        ),
-    },
-    {
-        path: `/app/:projectId/doe_workflow_combustion_safety_testing`,
-        // Workflow list view:  List the names of workflows available for generating installation report.
-        element: (
-            <RootLayout>
-                <MdxCombustionSafetyView />
-            </RootLayout>
-        ),
-    },
-    {
-        path: `/app/:projectId`,
-        // Project details view: Collects information related to the project.
-        element: (
-            <RootLayout>
-                <MdxProjectView />
-            </RootLayout>
-        ),
-    },
-    {
-        path: `/app/:projectId/:workflowName`,
-        // Jobs List View: Lists existing installations associated with a particular workflow
-        // and provides functionality to create new installations
-        element: (
-            <RootLayout>
-                <div>
-                    <JobsView />
-                </div>
-            </RootLayout>
-        ),
-    },
-    {
-        path: `/app/:projectId/:workflowName/:jobId`,
-        // Jobs View: Gathering and displaying information pertinent to individual installations
-        element: (
-            <RootLayout>
-                <MdxTemplateView />
-            </RootLayout>
-        ),
-    },
-    // TODO: This route will be revisited and revised in the future
-    // {
-    //     path: `/app/:projectId/:workflowName/:jobId/json`,
-    //     element: (
-    //         <RootLayout>
-    //             <JsonStoreView />
-    //         </RootLayout>
-    //     ),
-    // },
-]
+import ProjectsEditView from './components/views/projects/edit'
+import ProjectsListView from './components/views/projects/list'
+import ProjectsNewView from './components/views/projects/new'
+import ProjectsShowView from './components/views/projects/show'
 
-// React Router
-const router = createBrowserRouter(routes)
+import DatabaseProvider from './providers/database_provider'
 
-function App(): any {
-    return <RouterProvider router={router} />
+const router = createBrowserRouter(
+    [
+        {
+            path: '/',
+            element: <ProjectsListView />,
+        },
+        {
+            path: `/app/:projectId`,
+            element: <ProjectsEditView />,
+        },
+        {
+            path: `/app/new`,
+            element: <ProjectsNewView />,
+        },
+        {
+            path: `/app/:projectId/workflows`,
+            element: <ProjectsShowView />,
+        },
+        {
+            path: `/app/:projectId/:workflowName`,
+            element: <InstallationsListView />,
+        },
+        {
+            path: `/app/:projectId/:workflowName/:installationId`,
+            element: <InstallationsEditView />,
+        },
+    ],
+    {
+        future: {
+            v7_relativeSplatPath: true,
+        },
+    },
+)
+
+type AppProps = Record<string, never>
+
+const App: React.FC<AppProps> = () => {
+    return (
+        <DatabaseProvider>
+            <RouterProvider
+                future={{
+                    v7_startTransition: true,
+                }}
+                router={router}
+            />
+        </DatabaseProvider>
+    )
 }
 
 export default App

@@ -1,12 +1,33 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
 
     <Tab eventKey="planning" title="Planning">
         The data for this tab should be collected during the initial site visit.
 
+        ## Existing Heating and Cooling Equipment
+
+        <Select label="This heat pump will..." options={[
+            "Replace electric resistance heat",
+            "Replace natural gas heat",
+            "Replace fuel oil heat",
+            "Replace propane heat",
+            "Replace wood heat",
+            "Displace/Reduce electric resistance heat",
+            "Displace/Reduce natural gas heat",
+            "Displace/Reduce fuel oil heat",
+            "Displace/Reduce propane heat",
+            "Displace/Reduce wood heat",
+            "Add comfort to a currently under-conditioned area"
+            ]} path="heat_pump_purpose" />
+
+
         ## Proposed Outdoor Unit
-       
-        Enter how the outdoor unit (ODU) will be installed and the location's average snow depth, the outdoor unit 
-        should be installed above the snow depth. The customer may also have knowledge on how high the snow 
+
+        Enter how the outdoor unit (ODU) will be installed and the location&apos;s average snow depth, the outdoor unit
+        should be installed above the snow depth. The customer may also have knowledge on how high the snow
         typically gets at the planned heat pump location.
 
 
@@ -17,25 +38,25 @@
             where adding ductwork would be extremely difficult and cost prohibitive.
         </Collapsible>
 
-      
+
         <PhotoInput id="proposed_odu_location_photo" label="Proposed ODU Location – Photo">
-            Take a photo of the proposed heat pump outdoor unit (ODU) installation location. 
+            Take a photo of the proposed heat pump outdoor unit (ODU) installation location.
         </PhotoInput>
 
         <Radio label="ODU will be installed on a" options={['Pad','Ground Stand','Wall Mount','Roof Mount']} path="outdoor_unit.install_location" />
 
         <NumberInput label="Average Snow Depth (in)" min={0} path="outdoor_unit.average_snow_depth"  />
-        
+
         <StringInput  label="ODU Installation Location Comments" path="comment_odu_install_location" />
 
-        ## Proposed Indoor Unit   
+        ## Proposed Indoor Unit
         <PhotoInput id="proposed_idu_location_photo" label="Proposed IDU Location – Photo">
             Take a photo of the proposed indoor unit (IDU) installation location, if there are more than one IDU
             installation locations, write in the notes describing the others.
         </PhotoInput>
-        
+
         <StringInput  label="IDU Location Comments" path="comment_idu_install_location" />
-       
+
         <PhotoInput id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo" uploadable>
             Take a photo or attach a screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve.
         </PhotoInput>
@@ -47,34 +68,33 @@
             residential load calculation software. It is recommended that the Manual J calculations be
             performed with the home occupant present that knows the most about the home to help
             determine the most accurate values to enter. Ask the home occupant whether any rooms
-            presently get too hot or cold. 
-        </ Collapsible>   
+            presently get too hot or cold.
+        </ Collapsible>
 
-        
+
         <FileInput id="manual_j_file" label="PDF of Manual J - File">
-                Attach the Manual J load calculations showing design conditions, conditioned square footage, 
+                Attach the Manual J load calculations showing design conditions, conditioned square footage,
                 and the heating and cooling load calculations.
         </FileInput>
-           
-        
+
+
         ## Equipment Selection
-        You are encouraged to use the Cold Climate Heat Pump Decision Tool which can help assist in selecting the right 
-        heat pump for this home. The <a href="#" target="__new__">Cold Climate Heat Pump Decision Tool</a> will make use of the Manual J load values and 
-        the duct air flow capability test result data.  
+        You are encouraged to use the Cold Climate Heat Pump Decision Tool which can help assist in selecting the right
+        heat pump for this home. The <a href="https://basc.pnnl.gov/cchp_decision_tool" target="_blank" rel="noopener noreferrer">Cold Climate Heat Pump Decision Tool</a> will make use of the Manual J load values and
+        the duct air flow capability test result data.
 
         <Collapsible header="Equipment Selection Details">
-            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation 
-            or alternate load sizing method. For example, if the ductless equipment is providing only supplemental 
-            heating or cooling to a home with a central ducted system, sizing to loads smaller than those from 
-            Manual J would make sense. 
-            
-            Equipment selection also depends on knowing the equipment’s performance at specific temperatures. 
-            Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate 
-            Air Source Heat Pump List. Factor in supplemental heating or cooling from other equipment if applicable.
+        Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or alternate load sizing method.
+        For example, if the ductless equipment is providing only supplemental heating or cooling to a home with a central ducted system,
+        sizing to loads smaller than those from Manual J would make sense.
+
+        Equipment selection also depends on knowing the equipment’s performance at specific temperatures.
+        Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List.
+        Factor in supplemental heating or cooling from other equipment if applicable. ACCA’s Manual S can also be used to help select the right heat pump.
         </Collapsible>
         <PhotoInput id="heating_performance_table_photo" label="Heating Performance Table – Photo" uploadable>
-            Take a photo or attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model 
-            selected showing the total capacity and input energy used versus outdoor temperature. If not available, 
+            Take a photo or attach a screenshot of the manufacturer’s heating performance table for the heat pump make and model
+            selected showing the total capacity and input energy used versus outdoor temperature. If not available,
             use the data from the Northeast Energy Efficiency Partnership’s Air Source Heat Pump List.
         </PhotoInput>
 
@@ -87,33 +107,33 @@
 
 
         ## Combustion Appliance Safety Testing
-        <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft 
-        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion 
+        <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion
         safety checks are required to be performed at the completion of the project. </p>
-  
+
 
     </Tab>
     <Tab eventKey="installation" title="Installation">
-       
+
         <DateInput label="Installation Date" path="install_date" />
         ## Refrigerant Recovery
         <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
         <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
             <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
-                Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
-            </PhotoInput> 
+                Take a photo of the old AC or heat pump nameplate showing the refrigerant charge.
+            </PhotoInput>
             <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
-                Take a photo of the refrigerant recovery setup. 
-            </PhotoInput> 
+                Take a photo of the refrigerant recovery setup.
+            </PhotoInput>
             <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
-                Take a photo of the scale showing how much refrigerant was recovered out of the system. 
-            </PhotoInput> 
+                Take a photo of the scale showing how much refrigerant was recovered out of the system.
+            </PhotoInput>
        </ShowOrHide>
-       
+
         <PhotoInput id="odu_name_plate_photo" label="ODU Nameplate – Photo">
             Take a photo of the Outdoor Unit (ODU) nameplate.
         </PhotoInput>
-        
+
         <PhotoInput id="idu_name_plate_photo" label="IDU Nameplate – Photo">
             Take a photo  of the Indoor Unit (IDU) nameplate.
         </PhotoInput>
@@ -123,7 +143,12 @@
         </PhotoInput>
 
         <PhotoInput id="flare_tested_in_a_flare_guage_photo" label="Flare Tested In A Flare Gauge – Photo">
-            Take a photo  of one flare tested in a flare gauge, please test each flare using a flare gauge (one example photo).
+            Take a photo of one flare tested in a flare gauge, please test each flare using a flare gauge (one example photo).
+
+            Don&apos;t be surprised if you need to remake a flare more than once. It isn&apos;t always user error, variations in line set
+            copper quality contributes to the probability imperfect flares. Consider using a cylinder-style reaming and deburring
+            tool instead of a pen-style especially for small diameter lines. &frac14;&quot; flares can be the most difficult to make that fits perfectly in a
+            flare gauge because of the difficulty of reaming and deburring the pipe just the right amount.
         </PhotoInput>
 
         <PhotoInput id="torque_wrench_setting_photo" label="Torque Wrench Setting – Photo">
@@ -131,52 +156,56 @@
         </PhotoInput>
 
         <PhotoInput id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo">
-            Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer's recommended test pressure.
+            Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer&apos;s recommended test pressure.
         </PhotoInput>
 
         <PhotoInput id="pressure_test_result_photo" label="Nitrogen Pressure Test Results – Photo">
-             Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. 
+             Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes.
              Please use a digital pressure gauge while the system is pressurized with nitrogen, check all the field made connections using non-corrosive bubble solution and/or an ultrasonic leak detector.
         </PhotoInput>
 
         <PhotoInput id="vacuum_setup_photo" label="Vacuum Setup – Photo">
-            Take a photo of the vacuum/evacuation setup. Use core removal tool and minimize number of fittings.
-            
-            Valve cores are not to be reused under any circumstances after removal from the valve Body. 
-            The external sealing element of the core will take a “compression set”, conforming to the 
-            mating port surface after installation. This is a common phenomenon for rubber, and contributes 
-            to the robustness of rubber seals. But after the core has been removed and reinstalled the 
-            seal may experience difficulty sealing to another position with different surface conditions. 
+            Take a photo of the vacuum/evacuation setup. Use a core removal tool and minimize number of fittings.
+
+            Valve cores are not to be reused under any circumstances after removal from the valve body.
+
+            The external sealing element of the core will take a &quot;compression set&quot;, conforming to the
+            mating port surface after installation. This is a common phenomenon for rubber, and contributes
+            to the robustness of rubber seals. But after the core has been removed and reinstalled the
+            seal may experience difficulty sealing to another position with different surface conditions.
             Therefore, it is recommended that service personnel always install a new core when servicing the system.
         </PhotoInput>
 
         <PhotoInput id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
-            Take a photo of the vacuum decay test results. Use a digital micron gauge. 
+            Take a photo of the vacuum decay test results. Use a digital micron gauge.
             The system must be isolated from the vacuum pump. The vacuum must not rise above 500 microns in 15 minutes.
 
         </PhotoInput>
 
         <PhotoInput id="installation_manuals_line_set_compensation_instructions_photo" label="Installation Manual's Line Set Compensation Instructions – Photo" uploadable>
-            Take a photo or attach a screenshot of the installation manual showing what oz/ft to add and at what line set length to 
-            begin needing to add refrigerant to correct for the long line set. 
+            Take a photo or attach a screenshot of the installation manual showing what oz/ft to add and at what line set length to
+            begin needing to add refrigerant to correct for the long line set.
         </PhotoInput>
 
         | Ounce of refrigerant to add on top of factory charge
         | --------------------------------------------------
-        | <NumberInput label="Number of ft of line set beyond factory charge" min={0} path="oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge"  /> 
-        | <NumberInput label="Ounce / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft" hint="Please write the ounces of additional refrigerant added beyond the factory charge behind the service cover."  /> 
-        | Ounce(s) to add= { props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft).toFixed(2) : null } 
+        | <NumberInput label="Number of ft of line set beyond factory charge" min={0} path="oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge"  />
+        | <NumberInput label="Ounce / per ft of additional line set" min={0} path="oz_refrigerant_calculation.oz_refrigerant_to_add_per_ft" hint="Please write the ounces of additional refrigerant added beyond the factory charge behind the service cover."  />
+        | Ounce(s) to add= { props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft).toFixed(2) : null }
 
         <PhotoInput id="refrigerant_add_or_trim_photo" label="Refrigerant Add/Trim – Photo">
-            Take a photo  of the refrigerant scale readout showing it matches the targeted weight of 
+            Take a photo  of the refrigerant scale readout showing it matches the targeted weight of
             refrigerant to add (if applicable).
         </PhotoInput>
 
-        <StringInput  label="Notes About Refridgerant Adjustment" path="comment_refridgerant_adjustment" />
+        <StringInput  label="Notes About Refrigerant Adjustment" path="comment_refridgerant_adjustment" />
 
+        <PhotoInput id="condensate_line_photo" label="Condensate Line – Photo">
+            Take a photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+        </PhotoInput>
         <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
-            Take a photo  of the outdoor section of the refrigerant line set as it enters the building showing the 
-            line set insulation has been protected from weather and UV. 
+            Take a photo  of the outdoor section of the refrigerant line set as it enters the building showing the
+            line set insulation has been protected from weather and UV.
         </PhotoInput>
 
         <PhotoInput id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
@@ -185,7 +214,7 @@
 
         <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
             Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
-            
+
             Install service caps that have o-ring seals or use a copper flare gasket to help seal a brass-on-brass mating surface.
         </PhotoInput>
 
@@ -198,32 +227,32 @@
 
     </Tab>
     <Tab eventKey="report" title="Report">
-        
+
        <PrintSection label="Print Report">
             ---
             # Ductless Heat Pump Upgrade
             ## Photo Report
-        
+
            <ProjectInfoReport {...props} />
 
             ## About the Report
             This report is intended to document the critical tests and details spanning from the planning,
             sizing, and equipment selection step for a ductless heat pump to the completed installation.
-            
+
             ## About Ductless Heat Pumps Used as Supplemental Heating/Cooling
             If a ductless heat pump will be used as supplemental heating and/or cooling in concert with a
             central system, be sure to not run the ductless heat pump in heating mode while the central
             system is in cooling mode or vice versa. Make sure every household member knows to check
             the mode of both the thermostat of the central system and the ductless heat pump remote
-            when changing from heating to cooling or vice versa. The same applies to muti-split heat pumps
+            when changing from heating to cooling or vice versa. The same applies to multi-split heat pumps
             (one outdoor unit serving multiple indoor units), make sure to not set one indoor unit to
             heating mode while the others are in cooling mode.
-            
+
             ## Do not set Ductless Heat Pumps to Auto Mode
             Do not set ductless heat pumps to auto mode which will result in the equipment making
             frequent switches between heating mode and cooling mode resulting in large energy efficiency
             penalties and high energy bills.
-            
+
             ## Acronyms
             ODU – Outdoor Unit <br/>
             IDU – Indoor Unit
@@ -231,63 +260,57 @@
             ## ATTENTION CUSTOMER: Ductless Heat Pump Cleaning and Maintenance
             ## Quarterly
             ### Air Filter
-            Ductless heat pumps have mesh filters that need to be checked and cleaned quarterly. Refer to the owner’s 
-            manual for details on how to do this on your specific unit. The mesh filters can be cleaned using a vacuum. 
+            Ductless heat pumps have mesh filters that need to be checked and cleaned quarterly. Refer to the owner’s
+            manual for details on how to do this on your specific unit. The mesh filters can be cleaned using a vacuum.
             For stickier dust, wash them gently using soap and water.
 
             ## Twice a Year
             ### Outdoor Unit Condenser Coil
-            It is a best practice to inspect the outdoor unit at least twice a year for debris build up on the 
-            condenser coil. Leaves, pollen, and fluff from cottonwood trees can build up and block the movement of air 
-            through the condenser coil and cause poor performance. You can carefully clean loose debris off the 
-            condenser coil using a vacuum cleaner and a soft brush. Take care to not bend the fins on the condenser 
-            coil. For more stubborn or stickier dust, it is best practice to call an HVAC service tech. 
-            They will spray down your coil with the correct cleaning detergent to not damage the material and 
-            disassemble the outdoor unit enough to spray water from the inside to push out the dust and debris and 
+            It is a best practice to inspect the outdoor unit at least twice a year for debris build up on the
+            condenser coil. Leaves, pollen, and fluff from cottonwood trees can build up and block the movement of air
+            through the condenser coil and cause poor performance. You can carefully clean loose debris off the
+            condenser coil using a vacuum cleaner and a soft brush. Take care to not bend the fins on the condenser
+            coil. For more stubborn or stickier dust, it is best practice to call an HVAC service tech.
+            They will spray down your coil with the correct cleaning detergent to not damage the material and
+            disassemble the outdoor unit enough to spray water from the inside to push out the dust and debris and
             rinse the coil free of the cleaning detergent.
 
             ## Yearly
             ### Deep Cleaning
-            It is good practice to do a deep cleaning of the ductless heat pump indoor unit yearly. A deep 
-            cleaning is not a DIY task, it is a call and have an HVAC service tech do it task. You can check to 
-            see if a cleaning is needed by turning off the ductless heat pump, then gently pulling the louver open 
-            and looking at the blower wheel. If there is a buildup of dust or mold on the blower wheel it is time for 
-            a deep cleaning. The HVAC service tech will disassemble the ductless heat pump head to remove the blower 
-            wheel to thoroughly clean it outside. When the ductless heat pump head is disassembled, they will also 
-            clean the coil, condensate tray, and condensate drain. You can expect this deep cleaning procedure to 
+            It is good practice to do a deep cleaning of the ductless heat pump indoor unit yearly. A deep
+            cleaning is not a DIY task, it is a call and have an HVAC service tech do it task. You can check to
+            see if a cleaning is needed by turning off the ductless heat pump, then gently pulling the louver open
+            and looking at the blower wheel. If there is a buildup of dust or mold on the blower wheel it is time for
+            a deep cleaning. The HVAC service tech will disassemble the ductless heat pump head to remove the blower
+            wheel to thoroughly clean it outside. When the ductless heat pump head is disassembled, they will also
+            clean the coil, condensate tray, and condensate drain. You can expect this deep cleaning procedure to
             take several hours.
 
             ### Condensate Drain
-            It is a best practice to inspect the end of the condensate drain yearly. If there is a buildup of 
+            It is a best practice to inspect the end of the condensate drain yearly. If there is a buildup of
             goo/slime/mucus/snot at the end of the condensate drain line, it is time to call a HVAC service tech.
-             They will use the combination of a shop vac, drain snakes, and pressurized water to clean out the 
+             They will use the combination of a shop vac, drain snakes, and pressurized water to clean out the
              condensate drain line.
 
 
 
             ## Pre-Installation
+            <LabelValue label="This heat pump will" value={props.data?.heat_pump_purpose}/>
+
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
                 Photo of the proposed heat pump outdoor unit (ODU) installation location
             </Photo>
-            {
-                props.data.comment_odu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_odu_install_location}</p> 
-                : null
-            }
+            <LabelValue label="Notes" value={props.data.comment_odu_install_location}/>
 
-           
+
             Heat pump ODU will be installed on a { props.data.outdoor_unit?.install_location ? props.data.outdoor_unit.install_location : null } <br/>
-            Average Snow Depth (in): { props.data.outdoor_unit?.average_snow_depth ? props.data.outdoor_unit.average_snow_depth : null } 
+            Average Snow Depth (in): { props.data.outdoor_unit?.average_snow_depth ? props.data.outdoor_unit.average_snow_depth : null }
 
             <Photo id="proposed_idu_location_photo" label="Proposed IDU Location – Photo" required>
                 Photo of the proposed heat pump indoor unit (IDU) installation location
             </Photo>
 
-            {
-                props.data.comment_idu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_idu_install_location}</p> 
-                : null
-            }
+            <LabelValue label="Notes" value={props.data.comment_idu_install_location}/>
 
             <Photo id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo" required>
                 Photo or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve
@@ -299,14 +322,14 @@
                 <h2> Manual J </h2>
                 <p>Please see the attached Manual J report.</p>
                 </> : null
-                
+
             }
             <PDFRenderer id="manual_j_file" label="" />
 
             ## Equipment Selection
             <Photo id="heating_performance_table_photo" label="Heating Performance Table – Photo" required>
-                Photo or Screenshot of the manufacturer’s heating performance table for the heat pump make and model 
-                selected showing the total capacity and input energy used versus outdoor temperature. If not available, 
+                Photo or Screenshot of the manufacturer’s heating performance table for the heat pump make and model
+                selected showing the total capacity and input energy used versus outdoor temperature. If not available,
                 use the data from the Northeast Energy Efficiency Partnership’s Air Source Heat Pump List.
             </Photo>
 
@@ -315,33 +338,33 @@
                 and model selected showing the sensible versus total cooling capacity at the design conditions.
             </Photo>
 
-            { props.data?.comment_equipment_selection && 
+            { props.data?.comment_equipment_selection &&
             <p>Comment: {props.data?.comment_equipment_selection}</p>
             }
 
             ## Installation
             {props.data?.replacting_old_ac_or_heatpump && (<p> Is this heat pump installation replacing an old AC or heat pump? <strong>{props.data?.replacting_old_ac_or_heatpump}</strong></p>)}
-           
+
             {props.data?.replacting_old_ac_or_heatpump && props.data?.replacting_old_ac_or_heatpump === "Yes"  && (
             <>
                 <Photo id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo" required>
-                    Take a photo of the old AC or heat pump nameplate showing the refrigerant charge. 
-                </Photo> 
+                    Take a photo of the old AC or heat pump nameplate showing the refrigerant charge.
+                </Photo>
                 <Photo id="recover_setup_photo" label="Recovery Setup – Photo" required>
-                    Take a photo of the refrigerant recovery setup. 
-                </Photo> 
+                    Take a photo of the refrigerant recovery setup.
+                </Photo>
                 <Photo id="recover_scale_photo" label="Recovery Scale – Photo" required>
-                    Take a photo of the scale showing how much refrigerant was recovered out of the system. 
+                    Take a photo of the scale showing how much refrigerant was recovered out of the system.
                 </Photo>
             </>
             )}
-            
+
             ## Equipment
             <Photo id="odu_name_plate_photo" label="Outdoor Unit Nameplate – Photo" required>
             Photo of the outdoor unit nameplate
             </Photo>
-            
-            <Photo id="idu_name_plate_photo" label="Indoor Uint Nameplate – Photo" required>
+
+            <Photo id="idu_name_plate_photo" label="Indoor Unit Nameplate – Photo" required>
                 Photo of the indoor unit nameplate
             </Photo>
 
@@ -350,59 +373,57 @@
             </Photo>
 
             <Photo id="flare_tested_in_a_flare_guage_photo" label="Flare Tested In A Flare Gauge – Photo" required>
-                A quality flare is essential to a ductless heat pump that will not leak refrigerant during its lifetime. 
+                A quality flare is essential to a ductless heat pump that will not leak refrigerant during its lifetime.
                 One way to gauge the quality of a flare is to measure it in a flare gauge to ensure it is the correct size.
             </Photo>
 
             <Photo id="torque_wrench_setting_photo" label="Torque Wrench Setting – Photo" required>
-               Over or under torquing a flare connection will greatly increase the chance of a refrigerant leak. 
+               Over or under torquing a flare connection will greatly increase the chance of a refrigerant leak.
                Thus, a torque wrench is needed to ensure the flare connections are torqued just right.
             </Photo>
 
             <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
-                The test is conducted at 500 PSI or the manufacturer's recommended test pressure. 
+                The test is conducted at 500 PSI or the manufacturer&apos;s recommended test pressure.
             </Photo>
 
             <Photo id="pressure_test_result_photo" label="Nitrogen Pressure Test Results – Photo" required>
-                A passing temperature-compensated nitrogen pressure decay test will show zero or almost zero pressure decay after 10 minutes. 
-              This means the system's connections have been tested to withstand the maximum operating pressures and there are no leaks in the system. 
+                A passing temperature-compensated nitrogen pressure decay test will show zero or almost zero pressure decay after 10 minutes.
+              This means the system&apos;s connections have been tested to withstand the maximum operating pressures and there are no leaks in the system.
             </Photo>
 
             <Photo id="vacuum_setup_photo" label="Vacuum Setup – Photo" required>
                 A good vacuum decay test setup will have the micron gauge located as close to the equipment as possible. It will have an isolation
-                 valve in the setup so that the vacuum pump and vacuum hose can be isolated from the system during the decay measurement period. 
+                 valve in the setup so that the vacuum pump and vacuum hose can be isolated from the system during the decay measurement period.
             </Photo>
 
             <Photo id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo" required>
-                 A passing vacuum decay test is one where the system's vacuum does not rise above 500 microns in 10 minutes with the vacuum pump and 
+                A passing vacuum decay test is one where the system&apos;s vacuum does not rise above 500 microns in 10 minutes with the vacuum pump and
                 vacuum hose isolated from the system. This indicates the system contains no moisture and is leak free.
             </Photo>
 
             <Photo id="installation_manuals_line_set_compensation_instructions_photo" label="Installation Manual's Line Set Compensation Instructions – Photo" required>
-                The ODU comes factory charged with enough refrigerant for a line set out to a certain length. If the line set in the installation is longer than that, 
-                then some additional refrigerant needs to be added. The installation manual contains the details on what they maximum line set length is 
+                The ODU comes factory charged with enough refrigerant for a line set out to a certain length. If the line set in the installation is longer than that,
+                then some additional refrigerant needs to be added. The installation manual contains the details on what they maximum line set length is
                 for the factory charge and how much refrigerant to add per additional foot of line set.
             </Photo>
 
             For this heat pump installation, there was: <br/>
             <u>&nbsp;&nbsp;{props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge ? props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge : null } &nbsp;&nbsp;</u> ft of line set beyond factory charge  x  <u>&nbsp;&nbsp; { props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft : null } &nbsp;&nbsp;</u> Ounce/ft = <u>&nbsp;&nbsp;{ props.data.oz_refrigerant_calculation?.number_of_ft_line_beyond_factory_charge && props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft ? (props.data.oz_refrigerant_calculation.number_of_ft_line_beyond_factory_charge * props.data.oz_refrigerant_calculation?.oz_refrigerant_to_add_per_ft) : null }&nbsp;&nbsp;</u> oz to add.
-            
+
 
             <Photo id="refrigerant_add_or_trim_photo" label="Refrigerant Add/Trim – Photo" required>
-                Photo of the refrigerant scale readout showing it matches the targeted weight of 
+                Photo of the refrigerant scale readout showing it matches the targeted weight of
                 refrigerant to add (if applicable)
             </Photo>
 
+            <LabelValue label="Notes About Refrigerant Adjustment" value={props.data.comment_refridgerant_adjustment}/>
 
-            {
-                props.data.comment_refridgerant_adjustment
-                ? <p><strong>Notes About Refridgerant Adjustment:</strong> {props.data.comment_refridgerant_adjustment}</p> 
-                : null
-            }
-
+            <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
+                Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
+            </Photo>
 
             <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
-                Photo of the outdoor section of the refrigerant line set as it enters the building showing the 
+                Photo of the outdoor section of the refrigerant line set as it enters the building showing the
                 line set insulation has been protected from weather and UV
             </Photo>
 
@@ -415,7 +436,35 @@
                 Your jurisdiction may require the service port caps to be locking refrigerant caps.
             </Photo>
 
-            <CombustionSafetyChecksReport path="combustion_safety_tests" />
+            {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+                <InstallationProvider
+                    installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+                    attachments={true}
+                >
+                    <InstallationConsumer>
+                        {([installation]) => {
+                            if (installation) {
+                                return (
+                                    <StoreProvider
+                                        doc={installation}
+                                        onChange={async () => {
+                                            return
+                                        }}
+                                    >
+                                        <CombustionSafetyChecksReport
+                                            project={props.project}
+                                            data={installation.data_}
+                                            metadata={installation.metadata_}
+                                        />
+                                    </StoreProvider>
+                                )
+                            } else {
+                                return null
+                            }
+                        }}
+                    </InstallationConsumer>
+                </InstallationProvider>
+            )}
 
             {props.metadata?.attachments?.project_invoice_photo && (
             <><h2> Project Invoice</h2>
@@ -425,8 +474,7 @@
             )}
 
         </PrintSection>
-        
-    </Tab>
 
+    </Tab>
 
 </Tabs>

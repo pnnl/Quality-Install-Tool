@@ -1,78 +1,108 @@
-<Tabs>
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
 
+<Tabs>
 
   <Tab eventKey="pre-installation" title="Pre-Installation">
     ## Existing Conditions
     <Collapsible header="Existing Conditions">
-    The application of air permeable insulation without first air sealing is not an acceptable practice. 
-    E.g. just blowing an attic with loose fill fiberglass, cellulose, or mineral wood without first checking 
-    air sealing details have been performed is not an acceptable practice. Instead air 
-    sealing efforts should precede insulation work unless the insulation is spray foam. The air sealing and 
-    insulation don’t have to be done by the same contractor. While not required, often to achieve comprehensive 
-    high quality air sealing, the attic first needs to be cleaned of dust, debris, and/or degraded insulation. 
-    Prior to air sealing inspect the attic for damaged or missing framing members, exhaust fans venting to the attic, 
-    unsafe wiring, water leaks, mold, poor condition duct work, and old or unsafe HVAC or water heating appliances. 
-    Replacing these appliances in the attic afterwards can significantly damage or disturb the air sealing and insulation.
+      The application of air permeable insulation without first air sealing is not an acceptable practice.
+      E.g. just blowing an attic with loose fill fiberglass, cellulose, or mineral wood without first checking
+      air sealing details have been performed is not an acceptable practice. Instead, air sealing efforts should
+      precede insulation work unless the insulation is spray foam. Have a conversation with the customer about the added
+      cost of removing existing insulation and the benefits it offers toward achieving better air sealing.
+
+      The air sealing and insulation don&apos;t have to be done by the same contractor. While not required,
+      often to achieve comprehensive high quality air sealing, the attic first needs to be cleaned of dust, debris,
+      and/or degraded insulation. Prior to air sealing inspect the attic for damaged or missing framing members,
+      exhaust fans venting to the attic, unsafe electrical wiring, water leaks, mold, poor condition duct work,
+      and old or unsafe HVAC or water heating appliances. Repairing, upgrading, and replacing these things in the
+      attic afterwards can significantly damage or disturb the air sealing and insulation. Consider removing no
+      longer used things such a TV antenna and landline telephone wires during the attic air sealing and insulation project.
     </Collapsible>
 
-    <CheckBox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} default_value={['Attic']} path="airsealing_location" hidden />
-   
+    <Checkbox label="What part of the home are you air sealing?" options={['Attic','Walls/Windows/Doors','Floor/Foundation']} default_value={['Attic']} path="airsealing_location" hidden />
+
     <Radio label="What is the starting air leakage rate for the home before modification?" options={['Not Measured','CFM at 50Pa']} path="attic_air_leakage_rate" />
-    
-    <ShowOrHide visible={props.data?.attic_air_leakage_rate === 'CFM at 50Pa'}> 
-    <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+
+    <ShowOrHide visible={props.data?.attic_air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
+    | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
+    | <LabelValue label="ACH50" decimalPlaces={1} type={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string" } value={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3): 'N/A'}/>
+
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
     </PhotoInput>
+    <PhotoInput id="conditioned_volume_photo" label="Conditioned floor area and air volume calculation – Photo">
+        Take a photo of the math used to determine the conditioned floor area and volume, label the rooms/sections and the corresponding length, width, and height.
+    </PhotoInput>
     </ShowOrHide>
+
 
     <Select label="What is the existing insulation in the ceiling?" options={["None", "Batt insulation", "Blown-in insulation","Rigid board insulation","Closed cell spray foam insulation","Other"]} path="existing_insulation_type" />
 
     <NumberInput label="What is the existing insulation R-value in the ceiling?" min={0} path="airsealing_r_value"  />
-    
+
     ## General Safety
     <Collapsible header="General Safety">
         Some homes have existing mold or moisture issues. For the contractor’s protection and the safety of the customer, it is important to inspect for pre-existing mold or moisture issues. Some common causes of mold or moisture issues include a leaky roof, leaky ducts and clogged gutter or drainage systems.
     </Collapsible>
 
-    <Collapsible header="Roof condition">   
+    <Collapsible header="Roof condition">
     * Look for water stains, mold, or signs of pest entry. Water and moisture issues from a leaky roof can be made worse once the attic has been air sealed and insulated because afterwards there is less heat escaping to dry the roof/attic.
-    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work. 
+    * Pest entry can rapidly damage air sealing and insulation materials thus it is important to check and remediate prior to work.
     </Collapsible>
     <Radio label="What is the roof condition?" options={['Good','Potential Issue']} path="roof_condition" />
 
-    <Collapsible header="Mold or Moisture problems in the Attic"> 
-    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing 
-    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse, 
+    <Collapsible header="Mold or Moisture problems in the Attic">
+    Contractors should perform this inspection prior to work as protection against being blamed for a pre-existing
+    mold or moisture problem. Air sealing and insulation can make a pre-existing mold or moisture problem worse,
     thus it is important to check for the safety of the customer.
     </Collapsible>
     <Radio label="Are there signs of mold or moisture problems in the attic?" options={['Yes','No']} path="signs_of_mold_or_moisture" />
 
-    <Collapsible header="Pre-retrofit mechanical ventilation calculation"> 
+    <Collapsible header="Pre-retrofit mechanical ventilation calculation">
     *	The pre-retrofit ventilation calculation can help estimate whether mechanical ventilation will be needed post air sealing and insulation work.
     * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     </Collapsible>
     <Radio label="Has mechanical ventilation calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
+
   </Tab>
-  
+
   <Tab eventKey="installation" title="Installation">
   Provide a photo of each detail, skip if the feature is not present the home’s attic.
+  <DateInput label="Installation Date" path="install_date" />
     <Tabs>
       <Tab eventKey="installation_air_Sealing" title="Installation - Air Sealing">
-    
         <PhotoInput id="drywall_to_topplate_photo" label="Drywall to Top Plate – Photo">
-          Photo of drywall to top plate seam sealed
+          Photo of drywall to top plate seam sealed.
+
+          For exterior walls, try to see if it is possible to also seal the top plate to exterior sheathing connection seam. In attics where there is not a lot of space above the exterior wall top plates, consider installation spray foam to
+          achieve both air sealing and high R-value per inch insulation on top of the exterior top plate. Consider using a long
+          40&quot; spray foam gun to reach the exterior wall top plate areas. Consider using one-part closed cell spray foams that
+          come with tips to be installed onto the end of a
+          spray foam gun to enable the foam to be sprayed in a fan spray pattern.
         </PhotoInput>
         <PhotoInput id="soffit_air_baffels_photo" label="Soffit Air Baffles – Photo">
           Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam
+
+          Try to see if it is possible to also seal the top plate to exterior sheathing connection seam before installing the air baffle.
+          Consider using a long 40&quot; spray foam gun to reach the exterior wall top plate areas.
+          Consider using one-part closed cell spray foams that come with tips to be installed onto the end of a spray
+          foam gun to enable the foam to be sprayed in a fan spray pattern. In attics where there is not a lot of space
+          above the exterior wall top plates, consider installation spray foam to achieve both air sealing and high R-value
+          per inch insulation on top of the exterior top plate.
         </PhotoInput>
         <PhotoInput id="leakage_recessed_light_photo" label="Leaky Recessed Light – Photo">
-          Photo of a leaky recessed light fixture treatment. 
-          Recommended treatments include: 
+         Photo of a leaky recessed light fixture treatment.
+         Recommended treatments include:
           * Sealing the leaky recessed light fixture using an airtight recessed light cover from the attic
           * Replacing the bulb and trim from below with an airtight LED retrofit module
         </PhotoInput>
@@ -93,6 +123,9 @@
         </PhotoInput>
         <PhotoInput id="exhaust_fan_sealed_to_drywall_photo" label="Exhaust Fan Sealed to Drywall – Photo">
           Photo of exhaust fan sealed to drywall
+
+          Consider testing the fan&apos;s air flow and noise level prior to air sealing.
+          If the fan doesn&apos;t move enough air or is too noisy talk to the customer about replacing the fan first before air sealing it.
         </PhotoInput>
         <PhotoInput id="knee_wall_sealed_photo" label="Knee Walls Sealed – Photo">
           Photo of open back knee wall drywall sealed to studs. Install blocking if missing top or bottom plates. Install joist cavity blocking below the knee wall bottom plate.
@@ -126,17 +159,17 @@
           Photo of installed and sealed insulation dam around attic access
         </PhotoInput>
         <PhotoInput id="attic_access_weatherstrip_photo" label="Attic Access Weatherstrip – Photo">
-          Photo of weatherstriping applied to attic access
+          Photo of weather striping applied to attic access
         </PhotoInput>
       </Tab>
       <Tab eventKey="installation_insulation" title="Installation - Insulation">
         <PhotoInput id="insulation_measuring_rulers_photo" label="Insulation Measuring Rulers  – Photo">
-            Overview of insulation measuring rulers, one installed every 300 sq. ft. visible 
-            from attic entrance (photo taken from attic entrance).     
+            Overview of insulation measuring rulers, one installed every 300 sq. ft. visible
+            from attic entrance (photo taken from attic entrance).
         </PhotoInput>
 
         <PhotoInput id="rvalue_table_photo" label="R-value Per Inch  – Photo">
-          Photo of insulation bag R-value per inch table        
+          Photo of insulation bag R-value per inch table
         </PhotoInput>
 
         <PhotoInput id="skylight_shaft_photo" label="Skylight Shaft – Photo">
@@ -144,11 +177,11 @@
         </PhotoInput>
 
         <PhotoInput id="knee_wall_photo" label="Knee Wall – Photo">
-          Photo of knee wall insulation detail    
+          Photo of knee wall insulation detail
         </PhotoInput>
 
         <PhotoInput id="stairwell_wall_photo" label="Stairwell Wall – Photo">
-          Photo of stairwell wall insulation detail  
+          Photo of stairwell wall insulation detail
         </PhotoInput>
 
         <PhotoInput id="storage_platform_photo" label="Storage Platform – Photo">
@@ -156,45 +189,73 @@
         </PhotoInput>
 
         <PhotoInput id="wide_angle_photo" label="Wide Angle – Photo">
-          Wide angle photo showing the installed insulation         
+          Wide angle photo showing the installed insulation
           </PhotoInput>
 
         <PhotoInput id="attic_access_photo" label="Attic Access - Photo">
           Photo of insulation on attic access. The insulation applied to the access area should match the R-value of the rest of the attic.
-          Use of rigid foam board insulation to insulate the atttic access is recommended.
+          Use of rigid foam board insulation to insulate the attic access is recommended.
         </PhotoInput>
       </Tab>
     </Tabs>
-  </Tab>  
+
+  </Tab>
   <Tab eventKey="post_installation"  title="Post-Installation">
   ## Final Conditions
-  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />  
-  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}> 
-  <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
-  <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-      Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-  </PhotoInput>
-  </ShowOrHide>
-  <Radio label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?" options={['Yes','No', 'N/A']} path="postinstall_safety_briefing_to_homeowner" />
-  <Select label="What R-value was added to the ceiling?" options={["Less than R-30", "R-30","R-49", "R-60","more than R-60"]} path="postinstall_ceiling_r_value" />
-  <Select label="What percentage of ceiling area received additional insulation (choose the closest)? " options={["10%","25%","50%","75%","100%"]} path="postinstall_insulated_ceiling_area" />
+  <Radio label="What is the air sealing level you have achieved?" options={['Not Measured','CFM at 50Pa']} path="postinstall_attic_air_leakage_rate" />
 
-  <CombustionSafetyChecksLink {...props} />
-  
-  ## Ventilation
+  <ShowOrHide visible={props.data?.postinstall_attic_air_leakage_rate === 'CFM at 50Pa'}>
+    |                                                                                                                                                                                                                                           |
+    | ----------------------------
+    | <NumberInput label="CFM at 50Pa" min={0} path="postinstall_air_leakage_cfm50"  />
+    | <LabelValue label="Conditioned Volume (ft3)" value={props?.data?.conditioned_volume_ft3}/>
+    | <LabelValue label="ACH50" decimalPlaces={1} type={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string" } value={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3): 'N/A'}/>
+    
+    <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
+        Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+    </PhotoInput>
+
+  </ShowOrHide>
+
+<Radio
+    label="Is the homeowner aware that combustion safety tests are highly recommended for homes with any atmospherically drafted gas appliances after air sealing projects are completed?"
+    options={['Yes', 'No', 'N/A']}
+    path="postinstall_safety_briefing_to_homeowner"
+/>
+<Select
+    label="What R-value was added to the ceiling?"
+    options={['Less than R-30', 'R-30', 'R-49', 'R-60', 'more than R-60']}
+    path="postinstall_ceiling_r_value"
+/>
+<Select
+    label="What percentage of ceiling area received additional insulation (choose the closest)? "
+    options={['10%', '25%', '50%', '75%', '100%']}
+    path="postinstall_insulated_ceiling_area"
+/>
+
+<CombustionSafetyChecksLink {...props} />
+
+## Ventilation
+
   <Collapsible header="Post-retrofit Mechanical Ventilation Calculation">
   *	The post-retrofit ventilation calculation can help determine whether mechanical ventilation is needed post air sealing and insulation work.
   * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+    *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
   *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
   * If the ASHRAE 62.2 mechanical ventilation calculator finds that the home should have a whole-house mechanical ventilation system installed, please use the mechanical ventilation workflow to document.
-  <Button variant='primary' href={`/app/${props.project?._id}/doe_workflow_mechanical_ventilation`}> Document Mechanical Ventilation</Button>
+
+<Button
+    variant="primary"
+    href={`/app/${props.project._id}/doe_workflow_mechanical_ventilation`}
+>
+    <span>Document Mechanical Ventilation</span>
+</Button>
 
   </Collapsible>
   <Radio label="Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?" options={['Yes','No']} path="post_retrofit_ashrae_62_2_calculation" />
-  ## Project Invoice 
+  ## Project Invoice
   <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-    Take a photo of the project invoice if your program requires it. 
+    Take a photo of the project invoice if your program requires it.
   </PhotoInput>
   </Tab>
   <Tab eventKey="report"  title="Report">
@@ -209,16 +270,28 @@
 
     <p> What part of the home are you air sealing?  <strong> { props.data?.airsealing_location} </strong> </p>
     <p> What is the starting air leakage rate for the home before modification?  <strong> { props.data?.attic_air_leakage_rate == 'CFM at 50Pa' ? props.data?.air_leakage_cfm50 + " " : null } { props.data?.attic_air_leakage_rate} </strong></p>
-    
-    {
-    props.data.attic_air_leakage_rate == 'CFM at 50Pa'  && 
-    (
+
+<ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >
+
+    <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3}</strong></p>
+    <LabelValue label="ACH50" decimalPlaces={1} type={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string" } value={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3): 'N/A'}/>
+
     <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
         Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
     </Photo>
-    )}
+    <Photo
+      id="conditioned_volume_photo"
+      label="Conditioned floor area and air volume calculation – Photo"
+      required>
+      Photo of the math used to determine the conditioned floor area and
+      volume, label the rooms/sections and the corresponding length, width,
+      and height.
+    </Photo>
+
+</ShowOrHide>
+
     <p> What is the existing insulation in the ceiling?  <strong> { props.data?.existing_insulation_type} </strong></p>
-    <p> What is the existing insulation R-value in the ceiling?  <strong>{ props?.data.airsealing_r_value} </strong></p>    
+    <p> What is the existing insulation R-value in the ceiling?  <strong>{ props?.data.airsealing_r_value} </strong></p>
 
     ## General Safety
     <p> What is the roof condition?   <strong>{ props.data?.roof_condition} </strong></p>
@@ -235,8 +308,8 @@
       Photo of soffit air baffles installed blocked with batt insulation and/or air sealed with spray foam
     </Photo>
     <Photo id="leakage_recessed_light_photo" label="Leakage Recessed Light – Photo" >
-      Photo of a leaky recessed light fixture treatment. 
-      The photo below could be showing a recessed light fixture sealed from the attic suing a recessed light cover or sealed from below using an airtight LED retrofit fixture. 
+      Photo of a leaky recessed light fixture treatment.
+      The photo below could be showing a recessed light fixture sealed from the attic suing a recessed light cover or sealed from below using an airtight LED retrofit fixture.
     </Photo>
     <Photo id="chimney_dam_photo" label="Chimney Dam – Photo">
        Photo of fire caulking and sheet metal dam around chimney
@@ -292,32 +365,32 @@
 
     ## Installation - Insulation Details
     <Photo id="insulation_measuring_rulers_photo" label="Insulation Measuring Rulers  – Photo">
-        Overview of insulation measuring rulers, one installed every 300 sq. ft. visible 
-        from attic entrance (photo taken from attic entrance).     
+        Overview of insulation measuring rulers, one installed every 300 sq. ft. visible
+        from attic entrance (photo taken from attic entrance).
     </Photo>
 
     <Photo id="rvalue_table_photo" label="R-value Per Inch – Photo" required>
-    Photo of insulation bag R-value per inch table    
+    Photo of insulation bag R-value per inch table
     </Photo>
 
     <Photo id="skylight_shaft_photo" label="Skylight Shaft – Photo">
-    Photot of skylight shaft insulation detail
+    Photo of skylight shaft insulation detail
     </Photo>
 
     <Photo id="knee_wall_photo" label="Knee Wall – Photo" >
-     Photo of knee wall insulation detail     
+     Photo of knee wall insulation detail
     </Photo>
 
     <Photo id="stairwell_wall_photo" label="Stairwell Wall – Photo" >
-    Photo of stairwell wall insulation detail     
+    Photo of stairwell wall insulation detail
     </Photo>
 
     <Photo id="storage_platform_photo" label="Storage Platform – Photo">
-    Photo of storage platform insulation detail    
+    Photo of storage platform insulation detail
     </Photo>
 
     <Photo id="wide_angle_photo" label="Wide Angle – Photo" required>
-      Wide angle photo showing the installed insulation 
+      Wide angle photo showing the installed insulation
     </Photo>
 
     <Photo id="attic_door_hatch_photo" label="Attic Access - Photo" required>
@@ -325,16 +398,51 @@
     </Photo>
 
     ## Final Conditions
-    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa"  ? props.data?.postinstall_air_leakage_cfm50 : null } {' '} {props.data?.postinstall_attic_air_leakage_rate }</strong> </p>
-    {props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa" && (
-    <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>
+    <p> What is the air sealing level you have achieved? <strong>{props.data?.postinstall_attic_air_leakage_rate === "CFM at 50Pa"  ? props.data?.postinstall_air_leakage_cfm50 : null }{props.data?.postinstall_attic_air_leakage_rate }</strong> </p>
+
+
+    <ShowOrHide visible={props.data?.attic_air_leakage_rate == 'CFM at 50Pa'} >
+      <Photo id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo" required>
         Photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed
-    </Photo>)}
+      </Photo>
+
+      <p>Conditioned Volume (ft3): <strong>{props.data?.conditioned_volume_ft3}</strong> </p>
+      <LabelValue label="ACH50" decimalPlaces={1} type={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string" } value={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3): 'N/A'}/>
+
+  </ShowOrHide>
     <p> Is the homeowner aware that combustion safety tests are highly recommended for homes with any gas appliances after air sealing projects are completed? <strong>{props.data?.postinstall_safety_briefing_to_homeowner}</strong> </p>
     <p> What R-value was added to the ceiling? <strong>{props.data?.postinstall_ceiling_r_value}</strong> </p>
     <p> What percentage of ceiling area received additional insulation? <strong>{props.data?.postinstall_insulated_ceiling_area}</strong> </p>
 
-    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
     ## Ventilation
     <p> Has an mechanical ventilation calculation been performed post-retrofit to ensure proper indoor air quality?  { props.data?.post_retrofit_ashrae_62_2_calculation} </p>
@@ -346,7 +454,7 @@
             </Photo> </>
             )}
 
-
     </PrintSection>
+
   </Tab>
 </Tabs>

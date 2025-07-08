@@ -1,13 +1,17 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="installation" title="Installation">
-    This workflow is for Category IV gas appliances, which are served by positive static pressure vents that are airtight, 
+    This workflow is for Category IV gas appliances, which are served by positive static pressure vents that are airtight,
     corrosion-resistant, and include a method of condensate disposal.
-    
+
+    <DateInput label="Installation Date" path="install_date" />
+
     ## General
     <FileInput id="manual_j_file" label="PDF of Manual J Load Calculation - File">
         Attach a PDF of the Manual J load calculation.
     </FileInput>
-    
+
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
       Take a photo of the nameplate for the new system.
     </PhotoInput>
@@ -22,7 +26,7 @@
         -	To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANZI Z21 .10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA 8149.1 National Gas and Propane Installation Code.
         -	To show that the wall penetration for the vent has been flashed correctly.
         -	Install the termination high enough so that snow drifts won’t block the vent.
-        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake. 
+        -	Install termination fittings in a manner to prevent short circuit of air from exhaust to intake.
         -	The installation of bird screens are recommended.
     </PhotoInput>
 
@@ -48,7 +52,7 @@
     </PhotoInput>
 
     <PhotoInput id="air_flow_measurement_photo" label="Airflow Measurement – Photo">
-      Take a photo of the airflow measurement. Measurements obtained by a TrueFlow grid, air flow capture hood, or balometer are valid. Condensing furnaces require approximately 150 CFM per 10,000 Btu input. Make adjustments to the fan setting as needed to achieve target airflow. 
+      Take a photo of the airflow measurement. Measurements obtained by a TrueFlow grid, air flow capture hood, or balometer are valid. Condensing furnaces require approximately 150 CFM per 10,000 Btu input. Make adjustments to the fan setting as needed to achieve target airflow.
     </PhotoInput>
 
     <PhotoInput id="air_filter_photo" label="Air Filter – Photo">
@@ -64,13 +68,14 @@
       Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
     </PhotoInput>
 
-    <PhotoInput id="inlet_gas_pressure_manometer_photo" label="Manometer Showing Inlet Gas pressure – Photo">
-      Take a photo of the manometer measuring the inlet gas pressure.
+    <PhotoInput id="outlet_gas_pressure_manometer_photo" label="Manometer Showing Outlet Gas pressure – Photo">
+     Take a photo of the manometer measuring the outlet gas pressure for single, two, and three speed gas furnaces. Skip this photo prompt if the furnace is a modulating firing rate furnaces.
     </PhotoInput>
 
     <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
       Take a photo of the combustion analysis results. Refer to local regulations on how to do this test, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
     </PhotoInput>
+
   </Tab>
   <Tab eventKey="report" title="Report">
    <PrintSection label="Print Report">
@@ -81,9 +86,9 @@
     <ProjectInfoReport {...props} />
 
     ## About the Report
-    
+
     The photos in this report are intended to document the critical details of upgrading to a high efficiency gas furnace installation.
-   
+
     ### General
     <Photo id="nameplate_photo" label="Nameplate – Photo" required>
       Photo of the nameplate of the new system
@@ -114,13 +119,13 @@
     ### Airflow
     <Photo id="manometer_external_static_pressure_photo" label="Manometer Showing External Static Pressure – Photo" required>
       Photo of the manometer showing the total external static pressure measurement.
-      The total external static pressure should ideally be less than 0.5 i.w.c. It should not be above 0.8 i.w.c. 
+      The total external static pressure should ideally be less than 0.5 i.w.c. It should not be above 0.8 i.w.c.
     </Photo>
 
     <Photo id="air_flow_measurement_photo" label="Airflow Measurement – Photo" required>
       Photo of the airflow measurement. Condensing furnaces require approximately 150 CFM per 10,000 Btu input.
     </Photo>
- 
+
     <Photo id="air_filter_photo" label="Air Filter – Photo" required>
       Photo of the air filter. If the system has an air filter slot, the door should have a gasket. If the system has an air filter grille, the perimeter should be sealed to minimize air bypassing the filter.
     </Photo>
@@ -134,8 +139,8 @@
       Photo of the electronic methane leak detector while it is testing a gas connection
     </Photo>
 
-    <Photo id="inlet_gas_pressure_monometer_photo" label="Monometer Showing Inlet Gas pressure – Photo" required>
-      Photo of the manometer measuring the inlet gas pressure
+    <Photo id="outlet_gas_pressure_manometer_photo" label="Manometer Showing Outlet Gas pressure – Photo" required>
+      Take a photo of the manometer measuring the outlet gas pressure for single, two, and three speed gas furnaces. Skip this photo prompt if the furnace is a modulating firing rate furnaces.
     </Photo>
 
     <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" required>
@@ -154,5 +159,6 @@
     <PDFRenderer id="manual_j_file" label="" />
 
     </PrintSection>
+
   </Tab>
 </Tabs>

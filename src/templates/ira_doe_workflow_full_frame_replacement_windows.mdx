@@ -1,11 +1,14 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="installation" title="Installation">
-    This workflow is for the window replacement method where the entire old window is removed and a new window, 
-    typically one with nail fins, is installed. This method often requires careful cutting back of siding (stucco, 
-    fiber cement, vinyl, wood, and metal) or removing trim pieces to access the nail fins. On homes with stone, 
+    This workflow is for the window replacement method where the entire old window is removed and a new window,
+    typically one with nail fins, is installed. This method often requires careful cutting back of siding (stucco,
+    fiber cement, vinyl, wood, and metal) or removing trim pieces to access the nail fins. On homes with stone,
     brick or brick veneer siding, this method may not be possible.
-  
-    
+
+    <DateInput label="Installation Date" path="install_date" />
+
     ## Before Removal of Old Window
     <PhotoInput id="outside_photo" label="Outside – Photo">
       Take a photo of the original window from the outside.
@@ -15,24 +18,24 @@
       Take a photo of the original window from the inside.
     </PhotoInput>
 
-    ## Immediately After Removing the Window 
+    ## Immediately After Removing the Window
     <PhotoInput id="after_removing_outside_sill_area_photo" label="Outside Sill Area – Photo">
-      Take a photo of the sill section of the rough opening after the window has been removed. 
-      This photo should show the existing siding, sheathing, and framing material are in good condition, 
-      e.g. no water damage, dry rot, or damage by pests. If any of these issues are found, 
+      Take a photo of the sill section of the rough opening after the window has been removed.
+      This photo should show the existing siding, sheathing, and framing material are in good condition,
+      e.g. no water damage, dry rot, or damage by pests. If any of these issues are found,
       they must repaired before continuing.
     </PhotoInput>
 
     <PhotoInput id="after_removing_outside_head_area_photo" label="Outside Head Area – Photo">
-      Take a photo of the head section of the rough opening after the window has been removed. 
-      This photo should show the existing siding, sheathing, and framing material are in good 
-      condition, e.g. no water damage, dry rot, or damage by pests. If any of these issues are found, 
+      Take a photo of the head section of the rough opening after the window has been removed.
+      This photo should show the existing siding, sheathing, and framing material are in good
+      condition, e.g. no water damage, dry rot, or damage by pests. If any of these issues are found,
       they must repaired before continuing.
     </PhotoInput>
 
     ## Rough Opening Flashing
      <PhotoInput id="rough_opening_outside_sill_area_photo" label="Outside Sill Area – Photo">
-        Take a photo of the sill section of the rough opening after it has been flashed. 
+        Take a photo of the sill section of the rough opening after it has been flashed.
         Show how the flashing ties back to the home’s weather resistive barrier layer.
     </PhotoInput>
 
@@ -41,35 +44,35 @@
       Show how the flashing ties back to the home’s weather resistive barrier layer.
     </PhotoInput>
 
-    ## After Installing the Window 
+    ## After Installing the Window
     <PhotoInput id="after_installing_outside_sill_area_photo" label="Outside Sill Area – Photo">
       Take a photo of the sill section from the outside after the new window has been installed.
       This photo should show how the flashing details work with the nail fin.
     </PhotoInput>
 
     <PhotoInput id="after_installing_outside_head_area_photo" label="Outside Head Area – Photo">
-      Take a photo of the head section from the outside after the new window has been installed. 
+      Take a photo of the head section from the outside after the new window has been installed.
       The use of sloped sheet metal flashing is recommended.
       This photo should show how the flashing details work with the nail fin.
     </PhotoInput>
 
     <PhotoInput id="after_installing_rough_opening_air_sealing_photo" label="Inside Rough Opening Air Sealing  – Photo">
-      Take a photo of the window from the inside after the air sealing product has been applied into the area 
+      Take a photo of the window from the inside after the air sealing product has been applied into the area
       between the new window and the rough opening.
     </PhotoInput>
 
-    ## Completion Photos 
+    ## Completion Photos
     <PhotoInput id="new_window_from_outside_photo" label="New Window from the Outside – Photo">
-     Take a photo of the new window from the outside. This photo should show how the siding and trim 
-     has been repaired/reinstalled and caulked. 
+     Take a photo of the new window from the outside. This photo should show how the siding and trim
+     has been repaired/reinstalled and caulked.
      The use of sloped sheet metal flashing is recommended.
     </PhotoInput>
 
     <PhotoInput id="new_window_from_inside_photo" label="New Window from the Inside – Photo">
-     Take a photo of the new window from the inside. This photo should show how the trim and drywall 
+     Take a photo of the new window from the inside. This photo should show how the trim and drywall
      has been repaired/reinstalled and caulked.
     </PhotoInput>
-    
+
   </Tab>
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
@@ -80,30 +83,30 @@
     <ProjectInfoReport {...props} />
 
     ## About the Report
-    
+
     The photos in this report are intended to document the critical details of upgrading to a full frame replacement windows installation.
-   
+
      ## Before Removal of Old Window
     <Photo id="outside_photo" label="Outside – Photo" required>
-      This is a representative photo of the condition of the original window viewed from the outside. 
+      This is a representative photo of the condition of the original window viewed from the outside.
       - Look for signs of water damage, dry rot, or pest damage.
     </Photo>
 
     <Photo id="inside_photo" label="Inside – Photo" required>
-      This is a representative photo of the condition of the original window viewed from the inside. 
+      This is a representative photo of the condition of the original window viewed from the inside.
       - Look for signs of mold or water damage.
     </Photo>
 
-    ## Immediately After Removing the Window 
+    ## Immediately After Removing the Window
     <Photo id="after_removing_outside_sill_area_photo" label="Outside Sill Area – Photo" required>
-      This is a representative photo of the condition of the sill area of the rough opening 
+      This is a representative photo of the condition of the sill area of the rough opening
       after the window has been removed.
       - Look for signs of water damage, dry rot, or pest damage.
 
     </Photo>
 
     <Photo id="after_removing_outside_head_area_photo" label="Outside Head Area – Photo" required>
-      This is a representative photo of the condition of the head area of the rough opening 
+      This is a representative photo of the condition of the head area of the rough opening
       after the window has been removed.
       - Look for signs of water damage, dry rot, or pest damage.
     </Photo>
@@ -111,17 +114,17 @@
     ## Rough Opening Flashing
      <Photo id="rough_opening_outside_sill_area_photo" label="Outside Sill Area – Photo" required>
         This is a representative photo of the sill section of the rough opening after it has been flashed.
-        - Typically, liquid flashing, stretch tape, or plastic or metal pan flashing are used. 
+        - Typically, liquid flashing, stretch tape, or plastic or metal pan flashing are used.
         - Look for this flashing tying in with the home’s weather resistive barrier layer.
     </Photo>
 
     <Photo id="rough_opening_outside_head_area_photo" label="Outside Head Area – Photo" required>
       This is a representative photo of the head section of the rough opening after it has been flashed.
-        - Typically, liquid flashing, tape, or rigid flashing materials are used. 
+        - Typically, liquid flashing, tape, or rigid flashing materials are used.
         - Look for this flashing tying in with the home’s weather resistive barrier layer.
     </Photo>
 
-    ## After Installing the Window 
+    ## After Installing the Window
     <Photo id="after_installing_outside_sill_area_photo" label="Outside Sill Area – Photo" required>
       This is a representative photo of the sill section from the outside after the new window has been installed.
       - Typically, the bottom nail fin is not taped but the left and right nail fin is taped.
@@ -136,25 +139,26 @@
     </Photo>
 
     <Photo id="after_installing_rough_opening_air_sealing_photo" label="Inside Rough Opening Air Sealing  – Photo" required>
-      This is a representative photo of the window from the inside after the air sealing product has been applied into 
+      This is a representative photo of the window from the inside after the air sealing product has been applied into
       the area between the new window and the rough opening.
       - Typically, caulking, spray foam, or expanding weather stripping foam is used.
     </Photo>
 
-    ## Completion Photos 
+    ## Completion Photos
     <Photo id="new_window_from_outside_photo" label="New Window from the Outside – Photo" required>
      This is a representative photo of the new window from the outside.
-     - Typically, the connection between the trim pieces and the siding are caulked. 
+     - Typically, the connection between the trim pieces and the siding are caulked.
      - If the trim pieces are made of wood, typically, the end grains are sealed.
-     - Typically, a metal head flashing piece is installed either over top the window 
+     - Typically, a metal head flashing piece is installed either over top the window
        frame or over top the head trim piece.
     </Photo>
 
     <Photo id="new_window_from_inside_photo" label="New Window from the Inside – Photo" required>
      This is a representative photo of the new window from the inside.
-     - Typically, the connection between the trim pieces and the drywall are caulked. 
+     - Typically, the connection between the trim pieces and the drywall are caulked.
     </Photo>
 
     </PrintSection>
+
   </Tab>
 </Tabs>

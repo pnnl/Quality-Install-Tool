@@ -1,97 +1,118 @@
-import React from 'react'
-import type { FC } from 'react'
-import Button from 'react-bootstrap/Button'
+import { MDXProvider } from '@mdx-js/react'
+import { MDXProps } from 'mdx/types'
+import PouchDB from 'pouchdb'
+import React, { Suspense } from 'react'
+import { Button, Tab, Tabs } from 'react-bootstrap'
+
+import CheckboxWrapper from './checkbox_wrapper'
+import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
 import Collapsible from './collapsible'
+import CollapsibleTextContainerWrapper from './collapsible_text_container_wrapper'
+import CollapsibleTextWrapper from './collapsible_text_wrapper'
 import DateInputWrapper from './date_input_wrapper'
+import DateStr from './date_str'
+import DateTimeStr from './date_time_str'
 import FigureWrapper from './figure_wrapper'
+import FileInputWrapper from './file_input_wrapper'
+import GpsCoordStr from './gps_coord_str'
+import InstallationSelectWrapper from './installation_select_wrapper'
+import LabelValueWrapper from './label_value_wrapper'
+import LocationStr from './location_str'
 import NumberInputWrapper from './number_input_wrapper'
-import PhotoWrapper from './photo_wrapper'
+import PDFRendererWrapper from './pdf_renderer_wrapper'
+import PageBreak from './page_break'
 import PhotoInputWrapper from './photo_input_wrapper'
-import PrintSection from './print_section'
+import PhotoWrapper from './photo_wrapper'
+import PrintSectionWrapper from './print_section wrapper'
+import RadioWrapper from './radio_wrapper'
+import RepeatableInputWrapper from './repeatable_input_wrapper'
+import RepeatableWrapper from './repeatable_wrapper'
 import SelectWrapper from './select_wrapper'
+import ShowOrHideWrapper from './show_or_hide_wrapper'
 import StringInputWrapper from './string_input_wrapper'
 import TableWrapper from './table_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import USStateSelectWrapper from './us_state_select_wrapper'
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
-import { StoreContext } from './store'
-import DateStr from './date_str'
-import ClimateZoneSelectWrapper from './climate_zone_select_wrapper'
-import RadioWrapper from './radio_wrapper'
-import PageBreak from './page_break'
-import ProjectInfoInputs from '../templates/reusable/project_info_inputs.mdx'
-import ProjectInfoReport from '../templates/reusable/project_info_report.mdx'
-import PrintSectionWrapper from './print_section wrapper'
-import FileInputWrapper from './file_input_wrapper'
-import PDFRendererWrapper from './pdf_renderer_wrapper'
-import ShowOrHide from './show_or_hide'
-import CheckBoxWrapper from './checkbox_wrapper'
-import CombustionSafetyChecks from './combustion_safety_checks_inputs'
-import CombustionSafetyChecksReport from './combustion_safety_checks_report'
-import CombustionSafetyChecksLink from '../templates/reusable/combustion_safety_checks_link.mdx'
-import DocNameInputWrapper from './doc_name_input_wrapper'
-import SaveCancelButtonWrapper from './save_cancel_button_wrapper'
+import InstallationProvider, {
+    InstallationContext,
+} from '../providers/installation_provider'
+import InstallationsProvider, {
+    InstallationsContext,
+} from '../providers/installations_provider'
+import ProjectProvider, { ProjectContext } from '../providers/project_provider'
+import ProjectsProvider, {
+    ProjectsContext,
+} from '../providers/projects_provider'
+import StoreProvider, { StoreContext } from '../providers/store_provider'
+import { type TemplateProps } from '../templates'
+import { type Project } from '../types/database.types'
 
 const components = {
-    Collapsible,
+    Button,
+    Checkbox: CheckboxWrapper,
     ClimateZoneSelect: ClimateZoneSelectWrapper,
-    CheckBox: CheckBoxWrapper,
-    Button: Button,
+    Collapsible,
+    CollapsibleTextContainer: CollapsibleTextContainerWrapper,
+    CollapsibleText: CollapsibleTextWrapper,
     DateInput: DateInputWrapper,
+    DateStr,
+    DateTimeStr,
     Figure: FigureWrapper,
+    FileInput: FileInputWrapper,
+    GpsCoordStr,
+    InstallationConsumer: InstallationContext.Consumer,
+    InstallationProvider,
+    InstallationSelect: InstallationSelectWrapper,
+    InstallationsConsumer: InstallationsContext.Consumer,
+    InstallationsProvider,
+    LabelValue: LabelValueWrapper,
+    LocationStr,
     NumberInput: NumberInputWrapper,
+    PDFRenderer: PDFRendererWrapper,
+    PageBreak,
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
     PrintSection: PrintSectionWrapper,
+    ProjectConsumer: ProjectContext.Consumer,
+    ProjectProvider,
+    ProjectsConsumer: ProjectsContext.Consumer,
+    ProjectsProvider,
     Radio: RadioWrapper,
+    Repeatable: RepeatableWrapper,
+    RepeatableInput: RepeatableInputWrapper,
     Select: SelectWrapper,
+    ShowOrHide: ShowOrHideWrapper,
+    StoreProvider: StoreProvider,
     StringInput: StringInputWrapper,
-    table: TableWrapper,
+    Tab,
+    Table: TableWrapper,
+    Tabs,
     TextInput: TextInputWrapper,
     USStateSelect: USStateSelectWrapper,
-    DateStr: DateStr,
-    Tab: Tab,
-    Tabs: Tabs,
-    PageBreak: PageBreak,
-    ProjectInfoInputs: ProjectInfoInputs,
-    ProjectInfoReport: ProjectInfoReport,
-    FileInput: FileInputWrapper,
-    PDFRenderer: PDFRendererWrapper,
-    ShowOrHide: ShowOrHide,
-    CombustionSafetyChecks: CombustionSafetyChecks,
-    CombustionSafetyChecksLink: CombustionSafetyChecksLink,
-    CombustionSafetyChecksReport: CombustionSafetyChecksReport,
-    DocNameInput: DocNameInputWrapper,
-    SaveCancelButton: SaveCancelButtonWrapper,
 }
 
 interface MdxWrapperProps {
-    Component: React.ComponentType<any>
-    Project: any
+    Component: React.FC<MDXProps & TemplateProps>
+    project?: PouchDB.Core.Document<Project> & PouchDB.Core.GetMeta
 }
 
-/**
- * A component that wraps an MDX component instance in order to tie it to the data store
- * and place it inside a bootstrap container
- *
- * @param Component An MDX component instance
- */
-const MdxWrapper: FC<MdxWrapperProps> = ({ Component, Project }) => {
+const MdxWrapper: React.FC<MdxWrapperProps> = ({ Component, project }) => {
     return (
         <StoreContext.Consumer>
-            {({ metadata, data }) => {
+            {({ doc }) => {
                 return (
                     <div className="container" id="mdx-container">
-                        {/* metadata and data will be undefined for the very first render */}
-                        {metadata && data ? (
-                            <Component
-                                components={components}
-                                metadata={metadata}
-                                data={data}
-                                project={Project}
-                            />
-                        ) : null}
+                        {doc && (
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <MDXProvider components={components}>
+                                    <Component
+                                        project={project}
+                                        data={doc.data_}
+                                        metadata={doc.metadata_}
+                                    />
+                                </MDXProvider>
+                            </Suspense>
+                        )}
                     </div>
                 )
             }}

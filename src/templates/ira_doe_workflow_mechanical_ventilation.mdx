@@ -1,26 +1,30 @@
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
 <Tabs>
   <Tab eventKey="pre_installation" title="Pre-Installation">
     ## Amount of Mechanical Ventilation Needed
     <Collapsible header="Mechanical Ventilation Calculation">
     * Consider using RED Calc ASHRAE 62.2 tools to do the mechanical ventilation calculation. https://basc.pnnl.gov/redcalc
-      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed. 
+      *	Consider infiltration credits. A very leaky home may still be leaky enough after the scoped air sealing and insulation work is completed.
     *	The ASHRAE 62.2 standard does not require the installation of a system smaller than 15 CFM (7 L/s)
     * If the ASHRAE 62.2 mechanical ventilation calculator finds that the home should have a whole-house mechanical ventilation system installed, please use this workflow to document.
     </Collapsible>
 
     <NumberInput label="CFM of mechanical ventilation needed" path="cfm_of_mechanical_ventilation_needed" />
-    
+
     ## Existing Condition
     <Collapsible header="Existing Condition Details">
     The existing conditions of the home must be evaluated prior to installing mechanical ventilation. This includes evaluating:
         1.	Unavoidable point sources of indoor air pollution (e.g. showers, cooktop)
         2.	Avoidable point sources of indoor air pollution (e.g. back drafting combustion appliances)
         3.	Natural non-point sources of indoor air pollution (e.g. envelope air leakages)
-        4.	Occupant caused non-point sources of indoor air pollution (e.g. smoking, pets, air fresheners, incense) 
-        5.	Outdoor air pollution levels (e.g. proximity to a busy street, neighbor’s smoking, wildfire smoke). 
+        4.	Occupant caused non-point sources of indoor air pollution (e.g. smoking, pets, air fresheners, incense)
+        5.	Outdoor air pollution levels (e.g. proximity to a busy street, neighbor’s smoking, wildfire smoke).
 
     The type of mechanical ventilation equipment and strategy should:
-        1.	Capture unavoidable point sources of indoor air pollution near the source of emission, e.g. a exhaust fan should be in each full bath, and a range hood that exhaust to outdoors installed over the cooktop. 
+        1.	Capture unavoidable point sources of indoor air pollution near the source of emission, e.g. a exhaust fan should be in each full bath, and a range hood that exhaust to outdoors installed over the cooktop.
         2.	Not cause naturally drafting appliances to backdraft even under worse case conditions. See the Combustion Appliance Safety section in the Post-Installation tab for recording the combustion safety test results. Combustion appliance safety testing is only required if the home has one or more natural draft combustion appliances post-retrofit.
         3.	Effort to air seal the envelope to minimize natural non-point sources of indoor air pollution coming from an attached garage, unconditioned crawlspace, unconditioned attic, dusty walls.
         4.	Take into consideration ASHRAE 62.2 calculation as well as occupant caused non-point sources of indoor air pollution.
@@ -30,10 +34,10 @@
 
     <ShowOrHide visible={props.data?.whole_house_ventilation === "Yes"}>
       <PhotoInput id="existing_mechanical_ventilation_air_flow_measurement_photo" label="Existing Whole-House Mechanical Ventilation Air Flow Measurement – Photo">
-        Use an exhaust fan flow meter, balometer, powered capture flow hood, or bag inflation device to measure the air flow. 
+        Use an exhaust fan flow meter, balometer, powered capture flow hood, or bag inflation device to measure the air flow.
       </PhotoInput>
       <Select label="Existing whole-house mechanical ventilation system:" options={["Continuous exhaust", "Supply only", "Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"]} path="existing_ventilation_equipemnt_selection" />
-      
+
       <ShowOrHide visible={["Supply only","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.existing_ventilation_equipemnt_selection)}>
         <NumberInput label="What is the total supply based mechanical ventilation CFM?" path="total_supply_cfm" />
       </ShowOrHide>
@@ -54,6 +58,7 @@
 
   </Tab>
   <Tab eventKey="installation" title="Installation">
+    <DateInput label="Installation Date" path="install_date" />
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
       Please take a photo of the nameplate or sticker of the whole-house mechanical ventilation device showing the model number and serial number.
     </PhotoInput>
@@ -77,16 +82,17 @@
     </ShowOrHide>
     <PhotoInput id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" >
     The photo should be taken from far enough away to show how the mechanical ventilation equipment will be accessed for maintenance and cleaning.
-    </PhotoInput>     
+    </PhotoInput>
   </Tab>
   <Tab eventKey="post_installation" title="Post-Installation">
- 
-  <CombustionSafetyChecksLink {...props} />
 
-  ## Project Invoice 
-  <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
-      Take a photo of the project invoice if your program requires it.
-  </PhotoInput>
+<CombustionSafetyChecksLink {...props} />
+
+## Project Invoice
+
+<PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+    Take a photo of the project invoice if your program requires it.
+</PhotoInput>
 
   </Tab>
   <Tab eventKey="report"  title="Report">
@@ -102,11 +108,11 @@
 
     ## Existing Condition
     <p>Is there an existing whole-house ventilation system? <strong>{props.data?.whole_house_ventilation}</strong></p>
-    
-    <ShowOrHide visible={props.data?.whole_house_ventilation === "Yes"}> 
+
+    <ShowOrHide visible={props.data?.whole_house_ventilation === "Yes"}>
       <Photo id="existing_mechanical_ventilation_air_flow_measurement_photo" label="Existing Whole-House Mechanical Ventilation Air Flow Measurement – Photo" required />
-      
-      <p>Existing whole-house mechanical ventilation system: <strong>{props.data?.existing_ventilation_equipemnt_selection}</strong></p> 
+
+      <p>Existing whole-house mechanical ventilation system: <strong>{props.data?.existing_ventilation_equipemnt_selection}</strong></p>
       <ShowOrHide visible={["Supply only","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.existing_ventilation_equipemnt_selection)}>
         <p>What is the total supply based mechanical ventilation CFM? <strong>{props.data?.total_supply_cfm}</strong> </p>
       </ShowOrHide>
@@ -115,21 +121,21 @@
         <p>What is the total exhaust based mechanical ventilation CFM? <strong>{props.data?.total_exhaust_cfm}</strong> </p>
       </ShowOrHide>
     </ShowOrHide>
-    
+
 
     <p>Equipment selection: <strong>{props.data?.ventilation_equipemnt_selection}</strong></p>
 
     ## Installation
     <Photo id="nameplate_photo" label="Nameplate – Photo" required />
-    
+
     <Photo id="intake_photo" label="Intake – Photo" required>
       Photo of the intake
     </Photo>
-    
+
     <Photo id="exhaust_photo" label="Exhaust – Photo" required />
 
     <Photo id="air_flow_measurement_photo" label="Air Flow Measurement – Photo" required >
-        Photo of the air flow measurement    
+        Photo of the air flow measurement
     </Photo>
 
     <ShowOrHide visible={["Continuous exhaust","Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"].includes(props.data?.ventilation_equipemnt_selection)}>
@@ -142,12 +148,40 @@
 
     <Photo id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" required >
         Photo of the mechanical ventilation equipment
-    </Photo>  
+    </Photo>
 
-  
+
     ## Post-Installation
-    
-    <CombustionSafetyChecksReport path="combustion_safety_tests" />
+
+    {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+        <InstallationProvider
+            installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+            attachments={true}
+        >
+            <InstallationConsumer>
+                {([installation]) => {
+                    if (installation) {
+                        return (
+                            <StoreProvider
+                                doc={installation}
+                                onChange={async () => {
+                                    return
+                                }}
+                            >
+                                <CombustionSafetyChecksReport
+                                    project={props.project}
+                                    data={installation.data_}
+                                    metadata={installation.metadata_}
+                                />
+                            </StoreProvider>
+                        )
+                    } else {
+                        return null
+                    }
+                }}
+            </InstallationConsumer>
+        </InstallationProvider>
+    )}
 
 
     {props.metadata?.attachments?.project_invoice_photo && (<>
@@ -158,5 +192,6 @@
     </>)}
 
     </PrintSection>
+
   </Tab>
 </Tabs>

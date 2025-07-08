@@ -1,40 +1,23 @@
-import type { FC } from 'react'
-import FloatingLabel from 'react-bootstrap/FloatingLabel'
-import Form from 'react-bootstrap/Form'
+import React, { useId } from 'react'
+import { FloatingLabel, Form } from 'react-bootstrap'
 
 interface DateInputProps {
-    id: string
-    label: string
-    handleValueChange: (value: string) => void
+    label: React.ReactNode
     value: string
+    onChange: (value: string) => Promise<void>
 }
 
-/**
- * A component for inputing a date
- *
- * @param id The id for the underlying html input
- * @param label The component label
- * @param handleValueChange A function called whenever the user changes the
- * input value. The function has the new input value as the sole arguement.
- */
-const DateInput: FC<DateInputProps> = ({
-    id,
-    label,
-    handleValueChange,
-    value,
-}) => {
+const DateInput: React.FC<DateInputProps> = ({ label, value, onChange }) => {
+    const id = useId()
+
     return (
-        <>
-            <FloatingLabel className="mb-3" controlId={id} label={label}>
-                <Form.Control
-                    onChange={event => {
-                        handleValueChange(event.target.value)
-                    }}
-                    type="date"
-                    value={value}
-                />
-            </FloatingLabel>
-        </>
+        <FloatingLabel controlId={id} label={label}>
+            <Form.Control
+                type="date"
+                value={value}
+                onChange={async event => onChange(event.target.value)}
+            />
+        </FloatingLabel>
     )
 }
 

@@ -1,19 +1,62 @@
-<p>**Installer:**</p>
-<p className="margin-left">
-{props.project.data_.installer?.name} {props.project.data_.installer?.name ? <br/>: null}
-{props.project.data_.installer?.company_name }{props.project.data_.installer?.company_name ? <br/>: null}
-{props.project.data_.installer?.mailing_address }{props.project.data_.installer?.mailing_address ? <br/>: null}
-{props.project.data_.installer?.phone }{props.project.data_.installer?.phone ? <br/>: null}
-{props.project.data_.installer?.email} {props.project.data_.installer?.email ? <br/>: null}
-</p>
-{props.data.install_date && (
-  <>
-    <strong>Installation Date:</strong> <DateStr date={props.data.install_date} />
-  </>
-)}
+<>
+    <p>**Installer:**</p>
 
-**Installation Address:** {props.project.data_.location?.street_address}, {props.project.data_.location?.city}, {props.project.data_.location?.state} {props.project.data_.location?.zip_code}
+    <p className="margin-left">
+        <ShowOrHide visible={props.project}>
+            <LabelValue
+                path="installer.name"
+                parent={props.project}
+                suffix={<br />}
+            />
+            <LabelValue
+                path="installer.company_name"
+                parent={props.project}
+                suffix={<br />}
+            />
+            <LabelValue
+                path="installer.mailing_address"
+                parent={props.project}
+                suffix={<br />}
+            />
+            <LabelValue
+                path="installer.phone"
+                parent={props.project}
+                suffix={<br />}
+            />
+            <LabelValue
+                path="installer.email"
+                parent={props.project}
+                suffix={<br />}
+            />
+        </ShowOrHide>
+        <ShowOrHide visible={props.project == null}>
+            <LabelValue path="installer.name" suffix={<br />} />
+            <LabelValue path="installer.company_name" suffix={<br />} />
+            <LabelValue path="installer.mailing_address" suffix={<br />} />
+            <LabelValue path="installer.phone" suffix={<br />} />
+            <LabelValue path="installer.email" suffix={<br />} />
+        </ShowOrHide>
+    </p>
+    <ShowOrHide visible={props.data.install_date}>
+            <LabelValue value={props.data.install_date} label="Installation Date" type="date" />
+    </ShowOrHide>
 
-<Photo id="building_number_photo" label="Building Number" project={props.project} required fromParent>
-      A photo of the building showing the building number.
-</Photo>
+    <ShowOrHide visible={props.project?.data_.location}>
+        **Installation Address:**
+
+        <LocationStr
+            location={props.project.data_.location}
+            separators={[', ', ', ', ' ']}
+        />
+    </ShowOrHide>
+
+    <Photo
+        id="building_number_photo"
+        label="Building Number"
+        parent={props.project}
+        required
+    >
+        A photo of the building showing the building number.
+    </Photo>
+
+</>
