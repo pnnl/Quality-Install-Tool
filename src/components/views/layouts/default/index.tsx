@@ -56,10 +56,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         </Link>
                     </div>
                 )}
-                <Container id="root-flex-layout">
+                <Container fluid id="root-flex-layout">
                     <Navbar.Brand>
                         <span id="root-title">
                             {process.env.REACT_APP_NAME}
+                            {process.env.REACT_APP_VERSION && (
+                                <span> ({process.env.REACT_APP_VERSION})</span>
+                            )}
                         </span>
                     </Navbar.Brand>
                 </Container>
