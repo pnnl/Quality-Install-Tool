@@ -195,18 +195,32 @@ h1 + h3 {
 
 /* used in linear-flourescent-to-LED-workflow */
 .pre-installation-table {
-    /*forces the table to be scrollable on narrow screens*/
-    overflow-x: scroll;
+  display: block;
+  overflow-x: auto;
+  margin-bottom: 0;
 }
+
 .pre-installation-table table {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0;
 }
+
 .pre-installation-table th,
 .pre-installation-table td {
-    border: 1px solid black;
-    padding: 8px;
-    vertical-align: top;
+  border: 1px solid black;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.pre-installation-table td ul {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: circle;
+}
+
+.pre-installation-table td ul li {
+  margin-bottom: 0;
 }
 
 /* photo_input.tsx */
