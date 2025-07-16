@@ -78,7 +78,7 @@
         "typescript"
     ],
     "rules": {
-        "prettier/prettier": "error",
+        "prettier/prettier": "off",
         "react-hooks/exhaustive-deps": "warn",
         "react-hooks/rules-of-hooks": "error"
     },
