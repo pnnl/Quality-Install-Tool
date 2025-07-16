@@ -58,6 +58,7 @@ const InstallationSelect: React.FC<InstallationSelectProps> = ({
                                         onChange={async value =>
                                             await upsertData(path, value, [])
                                         }
+                                        path={path}
                                     />
                                 )
                             }}

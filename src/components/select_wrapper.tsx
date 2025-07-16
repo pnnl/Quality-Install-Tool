@@ -35,6 +35,7 @@ const SelectWrapper: React.FC<SelectWrapperProps> = ({
                         onChange={async value =>
                             await upsertData(path, value, [])
                         }
+                        path={path}
                     />
                 )
             }}

@@ -138,6 +138,11 @@ h1 + h3 {
     font-style: italic;
 }
 
+/* used in select.tsx */
+.select-group {
+    padding: 1rem;
+}
+
 /* root_layout.tsx */
 #root-flex-layout {
     display: flex;
