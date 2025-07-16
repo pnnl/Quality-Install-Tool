@@ -245,8 +245,18 @@ h1 + h3 {
 
 /* label styling for the Radio component */
 .custom-label {
-    color: gray;
     font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between radio options */
+}
+.form-check {
+    margin-left: 0.5rem;
+    margin-bottom: unset;
 }
 
 /* BETA version text - styling for new templates - temperary */

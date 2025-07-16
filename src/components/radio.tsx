@@ -22,7 +22,7 @@ const Radio: React.FC<RadioProps> = ({ label, options, value, onChange }) => {
         <Card className="input-card">
             <Card.Body>
                 <p className="mb-3 custom-label">{label}</p>
-                <Form.Group className="mb-3">
+                <Form.Group className="radio-group">
                     {options.map((option, index) => (
                         <Form.Check
                             key={index}
