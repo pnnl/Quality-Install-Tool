@@ -50,6 +50,13 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         selectedPhotoAttachmentForDelete,
         setSelectedPhotoAttachmentForDelete,
     ] = useState<PhotoAttachment | undefined>(undefined)
+    const [showInfo, setShowInfo] = useState(false)
+    const handleCloseInfo = () => setShowInfo(false)
+    const handleShowInfo = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        event.preventDefault()
+        setShowInfo(true)
+    }
 
     useEffect(() => {
         const objectURL = selectedPhotoAttachmentForDelete
@@ -140,21 +147,20 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <Offcanvas show={showInfo} onHide={handleCloseInfo}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>{label}</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>{children}</Offcanvas.Body>
+            </Offcanvas>
             <Card className="input-card photo-input">
                 <Card.Body>
-                    {/* <Collapsible header={label}>
-                        <Card.Text as="div">{children}</Card.Text>
-                    </Collapsible> */}
                     <div className="photo-input-header mb-4">
                         <h3>{label}</h3>
                         <button
                             className="info-button"
                             aria-label="Photo Input Information"
-                            onClick={event => {
-                                event.stopPropagation()
-                                event.preventDefault()
-                                console.log('Photo Input Information clicked')
-                            }}
+                            onClick={handleShowInfo}
                         >
                             <TfiInfoAlt size={20} />
                         </button>
