@@ -199,6 +199,20 @@ h1 + h3 {
 }
 
 /* photo_input.tsx */
+.photo-input .photo-input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.photo-input .photo-input-header h3 {
+    margin: 0;
+}
+.photo-input .photo-input-header button {
+    background-color: inherit;
+    border: none;
+    padding: unset;
+}
+
 .photo-input .card-body .accordion {
     margin-bottom: 0.5rem;
 }

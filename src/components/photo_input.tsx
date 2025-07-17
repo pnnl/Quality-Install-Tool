@@ -1,8 +1,7 @@
-import PouchDB from 'pouchdb'
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Card, Image, Modal } from 'react-bootstrap'
+import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
 import { TbCameraPlus } from 'react-icons/tb'
-import { TfiTrash } from 'react-icons/tfi'
+import { TfiTrash, TfiInfoAlt } from 'react-icons/tfi'
 
 import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
@@ -143,9 +142,23 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             </Modal>
             <Card className="input-card photo-input">
                 <Card.Body>
-                    <Collapsible header={label}>
+                    {/* <Collapsible header={label}>
                         <Card.Text as="div">{children}</Card.Text>
-                    </Collapsible>
+                    </Collapsible> */}
+                    <div className="photo-input-header mb-4">
+                        <h3>{label}</h3>
+                        <button
+                            className="info-button"
+                            aria-label="Photo Input Information"
+                            onClick={event => {
+                                event.stopPropagation()
+                                event.preventDefault()
+                                console.log('Photo Input Information clicked')
+                            }}
+                        >
+                            <TfiInfoAlt size={20} />
+                        </button>
+                    </div>
                     <input
                         ref={ref}
                         data-testid="photo-input"
@@ -249,7 +262,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                         <div className="error">Image loading failed.</div>
                     )}
                     {photoAttachments.length < count && (
-                        <div className="pb-2">
+                        <div className="mb-3">
                             <Button
                                 variant="outline-primary"
                                 onClick={() => ref.current?.click()}
@@ -261,7 +274,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     {notes && (
                         <TextInputWrapper
                             path={`${id}_note`}
-                            label="Optional note about photo(s):"
+                            label="Notes"
                             min={0}
                             max={300}
                             regexp={/.*/}
