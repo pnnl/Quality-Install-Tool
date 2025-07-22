@@ -12,6 +12,64 @@ import { DEFAULT_OPTIONS } from '../../components/date_time_str'
 global.URL.createObjectURL = jest.fn()
 // Mock heic2any
 jest.mock('heic2any', () => ({ window: jest.fn() }))
+// Mock window.matchMedia for react-bootstrap components
+Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+    })),
+})
+
+// Mock @restart/hooks completely
+jest.mock('@restart/hooks', () => ({
+    useMediaQuery: jest.fn(() => false),
+    useBreakpoint: jest.fn(() => false),
+    useMergedRefs: jest.fn((ref1, ref2) => ref1),
+}))
+
+// Mock react-bootstrap Offcanvas component completely with sub-components
+jest.mock('react-bootstrap/Offcanvas', () => {
+    const MockOffcanvas = ({ children, show, onHide, ...props }: any) => {
+        if (!show) return null
+        return (
+            <div data-testid="mock-offcanvas" {...props}>
+                {children}
+            </div>
+        )
+    }
+
+    MockOffcanvas.Header = ({ children, closeButton, ...props }: any) => (
+        <div data-testid="offcanvas-header" {...props}>
+            {children}
+            {closeButton && (
+                <button onClick={props.onHide} data-testid="offcanvas-close">
+                    Close
+                </button>
+            )}
+        </div>
+    )
+
+    MockOffcanvas.Title = ({ children, ...props }: any) => (
+        <div data-testid="offcanvas-title" {...props}>
+            {children}
+        </div>
+    )
+
+    MockOffcanvas.Body = ({ children, ...props }: any) => (
+        <div data-testid="offcanvas-body" {...props}>
+            {children}
+        </div>
+    )
+
+    return MockOffcanvas
+})
 
 const mockStoreContext = {
     docId: 'TestDocID123',
