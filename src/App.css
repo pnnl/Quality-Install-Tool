@@ -213,12 +213,15 @@ h1 + h3 {
     align-items: center;
 }
 .photo-input .photo-input-header h3 {
-    margin: 0;
+    margin: 0 1rem 0 0;
 }
 .photo-input .photo-input-header button {
     background-color: inherit;
     border: none;
-    padding: unset;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .photo-input .card-body .accordion {

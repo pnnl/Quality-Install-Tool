@@ -147,7 +147,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Offcanvas show={showInfo} onHide={handleCloseInfo}>
+            <Offcanvas show={showInfo} onHide={handleCloseInfo} placement="end">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>{label}</Offcanvas.Title>
                 </Offcanvas.Header>
@@ -155,7 +155,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             </Offcanvas>
             <Card className="input-card photo-input">
                 <Card.Body>
-                    <div className="photo-input-header mb-4">
+                    <div className="photo-input-header mb-3">
                         <h3>{label}</h3>
                         <button
                             className="info-button"
