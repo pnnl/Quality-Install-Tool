@@ -118,6 +118,14 @@ describe('PhotoInput Component', () => {
     test('renders label and children', () => {
         renderWithProps()
         expect(screen.getByText(/test label/i)).toBeInTheDocument()
+
+        // Click the info button to show the offcanvas with children
+        const infoButton = screen.getByRole('button', {
+            name: /photo input information/i,
+        })
+        fireEvent.click(infoButton)
+
+        // Now the children should be visible in the offcanvas
         expect(screen.getByText(/test children/i)).toBeInTheDocument()
     })
 
@@ -180,16 +188,12 @@ describe('PhotoInput Component', () => {
 
     test('renders notes input if notes prop is true', () => {
         renderWithProps({ notes: true })
-        expect(
-            screen.getByLabelText(/optional note about photo\(s\)/i),
-        ).toBeInTheDocument()
+        expect(screen.getByLabelText(/Notes/i)).toBeInTheDocument()
     })
 
     test('does not render notes input if notes prop is false', () => {
         renderWithProps({ notes: false })
-        expect(
-            screen.queryByLabelText(/optional note about photo\(s\)/i),
-        ).toBeNull()
+        expect(screen.queryByLabelText(/Notes/i)).toBeNull()
     })
     test('renders timestamp and geolocation correctly', () => {
         function formatDateTime(dateTimeStr: string): string {
