@@ -28,7 +28,7 @@ const Select: React.FC<SelectProps> = ({
     return (
         <Card>
             <Form.Group controlId={path} className="select-group">
-                <Form.Label>{label}</Form.Label>
+                <label>{label}</label>
                 <Form.Select
                     value={value || ''}
                     onChange={handleChange}
