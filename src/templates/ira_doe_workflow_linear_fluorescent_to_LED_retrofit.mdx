@@ -117,6 +117,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     For energy efficiency program managers and implementers, this photo report could be useful for helping contractors or client/customers diagnose the cause of performance problems. They are frequently caused by compatibility issues between an existing ballast and a particular Type A LED tube, or a particular dimmer and a particular Type B LED tube, or a particular LED driver and a particular Type C LED tube.
 
+<LabelValue
+    label="LED Tube Type"
+    path="led_tube_type"
+    type="string"
+    required={true}/>
 <ShowOrHide visible={props.data?.led_tube_type == 'Type A'} >
 
 <Photo id="fixture_ballast_photo" label="Fixture Ballast – Photo" required>
