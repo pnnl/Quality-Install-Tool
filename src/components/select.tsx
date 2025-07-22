@@ -3,16 +3,16 @@ import { Card, Form } from 'react-bootstrap'
 
 interface SelectProps {
     label: React.ReactNode
-    options: string[] | [string, string][]
     onChange: (value: string) => Promise<void>
+    options: string[] | [string, string][]
     path: string
     value: string
 }
 
 const Select: React.FC<SelectProps> = ({
     label,
-    options,
     onChange,
+    options,
     path,
     value,
 }) => {

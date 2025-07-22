@@ -1,36 +1,35 @@
 import { get } from 'lodash'
-import PouchDB from 'pouchdb'
-import React from 'react'
-
-import Select from './select'
 import InstallationsProvider, {
-    type InstallationDocument,
     InstallationsContext,
+    type InstallationDocument,
 } from '../providers/installations_provider'
 import { StoreContext } from '../providers/store_provider'
 import { comparator } from '../utilities/comparison_utils'
+import PouchDB from 'pouchdb'
+import React from 'react'
+import Select from './select'
 
 interface InstallationSelectProps {
-    path: string
     label: React.ReactNode
+    path: string
     projectId: PouchDB.Core.DocumentId
     workflowName?: string
 }
 
 const InstallationSelect: React.FC<InstallationSelectProps> = ({
-    path,
     label,
+    path,
     projectId,
     workflowName,
 }) => {
     return (
         <InstallationsProvider
-            projectId={projectId}
-            workflowName={workflowName}
             installationComparator={comparator<InstallationDocument>(
                 'last_modified_at',
                 'desc',
             )}
+            projectId={projectId}
+            workflowName={workflowName}
         >
             <InstallationsContext.Consumer>
                 {([installations]) => {
@@ -54,11 +53,11 @@ const InstallationSelect: React.FC<InstallationSelectProps> = ({
                                     <Select
                                         label={label}
                                         options={options}
+                                        path={path}
                                         value={doc && get(doc.data_, path)}
                                         onChange={async value =>
                                             await upsertData(path, value, [])
                                         }
-                                        path={path}
                                     />
                                 )
                             }}

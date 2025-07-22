@@ -1,43 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
-import { TbCameraPlus } from 'react-icons/tb'
-import { TfiTrash, TfiInfoAlt } from 'react-icons/tfi'
-
 import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
+import { TbCameraPlus } from 'react-icons/tb'
+import { TfiInfoAlt, TfiTrash } from 'react-icons/tfi'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 export interface PhotoInputProps {
-    label: string
-    uploadable: boolean
-    loading: boolean
-    error: string | undefined
+    children: React.ReactNode
     count: number
+    error: string | undefined
     id: string
+    label: string
+    loading: boolean
     notes?: boolean
-    photoAttachments: PhotoAttachment[]
     onPutPhotoAttachment?: (file: Blob) => Promise<void>
     onRemovePhotoAttachment?: (
         attachmentId: PouchDB.Core.AttachmentId,
     ) => Promise<void>
-    children: React.ReactNode
+    photoAttachments: PhotoAttachment[]
+    uploadable: boolean
 }
 
 const PhotoInput: React.FC<PhotoInputProps> = ({
-    label,
-    uploadable,
-    loading,
-    error,
+    children,
     count,
+    error,
     id,
+    label,
+    loading,
     notes = true,
-    photoAttachments,
     onPutPhotoAttachment,
     onRemovePhotoAttachment,
-    children,
+    photoAttachments,
+    uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
 

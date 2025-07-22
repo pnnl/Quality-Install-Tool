@@ -1,12 +1,13 @@
 // Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
 
 // Test suite for PhotoInput component
-import { render, screen, fireEvent } from '@testing-library/react'
-import React, { act } from 'react'
-import { StoreContext } from '../../providers/store_provider'
-import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
-import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
+import { act } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { DEFAULT_OPTIONS } from '../../components/date_time_str'
+import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
+import React from 'react'
+import { StoreContext } from '../../providers/store_provider'
+import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
 
 // Mock URL.createObjectURL
 global.URL.createObjectURL = jest.fn()
@@ -95,17 +96,17 @@ const generateMockPhotoAttachment = (): PhotoAttachment => ({
 describe('PhotoInput Component', () => {
     const renderWithProps = (props: Partial<PhotoInputProps> = {}) => {
         const defaultProps: PhotoInputProps = {
-            label: 'Test Label',
-            uploadable: true,
-            loading: false,
-            error: undefined,
+            children: <div>Test Children</div>,
             count: 5,
+            error: undefined,
             id: 'photo-input-id',
+            label: 'Test Label',
+            loading: false,
             notes: true,
-            photoAttachments: [],
             onPutPhotoAttachment: jest.fn(),
             onRemovePhotoAttachment: jest.fn(),
-            children: <div>Test Children</div>,
+            photoAttachments: [],
+            uploadable: true,
         }
 
         return render(

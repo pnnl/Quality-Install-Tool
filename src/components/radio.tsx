@@ -3,12 +3,12 @@ import { Card, Form } from 'react-bootstrap'
 
 interface RadioProps {
     label: React.ReactNode
+    onChange: (value: string) => Promise<void>
     options: string[]
     value: string
-    onChange: (value: string) => Promise<void>
 }
 
-const Radio: React.FC<RadioProps> = ({ label, options, value, onChange }) => {
+const Radio: React.FC<RadioProps> = ({ label, onChange, options, value }) => {
     const id = useId()
 
     const handleChange = useCallback(
