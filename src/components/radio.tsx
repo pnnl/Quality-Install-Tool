@@ -21,7 +21,7 @@ const Radio: React.FC<RadioProps> = ({ label, options, value, onChange }) => {
     return (
         <Card className="input-card">
             <Card.Body>
-                <p className="mb-3 custom-label">{label}</p>
+                <p className="mb-3">{label}</p>
                 <Form.Group className="radio-group">
                     {options.map((option, index) => (
                         <Form.Check

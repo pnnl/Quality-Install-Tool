@@ -274,11 +274,6 @@ h1 + h3 {
 }
 
 /* label styling for the Radio component */
-.custom-label {
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
 .radio-group {
     display: flex;
     flex-direction: column;
