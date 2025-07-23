@@ -43,39 +43,62 @@ jest.mock('@restart/hooks', () => ({
 jest.mock('react-bootstrap/Offcanvas', () => {
     const MockOffcanvas = ({ children, show, onHide, ...props }: any) => {
         if (!show) return null
+
+        // Use require inside the mock to access React
+        const React = require('react')
+
         return (
             <div data-testid="mock-offcanvas" {...props}>
-                {children}
+                {React.Children.map(children, (child: any) => {
+                    if (child?.type === MockOffcanvas.Header) {
+                        return React.cloneElement(child, { onHide })
+                    }
+                    return child
+                })}
             </div>
         )
     }
-    MockOffcanvas.Header = ({ children, closeButton, ...props }: any) => (
+
+    MockOffcanvas.Header = ({
+        children,
+        closeButton,
+        onHide,
+        ...props
+    }: any) => (
         <div data-testid="offcanvas-header" {...props}>
             {children}
             {closeButton && (
-                <button onClick={props.onHide} data-testid="offcanvas-close">
+                <button onClick={onHide} data-testid="offcanvas-close">
                     Close
                 </button>
             )}
         </div>
     )
+
     MockOffcanvas.Title = ({ children, ...props }: any) => (
         <div data-testid="offcanvas-title" {...props}>
             {children}
         </div>
     )
+
     MockOffcanvas.Body = ({ children, ...props }: any) => (
         <div data-testid="offcanvas-body" {...props}>
             {children}
         </div>
     )
+
     return MockOffcanvas
 })
 
-const mockStoreContext = {
-    docId: 'TestDocID123',
-    attachments: {},
-    metadata: {},
+type StoreContextType = NonNullable<React.ContextType<typeof StoreContext>>
+
+const mockStoreContext: StoreContextType = {
+    doc: undefined,
+    upsertData: jest.fn(),
+    upsertMetadata: jest.fn(),
+    putAttachment: jest.fn(),
+    removeAttachment: jest.fn(),
+    UNSAFE_put: jest.fn(),
 }
 
 const generateMockPhotoAttachment = (
@@ -117,13 +140,13 @@ describe('PhotoInput Component', () => {
             uploadable: true,
         }
         return render(
-            <StoreContext.Provider value={mockStoreContext as never}>
+            <StoreContext.Provider value={mockStoreContext}>
                 <PhotoInput {...defaultProps} {...props} />
             </StoreContext.Provider>,
         )
     }
 
-    test('renders label and children', () => {
+    test('renders label and children in offcanvas', () => {
         renderWithProps()
         expect(screen.getByText(/test label/i)).toBeInTheDocument()
 
@@ -142,7 +165,7 @@ describe('PhotoInput Component', () => {
             const [showInfo, setShowInfo] = React.useState(false)
 
             return (
-                <StoreContext.Provider value={mockStoreContext as never}>
+                <StoreContext.Provider value={mockStoreContext}>
                     <PhotoInput
                         children={<div>Test Children</div>}
                         count={5}
@@ -172,10 +195,9 @@ describe('PhotoInput Component', () => {
         // Close offcanvas by clicking outside or using the modal header close
         const modal = screen.getByTestId('mock-offcanvas')
         // Simulate clicking the backdrop or close button
-        fireEvent.click(infoButton) // Click info button again should close it
-
-        // For this test, let's just verify the offcanvas can be opened
-        // The actual close behavior is handled by the component's internal state
+        const closeButton = screen.getByTestId('offcanvas-close')
+        fireEvent.click(closeButton)
+        expect(screen.queryByText(/test children/i)).not.toBeInTheDocument()
     })
 
     test('can add a photo', async () => {
@@ -440,7 +462,7 @@ describe('PhotoInput Component', () => {
         })
 
         expect(mockCreateObjectURL).toHaveBeenCalledWith(
-            mockAttachment.attachment.data,
+            (mockAttachment.attachment as PouchDB.Core.FullAttachment).data,
         )
 
         // Rerender with no photos to trigger cleanup
@@ -483,7 +505,7 @@ describe('PhotoInput Component', () => {
 
         // Should create URL for delete preview
         expect(mockCreateObjectURL).toHaveBeenCalledWith(
-            mockAttachment.attachment.data,
+            (mockAttachment.attachment as PouchDB.Core.FullAttachment).data,
         )
 
         const cancelButton = screen.getByRole('button', {
