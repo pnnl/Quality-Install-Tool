@@ -16,8 +16,6 @@ const Select: React.FC<SelectProps> = ({
     path,
     value,
 }) => {
-    const id = useId()
-
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLSelectElement>) => {
             await onChange(event.target.value)

@@ -1,4 +1,3 @@
-import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import React, { useEffect, useRef, useState } from 'react'
