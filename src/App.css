@@ -208,6 +208,15 @@ h1 + h3 {
     padding: 8px;
     vertical-align: top;
 }
+.pre-installation-table td ul {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: circle;
+}
+
+.pre-installation-table td ul li {
+  margin-bottom: 0;
+}
 
 /* photo_input.tsx */
 .photo-input .card-body .accordion {
