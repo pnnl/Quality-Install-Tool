@@ -28,7 +28,7 @@ describe('LabelValue Component', () => {
         type = 'string',
     }: LabelValueProps) => {
         return render(
-            <StoreContext.Provider value={mockStoreContext as any}>
+            <StoreContext.Provider value={mockStoreContext as never}>
                 <LabelValue
                     label={label}
                     value={value}
