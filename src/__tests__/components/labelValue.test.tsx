@@ -1,9 +1,9 @@
 // Command to run this test: yarn test -- src/__tests__/components/labelValue.test.tsx
 
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { StoreContext } from '../../providers/store_provider'
 import LabelValue, { LabelValueProps } from '../../components/label_value'
-import heic2any from '../__mocks__/heic2any'
 
 // Mock `heic2any` module
 jest.mock('heic2any')
@@ -28,7 +28,7 @@ describe('LabelValue Component', () => {
         type = 'string',
     }: LabelValueProps) => {
         return render(
-            <StoreContext.Provider value={mockStoreContext as any}>
+            <StoreContext.Provider value={mockStoreContext as never}>
                 <LabelValue
                     label={label}
                     value={value}
