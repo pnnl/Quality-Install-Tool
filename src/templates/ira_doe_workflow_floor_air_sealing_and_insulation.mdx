@@ -33,8 +33,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     | ----------------------------
     | <NumberInput label="CFM at 50Pa" min={0} path="air_leakage_cfm50"  />
     | <NumberInput label="Conditioned Volume (ft3):" min={0} path="conditioned_volume_ft3" />
-    | <p><strong>ACH50: </strong>{!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1): 'N/A'}</p>
-
+    | <LabelValue decimalPlaces={1} type={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string"} label="ACH50" value={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3) : 'N/A'}/>
 
     <PhotoInput id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo">
         Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
@@ -169,8 +168,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <ShowOrHide visible={ props.data?.floor_air_leakage_rate == 'CFM at 50Pa'}>
 
       <p>Conditioned Volume (ft3): <strong> {props.data?.conditioned_volume_ft3}</strong></p>
-      <p>ACH50: <strong> {!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3).toFixed(1) : 'N/A'}</strong></p>
-
+      <LabelValue
+          label="ACH50"
+          decimalPlaces={1}
+          type={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string"}
+          value={!isNaN(props?.data?.air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3) : 'N/A'}/>
       <Photo id="cfm50_photo" label="Starting blower door manometer showing the CFM50 value – Photo" required>
             Photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed
       </Photo>

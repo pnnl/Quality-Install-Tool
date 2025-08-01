@@ -13,7 +13,7 @@ describe('Checkbox Component', () => {
 
     // Utility function to render the component
     const renderComponent = (
-        hidden: boolean = false,
+        hidden = false,
         value: string[] = [],
     ): RenderResult => {
         return render(

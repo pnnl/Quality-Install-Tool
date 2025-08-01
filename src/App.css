@@ -193,6 +193,31 @@ h1 + h3 {
     height: 58px !important;
 }
 
+/* used in linear-flourescent-to-LED-workflow */
+.pre-installation-table {
+    /*forces the table to be scrollable on narrow screens*/
+    overflow-x: scroll;
+}
+.pre-installation-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.pre-installation-table th,
+.pre-installation-table td {
+    border: 1px solid black;
+    padding: 8px;
+    vertical-align: top;
+}
+.pre-installation-table td ul {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: circle;
+}
+
+.pre-installation-table td ul li {
+  margin-bottom: 0;
+}
+
 /* photo_input.tsx */
 .photo-input .card-body .accordion {
     margin-bottom: 0.5rem;
@@ -476,6 +501,51 @@ btn-light:hover {
 /* Default font size */
 .modal-body-text {
     font-size: 18px; /* Adjust the default font size */
+}
+
+/* Collapsible text card */
+.collapsible-text {
+    position: relative;
+    background-color: white;
+}
+
+.collapsible-text p.description {
+    color: gray;
+    margin-bottom: unset;
+}
+
+.collapsible-text.collapsed {
+    height: 3.125rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapsible-text .clickable-text {
+    color: #006100;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    padding: 0 5px 0px 5px;
+}
+
+.collapsible-text .clickable-text.collapsed {
+    position: absolute;
+    background-color: white;
+    bottom: 2px;
+    right: 0px;
+}
+
+.collapsible-text-container .content {
+    margin-top: 10px;
+}
+
+.collapsible-text-container .content .card {
+    border: none;
+    margin-bottom: 0;
+}
+
+.collapsible-text-container .content .card-body {
+    padding: 0;
 }
 
 /* Common font size for medium, small, and extra small devices */

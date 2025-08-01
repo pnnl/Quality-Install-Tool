@@ -18,11 +18,12 @@ import DOEWorkflowHighEfficiencyGasFurnace from './ira_doe_workflow_high_efficie
 import DOEWorkflowHighEfficiencyModulatingBoiler from './ira_doe_workflow_high_efficiency_modulating_boiler.mdx'
 import DOEWorkflowHighEfficiencyWaterHeater from './ira_doe_workflow_high_efficiency_water_heater.mdx'
 import DOEWorkflowInsertReplacementWindows from './ira_doe_workflow_insert_replacement_windows.mdx'
+import DOEWorkflowLinearFluorescentToLEDRetrofit from './ira_doe_workflow_linear_fluorescent_to_LED_retrofit.mdx'
 import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_ventilation.mdx'
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
-// import Playground from './playground.mdx'
+import Playground from './playground.mdx'
 
 import {
     type BaseData,
@@ -146,6 +147,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowInsertReplacementWindows,
     },
+    doe_workflow_linear_fluorescent_to_led_retrofit: {
+        title: 'Linear Fluorescent to LED Retrofit',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowLinearFluorescentToLEDRetrofit,
+    },
     doe_workflow_mechanical_ventilation: {
         title: 'Mechanical Ventilation',
         subtitle: INSTALLATION_SUB_TITLE,
@@ -171,16 +177,16 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         },
         template: IRADOEWorkflowLimitedAssessment,
     },
-    // playground: {
-    //     title: 'Playground',
-    //     subtitle: {
-    //         singularTitleCase: 'Playground',
-    //         singularLowerCase: 'playground',
-    //         pluralTitleCase: 'Playgrounds',
-    //         pluralLowerCase: 'playgrounds',
-    //     },
-    //     template: Playground,
-    // },
+    playground: {
+        title: 'Playground',
+        subtitle: {
+            singularTitleCase: 'Playground',
+            singularLowerCase: 'playground',
+            pluralTitleCase: 'Playgrounds',
+            pluralLowerCase: 'playgrounds',
+        },
+        template: Playground,
+    },
 }
 
 const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
