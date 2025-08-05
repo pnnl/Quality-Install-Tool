@@ -21,7 +21,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({
         if (title) {
             return title
         } else if (workflow) {
-            return `Quality Install Tool - ${workflow.title}`
+            return `${process.env.REACT_APP_NAME} - ${workflow.title}`
         } else {
             return process.env.REACT_APP_NAME
         }
