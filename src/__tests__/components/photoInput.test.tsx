@@ -162,8 +162,6 @@ describe('PhotoInput Component', () => {
 
     test('can close offcanvas', () => {
         const TestComponent = () => {
-            const [showInfo, setShowInfo] = React.useState(false)
-
             return (
                 <StoreContext.Provider value={mockStoreContext}>
                     <PhotoInput
