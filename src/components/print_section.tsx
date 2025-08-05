@@ -18,10 +18,16 @@ const PrintSection: React.FC<PrintSectionProps> = ({
     const addHeader = () => {
         const printWrapper = document.getElementById(printContainerId)
         if (printWrapper) {
-            const header = document.createElement('div')
-            header.className = 'safari-print-header'
-            header.innerText = process.env.REACT_APP_PRINT_TITLE // Header for Safari
-            printWrapper.prepend(header) // Add header at the top
+            // Check if the header already exists
+            const existingHeader = printWrapper.querySelector(
+                '.safari-print-header',
+            )
+            if (!existingHeader) {
+                const header = document.createElement('div')
+                header.className = 'safari-print-header'
+                header.innerText = process.env.REACT_APP_PRINT_TITLE
+                printWrapper.prepend(header) // Add header at the top
+            }
         }
     }
 
