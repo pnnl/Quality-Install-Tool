@@ -1,13 +1,32 @@
-import React, { useId } from 'react'
-import { Button } from 'react-bootstrap'
 import print from 'print-js'
+import React, { useId, useMemo } from 'react'
+import { Button } from 'react-bootstrap'
+
+import { useWorkflow } from '../providers/workflow_provider'
 
 interface PrintSectionProps {
-    children: React.ReactNode
+    title?: string
     label: React.ReactNode
+    children: React.ReactNode
 }
 
-const PrintSection: React.FC<PrintSectionProps> = ({ children, label }) => {
+const PrintSection: React.FC<PrintSectionProps> = ({
+    title,
+    label,
+    children,
+}) => {
+    const workflow = useWorkflow()
+
+    const documentTitle = useMemo<string>(() => {
+        if (title) {
+            return title
+        } else if (workflow) {
+            return `Quality Install Tool - ${workflow.title}`
+        } else {
+            return process.env.REACT_APP_NAME
+        }
+    }, [title, workflow])
+
     const printContainerId = useId()
     const isSafari = () =>
         /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
@@ -18,7 +37,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({ children, label }) => {
             if (printWrapper) {
                 const header = document.createElement('div')
                 header.className = 'safari-print-header'
-                header.innerText = process.env.REACT_APP_PRINT_TITLE
+                header.innerText = documentTitle
                 printWrapper.prepend(header) // Add header at the top
             }
         }
@@ -28,6 +47,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({ children, label }) => {
             <Button
                 onClick={() => {
                     addSafariHeader()
+                    document.title = documentTitle // Set basename for PDF document
                     print({
                         maxWidth: 2000,
                         printable: printContainerId,
@@ -37,7 +57,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({ children, label }) => {
                         type: 'html',
                         targetStyles: ['*'],
                         css: ['/bootstrap.min.css', '/print.css'],
-                        documentTitle: process.env.REACT_APP_PRINT_TITLE,
+                        documentTitle,
                         scanStyles: false,
                     })
                 }}

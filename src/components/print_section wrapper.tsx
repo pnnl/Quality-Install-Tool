@@ -3,15 +3,21 @@ import React from 'react'
 import PrintSection from './print_section'
 
 interface PrintSectionWrapperProps {
-    children: React.ReactNode
+    title?: string
     label: React.ReactNode
+    children: React.ReactNode
 }
 
 const PrintSectionWrapper: React.FC<PrintSectionWrapperProps> = ({
-    children,
+    title,
     label,
+    children,
 }) => {
-    return <PrintSection label={label}>{children}</PrintSection>
+    return (
+        <PrintSection title={title} label={label}>
+            {children}
+        </PrintSection>
+    )
 }
 
 export default PrintSectionWrapper

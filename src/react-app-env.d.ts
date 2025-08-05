@@ -21,8 +21,6 @@ declare namespace NodeJS {
         readonly REACT_APP_PHOTO_MAXIMUM_WIDTH_PX: string
         readonly REACT_APP_PHOTO_MAXIMUM_HEIGHT_PX: string
         readonly REACT_APP_PHOTO_MAXIMUM_SIZE_MB: string
-
-        readonly REACT_APP_PRINT_TITLE: string
     }
 }
 
