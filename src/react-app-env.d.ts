@@ -17,6 +17,7 @@ declare namespace NodeJS {
 
         readonly REACT_APP_JSON_DOCUMENT_CONTENT_TYPE: string
         readonly REACT_APP_JSON_DOCUMENT_FILE_EXTENSION: string
+        readonly REACT_APP_PDF_DOCUMENT_FILE_EXTENSION: string
 
         readonly REACT_APP_PHOTO_MAXIMUM_WIDTH_PX: string
         readonly REACT_APP_PHOTO_MAXIMUM_HEIGHT_PX: string

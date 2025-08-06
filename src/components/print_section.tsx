@@ -11,7 +11,7 @@ interface PrintSectionProps {
 const PrintSection: React.FC<PrintSectionProps> = ({
     children,
     label,
-    file_name,
+    file_name = process.env.REACT_APP_PRINT_TITLE || 'QIT Report',
 }) => {
     const printContainerId = useId()
 
@@ -37,13 +37,16 @@ const PrintSection: React.FC<PrintSectionProps> = ({
         document.title = customFileName
 
         print({
-            printable: printContainerId,
-            type: 'html',
             maxWidth: 2000,
+            printable: printContainerId,
+            onPrintDialogClose: () => {
+                document.title = process.env.REACT_APP_PRINT_TITLE
+            },
+            type: 'html',
             targetStyles: ['*'],
-            scanStyles: false,
             css: ['/bootstrap.min.css', '/print.css'],
             documentTitle: customFileName,
+            scanStyles: false,
         })
     }
 
