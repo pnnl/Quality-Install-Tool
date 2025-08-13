@@ -1,10 +1,11 @@
+/* eslint-disable react/display-name */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
 // Test suite for PhotoInput component
-import { act } from 'react'
+import React, { act } from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { DEFAULT_OPTIONS } from '../../components/date_time_str'
 import PhotoInput, { PhotoInputProps } from '../../components/photo_input'
-import React from 'react'
 import { StoreContext } from '../../providers/store_provider'
 import { type PhotoAttachment } from '../../utilities/photo_attachment_utils'
 
@@ -36,7 +37,7 @@ Object.defineProperty(window, 'matchMedia', {
 jest.mock('@restart/hooks', () => ({
     useMediaQuery: jest.fn(() => false),
     useBreakpoint: jest.fn(() => false),
-    useMergedRefs: jest.fn((ref1, ref2) => ref1),
+    useMergedRefs: jest.fn(ref1 => ref1),
 }))
 
 // Mock react-bootstrap Offcanvas component completely with sub-components
@@ -45,7 +46,6 @@ jest.mock('react-bootstrap/Offcanvas', () => {
         if (!show) return null
 
         // Use require inside the mock to access React
-        const React = require('react')
 
         return (
             <div data-testid="mock-offcanvas" {...props}>
@@ -165,8 +165,6 @@ describe('PhotoInput Component', () => {
             return (
                 <StoreContext.Provider value={mockStoreContext}>
                     <PhotoInput
-                        children={<div>Test Children</div>}
-                        count={5}
                         error={undefined}
                         id="photo-input-id"
                         label="Test Label"
@@ -176,7 +174,10 @@ describe('PhotoInput Component', () => {
                         onRemovePhotoAttachment={jest.fn()}
                         photoAttachments={[]}
                         uploadable={true}
-                    />
+                        count={4}
+                    >
+                        <div>Test Children</div>
+                    </PhotoInput>
                 </StoreContext.Provider>
             )
         }
@@ -191,7 +192,6 @@ describe('PhotoInput Component', () => {
         expect(screen.getByText(/test children/i)).toBeInTheDocument()
 
         // Close offcanvas by clicking outside or using the modal header close
-        const modal = screen.getByTestId('mock-offcanvas')
         // Simulate clicking the backdrop or close button
         const closeButton = screen.getByTestId('offcanvas-close')
         fireEvent.click(closeButton)
@@ -467,7 +467,6 @@ describe('PhotoInput Component', () => {
         rerender(
             <StoreContext.Provider value={mockStoreContext as never}>
                 <PhotoInput
-                    children={<div>Test Children</div>}
                     count={5}
                     error={undefined}
                     id="photo-input-id"
@@ -478,7 +477,9 @@ describe('PhotoInput Component', () => {
                     onRemovePhotoAttachment={jest.fn()}
                     photoAttachments={[]}
                     uploadable={true}
-                />
+                >
+                    <div>Test Children</div>
+                </PhotoInput>
             </StoreContext.Provider>,
         )
 
