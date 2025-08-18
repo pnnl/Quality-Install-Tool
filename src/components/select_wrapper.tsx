@@ -1,6 +1,5 @@
 import { get } from 'lodash'
 import React from 'react'
-
 import Select from './select'
 import { StoreContext } from '../providers/store_provider'
 
@@ -30,11 +29,12 @@ const SelectWrapper: React.FC<SelectWrapperProps> = ({
                 return (
                     <Select
                         label={label}
-                        options={options}
-                        value={doc && get(doc.data_, path)}
                         onChange={async value =>
                             await upsertData(path, value, [])
                         }
+                        options={options}
+                        path={path}
+                        value={doc && get(doc.data_, path)}
                     />
                 )
             }}
