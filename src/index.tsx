@@ -6,22 +6,14 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 
 const env = process.env.REACT_APP_ENV
-
 // Digital Analytics Program - Universal Analytics https://digital.gov/guides/dap/
-
-const analyticsSrcMap: Record<string, string> = {
-    production:
-        'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY&subagency=PNNL',
-    default:
-        'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=HHS&subagency=PNNL&dapdev=true',
-}
-const analyticsSrc = analyticsSrcMap[env ?? ''] || analyticsSrcMap.default
-if (!document.getElementById('_fed_an_ua_tag')) {
+if (env === 'production' && !document.getElementById('_fed_an_ua_tag')) {
     const script = document.createElement('script')
     script.id = '_fed_an_ua_tag'
     script.async = true
     script.type = 'text/javascript'
-    script.src = analyticsSrc
+    script.src =
+        'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY&subagency=PNNL'
     document.head.appendChild(script)
 }
 
