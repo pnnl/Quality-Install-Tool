@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals'
 const env = process.env.REACT_APP_ENV
 // Digital Analytics Program - Universal Analytics https://digital.gov/guides/dap/
 if (
-    env === 'quality-install-tool' &&
+    env === 'ira-quality-install-tool' &&
     !document.getElementById('_fed_an_ua_tag')
 ) {
     const script = document.createElement('script')
