@@ -1,0 +1,26 @@
+import DateInput from '../../components/date_input_wrapper'
+import LabelValue from '../../components/label_value_wrapper'
+
+<div className="playground-section">
+    <h1>Date Value Examples</h1>
+    <p>Enter a date value to be retrieved by the LabelValues below</p>
+
+    <DateInput label="Date Input" path="label-value-test-date-input" />
+
+    <h2>Date LabelValue with date type prop:</h2>
+    <code>
+        `<LabelValue label="Date Value" path="label-value-test-date-input" type="date" />`
+    </code>
+    <div className="label-value-container">
+        <LabelValue label="Date Value" path="label-value-test-date-input" type="date" />
+    </div>
+
+    <h2>Date LabelValue without date type:</h2>
+    <code>
+        `<LabelValue label="Date Value" path="label-value-test-date-input" />`
+    </code>
+    <div className="label-value-container">
+        <LabelValue label="Date Value" path="label-value-test-date-input" />
+    </div>
+
+</div>

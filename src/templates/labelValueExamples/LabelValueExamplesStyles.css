@@ -1,0 +1,22 @@
+.label-value-section {
+    position: relative;
+}
+
+.label-value-section nav {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-cool-gray);
+    z-index: 1;
+    padding: 10px 0px;
+}
+
+.label-value-section ul {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-value-section .playground-section {
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid black;
+}

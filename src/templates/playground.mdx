@@ -1,61 +1,129 @@
+import TextLabelValues from './labelValueExamples/TextLabelValues.mdx'
+import NumberLabelValues from './labelValueExamples/NumberLabelValues.mdx'
+import OtherExamples from './labelValueExamples/OtherExamples.mdx'
+import DateLabelValues from './labelValueExamples/DateLabelValues.mdx'
+import LabelValueExamplesStyles from './labelValueExamples/LabelValueExamplesStyles.css'
+
 <>
     # Playground
 
-    <Button className="mb-3" variant="primary" href={process.env.REACT_APP_HOMEPAGE} rel="noopener noreferrer" target="_blank">
-        <span>Button</span>
-    </Button>
+    <Tabs>
+    <Tab eventKey="label-value-section" title="<LabelValue/> Examples" >
+        <div className="label-value-section">
+            <nav>
+                <ul>
+                    <a href="#text-examples">Text Value Examples</a>
+                    <a href="#number-examples">Number Value Examples</a>
+                    <a href="#date-examples">Date Value Examples</a>
+                    <a href="#other-examples">Other Examples</a>
+                    <a href="#">Back to Top</a>
+                </ul>
+            </nav>
+            <section id="text-examples" >
+                <TextLabelValues />
+            </section>
+            <section id="number-examples">
+                <NumberLabelValues />
+            </section>
+            <section id="date-examples">
+                <DateLabelValues />
+            </section>
+            <section id="other-examples">
+                <OtherExamples />
+            </section>
+        </div>
+    </Tab>
+        <Tab eventKey="components-example-section" title="Component Examples">
+            <Button className="mb-3" variant="primary" href={process.env.REACT_APP_HOMEPAGE} rel="noopener noreferrer" target="_blank">
+            <span>Button</span>
+            </Button>
 
-    <Checkbox options={['Checkbox']} path="check_box" />
+    <Checkbox options={['Option 1', 'Option 2', 'Option 3']} path="check_box" />
 
-    <ClimateZoneSelect label="ClimateZoneSelect" path="climate_zone_select" />
+            <ClimateZoneSelect label="ClimateZoneSelect" path="climate_zone_select" />
 
     <Collapsible header="Collapsible">Collapsible</Collapsible>
 
-    <DateInput label="DateInput" path="date_input" />
+    <CollapsibleTextContainer
+        title="Title Time"
+        text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."
+    >
+        <div style={{ backgroundColor: "pink", height: "200px" }}>WE CAN PUT ANYTHING HERE</div>
+    </CollapsibleTextContainer>
 
+    <CollapsibleTextContainer
+        title="Title Time"
+        text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."
+    >
+        <Radio label="Do you like this card?" options={['Yes', 'No']} path="radio" />
+    </CollapsibleTextContainer>
+
+    <CollapsibleTextContainer
+        title="Title Time"
+        text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos."
+    >
+        <Radio label="Do you like this card?" options={['Yes', 'No']} path="radio" />
+    </CollapsibleTextContainer>
+    <CollapsibleTextContainer
+        title="No content"
+        text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos."
+    />
+    <CollapsibleTextContainer
+    title={<div style={{ backgroundColor: "pink", height: "200px" }}>React.Node Title Example</div>}
+    text={<div style={{ padding: "10px", height: "200px" }}>This is an example of a React.Node instead of a string being passed. It was requested to change the acceptable text param type to a React.Node instead of a string. There is less control of the styling when we allow this. The &quot;..see more&quot;/&quot;...show less&quot; buttons cease to function because we can&apos;t gauge the length of text (if there is any text at all in the React.Node). Lorem ipsum dolor sit amet consectetur adipiscing elit. Ad litora torquent per conubia nostra inceptos himenaeos.</div>}
+    />
+    <CollapsibleTextContainer text="This is shorter than 75 chars." title="Title Town!">
+        <Radio label="Do you like this card?" options={['Yes', 'No']} path="radio" />
+    </CollapsibleTextContainer>
+    <h2>Collapsible Text Component without Card Wrapper and Styling:</h2>
+    <CollapsibleText text="This is a description that is very long so we only show two lines of it then add a see more. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos. Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos."/>
+
+    <DateInput label="DateInput" path="date_input" />
     **DateStr:** <DateStr date={props.data.date_input}/>
 
-    **DateTimeStr:** <DateTimeStr date={props.data.date_input}/>
+            **DateTimeStr:** <DateTimeStr date={props.data.date_input}/>
 
-    <Figure src="/logo192.png" />
+            <Figure src="/logo192.png" />
 
-    <FileInput id="file_input" label="File Input">
-        FileInput
-    </FileInput>
+            <FileInput id="file_input" label="File Input">
+                FileInput
+            </FileInput>
 
-    <LabelValue label="LabelValue" path="doc_name" parent={props.project} />
+            <LabelValue label="LabelValue" path="doc_name" parent={props.project} />
 
-    <NumberInput label="NumberInput" min={0} max={100} path="number_input" suffix="%" />
+            <NumberInput label="NumberInput" min={0} max={100} path="number_input" suffix="%" />
 
-    <PhotoInput id="photo_input" label="PhotoInput">
-        PhotoInput
-    </PhotoInput>
+            <PhotoInput id="photo_input" label="PhotoInput">
+                PhotoInput
+            </PhotoInput>
 
-    <Photo id="photo_input" />
+            <Photo id="photo_input" />
 
-    <Radio label="Radio" options={['Yes', 'No']} path="radio" />
+            <Radio label="Radio" options={['Yes', 'No']} path="radio" />
 
-    <Select label="Select" options={['Yes', 'No']} path="select" />
+            <Select label="Select" options={['Yes', 'No']} path="select" />
 
-    <StringInput label="StringInput" path="string_input" />
+            <StringInput label="StringInput" path="string_input" />
 
-    <TextInput label="TextInput" path="text_input" />
+            <TextInput label="TextInput" path="text_input" />
 
-    <USStateSelect label="USStateSelect" path="us_state_select" />
+            <USStateSelect label="USStateSelect" path="us_state_select" />
 
-    ## TODO
+            ## TODO
 
-    -   GpsCoordStr
-    -   LocationStr
-    -   PDFRenderer
-    -   PageBreak
-    -   Photo
-    -   PrintSection
-    -   Repeatable
-    -   RepeatableInput
-    -   ShowOrHide
-    -   Tab
-    -   Tabs
-    -   Table
+            -   GpsCoordStr
+            -   LocationStr
+            -   PDFRenderer
+            -   PageBreak
+            -   Photo
+            -   PrintSection
+            -   Repeatable
+            -   RepeatableInput
+            -   ShowOrHide
+            -   Tab
+            -   Tabs
+            -   Table
+        </Tab>
+    </Tabs>
 
 </>

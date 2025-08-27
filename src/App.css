@@ -1,3 +1,7 @@
+:root {
+    --bg-cool-gray: #e9ecef;
+}
+
 .App {
     text-align: center;
 }
@@ -69,6 +73,11 @@ h1 + h3 {
     text-align: center;
 }
 
+/* used in all Tab components */
+.tab-pane > *:not(.nav-tabs) {
+    margin-bottom: 0.5rem;
+}
+
 /* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
 .address {
     text-align: center;
@@ -133,6 +142,15 @@ h1 + h3 {
     font-style: italic;
 }
 
+/* used in select.tsx */
+.select-group {
+    padding: 1rem;
+}
+
+.select-group label {
+    margin-bottom: 1rem;
+}
+
 /* root_layout.tsx */
 #root-flex-layout {
     display: flex;
@@ -144,7 +162,7 @@ h1 + h3 {
     margin-left: auto;
     margin-right: auto;
     max-width: 800px;
-    background-color: rgba(231, 231, 231);
+    background-color: var(--bg-cool-gray);
     min-height: 100vh;
 }
 
@@ -188,10 +206,54 @@ h1 + h3 {
     height: 58px !important;
 }
 
+/* used in linear-flourescent-to-LED-workflow */
+.pre-installation-table {
+    /*forces the table to be scrollable on narrow screens*/
+    overflow-x: scroll;
+}
+.pre-installation-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.pre-installation-table th,
+.pre-installation-table td {
+    border: 1px solid black;
+    padding: 8px;
+    vertical-align: top;
+}
+.pre-installation-table td ul {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: circle;
+}
+
+.pre-installation-table td ul li {
+  margin-bottom: 0;
+}
+
 /* photo_input.tsx */
+.photo-input .photo-input-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.photo-input .photo-input-header h3 {
+    margin: 0 1rem 0 0;
+}
+.photo-input .photo-input-header button {
+    background-color: inherit;
+    border: none;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-input .card-body .accordion {
+    margin-bottom: 0.5rem;
+}
 .input-card {
     page-break-before: always;
-    margin-bottom: 1rem;
 } /*also in radio.tsx*/
 
 /* stylizes the hidden input for photo upload*/
@@ -202,8 +264,6 @@ h1 + h3 {
 /* photo.tsx */
 .photo-card {
     break-inside: avoid;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
 }
 
 .photo-card > .card-body > div {
@@ -239,9 +299,14 @@ h1 + h3 {
 }
 
 /* label styling for the Radio component */
-.custom-label {
-    color: gray;
-    font-size: 0.9rem;
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between radio options */
+}
+.form-check {
+    margin-left: 0.5rem;
+    margin-bottom: unset;
 }
 
 /* BETA version text - styling for new templates - temperary */
@@ -473,6 +538,51 @@ btn-light:hover {
     font-size: 18px; /* Adjust the default font size */
 }
 
+/* Collapsible text card */
+.collapsible-text {
+    position: relative;
+    background-color: white;
+}
+
+.collapsible-text p.description {
+    color: gray;
+    margin-bottom: unset;
+}
+
+.collapsible-text.collapsed {
+    height: 3.125rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapsible-text .clickable-text {
+    color: #006100;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: white;
+    padding: 0 5px 0px 5px;
+}
+
+.collapsible-text .clickable-text.collapsed {
+    position: absolute;
+    background-color: white;
+    bottom: 2px;
+    right: 0px;
+}
+
+.collapsible-text-container .content {
+    margin-top: 10px;
+}
+
+.collapsible-text-container .content .card {
+    border: none;
+    margin-bottom: 0;
+}
+
+.collapsible-text-container .content .card-body {
+    padding: 0;
+}
+
 /* Common font size for medium, small, and extra small devices */
 @media (max-width: 991.98px) {
     .modal-body-text {
@@ -500,4 +610,12 @@ btn-light:hover {
         display: block;
         page-break-before: always;
     }
+}
+
+.print-wrapper > .photo-card {
+    margin-bottom: 0.5rem;
+}
+
+.project-form > * {
+    margin-bottom: 0.5rem;
 }

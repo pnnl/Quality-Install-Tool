@@ -7,3 +7,4 @@ yarn-error.log
 /public/print.css
 /quality-install-tool
 /quality-install-tool-migrations
+.env

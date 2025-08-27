@@ -20,6 +20,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             "Displace/Reduce fuel oil heat",
             "Displace/Reduce propane heat",
             "Displace/Reduce wood heat",
+            "Add comfort to a currently under-conditioned area"
             ]} path="heat_pump_purpose" />
 
 
@@ -294,16 +295,12 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 
             ## Pre-Installation
-            <p><strong>This heat pump will: </strong> {props.data?.heat_pump_purpose}</p>
+            <LabelValue label="This heat pump will" value={props.data?.heat_pump_purpose}/>
 
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
                 Photo of the proposed heat pump outdoor unit (ODU) installation location
             </Photo>
-            {
-                props.data.comment_odu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_odu_install_location}</p>
-                : null
-            }
+            <LabelValue label="Notes" value={props.data.comment_odu_install_location}/>
 
 
             Heat pump ODU will be installed on a { props.data.outdoor_unit?.install_location ? props.data.outdoor_unit.install_location : null } <br/>
@@ -313,11 +310,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 Photo of the proposed heat pump indoor unit (IDU) installation location
             </Photo>
 
-            {
-                props.data.comment_idu_install_location
-                ? <p><strong>Notes:</strong> {props.data.comment_idu_install_location}</p>
-                : null
-            }
+            <LabelValue label="Notes" value={props.data.comment_idu_install_location}/>
 
             <Photo id="floor_plan_sketch_photo" label="Floor Plan Sketch – Photo" required>
                 Photo or screenshot of a floor plan sketch (hand sketched is ok) showing the area each ductless heat pump will serve
@@ -371,7 +364,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             Photo of the outdoor unit nameplate
             </Photo>
 
-            <Photo id="idu_name_plate_photo" label="Indoor Uint Nameplate – Photo" required>
+            <Photo id="idu_name_plate_photo" label="Indoor Unit Nameplate – Photo" required>
                 Photo of the indoor unit nameplate
             </Photo>
 
@@ -423,12 +416,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                 refrigerant to add (if applicable)
             </Photo>
 
+            <LabelValue label="Notes About Refrigerant Adjustment" value={props.data.comment_refridgerant_adjustment}/>
 
-            {
-                props.data.comment_refridgerant_adjustment
-                ? <p><strong>Notes About Refridgerant Adjustment:</strong> {props.data.comment_refridgerant_adjustment}</p>
-                : null
-            }
             <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
                 Photo of the condensate line. If the condensate line runs through an unconditioned attic or crawlspace the line must be insulated to prevent condensation drips.
             </Photo>
