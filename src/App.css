@@ -590,7 +590,8 @@ btn-light:hover {
     }
 }
 
-.safari-print-header {
+.print-header {
+    display: none;
     visibility: hidden;
 }
 
@@ -601,8 +602,8 @@ btn-light:hover {
         margin-bottom: 4rem;
     }
 
-    .safari-print-header {
-        text-align: center;
+    .print-header {
+        text-align: center !important;
         font-size: 10px;
         font-weight: bold;
         visibility: visible;

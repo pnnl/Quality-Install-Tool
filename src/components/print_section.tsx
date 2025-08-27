@@ -5,13 +5,13 @@ import print from 'print-js'
 interface PrintSectionProps {
     children: React.ReactNode
     label: React.ReactNode
-    file_name?: string // Optional prop for dynamic file name
+    fileName?: string // Optional prop for dynamic file name
 }
 
 const PrintSection: React.FC<PrintSectionProps> = ({
     children,
     label,
-    file_name = process.env.REACT_APP_PRINT_TITLE || 'QIT Report',
+    fileName = process.env.REACT_APP_PRINT_TITLE || 'QIT Report',
 }) => {
     const printContainerId = useId()
 
@@ -19,27 +19,31 @@ const PrintSection: React.FC<PrintSectionProps> = ({
         const printWrapper = document.getElementById(printContainerId)
         if (printWrapper) {
             // Check if the header already exists
-            const existingHeader = printWrapper.querySelector(
-                '.safari-print-header',
-            )
+            const existingHeader = printWrapper.querySelector('.print-header')
             if (!existingHeader) {
                 const header = document.createElement('div')
-                header.className = 'safari-print-header'
-                header.innerText = process.env.REACT_APP_PRINT_TITLE
+                header.className = 'print-header'
+                header.innerText = process.env.REACT_APP_PRINT_TITLE || ''
                 printWrapper.prepend(header) // Add header at the top
+                return header // Return the header so we can remove it later
             }
         }
+        return null
     }
 
     const handlePrint = () => {
-        addHeader()
-        const customFileName = `${file_name}` // File name
+        const header = addHeader()
+        const customFileName = `${fileName}`
         document.title = customFileName
 
         print({
             maxWidth: 2000,
             printable: printContainerId,
             onPrintDialogClose: () => {
+                // Remove the header after printing
+                if (header && header.parentNode) {
+                    header.parentNode.removeChild(header)
+                }
                 document.title = process.env.REACT_APP_PRINT_TITLE
             },
             type: 'html',
