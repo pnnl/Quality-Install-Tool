@@ -39,7 +39,7 @@ const PrintSectionWrapper: React.FC<PrintSectionWrapperProps> = ({
                 return (
                     <PrintSection
                         label={label}
-                        file_name={generateFileName(project, doc?.metadata_)}
+                        fileName={generateFileName(project, doc?.metadata_)}
                     >
                         {children}
                     </PrintSection>
