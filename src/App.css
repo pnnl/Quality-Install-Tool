@@ -592,7 +592,6 @@ btn-light:hover {
 
 .print-header {
     display: none;
-    visibility: hidden;
 }
 
 @media print {
