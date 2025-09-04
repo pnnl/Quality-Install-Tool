@@ -5,6 +5,21 @@ import App from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 
+const env = process.env.REACT_APP_ENV
+// Digital Analytics Program - Universal Analytics https://digital.gov/guides/dap/
+if (
+    env === 'quality-install-tool' &&
+    !document.getElementById('_fed_an_ua_tag')
+) {
+    const script = document.createElement('script')
+    script.id = '_fed_an_ua_tag'
+    script.async = true
+    script.type = 'text/javascript'
+    script.src =
+        'https://dap.digitalgov.gov/Universal-Federated-Analytics-Min.js?agency=AGENCY&subagency=PNNL'
+    document.head.appendChild(script)
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <React.StrictMode>

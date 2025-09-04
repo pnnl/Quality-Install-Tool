@@ -1,44 +1,41 @@
-import PouchDB from 'pouchdb'
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Card, Image, Modal } from 'react-bootstrap'
-import { TbCameraPlus } from 'react-icons/tb'
-import { TfiTrash } from 'react-icons/tfi'
-
-import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
+import { TbCameraPlus } from 'react-icons/tb'
+import { TfiInfoAlt, TfiTrash } from 'react-icons/tfi'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 export interface PhotoInputProps {
-    label: string
-    uploadable: boolean
-    loading: boolean
-    error: string | undefined
+    children: React.ReactNode
     count: number
+    error: string | undefined
     id: string
+    label: string
+    loading: boolean
     notes?: boolean
-    photoAttachments: PhotoAttachment[]
     onPutPhotoAttachment?: (file: Blob) => Promise<void>
     onRemovePhotoAttachment?: (
         attachmentId: PouchDB.Core.AttachmentId,
     ) => Promise<void>
-    children: React.ReactNode
+    photoAttachments: PhotoAttachment[]
+    uploadable: boolean
 }
 
 const PhotoInput: React.FC<PhotoInputProps> = ({
-    label,
-    uploadable,
-    loading,
-    error,
+    children,
     count,
+    error,
     id,
+    label,
+    loading,
     notes = true,
-    photoAttachments,
     onPutPhotoAttachment,
     onRemovePhotoAttachment,
-    children,
+    photoAttachments,
+    uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
 
@@ -51,6 +48,13 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         selectedPhotoAttachmentForDelete,
         setSelectedPhotoAttachmentForDelete,
     ] = useState<PhotoAttachment | undefined>(undefined)
+    const [showInfo, setShowInfo] = useState(false)
+    const handleCloseInfo = () => setShowInfo(false)
+    const handleShowInfo = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        event.preventDefault()
+        setShowInfo(true)
+    }
 
     useEffect(() => {
         const objectURL = selectedPhotoAttachmentForDelete
@@ -141,11 +145,24 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <Offcanvas show={showInfo} onHide={handleCloseInfo} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>{label}</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>{children}</Offcanvas.Body>
+            </Offcanvas>
             <Card className="input-card photo-input">
                 <Card.Body>
-                    <Collapsible header={label}>
-                        <Card.Text as="div">{children}</Card.Text>
-                    </Collapsible>
+                    <div className="photo-input-header mb-3">
+                        <h3>{label}</h3>
+                        <button
+                            className="info-button"
+                            aria-label="Photo Input Information"
+                            onClick={handleShowInfo}
+                        >
+                            <TfiInfoAlt size={20} />
+                        </button>
+                    </div>
                     <input
                         ref={ref}
                         data-testid="photo-input"
@@ -249,7 +266,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                         <div className="error">Image loading failed.</div>
                     )}
                     {photoAttachments.length < count && (
-                        <div className="pb-2">
+                        <div className="mb-3">
                             <Button
                                 variant="outline-primary"
                                 onClick={() => ref.current?.click()}
@@ -261,7 +278,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     {notes && (
                         <TextInputWrapper
                             path={`${id}_note`}
-                            label="Optional note about photo(s):"
+                            label="Notes"
                             min={0}
                             max={300}
                             regexp={/.*/}
