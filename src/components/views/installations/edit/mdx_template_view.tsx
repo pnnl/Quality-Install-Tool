@@ -25,18 +25,14 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
         return (
             <>
                 <h1>{workflow.title}</h1>
-                <h2>
-                    {workflow.subtitle.singularTitleCase} for{' '}
-                    {project.metadata_.doc_name}
-                </h2>
                 {project.data_.location &&
                     someLocation(project.data_.location) && (
-                        <p className="address">
+                        <div className="text-center">
                             <LocationStr
                                 location={project.data_.location}
                                 separators={[', ', ', ', ' ']}
                             />
-                        </p>
+                        </div>
                     )}
                 <center>
                     <b>{installation.metadata_.doc_name}</b>

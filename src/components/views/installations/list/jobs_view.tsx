@@ -240,18 +240,14 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
             {project && workflow && (
                 <div className="container">
                     <h1>{workflow.title}</h1>
-                    <h2>
-                        {workflow.subtitle.pluralTitleCase} for{' '}
-                        {project.metadata_.doc_name}
-                    </h2>
                     {project.data_.location &&
                         someLocation(project.data_.location) && (
-                            <p className="address">
+                            <div className="text-center">
                                 <LocationStr
                                     location={project.data_.location}
                                     separators={[', ', ', ', ' ']}
                                 />
-                            </p>
+                            </div>
                         )}
                     <br />
                     <Button

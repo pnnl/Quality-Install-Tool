@@ -12,6 +12,7 @@ import ProjectsEditView from './components/views/projects/edit'
 import ProjectsListView from './components/views/projects/list'
 import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
+import DownloadReminderPage from './components/views/shared/download_reminder_page'
 
 import DatabaseProvider from './providers/database_provider'
 
@@ -40,6 +41,10 @@ const router = createBrowserRouter(
         {
             path: `/app/:projectId/:workflowName/:installationId`,
             element: <InstallationsEditView />,
+        },
+        {
+            path: `/app/:projectId/download-reminder`,
+            element: <DownloadReminderPage />,
         },
     ],
     {

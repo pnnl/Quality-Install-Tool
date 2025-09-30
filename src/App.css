@@ -79,7 +79,7 @@ h1 + h3 {
 }
 
 /* used in workflows_view.tsx, mdx_template_view.tsx, job_view.tsx  */
-.address {
+.text-center {
     text-align: center;
 }
 
@@ -155,7 +155,24 @@ h1 + h3 {
 #root-flex-layout {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+}
+
+.download-button {
+    color: white !important;
+    background-color: transparent !important;
+    border: none !important;
+    font-size: 1rem;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.download-button:hover,
+.download-button:active,
+.download-button:focus {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 #root-background {
@@ -168,11 +185,29 @@ h1 + h3 {
 
 #root-banner {
     background-color: #006100;
+    transition: height 0.3s ease-in-out;
+}
+
+#root-banner.reduced-height {
+    height: 50px;
 }
 
 #root-title {
-    color: gold;
+    color: white;
+    font-size: 1.5rem;
+    margin-left: -15px;
+}
+
+#root-banner:not(.reduced-height) #root-title {
     font-size: 2rem;
+    color: gold;
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#root-banner:not(.reduced-height) #root-flex-layout {
+    justify-content: center;
 }
 
 #root-body {
@@ -187,7 +222,8 @@ h1 + h3 {
 
 #back-button {
     padding: 1rem;
-    background-color: #006100;
+    background-color: transparent;
+    border: none;
 }
 
 #back-button-link {
@@ -200,10 +236,10 @@ h1 + h3 {
 }
 
 #settings-button-container {
-    margin-left: 0.5rem;
+    margin-left: -15px;
     margin-right: 0.5rem;
-    width: 60px !important;
-    height: 58px !important;
+    padding-right: 1rem;
+    height: 100%;
 }
 
 /* used in linear-flourescent-to-LED-workflow */
@@ -443,6 +479,12 @@ btn-light:hover {
     }
 }
 
+#settings-button-container {
+    padding-right: 3rem;
+    width: 100px !important;
+    height: 58px !important;
+}
+
 .loader {
     border: 8px solid #f3f3f3; /* Light gray */
     border-top: 8px solid #3498db; /* Blue */
@@ -618,4 +660,9 @@ btn-light:hover {
 
 .project-form > * {
     margin-bottom: 0.5rem;
+}
+
+.download-alert {
+    font-size: 0.8rem;
+    color: red;
 }
