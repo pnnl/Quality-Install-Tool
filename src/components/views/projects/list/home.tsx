@@ -126,6 +126,9 @@ const Home: React.FC<HomeProps> = () => {
                                 onDelete={() =>
                                     setSelectedProjectForDelete(project)
                                 }
+                                onDownload={async () => {
+                                    await reloadProjects()
+                                }}
                             />
                         ))}
                     </div>

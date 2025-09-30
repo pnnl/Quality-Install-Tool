@@ -95,7 +95,11 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
 
             if (project) {
                 await putProject(db, project)
-                navigate(`/app/${project._id}/workflows`)
+                if (project.metadata_.show_download_reminder !== false) {
+                    navigate(`/app/${project._id}/download-reminder`)
+                } else {
+                    navigate(`/app/${project._id}/workflows`)
+                }
             }
 
             return false
@@ -105,7 +109,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
 
     return (
         <>
-            <h1>New Project</h1>
             <br />
             <StoreProvider
                 doc={

@@ -14,9 +14,15 @@ import {
 
 interface ExportDocProps {
     projectId: PouchDB.Core.DocumentId
+    variant?: string
+    onDownload?: () => void | Promise<void>
 }
 
-const ExportDoc: React.FC<ExportDocProps> = ({ projectId }) => {
+const ExportDoc: React.FC<ExportDocProps> = ({
+    projectId,
+    variant,
+    onDownload,
+}) => {
     const db = useDatabase()
 
     const handleClick = useCallback(
@@ -36,14 +42,24 @@ const ExportDoc: React.FC<ExportDocProps> = ({ projectId }) => {
 
             sendBlob(blob, fileName)
 
+            onDownload && (await onDownload())
+
             return false
         },
-        [db, projectId],
+        [db, projectId, onDownload],
     )
 
     return (
-        <Button variant="light" onClick={handleClick}>
-            <TfiImport size={20} />
+        <Button
+            variant={variant}
+            onClick={handleClick}
+            className={variant === 'outline-light' ? 'download-button' : ''}
+        >
+            {variant === 'outline-light' ? (
+                'Download Project'
+            ) : (
+                <TfiImport size={20} />
+            )}
         </Button>
     )
 }

@@ -57,6 +57,10 @@ export async function exportJSONDocument(
         all_docs: [projectDoc, ...installationDocs],
     }
 
+    projectDoc.metadata_.is_downloaded = true
+    projectDoc.metadata_.last_downloaded_date = new Date().toISOString()
+    await db.put(projectDoc)
+
     return data
 }
 
@@ -207,6 +211,8 @@ export async function importJSONDocument(
                 metadata_: {
                     ...doc.metadata_,
                     doc_name,
+                    is_downloaded: false,
+                    last_downloaded_date: undefined,
                 },
             }
         } else {

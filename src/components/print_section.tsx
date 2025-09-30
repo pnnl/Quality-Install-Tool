@@ -33,7 +33,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({
 
     const handlePrint = () => {
         const header = addHeader()
-        const customFileName = `${fileName}`
+        const customFileName = fileName
         document.title = customFileName
 
         print({
