@@ -67,40 +67,41 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
             <LinkContainer to={`/app/${project._id}/workflows`}>
                 <ListGroup.Item action={true}>
                     <span className="icon-container">
-                        {shouldShowDownloadAlert() && (
-                            <Button
+                        <div className="align-right">
+                            {onEdit && (
+                                <Button variant="light" onClick={handleEdit}>
+                                    <TfiPencil size={22} />
+                                </Button>
+                            )}
+                            {onDelete && (
+                                <Button variant="light" onClick={handleDelete}>
+                                    <TfiTrash size={22} />
+                                </Button>
+                            )}
+                            <ExportDoc
+                                projectId={project._id}
                                 variant="light"
-                                onClick={event => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    navigate(
-                                        `/app/${project._id}/download-reminder`,
-                                    )
-                                }}
-                            >
-                                <TfiAlert color="red" />
-                            </Button>
-                        )}
-                        {onEdit && (
-                            <Button variant="light" onClick={handleEdit}>
-                                <TfiPencil size={22} />
-                            </Button>
-                        )}
-                        {onDelete && (
-                            <Button variant="light" onClick={handleDelete}>
-                                <TfiTrash size={22} />
-                            </Button>
-                        )}
-                        <ExportDoc
-                            projectId={project._id}
-                            variant="light"
-                            onDownload={onDownload}
-                        />
+                                onDownload={onDownload}
+                            />
+                        </div>
                         <div>
                             {shouldShowDownloadAlert() && (
-                                <small className="download-alert">
-                                    Never Been Downloaded
-                                </small>
+                                <Button
+                                    variant="light"
+                                    className="download-button"
+                                    onClick={event => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        navigate(
+                                            `/app/${project._id}/download-reminder/fromHome`,
+                                        )
+                                    }}
+                                >
+                                    <TfiAlert color="red" />{' '}
+                                    <small className="download-alert">
+                                        Never Been Downloaded
+                                    </small>
+                                </Button>
                             )}
                         </div>
                     </span>

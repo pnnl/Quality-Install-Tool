@@ -43,7 +43,7 @@ const router = createBrowserRouter(
             element: <InstallationsEditView />,
         },
         {
-            path: `/app/:projectId/download-reminder`,
+            path: `/app/:projectId/download-reminder/:fromHome?`,
             element: <DownloadReminderPage />,
         },
     ],
