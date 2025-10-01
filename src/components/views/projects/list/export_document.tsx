@@ -1,7 +1,7 @@
 import PouchDB from 'pouchdb'
 import React, { useCallback } from 'react'
 import { Button } from 'react-bootstrap'
-import { TfiImport } from 'react-icons/tfi'
+import { TfiImport, TfiDownload } from 'react-icons/tfi'
 
 import { useDatabase } from '../../../../providers/database_provider'
 import { sendBlob } from '../../../../utilities/blob_utils'
@@ -56,7 +56,10 @@ const ExportDoc: React.FC<ExportDocProps> = ({
             className={variant === 'outline-light' ? 'download-button' : ''}
         >
             {variant === 'outline-light' ? (
-                'Download Project'
+                <>
+                    <TfiDownload />
+                    &nbsp; Download
+                </>
             ) : (
                 <TfiImport size={20} />
             )}

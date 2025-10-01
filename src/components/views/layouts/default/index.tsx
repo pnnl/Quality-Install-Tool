@@ -97,7 +97,7 @@ const PageHeader: React.FC = () => {
             {backPathname && (
                 <div
                     id="settings-button-container"
-                    className="settings-button-container d-flex align-items-center justify-content-center"
+                    className="settings-button-container d-flex align-items-center"
                 >
                     {projectId &&
                         ![

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import React from 'react'
+import { Button } from 'react-bootstrap'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDatabase } from '../../../providers/database_provider'
 import { getProject, putProject } from '../../../utilities/database_utils'
@@ -8,9 +8,8 @@ import Layout from '../layouts/default'
 import { TfiAlert } from 'react-icons/tfi'
 
 const DownloadReminderPage: React.FC = () => {
-    const [dontShowAgain, setDontShowAgain] = useState(false)
     const navigate = useNavigate()
-    const { projectId } = useParams()
+    const { projectId, fromHome } = useParams()
     const db = useDatabase()
 
     const handleSave = async () => {
@@ -20,11 +19,15 @@ const DownloadReminderPage: React.FC = () => {
                 ...project,
                 metadata_: {
                     ...project.metadata_,
-                    show_download_reminder: !dontShowAgain,
+                    show_download_reminder: false,
                 },
             }
             await putProject(db, updatedProject as Project)
-            navigate(`/app/${projectId}/workflows`)
+            if (fromHome) {
+                navigate('/')
+            } else {
+                navigate(`/app/${projectId}/workflows`)
+            }
         } else {
             navigate('/')
         }
