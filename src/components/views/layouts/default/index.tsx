@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react'
 import { Button, Container, Navbar } from 'react-bootstrap'
-import { TfiArrowLeft } from 'react-icons/tfi'
+import Footer from './footer'
+import { TfiArrowLeft, TfiHome } from 'react-icons/tfi'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import ExportDoc from '../../projects/list/export_document'
 import { useDatabase } from '../../../../providers/database_provider'
@@ -62,6 +63,9 @@ const PageHeader: React.FC = () => {
         if (location.pathname === `/app/${projectId}`) {
             return 'Edit Project'
         }
+        if (location.pathname === '/faqs') {
+            return 'FAQs'
+        }
         if (project) {
             return project.metadata_.doc_name
         }
@@ -71,48 +75,69 @@ const PageHeader: React.FC = () => {
     const backPathname = useMemo<string | undefined>(() => {
         if (
             location.pathname === '/app/new' ||
-            location.pathname === `/app/${projectId}`
+            location.pathname === `/app/${projectId}` ||
+            location.pathname.includes('/download-reminder')
         ) {
-            return '/'
+            return undefined
         }
         return getBackPathname(location.pathname)
     }, [location.pathname, projectId])
 
+    const isFaqsPage = location.pathname === '/faqs'
+
     return (
-        <Navbar id="root-banner" className={isHomePage ? '' : 'reduced-height'}>
-            {backPathname && (
-                <div id="back-button-container">
-                    <Link to={backPathname} id="back-button-link">
-                        <Button variant="light" id="back-button">
-                            <TfiArrowLeft id="back-button-logo" />
+        <>
+            <Navbar
+                id="root-banner"
+                className={isHomePage ? '' : 'reduced-height'}
+            >
+                <Container id="root-flex-layout">
+                    <Navbar.Brand>
+                        <span id="root-title">{getTitle()}</span>
+                    </Navbar.Brand>
+                </Container>
+                {backPathname && (
+                    <div
+                        id="settings-button-container"
+                        className="settings-button-container d-flex align-items-center"
+                    >
+                        {projectId &&
+                            ![
+                                '/',
+                                '/app/project/new',
+                                `/app/${projectId}`,
+                            ].includes(location.pathname) && (
+                                <ExportDoc
+                                    projectId={projectId}
+                                    variant="outline-light"
+                                />
+                            )}
+                    </div>
+                )}
+            </Navbar>
+            {(backPathname || isFaqsPage) && (
+                <Navbar
+                    className={`navigation-bar ${
+                        backPathname
+                            ? 'justify-content-between'
+                            : 'justify-content-end'
+                    }`}
+                >
+                    {backPathname && (
+                        <Link to={backPathname} id="back-button-link">
+                            <Button id="back-button">
+                                <TfiArrowLeft id="back-button-logo" />
+                            </Button>
+                        </Link>
+                    )}
+                    <Link to="/" id="home-button-link">
+                        <Button id="home-button">
+                            <TfiHome id="home-button-logo" />
                         </Button>
                     </Link>
-                </div>
+                </Navbar>
             )}
-            <Container id="root-flex-layout">
-                <Navbar.Brand>
-                    <span id="root-title">{getTitle()}</span>
-                </Navbar.Brand>
-            </Container>
-            {backPathname && (
-                <div
-                    id="settings-button-container"
-                    className="settings-button-container d-flex align-items-center"
-                >
-                    {projectId &&
-                        ![
-                            '/',
-                            '/app/project/new',
-                            `/app/${projectId}`,
-                        ].includes(location.pathname) && (
-                            <ExportDoc
-                                projectId={projectId}
-                                variant="outline-light"
-                            />
-                        )}
-                </div>
-            )}
-        </Navbar>
+        </>
     )
 }
 
@@ -122,9 +147,10 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
-        <div id="root-background">
+        <div id="root-background" className="layout-wrapper">
             <PageHeader />
             <div id="root-body">{children}</div>
+            <Footer />
         </div>
     )
 }

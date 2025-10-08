@@ -210,6 +210,10 @@ export async function putInstallation(
                     return null as PouchDB.CancelUpsert
                 } else {
                     doc.children = [...children, response.id]
+                    if (doc.metadata_) {
+                        doc.metadata_.last_modified_at =
+                            new Date().toISOString()
+                    }
 
                     return doc as Project & Partial<PouchDB.Core.IdMeta>
                 }

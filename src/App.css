@@ -196,6 +196,7 @@ h1 + h3 {
     color: white;
     font-size: 1.5rem;
     margin-left: -15px;
+    padding-left: 1rem;
 }
 
 #root-banner:not(.reduced-height) #root-title {
@@ -215,24 +216,29 @@ h1 + h3 {
     padding-bottom: 1rem;
 }
 
-#back-button-logo {
-    color: white;
+#back-button-logo,
+#home-button-logo {
+    color: black;
     height: 100%;
+    font-weight: bold;
 }
 
-#back-button {
-    padding: 1rem;
+#back-button,
+#home-button {
+    padding: 0.2rem;
     background-color: transparent;
     border: none;
 }
 
-#back-button-link {
+#back-button-link,
+#home-button-link {
     text-decoration: none;
 }
 
 #back-button-container {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    display: flex;
 }
 
 #settings-button-container {
@@ -662,7 +668,66 @@ btn-light:hover {
     margin-bottom: 0.5rem;
 }
 
-.download-alert {
-    font-size: 0.8rem;
+.download-status-capsule {
+    background-color: lightyellow;
+    border-radius: 10px;
+    padding: 2px 8px;
+    border: 1px solid #ccc;
     color: red;
+    font-size: 0.8rem;
+}
+
+.download-reminder-container {
+    width: auto;
+    max-width: 800px;
+    border: 1px solid #ccc;
+    padding: 40px;
+    margin: 20px;
+}
+
+.navigation-bar {
+    background-color: #f8f9fa;
+    min-height: 25px;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.footer {
+    border-top: 1px solid #e7e7e7;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+}
+
+.footer-nav-link {
+    font-weight: bold;
+}
+
+.footer-navbar-text {
+    font-size: 0.8rem;
+}
+
+.layout-wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Adjust this value to match your footer's height */
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.red-circle {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
 }
