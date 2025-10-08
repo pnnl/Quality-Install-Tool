@@ -13,6 +13,7 @@ import ProjectsListView from './components/views/projects/list'
 import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
 import DownloadReminderPage from './components/views/shared/download_reminder_page'
+import FaqsPage from './components/views/faqs'
 
 import DatabaseProvider from './providers/database_provider'
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter(
         {
             path: `/app/:projectId/download-reminder/:fromHome?`,
             element: <DownloadReminderPage />,
+        },
+        {
+            path: `/faqs`,
+            element: <FaqsPage />,
         },
     ],
     {

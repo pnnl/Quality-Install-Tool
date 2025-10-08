@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useDatabase } from '../../../providers/database_provider'
 import { getProject, putProject } from '../../../utilities/database_utils'
 import { type Project } from '../../../types/database.types'
@@ -11,9 +11,22 @@ const DownloadReminderPage: React.FC = () => {
     const navigate = useNavigate()
     const { projectId, fromHome } = useParams()
     const db = useDatabase()
+    const [doNotShowAgain, setDoNotShowAgain] = useState(false)
+
+    useEffect(() => {
+        const fetchProjectData = async () => {
+            if (projectId) {
+                const project = await getProject(db, projectId)
+                if (project.metadata_.show_download_reminder === false) {
+                    setDoNotShowAgain(true)
+                }
+            }
+        }
+        void fetchProjectData()
+    }, [db, projectId])
 
     const handleSave = async () => {
-        if (projectId) {
+        if (projectId && doNotShowAgain) {
             const project = await getProject(db, projectId)
             const updatedProject = {
                 ...project,
@@ -23,11 +36,10 @@ const DownloadReminderPage: React.FC = () => {
                 },
             }
             await putProject(db, updatedProject as Project)
-            if (fromHome) {
-                navigate('/')
-            } else {
-                navigate(`/app/${projectId}/workflows`)
-            }
+        }
+
+        if (projectId && !fromHome) {
+            navigate(`/app/${projectId}/workflows`)
         } else {
             navigate('/')
         }
@@ -35,70 +47,41 @@ const DownloadReminderPage: React.FC = () => {
 
     return (
         <Layout>
-            <div className="container">
-                <h1>
-                    <TfiAlert color="red" size={27} /> Warning: Protect Your
-                    Work from Accidental Loss
-                </h1>
+            <div className="container download-reminder-container">
+                <h2>
+                    <center>
+                        <TfiAlert color="red" size={27} /> Important: Prevent
+                        Accidental Loss by Saving Your Work
+                    </center>
+                </h2>
+                <br />
                 <p>
                     The Quality Install Tool stores all project data, including
-                    your photos and notes, <b>locally on your browser</b>. This
-                    means your work is not saved to the cloud or your device.
-                    While this approach eliminates the need for logging in, it
-                    also means that{' '}
-                    <b>we do not have a backup of your projects</b>.
+                    your photos and notes, locally in your browser.{' '}
+                    <b>
+                        Clearing site data in your browser’s Settings will
+                        permanently erase your data.
+                    </b>{' '}
+                    To avoid possible data loss, we strongly encourage you to
+                    download each project after making changes. The downloaded
+                    project can be imported later and acts as a backup. It can
+                    also be shared with others for importing into their
+                    browsers. &nbsp;
+                    <Link to="/faqs">Learn more</Link>
                 </p>
-                <p>
-                    <strong>Important:</strong>
-                    <br />
-                    <ul>
-                        <li>
-                            <b>Your projects will be lost </b> if you clear your
-                            browser cache, history, or reset browser settings.
-                        </li>
-                        <li>
-                            <b>
-                                All work, including photos and notes, will be
-                                permanently erased,
-                            </b>
-                            and recovery will not be possible.
-                        </li>
-                    </ul>
-                </p>
-                <p>
-                    <strong>How to Keep Your Work Safe:</strong>
-                    <br />
-                    <ul>
-                        <li>
-                            <b>Download your projects regularly</b> to ensure
-                            you have copies saved outside of the browser.
-                        </li>
-                        <li>
-                            Avoid clearing your browser history/cache without
-                            first backing up your work
-                        </li>
-                    </ul>
-                </p>
-                <p>
-                    Take precautions to avoid unexpected data loss — your
-                    projects rely entirely on your ability to save and back them
-                    up!
-                </p>
-                <p>
-                    <a
-                        href={process.env.REACT_APP_HOMEPAGE}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        Learn more here
-                    </a>
-                </p>
-
-                <p className="align-right">
+                {/* <Form.Check
+                    type="checkbox"
+                    label="Do not show again"
+                    checked={doNotShowAgain}
+                    onChange={e => {
+                        setDoNotShowAgain(e.target.checked)
+                    }}
+                /> */}
+                <div className="d-flex justify-content-end mt-3">
                     <Button variant="primary" onClick={handleSave}>
                         I Understand
                     </Button>
-                </p>
+                </div>
             </div>
         </Layout>
     )

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
-import { TfiAlert, TfiPencil, TfiTrash } from 'react-icons/tfi'
+import { TfiPencil, TfiTrash } from 'react-icons/tfi'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -47,19 +47,22 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
         [onDelete],
     )
 
-    const shouldShowDownloadAlert = () => {
-        if (!project.metadata_.is_downloaded) {
-            return true
-        }
-        if (project.metadata_.last_downloaded_date) {
+    const shouldShowDownloadSuggested = () => {
+        if (
+            project.metadata_.is_downloaded &&
+            project.metadata_.last_downloaded_date
+        ) {
             const lastDownloaded = new Date(
                 project.metadata_.last_downloaded_date,
             )
-            const thirtyDaysAgo = new Date()
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-            return lastDownloaded < thirtyDaysAgo
+            const lastModified = new Date(project.metadata_.last_modified_at)
+            return lastModified > lastDownloaded
         }
         return false
+    }
+
+    const shouldShowDownloadAlert = () => {
+        return !project.metadata_.is_downloaded
     }
 
     return (
@@ -82,10 +85,14 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
                                 projectId={project._id}
                                 variant="light"
                                 onDownload={onDownload}
+                                showAlert={
+                                    shouldShowDownloadSuggested() ||
+                                    shouldShowDownloadAlert()
+                                }
                             />
                         </div>
                         <div>
-                            {shouldShowDownloadAlert() && (
+                            {shouldShowDownloadSuggested() ? (
                                 <Button
                                     variant="light"
                                     className="download-button"
@@ -97,11 +104,16 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
                                         )
                                     }}
                                 >
-                                    <TfiAlert color="red" />{' '}
-                                    <small className="download-alert">
-                                        Never Been Downloaded
-                                    </small>
+                                    <span className="download-status-capsule">
+                                        Download Suggested
+                                    </span>
                                 </Button>
+                            ) : (
+                                shouldShowDownloadAlert() && (
+                                    <span className="download-status-capsule">
+                                        Never Been Downloaded
+                                    </span>
+                                )
                             )}
                         </div>
                     </span>
