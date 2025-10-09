@@ -134,20 +134,6 @@ const Home: React.FC<HomeProps> = () => {
                     </div>
                 </div>
             )}
-            <br />
-            <center>
-                <p className="welcome-content">
-                    <br />
-                    Click here to learn more about the{' '}
-                    <a
-                        href={process.env.REACT_APP_HOMEPAGE}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        {process.env.REACT_APP_NAME}
-                    </a>
-                </p>
-            </center>
         </>
     )
 }

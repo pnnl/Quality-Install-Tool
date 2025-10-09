@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
                 <div className="d-flex justify-content-between w-100 align-items-center">
                     <Nav>
                         <Nav.Link
-                            href="https://www.pnnl.gov/projects/quality-install-tool"
+                            href={process.env.REACT_APP_HOMEPAGE}
                             className="footer-nav-link"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
                             About the Tool
                         </Nav.Link>
                         <Nav.Link
-                            href="mailto:QItool@pnnl.gov"
+                            href={`mailto:${process.env.REACT_APP_CONTACT_EMAIL}`}
                             className="footer-nav-link"
                             target="_blank"
                             rel="noopener noreferrer"
