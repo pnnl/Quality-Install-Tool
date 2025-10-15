@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { useAppVersion } from '../../../../hooks/useAppVersion'
+import PATHS from '../../../../config/routes'
 
 const Footer: React.FC = () => {
     const { lastUpdated } = useAppVersion() || new Date().toISOString()
@@ -26,7 +27,7 @@ const Footer: React.FC = () => {
                         >
                             Contact Us
                         </Nav.Link>
-                        <Nav.Link href="/faqs" className="footer-nav-link">
+                        <Nav.Link href={PATHS.FAQS} className="footer-nav-link">
                             FAQs
                         </Nav.Link>
                     </Nav>

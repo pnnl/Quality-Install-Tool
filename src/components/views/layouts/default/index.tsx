@@ -2,11 +2,12 @@ import React, { useMemo, useEffect, useState } from 'react'
 import { Button, Container, Navbar } from 'react-bootstrap'
 import Footer from './footer'
 import { TfiArrowLeft, TfiHome } from 'react-icons/tfi'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useMatches } from 'react-router-dom'
 import ExportDoc from '../../projects/list/export_document'
 import { useDatabase } from '../../../../providers/database_provider'
 import { getProject } from '../../../../utilities/database_utils'
 import { type Project } from '../../../../types/database.types'
+import PATHS from '../../../../config/routes'
 
 const RE_PATH = /^\/(?:app\/([^/]+)(?:\/([^/]+)(?:\/([^/]+))?)?)?$/i
 
@@ -19,12 +20,12 @@ function getBackPathname(pathname: string): string | undefined {
         if (projectId) {
             if (workflowName) {
                 if (workflowName === 'workflows') {
-                    return '/'
+                    return PATHS.HOME
                 } else {
                     if (installationId) {
-                        return `/app/${projectId}/${workflowName}`
+                        return `${PATHS.APP_ROOT}/${projectId}/${workflowName}`
                     } else {
-                        return `/app/${projectId}/workflows`
+                        return `${PATHS.APP_ROOT}/${projectId}/workflows`
                     }
                 }
             } else {
@@ -51,39 +52,36 @@ const PageHeader: React.FC = () => {
         }
     }, [db, projectId])
 
-    const isHomePage = location.pathname === '/'
+    const matches = useMatches()
+    const isHomePage = location.pathname === PATHS.HOME
 
     const getTitle = () => {
-        if (location.pathname.endsWith('/workflows')) {
-            return 'Choose Installation'
+        const match = matches.find(
+            m => (m.handle as { pageTitle?: string })?.pageTitle,
+        )
+        if (match) {
+            return (match.handle as { pageTitle: string }).pageTitle
         }
-        if (location.pathname === '/app/new') {
-            return 'New Project'
-        }
-        if (location.pathname === `/app/${projectId}`) {
-            return 'Edit Project'
-        }
-        if (location.pathname === '/faqs') {
-            return 'FAQs'
-        }
+
         if (project) {
             return project.metadata_.doc_name
         }
+
         return process.env.REACT_APP_NAME
     }
 
     const backPathname = useMemo<string | undefined>(() => {
         if (
-            location.pathname === '/app/new' ||
-            location.pathname === `/app/${projectId}` ||
-            location.pathname.includes('/download-reminder')
+            location.pathname === PATHS.NEW_PROJECT ||
+            location.pathname === `${PATHS.APP_ROOT}/${projectId}` ||
+            location.pathname.includes('download-reminder')
         ) {
             return undefined
         }
         return getBackPathname(location.pathname)
     }, [location.pathname, projectId])
 
-    const isFaqsPage = location.pathname === '/faqs'
+    const isFaqsPage = location.pathname === PATHS.FAQS
 
     return (
         <>
@@ -103,9 +101,9 @@ const PageHeader: React.FC = () => {
                     >
                         {projectId &&
                             ![
-                                '/',
-                                '/app/project/new',
-                                `/app/${projectId}`,
+                                PATHS.HOME,
+                                PATHS.NEW_PROJECT,
+                                `${PATHS.APP_ROOT}/${projectId}`,
                             ].includes(location.pathname) && (
                                 <ExportDoc
                                     projectId={projectId}
@@ -130,7 +128,7 @@ const PageHeader: React.FC = () => {
                             </Button>
                         </Link>
                     )}
-                    <Link to="/" id="home-button-link">
+                    <Link to={PATHS.HOME} id="home-button-link">
                         <Button id="home-button">
                             <TfiHome id="home-button-logo" />
                         </Button>
