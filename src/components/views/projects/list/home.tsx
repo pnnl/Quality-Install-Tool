@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,7 +10,10 @@ import {
     type ProjectDocument,
     useProjects,
 } from '../../../../providers/projects_provider'
-import { removeProject } from '../../../../utilities/database_utils'
+import {
+    removeProject,
+    updateProjectLastModified,
+} from '../../../../utilities/database_utils'
 
 type HomeProps = Record<string, never>
 
@@ -24,6 +27,13 @@ const Home: React.FC<HomeProps> = () => {
     const [selectedProjectForDelete, setSelectedProjectForDelete] = useState<
         ProjectDocument | undefined
     >(undefined)
+
+    useEffect(() => {
+        projects.forEach(async project => {
+            await updateProjectLastModified(db, project)
+            await reloadProjects()
+        })
+    }, [projects, db, reloadProjects])
 
     return (
         <>

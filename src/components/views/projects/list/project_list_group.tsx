@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { Button, ListGroup } from 'react-bootstrap'
 import { TfiPencil, TfiTrash } from 'react-icons/tfi'
 import { LinkContainer } from 'react-router-bootstrap'
-import { useNavigate } from 'react-router-dom'
 
 import ExportDoc from './export_document'
 import LocationStr from '../../../location_str'
@@ -22,7 +21,6 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     onDelete,
     onDownload,
 }) => {
-    const navigate = useNavigate()
     const handleEdit = useCallback(
         async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
@@ -71,53 +69,48 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
                 <ListGroup.Item action={true}>
                     <span className="icon-container">
                         <div className="align-right">
-                            {onEdit && (
-                                <Button variant="light" onClick={handleEdit}>
-                                    <TfiPencil size={22} />
-                                </Button>
-                            )}
-                            {onDelete && (
-                                <Button variant="light" onClick={handleDelete}>
-                                    <TfiTrash size={22} />
-                                </Button>
-                            )}
-                            <ExportDoc
-                                projectId={project._id}
-                                variant="light"
-                                onDownload={onDownload}
-                                showAlert={
-                                    shouldShowDownloadSuggested() ||
-                                    shouldShowDownloadAlert()
-                                }
-                            />
-                        </div>
-                        <div>
-                            {shouldShowDownloadSuggested() ? (
-                                <Button
+                            <div>
+                                {onEdit && (
+                                    <Button
+                                        variant="light"
+                                        onClick={handleEdit}
+                                    >
+                                        <TfiPencil size={22} />
+                                    </Button>
+                                )}
+                                {onDelete && (
+                                    <Button
+                                        variant="light"
+                                        onClick={handleDelete}
+                                    >
+                                        <TfiTrash size={22} />
+                                    </Button>
+                                )}
+                                <ExportDoc
+                                    projectId={project._id}
                                     variant="light"
-                                    className="download-button"
-                                    onClick={event => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        navigate(
-                                            `/app/${project._id}/download-reminder/fromHome`,
-                                        )
-                                    }}
-                                >
+                                    onDownload={onDownload}
+                                    showAlert={
+                                        shouldShowDownloadSuggested() ||
+                                        shouldShowDownloadAlert()
+                                    }
+                                />
+                            </div>
+                            <div className="align-right">
+                                {shouldShowDownloadSuggested() ? (
                                     <span className="download-status-capsule">
                                         Download Suggested
                                     </span>
-                                </Button>
-                            ) : (
-                                shouldShowDownloadAlert() && (
-                                    <span className="download-status-capsule">
-                                        Never Been Downloaded
-                                    </span>
-                                )
-                            )}
+                                ) : (
+                                    shouldShowDownloadAlert() && (
+                                        <span className="download-status-capsule">
+                                            Never Been Downloaded
+                                        </span>
+                                    )
+                                )}
+                            </div>
                         </div>
                     </span>
-
                     <b>{project.metadata_.doc_name}</b>
 
                     {project.data_.location &&
