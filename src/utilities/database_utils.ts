@@ -419,6 +419,61 @@ export async function getProjects(
     return projectDocs
 }
 
+/**
+ * Updates a project's `last_modified_at` timestamp if any of its installations have been modified more recently.
+ * @param db The PouchDB database instance.
+ * @param project The project to check and potentially update.
+ * @returns A promise that resolves when the operation is complete.
+ */
+import { type ProjectDocument } from '../providers/projects_provider'
+
+export async function updateProjectLastModified(
+    db: PouchDB.Database<Base>,
+    project: ProjectDocument,
+) {
+    const installations = await getInstallations(db, project._id)
+    if (installations.length === 0) {
+        return
+    }
+    const mostRecentInstallation = installations.reduce(
+        (mostRecent, installation) => {
+            if (
+                installation.metadata_.last_modified_at >
+                mostRecent.metadata_.last_modified_at
+            ) {
+                return installation
+            }
+            return mostRecent
+        },
+        installations[0],
+    )
+    if (
+        mostRecentInstallation &&
+        mostRecentInstallation.metadata_.last_modified_at >
+            project.metadata_.last_modified_at
+    ) {
+        const lastModifiedAt = new Date(
+            mostRecentInstallation.metadata_.last_modified_at,
+        )
+        const diffFun: PouchDB.UpsertDiffCallback<Project> = (
+            doc: Partial<PouchDB.Core.Document<Project>>,
+        ) => {
+            if (doc) {
+                return {
+                    ...doc,
+                    metadata_: {
+                        ...doc.metadata_,
+                        last_modified_at: lastModifiedAt.toISOString(),
+                    },
+                } as Project & Partial<PouchDB.Core.IdMeta>
+            } else {
+                return null as PouchDB.CancelUpsert
+            }
+        }
+        await db.upsert<Project>(project._id, diffFun)
+    }
+}
+
 export async function putProject(
     db: PouchDB.Database<Base>,
     doc: PouchDB.Core.PutDocument<Project>,

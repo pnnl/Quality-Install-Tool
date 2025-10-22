@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { useAppVersion } from '../../../../hooks/useAppVersion'
+import PATHS from '../../../../config/routes'
 
 const Footer: React.FC = () => {
     const { lastUpdated } = useAppVersion() || new Date().toISOString()
@@ -11,7 +12,7 @@ const Footer: React.FC = () => {
                 <div className="d-flex justify-content-between w-100 align-items-center">
                     <Nav>
                         <Nav.Link
-                            href="https://www.pnnl.gov/projects/quality-install-tool"
+                            href={process.env.REACT_APP_HOMEPAGE}
                             className="footer-nav-link"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -19,14 +20,14 @@ const Footer: React.FC = () => {
                             About the Tool
                         </Nav.Link>
                         <Nav.Link
-                            href="mailto:QItool@pnnl.gov"
+                            href={`mailto:${process.env.REACT_APP_CONTACT_EMAIL}`}
                             className="footer-nav-link"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             Contact Us
                         </Nav.Link>
-                        <Nav.Link href="/faqs" className="footer-nav-link">
+                        <Nav.Link href={PATHS.FAQS} className="footer-nav-link">
                             FAQs
                         </Nav.Link>
                     </Nav>
