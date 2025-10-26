@@ -158,21 +158,21 @@ h1 + h3 {
     justify-content: flex-start;
 }
 
-.download-button {
-    color: white !important;
-    background-color: transparent !important;
-    border: none !important;
+.download-button.btn {
+    color: white;
+    background-color: transparent;
+    border: none;
     font-size: 1rem;
     vertical-align: middle;
     white-space: nowrap;
 }
 
-.download-button:hover,
-.download-button:active,
-.download-button:focus {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+.download-button.btn:hover,
+.download-button.btn:active,
+.download-button.btn:focus {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 #root-background {
