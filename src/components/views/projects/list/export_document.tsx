@@ -40,7 +40,9 @@ const ExportDoc: React.FC<ExportDocProps> = ({
                 type: JSON_DOCUMENT_CONTENT_TYPE,
             })
 
-            const fileName = `${projectDoc.metadata_.doc_name} ${new Date().toUTCString()}${JSON_DOCUMENT_FILE_EXTENSION}`
+            const fileName = `${
+                projectDoc?.metadata_?.doc_name ?? 'project'
+            } ${new Date().toUTCString()}${JSON_DOCUMENT_FILE_EXTENSION}`
 
             sendBlob(blob, fileName)
 

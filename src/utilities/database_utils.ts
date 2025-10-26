@@ -12,6 +12,7 @@ import {
     type ProjectMetadata,
 } from '../types/database.types'
 import { type Installer } from '../types/installer.type'
+import { comparator } from './comparison_utils'
 
 //
 // BASE
@@ -569,13 +570,6 @@ export async function getLastModifiedInstaller(
 ): Promise<Installer | null> {
     await db.info()
 
-    // Create the index required to sort
-    await db.createIndex({
-        index: {
-            fields: ['metadata_.last_modified_at'],
-        },
-    })
-
     const findRequest: PouchDB.Find.FindRequest<Base> = {
         selector: {
             type: { $eq: 'project' },
@@ -587,15 +581,16 @@ export async function getLastModifiedInstaller(
             ],
         },
         fields: ['data_.installer', 'metadata_.last_modified_at'],
-        sort: [{ 'metadata_.last_modified_at': 'desc' }],
-        limit: 1,
     }
 
     const findResponse: PouchDB.Find.FindResponse<Project> =
         await db.find(findRequest)
 
     if (findResponse.docs.length > 0) {
-        const installer = findResponse.docs[0]?.data_?.installer || null
+        const sortedDocs = findResponse.docs.sort(
+            comparator('last_modified_at', 'desc'),
+        )
+        const installer = sortedDocs[0]?.data_?.installer || null
 
         if (installer) {
             return {
