@@ -12,34 +12,50 @@ import ProjectsEditView from './components/views/projects/edit'
 import ProjectsListView from './components/views/projects/list'
 import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
+import DownloadReminderPage from './components/views/shared/download_reminder_page'
+import FaqsPage from './components/views/faqs'
 
 import DatabaseProvider from './providers/database_provider'
+import PATHS from './config/routes'
 
 const router = createBrowserRouter(
     [
         {
-            path: '/',
+            path: PATHS.HOME,
             element: <ProjectsListView />,
+            handle: { pageTitle: 'Projects' },
         },
         {
-            path: `/app/:projectId`,
+            path: PATHS.EDIT_PROJECT,
             element: <ProjectsEditView />,
+            handle: { pageTitle: 'Edit Project' },
         },
         {
-            path: `/app/new`,
+            path: PATHS.NEW_PROJECT,
             element: <ProjectsNewView />,
+            handle: { pageTitle: 'New Project' },
         },
         {
-            path: `/app/:projectId/workflows`,
+            path: PATHS.SHOW_PROJECT,
             element: <ProjectsShowView />,
+            handle: { pageTitle: 'Choose Installation' },
         },
         {
-            path: `/app/:projectId/:workflowName`,
+            path: PATHS.INSTALLATIONS_LIST,
             element: <InstallationsListView />,
         },
         {
-            path: `/app/:projectId/:workflowName/:installationId`,
+            path: PATHS.EDIT_INSTALLATION,
             element: <InstallationsEditView />,
+        },
+        {
+            path: PATHS.DOWNLOAD_REMINDER,
+            element: <DownloadReminderPage />,
+        },
+        {
+            path: PATHS.FAQS,
+            element: <FaqsPage />,
+            handle: { pageTitle: 'FAQs' },
         },
     ],
     {

@@ -4,9 +4,12 @@ import LocationStr from '../../../location_str'
 import MdxWrapper from '../../../mdx_wrapper'
 import { useInstallation } from '../../../../providers/installation_provider'
 import { useProject } from '../../../../providers/project_provider'
+import { useDatabase } from '../../../../providers/database_provider'
+import { putProject } from '../../../../utilities/database_utils'
 import StoreProvider, {
     useChangeEventHandler,
 } from '../../../../providers/store_provider'
+import { Base, type Project } from '../../../../types/database.types'
 import { useWorkflow } from '../../../../providers/workflow_provider'
 import { someLocation } from '../../../../utilities/location_utils'
 
@@ -19,24 +22,36 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
 
     const [installation] = useInstallation()
 
-    const handleChange = useChangeEventHandler()
+    const db = useDatabase()
+    const originalHandleChange = useChangeEventHandler()
+    const handleChange = async (
+        doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
+    ) => {
+        await originalHandleChange(doc)
+        if (project) {
+            const updatedProject = {
+                ...project,
+                metadata_: {
+                    ...project.metadata_,
+                    show_download_reminder: true,
+                },
+            }
+            await putProject(db, updatedProject as Project)
+        }
+    }
 
     if (project && installation && workflow) {
         return (
             <>
                 <h1>{workflow.title}</h1>
-                <h2>
-                    {workflow.subtitle.singularTitleCase} for{' '}
-                    {project.metadata_.doc_name}
-                </h2>
                 {project.data_.location &&
                     someLocation(project.data_.location) && (
-                        <p className="address">
+                        <div className="text-center">
                             <LocationStr
                                 location={project.data_.location}
                                 separators={[', ', ', ', ' ']}
                             />
-                        </p>
+                        </div>
                     )}
                 <center>
                     <b>{installation.metadata_.doc_name}</b>

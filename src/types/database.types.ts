@@ -51,7 +51,11 @@ export interface ProjectData extends BaseData {
     location?: Location
 }
 
-export type ProjectMetadata = BaseMetadata
+export interface ProjectMetadata extends BaseMetadata {
+    is_downloaded?: boolean
+    last_downloaded_date?: Timestamp
+    show_download_reminder?: boolean
+}
 
 export interface FileMetadata {
     filename?: string

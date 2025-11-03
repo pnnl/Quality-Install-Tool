@@ -11,6 +11,7 @@ import { someLocation } from '../../../../utilities/location_utils'
 interface ProjectListGroupProps {
     onEdit?: () => void | Promise<void>
     onDelete?: () => void | Promise<void>
+    onDownload?: () => void | Promise<void>
     project: ProjectDocument
 }
 
@@ -18,6 +19,7 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
     project,
     onEdit,
     onDelete,
+    onDownload,
 }) => {
     const handleEdit = useCallback(
         async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,24 +45,74 @@ const ProjectListGroup: React.FC<ProjectListGroupProps> = ({
         [onDelete],
     )
 
+    const shouldShowDownloadSuggested = () => {
+        if (
+            project.metadata_.is_downloaded &&
+            project.metadata_.last_downloaded_date
+        ) {
+            const lastDownloaded = new Date(
+                project.metadata_.last_downloaded_date,
+            )
+            const lastModified = new Date(project.metadata_.last_modified_at)
+            return lastModified > lastDownloaded
+        }
+        return false
+    }
+
+    const shouldShowDownloadAlert = () => {
+        return !project.metadata_.is_downloaded
+    }
+
     return (
         <ListGroup className="padding">
             <LinkContainer to={`/app/${project._id}/workflows`}>
                 <ListGroup.Item action={true}>
                     <span className="icon-container">
-                        {onEdit && (
-                            <Button variant="light" onClick={handleEdit}>
-                                <TfiPencil size={22} />
-                            </Button>
-                        )}
-                        {onDelete && (
-                            <Button variant="light" onClick={handleDelete}>
-                                <TfiTrash size={22} />
-                            </Button>
-                        )}
-                        <ExportDoc projectId={project._id} />
+                        <div className="align-right">
+                            <div>
+                                {onEdit && (
+                                    <Button
+                                        variant="light"
+                                        onClick={handleEdit}
+                                    >
+                                        <TfiPencil size={22} />
+                                    </Button>
+                                )}
+                                {onDelete && (
+                                    <Button
+                                        variant="light"
+                                        onClick={handleDelete}
+                                    >
+                                        <TfiTrash size={22} />
+                                    </Button>
+                                )}
+                                <ExportDoc
+                                    projectId={project._id}
+                                    variant="light"
+                                    onDownload={onDownload}
+                                    showAlert={
+                                        shouldShowDownloadSuggested() ||
+                                        shouldShowDownloadAlert()
+                                    }
+                                />
+                            </div>
+                            <div className="align-right">
+                                {shouldShowDownloadSuggested() ? (
+                                    <span className="download-status-capsule">
+                                        Download Suggested
+                                    </span>
+                                ) : (
+                                    shouldShowDownloadAlert() && (
+                                        <span className="download-status-capsule">
+                                            Never Been Downloaded
+                                        </span>
+                                    )
+                                )}
+                            </div>
+                        </div>
                     </span>
                     <b>{project.metadata_.doc_name}</b>
+
                     {project.data_.location &&
                         someLocation(project.data_.location) && (
                             <>

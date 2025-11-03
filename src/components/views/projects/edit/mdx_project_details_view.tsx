@@ -67,7 +67,6 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     if (editableProject) {
         return (
             <>
-                <h1>Edit Project Information</h1>
                 <br />
                 <StoreProvider
                     doc={editableProject}
