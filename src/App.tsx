@@ -23,7 +23,7 @@ const router = createBrowserRouter(
         {
             path: PATHS.HOME,
             element: <ProjectsListView />,
-            handle: { pageTitle: 'Projects' },
+            handle: { pageTitle: process.env.REACT_APP_NAME },
         },
         {
             path: PATHS.EDIT_PROJECT,

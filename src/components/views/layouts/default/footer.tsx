@@ -19,16 +19,16 @@ const Footer: React.FC = () => {
                         >
                             About the Tool
                         </Nav.Link>
+                        <Nav.Link href={PATHS.FAQS} className="footer-nav-link">
+                            FAQs
+                        </Nav.Link>
                         <Nav.Link
                             href={`mailto:${process.env.REACT_APP_CONTACT_EMAIL}`}
                             className="footer-nav-link"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Contact Us
-                        </Nav.Link>
-                        <Nav.Link href={PATHS.FAQS} className="footer-nav-link">
-                            FAQs
+                            {`Contact Us: ${process.env.REACT_APP_CONTACT_EMAIL}`}
                         </Nav.Link>
                     </Nav>
                     <span className="navbar-text footer-navbar-text">
