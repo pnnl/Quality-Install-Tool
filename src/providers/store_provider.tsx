@@ -98,8 +98,8 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     {
                         ...doc,
                         metadata_: {
-                            ...doc.metadata_,
-                            errors: doc.metadata_.errors ?? {
+                            ...(doc.metadata_ ?? {}),
+                            errors: doc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
@@ -136,8 +136,8 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     {
                         ...doc,
                         metadata_: {
-                            ...doc.metadata_,
-                            errors: doc.metadata_.errors ?? {
+                            ...(doc.metadata_ ?? {}),
+                            errors: doc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
