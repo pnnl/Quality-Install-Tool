@@ -212,7 +212,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     | <LabelValue label="ACH50" decimalPlaces={1} type={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? "number" : "string" } value={!isNaN(props?.data?.postinstall_air_leakage_cfm50) && !isNaN(props?.data?.conditioned_volume_ft3) ? ((props?.data?.postinstall_air_leakage_cfm50 * 60) / props?.data?.conditioned_volume_ft3): 'N/A'}/>
     
     <PhotoInput id="postinstall_cfm50_photo" label="Final blower door manometer showing the CFM50 value – Photo">
-        Take a photo of the manometer showing CFM50 of air leakage before air sealing and insulation work was performed.
+        Take a photo of the manometer showing CFM50 of air leakage after air sealing and insulation work was performed.
     </PhotoInput>
 
   </ShowOrHide>
