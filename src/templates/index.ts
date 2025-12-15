@@ -59,7 +59,7 @@ const INSTALLATION_SUB_TITLE = {
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_appliances: {
-        title: 'Appliance',
+        title: 'Appliance / Equipment Replacement',
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEAppliancesWorkflow,
     },
