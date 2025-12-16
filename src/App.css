@@ -659,6 +659,10 @@ btn-light:hover {
         display: block;
         page-break-before: always;
     }
+
+    .photo-row {
+        display: block;
+    }
 }
 
 .print-wrapper > .photo-card {
@@ -729,4 +733,8 @@ btn-light:hover {
     height: 10px;
     background-color: red;
     border-radius: 50%;
+}
+
+.print-header-title {
+    font-size: 1.2em !important;
 }
