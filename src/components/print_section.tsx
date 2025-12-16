@@ -22,7 +22,7 @@ const PrintSection: React.FC<PrintSectionProps> = ({
             const existingHeader = printWrapper.querySelector('.print-header')
             if (!existingHeader) {
                 const header = document.createElement('div')
-                header.className = 'print-header'
+                header.className = 'print-header print-header-title'
                 header.innerText = process.env.REACT_APP_PRINT_TITLE || ''
                 printWrapper.prepend(header) // Add header at the top
                 return header // Return the header so we can remove it later
