@@ -214,6 +214,7 @@ h1 + h3 {
 #root-body {
     padding-top: 1rem;
     padding-bottom: 1rem;
+    flex: 1 0 auto;
 }
 
 #back-button-logo,
@@ -658,6 +659,10 @@ btn-light:hover {
         display: block;
         page-break-before: always;
     }
+
+    .photo-row {
+        display: block;
+    }
 }
 
 .print-wrapper > .photo-card {
@@ -711,15 +716,13 @@ btn-light:hover {
 }
 
 .layout-wrapper {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 60px; /* Adjust this value to match your footer's height */
 }
 
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    flex-shrink: 0;
 }
 
 .red-circle {
@@ -730,4 +733,8 @@ btn-light:hover {
     height: 10px;
     background-color: red;
     border-radius: 50%;
+}
+
+.print-header-title {
+    font-size: 1.2em !important;
 }
