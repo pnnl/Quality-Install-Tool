@@ -1,0 +1,107 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<Tabs>
+  <Tab eventKey="installation" title="Installation">
+    <DateInput label="Installation Date" path="install_date" />
+    <Select label="Stove type" options={["Wood Stove","Pellet Stove"]} path="stove_type" />
+
+    <PhotoInput id="interior_stove_name_plate" label="Interior stove photo – Name plate">
+      Photo of the interior stove name plate showing the manufacturer and model number.
+    </PhotoInput>
+    <PhotoInput id="interior_stove_wide_angle_photo" label="Interior stove photo – Wide angle photo">
+      Wide-angle photo of the interior of the stove showing the noncombustible flooring.
+    </PhotoInput>
+    <PhotoInput id="interior_stove_clearance_photo" label="Interior stove clearance – Photo">
+      Show the clearance between the stove and the wall/combustible materials include tape measure in the photo.
+    </PhotoInput>
+
+    <Select label="Vent configuration" options={["Horizontal side vent","Vertical roof vent via exterior wall", "Existing chimney vertical roof vent"]} path="vent_configuration" />
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Horizontal side vent'}>
+      <PhotoInput id="interior_vent_flashing_detail_photo" label="Interior vent flashing detail – Photo">
+        Photo of the interior vent flashing detail.
+      </PhotoInput>
+      <PhotoInput id="exterior_vent_termination_photo" label="Exterior vent termination – Photo">
+        Photo of the exterior vent termination.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Vertical roof vent via exterior wall'}>
+      <PhotoInput id="interior_vent_flashing_detail_photo" label="Interior vent flashing detail – Photo">
+        Photo of the interior vent flashing detail.
+      </PhotoInput>
+      <PhotoInput id="exterior_vent_pipe_siding_photo" label="Exterior vent pipe clearance from siding – Photo">
+        Show the clearance between the vent pipe and the siding include tape measure in the photo.
+      </PhotoInput>
+      <PhotoInput id="exterior_vent_pipe_height_photo" label="Exterior vent pipe height relative to the roof peak – Photo">
+        Take the photo from an angle and distance that show the vent pipe relative to the roof peak.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Existing chimney vertical roof vent'}>
+      <PhotoInput id="exterior_chimney_cap_flashing_and_vent_termination_photo" label="Exterior chimney cap flashing and vent termination – Photo">
+        Take the photo showing the chimney cap, flashing, and vent termination.
+      </PhotoInput>
+      <PhotoInput id="exterior_chimney_height_photo" label="Exterior - chimney height relative to roof peak – Photo">
+        Take the photo from an angle and distance that show the chimney with the vent pipe height relative to the roof peak.
+      </PhotoInput>
+    </ShowOrHide>
+
+  </Tab>
+ <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Wood and Pellet Stove Installation
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    <LabelValue label="Installation Date" path="install_date" />
+    <LabelValue label="Stove Type" path="stove_type" />
+
+    <Photo label="Interior stove photo – Name plate" id="interior_stove_name_plate" required>
+      Photo of the interior stove name plate showing the manufacturer and model number.
+    </Photo>
+    <Photo label="Interior stove photo – Wide angle photo" id="interior_stove_wide_angle_photo" required>
+      Wide-angle photo of the interior of the stove showing the noncombustible flooring.
+    </Photo>
+    <Photo label="Interior stove clearance – Photo" id="interior_stove_clearance_photo" required>
+      Photo showing the clearance between the stove and the wall/combustible materials include tape measure in the photo.
+    </Photo>
+
+    <LabelValue label="Vent Configuration" path="vent_configuration" />
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Horizontal side vent'}>
+      <Photo label="Interior vent flashing detail – Photo" id="interior_vent_flashing_detail_photo">
+        Photo of the interior vent flashing detail.
+      </Photo>
+      <Photo label="Exterior vent termination – Photo" id="exterior_vent_termination_photo">
+        Photo of the exterior vent termination.
+      </Photo>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Vertical roof vent via exterior wall'}>
+      <Photo label="Interior vent flashing detail – Photo" id="interior_vent_flashing_detail_photo">
+        Photo of the interior vent flashing detail.
+      </Photo>
+      <Photo label="Exterior vent pipe clearance from siding – Photo" id="exterior_vent_pipe_siding_photo">
+        Photo showing the clearance between the vent pipe and the siding include tape measure in the photo.
+      </Photo>
+      <Photo label="Exterior vent pipe height relative to the roof peak – Photo" id="exterior_vent_pipe_height_photo">
+        Photo showing the vent pipe relative to the roof peak.
+      </Photo>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.vent_configuration === 'Existing chimney vertical roof vent'}>
+      <Photo label="Exterior chimney cap flashing and vent termination – Photo" id="exterior_chimney_cap_flashing_and_vent_termination_photo">
+        Photo showing the chimney cap, flashing, and vent termination.
+      </Photo>
+      <Photo label="Exterior - chimney height relative to roof peak – Photo" path="exterior_chimney_height_photo">
+        Photo showing the chimney with the vent pipe height relative to the roof peak.
+      </Photo>
+    </ShowOrHide>
+
+    </PrintSection>
+
+  </Tab>
+</Tabs>
