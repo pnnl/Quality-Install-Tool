@@ -155,18 +155,17 @@ export async function importJSONDocument(
 
                                         if (newLinkDocId) {
                                             accumulator[link] = newLinkDocId
-
-                                            return accumulator
                                         } else {
-                                            throw new Error(
+                                            console.error(
                                                 `Link at key ${link} of document at index ${index} was assigned an "_id" property, but it is falsey.`,
                                             )
                                         }
                                     } else {
-                                        throw new Error(
+                                        console.error(
                                             `Link at key ${link} of document at index ${index} has not been assigned an "_id" property.`,
                                         )
                                     }
+                                    return accumulator
                                 },
                                 {} as Record<string, PouchDB.Core.DocumentId>,
                             ),
