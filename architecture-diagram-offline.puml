@@ -1,0 +1,16 @@
+@startuml
+!theme plain
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(technician, "Field Technician", "A user of the Quality Install Tool, performing installations and assessments.")
+
+System_Boundary(qit, "Quality Install Tool") {
+    Container(spa, "Web Application", "React, TypeScript", "The client-side application that runs in the user's browser.")
+}
+
+System_Ext(pwa_storage, "PWA Storage", "Browser Storage (IndexedDB/LocalStorage)", "Stores all installation data locally for offline use.")
+
+Rel(technician, spa, "Uses")
+Rel(spa, pwa_storage, "Reads from and writes to")
+
+@enduml

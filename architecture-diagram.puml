@@ -1,0 +1,35 @@
+@startuml
+!theme plain
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Architectural Diagram for FieldSync Ecosystem
+
+Person(technician, "Field Technician", "A user of the FieldSync platform.")
+
+package "FieldSync Core Framework" {
+    System_Boundary(fs, "FieldSync") {
+        Container(spa, "Web Application Core", "React, TypeScript, PouchDB", "Provides core functionalities for offline-first data management, including photo prompts with geo-tagging and file attachments.")
+        Container(pdf_generator, "PDF Report Generator", "jsPDF", "Generates formatted PDF reports from collected data.")
+        System_Ext(pwa_storage, "PWA Storage", "Browser Storage (IndexedDB)", "Stores application data locally.")
+    }
+}
+
+package "Applications" as apps {
+    System(qit, "QIT", "Quality Installation Tool")
+    System(brecfst, "BRECFST", "Residential Energy Codes Field Studies")
+    Container(at, "AT Offline-first", "Component", "US Army HVAC Installations")
+}
+
+System_Ext(backend, "Backend API", "Rails", "Stores and retrieves data from the external system when the app is online.")
+System_Ext(database, "Database", "SQL Server", "Stores all persistent application data.")
+
+technician --> fs
+fs --> apps : "Provide code framework to applications"
+
+spa --> pwa_storage
+spa -> pdf_generator
+
+at --> backend
+backend --> database
+
+@enduml
