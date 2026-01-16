@@ -18,14 +18,20 @@ The appliance/equipment that use this workflow are ones that only require a phot
             />
             <ShowOrHide path="appliance_type" value="Dishwasher">
                 <Select
-                    label="Location of the appliance"
+                    label="Location of the appliance:"
                     options={['Main Kitchen', 'Auxiliary Kitchen', 'Other']}
                     path="appliance_location"
                 />
+                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location"
+                    />
+                </ShowOrHide>
             </ShowOrHide>
             <ShowOrHide path="appliance_type" value={["Freezer", "Refrigerator"]} matchCondition="Includes">
                 <Select
-                    label="Location of the appliance"
+                    label="Location of the appliance:"
                     options={['Main Kitchen',
                                 'Auxiliary Kitchen',
                                 'Garage Conditioned',
@@ -35,6 +41,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                 'Other']}
                     path="appliance_location"
                 />
+                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location"
+                    />
+                </ShowOrHide>
                 <Radio
                     label="Old freezer/refrigerator is recycled/removed/no-longer plugged-in/used?"
                     options={['Yes', 'No']}
@@ -42,7 +54,7 @@ The appliance/equipment that use this workflow are ones that only require a phot
 
                 <ShowOrHide path="old_appliance_recycled" value="No">
                     <Select
-                        label="Location of the old appliance"
+                        label="Location of the old appliance:"
                         options={['Main Kitchen',
                                     'Auxiliary Kitchen',
                                     'Garage Conditioned',
@@ -52,6 +64,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                     'Other']}
                         path="old_appliance_location"
                     />
+                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location"
+                        />
+                    </ShowOrHide>
                 </ShowOrHide>
             </ShowOrHide>
 
@@ -61,6 +79,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                     options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
                     path="appliance_location"
                 />
+                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location"
+                    />
+                </ShowOrHide>
                 <Radio
                     label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
                     options={['Yes', 'No']}
@@ -74,6 +98,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                     'Other']}
                         path="old_appliance_location"
                     />
+                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location"
+                        />
+                    </ShowOrHide>
                 </ShowOrHide>
             </ShowOrHide>
             <ShowOrHide path="appliance_type" value="Clothes Dryer-NON Heat Pump">
@@ -82,9 +112,15 @@ The appliance/equipment that use this workflow are ones that only require a phot
                     options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
                     path="appliance_location"
                 />
+                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location"
+                    />
+                </ShowOrHide>
                 <Radio
                     label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
-                    options={['Yes', 'No']}
+                    options={['Yes', 'No']}x
                     path="old_appliance_recycled" />
 
                 <ShowOrHide path="old_appliance_recycled" value="No">
@@ -95,6 +131,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                     'Other']}
                         path="old_appliance_location"
                     />
+                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location"
+                        />
+                    </ShowOrHide>
                 </ShowOrHide>
             </ShowOrHide>
             <PhotoInput
@@ -144,20 +186,37 @@ The appliance/equipment that use this workflow are ones that only require a phot
             <ProjectInfoReport {...props} />
              <Repeatable path="appliances">
                 <LabelValue label="Appliance Type" path="appliance_type" />
-                <LabelValue
-                    label="Location of the appliance:"
-                    path="appliance_location"
-                />
+
                 <ShowOrHide path="appliance_type" value={['Freezer', 'Refrigerator', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump']} matchCondition="Includes">
+                    <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location" value="Other" matchCondition="not Equals">
+                         <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location"
+                        />
+                    </ShowOrHide>
                     <LabelValue
                         label="Old appliance is recycled/removed/no-longer plugged-in/used?"
                         path="old_appliance_recycled"
                     />
                     <ShowOrHide path="old_appliance_recycled" value="No">
-                        <LabelValue
-                            label="Location of the old appliance:"
-                            path="old_appliance_location"
-                        />
+                        <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location"
+                            />
+                        </ShowOrHide>
+                        <ShowOrHide path="old_appliance_location" value="Other" matchCondition="not Equals">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location"
+                            />
+                        </ShowOrHide>
                     </ShowOrHide>
                 </ShowOrHide>
                  <Photo
