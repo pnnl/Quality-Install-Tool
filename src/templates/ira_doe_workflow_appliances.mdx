@@ -10,7 +10,7 @@ The appliance/equipment that use this workflow are ones that only require a phot
         
         <DateInput label="Assessment Date" path="assessment_date" />
 
-        <RepeatableInput path="appliances" label="Appliance" labelPath="appliance_type" maxValuesCount={15}>
+        <RepeatableInput path="appliances" label="Appliance / Equipment" labelPath="appliance_type" maxValuesCount={15}>
             <Select
                 label="Appliance Type:"
                 options={['Central A/C', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump', 'Dishwasher', 'Freezer', 'Refrigerator', 'Pool Pump']}
@@ -20,12 +20,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                 <Select
                     label="Location of the appliance:"
                     options={['Main Kitchen', 'Auxiliary Kitchen', 'Other']}
-                    path="appliance_location"
+                    path="appliance_location_dishwasher"
                 />
-                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                <ShowOrHide path="appliance_location_dishwasher" value="Other" matchCondition="Equals">
                     <StringInput
                         label="Specify other location of the appliance"
-                        path="other_appliance_location"
+                        path="other_appliance_location_dishwasher"
                     />
                 </ShowOrHide>
             </ShowOrHide>
@@ -39,20 +39,20 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                 'Basement Conditioned',
                                 'Basement Unconditioned',
                                 'Other']}
-                    path="appliance_location"
+                    path="appliance_location_freezer_refrigerator"
                 />
-                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                <ShowOrHide path="appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
                     <StringInput
                         label="Specify other location of the appliance"
-                        path="other_appliance_location"
+                        path="other_appliance_location_freezer_refrigerator"
                     />
                 </ShowOrHide>
                 <Radio
                     label="Old freezer/refrigerator is recycled/removed/no-longer plugged-in/used?"
                     options={['Yes', 'No']}
-                    path="old_appliance_recycled" />
+                    path="old_appliance_recycled_freezer_refrigerator" />
 
-                <ShowOrHide path="old_appliance_recycled" value="No">
+                <ShowOrHide path="old_appliance_recycled_freezer_refrigerator" value="No">
                     <Select
                         label="Location of the old appliance:"
                         options={['Main Kitchen',
@@ -62,12 +62,12 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                     'Basement Conditioned',
                                     'Basement Unconditioned',
                                     'Other']}
-                        path="old_appliance_location"
+                        path="old_appliance_location_freezer_refrigerator"
                     />
-                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                    <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
                         <StringInput
                             label="Specify other location of the old appliance"
-                            path="other_old_appliance_location"
+                            path="other_old_appliance_location_freezer_refrigerator"
                         />
                     </ShowOrHide>
                 </ShowOrHide>
@@ -77,31 +77,31 @@ The appliance/equipment that use this workflow are ones that only require a phot
                 <Select
                     label="Location of the appliance:"
                     options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
-                    path="appliance_location"
+                    path="appliance_location_clothes_washer"
                 />
-                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                <ShowOrHide path="appliance_location_clothes_washer" value="Other" matchCondition="Equals">
                     <StringInput
                         label="Specify other location of the appliance"
-                        path="other_appliance_location"
+                        path="other_appliance_location_clothes_washer"
                     />
                 </ShowOrHide>
                 <Radio
                     label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
                     options={['Yes', 'No']}
-                    path="old_appliance_recycled" />
+                    path="old_appliance_recycled_clothes_washer" />
 
-                <ShowOrHide path="old_appliance_recycled" value="No">
+                <ShowOrHide path="old_appliance_recycled_clothes_washer" value="No">
                     <Select
                         label="Location of the old appliance:"
                         options={['Laundry area conditioned',
                                     'Laundry area unconditioned',
                                     'Other']}
-                        path="old_appliance_location"
+                        path="old_appliance_location_clothes_washer"
                     />
-                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                    <ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Equals">
                         <StringInput
                             label="Specify other location of the old appliance"
-                            path="other_old_appliance_location"
+                            path="other_old_appliance_location_clothes_washer"
                         />
                     </ShowOrHide>
                 </ShowOrHide>
@@ -110,31 +110,31 @@ The appliance/equipment that use this workflow are ones that only require a phot
                 <Select
                     label="Location of the appliance:"
                     options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
-                    path="appliance_location"
+                    path="appliance_location_clothes_dryer"
                 />
-                <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
+                <ShowOrHide path="appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
                     <StringInput
                         label="Specify other location of the appliance"
-                        path="other_appliance_location"
+                        path="other_appliance_location_clothes_dryer"
                     />
                 </ShowOrHide>
                 <Radio
                     label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
-                    options={['Yes', 'No']}x
-                    path="old_appliance_recycled" />
+                    options={['Yes', 'No']}
+                    path="old_appliance_recycled_clothes_dryer" />
 
-                <ShowOrHide path="old_appliance_recycled" value="No">
+                <ShowOrHide path="old_appliance_recycled_clothes_dryer" value="No">
                     <Select
                         label="Location of the old appliance:"
                         options={['Laundry area conditioned',
                                     'Laundry area unconditioned',
                                     'Other']}
-                        path="old_appliance_location"
+                        path="old_appliance_location_clothes_dryer"
                     />
-                    <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                    <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
                         <StringInput
                             label="Specify other location of the old appliance"
-                            path="other_old_appliance_location"
+                            path="other_old_appliance_location_clothes_dryer"
                         />
                     </ShowOrHide>
                 </ShowOrHide>
@@ -184,37 +184,120 @@ The appliance/equipment that use this workflow are ones that only require a phot
                 ## Photo Report
             <LabelValue value ={props.data.assessment_date} type="date" label="Assessment Date"/>
             <ProjectInfoReport {...props} />
-             <Repeatable path="appliances">
+             <Repeatable path="appliances" label="Appliance / Equipment">
                 <LabelValue label="Appliance Type" path="appliance_type" />
-
-                <ShowOrHide path="appliance_type" value={['Freezer', 'Refrigerator', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump']} matchCondition="Includes">
-                    <ShowOrHide path="appliance_location" value="Other" matchCondition="Equals">
-                        <LabelValue
-                            label="Location of the appliance"
-                            path="other_appliance_location"
+                <ShowOrHide path="appliance_type" value="Dishwasher">
+                    <ShowOrHide path="appliance_location_dishwasher" value={['Other']} matchCondition="Excludes">
+                            <LabelValue
+                                label="Location of the appliance"
+                                path="appliance_location_dishwasher"
                         />
                     </ShowOrHide>
-                    <ShowOrHide path="appliance_location" value="Other" matchCondition="not Equals">
-                         <LabelValue
+                    <ShowOrHide path="appliance_location_dishwasher" value="Other">
+                        <LabelValue
                             label="Location of the appliance"
-                            path="appliance_location"
+                            path="other_appliance_location_dishwasher"
+                        />
+                    </ShowOrHide>
+                </ShowOrHide>
+
+                <ShowOrHide path="appliance_type" value={['Freezer', 'Refrigerator']} matchCondition="Includes">
+                    <ShowOrHide path="appliance_location_freezer_refrigerator" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_freezer_refrigerator"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_freezer_refrigerator" value="Other">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_freezer_refrigerator"
                         />
                     </ShowOrHide>
                     <LabelValue
                         label="Old appliance is recycled/removed/no-longer plugged-in/used?"
-                        path="old_appliance_recycled"
+                        path="old_appliance_recycled_freezer_refrigerator"
                     />
-                    <ShowOrHide path="old_appliance_recycled" value="No">
-                        <ShowOrHide path="old_appliance_location" value="Other" matchCondition="Equals">
+                    <ShowOrHide path="old_appliance_recycled_freezer_refrigerator" value="No">
+                        <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
                             <LabelValue
                                 label="Location of the old appliance"
-                                path="other_old_appliance_location"
+                                path="other_old_appliance_location_freezer_refrigerator"
                             />
                         </ShowOrHide>
-                        <ShowOrHide path="old_appliance_location" value="Other" matchCondition="not Equals">
+                        <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Excludes">
                             <LabelValue
                                 label="Location of the old appliance"
-                                path="old_appliance_location"
+                                path="old_appliance_location_freezer_refrigerator"
+                            />
+                        </ShowOrHide>
+                    </ShowOrHide>
+                </ShowOrHide>
+
+
+                <ShowOrHide path="appliance_type" value="Clothes Washer">
+                    <ShowOrHide path="appliance_location_clothes_washer" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_clothes_washer"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_clothes_washer" value="Other" >
+
+\ <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_clothes_washer"
+                        />
+
+</ShowOrHide>
+<LabelValue
+                        label="Old appliance is recycled/removed/no-longer plugged-in/used?"
+                        path="old_appliance_recycled_clothes_washer"
+                    />
+<ShowOrHide path="old_appliance_recycled_clothes_washer" value="No">
+<ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Equals">
+<LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location_clothes_washer"
+                            />
+</ShowOrHide>
+<ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Excludes">
+<LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location_clothes_washer"
+                            />
+</ShowOrHide>
+</ShowOrHide>
+</ShowOrHide>
+
+                <ShowOrHide path="appliance_type" value="Clothes Dryer-NON Heat Pump">
+                    <ShowOrHide path="appliance_location_clothes_dryer" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_clothes_dryer"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_clothes_dryer" value="Other">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_clothes_dryer"
+                        />
+                    </ShowOrHide>
+                    <LabelValue
+                        label="Old appliance is recycled/removed/no-longer plugged-in/used?"
+                        path="old_appliance_recycled_clothes_dryer"
+                    /   >
+                    <ShowOrHide path="old_appliance_recycled_clothes_dryer" value="No">
+                        <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location_clothes_dryer"
+                            />
+                        </ShowOrHide>
+                        <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Excludes">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location_clothes_dryer"
                             />
                         </ShowOrHide>
                     </ShowOrHide>
