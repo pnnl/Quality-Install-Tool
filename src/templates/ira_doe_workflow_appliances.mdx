@@ -1,6 +1,10 @@
 import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
+<div className="disclaimer-text mb-4">
+This workflow is intended to be used to document home upgrades that require minimum documentation to show a quality installation.
+The appliance/equipment that use this workflow are ones that only require a photo of the old equipment nameplate, photo of the new equipment nameplate, and a wide-angle photo of equipment/appliance in its installed environment.
+</div>
 <Tabs>
     <Tab eventKey="test" title="Appliance / Equipment" >
         
@@ -9,7 +13,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         <RepeatableInput path="appliances" label="Appliance" labelPath="appliance_type" maxValuesCount={15}>
             <Select
                 label="Appliance Type:"
-                options={['Central A/C', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump', 'Dishwasher', 'Freezer', 'Refrigerator']}
+                options={['Central A/C', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump', 'Dishwasher', 'Freezer', 'Refrigerator', 'Pool Pump']}
                 path="appliance_type"
             />
             <ShowOrHide path="appliance_type" value="Dishwasher">
@@ -32,7 +36,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                     path="appliance_location"
                 />
                 <Radio
-                    label="Old freezer is recycled/removed/no-longer plugged-in/used?"
+                    label="Old fappliance is recycled/removed/no-longer plugged-in/used?"
                     options={['Yes', 'No']}
                     path="old_appliance_recycled" />
 
