@@ -7,11 +7,13 @@ import { StoreContext } from '../providers/store_provider'
 interface RepeatableWrapperProps {
     path: string
     children: React.ReactNode
+    label?: string
 }
 
 const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
     path,
     children,
+    label,
 }) => {
     return (
         <StoreContext.Consumer>
@@ -19,6 +21,7 @@ const RepeatableWrapper: React.FC<RepeatableWrapperProps> = ({
                 return (
                     <Repeatable
                         path={path}
+                        label={label}
                         keys={Object.keys((doc && get(doc.data_, path)) ?? [])}
                     >
                         {children}
