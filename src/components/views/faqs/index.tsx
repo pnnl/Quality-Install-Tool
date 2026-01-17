@@ -2,6 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import Layout from '../layouts/default'
 import Collapsible from '../../collapsible'
+import { TfiImport, TfiExport } from 'react-icons/tfi'
 
 const FaqsPage: React.FC = () => {
     return (
@@ -31,11 +32,32 @@ const FaqsPage: React.FC = () => {
                     strongly recommend exporting your projects regularly as a
                     backup.
                 </Collapsible>
-                <Collapsible header="How can I back up my data?">
-                    You can export your projects from the main project list.
-                    This will save your data as a file on your device, which you
-                    can then transfer and import on another device or keep a
-                    backup.
+                <Collapsible header="How can I back up / download my data?">
+                    You can export / download your projects as JSON object from
+                    the main project list by clicking the{' '}
+                    <TfiImport size={30} /> icon. This allows you to save a
+                    specific project&rsquo;s data as a JSON file to your device.
+                    This file contains all the information related to that
+                    project.
+                    <br />
+                    <br />
+                    Downloading your projects serves as a backup mechanism. If
+                    your browser&rsquo;s cache or site data is cleared (either
+                    accidentally or due to browser updates/settings), having
+                    these downloaded files allows you to restore your projects
+                    by importing them back into the application. This is also
+                    useful for sharing project data with others or moving it to
+                    another device.
+                    <br />
+                    <br />
+                    In the unlikely event that a browser security update affects
+                    local storage, you may need to clear your browser data to
+                    reset the application. Having your projects downloaded
+                    ensures you can easily reload them afterwards.
+                    <br />
+                    <br />
+                    Please note that you must download each project
+                    individually.
                 </Collapsible>
                 <Collapsible header="Can I use the app on multiple devices?">
                     Since data is stored locally on each device, your projects
