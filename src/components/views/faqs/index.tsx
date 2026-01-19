@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import Layout from '../layouts/default'
 import Collapsible from '../../collapsible'
-import { TfiImport, TfiExport } from 'react-icons/tfi'
+import { TfiImport } from 'react-icons/tfi'
 
 const FaqsPage: React.FC = () => {
     return (
@@ -33,12 +33,12 @@ const FaqsPage: React.FC = () => {
                     backup.
                 </Collapsible>
                 <Collapsible header="How can I back up / download my data?">
-                    You can export / download your projects as JSON object from
-                    the main project list by clicking the{' '}
-                    <TfiImport size={30} /> icon. This allows you to save a
-                    specific project&rsquo;s data as a JSON file to your device.
-                    This file contains all the information related to that
-                    project.
+                    You can export or download yourprojects as JSON. The
+                    Download icon <TfiImport size={25} color={'black'} />{' '}
+                    appears next to each project in the main project list and at
+                    the top of other pages. Clicking this icon allows you to
+                    save a project’s data as a JSON file on your device,
+                    containing all the information related to that project.
                     <br />
                     <br />
                     Downloading your projects serves as a backup mechanism. If
@@ -48,12 +48,6 @@ const FaqsPage: React.FC = () => {
                     by importing them back into the application. This is also
                     useful for sharing project data with others or moving it to
                     another device.
-                    <br />
-                    <br />
-                    In the unlikely event that a browser security update affects
-                    local storage, you may need to clear your browser data to
-                    reset the application. Having your projects downloaded
-                    ensures you can easily reload them afterwards.
                     <br />
                     <br />
                     Please note that you must download each project
