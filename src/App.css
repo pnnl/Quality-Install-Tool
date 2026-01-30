@@ -327,6 +327,17 @@ h1 + h3 {
     margin-bottom: unset;
 }
 
+.photo-gallery .col-4 {
+    position: relative;
+}
+
+.photo-gallery .photo-delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 10;
+}
+
 /* styling for PDFRenderer component  */
 .react-pdf__Page__textContent {
     display: none;

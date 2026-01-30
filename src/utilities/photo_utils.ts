@@ -31,6 +31,7 @@ export const PHOTO_MIME_TYPES: string[] = [
     // 'image/jpg',
     // 'image/png',
     // 'image/tiff',
+    // 'image/webp',
 ]
 
 /**
@@ -50,6 +51,28 @@ export async function compressPhoto(blob: Blob) {
         useWebWorker: true,
         maxWidthOrHeight: Math.max(MAXIMUM_HEIGHT_PX, MAXIMUM_WIDTH_PX),
     })
+}
+
+/**
+ * Processes an image file by compressing and converting it to WebP format.
+ *
+ * @param {File} file - The image file to process.
+ * @returns {Promise<Blob>} A Promise that resolves to the processed image as a Blob.
+ * @throws {Error} Throws an error if the image processing fails.
+ */
+export async function processImage(file: File): Promise<Blob> {
+    const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/webp',
+    }
+    try {
+        const compressedFile = await imageCompression(file, options)
+        return compressedFile
+    } catch (error) {
+        throw new Error('Image processing failed. Please try another image.')
+    }
 }
 
 /**
