@@ -109,10 +109,10 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     useEffect(() => {
         const objectURL = selectedPhotoAttachmentForDelete
             ? URL.createObjectURL(
-                  (
-                      selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
-                  ).data as Blob,
-              )
+                (
+                    selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
+                ).data as Blob,
+            )
             : undefined
         setObjectURLForDelete(objectURL)
         return () => {
@@ -235,7 +235,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                         ref={fileInputRef}
                         type="file"
                         accept={PHOTO_MIME_TYPES.join(',')}
-                        capture={uploadable ? 'environment' : undefined}
+                        capture={uploadable ? undefined : 'environment'}
                         className="d-none"
                         onChange={handleFileChange}
                     />
@@ -266,7 +266,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                         <Image
                                             src={
                                                 objectURLsForPhotoAttachments[
-                                                    index
+                                                index
                                                 ]
                                             }
                                             thumbnail
