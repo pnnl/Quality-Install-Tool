@@ -185,7 +185,7 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         template: IRADOEWorkflowLimitedAssessment,
     },
     ira_doe_workflow_wood_and_pellet_stove: {
-        title: 'Wood and Pellet Stove Replacement',
+        title: 'Wood or Pellet Stove',
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowWoodAndPelletStove,
     },
