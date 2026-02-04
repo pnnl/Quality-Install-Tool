@@ -23,6 +23,8 @@ import DOEWorkflowMechanicalVentilation from './ira_doe_workflow_mechanical_vent
 import DOEWorkflowSlapFoundationExterior from './ira_doe_workflow_slap_foundation_exterior_sealing_and_insulation.mdx'
 import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_sealing_and_insulation_dry_fill.mdx'
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
+import DOEAppliancesWorkflow from './ira_doe_workflow_appliances.mdx'
+import DOEWorkflowWoodAndPelletStove from './ira_doe_workflow_wood_and_pallet_stove.mdx'
 // import Playground from './playground.mdx'
 
 import {
@@ -57,6 +59,11 @@ const INSTALLATION_SUB_TITLE = {
 }
 
 const TEMPLATES: Record<string, TemplateConfiguration> = {
+    doe_workflow_appliances: {
+        title: 'Appliance / Equipment Replacement',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEAppliancesWorkflow,
+    },
     doe_workflow_attic_air_sealing_and_insulation: {
         title: 'Attic Air Sealing and Insulation',
         subtitle: INSTALLATION_SUB_TITLE,
@@ -176,6 +183,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
             pluralLowerCase: 'assessments',
         },
         template: IRADOEWorkflowLimitedAssessment,
+    },
+    ira_doe_workflow_wood_and_pellet_stove: {
+        title: 'Wood or Pellet Stove',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowWoodAndPelletStove,
     },
     // playground: {
     //     title: 'Playground',

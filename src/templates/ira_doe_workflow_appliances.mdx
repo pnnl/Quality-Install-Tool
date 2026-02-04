@@ -1,0 +1,332 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<div className="disclaimer-text mb-4">
+This workflow is intended to be used to document home upgrades that require minimum documentation to show a quality installation.
+The appliance/equipment that use this workflow are ones that only require a photo of the old equipment nameplate, photo of the new equipment nameplate, and a wide-angle photo of equipment/appliance in its installed environment.
+</div>
+<Tabs>
+    <Tab eventKey="test" title="Appliance / Equipment" >
+        
+        <DateInput label="Assessment Date" path="assessment_date" />
+
+        <RepeatableInput path="appliances" label="Appliance / Equipment" labelPath="appliance_type" maxValuesCount={15}>
+            <Select
+                label="Appliance Type:"
+                options={['Central A/C', 'Clothes Washer', 'Clothes Dryer-NON Heat Pump', 'Dishwasher', 'Freezer', 'Refrigerator', 'Pool Pump']}
+                path="appliance_type"
+            />
+            <ShowOrHide path="appliance_type" value="Dishwasher">
+                <Select
+                    label="Location of the appliance:"
+                    options={['Main Kitchen', 'Auxiliary Kitchen', 'Other']}
+                    path="appliance_location_dishwasher"
+                />
+                <ShowOrHide path="appliance_location_dishwasher" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location_dishwasher"
+                    />
+                </ShowOrHide>
+            </ShowOrHide>
+            <ShowOrHide path="appliance_type" value={["Freezer", "Refrigerator"]} matchCondition="Includes">
+                <Select
+                    label="Location of the appliance:"
+                    options={['Main Kitchen',
+                                'Auxiliary Kitchen',
+                                'Garage Conditioned',
+                                'Garage Unconditioned',
+                                'Basement Conditioned',
+                                'Basement Unconditioned',
+                                'Other']}
+                    path="appliance_location_freezer_refrigerator"
+                />
+                <ShowOrHide path="appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location_freezer_refrigerator"
+                    />
+                </ShowOrHide>
+                <Radio
+                    label="Old freezer/refrigerator is recycled/removed/no-longer plugged-in/used?"
+                    options={['Yes', 'No']}
+                    path="old_appliance_recycled_freezer_refrigerator" />
+
+                <ShowOrHide path="old_appliance_recycled_freezer_refrigerator" value="No">
+                    <Select
+                        label="Location of the old appliance:"
+                        options={['Main Kitchen',
+                                    'Auxiliary Kitchen',
+                                    'Garage Conditioned',
+                                    'Garage Unconditioned',
+                                    'Basement Conditioned',
+                                    'Basement Unconditioned',
+                                    'Other']}
+                        path="old_appliance_location_freezer_refrigerator"
+                    />
+                    <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location_freezer_refrigerator"
+                        />
+                    </ShowOrHide>
+                </ShowOrHide>
+            </ShowOrHide>
+
+            <ShowOrHide path="appliance_type" value="Clothes Washer">
+                <Select
+                    label="Location of the appliance:"
+                    options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
+                    path="appliance_location_clothes_washer"
+                />
+                <ShowOrHide path="appliance_location_clothes_washer" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location_clothes_washer"
+                    />
+                </ShowOrHide>
+                <Radio
+                    label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
+                    options={['Yes', 'No']}
+                    path="old_appliance_recycled_clothes_washer" />
+
+                <ShowOrHide path="old_appliance_recycled_clothes_washer" value="No">
+                    <Select
+                        label="Location of the old appliance:"
+                        options={['Laundry area conditioned',
+                                    'Laundry area unconditioned',
+                                    'Other']}
+                        path="old_appliance_location_clothes_washer"
+                    />
+                    <ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location_clothes_washer"
+                        />
+                    </ShowOrHide>
+                </ShowOrHide>
+            </ShowOrHide>
+            <ShowOrHide path="appliance_type" value="Clothes Dryer-NON Heat Pump">
+                <Select
+                    label="Location of the appliance:"
+                    options={['Laundry area conditioned', 'Laundry area unconditioned', 'Other']}
+                    path="appliance_location_clothes_dryer"
+                />
+                <ShowOrHide path="appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
+                    <StringInput
+                        label="Specify other location of the appliance"
+                        path="other_appliance_location_clothes_dryer"
+                    />
+                </ShowOrHide>
+                <Radio
+                    label="Old clothes washer is recycled/removed/no-longer plugged-in/used?"
+                    options={['Yes', 'No']}
+                    path="old_appliance_recycled_clothes_dryer" />
+
+                <ShowOrHide path="old_appliance_recycled_clothes_dryer" value="No">
+                    <Select
+                        label="Location of the old appliance:"
+                        options={['Laundry area conditioned',
+                                    'Laundry area unconditioned',
+                                    'Other']}
+                        path="old_appliance_location_clothes_dryer"
+                    />
+                    <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
+                        <StringInput
+                            label="Specify other location of the old appliance"
+                            path="other_old_appliance_location_clothes_dryer"
+                        />
+                    </ShowOrHide>
+                </ShowOrHide>
+            </ShowOrHide>
+            <PhotoInput
+                id="existing_nameplate_photo"
+                label="Existing Nameplate - Photo"
+                uploadable={false}
+                required={true}
+            >
+                Take a photo of the appliance nameplate showing the manufacturer
+                information, model number, and serial number.
+            </PhotoInput>
+            <PhotoInput
+                id="existing_wide_angle_photo"
+                label="Existing Wide Angle - Photo"
+                uploadable={false}
+                required={true}
+            >
+                Take a wide-angle photo of the appliance in its installation
+                location showing the surrounding area.
+            </PhotoInput>
+            <PhotoInput
+                id="new_nameplate_photo"
+                label="New Nameplate - Photo"
+                uploadable={false}
+                required={true}
+            >
+                Take a photo of the appliance nameplate showing the manufacturer
+                information, model number, and serial number.
+            </PhotoInput>
+            <PhotoInput
+                id="new_wideangle_photo"
+                label="New Wide Angle - Photo"
+                uploadable={false}
+                required={true}
+            >
+                Take a wide-angle photo of the appliance in its installation
+                location showing the surrounding area.
+            </PhotoInput>
+        </RepeatableInput>
+    </Tab>
+    <Tab eventKey="report"  title="Report">
+        <PrintSection label="Print Report">
+              ---
+                # Appliance Installation
+                ## Photo Report
+            <LabelValue value ={props.data.assessment_date} type="date" label="Assessment Date"/>
+            <ProjectInfoReport {...props} />
+             <Repeatable path="appliances" label="Appliance / Equipment">
+                <LabelValue label="Appliance Type" path="appliance_type" />
+                <ShowOrHide path="appliance_type" value="Dishwasher">
+                    <ShowOrHide path="appliance_location_dishwasher" value={['Other']} matchCondition="Excludes">
+                            <LabelValue
+                                label="Location of the appliance"
+                                path="appliance_location_dishwasher"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_dishwasher" value="Other">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_dishwasher"
+                        />
+                    </ShowOrHide>
+                </ShowOrHide>
+
+                <ShowOrHide path="appliance_type" value={['Freezer', 'Refrigerator']} matchCondition="Includes">
+                    <ShowOrHide path="appliance_location_freezer_refrigerator" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_freezer_refrigerator"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_freezer_refrigerator" value="Other">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_freezer_refrigerator"
+                        />
+                    </ShowOrHide>
+                    <LabelValue
+                        label="Old appliance is recycled/removed/no-longer plugged-in/used?"
+                        path="old_appliance_recycled_freezer_refrigerator"
+                    />
+                    <ShowOrHide path="old_appliance_recycled_freezer_refrigerator" value="No">
+                        <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Equals">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location_freezer_refrigerator"
+                            />
+                        </ShowOrHide>
+                        <ShowOrHide path="old_appliance_location_freezer_refrigerator" value="Other" matchCondition="Excludes">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location_freezer_refrigerator"
+                            />
+                        </ShowOrHide>
+                    </ShowOrHide>
+                </ShowOrHide>
+
+
+                <ShowOrHide path="appliance_type" value="Clothes Washer">
+                    <ShowOrHide path="appliance_location_clothes_washer" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_clothes_washer"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_clothes_washer" value="Other" >
+
+\ <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_clothes_washer"
+                        />
+
+</ShowOrHide>
+<LabelValue
+                        label="Old appliance is recycled/removed/no-longer plugged-in/used?"
+                        path="old_appliance_recycled_clothes_washer"
+                    />
+<ShowOrHide path="old_appliance_recycled_clothes_washer" value="No">
+<ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Equals">
+<LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location_clothes_washer"
+                            />
+</ShowOrHide>
+<ShowOrHide path="old_appliance_location_clothes_washer" value="Other" matchCondition="Excludes">
+<LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location_clothes_washer"
+                            />
+</ShowOrHide>
+</ShowOrHide>
+</ShowOrHide>
+
+                <ShowOrHide path="appliance_type" value="Clothes Dryer-NON Heat Pump">
+                    <ShowOrHide path="appliance_location_clothes_dryer" value={['Other']} matchCondition="Excludes">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="appliance_location_clothes_dryer"
+                        />
+                    </ShowOrHide>
+                    <ShowOrHide path="appliance_location_clothes_dryer" value="Other">
+                        <LabelValue
+                            label="Location of the appliance"
+                            path="other_appliance_location_clothes_dryer"
+                        />
+                    </ShowOrHide>
+                    <LabelValue
+                        label="Old appliance is recycled/removed/no-longer plugged-in/used?"
+                        path="old_appliance_recycled_clothes_dryer"
+                    /   >
+                    <ShowOrHide path="old_appliance_recycled_clothes_dryer" value="No">
+                        <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Equals">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="other_old_appliance_location_clothes_dryer"
+                            />
+                        </ShowOrHide>
+                        <ShowOrHide path="old_appliance_location_clothes_dryer" value="Other" matchCondition="Excludes">
+                            <LabelValue
+                                label="Location of the old appliance"
+                                path="old_appliance_location_clothes_dryer"
+                            />
+                        </ShowOrHide>
+                    </ShowOrHide>
+                </ShowOrHide>
+                 <Photo
+                    id="existing_nameplate_photo"
+                    label="Existing Nameplate - Photo"
+                >
+                    Existing nameplate photo
+                </Photo>
+                <Photo
+                    id="existing_wide_angle_photo"
+                    label="Existing Wide Angle - Photo"
+                >
+                    Existing wide-angle photo
+                </Photo>
+                <Photo
+                    id="new_nameplate_photo"
+                    label="New Nameplate - Photo"
+                >
+                    New nameplate photo
+                </Photo>
+                <Photo
+                    id="new_wideangle_photo"
+                    label="New Wide Angle - Photo"
+                >
+                    New wide-angle photo
+                </Photo>
+            </Repeatable>
+        </PrintSection>
+    </Tab>
+
+</Tabs>
