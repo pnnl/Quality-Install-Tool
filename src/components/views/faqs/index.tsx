@@ -2,6 +2,7 @@ import React from 'react'
 import { Container } from 'react-bootstrap'
 import Layout from '../layouts/default'
 import Collapsible from '../../collapsible'
+import { TfiImport } from 'react-icons/tfi'
 
 const FaqsPage: React.FC = () => {
     return (
@@ -31,11 +32,26 @@ const FaqsPage: React.FC = () => {
                     strongly recommend exporting your projects regularly as a
                     backup.
                 </Collapsible>
-                <Collapsible header="How can I back up my data?">
-                    You can export your projects from the main project list.
-                    This will save your data as a file on your device, which you
-                    can then transfer and import on another device or keep a
-                    backup.
+                <Collapsible header="How can I back up / download my data?">
+                    You can export or download yourprojects as JSON. The
+                    Download icon <TfiImport size={25} color={'black'} />{' '}
+                    appears next to each project in the main project list and at
+                    the top of other pages. Clicking this icon allows you to
+                    save a project’s data as a JSON file on your device,
+                    containing all the information related to that project.
+                    <br />
+                    <br />
+                    Downloading your projects serves as a backup mechanism. If
+                    your browser&rsquo;s cache or site data is cleared (either
+                    accidentally or due to browser updates/settings), having
+                    these downloaded files allows you to restore your projects
+                    by importing them back into the application. This is also
+                    useful for sharing project data with others or moving it to
+                    another device.
+                    <br />
+                    <br />
+                    Please note that you must download each project
+                    individually.
                 </Collapsible>
                 <Collapsible header="Can I use the app on multiple devices?">
                     Since data is stored locally on each device, your projects
@@ -61,7 +77,46 @@ const FaqsPage: React.FC = () => {
                     Installation. To do this, navigate to the desired
                     Installation in the project&rsquo;s installation list, and
                     click the &ldquo;Print Report&rdquo; button within the
-                    Report tab to open the report as a PDF in your browser.
+                    Report tab to open the report as a PDF in your browser. If
+                    nothing happens when you click &ldquo;Print Report&rdquo;,
+                    your browser&rdquo;s pop-up blocker may be preventing the
+                    PDF from opening from https://quality-install-tool.pnnl.gov/
+                    <br />
+                    <b>For desktop browsers:</b>
+                    <ol>
+                        <li>
+                            In Google Chrome, click &ldquo;Print Report&rdquo;
+                            and check for a pop-up blocker icon on the right
+                            side of the address bar. Click it and allow pop-ups
+                            from
+                            &ldquo;https://quality-install-tool.pnnl.gov/&rdquo;.
+                            You can also enable this via: Settings → Privacy and
+                            security → Site settings → Pop-ups and redirects,
+                            then add QI Tool under Allowed.
+                        </li>
+                        <li>
+                            In Safari on macOS, go to Safari → Settings
+                            (Preferences) → Websites → Pop-up Windows, find your
+                            site in the list, and set it to Allow. Then reload
+                            the page and click “Print Report” again.
+                        </li>
+                    </ol>
+                    <b>For mobile browsers:</b>
+                    <ol>
+                        <li>
+                            In Chrome on Android, the PDF may open in the same
+                            tab. If it appears blocked, open Chrome&rdquo;s menu
+                            and go to Settings → Site settings → Pop-ups and
+                            redirects, and allow pop-ups for QI Tool site (or
+                            enable pop-ups in general).
+                        </li>
+                        <li>
+                            In Safari on iPhone or iPad, adjust pop-up behavior
+                            via the iOS Settings app by going to Settings →
+                            Safari → Block Pop-Ups and turning this option off
+                            if needed, then try “Print Report” again.
+                        </li>
+                    </ol>
                 </Collapsible>
             </Container>
         </Layout>
