@@ -58,12 +58,21 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                             try {
                                 // Check file type
                                 if (!isPhoto(blob)) {
+                                    console.error(
+                                        `[PhotoUpload] File validation failed: Invalid file type. MIME type: ${blob.type}`,
+                                    )
                                     throw new Error('Invalid file type')
                                 }
 
+                                console.info(
+                                    `[PhotoUpload] Validation passed. File size: ${(blob.size / 1024).toFixed(2)}KB`,
+                                )
+
                                 // Provide loading feedback
                                 setLoadingMessage('Preparing photo...')
-                                console.log('Starting photo attachment process')
+                                console.log(
+                                    `[PhotoUpload] Starting photo attachment process for attachment ID: ${photoAttachmentId}`,
+                                )
 
                                 // Simulate a minimum loading time to ensure loader is visible
                                 const startTime = Date.now()
@@ -82,7 +91,9 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                                     )
                                 }
 
-                                console.log('Photo attachment completed')
+                                console.log(
+                                    `[PhotoUpload] Photo attachment completed successfully in ${processingTime}ms`,
+                                )
                                 setLoadingMessage(undefined)
                                 setError(undefined)
                             } catch (cause) {
@@ -93,9 +104,11 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                                         : String(cause)
 
                                 console.error(
-                                    'Photo attachment error:',
-                                    cause,
-                                    loadingMessage,
+                                    `[PhotoUpload] Upload failed: ${errorMessage}`,
+                                    {
+                                        error: cause,
+                                        attachmentId: photoAttachmentId,
+                                    },
                                 )
                                 setError(errorMessage)
                                 setLoadingMessage(undefined)

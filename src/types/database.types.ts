@@ -65,6 +65,7 @@ export interface FileMetadata {
 export interface PhotoMetadata {
     geolocation: Geolocation
     geolocationSource?: GeolocationSource | null
+    geolocationError?: string | null
     timestamp: Timestamp
     timestampSource?: TimestampSource | null
 }

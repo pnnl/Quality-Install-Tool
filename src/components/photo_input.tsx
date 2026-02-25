@@ -11,10 +11,15 @@ import {
     Spinner,
 } from 'react-bootstrap'
 import { TbCameraPlus } from 'react-icons/tb'
-import { TfiInfoAlt, TfiTrash } from 'react-icons/tfi'
+import { TfiInfoAlt, TfiTrash, TfiAlert } from 'react-icons/tfi'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
-import { PHOTO_MIME_TYPES, isPhoto } from '../utilities/photo_utils'
+import {
+    PHOTO_MIME_TYPES,
+    isPhoto,
+    getGeolocationErrorInfo,
+} from '../utilities/photo_utils'
+import { getDeviceType } from '../utilities/device_detection_utils'
 
 export interface PhotoInputProps {
     children: React.ReactNode
@@ -58,6 +63,20 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         setSelectedPhotoAttachmentForDelete,
     ] = useState<PhotoAttachment | undefined>(undefined)
     const [showInfo, setShowInfo] = useState(false)
+
+    // State for geolocation error offcanvas
+    const [geolocationErrorOffcanvas, setGeolocationErrorOffcanvas] = useState<{
+        isOpen: boolean
+        message: string
+        photoIndex: number
+        showFaqLink: boolean
+        faqTopic?: string
+    }>({
+        isOpen: false,
+        message: '',
+        photoIndex: -1,
+        showFaqLink: false,
+    })
 
     // Enhanced error state for more detailed feedback
     const [uploadError, setUploadError] = useState<{
@@ -109,10 +128,10 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     useEffect(() => {
         const objectURL = selectedPhotoAttachmentForDelete
             ? URL.createObjectURL(
-                (
-                    selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
-                ).data as Blob,
-            )
+                  (
+                      selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
+                  ).data as Blob,
+              )
             : undefined
         setObjectURLForDelete(objectURL)
         return () => {
@@ -152,6 +171,61 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
 
     return (
         <>
+            {/* Geolocation Error Offcanvas */}
+            <Offcanvas
+                show={geolocationErrorOffcanvas.isOpen}
+                onHide={() =>
+                    setGeolocationErrorOffcanvas(prev => ({
+                        ...prev,
+                        isOpen: false,
+                    }))
+                }
+                placement="end"
+            >
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>
+                        <TfiAlert
+                            className="me-2"
+                            style={{ color: '#dc3545' }}
+                        />
+                        Geolocation Data Missing
+                    </Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    <p>
+                        <strong>
+                            Photo {geolocationErrorOffcanvas.photoIndex + 1}:
+                        </strong>
+                    </p>
+                    <p style={{ whiteSpace: 'pre-wrap' }}>
+                        {geolocationErrorOffcanvas.message}
+                    </p>
+                    {geolocationErrorOffcanvas.showFaqLink && (
+                        <div className="mt-3 p-3 bg-light rounded">
+                            <p className="mb-2">
+                                <strong>Need help enabling location?</strong>
+                            </p>
+                            <a
+                                href={`/app/faqs#faq-location-${geolocationErrorOffcanvas.faqTopic}`}
+                                className="btn btn-link p-0"
+                                onClick={e => {
+                                    // Allow default link behavior but also log it
+                                    console.info(
+                                        `[PhotoUpload] User clicked FAQ link for: ${geolocationErrorOffcanvas.faqTopic}`,
+                                    )
+                                }}
+                            >
+                                View instructions for{' '}
+                                {geolocationErrorOffcanvas.faqTopic === 'mobile'
+                                    ? 'Android/iOS'
+                                    : 'Desktop'}
+                                &apos; → &apos;
+                            </a>
+                        </div>
+                    )}
+                </Offcanvas.Body>
+            </Offcanvas>
+
             {/* Delete Confirmation Modal */}
             <Modal
                 dialogClassName="custom-modal"
@@ -257,61 +331,154 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     {/* Photo Gallery */}
                     {photoAttachments.length > 0 && (
                         <div className="photo-gallery row g-2">
-                            {photoAttachments.map((photoAttachment, index) => (
-                                <div
-                                    key={index}
-                                    className="col-4 position-relative"
-                                >
-                                    {objectURLsForPhotoAttachments?.[index] && (
-                                        <Image
-                                            src={
-                                                objectURLsForPhotoAttachments[
-                                                index
-                                                ]
-                                            }
-                                            thumbnail
-                                            className="w-100"
-                                        />
-                                    )}
-                                    <Button
-                                        variant="danger"
-                                        size="sm"
-                                        className="position-absolute top-0 end-0 m-1"
-                                        onClick={() =>
-                                            setSelectedPhotoAttachmentForDelete(
-                                                photoAttachment,
-                                            )
-                                        }
+                            {photoAttachments.map((photoAttachment, index) => {
+                                // Log detailed geolocation errors
+                                const metadata = photoAttachment.metadata
+                                const hasGeolocation =
+                                    metadata?.geolocation?.latitude &&
+                                    metadata?.geolocation?.longitude
+                                const geolocationSource =
+                                    metadata?.geolocationSource
+
+                                if (!hasGeolocation) {
+                                    const deviceType =
+                                        getDeviceType() === 'mobile'
+                                            ? 'Mobile (Android/iOS)'
+                                            : 'Desktop'
+
+                                    if (geolocationSource === 'EXIF') {
+                                        // EXIF was found but had no coordinates
+                                        console.warn(
+                                            `[PhotoInput] Geolocation missing from EXIF data (Photo ${index + 1}). ` +
+                                                `EXIF data was extracted but contained no GPS coordinates. ` +
+                                                `For mobile (${deviceType}), GPS data may not be embedded in the photo. ` +
+                                                `Attempted fallback to device location, but fallback also failed.`,
+                                        )
+                                    } else if (
+                                        geolocationSource ===
+                                        'navigator.geolocation'
+                                    ) {
+                                        // Device location was requested but returned nulls
+                                        console.warn(
+                                            `[PhotoInput] Device location data missing (Photo ${index + 1}). ` +
+                                                `EXIF extraction found no GPS data. ` +
+                                                `Attempted to retrieve location from device (${deviceType}), ` +
+                                                `but device returned null/empty coordinates.`,
+                                        )
+                                    } else {
+                                        // EXIF extraction completely failed
+                                        console.warn(
+                                            `[PhotoInput] Unable to extract EXIF data (Photo ${index + 1}). ` +
+                                                `EXIF extraction failed on device (${deviceType}). ` +
+                                                `Attempted to retrieve location from device, but also failed. ` +
+                                                `Possible causes: ` +
+                                                `1) Photo format does not support EXIF, ` +
+                                                `2) Location permissions not granted (mobile), ` +
+                                                `3) GPS hardware/signal unavailable (mobile), ` +
+                                                `4) Browser/privacy settings blocking location access (desktop).`,
+                                        )
+                                    }
+                                }
+
+                                return (
+                                    <div
+                                        key={index}
+                                        className="col-4 position-relative"
                                     >
-                                        <TfiTrash />
-                                    </Button>
-                                    <div className="mt-1">
-                                        <small>
-                                            {photoAttachment.metadata
-                                                ?.timestamp ? (
-                                                <DateTimeStr
-                                                    date={
-                                                        photoAttachment.metadata
-                                                            .timestamp
-                                                    }
-                                                />
-                                            ) : (
-                                                <span>Missing</span>
-                                            )}
-                                            <br />
-                                            {photoAttachment.metadata
-                                                ?.geolocation ? (
-                                                <GpsCoordStr
-                                                    {...photoAttachment.metadata
-                                                        .geolocation}
-                                                />
-                                            ) : (
-                                                <span>Missing</span>
-                                            )}
-                                        </small>
+                                        {objectURLsForPhotoAttachments?.[
+                                            index
+                                        ] && (
+                                            <Image
+                                                src={
+                                                    objectURLsForPhotoAttachments[
+                                                        index
+                                                    ]
+                                                }
+                                                thumbnail
+                                                className="w-100"
+                                            />
+                                        )}
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            className="position-absolute top-0 end-0 m-1"
+                                            onClick={() =>
+                                                setSelectedPhotoAttachmentForDelete(
+                                                    photoAttachment,
+                                                )
+                                            }
+                                        >
+                                            <TfiTrash />
+                                        </Button>
+                                        <div className="mt-1">
+                                            <small>
+                                                {photoAttachment.metadata
+                                                    ?.timestamp ? (
+                                                    <DateTimeStr
+                                                        date={
+                                                            photoAttachment
+                                                                .metadata
+                                                                .timestamp
+                                                        }
+                                                    />
+                                                ) : (
+                                                    <span>Missing</span>
+                                                )}
+                                                <br />
+                                                Geolocation:{' '}
+                                                {photoAttachment.metadata
+                                                    ?.geolocation?.latitude &&
+                                                photoAttachment.metadata
+                                                    ?.geolocation?.longitude ? (
+                                                    <GpsCoordStr
+                                                        {...photoAttachment
+                                                            .metadata
+                                                            .geolocation}
+                                                    />
+                                                ) : (
+                                                    <>
+                                                        <span>Missing</span>
+                                                        <Button
+                                                            variant="link"
+                                                            className="p-0 ms-2"
+                                                            style={{
+                                                                fontSize:
+                                                                    'inherit',
+                                                            }}
+                                                            onClick={() => {
+                                                                const errorInfo =
+                                                                    getGeolocationErrorInfo(
+                                                                        metadata?.geolocationSource,
+                                                                    )
+                                                                setGeolocationErrorOffcanvas(
+                                                                    {
+                                                                        isOpen: true,
+                                                                        message:
+                                                                            errorInfo.message,
+                                                                        photoIndex:
+                                                                            index,
+                                                                        showFaqLink:
+                                                                            errorInfo.showFaqLink,
+                                                                        faqTopic:
+                                                                            errorInfo.faqTopic,
+                                                                    },
+                                                                )
+                                                            }}
+                                                            title="Click to view error details"
+                                                        >
+                                                            <TfiAlert
+                                                                style={{
+                                                                    color: '#dc3545',
+                                                                }}
+                                                            />
+                                                        </Button>
+                                                    </>
+                                                )}
+                                            </small>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     )}
 
