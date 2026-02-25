@@ -257,33 +257,33 @@ export function getGeolocationErrorInfo(
                 `The location data was found in the photo file but is empty. This happens when:\n\n` +
                 `• The photo was taken without GPS turned on\n` +
                 `• Location permission was not granted when taking the photo\n\n` +
-                `We tried to use your ${deviceType}&apos;s current location as a backup, but that didn&apos;t work either.\n\n` +
-                `💡 To fix this: Enable location services and GPS on your ${deviceType}, then delete this photo and upload it again.`,
+                `Location services on the ${deviceType} were unavailable as a backup.\n\n` +
+                `💡 To fix this: Enable location services and GPS on the ${deviceType}, then delete this photo and upload it again.`,
             showFaqLink: true,
             faqTopic: isMobileDevice ? 'mobile' : 'desktop',
         }
     } else if (geolocationSource === 'navigator.geolocation') {
         return {
             message:
-                `The photo does not contain location information, and we couldn&apos;t get your ${deviceType}&apos;s current location.\n\n` +
+                `The photo does not contain location information, and the ${deviceType}'s current location could not be obtained.\n\n` +
                 `This usually happens when:\n\n` +
                 `• Location services are turned off\n` +
-                `• You haven&apos;t allowed this app to access your location\n` +
+                `• The app does not have permission to access location services\n` +
                 `• The GPS signal is too weak (on mobile)\n\n` +
-                `💡 To fix this: Enable location services on your ${deviceType}, then delete this photo and upload it again.`,
+                `💡 To fix this: Enable location services on the ${deviceType}, then delete this photo and upload it again.`,
             showFaqLink: true,
             faqTopic: isMobileDevice ? 'mobile' : 'desktop',
         }
     } else {
         return {
             message:
-                `We couldn&apos;t find location information for this photo.\n\n` +
+                `Location information for this photo could not be found.\n\n` +
                 `This could happen because:\n\n` +
-                `• The photo file doesn&apos;t contain location data\n` +
-                `• You haven&apos;t allowed location access on your ${deviceType}\n` +
-                `• The GPS isn&apos;t working or doesn&apos;t have a signal\n` +
+                `• The photo file doesn't contain location data\n` +
+                `• The app does not have permission to access location services on the ${deviceType}\n` +
+                `• The GPS isn't working or doesn't have a signal\n` +
                 `• The photo was imported without location information\n\n` +
-                `💡 To fix this: Enable location services on your ${deviceType} and try uploading the photo again. If the photo file doesn&apos;t have location data, you can delete it and take a new one with GPS enabled.`,
+                `💡 To fix this: Enable location services on the ${deviceType} and try uploading the photo again. If the photo file doesn't have location data, delete it and take a new one with GPS enabled.`,
             showFaqLink: true,
             faqTopic: isMobileDevice ? 'mobile' : 'desktop',
         }
