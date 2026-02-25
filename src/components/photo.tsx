@@ -108,7 +108,7 @@ const Photo: React.FC<PhotoProps> = ({
                                 <a
                                     href={`/app/faqs#faq-location-${geolocationErrorOffcanvas.faqTopic}`}
                                     className="btn btn-link p-0"
-                                    onClick={e => {
+                                    onClick={() => {
                                         // Allow default link behavior but also log it
                                         console.info(
                                             `[PhotoUpload] User clicked FAQ link for: ${geolocationErrorOffcanvas.faqTopic}`,

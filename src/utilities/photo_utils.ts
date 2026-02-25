@@ -4,6 +4,13 @@ import imageCompression from 'browser-image-compression'
 import { type PhotoMetadata } from '../types/database.types'
 import { getDeviceType } from './device_detection_utils'
 
+// Development-only logging utility
+const devLog = (message: string, data?: unknown) => {
+    if (process.env.NODE_ENV !== 'production') {
+        console.info(message, data)
+    }
+}
+
 const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
     process.env.REACT_APP_GEOLOCATION_MAXIMUM_AGE,
 )
@@ -91,7 +98,7 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
     const uploadId = Math.random().toString(36).substring(7) // Unique ID for this upload
     let geolocationError: string | null = null
 
-    console.info(
+    devLog(
         `[PhotoUpload-${uploadId}] Starting metadata extraction for file: ${blob.type}, Size: ${(blob.size / 1024).toFixed(2)}KB`,
     )
 
@@ -102,11 +109,11 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
     try {
         tags = await exifr.parse(blob)
         if (tags) {
-            console.info(
+            devLog(
                 `[PhotoUpload-${uploadId}] EXIF data successfully extracted. Keys found: ${Object.keys(tags).length}`,
             )
         } else {
-            console.info(
+            devLog(
                 `[PhotoUpload-${uploadId}] EXIF data is empty - no metadata tags found in file`,
             )
         }
@@ -134,7 +141,7 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
             }
             const geolocationSource = 'EXIF'
 
-            console.info(
+            devLog(
                 `[PhotoUpload-${uploadId}] SUCCESS: GPS coordinates found in EXIF. Location: (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`,
             )
 
@@ -171,7 +178,7 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
 
     // Step 3: Fallback to device geolocation
     try {
-        console.info(
+        devLog(
             `[PhotoUpload-${uploadId}] Attempting fallback: Requesting device location via navigator.geolocation...`,
         )
 
@@ -188,7 +195,7 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
         const longitude = geolocationPosition.coords.longitude
         const altitude = geolocationPosition.coords.altitude
 
-        console.info(
+        devLog(
             `[PhotoUpload-${uploadId}] SUCCESS (Fallback): Device location obtained. Location: (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`,
         )
 

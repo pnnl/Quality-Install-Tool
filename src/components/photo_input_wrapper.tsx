@@ -49,6 +49,7 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                         id={id}
                         notes={notes}
                         photoAttachments={photoAttachments}
+                        loadingMessage={loadingMessage}
                         onPutPhotoAttachment={async blob => {
                             // Start loading and reset previous states
                             setIsLoading(true)
@@ -64,9 +65,11 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                                     throw new Error('Invalid file type')
                                 }
 
-                                console.info(
-                                    `[PhotoUpload] Validation passed. File size: ${(blob.size / 1024).toFixed(2)}KB`,
-                                )
+                                if (process.env.NODE_ENV !== 'production') {
+                                    console.info(
+                                        `[PhotoUpload] Validation passed. File size: ${(blob.size / 1024).toFixed(2)}KB`,
+                                    )
+                                }
 
                                 // Provide loading feedback
                                 setLoadingMessage('Preparing photo...')

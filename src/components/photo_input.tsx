@@ -28,6 +28,7 @@ export interface PhotoInputProps {
     id: string
     label: string
     loading: boolean
+    loadingMessage?: string
     notes?: boolean
     onPutPhotoAttachment?: (file: Blob) => Promise<void>
     onRemovePhotoAttachment?: (
@@ -44,6 +45,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     id,
     label,
     loading,
+    loadingMessage,
     notes = true,
     onPutPhotoAttachment,
     onRemovePhotoAttachment,
@@ -208,11 +210,12 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             <a
                                 href={`/app/faqs#faq-location-${geolocationErrorOffcanvas.faqTopic}`}
                                 className="btn btn-link p-0"
-                                onClick={e => {
-                                    // Allow default link behavior but also log it
-                                    console.info(
-                                        `[PhotoUpload] User clicked FAQ link for: ${geolocationErrorOffcanvas.faqTopic}`,
-                                    )
+                                onClick={() => {
+                                    // Allow default link behavior but also log it in dev mode
+                                    process.env.NODE_ENV !== 'production' &&
+                                        console.info(
+                                            `[PhotoUpload] User clicked FAQ link for: ${geolocationErrorOffcanvas.faqTopic}`,
+                                        )
                                 }}
                             >
                                 View instructions for{' '}
@@ -323,7 +326,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                 </span>
                             </Spinner>
                             <p className="mt-2 text-muted">
-                                Processing photo...
+                                {loadingMessage || 'Processing photo...'}
                             </p>
                         </div>
                     )}

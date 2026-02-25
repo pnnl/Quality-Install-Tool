@@ -29,7 +29,8 @@ export const getDeviceType = (): 'mobile' | 'desktop' => {
         typeof window !== 'undefined' &&
         ('ontouchstart' in window ||
             navigator.maxTouchPoints > 0 ||
-            (navigator as any).msMaxTouchPoints > 0)
+            (navigator as unknown as { msMaxTouchPoints: number })
+                .msMaxTouchPoints > 0)
 
     // If either check indicates mobile, return mobile
     if (isMobileUserAgent || hasTouchCapability) {
