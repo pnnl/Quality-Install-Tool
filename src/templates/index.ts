@@ -25,7 +25,8 @@ import DOEWorkflowWallAirSealingAndInsulation from './ira_doe_workflow_wall_air_
 import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessment.mdx'
 import DOEAppliancesWorkflow from './ira_doe_workflow_appliances.mdx'
 import DOEWorkflowWoodAndPelletStove from './ira_doe_workflow_wood_and_pallet_stove.mdx'
-// import Playground from './playground.mdx'
+import DOEWorkflowRimJoist from './ira_doe_workflow_rim_joist_air_sealing_and_insulation.mdx'
+import Playground from './playground.mdx'
 
 import {
     type BaseData,
@@ -164,6 +165,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowMechanicalVentilation,
     },
+    doe_workflow_rim_joist_air_sealing_and_insulation: {
+        title: 'Rim Joist Air Sealing and Insulation',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowRimJoist,
+    },
     doe_workflow_slab_foundation_exterior: {
         title: 'Slab Foundation Exterior Perimeter Sealing and Insulation',
         subtitle: INSTALLATION_SUB_TITLE,
@@ -189,16 +195,16 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowWoodAndPelletStove,
     },
-    // playground: {
-    //     title: 'Playground',
-    //     subtitle: {
-    //         singularTitleCase: 'Playground',
-    //         singularLowerCase: 'playground',
-    //         pluralTitleCase: 'Playgrounds',
-    //         pluralLowerCase: 'playgrounds',
-    //     },
-    //     template: Playground,
-    // },
+    playground: {
+        title: 'Playground',
+        subtitle: {
+            singularTitleCase: 'Playground',
+            singularLowerCase: 'playground',
+            pluralTitleCase: 'Playgrounds',
+            pluralLowerCase: 'playgrounds',
+        },
+        template: Playground,
+    },
 }
 
 const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']

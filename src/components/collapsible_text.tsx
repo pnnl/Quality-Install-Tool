@@ -1,17 +1,21 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 
 interface CollapsibleTextProps {
     children?: React.ReactNode
     text: React.ReactNode
     title: React.ReactNode
+    isCollapsed: boolean
+    onToggle: () => void
 }
 
-const CollapsibleText: React.FC<CollapsibleTextProps> = ({ text }) => {
-    const [isCollapsed, setIsCollapsed] = useState(true)
-
+const CollapsibleText: React.FC<CollapsibleTextProps> = ({
+    text,
+    isCollapsed,
+    onToggle,
+}) => {
     const toggleCollapse = useCallback(() => {
-        setIsCollapsed(prevState => !prevState)
-    }, [])
+        onToggle()
+    }, [onToggle])
 
     const isExpandable = typeof text === 'string' && text.length > 75
 
