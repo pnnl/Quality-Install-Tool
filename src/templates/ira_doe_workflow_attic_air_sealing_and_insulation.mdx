@@ -1,3 +1,4 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
 import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
@@ -79,6 +80,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="installation" title="Installation">
   Provide a photo of each detail, skip if the feature is not present the home’s attic.
   <DateInput label="Installation Date" path="install_date" />
+
+  <InstallationPermitInput />
     <Tabs>
       <Tab eventKey="installation_air_Sealing" title="Installation - Air Sealing">
         <PhotoInput id="drywall_to_topplate_photo" label="Drywall to Top Plate – Photo">

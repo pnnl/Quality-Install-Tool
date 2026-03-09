@@ -1,0 +1,31 @@
+<CollapsibleTextContainer
+    title="Installation Permit"
+    text="You can upload the installation permit as a PDF or photo. Enter a Name for the uploaded file or photo."
+>
+    <Radio
+        label="Permit File Type:"
+        options={['Photo', 'File']}
+        path="permit.file_type"
+    />
+    <br />
+    <ShowOrHide
+        path="permit.file_type"
+        value={['File']}
+        matchCondition="Includes"
+    >
+        <FileInput id="permit.file_input" label="" fileNameField={true} />
+    </ShowOrHide>
+    <ShowOrHide
+        path="permit.file_type"
+        value={['Photo']}
+        matchCondition="Includes"
+    >
+        <PhotoInput
+            id="permit.photo_input"
+            label=""
+            photoNameField={true}
+            count={1}
+            notes={false}
+        />
+    </ShowOrHide>
+</CollapsibleTextContainer>

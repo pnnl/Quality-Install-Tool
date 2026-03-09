@@ -1,3 +1,4 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
 import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
@@ -59,6 +60,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   </Tab>
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
+
+    <InstallationPermitInput />
     <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
       Please take a photo of the nameplate or sticker of the whole-house mechanical ventilation device showing the model number and serial number.
     </PhotoInput>
@@ -83,6 +86,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <PhotoInput id="mechanical_ventialtion_installed_photo" label="Mechanical Ventilation Unit Installed – Photo" >
     The photo should be taken from far enough away to show how the mechanical ventilation equipment will be accessed for maintenance and cleaning.
     </PhotoInput>
+
   </Tab>
   <Tab eventKey="post_installation" title="Post-Installation">
 

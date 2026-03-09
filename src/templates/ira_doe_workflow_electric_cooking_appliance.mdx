@@ -1,3 +1,4 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
@@ -7,6 +8,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   </Tab>
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
+
+    <InstallationPermitInput />
 
     <PhotoInput id="electric_cooking_appliance_nameplate_photo" label="Nameplate of the Electric Cooking Appliance – Photo">
         Please take a photo of the nameplate of the electric cooking appliance showing the model number and serial number.

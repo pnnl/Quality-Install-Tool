@@ -25,11 +25,18 @@ const PhotoWrapper: React.FC<PhotoWrapperProps> = ({
     return (
         <StoreContext.Consumer>
             {({ doc }) => {
+                const sourceDoc = parent ?? doc
+
                 return (
                     <Photo
                         label={label}
                         description={children}
                         required={required}
+                        photoName={
+                            (sourceDoc &&
+                                get(sourceDoc.data_, `${id}_photo_name`)) ||
+                            undefined
+                        }
                         photoAttachments={
                             parent
                                 ? getPhotoAttachments(parent, id)
@@ -37,7 +44,10 @@ const PhotoWrapper: React.FC<PhotoWrapperProps> = ({
                                   ? getPhotoAttachments(doc, id)
                                   : []
                         }
-                        noteValue={(doc && get(doc.data_, `${id}_note`)) ?? ''}
+                        noteValue={
+                            (sourceDoc && get(sourceDoc.data_, `${id}_note`)) ??
+                            ''
+                        }
                     />
                 )
             }}

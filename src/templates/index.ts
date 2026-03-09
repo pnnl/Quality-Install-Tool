@@ -151,7 +151,7 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         template: DOEWorkflowHighEfficiencyWaterHeater,
     },
     doe_workflow_insert_replacement_windows: {
-        title: 'Insert Replacement Windows',
+        title: 'Insert Replacement Windows/Doors',
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowInsertReplacementWindows,
     },

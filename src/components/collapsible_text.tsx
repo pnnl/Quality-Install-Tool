@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 interface CollapsibleTextProps {
     children?: React.ReactNode
@@ -13,14 +13,49 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
     isCollapsed,
     onToggle,
 }) => {
+    const textContainerRef = useRef<HTMLDivElement>(null)
+    const [isExpandable, setIsExpandable] = useState(false)
+
     const toggleCollapse = useCallback(() => {
         onToggle()
     }, [onToggle])
 
-    const isExpandable = typeof text === 'string' && text.length > 75
+    useEffect(() => {
+        const updateExpandableState = () => {
+            const textContainer = textContainerRef.current
+
+            if (!textContainer) {
+                return
+            }
+
+            const wasCollapsed = textContainer.classList.contains('collapsed')
+
+            // Measure overflow against the collapsed height limit.
+            if (!wasCollapsed) {
+                textContainer.classList.add('collapsed')
+            }
+
+            const hasOverflow =
+                textContainer.scrollHeight > textContainer.clientHeight + 1
+
+            if (!wasCollapsed) {
+                textContainer.classList.remove('collapsed')
+            }
+
+            setIsExpandable(hasOverflow)
+        }
+
+        updateExpandableState()
+        window.addEventListener('resize', updateExpandableState)
+
+        return () => {
+            window.removeEventListener('resize', updateExpandableState)
+        }
+    }, [text])
 
     return (
         <div
+            ref={textContainerRef}
             className={`collapsible-text ${isCollapsed && isExpandable ? 'collapsed' : ''}`}
         >
             <p className="description">

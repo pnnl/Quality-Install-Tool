@@ -1,8 +1,11 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
+
+    <InstallationPermitInput />
    
     
     <Select label="Target R-Value" options={["R-13","R-20"]} path="target_r_value" />
@@ -51,12 +54,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       </PhotoInput>
     </ShowOrHide>
 
-    <CollapsibleTextContainer title="" text="" collapsible={false}>
-    |  |  |
-    | ----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | | <NumberInput label="Total Number of Feet of Rim Joist:" min={0} path="total_rim_joist_feet"  />|
-    | | <NumberInput label="Total Number of Feet of Rim Joist Retrofitted:" min={0} path="total_rim_joist_retrofitted_feet"  />|
-    | | <LabelValue label="Percent of Rim Joist Retrofitted: " decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : 'N/A'}/>|
+    <CollapsibleTextContainer title="" text="">
+        <NumberInput label="Total Number of Feet of Rim Joist:" min={0} path="total_rim_joist_feet"  />
+        <NumberInput label="Total Number of Feet of Rim Joist Retrofitted:" min={0} path="total_rim_joist_retrofitted_feet"  />
+        <LabelValue label="Percent of Rim Joist Retrofitted" decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : ''}/>
     </CollapsibleTextContainer>
 
   </Tab>
@@ -67,8 +68,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     ## Photo Report
 
     <ProjectInfoReport {...props} />
-
-    <LabelValue label="Installation Date" path="install_date" />
 
     <LabelValue label="Target R-Value" path="target_r_value" />
 
@@ -119,7 +118,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <LabelValue label="Total Number of Feet of Rim Joist:" path="total_rim_joist_feet"  />
     <LabelValue label="Total Number of Feet of Rim Joist Retrofitted:" path="total_rim_joist_retrofitted_feet"  />
-    <LabelValue label="Percent of Rim Joist Retrofitted: " decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : 'N/A'}/>
+    <LabelValue label="Percent of Rim Joist Retrofitted: " decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : ''}/>
 
     </PrintSection>
 

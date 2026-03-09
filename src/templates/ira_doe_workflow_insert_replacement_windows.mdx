@@ -1,3 +1,4 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
@@ -12,6 +13,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     rough opening and the window is caulked to the siding.
 
     <DateInput label="Installation Date" path="install_date" />
+
+
+    <InstallationPermitInput />
 
     ## Before Removal of Old Window
     <PhotoInput id="outside_photo" label="Outside – Photo">
@@ -78,7 +82,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
     ---
-    # Insert Replacement Windows Upgrade
+    # Insert Replacement Windows / Doors Upgrade
     ## Photo Report
 
     <ProjectInfoReport {...props} />

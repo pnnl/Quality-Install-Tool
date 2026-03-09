@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
 import Collapsible from './collapsible'
@@ -26,16 +26,26 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
     onRemove,
     children,
 }) => {
+    const [newlyAddedIndex, setNewlyAddedIndex] = useState<number | null>(null)
+
+    useEffect(() => {
+        if (newlyAddedIndex !== null && values.length > newlyAddedIndex) {
+            setNewlyAddedIndex(null)
+        }
+    }, [newlyAddedIndex, values.length])
+
     const handleAdd = useCallback(
         async (event: React.MouseEvent<HTMLButtonElement>) => {
             event.stopPropagation()
             event.preventDefault()
 
+            setNewlyAddedIndex(values.length)
+
             onAdd && (await onAdd())
 
             return false
         },
-        [onAdd],
+        [onAdd, values.length],
     )
 
     const handleRemove = useCallback(
@@ -73,6 +83,7 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                     <Collapsible
                         key={index}
                         header={`${label} ${index + 1}${labelValue ? `: ${labelValue}` : ''}`}
+                        defaultOpen={index === newlyAddedIndex}
                     >
                         <div className="combustion_tests">
                             {React.Children.map(children, (child, childIndex) =>
@@ -84,7 +95,7 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                                 ),
                             )}
                         </div>
-                        <div>
+                        <div className="d-flex justify-content-end">
                             <Button
                                 className="remove-button"
                                 onClick={handleRemove}
