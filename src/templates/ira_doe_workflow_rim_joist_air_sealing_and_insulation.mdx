@@ -6,9 +6,12 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <DateInput label="Installation Date" path="install_date" />
 
     <InstallationPermitInput />
-    <Select label="Target R-Value" options={["R-13","R-20"]} path="target_r_value" />
+    <Select label="Target R-Value" options={["R-13","R-20", "Other"]} path="target_r_value" />
+    <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
+      <NumberInput label="Target R-Value" min={8} max={30} path="target_r_value_other"  />
+    </ShowOrHide>
 
-    <Select label="Rim Joist Air Seal and Insulation Method" options={["Spray foam for air sealing and insulation","Rigid foam with spray foam or caulking for air sealing","Rigid foam with batt + spray foam or caulking for air sealing"]} path="insulation_method" />
+    <Select label="Rim Joist Air Seal and Insulation Method" options={["Spray foam for air sealing and insulation","Rigid foam with spray foam or caulking for air sealing","Spray foam with batt"]} path="insulation_method" />
 
     <ShowOrHide visible={props.data?.insulation_method === 'Spray foam for air sealing and insulation'}>
       <PhotoInput id="blocking_cinderblock_holes_photo" label="Blocking Cinderblock Holes – Photo">
@@ -37,17 +40,14 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       </PhotoInput>
     </ShowOrHide>
 
-    <ShowOrHide visible={props.data?.insulation_method === 'Rigid foam with batt + spray foam or caulking for air sealing'}>
-      <PhotoInput id="rigid_foam_batt_spray_thickness_photo" label="Rigid Foam Thickness – Photo">
-        Take a photo showing a tape measurement of the rigid foam thickness.
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam with batt'}>
+      <PhotoInput id="rigid_foam_batt_spray_thickness_photo" label="Spray Foam Thickness – Photo" required>
+        Take a photo of the spray foam with depth gauge showing its thickness.
       </PhotoInput>
-      <PhotoInput id="rigid_foam_batt_air_sealed_photo" label="Air Sealing – Photo">
-        Take a photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
-      </PhotoInput>
-       <PhotoInput id="rigid_foam_batt_insulation_photo" label="Batt Insulation – Photo">
+       <PhotoInput id="rigid_foam_batt_insulation_photo" label="Batt Insulation – Photo" required>
         Take a photo showing the R-value of the batt insulation.
       </PhotoInput>
-      <PhotoInput id="rigid_foam_batt_wide_angle_photo" label="Rim Joist Retrofit – Wide angle photo">
+      <PhotoInput id="rigid_foam_batt_wide_angle_photo" label="Rim Joist Retrofit – Wide angle photo" required>
         Take a representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
       </PhotoInput>
     </ShowOrHide>
@@ -72,44 +72,44 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <LabelValue label="Rim Joist Air Seal and Insulation Method" path="insulation_method" />
 
     <ShowOrHide visible={props.data?.insulation_method === 'Spray foam for air sealing and insulation'}>
-      <Photo label="Blocking Cinderblock Holes – Photo" id="blocking_cinderblock_holes_photo">
+      <Photo label="Blocking Cinderblock Holes – Photo" id="blocking_cinderblock_holes_photo" required>
         Photo of the material used to block the cinderblock holes prior to spray foaming.
       </Photo>
-      <Photo label="Spray Foam Thickness – Photo" id="spray_foam_thickness_photo">
+      <Photo label="Spray Foam Thickness – Photo" id="spray_foam_thickness_photo" required>
         Photo with a spray foam depth gauge inserted into the foam to show the thickness is adequate to reach the target R-value.
       </Photo>
-      <Photo label="Spray Foam – Wide angle photo" id="spray_foam_wide_angle_photo">
+      <Photo label="Spray Foam – Wide angle photo" id="spray_foam_wide_angle_photo" required>
         Representative photo that shows the spray foam has been evenly applied in each rim joist bay.
       </Photo>
     </ShowOrHide>
 
      <ShowOrHide visible={props.data?.insulation_method === 'Rigid foam with spray foam or caulking for air sealing'}>
-      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_thickness_photo">
+      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_thickness_photo" required  >
         Photo showing a tape measurement of the rigid foam thickness.
       </Photo>
-      <Photo label="Air Sealing – Photo" id="rigid_foam_air_sealed_photo">
+      <Photo label="Air Sealing – Photo" id="rigid_foam_air_sealed_photo" required>
         Photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
       </Photo>
-      <Photo label="Spray Foam Thickness – Photo" id="rigid_foam_spray_thickness_photo">
+      <Photo label="Spray Foam Thickness – Photo" id="rigid_foam_spray_thickness_photo" required  >
         Photo of a spray foam depth gauge inserted into the foam to show the thickness.
       </Photo>
-      <Photo label="Rigid Foam – Wide angle photo" id="rigid_foam_wide_angle_photo">
+      <Photo label="Rigid Foam – Wide angle photo" id="rigid_foam_wide_angle_photo" required>
         Representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
       </Photo>
     </ShowOrHide>
 
 
-    <ShowOrHide visible={props.data?.insulation_method === 'Rigid foam with batt + spray foam or caulking for air sealing'}>
-      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_batt_spray_thickness_photo">
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam with batt'}>
+      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_batt_spray_thickness_photo" required>
         Photo showing a tape measurement of the rigid foam thickness.
       </Photo>
-      <Photo label="Air Sealing – Photo" id="rigid_foam_batt_air_sealed_photo">
+      <Photo label="Air Sealing – Photo" id="rigid_foam_batt_air_sealed_photo" required>
         Photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
       </Photo>
-      <Photo label="Batt Insulation – Photo" id="rigid_foam_batt_insulation_photo">
+      <Photo label="Batt Insulation – Photo" id="rigid_foam_batt_insulation_photo"  required>
         Photo showing the R-value of the batt insulation.
       </Photo>
-      <Photo label="Rim Joist Retrofit – Wide angle photo" id="rigid_foam_batt_wide_angle_photo">
+      <Photo label="Rim Joist Retrofit – Wide angle photo" id="rigid_foam_batt_wide_angle_photo" required>
         Representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
       </Photo>
     </ShowOrHide>
