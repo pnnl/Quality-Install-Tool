@@ -1,3 +1,5 @@
+import InstallationPermitReport from './installation_permit_report.mdx'
+
 <>
     <p>**Installer:**</p>
 
@@ -58,5 +60,21 @@
     >
         A photo of the building showing the building number.
     </Photo>
+
+    <Repeatable
+        path="project_documentation"
+        label="Other Project Documentation"
+        parent={props.project}
+    >
+        <Photo
+            id="photo_input"
+            label=""
+            parent={props.project}
+        />
+        <PDFRenderer id="file_input" label="" parent={props.project} />
+    </Repeatable>
+
+
+    <InstallationPermitReport {...props} />
 
 </>

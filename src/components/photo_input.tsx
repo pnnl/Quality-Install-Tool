@@ -1,20 +1,13 @@
 import DateTimeStr from './date_time_str'
 import GpsCoordStr from './gps_coord_str'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-    Button,
-    Card,
-    Image,
-    Modal,
-    Offcanvas,
-    Alert,
-    Spinner,
-} from 'react-bootstrap'
+import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
 import { TbCameraPlus } from 'react-icons/tb'
 import { TfiInfoAlt, TfiTrash } from 'react-icons/tfi'
+import StringInputWrapper from './string_input_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
-import { PHOTO_MIME_TYPES, isPhoto } from '../utilities/photo_utils'
+import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
 
 export interface PhotoInputProps {
     children: React.ReactNode
@@ -24,6 +17,9 @@ export interface PhotoInputProps {
     label: string
     loading: boolean
     notes?: boolean
+    photoNameField?: boolean
+    photoNamePath?: string
+    photoName?: string
     onPutPhotoAttachment?: (file: Blob) => Promise<void>
     onRemovePhotoAttachment?: (
         attachmentId: PouchDB.Core.AttachmentId,
@@ -40,14 +36,17 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     label,
     loading,
     notes = true,
+    photoNameField = false,
+    photoNamePath,
+    photoName,
     onPutPhotoAttachment,
     onRemovePhotoAttachment,
     photoAttachments,
     uploadable,
 }) => {
-    const fileInputRef = useRef<HTMLInputElement>(null)
+    const ref = useRef<HTMLInputElement>(null)
+    const hasInfoContent = Boolean(children) || Boolean(label)
 
-    // State for managing photo-related operations
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
@@ -58,63 +57,24 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         setSelectedPhotoAttachmentForDelete,
     ] = useState<PhotoAttachment | undefined>(undefined)
     const [showInfo, setShowInfo] = useState(false)
-
-    // Enhanced error state for more detailed feedback
-    const [uploadError, setUploadError] = useState<{
-        message?: string
-        type?: 'validation' | 'upload'
-    }>({})
-
-    // File change handler
-    const handleFileChange = async (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        // Reset previous errors
-        setUploadError({})
-
-        if (event.target.files && event.target.files.length > 0) {
-            const file = event.target.files[0]
-
-            // Validate file type
-            if (!isPhoto(file)) {
-                setUploadError({
-                    message: `Unsupported file type. Allowed types: ${PHOTO_MIME_TYPES.join(', ')}`,
-                    type: 'validation',
-                })
-                return
-            }
-
-            try {
-                // Upload the photo
-                if (onPutPhotoAttachment) {
-                    await onPutPhotoAttachment(file)
-                }
-            } catch (error) {
-                console.error('Photo upload error:', error)
-                setUploadError({
-                    message:
-                        error instanceof Error
-                            ? `Upload failed: ${error.message}`
-                            : 'Failed to upload photo',
-                    type: 'upload',
-                })
-            } finally {
-                // Reset input value to allow re-uploading same file
-                event.target.value = ''
-            }
-        }
+    const handleCloseInfo = () => setShowInfo(false)
+    const handleShowInfo = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        event.preventDefault()
+        setShowInfo(true)
     }
 
-    // Effect for managing delete preview URL
     useEffect(() => {
         const objectURL = selectedPhotoAttachmentForDelete
             ? URL.createObjectURL(
-                (
-                    selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
-                ).data as Blob,
-            )
+                  (
+                      selectedPhotoAttachmentForDelete.attachment as PouchDB.Core.FullAttachment
+                  ).data as Blob,
+              )
             : undefined
+
         setObjectURLForDelete(objectURL)
+
         return () => {
             if (objectURL) {
                 URL.revokeObjectURL(objectURL)
@@ -122,7 +82,6 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         }
     }, [selectedPhotoAttachmentForDelete])
 
-    // Effect for managing photo attachment preview URLs
     useEffect(() => {
         const objectURLs = photoAttachments.map(photoAttachment => {
             return URL.createObjectURL(
@@ -130,7 +89,9 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     .data as Blob,
             )
         })
+
         setObjectURLsForPhotoAttachments(objectURLs)
+
         return () => {
             objectURLs.forEach(objectURL => {
                 if (objectURL) {
@@ -140,19 +101,8 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
         }
     }, [photoAttachments])
 
-    // Photo deletion handler
-    const handlePhotoDelete = async () => {
-        if (selectedPhotoAttachmentForDelete && onRemovePhotoAttachment) {
-            await onRemovePhotoAttachment(
-                selectedPhotoAttachmentForDelete.attachmentId,
-            )
-            setSelectedPhotoAttachmentForDelete(undefined)
-        }
-    }
-
     return (
         <>
-            {/* Delete Confirmation Modal */}
             <Modal
                 dialogClassName="custom-modal"
                 show={selectedPhotoAttachmentForDelete !== undefined}
@@ -163,18 +113,18 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                 </Modal.Header>
                 <Modal.Body>
                     {objectURLForDelete && (
-                        <div className="text-center mb-3">
+                        <center>
                             <img
-                                className="modal-image-tag img-fluid"
+                                className="modal-image-tag"
                                 src={objectURLForDelete}
                                 alt="Thumbnail of the photo to delete."
                             />
-                        </div>
+                        </center>
                     )}
-                    <p>
+                    <div>
                         Are you sure you want to permanently delete this photo?
                         This action cannot be undone.
-                    </p>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -185,108 +135,122 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     >
                         Cancel
                     </Button>
-                    <Button variant="danger" onClick={handlePhotoDelete}>
+                    <Button
+                        variant="danger"
+                        aria-label="Confirm permanent photo deletion"
+                        onClick={async () => {
+                            if (selectedPhotoAttachmentForDelete) {
+                                onRemovePhotoAttachment &&
+                                    (await onRemovePhotoAttachment(
+                                        selectedPhotoAttachmentForDelete.attachmentId,
+                                    ))
+
+                                setSelectedPhotoAttachmentForDelete(undefined)
+                            }
+                        }}
+                    >
                         Permanently Delete
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-            {/* Info Offcanvas */}
-            <Offcanvas
-                show={showInfo}
-                onHide={() => setShowInfo(false)}
-                placement="end"
-            >
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{label}</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>{children}</Offcanvas.Body>
-            </Offcanvas>
-
-            {/* Main Photo Input Card */}
+            {hasInfoContent && (
+                <Offcanvas
+                    show={showInfo}
+                    onHide={handleCloseInfo}
+                    placement="end"
+                >
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>{label}</Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>{children}</Offcanvas.Body>
+                </Offcanvas>
+            )}
             <Card className="input-card photo-input">
                 <Card.Body>
-                    {/* Header */}
-                    <div className="photo-input-header d-flex justify-content-between align-items-center mb-3">
+                    <div className="photo-input-header mb-3">
                         <h3>{label}</h3>
-                        <Button
-                            variant="link"
-                            className="p-0"
-                            onClick={() => setShowInfo(true)}
-                            aria-label="Show information"
-                        >
-                            <TfiInfoAlt size={20} />
-                        </Button>
+                        {hasInfoContent && (
+                            <button
+                                className="info-button"
+                                aria-label="Photo Input Information"
+                                onClick={handleShowInfo}
+                            >
+                                <TfiInfoAlt size={20} />
+                            </button>
+                        )}
                     </div>
-
-                    {/* Error Handling */}
-                    {(uploadError.message || error) && (
-                        <Alert
-                            variant="danger"
-                            onClose={() => setUploadError({})}
-                            dismissible
-                        >
-                            {uploadError.message || error}
-                        </Alert>
-                    )}
-
-                    {/* File Input */}
                     <input
-                        ref={fileInputRef}
+                        ref={ref}
+                        data-testid="photo-input"
                         type="file"
                         accept={PHOTO_MIME_TYPES.join(',')}
                         capture={uploadable ? undefined : 'environment'}
-                        className="d-none"
-                        onChange={handleFileChange}
+                        className="photo-upload-input"
+                        onChange={async event => {
+                            if (event.target.files) {
+                                const file = event.target.files[0]
+
+                                if (file) {
+                                    onPutPhotoAttachment &&
+                                        (await onPutPhotoAttachment(file))
+                                }
+                            }
+
+                            // @note Change detection for `<input type="file" />` elements.
+                            //     The "value" attribute is set to the empty
+                            //     string to account for the situation when the
+                            //     user attempts to import the same JSON
+                            //     document more than once without reloading the
+                            //     page.
+                            //
+                            //     If the "value" attribute is not set to the
+                            //     empty string, then the second attempt will
+                            //     not trigger a change event (because the
+                            //     "value" attribute has not changed).
+                            event.target.value = ''
+                        }}
                     />
-
-                    {/* Loading Indicator */}
-                    {loading && (
-                        <div className="text-center my-3">
-                            <Spinner animation="border" role="status">
-                                <span className="visually-hidden">
-                                    Loading...
-                                </span>
-                            </Spinner>
-                            <p className="mt-2 text-muted">
-                                Processing photo...
-                            </p>
-                        </div>
-                    )}
-
-                    {/* Photo Gallery */}
                     {photoAttachments.length > 0 && (
-                        <div className="photo-gallery row g-2">
+                        <div className="photo-gallery">
                             {photoAttachments.map((photoAttachment, index) => (
-                                <div
-                                    key={index}
-                                    className="col-4 position-relative"
-                                >
+                                <div key={index} className="photo-container">
                                     {objectURLsForPhotoAttachments?.[index] && (
                                         <Image
+                                            className="image-tag"
                                             src={
                                                 objectURLsForPhotoAttachments[
-                                                index
+                                                    index
                                                 ]
                                             }
                                             thumbnail
-                                            className="w-100"
                                         />
                                     )}
                                     <Button
                                         variant="danger"
-                                        size="sm"
-                                        className="position-absolute top-0 end-0 m-1"
-                                        onClick={() =>
+                                        className="photo-delete-button"
+                                        aria-label="Delete photo"
+                                        onClick={event => {
+                                            event.stopPropagation()
+                                            event.preventDefault()
+
                                             setSelectedPhotoAttachmentForDelete(
                                                 photoAttachment,
                                             )
-                                        }
+
+                                            return false
+                                        }}
                                     >
                                         <TfiTrash />
                                     </Button>
-                                    <div className="mt-1">
+                                    <div>
                                         <small>
+                                            {photoName && (
+                                                <>
+                                                    Name: {photoName}
+                                                    <br />
+                                                </>
+                                            )}
+                                            Timestamp:{' '}
                                             {photoAttachment.metadata
                                                 ?.timestamp ? (
                                                 <DateTimeStr
@@ -299,6 +263,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                                 <span>Missing</span>
                                             )}
                                             <br />
+                                            Geolocation:{' '}
                                             {photoAttachment.metadata
                                                 ?.geolocation ? (
                                                 <GpsCoordStr
@@ -314,21 +279,34 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             ))}
                         </div>
                     )}
-
-                    {/* Add Photo Button */}
+                    {loading && (
+                        <div className="padding">
+                            <div className="loader"></div>
+                        </div>
+                    )}
+                    {error && (
+                        <div className="error">Image loading failed.</div>
+                    )}
+                    {photoNameField && (
+                        <StringInputWrapper
+                            path={photoNamePath ?? `${id}_photo_name`}
+                            label="Name"
+                            min={0}
+                            max={100}
+                            regexp={/.*/}
+                            hint=""
+                        />
+                    )}
                     {photoAttachments.length < count && (
-                        <div className="mt-3">
+                        <div className="mb-3">
                             <Button
                                 variant="outline-primary"
-                                onClick={() => fileInputRef.current?.click()}
-                                disabled={loading}
+                                onClick={() => ref.current?.click()}
                             >
-                                <TbCameraPlus className="me-2" /> Add Photo
+                                <TbCameraPlus /> Add Photo
                             </Button>
                         </div>
                     )}
-
-                    {/* Optional Notes Input */}
                     {notes && (
                         <TextInputWrapper
                             path={`${id}_note`}

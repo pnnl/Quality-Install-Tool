@@ -4,11 +4,15 @@ import { Button, Card } from 'react-bootstrap'
 import Collapsible from './collapsible'
 import DateTimeStr from './date_time_str'
 import { type FileMetadata } from '../types/database.types'
+import StringInputWrapper from './string_input_wrapper'
 
 interface FileInputProps {
     label: React.ReactNode
     file: Blob | undefined
     fileMetadata: FileMetadata | undefined
+    fileNameField?: boolean
+    fileNamePath?: string
+    fileName?: string
     upsertFile: (file: Blob, fileName: string) => Promise<void>
     children: React.ReactNode
 }
@@ -18,6 +22,9 @@ const FileInput: React.FC<FileInputProps> = ({
     label,
     file,
     fileMetadata,
+    fileNameField = false,
+    fileNamePath,
+    fileName,
     upsertFile,
 }) => {
     const id = useId()
@@ -70,14 +77,22 @@ const FileInput: React.FC<FileInputProps> = ({
     return (
         <Card className="input-card">
             <Card.Body>
-                <Collapsible header={label}>
-                    <Card.Text as="div">{children}</Card.Text>
-                </Collapsible>
+                {label && (
+                    <Collapsible header={label}>
+                        <Card.Text as="div">{children}</Card.Text>
+                    </Collapsible>
+                )}
                 <div>
                     {file && (
                         <Card className="input-card">
                             <Card.Body>
-                                File Name:{' '}
+                                {fileName && (
+                                    <>
+                                        File Name: <strong>{fileName}</strong>
+                                        <br />
+                                    </>
+                                )}
+                                Uploaded File:{' '}
                                 {fileObjectURL && (
                                     <a
                                         href={fileObjectURL}
@@ -99,6 +114,16 @@ const FileInput: React.FC<FileInputProps> = ({
                                 <br />
                             </Card.Body>
                         </Card>
+                    )}
+                    {fileNameField && (
+                        <StringInputWrapper
+                            path={fileNamePath ?? `${id}_filename`}
+                            label="Name"
+                            min={0}
+                            max={100}
+                            regexp={/.*/}
+                            hint=""
+                        />
                     )}
                     <p className="mb-3 custom-label">
                         File Types Accepted: PDF

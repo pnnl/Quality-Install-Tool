@@ -601,7 +601,6 @@ btn-light:hover {
 /* Collapsible text card */
 .collapsible-text {
     position: relative;
-    background-color: white;
 }
 
 .collapsible-text p.description {
@@ -619,15 +618,16 @@ btn-light:hover {
     color: #006100;
     cursor: pointer;
     font-weight: bold;
-    background-color: white;
     padding: 0 5px 0px 5px;
 }
 
 .collapsible-text .clickable-text.collapsed {
     position: absolute;
-    background-color: white;
     bottom: 2px;
     right: 0px;
+    background: linear-gradient(to right, transparent, white 20%);
+    padding: 0 8px;
+    min-width: fit-content;
 }
 
 .collapsible-text-container .content {

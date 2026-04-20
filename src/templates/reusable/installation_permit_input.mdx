@@ -1,0 +1,31 @@
+<CollapsibleTextContainer
+    title="Installation Permit"
+    text="If your jurisdiction/program requires you to pull a permit for this work scope you can upload documentation of that permit here"
+>
+    <Radio
+        label="Permit File Type:"
+        options={['Photo', 'File']}
+        path="permit.file_type"
+    />
+    <br />
+    <ShowOrHide
+        path="permit.file_type"
+        value={['File']}
+        matchCondition="Includes"
+    >
+        <FileInput id="permit.file_input" label="" fileNameField={true} />
+    </ShowOrHide>
+    <ShowOrHide
+        path="permit.file_type"
+        value={['Photo']}
+        matchCondition="Includes"
+    >
+        <PhotoInput
+            id="permit.photo_input"
+            label=""
+            photoNameField={true}
+            count={1}
+            notes={false}
+        />
+    </ShowOrHide>
+</CollapsibleTextContainer>
