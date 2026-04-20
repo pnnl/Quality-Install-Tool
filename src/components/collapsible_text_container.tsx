@@ -33,7 +33,9 @@ const CollapsibleTextContainer: React.FC<CollapsibleTextContainerProps> = ({
                     isCollapsed={isCollapsed}
                     onToggle={toggleCollapse}
                 />
-                {shouldShowChildren && children && <div className="content">{children}</div>}
+                {shouldShowChildren && children && (
+                    <div className="content">{children}</div>
+                )}
             </Card.Body>
         </Card>
     )

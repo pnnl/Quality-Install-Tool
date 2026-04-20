@@ -1,15 +1,15 @@
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
-<CollapsibleTextContainer showChildrenOnExpand={true} text="Air sealing and insulating the rim joist area of a home yields some of the biggest bang for the buck in energy savings and improved comfort. But doing it wrong (batt insulation only) can result in mold development in the rim joist area. This workflow is used to document the quality installation of air sealing and insulation products in the rim joist area.">
- <Figure src="/images/rim_joist/air_leak_paths_rim_joist_area.png"> 
-  Air leak paths in the rim joist area
- </Figure>
- <Figure src="/images/rim_joist/example_of_insulate_air_seal_rim_joist.png" >
-  Example of insulated and air sealed rim joist area
-  </Figure>
-</CollapsibleTextContainer>
 <Tabs>
   <Tab eventKey="installation" title="Installation">
+    <CollapsibleTextContainer showChildrenOnExpand={true} text="Air sealing and insulating the rim joist area of a home yields some of the biggest bang for the buck in energy savings and improved comfort. But doing it wrong (batt insulation only) can result in mold development in the rim joist area. This workflow is used to document the quality installation of air sealing and insulation products in the rim joist area.">
+      <Figure src="/images/rim_joist/air_leak_paths_rim_joist_area.png"> 
+        Air leak paths in the rim joist area
+      </Figure>
+      <Figure src="/images/rim_joist/example_of_insulate_air_seal_rim_joist.png" >
+        Example of insulated and air sealed rim joist area
+      </Figure>
+    </CollapsibleTextContainer>
     <DateInput label="Installation Date" path="install_date" />
     <Select label="Target R-Value" options={["R-13","R-20", "Other"]} path="target_r_value" />
     <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
