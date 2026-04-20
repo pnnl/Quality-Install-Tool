@@ -1,4 +1,3 @@
-import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
@@ -26,8 +25,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
-
-    <InstallationPermitInput />
     <Radio label="LED Tube Type" options={['Type A', 'Type B', 'Type C']} path="led_tube_type" />
     <ShowOrHide visible={props.data?.led_tube_type === 'Type A'}>
       <PhotoInput id="fixture_ballast_photo" label="Fixture Ballast – Photo">

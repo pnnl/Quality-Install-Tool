@@ -9,7 +9,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
-    <InstallationPermitInput />
+    <ShowOrHide visible={props.data?.existing_cooking_appliance_type === "Gas" || props.data?.existing_cooking_appliance_type === "None"}>
+      <InstallationPermitInput />
+    </ShowOrHide>
 
     <PhotoInput id="electric_cooking_appliance_nameplate_photo" label="Nameplate of the New Cooking Appliance – Photo">
         Please take a photo of the nameplate of the new cooking appliance showing the model number and serial number.

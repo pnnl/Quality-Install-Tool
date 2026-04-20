@@ -1,11 +1,9 @@
-import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
-    <InstallationPermitInput />
     <Select label="Target R-Value" options={["R-13","R-20", "Other"]} path="target_r_value" />
     <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
       <NumberInput label="Target R-Value" min={8} max={30} path="target_r_value_other"  />
@@ -68,6 +66,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <ProjectInfoReport {...props} />
 
     <LabelValue label="Target R-Value" path="target_r_value" />
+    <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
+          <LabelValue label="Target R-Value (Other)" path="target_r_value_other" />
+    </ShowOrHide>
 
     <LabelValue label="Rim Joist Air Seal and Insulation Method" path="insulation_method" />
 
@@ -102,9 +103,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <ShowOrHide visible={props.data?.insulation_method === 'Spray foam with batt'}>
       <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_batt_spray_thickness_photo" required>
         Photo showing a tape measurement of the rigid foam thickness.
-      </Photo>
-      <Photo label="Air Sealing – Photo" id="rigid_foam_batt_air_sealed_photo" required>
-        Photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
       </Photo>
       <Photo label="Batt Insulation – Photo" id="rigid_foam_batt_insulation_photo"  required>
         Photo showing the R-value of the batt insulation.
