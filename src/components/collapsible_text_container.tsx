@@ -6,18 +6,22 @@ interface CollapsibleTextContainerProps {
     children?: React.ReactNode
     text: React.ReactNode
     title: React.ReactNode
+    showChildrenOnExpand?: boolean
 }
 
 const CollapsibleTextContainer: React.FC<CollapsibleTextContainerProps> = ({
     children,
     text,
     title,
+    showChildrenOnExpand = false,
 }) => {
     const [isCollapsed, setIsCollapsed] = useState(true)
 
     const toggleCollapse = useCallback(() => {
         setIsCollapsed(prevState => !prevState)
     }, [])
+
+    const shouldShowChildren = !showChildrenOnExpand || !isCollapsed
 
     return (
         <Card className="collapsible-text-container">
@@ -29,7 +33,7 @@ const CollapsibleTextContainer: React.FC<CollapsibleTextContainerProps> = ({
                     isCollapsed={isCollapsed}
                     onToggle={toggleCollapse}
                 />
-                {children && <div className="content">{children}</div>}
+                {shouldShowChildren && children && <div className="content">{children}</div>}
             </Card.Body>
         </Card>
     )
