@@ -1,4 +1,3 @@
-import heic2any from 'heic2any'
 import PouchDB from 'pouchdb'
 import React, { createContext, useCallback } from 'react'
 
@@ -202,13 +201,6 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
 
                 if (isPhoto(blob)) {
                     attachmentMetadata = await getPhotoMetadata(blob)
-
-                    if (blob.type === 'image/heic') {
-                        blob = (await heic2any({
-                            blob,
-                            toType: 'image/jpeg',
-                        })) as Blob
-                    }
 
                     blob = await compressPhoto(blob)
                 }

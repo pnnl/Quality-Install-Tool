@@ -15,6 +15,7 @@
         "lodash": "^4.17.21",
         "mdx": "^0.3.1",
         "pdfjs-dist": "3.11.174",
+        "pica": "^9.0.1",
         "pouchdb": "^8.0.1",
         "pouchdb-find": "^9.0.0",
         "pouchdb-upsert": "^2.2.0",
