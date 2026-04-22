@@ -276,8 +276,21 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                         </div>
                     )}
                     {loading && (
-                        <div className="padding">
-                            <div className="loader"></div>
+                        <div
+                            className="photo-upload-status"
+                            aria-live="polite"
+                            role="status"
+                        >
+                            <div
+                                className="photo-upload-status-spinner"
+                                aria-hidden="true"
+                            ></div>
+                            <div>
+                                <strong>Processing photo...</strong>
+                                <div>
+                                    Processing the image and saving it now.
+                                </div>
+                            </div>
                         </div>
                     )}
                     {error && (
