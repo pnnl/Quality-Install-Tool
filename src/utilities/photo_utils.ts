@@ -27,6 +27,8 @@ const MAXIMUM_SIZE_MB: number = parseFloat(
 
 const HIGH_TEXT_READABILITY_QUALITY = 0.92
 
+const HIGH_QUALITY_JPEG_EXPORT = 0.98
+
 const RESIZED_IMAGE_QUALITY = 0.9
 
 const PREPROCESS_CONTRAST = 1.08
@@ -59,24 +61,29 @@ export const PHOTO_MIME_TYPES: string[] = [
 export async function compressPhoto(blob: Blob) {
     // Normalize into a browser-friendly format first so the later canvas and
     // resize steps can treat every photo the same way.
-    const normalizedBlob = await normalizePhotoBlob(blob)
-    const preprocessedBlob = await preprocessPhoto(normalizedBlob as File)
-    const file = preprocessedBlob as File
+    const normalizedPhoto = await normalizePhotoBlob(blob)
+    const processedBlob = await preprocessPhoto(
+        normalizedPhoto.blob as File,
+        normalizedPhoto.mimeType,
+    )
+    const file = processedBlob as File
 
     console.log('[photo_utils] Starting photo preprocessing and compression', {
         type: file.type,
         sizeBytes: file.size,
     })
 
-    // First try to preserve the original pixel dimensions and only reduce
-    // encoding quality. This keeps text sharper when the file can fit.
-    const qualityPreservingBlob = await imageCompression(file, {
-        maxSizeMB: MAXIMUM_SIZE_MB,
-        useWebWorker: true,
-        initialQuality: HIGH_TEXT_READABILITY_QUALITY,
-        alwaysKeepResolution: true,
-        preserveExif: file.type === 'image/jpeg',
-    })
+    if (file.size <= MAXIMUM_SIZE_MB * 1024 * 1024) {
+        console.log(
+            '[photo_utils] Using processed photo without extra compression',
+            {
+                sizeBytes: file.size,
+            },
+        )
+        return file
+    }
+
+    const qualityPreservingBlob = await compressAtCurrentResolution(file)
 
     if (qualityPreservingBlob.size <= MAXIMUM_SIZE_MB * 1024 * 1024) {
         console.log('[photo_utils] Used quality-preserving compression', {
@@ -104,23 +111,35 @@ export async function compressPhoto(blob: Blob) {
     }
 }
 
-async function normalizePhotoBlob(blob: Blob): Promise<Blob> {
+async function normalizePhotoBlob(
+    blob: Blob,
+): Promise<{ blob: Blob; mimeType: string }> {
     if (blob.type !== 'image/heic') {
-        return blob
+        return {
+            blob,
+            mimeType: blob.type,
+        }
     }
 
     // HEIC cannot be relied on for browser canvas processing, so convert once
     // up front and let the rest of the pipeline work with JPEG.
     console.log('[photo_utils] Converting HEIC photo to JPEG')
 
-    return (await heic2any({
-        blob,
-        toType: 'image/jpeg',
-    })) as Blob
+    return {
+        blob: (await heic2any({
+            blob,
+            toType: 'image/jpeg',
+        })) as Blob,
+        mimeType: 'image/jpeg',
+    }
 }
 
-async function preprocessPhoto(file: File): Promise<Blob> {
+async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
     const image = await loadImage(file)
+    const [targetWidth, targetHeight] = getConstrainedDimensions(
+        image.naturalWidth,
+        image.naturalHeight,
+    )
 
     const canvas = document.createElement('canvas')
     canvas.width = image.naturalWidth
@@ -146,7 +165,36 @@ async function preprocessPhoto(file: File): Promise<Blob> {
         height: image.naturalHeight,
     })
 
-    return await canvasToBlob(canvas, file.type, 1)
+    if (
+        targetWidth === image.naturalWidth &&
+        targetHeight === image.naturalHeight
+    ) {
+        return await canvasToBlob(
+            canvas,
+            mimeType,
+            mimeType === 'image/jpeg' ? HIGH_QUALITY_JPEG_EXPORT : 1,
+        )
+    }
+
+    const targetCanvas = document.createElement('canvas')
+    targetCanvas.width = targetWidth
+    targetCanvas.height = targetHeight
+
+    console.log('[photo_utils] Resizing with pica', {
+        originalWidth: image.naturalWidth,
+        originalHeight: image.naturalHeight,
+        targetWidth,
+        targetHeight,
+    })
+
+    await picaResizer.resize(canvas, targetCanvas, {
+        filter: 'mks2013',
+        unsharpAmount: 160,
+        unsharpRadius: 0.6,
+        unsharpThreshold: 1,
+    })
+
+    return await canvasToBlob(targetCanvas, mimeType, RESIZED_IMAGE_QUALITY)
 }
 
 function applyContrastAndSharpen(imageData: ImageData): ImageData {
@@ -198,6 +246,18 @@ function clampColor(value: number): number {
     return Math.max(0, Math.min(255, Math.round(value)))
 }
 
+async function compressAtCurrentResolution(file: File): Promise<Blob> {
+    // Preserve the current pixel dimensions and only reduce encoding quality
+    // when the processed image is still larger than the configured limit.
+    return await imageCompression(file, {
+        maxSizeMB: MAXIMUM_SIZE_MB,
+        useWebWorker: true,
+        initialQuality: HIGH_TEXT_READABILITY_QUALITY,
+        alwaysKeepResolution: true,
+        preserveExif: file.type === 'image/jpeg',
+    })
+}
+
 async function resizePhotoWithPica(file: File): Promise<Blob> {
     const image = await loadImage(file)
     const [targetWidth, targetHeight] = getConstrainedDimensions(
@@ -216,13 +276,7 @@ async function resizePhotoWithPica(file: File): Promise<Blob> {
                 height: image.naturalHeight,
             },
         )
-        return await imageCompression(file, {
-            maxSizeMB: MAXIMUM_SIZE_MB,
-            useWebWorker: true,
-            initialQuality: RESIZED_IMAGE_QUALITY,
-            alwaysKeepResolution: true,
-            preserveExif: file.type === 'image/jpeg',
-        })
+        return await compressAtCurrentResolution(file)
     }
 
     const sourceCanvas = document.createElement('canvas')
@@ -241,7 +295,7 @@ async function resizePhotoWithPica(file: File): Promise<Blob> {
     targetCanvas.width = targetWidth
     targetCanvas.height = targetHeight
 
-    console.log('[photo_utils] Resizing with pica', {
+    console.log('[photo_utils] Retrying resize with pica', {
         originalWidth: image.naturalWidth,
         originalHeight: image.naturalHeight,
         targetWidth,
@@ -255,7 +309,7 @@ async function resizePhotoWithPica(file: File): Promise<Blob> {
         unsharpThreshold: 1,
     })
 
-    const resizedBlob = await picaResizer.toBlob(
+    const resizedBlob = await canvasToBlob(
         targetCanvas,
         file.type,
         RESIZED_IMAGE_QUALITY,
