@@ -251,6 +251,24 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                             ) : (
                                                 <span>Missing</span>
                                             )}
+                                            {photoAttachment.metadata
+                                                ?.geolocationWarning && (
+                                                <>
+                                                    <br />
+                                                    <span
+                                                        style={{
+                                                            color: 'red',
+                                                        }}
+                                                    >
+                                                        Location Status:{' '}
+                                                        {
+                                                            photoAttachment
+                                                                .metadata
+                                                                .geolocationWarning
+                                                        }
+                                                    </span>
+                                                </>
+                                            )}
                                         </small>
                                     </div>
                                 </div>

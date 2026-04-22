@@ -382,6 +382,21 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
         }
     }
 
+    if (!('geolocation' in navigator)) {
+        return {
+            geolocation: {
+                altitude: null,
+                latitude: null,
+                longitude: null,
+            },
+            geolocationWarning:
+                'Location services are not available in this browser. The photo was uploaded without GPS coordinates.',
+            geolocationSource: null,
+            timestamp,
+            timestampSource,
+        }
+    }
+
     try {
         const geolocationPosition = await new Promise<GeolocationPosition>(
             (resolve, reject) => {
@@ -403,16 +418,34 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
             timestampSource,
         }
     } catch (cause) {
+        const geolocationError = cause as GeolocationPositionError | undefined
+
         return {
             geolocation: {
                 altitude: null,
                 latitude: null,
                 longitude: null,
             },
+            geolocationWarning: getGeolocationWarningMessage(geolocationError),
             geolocationSource: null,
             timestamp,
             timestampSource,
         }
+    }
+}
+
+function getGeolocationWarningMessage(
+    error?: GeolocationPositionError,
+): string {
+    switch (error?.code) {
+        case 1:
+            return 'Location services are blocked. Enable browser location access if you want GPS coordinates saved with the photo.'
+        case 2:
+            return 'Location services are currently unavailable. The photo was uploaded without GPS coordinates.'
+        case 3:
+            return 'Location lookup timed out. The photo was uploaded without GPS coordinates.'
+        default:
+            return 'GPS coordinates could not be retrieved. The photo was uploaded without GPS coordinates.'
     }
 }
 
