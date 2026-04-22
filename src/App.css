@@ -513,6 +513,33 @@ btn-light:hover {
     background-color: white;
 }
 
+.photo-upload-status {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0.75rem 0 1rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid #cfe2ff;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, #f4f9ff 0%, #eef6ff 100%);
+    color: #153b63;
+}
+
+.photo-upload-status-spinner {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(21, 59, 99, 0.16);
+    border-top-color: #1d70b8;
+    border-radius: 50%;
+    animation: spin 0.85s linear infinite;
+}
+
+.photo-upload-status strong {
+    display: block;
+    margin-bottom: 0.1rem;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
