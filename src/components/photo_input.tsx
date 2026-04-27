@@ -56,6 +56,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             the item while keeping it in focus.
         </>
     )
+    const hasInfoContent = children || defaultTip
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
