@@ -604,9 +604,8 @@ btn-light:hover {
 }
 
 .collapsible-text .clickable-text {
-    color: #006100;
+    color: #2172d6;
     cursor: pointer;
-    font-weight: bold;
     padding: 0 5px 0px 5px;
 }
 
