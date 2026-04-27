@@ -135,6 +135,22 @@ async function normalizePhotoBlob(
     }
 }
 
+/**
+ * Preprocesses an image before compression or resizing to improve readability and quality.
+ *
+ * Steps:
+ * 1. Loads the image into a canvas and applies a contrast and sharpening filter (see applyContrastAndSharpen).
+ *    This helps preserve text and edge clarity during later compression or resizing.
+ * 2. If the image already fits within the target dimensions, it is exported directly to a Blob.
+ * 3. If resizing is needed, uses pica to resize the image to the target dimensions for high-quality resampling.
+ *
+ * This function is a key part of the photo pipeline, ensuring that images retain important visual details
+ * and are optimized for size and clarity before being saved or uploaded.
+ *
+ * @param file The input image file to preprocess.
+ * @param mimeType The desired output MIME type (e.g., 'image/jpeg').
+ * @returns A Promise resolving to a Blob of the preprocessed image.
+ */
 async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
     const image = await loadImage(file)
     const [targetWidth, targetHeight] = getConstrainedDimensions(
@@ -198,6 +214,23 @@ async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
     return await canvasToBlob(targetCanvas, mimeType, RESIZED_IMAGE_QUALITY)
 }
 
+/**
+ * Enhances an image by first applying a contrast adjustment and then sharpening it using a 3x3 convolution kernel.
+ *
+ * - Contrast adjustment: Each RGB channel is adjusted using a fixed contrast factor (PREPROCESS_CONTRAST),
+ *   which helps make text and edges more distinct before compression or resizing.
+ *
+ * - Sharpening: After contrast, a 3x3 sharpening kernel (SHARPEN_KERNEL) is applied to each pixel and channel.
+ *   This kernel emphasizes differences with neighboring pixels, making edges and fine details clearer.
+ *   The result is an image that better preserves readability and clarity, especially for text, after
+ *   subsequent compression or resizing steps.
+ *
+ * This function is used in the photo preprocessing pipeline to improve the quality of images before they
+ * are compressed or resized, helping to maintain important visual details.
+ *
+ * @param imageData The input ImageData to enhance.
+ * @returns A new ImageData object with enhanced contrast and sharpness.
+ */
 function applyContrastAndSharpen(imageData: ImageData): ImageData {
     const { data, width, height } = imageData
     const contrasted = new Uint8ClampedArray(data)

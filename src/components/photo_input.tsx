@@ -8,6 +8,7 @@ import StringInputWrapper from './string_input_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
+import { PhotoQualityWarning } from './photo_quality_warning'
 
 export interface PhotoInputProps {
     children: React.ReactNode
@@ -45,8 +46,16 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
-    const hasInfoContent = Boolean(children) || Boolean(label)
-
+    const defaultTip = (
+        <>
+            <br />
+            <b>Photo Tip:</b> To capture the most detail, avoid digital zoom.
+            Instead, move closer and frame the shot so the item fills the
+            screen. If your phone has multiple cameras/lenses (e.g., 0.5x / 1x /
+            2x / 3x), switch lenses to the one that best fills the frame with
+            the item while keeping it in focus.
+        </>
+    )
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
@@ -153,18 +162,15 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
-            {hasInfoContent && (
-                <Offcanvas
-                    show={showInfo}
-                    onHide={handleCloseInfo}
-                    placement="end"
-                >
-                    <Offcanvas.Header closeButton>
-                        <Offcanvas.Title>{label}</Offcanvas.Title>
-                    </Offcanvas.Header>
-                    <Offcanvas.Body>{children}</Offcanvas.Body>
-                </Offcanvas>
-            )}
+            <Offcanvas show={showInfo} onHide={handleCloseInfo} placement="end">
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>{label}</Offcanvas.Title>
+                </Offcanvas.Header>
+                <Offcanvas.Body>
+                    {children}
+                    {defaultTip}
+                </Offcanvas.Body>
+            </Offcanvas>
             <Card className="input-card photo-input">
                 <Card.Body>
                     <div className="photo-input-header mb-3">
@@ -278,9 +284,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                                 <>
                                                     <br />
                                                     <span
-                                                        style={{
-                                                            color: 'red',
-                                                        }}
+                                                        style={{ color: 'red' }}
                                                     >
                                                         Location Status:{' '}
                                                         {
@@ -292,6 +296,9 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                                 </>
                                             )}
                                         </small>
+                                        <PhotoQualityWarning
+                                            attachment={photoAttachment}
+                                        />
                                     </div>
                                 </div>
                             ))}
