@@ -42,6 +42,7 @@
                 "PageBreak": false,
                 "Photo": false,
                 "PhotoInput": false,
+                "PhotoQualityWarning": false,
                 "PrintSection": false,
                 "Radio": false,
                 "Repeatable": false,
