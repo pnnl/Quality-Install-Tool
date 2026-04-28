@@ -43,6 +43,7 @@
                 "Photo": false,
                 "PhotoInput": false,
                 "PhotoQualityWarning": false,
+                "ImprovedPhotoUpload": false,
                 "PrintSection": false,
                 "Radio": false,
                 "Repeatable": false,

@@ -46,6 +46,7 @@ import ProjectsProvider, {
 import StoreProvider, { StoreContext } from '../providers/store_provider'
 import { type TemplateProps } from '../templates'
 import { type Project } from '../types/database.types'
+import ImprovedPhotoUpload from './improved_photo_upload'
 
 const components = {
     Button,
@@ -72,6 +73,7 @@ const components = {
     PageBreak,
     Photo: PhotoWrapper,
     PhotoInput: PhotoInputWrapper,
+    ImprovedPhotoUpload: ImprovedPhotoUpload,
     PrintSection: PrintSectionWrapper,
     ProjectConsumer: ProjectContext.Consumer,
     ProjectProvider,
