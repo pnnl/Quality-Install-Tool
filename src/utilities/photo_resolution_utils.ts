@@ -1,19 +1,7 @@
 import { type Base } from '../types/database.types'
 
 export function getDefaultProjectPhotoResolution(): string {
-    const profile = (
-        process.env.REACT_APP_PHOTO_PROFILE_DEFAULT ?? 'standard'
-    ).toLowerCase()
-
-    switch (profile) {
-        case 'preview':
-        case 'low':
-            return 'Low (Smaller Files, May Miss Details)'
-        case 'high':
-            return 'High (Larger Files, Best Detail)'
-        default:
-            return 'Standard (Balanced)'
-    }
+    return 'Low (Smaller Files, May Miss Details)'
 }
 
 interface PhotoResolutionDoc {
@@ -30,7 +18,7 @@ export function getPhotoProfileFromDoc(
     const resolution = doc?.data_?.photo?.resolution?.toLowerCase()
 
     if (!resolution) {
-        return 'standard'
+        return 'low'
     }
 
     if (resolution.includes('high')) {
@@ -38,7 +26,7 @@ export function getPhotoProfileFromDoc(
     }
 
     if (resolution.includes('low') || resolution.includes('preview')) {
-        return 'preview'
+        return 'low'
     }
 
     return 'standard'

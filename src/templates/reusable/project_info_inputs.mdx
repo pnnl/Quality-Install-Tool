@@ -18,9 +18,9 @@
         <StringInput label="Zip Code" path="location.zip_code" />
 
 
-        <div style={{ marginBottom: '0.5em' }}>
+        <div className="photo-resolution-block">
             <b>Photo Resolution:</b>
-            <ul style={{ margin: '0.5em 0 0.5em 1.2em', padding: 0 }}>
+            <ul className="photo-resolution-list">
                 <li><b>Low (Smaller Files, May Miss Details):</b> Fastest uploads and lowest storage use, but small text or fine details may be harder to read. <i>(~0.2 MB per photo)</i></li>
                 <li><b>Standard (Balanced):</b> A good balance of image detail, upload speed and storage use. <i>(~0.75 MB per photo)</i></li>
                 <li><b>High (Larger Files, Best Detail):</b> Highest image detail, but uploads take longer and use more storage. <i>(up to 2 MB per photo)</i></li>
@@ -35,8 +35,8 @@
             ]}
             path="photo.resolution"
         />
-        <div style={{ marginTop: '0.5em', fontSize: '0.95em', color: '#555' }}>
-            <b>Note:</b> Photos are compressed based on the selected upload quality. The maximum single photo size that can be stored is 2 MB.
+        <div className="photo-resolution-note">
+            <b>Note:</b> Photos are compressed based on the selected upload quality.
         </div>
 
         <PhotoInput

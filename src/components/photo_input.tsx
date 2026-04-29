@@ -46,7 +46,6 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
-    const hasInfoContent = Boolean(children) || Boolean(label)
     const defaultTip = (
         <>
             <br />
@@ -61,6 +60,8 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             for geolocation and geotagging.
         </>
     )
+    const hasInfoContent =
+        Boolean(children) || Boolean(label) || Boolean(defaultTip)
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
@@ -177,9 +178,9 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                         <Offcanvas.Title>{label}</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                    {children}
-                    {defaultTip}
-                </Offcanvas.Body>
+                        {children}
+                        {defaultTip}
+                    </Offcanvas.Body>
                 </Offcanvas>
             )}
             <Card className="input-card photo-input">
