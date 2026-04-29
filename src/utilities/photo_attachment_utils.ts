@@ -46,19 +46,44 @@ export function getPhotoAttachments(
     doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     attachmentId: PouchDB.Core.AttachmentId,
 ): Array<PhotoAttachment> {
-    const rePhotoAttachmentId = getPhotoAttachmentRegExp(attachmentId)
+    // Match keys like photoId_1, photoId_1.jpg, photoId_1.jpeg, etc.
+    const baseRe = new RegExp(`^(${escapeRegExp(attachmentId)}_\\d+)`)
+    const allEntries = Object.entries(doc._attachments ?? {}).filter(([key]) =>
+        baseRe.test(key),
+    )
 
-    return Object.entries(doc._attachments ?? {})
-        .filter(([key]) => {
-            return key.match(rePhotoAttachmentId)
-        })
-        .map(([key, value]) => {
-            return {
-                attachmentId: key,
-                attachment: value,
-                metadata: doc.metadata_.attachments[key] as
-                    | PhotoMetadata
-                    | undefined,
-            }
-        })
+    // Group by base id (photoId_1, photoId_2, ...)
+    const grouped: Record<string, Array<[string, PouchDB.Core.Attachment]>> = {}
+    for (const [key, value] of allEntries) {
+        const match = key.match(baseRe)
+        if (match) {
+            const base = match[1]
+            if (!grouped[base]) grouped[base] = []
+            grouped[base].push([key, value])
+        }
+    }
+
+    const result: PhotoAttachment[] = []
+    for (const base in grouped) {
+        const meta = doc.metadata_.attachments[base] as
+            | PhotoMetadata
+            | undefined
+        const entry =
+            grouped[base].find(([key]) => {
+                return key.endsWith('.jpg')
+            }) ??
+            grouped[base].find(([key]) => {
+                return key.endsWith('.jpeg')
+            }) ??
+            grouped[base][0]
+
+        if (entry) {
+            result.push({
+                attachmentId: base,
+                attachment: entry[1],
+                metadata: meta,
+            })
+        }
+    }
+    return result
 }

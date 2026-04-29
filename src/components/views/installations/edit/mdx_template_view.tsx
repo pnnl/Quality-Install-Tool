@@ -57,7 +57,11 @@ const MdxTemplateView: React.FC<MdxTemplateViewProps> = () => {
                     <b>{installation.metadata_.doc_name}</b>
                 </center>
                 <br />
-                <StoreProvider doc={installation} onChange={handleChange}>
+                <StoreProvider
+                    doc={installation}
+                    projectDoc={project}
+                    onChange={handleChange}
+                >
                     <MdxWrapper
                         Component={workflow.template}
                         project={project}

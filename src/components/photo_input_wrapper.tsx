@@ -32,7 +32,6 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
         <StoreContext.Consumer>
             {({ doc, putAttachment, removeAttachment }) => {
                 const photoAttachments = doc ? getPhotoAttachments(doc, id) : []
-
                 const photoAttachmentId = getNextPhotoAttachmentId(
                     id,
                     photoAttachments,
@@ -50,14 +49,12 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                         photoAttachments={photoAttachments}
                         onPutPhotoAttachment={async blob => {
                             setIsLoading(true)
-
                             try {
                                 await putAttachment(
                                     photoAttachmentId,
                                     blob,
                                     undefined,
                                 )
-
                                 setError(undefined)
                             } catch (cause) {
                                 setError(cause as string)

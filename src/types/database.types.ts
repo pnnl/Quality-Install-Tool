@@ -49,6 +49,9 @@ export interface Project extends Base {
 export interface ProjectData extends BaseData {
     installer?: Installer
     location?: Location
+    photo?: {
+        resolution?: string
+    }
 }
 
 export interface ProjectMetadata extends BaseMetadata {
@@ -66,6 +69,8 @@ export interface PhotoMetadata {
     geolocation: Geolocation
     geolocationWarning?: string | null
     geolocationSource?: GeolocationSource | null
+    imageHeightPx?: number
+    imageWidthPx?: number
     timestamp: Timestamp
     timestampSource?: TimestampSource | null
 }

@@ -13,6 +13,7 @@ import {
 } from '../types/database.types'
 import { type Installer } from '../types/installer.type'
 import { comparator } from './comparison_utils'
+import { getDefaultProjectPhotoResolution } from './photo_resolution_utils'
 
 //
 // BASE
@@ -307,6 +308,12 @@ export function newProject(
         children: [],
         data_: {
             ...data,
+            photo: {
+                resolution:
+                    data.photo?.resolution ??
+                    getDefaultProjectPhotoResolution(),
+                ...data.photo,
+            },
         },
         metadata_: {
             doc_name: docName,

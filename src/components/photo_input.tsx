@@ -47,6 +47,10 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             screen. If your phone has multiple cameras/lenses (e.g., 0.5x / 1x /
             2x / 3x), switch lenses to the one that best fills the frame with
             the item while keeping it in focus.
+            <br />
+            <b>Geolocation Tip:</b> For more reliable GPS data on iPhone, use
+            Safari when uploading photos. Chrome on iPhone can be less reliable
+            for geolocation and geotagging.
         </>
     )
     const [objectURLForDelete, setObjectURLForDelete] = useState<

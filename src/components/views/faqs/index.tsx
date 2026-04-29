@@ -67,6 +67,11 @@ const FaqsPage: React.FC = () => {
                     transferred from the original device via USB cable to a
                     desktop or laptop computer and adding the photos from that
                     computer.
+                    <br />
+                    <br />
+                    For more reliable GPS/geolocation data on iPhone, we
+                    recommend using Safari when uploading photos. Chrome on
+                    iPhone can be less reliable for geolocation and geotagging.
                 </Collapsible>
                 <Collapsible header="What photo types are supported?">
                     The current version of the tool supports JPEG and HEIC/HEIF

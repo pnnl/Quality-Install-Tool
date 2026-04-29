@@ -70,6 +70,7 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                 <br />
                 <StoreProvider
                     doc={editableProject}
+                    projectDoc={editableProject}
                     onChange={handleChangeEditableProject}
                 >
                     <div className="container">
