@@ -1,6 +1,7 @@
 import { get } from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap'
+import { TfiTrash } from 'react-icons/tfi'
 
 import Collapsible from './collapsible'
 import { type CloneableProps, cloneElement } from '../utilities/cloning_utils'
@@ -50,14 +51,14 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
 
     const handleRemove = useCallback(
         async (event: React.SyntheticEvent<EventTarget>) => {
-            if (!(event.target instanceof HTMLButtonElement)) {
+            if (!(event.currentTarget instanceof HTMLButtonElement)) {
                 return false
             }
 
             event.stopPropagation()
             event.preventDefault()
 
-            const index = event.target.dataset.index
+            const index = event.currentTarget.dataset.index
 
             if (index === undefined) {
                 return false
@@ -85,7 +86,18 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                         header={`${label} ${index + 1}${labelValue ? `: ${labelValue}` : ''}`}
                         defaultOpen={index === newlyAddedIndex}
                     >
-                        <div className="combustion_tests">
+                        <div className="d-flex justify-content-end">
+                            <Button
+                                className="d-flex align-items-center"
+                                variant="outline-danger"
+                                onClick={handleRemove}
+                                data-index={index}
+                            >
+                                <TfiTrash size={18} />
+                                <span className="ms-1">Remove</span>
+                            </Button>
+                        </div>
+                        <div className="combustion_tests mt-2">
                             {React.Children.map(children, (child, childIndex) =>
                                 cloneElement(
                                     child as React.ReactElement<CloneableProps>,
@@ -95,15 +107,7 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                                 ),
                             )}
                         </div>
-                        <div className="d-flex justify-content-end">
-                            <Button
-                                className="remove-button"
-                                onClick={handleRemove}
-                                data-index={index}
-                            >
-                                Remove {label}
-                            </Button>
-                        </div>
+                         
                     </Collapsible>
                 )
             })}
