@@ -1,8 +1,11 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
+
+    <InstallationPermitInput />
     <Select label="Stove type" options={["Wood Stove","Pellet Stove"]} path="stove_type" />
 
     <PhotoInput id="interior_stove_name_plate" label="Interior stove photo – Name plate">
@@ -56,7 +59,6 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <ProjectInfoReport {...props} />
 
-    <LabelValue label="Installation Date" path="install_date" />
     <LabelValue label="Stove Type" path="stove_type" />
 
     <Photo label="Interior stove photo – Name plate" id="interior_stove_name_plate" required>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { get } from 'lodash'
 
 import PhotoInput from './photo_input'
 import { StoreContext } from '../providers/store_provider'
@@ -14,6 +15,7 @@ interface PhotoInputWrapperProps {
     uploadable: boolean
     count?: number
     notes?: boolean
+    photoNameField?: boolean
 }
 
 const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
@@ -23,6 +25,7 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
     uploadable,
     count = 10,
     notes,
+    photoNameField = false,
 }) => {
     const [error, setError] = useState<string | undefined>(undefined)
 
@@ -32,6 +35,10 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
         <StoreContext.Consumer>
             {({ doc, putAttachment, removeAttachment }) => {
                 const photoAttachments = doc ? getPhotoAttachments(doc, id) : []
+                const photoName = doc
+                    ? get(doc.data_, `${id}_photo_name`)
+                    : undefined
+
                 const photoAttachmentId = getNextPhotoAttachmentId(
                     id,
                     photoAttachments,
@@ -46,6 +53,9 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                         count={count}
                         id={id}
                         notes={notes}
+                        photoNameField={photoNameField}
+                        photoNamePath={`${id}_photo_name`}
+                        photoName={photoName}
                         photoAttachments={photoAttachments}
                         onPutPhotoAttachment={async blob => {
                             setIsLoading(true)

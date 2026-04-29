@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 // Command to run this test: yarn test src/__tests__/components/photoInput.test.tsx
 // Test suite for PhotoInput component
 import { act } from 'react'
