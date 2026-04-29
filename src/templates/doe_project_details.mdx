@@ -1,3 +1,37 @@
 import ProjectInfoInputs from './reusable/project_info_inputs.mdx'
 
 <ProjectInfoInputs {...props} />
+
+<CollapsibleTextContainer
+    title="Other project documentation"
+    text="You can optionally upload additional project documentation at the project level as PDFs and/or photos. Please provide a Name for each uploaded file or photo."
+>
+    <RepeatableInput
+        path="project_documentation"
+        label="Attachment"
+        labelPath="appliance_type"
+        maxValuesCount={15}
+    >
+        <Radio
+            label="File Type:"
+            options={['Photo', 'File']}
+            path="file_type"
+        />
+        <br />
+        <ShowOrHide path="file_type" value={['File']} matchCondition="Includes">
+            <FileInput id="file_input" label="" fileNameField={true} />
+        </ShowOrHide>
+        <ShowOrHide
+            path="file_type"
+            value={['Photo']}
+            matchCondition="Includes"
+        >
+            <PhotoInput
+                id="photo_input"
+                label=""
+                photoNameField={true}
+                count={1}
+            />
+        </ShowOrHide>
+    </RepeatableInput>
+</CollapsibleTextContainer>

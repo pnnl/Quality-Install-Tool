@@ -1,0 +1,129 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<Tabs>
+  <Tab eventKey="installation" title="Installation">
+    <CollapsibleTextContainer showChildrenOnExpand={true} text="Air sealing and insulating the rim joist area of a home yields some of the biggest bang for the buck in energy savings and improved comfort. But doing it wrong (batt insulation only) can result in mold development in the rim joist area. This workflow is used to document the quality installation of air sealing and insulation products in the rim joist area.">
+      <Figure src="/images/rim_joist/air_leak_paths_rim_joist_area.png"> 
+        Air leak paths in the rim joist area
+      </Figure>
+      <Figure src="/images/rim_joist/example_of_insulate_air_seal_rim_joist.png" >
+        Example of insulated and air sealed rim joist area
+      </Figure>
+    </CollapsibleTextContainer>
+    <DateInput label="Installation Date" path="install_date" />
+    <Select label="Target R-Value" options={["R-13","R-20", "Other"]} path="target_r_value" />
+    <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
+      <NumberInput label="Target R-Value" min={8} max={30} path="target_r_value_other"  />
+    </ShowOrHide>
+
+    <Select label="Rim Joist Air Seal and Insulation Method" options={["Spray foam for air sealing and insulation","Rigid foam with spray foam or caulking for air sealing","Spray foam with batt"]} path="insulation_method" />
+
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam for air sealing and insulation'}>
+      <PhotoInput id="blocking_cinderblock_holes_photo" label="Blocking Cinderblock Holes – Photo">
+        If applicable, take a photo of the material used to block the cinderblock holes prior to spray foaming.
+      </PhotoInput>
+      <PhotoInput id="spray_foam_thickness_photo" label="Spray Foam Thickness – Photo">
+        Take a photo with a spray foam depth gauge inserted into the foam to show the thickness is adequate to reach the target R-value.
+      </PhotoInput>
+      <PhotoInput id="spray_foam_wide_angle_photo" label="Spray Foam – Wide angle photo">
+        Take a representative photo that shows the spray foam has been evenly applied in each rim joist bay.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.insulation_method === 'Rigid foam with spray foam or caulking for air sealing'}>
+      <PhotoInput id="rigid_foam_thickness_photo" label="Rigid Foam Thickness – Photo">
+        Take a photo showing a tape measurement of the rigid foam thickness. If multiple layers are used take a photo showing the total rigid foam thickness.
+      </PhotoInput>
+      <PhotoInput id="rigid_foam_air_sealed_photo" label="Air Sealing – Photo">
+        Take a photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
+      </PhotoInput>
+      <PhotoInput id="rigid_foam_spray_thickness_photo" label="Spray Foam Thickness – Photo">
+        If spray foam is used to also used to add R-value to the rim joist to achieve the target R-value, include a photo of a spray foam depth gauge inserted into the foam to show the thickness.
+      </PhotoInput>
+      <PhotoInput id="rigid_foam_wide_angle_photo" label="Rigid Foam – Wide angle photo">
+        Take a representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam with batt'}>
+      <PhotoInput id="rigid_foam_batt_spray_thickness_photo" label="Spray Foam Thickness – Photo" required>
+        Take a photo of the spray foam with depth gauge showing its thickness.
+      </PhotoInput>
+       <PhotoInput id="rigid_foam_batt_insulation_photo" label="Batt Insulation – Photo" required>
+        Take a photo showing the R-value of the batt insulation.
+      </PhotoInput>
+      <PhotoInput id="rigid_foam_batt_wide_angle_photo" label="Rim Joist Retrofit – Wide angle photo" required>
+        Take a representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
+      </PhotoInput>
+    </ShowOrHide>
+
+    <CollapsibleTextContainer title="" text="">
+        <NumberInput label="Total Number of Feet of Rim Joist:" min={0} path="total_rim_joist_feet"  />
+        <NumberInput label="Total Number of Feet of Rim Joist Retrofitted:" min={0} path="total_rim_joist_retrofitted_feet"  />
+        <LabelValue label="Percent of Rim Joist Retrofitted" decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : ''}/>
+    </CollapsibleTextContainer>
+
+  </Tab>
+ <Tab eventKey="report"  title="Report">
+    <PrintSection label="Print Report">
+    ---
+    # Rim Joist Air Sealing and Insulation
+    ## Photo Report
+
+    <ProjectInfoReport {...props} />
+
+    <LabelValue label="Target R-Value" path="target_r_value" />
+    <ShowOrHide visible={props.data?.target_r_value === 'Other'}>
+          <LabelValue label="Target R-Value (Other)" path="target_r_value_other" />
+    </ShowOrHide>
+
+    <LabelValue label="Rim Joist Air Seal and Insulation Method" path="insulation_method" />
+
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam for air sealing and insulation'}>
+      <Photo label="Blocking Cinderblock Holes – Photo" id="blocking_cinderblock_holes_photo" required>
+        Photo of the material used to block the cinderblock holes prior to spray foaming.
+      </Photo>
+      <Photo label="Spray Foam Thickness – Photo" id="spray_foam_thickness_photo" required>
+        Photo with a spray foam depth gauge inserted into the foam to show the thickness is adequate to reach the target R-value.
+      </Photo>
+      <Photo label="Spray Foam – Wide angle photo" id="spray_foam_wide_angle_photo" required>
+        Representative photo that shows the spray foam has been evenly applied in each rim joist bay.
+      </Photo>
+    </ShowOrHide>
+
+     <ShowOrHide visible={props.data?.insulation_method === 'Rigid foam with spray foam or caulking for air sealing'}>
+      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_thickness_photo" required  >
+        Photo showing a tape measurement of the rigid foam thickness.
+      </Photo>
+      <Photo label="Air Sealing – Photo" id="rigid_foam_air_sealed_photo" required>
+        Photo showing the rigid foam perimeter has been air sealed using spray foam or caulking.
+      </Photo>
+      <Photo label="Spray Foam Thickness – Photo" id="rigid_foam_spray_thickness_photo"  >
+        Photo of a spray foam depth gauge inserted into the foam to show the thickness.
+      </Photo>
+      <Photo label="Rigid Foam – Wide angle photo" id="rigid_foam_wide_angle_photo" required>
+        Representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
+      </Photo>
+    </ShowOrHide>
+
+
+    <ShowOrHide visible={props.data?.insulation_method === 'Spray foam with batt'}>
+      <Photo label="Rigid Foam Thickness – Photo" id="rigid_foam_batt_spray_thickness_photo" required>
+        Photo showing a tape measurement of the rigid foam thickness.
+      </Photo>
+      <Photo label="Batt Insulation – Photo" id="rigid_foam_batt_insulation_photo"  required>
+        Photo showing the R-value of the batt insulation.
+      </Photo>
+      <Photo label="Rim Joist Retrofit – Wide angle photo" id="rigid_foam_batt_wide_angle_photo" required>
+        Representative photo that shows the rim joist retrofit has been evenly applied to each rim joist bay.
+      </Photo>
+    </ShowOrHide>
+
+    <LabelValue label="Total Number of Feet of Rim Joist:" path="total_rim_joist_feet"  />
+    <LabelValue label="Total Number of Feet of Rim Joist Retrofitted:" path="total_rim_joist_retrofitted_feet"  />
+    <LabelValue label="Percent of Rim Joist Retrofitted: " decimalPlaces={1} suffix="%" type={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? "number" : "string" } value={!isNaN(props?.data?.total_rim_joist_feet) && !isNaN(props?.data?.total_rim_joist_retrofitted_feet) ? ((props?.data?.total_rim_joist_retrofitted_feet / props?.data?.total_rim_joist_feet) * 100) : ''}/>
+
+    </PrintSection>
+
+  </Tab>
+</Tabs>

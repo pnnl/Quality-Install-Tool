@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Card, Image, Modal, Offcanvas } from 'react-bootstrap'
 import { TbCameraPlus } from 'react-icons/tb'
 import { TfiInfoAlt, TfiTrash } from 'react-icons/tfi'
+import StringInputWrapper from './string_input_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
@@ -16,6 +17,9 @@ export interface PhotoInputProps {
     label: string
     loading: boolean
     notes?: boolean
+    photoNameField?: boolean
+    photoNamePath?: string
+    photoName?: string
     onPutPhotoAttachment?: (file: Blob) => Promise<void>
     onRemovePhotoAttachment?: (
         attachmentId: PouchDB.Core.AttachmentId,
@@ -32,12 +36,16 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     label,
     loading,
     notes = true,
+    photoNameField = false,
+    photoNamePath,
+    photoName,
     onPutPhotoAttachment,
     onRemovePhotoAttachment,
     photoAttachments,
     uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
+    const hasInfoContent = Boolean(children) || Boolean(label)
 
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
@@ -145,23 +153,31 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Offcanvas show={showInfo} onHide={handleCloseInfo} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{label}</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>{children}</Offcanvas.Body>
-            </Offcanvas>
+            {hasInfoContent && (
+                <Offcanvas
+                    show={showInfo}
+                    onHide={handleCloseInfo}
+                    placement="end"
+                >
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>{label}</Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>{children}</Offcanvas.Body>
+                </Offcanvas>
+            )}
             <Card className="input-card photo-input">
                 <Card.Body>
                     <div className="photo-input-header mb-3">
                         <h3>{label}</h3>
-                        <button
-                            className="info-button"
-                            aria-label="Photo Input Information"
-                            onClick={handleShowInfo}
-                        >
-                            <TfiInfoAlt size={20} />
-                        </button>
+                        {hasInfoContent && (
+                            <button
+                                className="info-button"
+                                aria-label="Photo Input Information"
+                                onClick={handleShowInfo}
+                            >
+                                <TfiInfoAlt size={20} />
+                            </button>
+                        )}
                     </div>
                     <input
                         ref={ref}
@@ -228,6 +244,12 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                     </Button>
                                     <div>
                                         <small>
+                                            {photoName && (
+                                                <>
+                                                    Name: {photoName}
+                                                    <br />
+                                                </>
+                                            )}
                                             Timestamp:{' '}
                                             {photoAttachment.metadata
                                                 ?.timestamp ? (
@@ -264,6 +286,16 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     )}
                     {error && (
                         <div className="error">Image loading failed.</div>
+                    )}
+                    {photoNameField && (
+                        <StringInputWrapper
+                            path={photoNamePath ?? `${id}_photo_name`}
+                            label="Name"
+                            min={0}
+                            max={100}
+                            regexp={/.*/}
+                            hint=""
+                        />
                     )}
                     {photoAttachments.length < count && (
                         <div className="mb-3">

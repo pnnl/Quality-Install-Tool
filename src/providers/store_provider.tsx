@@ -30,7 +30,27 @@ export function useChangeEventHandler(
 
                 callback && (await callback(null, result))
             } catch (error) {
-                callback && (await callback(error as PouchDB.Core.Error, null))
+                // Handle conflict errors by fetching latest version and retrying
+                const dbError = error as PouchDB.Core.Error
+                if (dbError.status === 409) {
+                    try {
+                        const latestDoc = await db.get<Base>(doc._id)
+                        const updatedDoc = {
+                            ...doc,
+                            _rev: latestDoc._rev,
+                        }
+                        const result = await db.put<Base>(updatedDoc)
+                        callback && (await callback(null, result))
+                    } catch (retryError) {
+                        callback &&
+                            (await callback(
+                                retryError as PouchDB.Core.Error,
+                                null,
+                            ))
+                    }
+                } else {
+                    callback && (await callback(dbError, null))
+                }
             }
         },
         [db, callback],

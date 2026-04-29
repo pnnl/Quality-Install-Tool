@@ -7,15 +7,17 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
 interface PDFRendererProps {
     label: string
     file: Blob | undefined
+    fileName?: string
 }
 
-const PDFRenderer: React.FC<PDFRendererProps> = ({ label, file }) => {
+const PDFRenderer: React.FC<PDFRendererProps> = ({ label, file, fileName }) => {
     const [numPages, setNumPages] = useState(0)
 
     return (
         file && (
             <div>
                 <h1>{label}</h1>
+                {fileName && <p>File Name: {fileName}</p>}
                 <Document
                     file={file}
                     onLoadSuccess={({ numPages }) => setNumPages(numPages)}
