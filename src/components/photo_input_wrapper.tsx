@@ -59,14 +59,12 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                         photoAttachments={photoAttachments}
                         onPutPhotoAttachment={async blob => {
                             setIsLoading(true)
-
                             try {
                                 await putAttachment(
                                     photoAttachmentId,
                                     blob,
                                     undefined,
                                 )
-
                                 setError(undefined)
                             } catch (cause) {
                                 setError(cause as string)

@@ -54,9 +54,14 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
             screen. If your phone has multiple cameras/lenses (e.g., 0.5x / 1x /
             2x / 3x), switch lenses to the one that best fills the frame with
             the item while keeping it in focus.
+            <br />
+            <b>Geolocation Tip:</b> For more reliable GPS data on iPhone, use
+            Safari when uploading photos. Chrome on iPhone can be less reliable
+            for geolocation and geotagging.
         </>
     )
-    const hasInfoContent = children || defaultTip
+    const hasInfoContent =
+        Boolean(children) || Boolean(label) || Boolean(defaultTip)
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
@@ -163,15 +168,21 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Offcanvas show={showInfo} onHide={handleCloseInfo} placement="end">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>{label}</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                    {children}
-                    {defaultTip}
-                </Offcanvas.Body>
-            </Offcanvas>
+            {hasInfoContent && (
+                <Offcanvas
+                    show={showInfo}
+                    onHide={handleCloseInfo}
+                    placement="end"
+                >
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>{label}</Offcanvas.Title>
+                    </Offcanvas.Header>
+                    <Offcanvas.Body>
+                        {children}
+                        {defaultTip}
+                    </Offcanvas.Body>
+                </Offcanvas>
+            )}
             <Card className="input-card photo-input">
                 <Card.Body>
                     <div className="photo-input-header mb-3">

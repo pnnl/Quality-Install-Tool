@@ -13,6 +13,7 @@ import {
     getPhotoMetadata,
     isPhoto,
 } from '../utilities/photo_utils'
+import { getPhotoProfileFromDoc } from '../utilities/photo_resolution_utils'
 
 export function useChangeEventHandler(
     callback?: (
@@ -58,6 +59,7 @@ export function useChangeEventHandler(
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
+    projectDoc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
     upsertData: (
         path: string,
         value: unknown,
@@ -79,6 +81,7 @@ export const StoreContext = createContext<{
     ) => Promise<void>
 }>({
     doc: undefined,
+    projectDoc: undefined,
     upsertData: async () => {
         return
     },
@@ -98,6 +101,7 @@ export const StoreContext = createContext<{
 
 interface StoreProviderProps {
     doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
+    projectDoc?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
     onChange?: (
         doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     ) => void | Promise<void>
@@ -106,6 +110,7 @@ interface StoreProviderProps {
 
 const StoreProvider: React.FC<StoreProviderProps> = ({
     doc,
+    projectDoc,
     onChange,
     children,
 }) => {
@@ -200,11 +205,49 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 }
 
                 if (isPhoto(blob)) {
-                    attachmentMetadata = await getPhotoMetadata(blob)
+                    const profileSource = projectDoc ?? doc
+                    const profile = getPhotoProfileFromDoc(profileSource)
 
-                    blob = await compressPhoto(blob)
+                    const { blobs, mainFormat } = await compressPhoto(
+                        blob,
+                        profile,
+                    )
+                    const storedBlob = blobs[mainFormat] ?? blob
+                    attachmentMetadata = await getPhotoMetadata(
+                        blob,
+                        storedBlob,
+                    )
+
+                    const attachments: PouchDB.Core.Attachments = {
+                        ...doc._attachments,
+                    }
+                    Object.entries(blobs).forEach(([format, b]) => {
+                        const ext = format === 'jpeg' ? 'jpg' : format
+                        attachments[`${attachmentId}.${ext}`] = {
+                            content_type:
+                                format === 'jpeg'
+                                    ? 'image/jpeg'
+                                    : `image/${format}`,
+                            data: b,
+                        }
+                    })
+
+                    await onChange({
+                        ...doc,
+                        _attachments: attachments,
+                        metadata_: {
+                            ...doc.metadata_,
+                            last_modified_at: lastModifiedAt.toISOString(),
+                            attachments: {
+                                ...doc.metadata_.attachments,
+                                [attachmentId]: attachmentMetadata,
+                            },
+                        },
+                    })
+                    return
                 }
 
+                // Non-photo: store as usual
                 await onChange({
                     ...doc,
                     _attachments: {
@@ -225,7 +268,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 })
             }
         },
-        [doc, onChange],
+        [doc, onChange, projectDoc],
     )
 
     const removeAttachment = useCallback(
@@ -237,8 +280,6 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     ...doc._attachments,
                 }
 
-                delete _attachments[attachmentId]
-
                 const metadata_ = {
                     ...doc.metadata_,
                     last_modified_at: lastModifiedAt.toISOString(),
@@ -247,7 +288,21 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                 }
 
-                delete metadata_.attachments[attachmentId]
+                const attachmentIdsToRemove = Object.keys(_attachments).filter(
+                    key =>
+                        key === attachmentId ||
+                        key.startsWith(`${attachmentId}.`),
+                )
+
+                if (attachmentIdsToRemove.length > 0) {
+                    attachmentIdsToRemove.forEach(key => {
+                        delete _attachments[key]
+                    })
+                    delete metadata_.attachments[attachmentId]
+                } else {
+                    delete _attachments[attachmentId]
+                    delete metadata_.attachments[attachmentId]
+                }
 
                 await onChange({
                     ...doc,
@@ -280,6 +335,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 doc,
+                projectDoc,
                 upsertData,
                 upsertMetadata,
                 putAttachment,

@@ -1,9 +1,6 @@
 import React from 'react'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
-import {
-    isImageTooSmall,
-    estimateBlurriness,
-} from '../utilities/image_quality_utils'
+import { estimateBlurriness } from '../utilities/image_quality_utils'
 
 function hasBlobData(obj: unknown): obj is { data: Blob } {
     return (
@@ -29,9 +26,11 @@ export function PhotoQualityWarning({
                 img.onload = async () => {
                     if (revoked) return
                     let w = ''
-                    if (isImageTooSmall(img)) {
-                        w += 'Image is too small (min 800x600 recommended). '
-                    }
+
+                    // if (isImageTooSmall(img)) {
+                    //     w += 'Image is too small (min 800x600 recommended). '
+                    // }
+
                     const blur = await estimateBlurriness(img)
                     if (blur < 100) {
                         w += 'Image may be blurry. '

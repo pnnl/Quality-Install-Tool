@@ -1,9 +1,12 @@
 import exifr from 'exifr'
-import imageCompression from 'browser-image-compression'
 import heic2any from 'heic2any'
 import pica from 'pica'
 
 import { type PhotoMetadata } from '../types/database.types'
+import {
+    type PhotoProfileSettings,
+    getPhotoProfileSettings,
+} from './photo_resolution_utils'
 
 const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
     process.env.REACT_APP_GEOLOCATION_MAXIMUM_AGE,
@@ -12,20 +15,6 @@ const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
 const GEOLOCATION_TIMEOUT_MILLIS: number = parseInt(
     process.env.REACT_APP_GEOLOCATION_TIMEOUT_MILLIS,
 )
-
-const MAXIMUM_WIDTH_PX: number = parseInt(
-    process.env.REACT_APP_PHOTO_MAXIMUM_WIDTH_PX,
-)
-
-const MAXIMUM_HEIGHT_PX: number = parseInt(
-    process.env.REACT_APP_PHOTO_MAXIMUM_HEIGHT_PX,
-)
-
-const MAXIMUM_SIZE_MB: number = parseFloat(
-    process.env.REACT_APP_PHOTO_MAXIMUM_SIZE_MB,
-)
-
-const HIGH_TEXT_READABILITY_QUALITY = 0.92
 
 const HIGH_QUALITY_JPEG_EXPORT = 0.98
 
@@ -59,57 +48,42 @@ export const PHOTO_MIME_TYPES: string[] = [
  *     it will be caught, and the function may return undefined.
  * @throws {Error} - Throws an error if the compression process fails.
  */
-export async function compressPhoto(blob: Blob) {
-    // Normalize into a browser-friendly format first so the later canvas and
-    // resize steps can treat every photo the same way.
-    const normalizedPhoto = await normalizePhotoBlob(blob)
-    const processedBlob = await preprocessPhoto(
-        normalizedPhoto.blob as File,
-        normalizedPhoto.mimeType,
-    )
-    const file = processedBlob as File
+// Returns { blobs: { [format]: Blob }, mainFormat: string }
+export async function compressPhoto(blob: Blob, profile: string) {
+    const settings = getPhotoProfileSettings(profile)
+    const normalized = await normalizePhotoBlob(blob)
+    const file = normalized.blob as File
+    const mimeType = normalized.mimeType
 
-    console.log('[photo_utils] Starting photo preprocessing and compression', {
-        type: file.type,
-        sizeBytes: file.size,
-    })
-
-    if (file.size <= MAXIMUM_SIZE_MB * 1024 * 1024) {
-        console.log(
-            '[photo_utils] Using processed photo without extra compression',
-            {
-                sizeBytes: file.size,
-            },
-        )
-        return file
+    // ORIGINAL: if HEIC, convert to JPEG; else, keep original
+    if (settings.keepOriginal) {
+        if (mimeType === 'image/heic') {
+            // Convert to JPEG for browser compatibility
+            const jpegBlob = (await heic2any({
+                blob: file,
+                toType: 'image/jpeg',
+            })) as Blob
+            return { blobs: { jpeg: jpegBlob }, mainFormat: 'jpeg' }
+        } else {
+            // Store original
+            const ext = mimeType.split('/')[1]
+            return { blobs: { [ext]: file }, mainFormat: ext }
+        }
     }
 
-    const qualityPreservingBlob = await compressAtCurrentResolution(file)
-
-    if (qualityPreservingBlob.size <= MAXIMUM_SIZE_MB * 1024 * 1024) {
-        console.log('[photo_utils] Used quality-preserving compression', {
-            sizeBytes: qualityPreservingBlob.size,
-        })
-        return qualityPreservingBlob
+    // For all other profiles, output the configured formats.
+    const blobs: { [format: string]: Blob } = {}
+    for (const format of settings.formats) {
+        const outMime = format === 'jpeg' ? 'image/jpeg' : `image/${format}`
+        try {
+            const processed = await preprocessPhoto(file, outMime, settings)
+            blobs[format] = processed
+        } catch (err) {
+            console.error('Photo compression failed for format:', format, err)
+        }
     }
-
-    try {
-        // If quality-only compression is still too large, resize with pica
-        // because its resampling is usually clearer for text than basic canvas.
-        console.log('[photo_utils] Trying pica resize compression')
-        return await resizePhotoWithPica(file)
-    } catch (error) {
-        console.log('[photo_utils] Falling back to browser-image-compression', {
-            error,
-        })
-        return await imageCompression(file, {
-            maxSizeMB: MAXIMUM_SIZE_MB,
-            useWebWorker: true,
-            maxWidthOrHeight: Math.max(MAXIMUM_HEIGHT_PX, MAXIMUM_WIDTH_PX),
-            initialQuality: RESIZED_IMAGE_QUALITY,
-            preserveExif: file.type === 'image/jpeg',
-        })
-    }
+    const mainFormat = settings.formats[0]
+    return { blobs, mainFormat }
 }
 
 async function normalizePhotoBlob(
@@ -124,8 +98,6 @@ async function normalizePhotoBlob(
 
     // HEIC cannot be relied on for browser canvas processing, so convert once
     // up front and let the rest of the pipeline work with JPEG.
-    console.log('[photo_utils] Converting HEIC photo to JPEG')
-
     return {
         blob: (await heic2any({
             blob,
@@ -151,12 +123,19 @@ async function normalizePhotoBlob(
  * @param mimeType The desired output MIME type (e.g., 'image/jpeg').
  * @returns A Promise resolving to a Blob of the preprocessed image.
  */
-async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
+async function preprocessPhoto(
+    file: File,
+    mimeType: string,
+    settings: PhotoProfileSettings,
+): Promise<Blob> {
     const image = await loadImage(file)
-    const [targetWidth, targetHeight] = getConstrainedDimensions(
-        image.naturalWidth,
-        image.naturalHeight,
+    const scale = Math.min(
+        1,
+        settings.maxWidth / image.naturalWidth,
+        settings.maxHeight / image.naturalHeight,
     )
+    const targetWidth = Math.max(1, Math.round(image.naturalWidth * scale))
+    const targetHeight = Math.max(1, Math.round(image.naturalHeight * scale))
 
     const canvas = document.createElement('canvas')
     canvas.width = image.naturalWidth
@@ -177,11 +156,6 @@ async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
 
     context.putImageData(enhancedData, 0, 0)
 
-    console.log('[photo_utils] Preprocessed photo before compression', {
-        width: image.naturalWidth,
-        height: image.naturalHeight,
-    })
-
     if (
         targetWidth === image.naturalWidth &&
         targetHeight === image.naturalHeight
@@ -189,20 +163,14 @@ async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
         return await canvasToBlob(
             canvas,
             mimeType,
-            mimeType === 'image/jpeg' ? HIGH_QUALITY_JPEG_EXPORT : 1,
+            settings.quality ||
+                (mimeType === 'image/jpeg' ? HIGH_QUALITY_JPEG_EXPORT : 1),
         )
     }
 
     const targetCanvas = document.createElement('canvas')
     targetCanvas.width = targetWidth
     targetCanvas.height = targetHeight
-
-    console.log('[photo_utils] Resizing with pica', {
-        originalWidth: image.naturalWidth,
-        originalHeight: image.naturalHeight,
-        targetWidth,
-        targetHeight,
-    })
 
     await picaResizer.resize(canvas, targetCanvas, {
         filter: 'mks2013',
@@ -211,7 +179,11 @@ async function preprocessPhoto(file: File, mimeType: string): Promise<Blob> {
         unsharpThreshold: 1,
     })
 
-    return await canvasToBlob(targetCanvas, mimeType, RESIZED_IMAGE_QUALITY)
+    return await canvasToBlob(
+        targetCanvas,
+        mimeType,
+        settings.quality || RESIZED_IMAGE_QUALITY,
+    )
 }
 
 /**
@@ -280,125 +252,17 @@ function clampColor(value: number): number {
     return Math.max(0, Math.min(255, Math.round(value)))
 }
 
-async function compressAtCurrentResolution(file: File): Promise<Blob> {
-    // Preserve the current pixel dimensions and only reduce encoding quality
-    // when the processed image is still larger than the configured limit.
-    return await imageCompression(file, {
-        maxSizeMB: MAXIMUM_SIZE_MB,
-        useWebWorker: true,
-        initialQuality: HIGH_TEXT_READABILITY_QUALITY,
-        alwaysKeepResolution: true,
-        preserveExif: file.type === 'image/jpeg',
-    })
-}
-
-async function resizePhotoWithPica(file: File): Promise<Blob> {
-    const image = await loadImage(file)
-    const [targetWidth, targetHeight] = getConstrainedDimensions(
-        image.naturalWidth,
-        image.naturalHeight,
-    )
-
-    if (
-        targetWidth === image.naturalWidth &&
-        targetHeight === image.naturalHeight
-    ) {
-        console.log(
-            '[photo_utils] Pica resize skipped because dimensions fit',
-            {
-                width: image.naturalWidth,
-                height: image.naturalHeight,
-            },
-        )
-        return await compressAtCurrentResolution(file)
-    }
-
-    const sourceCanvas = document.createElement('canvas')
-    sourceCanvas.width = image.naturalWidth
-    sourceCanvas.height = image.naturalHeight
-
-    const sourceContext = sourceCanvas.getContext('2d')
-
-    if (!sourceContext) {
-        throw new Error('Canvas rendering is unavailable.')
-    }
-
-    sourceContext.drawImage(image, 0, 0)
-
-    const targetCanvas = document.createElement('canvas')
-    targetCanvas.width = targetWidth
-    targetCanvas.height = targetHeight
-
-    console.log('[photo_utils] Retrying resize with pica', {
-        originalWidth: image.naturalWidth,
-        originalHeight: image.naturalHeight,
-        targetWidth,
-        targetHeight,
-    })
-
-    await picaResizer.resize(sourceCanvas, targetCanvas, {
-        filter: 'mks2013',
-        unsharpAmount: 160,
-        unsharpRadius: 0.6,
-        unsharpThreshold: 1,
-    })
-
-    const resizedBlob = await canvasToBlob(
-        targetCanvas,
-        file.type,
-        RESIZED_IMAGE_QUALITY,
-    )
-
-    if (resizedBlob.size <= MAXIMUM_SIZE_MB * 1024 * 1024) {
-        console.log('[photo_utils] Pica resize satisfied size limit', {
-            sizeBytes: resizedBlob.size,
-        })
-        return resizedBlob
-    }
-
-    console.log('[photo_utils] Pica resize still too large, recompressing', {
-        sizeBytes: resizedBlob.size,
-    })
-    return await imageCompression(resizedBlob as File, {
-        maxSizeMB: MAXIMUM_SIZE_MB,
-        useWebWorker: true,
-        initialQuality: RESIZED_IMAGE_QUALITY,
-        alwaysKeepResolution: true,
-    })
-}
-
-function getConstrainedDimensions(
-    width: number,
-    height: number,
-): [number, number] {
-    // Keep aspect ratio while fitting within the configured max photo bounds.
-    const scale = Math.min(
-        1,
-        MAXIMUM_WIDTH_PX / width,
-        MAXIMUM_HEIGHT_PX / height,
-    )
-
-    return [
-        Math.max(1, Math.round(width * scale)),
-        Math.max(1, Math.round(height * scale)),
-    ]
-}
-
 async function loadImage(file: File): Promise<HTMLImageElement> {
     const imageUrl = URL.createObjectURL(file)
-
     try {
         return await new Promise<HTMLImageElement>((resolve, reject) => {
             const image = new Image()
-
             image.onload = () => {
                 resolve(image)
             }
-
             image.onerror = () => {
                 reject(new Error('Image loading failed.'))
             }
-
             image.src = imageUrl
         })
     } finally {
@@ -454,9 +318,13 @@ export async function processImage(file: File): Promise<Blob> {
  * and the original timestamp. If the GPS coordinates are not present, then
  * delegates to the current device location.
  */
-export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
+export async function getPhotoMetadata(
+    blob: Blob,
+    storedBlob?: Blob,
+): Promise<PhotoMetadata> {
     const timestamp = new Date().toISOString()
     const timestampSource = 'Date.now'
+    const { height, width } = await getImageDimensions(storedBlob ?? blob)
 
     const tags = await exifr.parse(blob)
 
@@ -478,6 +346,8 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
                 return {
                     geolocation,
                     geolocationSource,
+                    imageHeightPx: height,
+                    imageWidthPx: width,
                     timestamp: DateTimeOriginal.toISOString(),
                     timestampSource: 'EXIF',
                 }
@@ -485,6 +355,8 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
                 return {
                     geolocation,
                     geolocationSource,
+                    imageHeightPx: height,
+                    imageWidthPx: width,
                     timestamp,
                     timestampSource,
                 }
@@ -502,6 +374,8 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
             geolocationWarning:
                 'Location services are not available in this browser. The photo was uploaded without GPS coordinates.',
             geolocationSource: null,
+            imageHeightPx: height,
+            imageWidthPx: width,
             timestamp,
             timestampSource,
         }
@@ -524,6 +398,8 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
                 longitude: geolocationPosition.coords.longitude,
             },
             geolocationSource: 'navigator.geolocation',
+            imageHeightPx: height,
+            imageWidthPx: width,
             timestamp,
             timestampSource,
         }
@@ -538,9 +414,22 @@ export async function getPhotoMetadata(blob: Blob): Promise<PhotoMetadata> {
             },
             geolocationWarning: getGeolocationWarningMessage(geolocationError),
             geolocationSource: null,
+            imageHeightPx: height,
+            imageWidthPx: width,
             timestamp,
             timestampSource,
         }
+    }
+}
+
+async function getImageDimensions(
+    blob: Blob,
+): Promise<{ height: number; width: number }> {
+    const image = await loadImage(blob as File)
+
+    return {
+        height: image.naturalHeight,
+        width: image.naturalWidth,
     }
 }
 

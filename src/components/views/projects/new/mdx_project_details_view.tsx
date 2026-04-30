@@ -115,6 +115,10 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
                     project as PouchDB.Core.Document<Project> &
                         PouchDB.Core.GetMeta
                 }
+                projectDoc={
+                    project as PouchDB.Core.Document<Project> &
+                        PouchDB.Core.GetMeta
+                }
                 onChange={doc =>
                     setProject(
                         doc as PouchDB.Core.Document<Project> &

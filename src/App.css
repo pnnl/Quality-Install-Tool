@@ -775,3 +775,19 @@ btn-light:hover {
 .print-header-title {
     font-size: 1.2em !important;
 }
+
+/* Project Info Inputs styles */
+.photo-resolution-block {
+  margin-bottom: 0.5em;
+}
+
+.photo-resolution-list {
+  margin: 0.5em 0 0.5em 1.2em;
+  padding: 0;
+}
+
+.photo-resolution-note {
+  margin-top: 0.5em;
+  font-size: 0.95em;
+  color: #555;
+}
