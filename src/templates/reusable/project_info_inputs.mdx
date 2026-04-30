@@ -18,16 +18,19 @@
         <StringInput label="Zip Code" path="location.zip_code" />
 
 
+        ## Photo Quality Setting
+
+        _Photos will be compressed to the selected quality (reducing file size for larger uploads)._
         <div className="photo-resolution-block">
-            <b>Photo Resolution:</b>
             <ul className="photo-resolution-list">
-                <li><b>Low (Smaller Files, May Miss Details):</b> Fastest uploads and lowest storage use, but small text or fine details may be harder to read. <i>(~0.2 MB per photo)</i></li>
-                <li><b>Standard (Balanced):</b> A good balance of image detail, upload speed and storage use. <i>(~0.75 MB per photo)</i></li>
-                <li><b>High (Larger Files, Best Detail):</b> Highest image detail, but uploads take longer and use more storage. <i>(up to 2 MB per photo)</i></li>
+                <li><b>Low:</b> Lowest browser storage use, but fine details may be harder to read. <i>(~0.2 MB per photo)</i></li>
+                <li><b>Standard:</b> Mid-level image clarity and browser storage. <i>(~0.75 MB per photo)</i></li>
+                <li><b>High:</b> Highest image detail, but most browser storage. <i>(up to 2 MB per photo)</i></li>
             </ul>
         </div>
+        _Choose the option that best fits your needs._
         <Radio
-            label="Select Photo Resolution"
+            label="Select Photo Quality:"
             options={[
                 "Low (Smaller Files, May Miss Details)",
                 "Standard (Balanced)",
@@ -36,7 +39,7 @@
             path="photo.resolution"
         />
         <div className="photo-resolution-note">
-            <b>Note:</b> Photos are compressed based on the selected upload quality.
+            <b>Note:</b> This tool does not enhance or upscale images—if a photo is uploaded at low quality, it will not be improved.
         </div>
 
         <PhotoInput
