@@ -7,6 +7,7 @@ import {
     type PhotoProfileSettings,
     getPhotoProfileSettings,
 } from './photo_resolution_utils'
+import imageCompression from 'browser-image-compression'
 
 const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
     process.env.REACT_APP_GEOLOCATION_MAXIMUM_AGE,
