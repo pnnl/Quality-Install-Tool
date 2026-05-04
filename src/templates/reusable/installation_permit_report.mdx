@@ -1,0 +1,11 @@
+<ShowOrHide visible={props.data?.permit?.file_type}>
+
+    <ShowOrHide visible={props.data?.permit?.file_type === 'Photo'}>
+        <Photo id="permit.photo_input" label="Installation Permit" />
+    </ShowOrHide>
+
+    <ShowOrHide visible={props.data?.permit?.file_type === 'File'}>
+        <PDFRenderer id="permit.file_input" label="Installation Permit" />
+    </ShowOrHide>
+
+</ShowOrHide>

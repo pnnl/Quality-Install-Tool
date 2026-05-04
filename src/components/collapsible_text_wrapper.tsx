@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 
 import CollapsibleText from './collapsible_text'
 import { StoreContext } from '../providers/store_provider'
@@ -14,11 +14,22 @@ const CollapsibleTextWrapper: React.FC<CollapsibleTextWrapperProps> = ({
     text,
     title,
 }) => {
+    const [isCollapsed, setIsCollapsed] = useState(true)
+
+    const toggleCollapse = useCallback(() => {
+        setIsCollapsed(prevState => !prevState)
+    }, [])
+
     return (
         <StoreContext.Consumer>
             {() => {
                 return (
-                    <CollapsibleText text={text} title={title}>
+                    <CollapsibleText
+                        text={text}
+                        title={title}
+                        isCollapsed={isCollapsed}
+                        onToggle={toggleCollapse}
+                    >
                         {children}
                     </CollapsibleText>
                 )

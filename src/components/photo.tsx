@@ -11,6 +11,7 @@ interface PhotoProps {
     photoAttachments: PhotoAttachment[]
     required: boolean
     noteValue: string | undefined
+    photoName?: string
 }
 
 const Photo: React.FC<PhotoProps> = ({
@@ -19,6 +20,7 @@ const Photo: React.FC<PhotoProps> = ({
     photoAttachments,
     required,
     noteValue,
+    photoName,
 }) => {
     const noteValueLines = useMemo<string[]>(() => {
         if (noteValue) {
@@ -68,6 +70,12 @@ const Photo: React.FC<PhotoProps> = ({
                                         )}
                                         <div>
                                             <small>
+                                                {photoName && (
+                                                    <>
+                                                        Name: {photoName}
+                                                        <br />
+                                                    </>
+                                                )}
                                                 Timestamp:{' '}
                                                 {photoAttachment.metadata
                                                     ?.timestamp ? (

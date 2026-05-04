@@ -1,3 +1,4 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
 import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
@@ -181,6 +182,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     </Tab>
     <Tab eventKey="installation" title="Installation">
         <DateInput label="Installation Date" path="install_date" />
+
+        <InstallationPermitInput />
         ## Refrigerant Recovery
         <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacting_old_ac_or_heatpump" />
         <ShowOrHide visible={props.data.replacting_old_ac_or_heatpump === "Yes"}>
