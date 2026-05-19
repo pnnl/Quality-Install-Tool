@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
                             {storageUsageText}
                         </span>
                         {storageUsagePercent !== undefined &&
-                            storageUsagePercent >= 0.1 && (
+                            storageUsagePercent >= 50 && (
                                 <span className="navbar-text footer-navbar-text footer-storage-warning">
                                     <span
                                         className="footer-storage-warning-icon"
