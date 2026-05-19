@@ -78,6 +78,18 @@ const Home: React.FC<HomeProps> = () => {
                     if (selectedProjectForDelete) {
                         await removeProject(db, selectedProjectForDelete._id)
 
+                        // Compact the database after deletion to free space
+                        // occupied by orphaned attachment blobs and tombstones.
+                        // Dispatch an event when done so the footer refreshes
+                        // the storage usage display immediately.
+                        const compactAndNotify = async () => {
+                            await db.compact()
+                            window.dispatchEvent(
+                                new CustomEvent('pouchdb-compacted'),
+                            )
+                        }
+                        void compactAndNotify()
+
                         setProjects(previousProjects => {
                             return previousProjects.filter(previousProject => {
                                 return (

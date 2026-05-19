@@ -115,8 +115,13 @@ export async function getBrowserStorageUsageDetails(): Promise<BrowserStorageUsa
             quota > 0
         ) {
             const usagePercent = Math.min(100, (usage / quota) * 100)
+            console.log(
+                `Browser storage usage: ${formatBytes(usage)} / ${formatBytes(
+                    quota,
+                )} (${usagePercent.toFixed(2)}%)`,
+            )
             return {
-                text: `Browser Storage Used: ${usagePercent.toFixed(2)}% (${formatBytes(usage)} of ${formatBytes(quota)})`,
+                text: `Browser Storage Used: ${usagePercent.toFixed(2)}%`,
                 percent: usagePercent,
             }
         }

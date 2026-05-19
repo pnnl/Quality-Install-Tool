@@ -517,6 +517,7 @@ export async function removeProject(
     if (installationIds.length > 0) {
         const allDocsWithKeysOptions: PouchDB.Core.AllDocsWithKeysOptions = {
             keys: installationIds,
+            include_docs: true,
         }
 
         const allDocsWithKeysResponse: PouchDB.Core.AllDocsWithKeysResponse<Installation> =

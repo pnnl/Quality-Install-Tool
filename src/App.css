@@ -779,10 +779,43 @@ btn-light:hover {
 
 .footer-storage-warning-link {
     display: inline;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin: 0;
     padding: 0;
     text-decoration: underline;
+}
+
+.footer-storage-meter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+.footer-storage-label {
+    align-items: center;
+    display: flex;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.footer-storage-bar {
+    height: 6px;
+    width: 120px;
+    border-radius: 3px;
+}
+
+.footer-last-updated {
+    color: #6c757d;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.footer-last-updated-icon {
+    font-size: 0.8rem;
 }
 
 .layout-wrapper {
