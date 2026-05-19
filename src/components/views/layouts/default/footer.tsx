@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
         <Navbar bg="light" variant="light" className="footer">
             <Container>
                 <div className="d-flex flex-column flex-sm-row justify-content-between w-100 align-items-sm-center gap-1">
-                    <Nav className="flex-wrap">
+                    <Nav className="flex-wrap footer-links-nav">
                         <Nav.Link
                             href={process.env.REACT_APP_HOMEPAGE}
                             className="footer-nav-link"
