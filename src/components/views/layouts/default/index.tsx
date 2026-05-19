@@ -1,10 +1,11 @@
 import React, { useMemo, useEffect, useState } from 'react'
-import { Button, Container, Navbar } from 'react-bootstrap'
+import { Alert, Button, Container, Navbar } from 'react-bootstrap'
 import Footer from './footer'
 import { TfiArrowLeft, TfiHome } from 'react-icons/tfi'
 import { Link, useLocation, useParams, useMatches } from 'react-router-dom'
 import ExportDoc from '../../projects/list/export_document'
 import { useDatabase } from '../../../../providers/database_provider'
+import { useStorageError } from '../../../../providers/storage_error_provider'
 import { getProject } from '../../../../utilities/database_utils'
 import { type Project } from '../../../../types/database.types'
 import PATHS from '../../../../config/routes'
@@ -48,7 +49,27 @@ const PageHeader: React.FC = () => {
 
     useEffect(() => {
         if (projectId) {
-            getProject(db, projectId).then(doc => setProject(doc as Project))
+            getProject(db, projectId)
+                .then(doc => setProject(doc as Project))
+                .catch(error => {
+                    const dbError = error as PouchDB.Core.Error
+
+                    if (
+                        dbError.status === 404 ||
+                        dbError.name === 'not_found' ||
+                        dbError.reason === 'deleted'
+                    ) {
+                        setProject(null)
+                        return
+                    }
+
+                    console.error(
+                        'Failed to load project for page header:',
+                        error,
+                    )
+                })
+        } else {
+            setProject(null)
         }
     }, [db, projectId])
 
@@ -144,9 +165,18 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+    const { message, clearError } = useStorageError()
+
     return (
         <div id="root-background" className="layout-wrapper">
             <PageHeader />
+            {message && (
+                <div className="container mt-3">
+                    <Alert variant="danger" dismissible onClose={clearError}>
+                        {message}
+                    </Alert>
+                </div>
+            )}
             <div id="root-body">{children}</div>
             <Footer />
         </div>

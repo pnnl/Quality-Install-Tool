@@ -29,10 +29,42 @@ const Home: React.FC<HomeProps> = () => {
     >(undefined)
 
     useEffect(() => {
-        projects.forEach(async project => {
-            await updateProjectLastModified(db, project)
-            await reloadProjects()
-        })
+        let isCancelled = false
+
+        const syncProjectMetadata = async () => {
+            await Promise.all(
+                projects.map(async project => {
+                    try {
+                        await updateProjectLastModified(db, project)
+                    } catch (error) {
+                        const dbError = error as PouchDB.Core.Error
+
+                        if (
+                            dbError.status === 404 ||
+                            dbError.name === 'not_found' ||
+                            dbError.reason === 'deleted'
+                        ) {
+                            return
+                        }
+
+                        console.error(
+                            'Failed to update project metadata:',
+                            error,
+                        )
+                    }
+                }),
+            )
+
+            if (!isCancelled) {
+                await reloadProjects()
+            }
+        }
+
+        void syncProjectMetadata()
+
+        return () => {
+            isCancelled = true
+        }
     }, [projects, db, reloadProjects])
 
     return (

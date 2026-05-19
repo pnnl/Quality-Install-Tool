@@ -53,6 +53,22 @@ const FaqsPage: React.FC = () => {
                     Please note that you must download each project
                     individually.
                 </Collapsible>
+                <Collapsible
+                    header="What does Browser Storage Used mean and can saves fail?"
+                    id="browser-storage"
+                >
+                    The Browser Storage Used value in the footer shows how much
+                    of your browser&rsquo;s available site storage this tool is
+                    currently using. As usage gets close to the browser&rsquo;s
+                    storage limit, saves can fail, especially on photo-heavy
+                    projects.
+                    <br />
+                    <br />
+                    If Browser Storage Used is near 95% or higher, download
+                    older completed projects to your device and remove them from
+                    browser storage, then try saving again. This frees space for
+                    new project data and photos.
+                </Collapsible>
                 <Collapsible header="Can I use the app on multiple devices?">
                     Since data is stored locally on each device, your projects
                     will not automatically sync between devices. To move a
