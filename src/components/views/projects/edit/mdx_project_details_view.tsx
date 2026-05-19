@@ -6,6 +6,7 @@ import DocNameInputWrapper from '../../shared/doc_name_input_wrapper'
 import MdxWrapper from '../../../mdx_wrapper'
 import useEditableProject from '../../../../hooks/useEditableProject'
 import { useProject } from '../../../../providers/project_provider'
+import { useStorageError } from '../../../../providers/storage_error_provider'
 import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 import { hasErrors } from '../../../../utilities/validation_utils'
@@ -14,6 +15,7 @@ type MdxProjectViewProps = Record<string, never>
 
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const navigate = useNavigate()
+    const { reportError, clearError } = useStorageError()
 
     const [project] = useProject()
 
@@ -55,13 +57,17 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             event.stopPropagation()
             event.preventDefault()
 
-            await handleSaveEditableProject()
-
-            navigate('/')
+            clearError()
+            try {
+                await handleSaveEditableProject()
+                navigate('/')
+            } catch (error) {
+                reportError(error)
+            }
 
             return false
         },
-        [handleSaveEditableProject, navigate],
+        [clearError, handleSaveEditableProject, navigate, reportError],
     )
 
     if (editableProject) {

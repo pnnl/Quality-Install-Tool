@@ -14,6 +14,7 @@ import {
     isPhoto,
 } from '../utilities/photo_utils'
 import { getPhotoProfileFromDoc } from '../utilities/photo_resolution_utils'
+import { useStorageError } from './storage_error_provider'
 
 export function useChangeEventHandler(
     callback?: (
@@ -22,12 +23,13 @@ export function useChangeEventHandler(
     ) => void | Promise<void>,
 ): (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => Promise<void> {
     const db = useDatabase()
+    const { reportError, clearError } = useStorageError()
 
     return useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             try {
                 const result = await db.put<Base>(doc)
-
+                clearError()
                 callback && (await callback(null, result))
             } catch (error) {
                 // Handle conflict errors by fetching latest version and retrying
@@ -40,8 +42,10 @@ export function useChangeEventHandler(
                             _rev: latestDoc._rev,
                         }
                         const result = await db.put<Base>(updatedDoc)
+                        clearError()
                         callback && (await callback(null, result))
                     } catch (retryError) {
+                        reportError(retryError)
                         callback &&
                             (await callback(
                                 retryError as PouchDB.Core.Error,
@@ -49,11 +53,12 @@ export function useChangeEventHandler(
                             ))
                     }
                 } else {
+                    reportError(dbError)
                     callback && (await callback(dbError, null))
                 }
             }
         },
-        [db, callback],
+        [db, callback, reportError, clearError],
     )
 }
 
@@ -114,6 +119,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     onChange,
     children,
 }) => {
+    const { reportError } = useStorageError()
     const upsertData = useCallback(
         async (path: string, value: unknown, errors: string[]) => {
             if (onChange) {
@@ -196,7 +202,11 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
             blob: Blob,
             filename?: string,
         ) => {
-            if (onChange) {
+            if (!onChange) {
+                return
+            }
+
+            try {
                 const lastModifiedAt = new Date()
 
                 let attachmentMetadata: FileMetadata | PhotoMetadata = {
@@ -266,9 +276,11 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                         },
                     },
                 })
+            } catch (error) {
+                reportError(error)
             }
         },
-        [doc, onChange, projectDoc],
+        [doc, onChange, projectDoc, reportError],
     )
 
     const removeAttachment = useCallback(

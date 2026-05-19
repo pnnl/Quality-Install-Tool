@@ -16,6 +16,7 @@ import DownloadReminderPage from './components/views/shared/download_reminder_pa
 import FaqsPage from './components/views/faqs'
 
 import DatabaseProvider from './providers/database_provider'
+import StorageErrorProvider from './providers/storage_error_provider'
 import PATHS from './config/routes'
 
 const router = createBrowserRouter(
@@ -70,12 +71,14 @@ type AppProps = Record<string, never>
 const App: React.FC<AppProps> = () => {
     return (
         <DatabaseProvider>
-            <RouterProvider
-                future={{
-                    v7_startTransition: true,
-                }}
-                router={router}
-            />
+            <StorageErrorProvider>
+                <RouterProvider
+                    future={{
+                        v7_startTransition: true,
+                    }}
+                    router={router}
+                />
+            </StorageErrorProvider>
         </DatabaseProvider>
     )
 }
