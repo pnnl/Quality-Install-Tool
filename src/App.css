@@ -882,6 +882,18 @@ btn-light:hover {
     font-size: 1.2em !important;
 }
 
+.print-back-bar {
+    padding: 0.6rem 0 0.4rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
 /* Project Info Inputs styles */
 .photo-resolution-block {
   margin-bottom: 0.5em;
