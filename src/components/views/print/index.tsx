@@ -140,20 +140,44 @@ const PrintView: React.FC = () => {
         }
     }, [payload, storageKey])
 
+    const backButton = (
+        <div className="print-back-bar no-print">
+            <button
+                className="btn btn-secondary btn-sm"
+                onClick={() => window.close()}
+            >
+                ← Back to QI Tool
+            </button>
+        </div>
+    )
+
     if (errorMessage) {
-        return <div className="container mt-3">{errorMessage}</div>
+        return (
+            <div className="container mt-3">
+                {backButton}
+                <p className="mt-3">{errorMessage}</p>
+            </div>
+        )
     }
 
     if (!payload) {
-        return <div className="container mt-3">Preparing print view...</div>
+        return (
+            <div className="container mt-3">
+                {backButton}
+                <p className="mt-3">Preparing print view...</p>
+            </div>
+        )
     }
 
     return (
-        <div
-            ref={containerRef}
-            className="container"
-            dangerouslySetInnerHTML={{ __html: payload.html }}
-        />
+        <>
+            {backButton}
+            <div
+                ref={containerRef}
+                className="container"
+                dangerouslySetInnerHTML={{ __html: payload.html }}
+            />
+        </>
     )
 }
 
