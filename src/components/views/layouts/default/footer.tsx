@@ -107,7 +107,7 @@ const Footer: React.FC = () => {
                             <div className="footer-storage-label">
                                 Storage{' '}
                                 {storageUsagePercent !== undefined
-                                    ? `${storageUsagePercent.toFixed(1)}%`
+                                    ? `${storageUsagePercent.toFixed(2)}%`
                                     : 'N/A'}
                                 {storageUsagePercent !== undefined &&
                                     storageUsagePercent >= 50 && (
