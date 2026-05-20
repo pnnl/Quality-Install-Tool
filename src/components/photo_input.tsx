@@ -334,9 +334,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             </div>
                         </div>
                     )}
-                    {error && (
-                        <div className="error">Image loading failed.</div>
-                    )}
+                    {error && <div className="error">{error}</div>}
                     {photoNameField && (
                         <StringInputWrapper
                             path={photoNamePath ?? `${id}_photo_name`}

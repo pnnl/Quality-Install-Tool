@@ -8,6 +8,7 @@ const routes = {
     EDIT_INSTALLATION: '/app/:projectId/:workflowName/:installationId',
     DOWNLOAD_REMINDER: '/app/:projectId/download-reminder/:fromHome?',
     FAQS: '/app/faqs',
+    PRINT: '/app/print',
 }
 
 export default routes

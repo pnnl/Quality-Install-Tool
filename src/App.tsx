@@ -14,6 +14,7 @@ import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
 import DownloadReminderPage from './components/views/shared/download_reminder_page'
 import FaqsPage from './components/views/faqs'
+import PrintView from './components/views/print'
 
 import DatabaseProvider from './providers/database_provider'
 import StorageErrorProvider from './providers/storage_error_provider'
@@ -57,6 +58,11 @@ const router = createBrowserRouter(
             path: PATHS.FAQS,
             element: <FaqsPage />,
             handle: { pageTitle: 'FAQs' },
+        },
+        {
+            path: PATHS.PRINT,
+            element: <PrintView />,
+            handle: { pageTitle: 'Print' },
         },
     ],
     {

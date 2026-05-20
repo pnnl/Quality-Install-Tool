@@ -35,7 +35,7 @@ export const PHOTO_MIME_TYPES: string[] = [
     // 'image/jpg',
     // 'image/png',
     // 'image/tiff',
-    // 'image/webp',
+    'image/webp',
 ]
 
 /**
@@ -55,6 +55,7 @@ export async function compressPhoto(blob: Blob, profile: string) {
     const normalized = await normalizePhotoBlob(blob)
     const file = normalized.blob as File
     const mimeType = normalized.mimeType
+    const isWebPInput = mimeType === 'image/webp'
 
     // ORIGINAL: if HEIC, convert to JPEG; else, keep original
     if (settings.keepOriginal) {
@@ -73,8 +74,24 @@ export async function compressPhoto(blob: Blob, profile: string) {
     }
 
     // For all other profiles, output the configured formats.
+    // If input is WebP, keep processing/storing in WebP instead of JPEG.
+    const formats = Array.from(
+        new Set(
+            settings.formats
+                .map(format => format.trim().toLowerCase())
+                .filter(Boolean)
+                .map(format => {
+                    if (isWebPInput && format === 'jpeg') {
+                        return 'webp'
+                    }
+
+                    return format
+                }),
+        ),
+    )
+
     const blobs: { [format: string]: Blob } = {}
-    for (const format of settings.formats) {
+    for (const format of formats) {
         const outMime = format === 'jpeg' ? 'image/jpeg' : `image/${format}`
         try {
             const processed = await preprocessPhoto(file, outMime, settings)
@@ -83,7 +100,16 @@ export async function compressPhoto(blob: Blob, profile: string) {
             console.error('Photo compression failed for format:', format, err)
         }
     }
-    const mainFormat = settings.formats[0]
+    // If every configured conversion fails, keep the normalized original so
+    // uploads still succeed.
+    if (Object.keys(blobs).length === 0) {
+        const fallbackMime = mimeType || file.type || 'image/jpeg'
+        const fallbackExt = fallbackMime.split('/')[1] || 'jpeg'
+
+        return { blobs: { [fallbackExt]: file }, mainFormat: fallbackExt }
+    }
+
+    const mainFormat = formats[0]
     return { blobs, mainFormat }
 }
 
@@ -253,7 +279,21 @@ function clampColor(value: number): number {
     return Math.max(0, Math.min(255, Math.round(value)))
 }
 
-async function loadImage(file: File): Promise<HTMLImageElement> {
+function isWebPSupported(): boolean {
+    const canvas = document.createElement('canvas')
+
+    if (!canvas.getContext) {
+        return false
+    }
+
+    return canvas.toDataURL('image/webp').startsWith('data:image/webp')
+}
+
+async function loadImage(file: Blob): Promise<HTMLImageElement> {
+    if (file.type === 'image/webp' && !isWebPSupported()) {
+        throw new Error('WebP is not supported in this browser version.')
+    }
+
     const imageUrl = URL.createObjectURL(file)
     try {
         return await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -262,6 +302,15 @@ async function loadImage(file: File): Promise<HTMLImageElement> {
                 resolve(image)
             }
             image.onerror = () => {
+                if (file.type === 'image/webp') {
+                    reject(
+                        new Error(
+                            'WebP is not supported in this browser version.',
+                        ),
+                    )
+                    return
+                }
+
                 reject(new Error('Image loading failed.'))
             }
             image.src = imageUrl
@@ -327,7 +376,15 @@ export async function getPhotoMetadata(
     const timestampSource = 'Date.now'
     const { height, width } = await getImageDimensions(storedBlob ?? blob)
 
-    const tags = await exifr.parse(blob)
+    let tags: Record<string, unknown> | null = null
+
+    try {
+        tags = (await exifr.parse(blob)) as Record<string, unknown> | null
+    } catch {
+        // Some formats (or browser-decoder outputs) can fail EXIF parsing.
+        // Continue with geolocation fallback instead of failing upload.
+        tags = null
+    }
 
     if (tags) {
         const altitude = tags['altitude'] as number | null
@@ -426,11 +483,20 @@ export async function getPhotoMetadata(
 async function getImageDimensions(
     blob: Blob,
 ): Promise<{ height: number; width: number }> {
-    const image = await loadImage(blob as File)
+    try {
+        const image = await loadImage(blob)
 
-    return {
-        height: image.naturalHeight,
-        width: image.naturalWidth,
+        return {
+            height: image.naturalHeight,
+            width: image.naturalWidth,
+        }
+    } catch {
+        // Keep photo upload resilient even if a browser cannot decode this
+        // image for dimension probing.
+        return {
+            height: 0,
+            width: 0,
+        }
     }
 }
 

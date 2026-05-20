@@ -306,7 +306,8 @@ h1 + h3 {
 
 /* photo.tsx */
 .photo-card {
-    break-inside: avoid;
+    break-inside: auto;
+    page-break-inside: auto;
 }
 
 .photo-card > .card-body > div {
@@ -700,6 +701,18 @@ btn-light:hover {
     .photo-row {
         display: block;
     }
+
+    /* Let photo sections span pages, but do not split a single photo entry. */
+    .photo-card {
+        break-inside: auto;
+        page-break-inside: auto;
+    }
+
+    .photo-row > .col,
+    .photo-report-container {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+    }
 }
 
 .print-wrapper > .photo-card {
@@ -894,4 +907,69 @@ btn-light:hover {
   margin-top: 0.5em;
   font-size: 0.95em;
   color: #555;
+}
+
+.photo-quality-card {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0 0.75rem;
+    padding: 0.75rem;
+}
+
+.photo-quality-intro,
+.photo-quality-choose {
+    color: #333;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.photo-quality-choose {
+    margin-top: 0.65rem;
+}
+
+.photo-quality-grid {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 0.6rem;
+}
+
+.photo-quality-item {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 0.35rem;
+    padding: 0.55rem 0.65rem;
+}
+
+.photo-quality-title {
+    color: #222;
+    font-size: 0.86rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.photo-quality-description {
+    color: #444;
+    font-size: 0.8rem;
+    line-height: 1.25;
+}
+
+.photo-quality-size {
+    color: #555;
+    font-size: 0.76rem;
+    font-style: italic;
+    margin-top: 0.28rem;
+}
+
+.photo-quality-note {
+    border-left: 3px solid #ccc;
+    margin-top: 0.65rem;
+    padding-left: 0.55rem;
+}
+
+@media (max-width: 767.98px) {
+    .photo-quality-grid {
+        grid-template-columns: 1fr;
+    }
 }
