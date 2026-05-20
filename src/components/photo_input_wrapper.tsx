@@ -67,7 +67,11 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                                 )
                                 setError(undefined)
                             } catch (cause) {
-                                setError(cause as string)
+                                const message =
+                                    cause instanceof Error
+                                        ? cause.message
+                                        : String(cause)
+                                setError(message)
                             } finally {
                                 setIsLoading(false)
                             }

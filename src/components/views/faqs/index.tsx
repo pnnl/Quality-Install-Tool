@@ -90,8 +90,13 @@ const FaqsPage: React.FC = () => {
                     iPhone can be less reliable for geolocation and geotagging.
                 </Collapsible>
                 <Collapsible header="What photo types are supported?">
-                    The current version of the tool supports JPEG and HEIC/HEIF
-                    formatted photos.
+                    The current version of the tool supports JPEG, HEIC/HEIF,
+                    and WebP formatted photos.
+                    <br />
+                    <br />
+                    If you see a message like &ldquo;WebP is not supported in
+                    this browser version,&rdquo; update your browser or upload
+                    the photo as JPEG/HEIC.
                 </Collapsible>
                 <Collapsible header="How do I print a report?">
                     You can generate a printable PDF report for any

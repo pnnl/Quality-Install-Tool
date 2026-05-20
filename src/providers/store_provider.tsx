@@ -277,6 +277,9 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                 })
             } catch (error) {
+                if (isPhoto(blob)) {
+                    throw error
+                }
                 reportError(error)
             }
         },
