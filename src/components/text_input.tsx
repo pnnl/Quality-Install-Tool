@@ -1,4 +1,11 @@
-import React, { useCallback, useId, useMemo, useState } from 'react'
+import React, {
+    useCallback,
+    useEffect,
+    useId,
+    useMemo,
+    useRef,
+    useState,
+} from 'react'
 import { FloatingLabel, Form } from 'react-bootstrap'
 
 interface TextInputProps {
@@ -9,6 +16,10 @@ interface TextInputProps {
     placeholder?: string
 }
 
+// Debounce delay (ms) before triggering the DB write.
+// Prevents PouchDB 409 conflicts from rapid keystrokes.
+const DEBOUNCE_MS = 300
+
 const TextInput: React.FC<TextInputProps> = ({
     label,
     onChange,
@@ -18,28 +29,60 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
     const id = useId()
 
+    // Local state keeps the UI responsive on every keystroke
+    const [localValue, setLocalValue] = useState(value)
     const [isFocused, setIsFocused] = useState<boolean>(false)
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    // Ref avoids stale closure: always calls the latest onChange
+    const onChangeRef = useRef(onChange)
+    onChangeRef.current = onChange
+
+    // Sync local state from parent (e.g. when doc updates from DB)
+    useEffect(() => {
+        setLocalValue(value)
+    }, [value])
 
     const floatingLabelClassName = useMemo<string>(() => {
         const classNames = []
 
-        if (isFocused || value) {
+        if (isFocused || localValue) {
             classNames.push('text-area-expanded')
         }
 
-        if (value) {
+        if (localValue) {
             classNames.push('label-hidden')
         }
 
         return classNames.join(' ')
-    }, [isFocused, value])
+    }, [isFocused, localValue])
 
     const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            await onChange(event.target.value)
+        (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            const newValue = event.target.value
+            // Update UI immediately — no data loss
+            setLocalValue(newValue)
+
+            // Reset the debounce timer on each keystroke so only the
+            // final value after the user pauses is written to PouchDB
+            if (timerRef.current) {
+                clearTimeout(timerRef.current)
+            }
+            timerRef.current = setTimeout(() => {
+                void onChangeRef.current(newValue)
+            }, DEBOUNCE_MS)
         },
-        [onChange],
+        [],
     )
+
+    // Clean up pending timer on unmount to avoid memory leaks
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current)
+            }
+        }
+    }, [])
 
     return (
         <FloatingLabel
@@ -51,7 +94,7 @@ const TextInput: React.FC<TextInputProps> = ({
                 as="textarea"
                 onChange={handleChange}
                 placeholder={placeholder}
-                value={value}
+                value={localValue}
                 isInvalid={errorMessages.length > 0}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}

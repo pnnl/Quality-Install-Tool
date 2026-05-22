@@ -23,6 +23,28 @@ const PrintSection: React.FC<PrintSectionProps> = ({
         }
 
         const wrapperClone = printWrapper.cloneNode(true) as HTMLElement
+
+        // Convert canvas elements (e.g. PDF pages rendered by react-pdf) to
+        // <img> tags so their content survives the HTML serialization into the
+        // print view. cloneNode does not preserve canvas pixel data.
+        const originalCanvases = printWrapper.querySelectorAll('canvas')
+        const clonedCanvases = wrapperClone.querySelectorAll('canvas')
+        originalCanvases.forEach((canvas, index) => {
+            try {
+                const dataUrl = canvas.toDataURL('image/png')
+                const img = document.createElement('img')
+                img.src = dataUrl
+                img.style.width = canvas.style.width || `${canvas.width}px`
+                img.style.height = canvas.style.height || `${canvas.height}px`
+                clonedCanvases[index]?.parentNode?.replaceChild(
+                    img,
+                    clonedCanvases[index],
+                )
+            } catch {
+                // Canvas may be tainted (cross-origin); skip replacement
+            }
+        })
+
         const existingHeader = wrapperClone.querySelector('.print-header')
 
         if (!existingHeader) {
