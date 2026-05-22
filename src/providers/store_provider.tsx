@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { createContext, useCallback } from 'react'
+import React, { createContext, useCallback, useRef } from 'react'
 
 import { useDatabase } from './database_provider'
 import {
@@ -120,80 +120,125 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     children,
 }) => {
     const { reportError } = useStorageError()
+
+    // Ref to the latest doc prop so that queued writes always read the most
+    // up-to-date _rev, avoiding stale-revision 409 conflicts when multiple
+    // writes are enqueued between renders.
+    const docRef = useRef(doc)
+    docRef.current = doc
+
+    // Write queue: each upsert chains onto this promise so writes execute
+    // sequentially. This prevents concurrent db.put() calls from racing
+    // with the same _rev, which would cause PouchDB 409 "Document update
+    // conflict" errors during rapid user input.
+    const writeQueueRef = useRef<Promise<void>>(Promise.resolve())
+
     const upsertData = useCallback(
-        async (path: string, value: unknown, errors: string[]) => {
-            if (onChange) {
+        (path: string, value: unknown, errors: string[]) => {
+            // Chain this write after any pending write completes
+            const enqueued = writeQueueRef.current.then(async () => {
+                if (!onChange) return
+
+                // Read the latest doc at execution time (not enqueue time)
+                // to ensure we have the current _rev after prior writes
+                const currentDoc = docRef.current
                 const docWithErrors = immutableUpsert(
                     `metadata_.errors.data_.${path}`,
                     {
-                        ...doc,
+                        ...currentDoc,
                         metadata_: {
-                            ...(doc.metadata_ ?? {}),
-                            errors: doc.metadata_?.errors ?? {
+                            ...(currentDoc.metadata_ ?? {}),
+                            errors: currentDoc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
                         },
                     } as unknown as Record<string, unknown>,
                     errors,
-                ) as unknown as typeof doc
+                ) as unknown as typeof currentDoc
 
                 const lastModifiedAt = new Date()
 
-                await onChange(
-                    immutableUpsert(
-                        `data_.${path}`,
-                        {
-                            ...docWithErrors,
-                            metadata_: {
-                                ...docWithErrors.metadata_,
-                                last_modified_at: lastModifiedAt.toISOString(),
+                try {
+                    await onChange(
+                        immutableUpsert(
+                            `data_.${path}`,
+                            {
+                                ...docWithErrors,
+                                metadata_: {
+                                    ...docWithErrors.metadata_,
+                                    last_modified_at:
+                                        lastModifiedAt.toISOString(),
+                                },
                             },
-                        },
-                        value,
-                    ),
-                )
-            }
+                            value,
+                        ),
+                    )
+                } catch (error) {
+                    reportError(error)
+                }
+            })
+            // Prevent unhandled rejection if the queued write fails;
+            // errors are already surfaced via reportError() above
+            writeQueueRef.current = enqueued.catch(() => {
+                // errors already reported above
+            })
+            return enqueued
         },
-        [doc, onChange],
+        [onChange, reportError],
     )
 
     const upsertMetadata = useCallback(
-        async (path: string, value: unknown, errors: string[]) => {
-            if (onChange) {
+        (path: string, value: unknown, errors: string[]) => {
+            // Chain this write after any pending write completes
+            const enqueued = writeQueueRef.current.then(async () => {
+                if (!onChange) return
+
+                // Read the latest doc at execution time (not enqueue time)
+                const currentDoc = docRef.current
                 const docWithErrors = immutableUpsert(
                     `metadata_.errors.metadata_.${path}`,
                     {
-                        ...doc,
+                        ...currentDoc,
                         metadata_: {
-                            ...(doc.metadata_ ?? {}),
-                            errors: doc.metadata_?.errors ?? {
+                            ...(currentDoc.metadata_ ?? {}),
+                            errors: currentDoc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
                         },
                     } as unknown as Record<string, unknown>,
                     errors,
-                ) as unknown as typeof doc
+                ) as unknown as typeof currentDoc
 
                 const lastModifiedAt = new Date()
 
-                await onChange(
-                    immutableUpsert(
-                        `metadata_.${path}`,
-                        {
-                            ...docWithErrors,
-                            metadata_: {
-                                ...docWithErrors.metadata_,
-                                last_modified_at: lastModifiedAt.toISOString(),
+                try {
+                    await onChange(
+                        immutableUpsert(
+                            `metadata_.${path}`,
+                            {
+                                ...docWithErrors,
+                                metadata_: {
+                                    ...docWithErrors.metadata_,
+                                    last_modified_at:
+                                        lastModifiedAt.toISOString(),
+                                },
                             },
-                        },
-                        value,
-                    ),
-                )
-            }
+                            value,
+                        ),
+                    )
+                } catch (error) {
+                    reportError(error)
+                }
+            })
+            // Prevent unhandled rejection; errors surfaced via reportError()
+            writeQueueRef.current = enqueued.catch(() => {
+                // errors already reported above
+            })
+            return enqueued
         },
-        [doc, onChange],
+        [onChange, reportError],
     )
 
     const putAttachment = useCallback(
