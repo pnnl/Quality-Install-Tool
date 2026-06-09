@@ -31,9 +31,18 @@
                 <Radio
                 label="Select Photo Quality:"
                 options={[
-                    "Low — Lowest browser storage use, but fine details may be harder to read (~0.2 MB/photo)",
-                    "Standard — Mid-level image clarity and browser storage (~0.75 MB/photo)",
-                    "High — Highest image detail, but most browser storage (up to 2 MB/photo)",
+                    {
+                        label: "Low — Lowest browser storage use, but fine details may be harder to read (~0.2 MB/photo)",
+                        value: 'low',
+                    },
+                    {
+                        label: "Standard — Mid-level image clarity and browser storage (~0.75 MB/photo)",
+                        value: 'standard',
+                    },
+                    {
+                        label: "High — Highest image detail, but most browser storage (up to 2 MB/photo)",
+                        value: 'high',
+                    },
                 ]}
                 path="photo.resolution"
                 />

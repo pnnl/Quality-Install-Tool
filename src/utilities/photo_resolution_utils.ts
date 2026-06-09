@@ -1,7 +1,35 @@
 import { type Base } from '../types/database.types'
 
+export type PhotoResolutionProfile = 'low' | 'standard' | 'high'
+
+export function normalizePhotoResolution(
+    resolution: string | undefined,
+    defaultProfile?: PhotoResolutionProfile,
+): PhotoResolutionProfile {
+    const fallback = defaultProfile || 'standard'
+    const normalized = resolution?.toLowerCase().trim()
+
+    if (!normalized) {
+        return fallback
+    }
+
+    if (normalized === 'high' || normalized.includes('high')) {
+        return 'high'
+    }
+
+    if (
+        normalized === 'low' ||
+        normalized.includes('low') ||
+        normalized.includes('preview')
+    ) {
+        return 'low'
+    }
+
+    return 'standard'
+}
+
 export function getDefaultProjectPhotoResolution(): string {
-    return 'Low (Smaller Files, May Miss Details)'
+    return 'standard'
 }
 
 interface PhotoResolutionDoc {
@@ -15,24 +43,12 @@ interface PhotoResolutionDoc {
 export function getPhotoProfileFromDoc(
     doc: PhotoResolutionDoc | undefined,
 ): string {
-    const defaultProfile = (
-        process.env.REACT_APP_PHOTO_PROFILE_DEFAULT || 'standard'
-    ).toLowerCase()
-    const resolution = doc?.data_?.photo?.resolution?.toLowerCase()
+    const defaultProfile = normalizePhotoResolution(
+        process.env.REACT_APP_PHOTO_PROFILE_DEFAULT || 'standard',
+    )
+    const resolution = doc?.data_?.photo?.resolution
 
-    if (!resolution) {
-        return defaultProfile
-    }
-
-    if (resolution.includes('high')) {
-        return 'high'
-    }
-
-    if (resolution.includes('low') || resolution.includes('preview')) {
-        return 'low'
-    }
-
-    return 'standard'
+    return normalizePhotoResolution(resolution, defaultProfile)
 }
 
 export interface PhotoProfileSettings {
