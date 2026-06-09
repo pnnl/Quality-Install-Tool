@@ -28,7 +28,7 @@ export function PhotoQualityWarning({
         }
         async function checkQuality() {
             if (attachment.attachment && hasBlobData(attachment.attachment)) {
-                const url = URL.createObjectURL(attachment.attachment.data)
+                url = URL.createObjectURL(attachment.attachment.data)
                 const img = new window.Image()
                 img.onload = async () => {
                     if (revoked) return

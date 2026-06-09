@@ -51,6 +51,13 @@ export function isBrowserStorageError(error: unknown): boolean {
 export function getStorageErrorMessage(error: unknown): string {
     const errorText = getErrorText(error).trim()
 
+    if (
+        /unable to compress (image|photo) within/i.test(errorText) ||
+        /multiple attempts/i.test(errorText)
+    ) {
+        return "The selected photo could not be reduced enough to fit this project's quality and size limits. Please retake the photo with less detail/zoom or choose a lower photo quality setting and try again."
+    }
+
     if (isBrowserStorageError(error)) {
         const guidance =
             'This browser appears to have reached its storage limit, so this project data could not be saved. Please try downloading older projects and removing them from the browser, then try again.'

@@ -52,14 +52,14 @@ export interface CompressedPhotoResult {
  * Compresses an image file (Blob) while maintaining its aspect ratio and
  * ensuring it does not exceed specified size limits.
  *
- * @param {Blob} imageBlob - The original image file as a Blob object that needs
- *     to be compressed.
- * @returns {Promise<Blob | undefined>} A Promise that resolves to the
- *     compressed image file as a Blob. If an error occurs during compression,
- *     it will be caught, and the function may return undefined.
- * @throws {Error} - Throws an error if the compression process fails.
+ * @param {Blob} blob - The original image file as a Blob object.
+ * @param {string} profile - Photo profile key used to read sizing and quality
+ *     constraints.
+ * @returns {Promise<CompressedPhotoResult>} A Promise that resolves to one or
+ *     more compressed format blobs and the primary format key.
+ * @throws {Error} - Throws when no output format can be produced within
+ *     configured constraints.
  */
-// Returns { blobs: { [format]: Blob }, mainFormat: string }
 export async function compressPhoto(
     blob: Blob,
     profile: string,
@@ -109,13 +109,12 @@ export async function compressPhoto(
             console.error('Photo compression failed for format:', format, err)
         }
     }
-    // If every configured conversion fails, keep the normalized original so
-    // uploads still succeed.
+    // If every configured conversion fails, fail explicitly rather than
+    // silently storing an oversized image.
     if (Object.keys(blobs).length === 0) {
-        const fallbackMime = mimeType || file.type || 'image/jpeg'
-        const fallbackExt = fallbackMime.split('/')[1] || 'jpeg'
-
-        return { blobs: { [fallbackExt]: file }, mainFormat: fallbackExt }
+        throw new Error(
+            `Unable to compress photo within ${settings.maxSizeMB} MB for profile ${profile}.`,
+        )
     }
 
     const mainFormat = formats[0]
@@ -344,10 +343,27 @@ async function exportCanvasWithinSizeLimit(
     }
 
     if (bestBlob) {
-        return bestBlob
+        if (bestBlob.size <= maxBytes) {
+            return bestBlob
+        }
+
+        throw new Error(
+            `Unable to compress image within ${maxSizeMB} MB after multiple attempts.`,
+        )
     }
 
-    return await canvasToBlob(sourceCanvas, mimeType, initialQuality)
+    const fallbackBlob = await canvasToBlob(
+        sourceCanvas,
+        mimeType,
+        initialQuality,
+    )
+    if (fallbackBlob.size <= maxBytes) {
+        return fallbackBlob
+    }
+
+    throw new Error(
+        `Unable to compress image within ${maxSizeMB} MB after multiple attempts.`,
+    )
 }
 
 /**
