@@ -20,6 +20,12 @@ const HIGH_QUALITY_JPEG_EXPORT = 0.98
 
 const RESIZED_IMAGE_QUALITY = 0.9
 
+const MIN_LOSSY_QUALITY = 0.45
+
+const QUALITY_STEP = 0.07
+
+const MAX_SIZE_ENFORCEMENT_PASSES = 8
+
 const PREPROCESS_CONTRAST = 1.08
 
 const SHARPEN_KERNEL = [0, -1, 0, -1, 5, -1, 0, -1, 0]
@@ -37,6 +43,11 @@ export const PHOTO_MIME_TYPES: string[] = [
     'image/webp',
 ]
 
+export interface CompressedPhotoResult {
+    blobs: Record<string, Blob>
+    mainFormat: string
+}
+
 /**
  * Compresses an image file (Blob) while maintaining its aspect ratio and
  * ensuring it does not exceed specified size limits.
@@ -49,28 +60,27 @@ export const PHOTO_MIME_TYPES: string[] = [
  * @throws {Error} - Throws an error if the compression process fails.
  */
 // Returns { blobs: { [format]: Blob }, mainFormat: string }
-export async function compressPhoto(blob: Blob, profile: string) {
+export async function compressPhoto(
+    blob: Blob,
+    profile: string,
+): Promise<CompressedPhotoResult> {
     const settings = getPhotoProfileSettings(profile)
+    const originalMimeType = blob.type
     const normalized = await normalizePhotoBlob(blob)
     const file = normalized.blob as File
     const mimeType = normalized.mimeType
-    const isWebPInput = mimeType === 'image/webp'
 
     // ORIGINAL: if HEIC, convert to JPEG; else, keep original
     if (settings.keepOriginal) {
-        if (mimeType === 'image/heic') {
-            // Convert to JPEG for browser compatibility
-            const jpegBlob = (await heic2any({
-                blob: file,
-                toType: 'image/jpeg',
-            })) as Blob
-            return { blobs: { jpeg: jpegBlob }, mainFormat: 'jpeg' }
-        } else {
-            // Store original
-            const ext = mimeType.split('/')[1]
-            return { blobs: { [ext]: file }, mainFormat: ext }
+        if (originalMimeType === 'image/heic') {
+            return { blobs: { jpeg: normalized.blob }, mainFormat: 'jpeg' }
         }
+
+        const fallbackMime = originalMimeType || mimeType || 'image/jpeg'
+        const ext = fallbackMime.split('/')[1] || 'jpeg'
+        return { blobs: { [ext]: blob }, mainFormat: ext }
     }
+    const isWebPInput = mimeType === 'image/webp'
 
     // For all other profiles, output the configured formats.
     // If input is WebP, keep processing/storing in WebP instead of JPEG.
@@ -182,34 +192,162 @@ async function preprocessPhoto(
 
     context.putImageData(enhancedData, 0, 0)
 
+    let outputCanvas: HTMLCanvasElement
+    let initialQuality: number
+
     if (
         targetWidth === image.naturalWidth &&
         targetHeight === image.naturalHeight
     ) {
-        return await canvasToBlob(
-            canvas,
-            mimeType,
+        outputCanvas = canvas
+        initialQuality =
             settings.quality ||
-                (mimeType === 'image/jpeg' ? HIGH_QUALITY_JPEG_EXPORT : 1),
-        )
+            (mimeType === 'image/jpeg' ? HIGH_QUALITY_JPEG_EXPORT : 1)
+    } else {
+        const targetCanvas = document.createElement('canvas')
+        targetCanvas.width = targetWidth
+        targetCanvas.height = targetHeight
+
+        await picaResizer.resize(canvas, targetCanvas, {
+            filter: 'mks2013',
+            unsharpAmount: 160,
+            unsharpRadius: 0.6,
+            unsharpThreshold: 1,
+        })
+
+        outputCanvas = targetCanvas
+        initialQuality = settings.quality || RESIZED_IMAGE_QUALITY
     }
 
-    const targetCanvas = document.createElement('canvas')
-    targetCanvas.width = targetWidth
-    targetCanvas.height = targetHeight
+    return await exportCanvasWithinSizeLimit(
+        outputCanvas,
+        mimeType,
+        initialQuality,
+        settings.maxSizeMB,
+    )
+}
 
-    await picaResizer.resize(canvas, targetCanvas, {
+function getMaxBytes(maxSizeMB: number): number {
+    if (!Number.isFinite(maxSizeMB) || maxSizeMB <= 0) {
+        return 0
+    }
+
+    return Math.floor(maxSizeMB * 1024 * 1024)
+}
+
+function isLossyMimeType(mimeType: string): boolean {
+    return mimeType === 'image/jpeg' || mimeType === 'image/webp'
+}
+
+function clampQuality(quality: number): number {
+    if (!Number.isFinite(quality)) {
+        return 1
+    }
+
+    return Math.min(1, Math.max(MIN_LOSSY_QUALITY, quality))
+}
+
+async function resizeCanvas(
+    sourceCanvas: HTMLCanvasElement,
+    width: number,
+    height: number,
+): Promise<HTMLCanvasElement> {
+    const resizedCanvas = document.createElement('canvas')
+    resizedCanvas.width = width
+    resizedCanvas.height = height
+
+    await picaResizer.resize(sourceCanvas, resizedCanvas, {
         filter: 'mks2013',
         unsharpAmount: 160,
         unsharpRadius: 0.6,
         unsharpThreshold: 1,
     })
 
-    return await canvasToBlob(
-        targetCanvas,
-        mimeType,
-        settings.quality || RESIZED_IMAGE_QUALITY,
-    )
+    return resizedCanvas
+}
+
+async function exportCanvasWithinSizeLimit(
+    sourceCanvas: HTMLCanvasElement,
+    mimeType: string,
+    initialQuality: number,
+    maxSizeMB: number,
+): Promise<Blob> {
+    const maxBytes = getMaxBytes(maxSizeMB)
+
+    if (maxBytes === 0) {
+        return await canvasToBlob(sourceCanvas, mimeType, initialQuality)
+    }
+
+    let workingCanvas = sourceCanvas
+    let bestBlob: Blob | null = null
+    const canAdjustQuality = isLossyMimeType(mimeType)
+
+    for (let pass = 0; pass < MAX_SIZE_ENFORCEMENT_PASSES; pass += 1) {
+        let quality = clampQuality(initialQuality)
+        const maxQualityAttempts = canAdjustQuality
+            ? Math.floor((1 - MIN_LOSSY_QUALITY) / QUALITY_STEP) + 2
+            : 1
+
+        // Try higher quality first, then step down quality before reducing
+        // dimensions again.
+        for (
+            let qualityAttempt = 0;
+            qualityAttempt < maxQualityAttempts;
+            qualityAttempt += 1
+        ) {
+            const blob = await canvasToBlob(
+                workingCanvas,
+                mimeType,
+                canAdjustQuality ? quality : undefined,
+            )
+
+            if (!bestBlob || blob.size < bestBlob.size) {
+                bestBlob = blob
+            }
+
+            if (blob.size <= maxBytes) {
+                return blob
+            }
+
+            if (!canAdjustQuality || quality <= MIN_LOSSY_QUALITY) {
+                break
+            }
+
+            quality = Math.max(MIN_LOSSY_QUALITY, quality - QUALITY_STEP)
+        }
+
+        if (workingCanvas.width <= 1 || workingCanvas.height <= 1) {
+            break
+        }
+
+        // Use the measured oversize ratio to compute an adaptive scale step.
+        const measuredSize = Math.max(bestBlob?.size || 0, maxBytes + 1)
+        const rawScale = Math.sqrt(maxBytes / measuredSize)
+        const constrainedScale = Math.max(0.6, Math.min(0.95, rawScale * 0.95))
+        const nextWidth = Math.max(
+            1,
+            Math.floor(workingCanvas.width * constrainedScale),
+        )
+        const nextHeight = Math.max(
+            1,
+            Math.floor(workingCanvas.height * constrainedScale),
+        )
+
+        if (
+            nextWidth === workingCanvas.width &&
+            nextHeight === workingCanvas.height
+        ) {
+            break
+        }
+
+        workingCanvas = await resizeCanvas(workingCanvas, nextWidth, nextHeight)
+    }
+
+    if (bestBlob) {
+        return bestBlob
+    }
+
+    return await canvasToBlob(sourceCanvas, mimeType, initialQuality)
 }
 
 /**

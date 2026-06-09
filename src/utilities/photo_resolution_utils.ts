@@ -15,10 +15,13 @@ interface PhotoResolutionDoc {
 export function getPhotoProfileFromDoc(
     doc: PhotoResolutionDoc | undefined,
 ): string {
+    const defaultProfile = (
+        process.env.REACT_APP_PHOTO_PROFILE_DEFAULT || 'standard'
+    ).toLowerCase()
     const resolution = doc?.data_?.photo?.resolution?.toLowerCase()
 
     if (!resolution) {
-        return 'low'
+        return defaultProfile
     }
 
     if (resolution.includes('high')) {

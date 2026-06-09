@@ -78,18 +78,18 @@ export function getStorageErrorMessage(error: unknown): string {
     return 'An unexpected browser storage error prevented saving. Please try again.'
 }
 
-function formatBytes(bytes: number): string {
-    if (bytes >= 1_073_741_824) {
-        return `${(bytes / 1_073_741_824).toFixed(2)} GB`
-    }
-    if (bytes >= 1_048_576) {
-        return `${(bytes / 1_048_576).toFixed(2)} MB`
-    }
-    if (bytes >= 1024) {
-        return `${(bytes / 1024).toFixed(2)} KB`
-    }
-    return `${bytes} B`
-}
+// function formatBytes(bytes: number): string {
+//     if (bytes >= 1_073_741_824) {
+//         return `${(bytes / 1_073_741_824).toFixed(2)} GB`
+//     }
+//     if (bytes >= 1_048_576) {
+//         return `${(bytes / 1_048_576).toFixed(2)} MB`
+//     }
+//     if (bytes >= 1024) {
+//         return `${(bytes / 1024).toFixed(2)} KB`
+//     }
+//     return `${bytes} B`
+// }
 
 const STORAGE_USED_UNAVAILABLE = 'Browser Storage Used: unavailable'
 
@@ -99,7 +99,7 @@ export interface BrowserStorageUsageDetails {
 }
 
 export async function getBrowserStorageUsageDetails(): Promise<BrowserStorageUsageDetails> {
-    if (!navigator.storage?.estimate) {
+    if (typeof navigator === 'undefined' || !navigator.storage?.estimate) {
         return {
             text: STORAGE_USED_UNAVAILABLE,
             percent: undefined,
@@ -115,11 +115,7 @@ export async function getBrowserStorageUsageDetails(): Promise<BrowserStorageUsa
             quota > 0
         ) {
             const usagePercent = Math.min(100, (usage / quota) * 100)
-            console.log(
-                `Browser storage usage: ${formatBytes(usage)} / ${formatBytes(
-                    quota,
-                )} (${usagePercent.toFixed(2)}%)`,
-            )
+
             return {
                 text: `Browser Storage Used: ${usagePercent.toFixed(2)}%`,
                 percent: usagePercent,
