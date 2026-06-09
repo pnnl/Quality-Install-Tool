@@ -309,10 +309,10 @@ export function newProject(
         data_: {
             ...data,
             photo: {
+                ...data.photo,
                 resolution:
                     data.photo?.resolution ??
                     getDefaultProjectPhotoResolution(),
-                ...data.photo,
             },
         },
         metadata_: {

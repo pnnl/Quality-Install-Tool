@@ -19,31 +19,33 @@ export function PhotoQualityWarning({
     const [warning, setWarning] = React.useState<string | undefined>(undefined)
     React.useEffect(() => {
         let revoked = false
+        let url: string | null = null
+        const cleanupUrl = () => {
+            if (url) {
+                URL.revokeObjectURL(url)
+                url = null
+            }
+        }
         async function checkQuality() {
             if (attachment.attachment && hasBlobData(attachment.attachment)) {
-                const url = URL.createObjectURL(attachment.attachment.data)
+                url = URL.createObjectURL(attachment.attachment.data)
                 const img = new window.Image()
                 img.onload = async () => {
                     if (revoked) return
-                    let w = ''
-
-                    // if (isImageTooSmall(img)) {
-                    //     w += 'Image is too small (min 800x600 recommended). '
-                    // }
-
                     const blur = await estimateBlurriness(img)
-                    if (blur < 100) {
-                        w += 'Image may be blurry. '
-                    }
-                    setWarning(w || undefined)
-                    URL.revokeObjectURL(url)
+                    setWarning(blur < 100 ? 'Image may be blurry. ' : undefined)
+                    cleanupUrl()
+                }
+                img.onerror = () => {
+                    cleanupUrl()
                 }
                 img.src = url
             }
         }
-        checkQuality()
+        void checkQuality()
         return () => {
             revoked = true
+            cleanupUrl()
         }
     }, [attachment])
     if (!warning) return null

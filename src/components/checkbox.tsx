@@ -44,7 +44,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     return (
         <Card className="input-card" hidden={hidden}>
             <Card.Body>
-                {label && <p className="mb-3 custom-label">{label}</p>}
+                {label && <div className="mb-3 custom-label">{label}</div>}
                 <Form.Group>
                     {options.map((option, index) => (
                         <Form.Check

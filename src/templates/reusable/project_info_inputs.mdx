@@ -21,9 +21,9 @@
         ## Photo Quality Setting
 
         <div className="photo-quality-card">
-            <p className="photo-quality-intro">
+            <div className="photo-quality-intro">
                 Uploaded photos are compressed to the selected quality to reduce file size. This helps minimize the amount of browser storage the app consumes, particularly for larger uploads.
-            </p>
+            </div>
             <div className="photo-quality-choose">
                 Choose the option that best fits your needs.
             </div>
@@ -31,9 +31,18 @@
                 <Radio
                 label="Select Photo Quality:"
                 options={[
-                    "Low — Lowest browser storage use, but fine details may be harder to read (~0.2 MB/photo)",
-                    "Standard — Mid-level image clarity and browser storage (~0.75 MB/photo)",
-                    "High — Highest image detail, but most browser storage (up to 2 MB/photo)",
+                    {
+                        label: "Low — Lowest browser storage use, but fine details may be harder to read (~0.2 MB/photo)",
+                        value: 'low',
+                    },
+                    {
+                        label: "Standard — Mid-level image clarity and browser storage (~0.75 MB/photo)",
+                        value: 'standard',
+                    },
+                    {
+                        label: "High — Highest image detail, but most browser storage (up to 2 MB/photo)",
+                        value: 'high',
+                    },
                 ]}
                 path="photo.resolution"
                 />

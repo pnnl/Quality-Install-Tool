@@ -83,10 +83,17 @@ const Home: React.FC<HomeProps> = () => {
                         // Dispatch an event when done so the footer refreshes
                         // the storage usage display immediately.
                         const compactAndNotify = async () => {
-                            await db.compact()
-                            window.dispatchEvent(
-                                new CustomEvent('pouchdb-compacted'),
-                            )
+                            try {
+                                await db.compact()
+                                window.dispatchEvent(
+                                    new CustomEvent('pouchdb-compacted'),
+                                )
+                            } catch (error) {
+                                console.error(
+                                    'Database compaction failed:',
+                                    error,
+                                )
+                            }
                         }
                         void compactAndNotify()
 

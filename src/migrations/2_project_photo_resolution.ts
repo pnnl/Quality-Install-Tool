@@ -30,18 +30,13 @@ export function transformProjectPhotoResolution(
 }
 
 export async function migrate(db: PouchDB.Database<Base>): Promise<void> {
-    const projects = await getProjects(db, {
-        attachments: true,
-        binary: true,
-    })
+    const projects = await getProjects(db)
 
-    projects
-        .filter(project => {
-            return shouldMigrateProjectPhotoResolution(project)
-        })
-        .forEach(async project => {
+    for (const project of projects) {
+        if (shouldMigrateProjectPhotoResolution(project)) {
             await putProject(db, transformProjectPhotoResolution(project))
-        })
+        }
+    }
 }
 
 export default migrate

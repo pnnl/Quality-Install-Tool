@@ -1,5 +1,4 @@
 // Utility functions for image quality validation
-// Utility functions for image quality validation
 
 /**
  * Checks if an image is too small (below min width/height)

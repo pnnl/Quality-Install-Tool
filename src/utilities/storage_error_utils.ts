@@ -51,6 +51,13 @@ export function isBrowserStorageError(error: unknown): boolean {
 export function getStorageErrorMessage(error: unknown): string {
     const errorText = getErrorText(error).trim()
 
+    if (
+        /unable to compress (image|photo) within/i.test(errorText) ||
+        /multiple attempts/i.test(errorText)
+    ) {
+        return "The selected photo could not be reduced enough to fit this project's quality and size limits. Please retake the photo with less detail/zoom or choose a lower photo quality setting and try again."
+    }
+
     if (isBrowserStorageError(error)) {
         const guidance =
             'This browser appears to have reached its storage limit, so this project data could not be saved. Please try downloading older projects and removing them from the browser, then try again.'
@@ -78,18 +85,18 @@ export function getStorageErrorMessage(error: unknown): string {
     return 'An unexpected browser storage error prevented saving. Please try again.'
 }
 
-function formatBytes(bytes: number): string {
-    if (bytes >= 1_073_741_824) {
-        return `${(bytes / 1_073_741_824).toFixed(2)} GB`
-    }
-    if (bytes >= 1_048_576) {
-        return `${(bytes / 1_048_576).toFixed(2)} MB`
-    }
-    if (bytes >= 1024) {
-        return `${(bytes / 1024).toFixed(2)} KB`
-    }
-    return `${bytes} B`
-}
+// function formatBytes(bytes: number): string {
+//     if (bytes >= 1_073_741_824) {
+//         return `${(bytes / 1_073_741_824).toFixed(2)} GB`
+//     }
+//     if (bytes >= 1_048_576) {
+//         return `${(bytes / 1_048_576).toFixed(2)} MB`
+//     }
+//     if (bytes >= 1024) {
+//         return `${(bytes / 1024).toFixed(2)} KB`
+//     }
+//     return `${bytes} B`
+// }
 
 const STORAGE_USED_UNAVAILABLE = 'Browser Storage Used: unavailable'
 
@@ -99,7 +106,7 @@ export interface BrowserStorageUsageDetails {
 }
 
 export async function getBrowserStorageUsageDetails(): Promise<BrowserStorageUsageDetails> {
-    if (!navigator.storage?.estimate) {
+    if (typeof navigator === 'undefined' || !navigator.storage?.estimate) {
         return {
             text: STORAGE_USED_UNAVAILABLE,
             percent: undefined,
@@ -115,11 +122,7 @@ export async function getBrowserStorageUsageDetails(): Promise<BrowserStorageUsa
             quota > 0
         ) {
             const usagePercent = Math.min(100, (usage / quota) * 100)
-            console.log(
-                `Browser storage usage: ${formatBytes(usage)} / ${formatBytes(
-                    quota,
-                )} (${usagePercent.toFixed(2)}%)`,
-            )
+
             return {
                 text: `Browser Storage Used: ${usagePercent.toFixed(2)}%`,
                 percent: usagePercent,
