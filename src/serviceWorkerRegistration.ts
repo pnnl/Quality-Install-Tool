@@ -83,7 +83,7 @@ async function fetchReleaseNotes(): Promise<string> {
 
         return `
             <div style="text-align: left; margin-top: 12px;">
-                <strong>Version ${latest.version}</strong> (${latest.date})
+                <strong>What's New</strong> (${latest.date})
                 <ul style="margin: 8px 0; padding-left: 20px; font-size: 14px;">
                     ${notesList}
                 </ul>

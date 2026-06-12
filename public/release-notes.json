@@ -2,17 +2,6 @@
   "current": "1.0.0",
   "releases": [
     {
-      "version": "1.0.0",
-      "date": "2026-06-11",
-      "notes": [
-        "Photo quality settings: When creating a project, you can now choose the quality of the photos to balance quality and storage space in your browser.",
-        "Print Report: The report now opens in a new tab in a print-friendly format, allowing direct printing without relying on pop-ups (which may be blocked/disabled).",
-        "WebP photo support: Photo input now accepts .webp images when supported by the browser.",
-        "Browser storage indicator – The app footer now displays the amount of browser storage used by the app."
-      ]
-    },
-    {
-      "version": "1.0.0",
       "date": "2026-06-11",
       "notes": [
         "Photo quality settings: When creating a project, you can now choose the quality of the photos to balance quality and storage space in your browser.",
