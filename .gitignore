@@ -3,6 +3,7 @@
 /coverage
 .vscode
 .DS_Store
+.claude
 yarn-error.log
 /public/print.css
 /quality-install-tool
