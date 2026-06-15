@@ -58,7 +58,7 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
             ref={textContainerRef}
             className={`collapsible-text ${isCollapsed && isExpandable ? 'collapsed' : ''}`}
         >
-            <p className="description">
+            <div className="description">
                 {text}
                 {isExpandable && (
                     <span
@@ -68,7 +68,7 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
                         {isCollapsed ? '...see more' : '...show less'}
                     </span>
                 )}
-            </p>
+            </div>
         </div>
     )
 }

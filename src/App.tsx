@@ -14,8 +14,10 @@ import ProjectsNewView from './components/views/projects/new'
 import ProjectsShowView from './components/views/projects/show'
 import DownloadReminderPage from './components/views/shared/download_reminder_page'
 import FaqsPage from './components/views/faqs'
+import PrintView from './components/views/print'
 
 import DatabaseProvider from './providers/database_provider'
+import StorageErrorProvider from './providers/storage_error_provider'
 import PATHS from './config/routes'
 
 const router = createBrowserRouter(
@@ -57,6 +59,11 @@ const router = createBrowserRouter(
             element: <FaqsPage />,
             handle: { pageTitle: 'FAQs' },
         },
+        {
+            path: PATHS.PRINT,
+            element: <PrintView />,
+            handle: { pageTitle: 'Print' },
+        },
     ],
     {
         future: {
@@ -70,12 +77,14 @@ type AppProps = Record<string, never>
 const App: React.FC<AppProps> = () => {
     return (
         <DatabaseProvider>
-            <RouterProvider
-                future={{
-                    v7_startTransition: true,
-                }}
-                router={router}
-            />
+            <StorageErrorProvider>
+                <RouterProvider
+                    future={{
+                        v7_startTransition: true,
+                    }}
+                    router={router}
+                />
+            </StorageErrorProvider>
         </DatabaseProvider>
     )
 }

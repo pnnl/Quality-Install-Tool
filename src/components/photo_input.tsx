@@ -8,6 +8,7 @@ import StringInputWrapper from './string_input_wrapper'
 import TextInputWrapper from './text_input_wrapper'
 import { type PhotoAttachment } from '../utilities/photo_attachment_utils'
 import { PHOTO_MIME_TYPES } from '../utilities/photo_utils'
+import { PhotoQualityWarning } from './photo_quality_warning'
 
 export interface PhotoInputProps {
     children: React.ReactNode
@@ -45,8 +46,22 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     uploadable,
 }) => {
     const ref = useRef<HTMLInputElement>(null)
-    const hasInfoContent = Boolean(children) || Boolean(label)
-
+    const defaultTip = (
+        <>
+            <br />
+            <b>Photo Tip:</b> To capture the most detail, avoid digital zoom.
+            Instead, move closer and frame the shot so the item fills the
+            screen. If your phone has multiple cameras/lenses (e.g., 0.5x / 1x /
+            2x / 3x), switch lenses to the one that best fills the frame with
+            the item while keeping it in focus.
+            <br />
+            <b>Geolocation Tip:</b> For more reliable GPS data on iPhone, use
+            Safari when uploading photos. Chrome on iPhone can be less reliable
+            for geolocation and geotagging.
+        </>
+    )
+    const hasInfoContent =
+        Boolean(children) || Boolean(label) || Boolean(defaultTip)
     const [objectURLForDelete, setObjectURLForDelete] = useState<
         string | undefined
     >(undefined)
@@ -162,7 +177,10 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title>{label}</Offcanvas.Title>
                     </Offcanvas.Header>
-                    <Offcanvas.Body>{children}</Offcanvas.Body>
+                    <Offcanvas.Body>
+                        {children}
+                        {defaultTip}
+                    </Offcanvas.Body>
                 </Offcanvas>
             )}
             <Card className="input-card photo-input">
@@ -273,20 +291,50 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                                             ) : (
                                                 <span>Missing</span>
                                             )}
+                                            {photoAttachment.metadata
+                                                ?.geolocationWarning && (
+                                                <>
+                                                    <br />
+                                                    <span
+                                                        style={{ color: 'red' }}
+                                                    >
+                                                        Location Status:{' '}
+                                                        {
+                                                            photoAttachment
+                                                                .metadata
+                                                                .geolocationWarning
+                                                        }
+                                                    </span>
+                                                </>
+                                            )}
                                         </small>
+                                        <PhotoQualityWarning
+                                            attachment={photoAttachment}
+                                        />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     )}
                     {loading && (
-                        <div className="padding">
-                            <div className="loader"></div>
+                        <div
+                            className="photo-upload-status"
+                            aria-live="polite"
+                            role="status"
+                        >
+                            <div
+                                className="photo-upload-status-spinner"
+                                aria-hidden="true"
+                            ></div>
+                            <div>
+                                <strong>Processing photo...</strong>
+                                <div>
+                                    Processing the image and saving it now.
+                                </div>
+                            </div>
                         </div>
                     )}
-                    {error && (
-                        <div className="error">Image loading failed.</div>
-                    )}
+                    {error && <div className="error">{error}</div>}
                     {photoNameField && (
                         <StringInputWrapper
                             path={photoNamePath ?? `${id}_photo_name`}

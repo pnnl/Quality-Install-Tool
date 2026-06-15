@@ -10,6 +10,10 @@ import {
     shouldMigrateCombustionSafetyTestsProject,
     transformCombustionSafetyTestsProject,
 } from '../migrations/0_doe_combustion_appliance_safety_tests'
+import {
+    shouldMigrateProjectPhotoResolution,
+    transformProjectPhotoResolution,
+} from '../migrations/2_project_photo_resolution'
 import { transformPhotoAttachmentIdSuffixes } from '../migrations/1_photo_attachment_id_suffixes'
 import {
     type Base,
@@ -269,6 +273,10 @@ export async function importJSONDocument(
                         }
                     })
                 })
+            }
+
+            if (shouldMigrateProjectPhotoResolution(origProject)) {
+                docs[index] = transformProjectPhotoResolution(origProject)
             }
         }
     })

@@ -1,6 +1,5 @@
-import heic2any from 'heic2any'
 import PouchDB from 'pouchdb'
-import React, { createContext, useCallback } from 'react'
+import React, { createContext, useCallback, useRef } from 'react'
 
 import { useDatabase } from './database_provider'
 import {
@@ -14,6 +13,8 @@ import {
     getPhotoMetadata,
     isPhoto,
 } from '../utilities/photo_utils'
+import { getPhotoProfileFromDoc } from '../utilities/photo_resolution_utils'
+import { useStorageError } from './storage_error_provider'
 
 export function useChangeEventHandler(
     callback?: (
@@ -22,12 +23,13 @@ export function useChangeEventHandler(
     ) => void | Promise<void>,
 ): (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => Promise<void> {
     const db = useDatabase()
+    const { reportError, clearError } = useStorageError()
 
     return useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             try {
                 const result = await db.put<Base>(doc)
-
+                clearError()
                 callback && (await callback(null, result))
             } catch (error) {
                 // Handle conflict errors by fetching latest version and retrying
@@ -40,8 +42,10 @@ export function useChangeEventHandler(
                             _rev: latestDoc._rev,
                         }
                         const result = await db.put<Base>(updatedDoc)
+                        clearError()
                         callback && (await callback(null, result))
                     } catch (retryError) {
+                        reportError(retryError)
                         callback &&
                             (await callback(
                                 retryError as PouchDB.Core.Error,
@@ -49,16 +53,18 @@ export function useChangeEventHandler(
                             ))
                     }
                 } else {
+                    reportError(dbError)
                     callback && (await callback(dbError, null))
                 }
             }
         },
-        [db, callback],
+        [db, callback, reportError, clearError],
     )
 }
 
 export const StoreContext = createContext<{
     doc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
+    projectDoc: (PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) | undefined
     upsertData: (
         path: string,
         value: unknown,
@@ -80,6 +86,7 @@ export const StoreContext = createContext<{
     ) => Promise<void>
 }>({
     doc: undefined,
+    projectDoc: undefined,
     upsertData: async () => {
         return
     },
@@ -99,6 +106,7 @@ export const StoreContext = createContext<{
 
 interface StoreProviderProps {
     doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
+    projectDoc?: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta
     onChange?: (
         doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta,
     ) => void | Promise<void>
@@ -107,83 +115,130 @@ interface StoreProviderProps {
 
 const StoreProvider: React.FC<StoreProviderProps> = ({
     doc,
+    projectDoc,
     onChange,
     children,
 }) => {
+    const { reportError } = useStorageError()
+
+    // Ref to the latest doc prop so that queued writes always read the most
+    // up-to-date _rev, avoiding stale-revision 409 conflicts when multiple
+    // writes are enqueued between renders.
+    const docRef = useRef(doc)
+    docRef.current = doc
+
+    // Write queue: each upsert chains onto this promise so writes execute
+    // sequentially. This prevents concurrent db.put() calls from racing
+    // with the same _rev, which would cause PouchDB 409 "Document update
+    // conflict" errors during rapid user input.
+    const writeQueueRef = useRef<Promise<void>>(Promise.resolve())
+
     const upsertData = useCallback(
-        async (path: string, value: unknown, errors: string[]) => {
-            if (onChange) {
+        (path: string, value: unknown, errors: string[]) => {
+            // Chain this write after any pending write completes
+            const enqueued = writeQueueRef.current.then(async () => {
+                if (!onChange) return
+
+                // Read the latest doc at execution time (not enqueue time)
+                // to ensure we have the current _rev after prior writes
+                const currentDoc = docRef.current
                 const docWithErrors = immutableUpsert(
                     `metadata_.errors.data_.${path}`,
                     {
-                        ...doc,
+                        ...currentDoc,
                         metadata_: {
-                            ...(doc.metadata_ ?? {}),
-                            errors: doc.metadata_?.errors ?? {
+                            ...(currentDoc.metadata_ ?? {}),
+                            errors: currentDoc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
                         },
                     } as unknown as Record<string, unknown>,
                     errors,
-                ) as unknown as typeof doc
+                ) as unknown as typeof currentDoc
 
                 const lastModifiedAt = new Date()
 
-                await onChange(
-                    immutableUpsert(
-                        `data_.${path}`,
-                        {
-                            ...docWithErrors,
-                            metadata_: {
-                                ...docWithErrors.metadata_,
-                                last_modified_at: lastModifiedAt.toISOString(),
+                try {
+                    await onChange(
+                        immutableUpsert(
+                            `data_.${path}`,
+                            {
+                                ...docWithErrors,
+                                metadata_: {
+                                    ...docWithErrors.metadata_,
+                                    last_modified_at:
+                                        lastModifiedAt.toISOString(),
+                                },
                             },
-                        },
-                        value,
-                    ),
-                )
-            }
+                            value,
+                        ),
+                    )
+                } catch (error) {
+                    reportError(error)
+                }
+            })
+            // Prevent unhandled rejection if the queued write fails;
+            // errors are already surfaced via reportError() above
+            writeQueueRef.current = enqueued.catch(() => {
+                // errors already reported above
+            })
+            return enqueued
         },
-        [doc, onChange],
+        [onChange, reportError],
     )
 
     const upsertMetadata = useCallback(
-        async (path: string, value: unknown, errors: string[]) => {
-            if (onChange) {
+        (path: string, value: unknown, errors: string[]) => {
+            // Chain this write after any pending write completes
+            const enqueued = writeQueueRef.current.then(async () => {
+                if (!onChange) return
+
+                // Read the latest doc at execution time (not enqueue time)
+                const currentDoc = docRef.current
                 const docWithErrors = immutableUpsert(
                     `metadata_.errors.metadata_.${path}`,
                     {
-                        ...doc,
+                        ...currentDoc,
                         metadata_: {
-                            ...(doc.metadata_ ?? {}),
-                            errors: doc.metadata_?.errors ?? {
+                            ...(currentDoc.metadata_ ?? {}),
+                            errors: currentDoc.metadata_?.errors ?? {
                                 data_: {},
                                 metadata_: {},
                             },
                         },
                     } as unknown as Record<string, unknown>,
                     errors,
-                ) as unknown as typeof doc
+                ) as unknown as typeof currentDoc
 
                 const lastModifiedAt = new Date()
 
-                await onChange(
-                    immutableUpsert(
-                        `metadata_.${path}`,
-                        {
-                            ...docWithErrors,
-                            metadata_: {
-                                ...docWithErrors.metadata_,
-                                last_modified_at: lastModifiedAt.toISOString(),
+                try {
+                    await onChange(
+                        immutableUpsert(
+                            `metadata_.${path}`,
+                            {
+                                ...docWithErrors,
+                                metadata_: {
+                                    ...docWithErrors.metadata_,
+                                    last_modified_at:
+                                        lastModifiedAt.toISOString(),
+                                },
                             },
-                        },
-                        value,
-                    ),
-                )
-            }
+                            value,
+                        ),
+                    )
+                } catch (error) {
+                    reportError(error)
+                }
+            })
+            // Prevent unhandled rejection; errors surfaced via reportError()
+            writeQueueRef.current = enqueued.catch(() => {
+                // errors already reported above
+            })
+            return enqueued
         },
-        [doc, onChange],
+        [onChange, reportError],
     )
 
     const putAttachment = useCallback(
@@ -192,7 +247,11 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
             blob: Blob,
             filename?: string,
         ) => {
-            if (onChange) {
+            if (!onChange) {
+                return
+            }
+
+            try {
                 const lastModifiedAt = new Date()
 
                 let attachmentMetadata: FileMetadata | PhotoMetadata = {
@@ -201,18 +260,49 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 }
 
                 if (isPhoto(blob)) {
-                    attachmentMetadata = await getPhotoMetadata(blob)
+                    const profileSource = projectDoc ?? doc
+                    const profile = getPhotoProfileFromDoc(profileSource)
 
-                    if (blob.type === 'image/heic') {
-                        blob = (await heic2any({
-                            blob,
-                            toType: 'image/jpeg',
-                        })) as Blob
+                    const { blobs, mainFormat } = await compressPhoto(
+                        blob,
+                        profile,
+                    )
+                    const storedBlob = blobs[mainFormat] ?? blob
+                    attachmentMetadata = await getPhotoMetadata(
+                        blob,
+                        storedBlob,
+                    )
+
+                    const attachments: PouchDB.Core.Attachments = {
+                        ...doc._attachments,
                     }
+                    Object.entries(blobs).forEach(([format, b]) => {
+                        const ext = format === 'jpeg' ? 'jpg' : format
+                        attachments[`${attachmentId}.${ext}`] = {
+                            content_type:
+                                format === 'jpeg'
+                                    ? 'image/jpeg'
+                                    : `image/${format}`,
+                            data: b,
+                        }
+                    })
 
-                    blob = await compressPhoto(blob)
+                    await onChange({
+                        ...doc,
+                        _attachments: attachments,
+                        metadata_: {
+                            ...doc.metadata_,
+                            last_modified_at: lastModifiedAt.toISOString(),
+                            attachments: {
+                                ...doc.metadata_.attachments,
+                                [attachmentId]: attachmentMetadata,
+                            },
+                        },
+                    })
+                    return
                 }
 
+                // Non-photo: store as usual
                 await onChange({
                     ...doc,
                     _attachments: {
@@ -231,9 +321,14 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                         },
                     },
                 })
+            } catch (error) {
+                if (isPhoto(blob)) {
+                    throw error
+                }
+                reportError(error)
             }
         },
-        [doc, onChange],
+        [doc, onChange, projectDoc, reportError],
     )
 
     const removeAttachment = useCallback(
@@ -245,8 +340,6 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     ...doc._attachments,
                 }
 
-                delete _attachments[attachmentId]
-
                 const metadata_ = {
                     ...doc.metadata_,
                     last_modified_at: lastModifiedAt.toISOString(),
@@ -255,7 +348,21 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                 }
 
-                delete metadata_.attachments[attachmentId]
+                const attachmentIdsToRemove = Object.keys(_attachments).filter(
+                    key =>
+                        key === attachmentId ||
+                        key.startsWith(`${attachmentId}.`),
+                )
+
+                if (attachmentIdsToRemove.length > 0) {
+                    attachmentIdsToRemove.forEach(key => {
+                        delete _attachments[key]
+                    })
+                    delete metadata_.attachments[attachmentId]
+                } else {
+                    delete _attachments[attachmentId]
+                    delete metadata_.attachments[attachmentId]
+                }
 
                 await onChange({
                     ...doc,
@@ -288,6 +395,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         <StoreContext.Provider
             value={{
                 doc,
+                projectDoc,
                 upsertData,
                 upsertMetadata,
                 putAttachment,

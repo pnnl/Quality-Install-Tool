@@ -12,12 +12,12 @@
 
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
-        // [::1] is the IPv6 localhost address.
-        window.location.hostname === '[::1]' ||
-        // 127.0.0.0/8 are considered localhost for IPv4.
-        window.location.hostname.match(
-            /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
-        ),
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.0/8 are considered localhost for IPv4.
+    window.location.hostname.match(
+        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/,
+    ),
 )
 
 type Config = {
@@ -67,6 +67,34 @@ export function register(config?: Config) {
     }
 }
 
+async function fetchReleaseNotes(): Promise<string> {
+    try {
+        const response = await fetch('/release-notes.json')
+        if (!response.ok) throw new Error('Failed to fetch release notes')
+        const data = await response.json()
+        const releases = data.releases || []
+
+        if (releases.length === 0) return ''
+
+        const latest = releases[0]
+        const notesList = latest.notes
+            .map((note: string) => `<li>${note}</li>`)
+            .join('')
+
+        return `
+            <div style="text-align: left; margin-top: 12px;">
+                <strong>What's New</strong> (${latest.date})
+                <ul style="margin: 8px 0; padding-left: 20px; font-size: 14px;">
+                    ${notesList}
+                </ul>
+            </div>
+        `
+    } catch (error) {
+        console.warn('Could not fetch release notes:', error)
+        return ''
+    }
+}
+
 function registerValidSW(swUrl: string, config?: Config) {
     navigator.serviceWorker
         .register(swUrl)
@@ -86,9 +114,10 @@ function registerValidSW(swUrl: string, config?: Config) {
                                 'New content is available and will be used when all ' +
                                     'tabs for this page are closed. See https://cra.link/PWA.',
                             )
-                            showUpdateBanner(
-                                'A new version of this app is available! <b>Click here</b> to update now. ',
-                                () => {
+
+                            fetchReleaseNotes().then(releaseNotesHtml => {
+                                const message = `A new version of this app is available! <b>Click here</b> to update now.${releaseNotesHtml}`
+                                showUpdateBanner(message, () => {
                                     if (registration.waiting) {
                                         registration.waiting.postMessage({
                                             type: 'SKIP_WAITING',
@@ -107,8 +136,8 @@ function registerValidSW(swUrl: string, config?: Config) {
                                             },
                                         )
                                     }
-                                },
-                            )
+                                })
+                            })
 
                             // Execute callback
                             if (config && config.onUpdate) {
