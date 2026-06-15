@@ -133,12 +133,27 @@ async function normalizePhotoBlob(
 
     // HEIC cannot be relied on for browser canvas processing, so convert once
     // up front and let the rest of the pipeline work with JPEG.
-    return {
-        blob: (await heic2any({
+    try {
+        const converted = (await heic2any({
             blob,
             toType: 'image/jpeg',
-        })) as Blob,
-        mimeType: 'image/jpeg',
+        })) as Blob
+        console.log(
+            'HEIC conversion successful',
+            'Original size:',
+            blob.size,
+            'Converted size:',
+            converted.size,
+            'Converted type:',
+            converted.type,
+        )
+        return {
+            blob: converted,
+            mimeType: 'image/jpeg',
+        }
+    } catch (error) {
+        console.error('HEIC conversion failed:', error)
+        throw error
     }
 }
 
