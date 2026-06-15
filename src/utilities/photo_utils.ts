@@ -533,7 +533,15 @@ export async function getPhotoMetadata(
     let tags: Record<string, unknown> | null = null
 
     try {
-        tags = (await exifr.parse(blob)) as Record<string, unknown> | null
+        // Normalize HEIC to JPEG before parsing EXIF, since exifr can't read HEIC on Windows
+        const normalizedBlob =
+            blob.type === 'image/heic'
+                ? (await normalizePhotoBlob(blob)).blob
+                : blob
+        tags = (await exifr.parse(normalizedBlob)) as Record<
+            string,
+            unknown
+        > | null
     } catch {
         // Some formats (or browser-decoder outputs) can fail EXIF parsing.
         // Continue with geolocation fallback instead of failing upload.
