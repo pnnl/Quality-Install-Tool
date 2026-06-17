@@ -121,24 +121,46 @@ export async function compressPhoto(
     return { blobs, mainFormat }
 }
 
-async function normalizePhotoBlob(
+export async function normalizePhotoBlob(
     blob: Blob,
 ): Promise<{ blob: Blob; mimeType: string }> {
-    if (blob.type !== 'image/heic') {
-        return {
-            blob,
-            mimeType: blob.type,
+    if (blob.type === 'image/heic' || !blob.type) {
+        try {
+            const result = await heic2any({
+                blob,
+                toType: 'image/jpeg',
+            })
+            let converted: Blob
+
+            if (Array.isArray(result)) {
+                console.warn('heic2any returned array, using first element')
+                converted = result[0] as Blob
+            } else {
+                converted = result as Blob
+            }
+
+            console.log(
+                'Photo conversion successful',
+                'Original size:',
+                blob.size,
+                'Converted size:',
+                converted.size,
+                'Converted type:',
+                converted.type,
+            )
+            return {
+                blob: converted,
+                mimeType: 'image/jpeg',
+            }
+        } catch (error) {
+            console.error('Photo conversion failed:', error)
+            throw error
         }
     }
 
-    // HEIC cannot be relied on for browser canvas processing, so convert once
-    // up front and let the rest of the pipeline work with JPEG.
     return {
-        blob: (await heic2any({
-            blob,
-            toType: 'image/jpeg',
-        })) as Blob,
-        mimeType: 'image/jpeg',
+        blob,
+        mimeType: blob.type,
     }
 }
 
@@ -510,11 +532,24 @@ export async function getPhotoMetadata(
     let tags: Record<string, unknown> | null = null
 
     try {
+        // Try to parse EXIF from original blob first
         tags = (await exifr.parse(blob)) as Record<string, unknown> | null
     } catch {
-        // Some formats (or browser-decoder outputs) can fail EXIF parsing.
-        // Continue with geolocation fallback instead of failing upload.
-        tags = null
+        // If original fails, normalize HEIC to JPEG and try again
+        // (exifr can't read HEIC on Windows, but EXIF should survive conversion)
+        try {
+            if (blob.type === 'image/heic' || !blob.type) {
+                const normalizedBlob = (await normalizePhotoBlob(blob)).blob
+                tags = (await exifr.parse(normalizedBlob)) as Record<
+                    string,
+                    unknown
+                > | null
+            }
+        } catch {
+            // Some formats (or browser-decoder outputs) can fail EXIF parsing.
+            // Continue with geolocation fallback instead of failing upload.
+            tags = null
+        }
     }
 
     if (tags) {
