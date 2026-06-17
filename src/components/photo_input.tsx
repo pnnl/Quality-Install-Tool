@@ -345,16 +345,6 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             hint=""
                         />
                     )}
-                    {photoNameField && (
-                        <StringInputWrapper
-                            path={photoNamePath ?? `${id}_photo_name`}
-                            label="Name"
-                            min={0}
-                            max={100}
-                            regexp={/.*/}
-                            hint=""
-                        />
-                    )}
                     {photoAttachments.length < count && (
                         <div className="mb-3">
                             <Button
