@@ -83,12 +83,18 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
     for (const [attachmentId, attachment] of Object.entries(doc._attachments)) {
         if (!attachment.content_type) {
             const fullAttachment = attachment as PouchDB.Core.FullAttachment
-            const blob = blobFromAttachmentData(fullAttachment.data)
+            // Assume missing content_type is HEIC - create blob with HEIC type
+            const blob = blobFromAttachmentData(
+                fullAttachment.data,
+                'image/heic',
+            )
 
             if (blob) {
                 try {
+                    // Try to extract metadata from original HEIC blob first
                     let exifData = await getPhotoMetadata(blob)
 
+                    // Compress/convert HEIC to JPEG using the configured profile
                     const profile = getPhotoProfileFromDoc(
                         doc as PouchDB.Core.ExistingDocument<Base> &
                             PouchDB.Core.AllDocsMeta,
@@ -101,6 +107,7 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
                             ? 'image/jpeg'
                             : `image/${compressed.mainFormat}`
 
+                    // Convert compressed blob to base64 for storage
                     const arrayBuffer = await compressedBlob.arrayBuffer()
                     const uint8Array = new Uint8Array(arrayBuffer)
                     let base64Data = ''
@@ -116,8 +123,16 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
                     }
                     attachmentsChanged = true
 
-                    if (!exifData)
-                        exifData = await getPhotoMetadata(compressedBlob)
+                    // If no EXIF found in original, try converted blob
+                    if (!exifData || exifData.geolocationSource !== 'EXIF') {
+                        const convertedExif =
+                            await getPhotoMetadata(compressedBlob)
+                        if (convertedExif.geolocationSource === 'EXIF') {
+                            exifData = convertedExif
+                        }
+                    }
+
+                    // Update metadata with geolocation and timestamp if found
                     if (
                         exifData.geolocationSource === 'EXIF' &&
                         exifData.geolocation.latitude &&
@@ -128,6 +143,14 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
                             ...(currentMetadata as PhotoMetadata | undefined),
                             geolocation: exifData.geolocation,
                             geolocationSource: 'EXIF',
+                            timestamp:
+                                exifData.timestamp ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestamp,
+                            timestampSource:
+                                exifData.timestampSource ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestampSource,
                         } as PhotoMetadata
                         metadataChanged = true
                     }
