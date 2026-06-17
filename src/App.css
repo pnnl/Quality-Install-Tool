@@ -306,7 +306,8 @@ h1 + h3 {
 
 /* photo.tsx */
 .photo-card {
-    break-inside: avoid;
+    break-inside: auto;
+    page-break-inside: auto;
 }
 
 .photo-card > .card-body > div {
@@ -502,6 +503,33 @@ btn-light:hover {
     background-color: white;
 }
 
+.photo-upload-status {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0.75rem 0 1rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid #cfe2ff;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, #f4f9ff 0%, #eef6ff 100%);
+    color: #153b63;
+}
+
+.photo-upload-status-spinner {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(21, 59, 99, 0.16);
+    border-top-color: #1d70b8;
+    border-radius: 50%;
+    animation: spin 0.85s linear infinite;
+}
+
+.photo-upload-status strong {
+    display: block;
+    margin-bottom: 0.1rem;
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -662,6 +690,18 @@ btn-light:hover {
     .photo-row {
         display: block;
     }
+
+    /* Let photo sections span pages, but do not split a single photo entry. */
+    .photo-card {
+        break-inside: auto;
+        page-break-inside: auto;
+    }
+
+    .photo-row > .col,
+    .photo-report-container {
+        break-inside: avoid-page;
+        page-break-inside: avoid;
+    }
 }
 
 .print-wrapper > .photo-card {
@@ -706,12 +746,116 @@ btn-light:hover {
     background-color: #f8f9fa;
 }
 
+.footer-links-nav {
+    align-items: center;
+    gap: 0.25rem;
+}
+
 .footer-nav-link {
-    font-weight: bold;
+    border-radius: 999px;
+    color: #1f2f47;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0.28rem 0.55rem;
+    text-decoration: none;
+    transition: background-color 120ms ease, color 120ms ease;
+}
+
+.footer-nav-link:hover,
+.footer-nav-link:focus,
+.footer-nav-link:focus-visible {
+    background-color: #e8eef8;
+    color: #0b5ed7;
+    text-decoration: none;
+}
+
+.footer-nav-link.active,
+.footer-nav-link:active {
+    background-color: #dce8fb;
+    color: #084298;
 }
 
 .footer-navbar-text {
     font-size: 0.8rem;
+}
+
+.footer-status-group {
+    gap: 0.15rem;
+}
+
+.footer-storage-warning {
+    align-items: center;
+    color: #a81414;
+    display: inline-flex;
+    gap: 0.35rem;
+}
+
+.footer-storage-warning-icon {
+    align-items: center;
+    background-color: #a81414;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    font-size: 0.65rem;
+    font-weight: 700;
+    height: 14px;
+    justify-content: center;
+    line-height: 1;
+    width: 14px;
+}
+
+.footer-storage-warning-link {
+    display: inline;
+    font-size: 0.75rem;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.footer-storage-meter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+.footer-storage-label {
+    align-items: center;
+    display: flex;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.footer-storage-bar {
+    height: 6px;
+    width: 120px;
+    border-radius: 3px;
+}
+
+.footer-last-updated {
+    color: #6c757d;
+    font-size: 0.75rem;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
+.footer-last-updated-icon {
+    font-size: 0.8rem;
+}
+
+@media (max-width: 575.98px) {
+    .footer-links-nav {
+        gap: 0.15rem;
+    }
+
+    .footer-nav-link {
+        font-size: 0.78rem;
+        padding: 0.22rem 0.45rem;
+    }
 }
 
 .layout-wrapper {
@@ -736,4 +880,97 @@ btn-light:hover {
 
 .print-header-title {
     font-size: 1.2em !important;
+}
+
+.print-back-bar {
+    padding: 0.6rem 0 0.4rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Project Info Inputs styles */
+.photo-resolution-block {
+  margin-bottom: 0.5em;
+}
+
+.photo-resolution-list {
+  margin: 0.5em 0 0.5em 1.2em;
+  padding: 0;
+}
+
+.photo-resolution-note {
+  margin-top: 0.5em;
+  font-size: 0.95em;
+  color: #555;
+}
+
+.photo-quality-card {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0 0.75rem;
+    padding: 0.75rem;
+}
+
+.photo-quality-intro,
+.photo-quality-choose {
+    color: #333;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.photo-quality-choose {
+    margin-top: 0.65rem;
+}
+
+.photo-quality-grid {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 0.6rem;
+}
+
+.photo-quality-item {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 0.35rem;
+    padding: 0.55rem 0.65rem;
+}
+
+.photo-quality-title {
+    color: #222;
+    font-size: 0.86rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.photo-quality-description {
+    color: #444;
+    font-size: 0.8rem;
+    line-height: 1.25;
+}
+
+.photo-quality-size {
+    color: #555;
+    font-size: 0.76rem;
+    font-style: italic;
+    margin-top: 0.28rem;
+}
+
+.photo-quality-note {
+    border-left: 3px solid #ccc;
+    margin-top: 0.65rem;
+    padding-left: 0.55rem;
+}
+
+@media (max-width: 767.98px) {
+    .photo-quality-grid {
+        grid-template-columns: 1fr;
+    }
 }

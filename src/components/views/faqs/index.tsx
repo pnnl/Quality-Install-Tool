@@ -53,6 +53,22 @@ const FaqsPage: React.FC = () => {
                     Please note that you must download each project
                     individually.
                 </Collapsible>
+                <Collapsible
+                    header="What does Browser Storage Used mean and can saves fail?"
+                    id="browser-storage"
+                >
+                    The Browser Storage Used value in the footer shows how much
+                    of your browser&rsquo;s available site storage this tool is
+                    currently using. As usage gets close to the browser&rsquo;s
+                    storage limit, saves can fail, especially on photo-heavy
+                    projects.
+                    <br />
+                    <br />
+                    If Browser Storage Used is near 95% or higher, download
+                    older completed projects to your device and remove them from
+                    browser storage, then try saving again. This frees space for
+                    new project data and photos.
+                </Collapsible>
                 <Collapsible header="Can I use the app on multiple devices?">
                     Since data is stored locally on each device, your projects
                     will not automatically sync between devices. To move a
@@ -67,10 +83,20 @@ const FaqsPage: React.FC = () => {
                     transferred from the original device via USB cable to a
                     desktop or laptop computer and adding the photos from that
                     computer.
+                    <br />
+                    <br />
+                    For more reliable GPS/geolocation data on iPhone, we
+                    recommend using Safari when uploading photos. Chrome on
+                    iPhone can be less reliable for geolocation and geotagging.
                 </Collapsible>
                 <Collapsible header="What photo types are supported?">
-                    The current version of the tool supports JPEG and HEIC/HEIF
-                    formatted photos.
+                    The current version of the tool supports JPEG, HEIC/HEIF,
+                    and WebP formatted photos.
+                    <br />
+                    <br />
+                    If you see a message like &ldquo;WebP is not supported in
+                    this browser version,&rdquo; update your browser or upload
+                    the photo as JPEG/HEIC.
                 </Collapsible>
                 <Collapsible header="How do I print a report?">
                     You can generate a printable PDF report for any

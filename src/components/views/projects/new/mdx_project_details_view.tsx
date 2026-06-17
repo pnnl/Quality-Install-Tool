@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import DocNameInputWrapper from '../../shared/doc_name_input_wrapper'
 import MdxWrapper from '../../../mdx_wrapper'
 import { useDatabase } from '../../../../providers/database_provider'
+import { useStorageError } from '../../../../providers/storage_error_provider'
 import StoreProvider from '../../../../providers/store_provider'
 import DOEProjectDetailsTemplate from '../../../../templates/doe_project_details.mdx'
 import { type Project } from '../../../../types/database.types'
@@ -22,6 +23,7 @@ type MdxProjectViewProps = Record<string, never>
 const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
     const db = useDatabase()
     const navigate = useNavigate()
+    const { reportError, clearError } = useStorageError()
     const [project, setProject] = useState<PouchDB.Core.PutDocument<Project>>()
 
     useEffect(() => {
@@ -94,17 +96,22 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             event.preventDefault()
 
             if (project) {
-                await putProject(db, project)
-                if (project.metadata_.show_download_reminder !== false) {
-                    navigate(`/app/${project._id}/download-reminder`)
-                } else {
-                    navigate(`/app/${project._id}/workflows`)
+                clearError()
+                try {
+                    await putProject(db, project)
+                    if (project.metadata_.show_download_reminder !== false) {
+                        navigate(`/app/${project._id}/download-reminder`)
+                    } else {
+                        navigate(`/app/${project._id}/workflows`)
+                    }
+                } catch (error) {
+                    reportError(error)
                 }
             }
 
             return false
         },
-        [db, navigate, project],
+        [clearError, db, navigate, project, reportError],
     )
 
     return (
@@ -112,6 +119,10 @@ const MdxProjectView: React.FC<MdxProjectViewProps> = () => {
             <br />
             <StoreProvider
                 doc={
+                    project as PouchDB.Core.Document<Project> &
+                        PouchDB.Core.GetMeta
+                }
+                projectDoc={
                     project as PouchDB.Core.Document<Project> &
                         PouchDB.Core.GetMeta
                 }

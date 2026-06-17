@@ -125,9 +125,9 @@ const FileInput: React.FC<FileInputProps> = ({
                             hint=""
                         />
                     )}
-                    <p className="mb-3 custom-label">
+                    <div className="mb-3 custom-label">
                         File Types Accepted: PDF
-                    </p>
+                    </div>
                     <Button
                         onClick={handleFileInputButtonClick}
                         variant="outline-primary"

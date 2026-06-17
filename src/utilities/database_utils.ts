@@ -13,6 +13,7 @@ import {
 } from '../types/database.types'
 import { type Installer } from '../types/installer.type'
 import { comparator } from './comparison_utils'
+import { getDefaultProjectPhotoResolution } from './photo_resolution_utils'
 
 //
 // BASE
@@ -307,6 +308,12 @@ export function newProject(
         children: [],
         data_: {
             ...data,
+            photo: {
+                ...data.photo,
+                resolution:
+                    data.photo?.resolution ??
+                    getDefaultProjectPhotoResolution(),
+            },
         },
         metadata_: {
             doc_name: docName,
@@ -510,6 +517,7 @@ export async function removeProject(
     if (installationIds.length > 0) {
         const allDocsWithKeysOptions: PouchDB.Core.AllDocsWithKeysOptions = {
             keys: installationIds,
+            include_docs: true,
         }
 
         const allDocsWithKeysResponse: PouchDB.Core.AllDocsWithKeysResponse<Installation> =
