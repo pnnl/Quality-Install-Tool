@@ -12,9 +12,14 @@ import {
     compressPhoto,
     getPhotoMetadata,
     isPhoto,
+    normalizePhotoBlob,
 } from '../utilities/photo_utils'
 import { getPhotoProfileFromDoc } from '../utilities/photo_resolution_utils'
 import { useStorageError } from './storage_error_provider'
+
+function isPhotoOrUnknownType(blob: Blob): boolean {
+    return isPhoto(blob) || !blob.type
+}
 
 export function useChangeEventHandler(
     callback?: (
@@ -259,18 +264,15 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     timestamp: lastModifiedAt.toISOString(),
                 }
 
-                if (isPhoto(blob)) {
+                if (isPhotoOrUnknownType(blob)) {
+                    attachmentMetadata = await getPhotoMetadata(blob, blob)
+                    const normalized = await normalizePhotoBlob(blob)
                     const profileSource = projectDoc ?? doc
                     const profile = getPhotoProfileFromDoc(profileSource)
 
-                    const { blobs, mainFormat } = await compressPhoto(
-                        blob,
+                    const { blobs } = await compressPhoto(
+                        normalized.blob,
                         profile,
-                    )
-                    const storedBlob = blobs[mainFormat] ?? blob
-                    attachmentMetadata = await getPhotoMetadata(
-                        blob,
-                        storedBlob,
                     )
 
                     const attachments: PouchDB.Core.Attachments = {
