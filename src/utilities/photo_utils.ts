@@ -7,7 +7,6 @@ import {
     type PhotoProfileSettings,
     getPhotoProfileSettings,
 } from './photo_resolution_utils'
-import imageCompression from 'browser-image-compression'
 
 const GEOLOCATION_MAXIMUM_AGE: number = parseInt(
     process.env.REACT_APP_GEOLOCATION_MAXIMUM_AGE,
@@ -496,28 +495,6 @@ async function canvasToBlob(
 }
 
 /**
- * Processes an image file by compressing and converting it to WebP format.
- *
- * @param {File} file - The image file to process.
- * @returns {Promise<Blob>} A Promise that resolves to the processed image as a Blob.
- * @throws {Error} Throws an error if the image processing fails.
- */
-export async function processImage(file: File): Promise<Blob> {
-    const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-        fileType: 'image/webp',
-    }
-    try {
-        const compressedFile = await imageCompression(file, options)
-        return compressedFile
-    } catch (error) {
-        throw new Error('Image processing failed. Please try another image.')
-    }
-}
-
-/**
  * Retrieves EXIF metadata for the given photo, including the GPS coordinates
  * and the original timestamp. If the GPS coordinates are not present, then
  * delegates to the current device location.
@@ -533,15 +510,7 @@ export async function getPhotoMetadata(
     let tags: Record<string, unknown> | null = null
 
     try {
-        // Normalize HEIC to JPEG before parsing EXIF, since exifr can't read HEIC on Windows
-        const normalizedBlob =
-            blob.type === 'image/heic'
-                ? (await normalizePhotoBlob(blob)).blob
-                : blob
-        tags = (await exifr.parse(normalizedBlob)) as Record<
-            string,
-            unknown
-        > | null
+        tags = (await exifr.parse(blob)) as Record<string, unknown> | null
     } catch {
         // Some formats (or browser-decoder outputs) can fail EXIF parsing.
         // Continue with geolocation fallback instead of failing upload.
