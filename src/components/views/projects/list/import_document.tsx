@@ -21,6 +21,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
     const ref = useRef<HTMLInputElement>(null)
 
     const [error, setError] = useState<string | undefined>(undefined)
+    const [isLoading, setIsLoading] = useState(false)
 
     const reader = useMemo<FileReader>(() => {
         const _reader = new FileReader()
@@ -32,6 +33,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                 const data = JSON.parse(text)
 
                 try {
+                    setIsLoading(true)
                     const responses = await importJSONDocument(db, data)
 
                     setError(undefined)
@@ -39,6 +41,8 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                     onImport && (await onImport(responses))
                 } catch (cause) {
                     setError(`Failed to import JSON: ${cause}`)
+                } finally {
+                    setIsLoading(false)
                 }
             } catch (cause) {
                 setError(`Failed to parse as JSON: ${cause}`)
@@ -80,14 +84,23 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
 
     return (
         <>
-            <Button onClick={() => ref.current?.click()}>{label}</Button>
+            <Button onClick={() => ref.current?.click()} disabled={isLoading}>
+                {isLoading ? 'Importing...' : label}
+            </Button>
             <input
                 ref={ref}
                 className="photo-upload-input"
                 type="file"
                 accept={`*${JSON_DOCUMENT_FILE_EXTENSION}`}
                 onChange={handleChange}
+                disabled={isLoading}
             />
+            {isLoading && (
+                <div className="import-loader" role="status" aria-live="polite">
+                    <div className="spinner-border spinner-border-sm me-2" />
+                    Processing and importing project...
+                </div>
+            )}
             {error && <div className="error">{error}</div>}
         </>
     )
