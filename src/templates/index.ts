@@ -195,16 +195,16 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowWoodAndPelletStove,
     },
-    // playground: {
-    //     title: 'Playground',
-    //     subtitle: {
-    //         singularTitleCase: 'Playground',
-    //         singularLowerCase: 'playground',
-    //         pluralTitleCase: 'Playgrounds',
-    //         pluralLowerCase: 'playgrounds',
+    //     playground: {
+    //         title: 'Playground',
+    //         subtitle: {
+    //             singularTitleCase: 'Playground',
+    //             singularLowerCase: 'playground',
+    //             pluralTitleCase: 'Playgrounds',
+    //             pluralLowerCase: 'playgrounds',
+    //         },
+    //         template: Playground,
     //     },
-    //     template: Playground,
-    // },
 }
 
 const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
