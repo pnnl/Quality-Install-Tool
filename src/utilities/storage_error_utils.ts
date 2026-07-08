@@ -51,6 +51,20 @@ export function isBrowserStorageError(error: unknown): boolean {
 export function getStorageErrorMessage(error: unknown): string {
     const errorText = getErrorText(error).trim()
 
+    // Suppress all database errors (including 409 conflicts) as they are handled internally
+    if (typeof error === 'object' && error !== null) {
+        const dbError = error as PouchDB.Core.Error
+        if (typeof dbError.status === 'number') {
+            // It's a PouchDB error, log it for debugging but suppress from UI
+            console.log('[DB Error]', {
+                status: dbError.status,
+                message: dbError.message,
+                reason: dbError.reason,
+            })
+            return ''
+        }
+    }
+
     if (
         /unable to compress (image|photo) within/i.test(errorText) ||
         /multiple attempts/i.test(errorText)
@@ -75,14 +89,7 @@ export function getStorageErrorMessage(error: unknown): string {
         return error.message
     }
 
-    if (typeof error === 'object' && error !== null) {
-        const dbError = error as PouchDB.Core.Error
-        if (typeof dbError.message === 'string' && dbError.message.length > 0) {
-            return dbError.message
-        }
-    }
-
-    return 'An unexpected browser storage error prevented saving. Please try again.'
+    return ''
 }
 
 // function formatBytes(bytes: number): string {
