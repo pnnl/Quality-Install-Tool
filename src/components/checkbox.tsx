@@ -1,4 +1,4 @@
-import React, { useCallback, useId } from 'react'
+import React, { useCallback, useId, useRef } from 'react'
 import { Card, Form } from 'react-bootstrap'
 
 interface CheckboxProps {
@@ -19,6 +19,11 @@ interface CheckboxProps {
  * input value. The function has the new input value as the sole argument.
  * @param value The current value of the input
  */
+
+// Debounce delay (ms) before triggering the DB write.
+// Prevents PouchDB 409 conflicts from rapid input changes.
+const DEBOUNCE_MS = 300
+
 const Checkbox: React.FC<CheckboxProps> = ({
     label,
     options,
@@ -27,18 +32,29 @@ const Checkbox: React.FC<CheckboxProps> = ({
     hidden,
 }) => {
     const id = useId()
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    // Ref avoids stale closure: always calls the latest onChange
+    const onChangeRef = useRef(onChange)
+    onChangeRef.current = onChange
 
     const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLInputElement>) => {
+        (event: React.ChangeEvent<HTMLInputElement>) => {
             const { value, checked } = event.target
 
             const selectedValues = checked
                 ? [...initialValue, value]
                 : initialValue.filter(item => item !== value)
 
-            await onChange(selectedValues)
+            // Reset the debounce timer on each change
+            if (timerRef.current) {
+                clearTimeout(timerRef.current)
+            }
+            timerRef.current = setTimeout(() => {
+                void onChangeRef.current(selectedValues)
+            }, DEBOUNCE_MS)
         },
-        [initialValue, onChange],
+        [initialValue],
     )
 
     return (

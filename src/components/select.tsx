@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Card, Form } from 'react-bootstrap'
 
 interface SelectProps {
@@ -9,6 +9,10 @@ interface SelectProps {
     value: string
 }
 
+// Debounce delay (ms) before triggering the DB write.
+// Prevents PouchDB 409 conflicts from rapid input changes.
+const DEBOUNCE_MS = 300
+
 const Select: React.FC<SelectProps> = ({
     label,
     onChange,
@@ -16,11 +20,25 @@ const Select: React.FC<SelectProps> = ({
     path,
     value,
 }) => {
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+    // Ref avoids stale closure: always calls the latest onChange
+    const onChangeRef = useRef(onChange)
+    onChangeRef.current = onChange
+
     const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLSelectElement>) => {
-            await onChange(event.target.value)
+        (event: React.ChangeEvent<HTMLSelectElement>) => {
+            const newValue = event.target.value
+
+            // Reset the debounce timer on each change
+            if (timerRef.current) {
+                clearTimeout(timerRef.current)
+            }
+            timerRef.current = setTimeout(() => {
+                void onChangeRef.current(newValue)
+            }, DEBOUNCE_MS)
         },
-        [onChange],
+        [],
     )
 
     return (
