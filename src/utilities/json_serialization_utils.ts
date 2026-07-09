@@ -23,6 +23,7 @@ import {
 } from '../types/database.types'
 import { compressPhoto, getPhotoMetadata } from './photo_utils'
 import { getPhotoProfileFromDoc } from './photo_resolution_utils'
+import { putWithConflictRetry } from './pouchdb_conflict_utils'
 
 export const JSON_DOCUMENT_CONTENT_TYPE: string =
     process.env.REACT_APP_JSON_DOCUMENT_CONTENT_TYPE
@@ -227,11 +228,22 @@ export async function exportJSONDocument(
 
     projectDoc.metadata_.is_downloaded = true
     projectDoc.metadata_.last_downloaded_date = new Date().toISOString()
-    await db.put(projectDoc)
+    await putWithConflictRetry(db, projectDoc)
 
     return data
 }
 
+/**
+ * Imports a previously exported JSON document (projects + installations).
+ *
+ * Processes and normalizes document data, compresses photos, then bulk-writes
+ * to database. Automatically retries any documents that fail with 409 conflicts
+ * to handle concurrent updates gracefully.
+ *
+ * @param db - PouchDB database
+ * @param data - Exported JSON document with projects and installations
+ * @returns Array of per-document write responses/errors (including conflict retries)
+ */
 export async function importJSONDocument(
     db: PouchDB.Database<Base>,
     data: JSONDocument,
@@ -461,7 +473,43 @@ export async function importJSONDocument(
         ),
     )
 
-    const responses = await db.bulkDocs<Base>(docs)
+    const bulkResponses = await db.bulkDocs<Base>(docs)
+
+    // Identify docs with 409 conflicts; collect them for individual retry
+    const failedDocs: PouchDB.Core.PutDocument<Base>[] = []
+    const responses: Array<PouchDB.Core.Response | PouchDB.Core.Error> =
+        bulkResponses.map((response, index) => {
+            if ('error' in response && response.error === 'conflict') {
+                failedDocs.push(docs[index])
+                return response as PouchDB.Core.Error
+            }
+            return response as PouchDB.Core.Response
+        })
+
+    // Retry failed docs individually with exponential backoff and fresh _rev
+    if (failedDocs.length > 0) {
+        const retryResults = await Promise.allSettled(
+            failedDocs.map(doc =>
+                putWithConflictRetry(db, doc as PouchDB.Core.PutDocument<Base>),
+            ),
+        )
+        retryResults.forEach((result, index) => {
+            const docIndex = bulkResponses.findIndex(
+                (r, i) =>
+                    'error' in r &&
+                    r.error === 'conflict' &&
+                    docs[i]._id === failedDocs[index]._id,
+            )
+            if (result.status === 'fulfilled') {
+                responses[docIndex] = result.value
+            } else {
+                responses[docIndex] = {
+                    error: 'conflict',
+                    reason: 'Retry failed',
+                } as PouchDB.Core.Error
+            }
+        })
+    }
 
     return responses
 }
