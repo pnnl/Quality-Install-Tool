@@ -70,6 +70,7 @@ const router = createBrowserRouter(
             v7_relativeSplatPath: true,
         },
     },
+    
 )
 
 type AppProps = Record<string, never>
