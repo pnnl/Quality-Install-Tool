@@ -14,7 +14,6 @@ import {
 import { type Installer } from '../types/installer.type'
 import { comparator } from './comparison_utils'
 import { getDefaultProjectPhotoResolution } from './photo_resolution_utils'
-import { putWithConflictRetry } from './pouchdb_conflict_utils'
 
 //
 // BASE
@@ -188,27 +187,18 @@ export async function getInstallations(
     return installationDocs
 }
 
-/**
- * Persists an installation document and updates parent project's children list.
- *
- * Writes the installation with automatic conflict retry, then atomically updates
- * the parent project's children array via upsert. If installation already exists
- * in project.children, the upsert is cancelled (no duplicate entries).
- *
- * @param db - PouchDB database
- * @param projectId - Parent project document ID
- * @param doc - Installation document to save
- * @returns Tuple of [installation write response, project upsert response]
- */
 export async function putInstallation(
     db: PouchDB.Database<Base>,
     projectId: PouchDB.Core.DocumentId,
     doc: PouchDB.Core.PutDocument<Installation>,
+    options: PouchDB.Core.PutOptions = {},
 ): Promise<[PouchDB.Core.Response, PouchDB.UpsertResponse | undefined]> {
     await db.info()
 
-    const response: PouchDB.Core.Response =
-        await putWithConflictRetry<Installation>(db, doc)
+    const response: PouchDB.Core.Response = await db.put<Installation>(
+        doc,
+        options,
+    )
 
     if (response.ok) {
         const diffFun: PouchDB.UpsertDiffCallback<Project> = (
@@ -492,37 +482,18 @@ export async function updateProjectLastModified(
     }
 }
 
-/**
- * Persists a project document with automatic conflict resolution.
- *
- * Writes the project with automatic retry logic to handle concurrent updates
- * (e.g., simultaneous edits from multiple components or tabs).
- *
- * @param db - PouchDB database
- * @param doc - Project document to save
- * @returns Write response with revision ID
- */
 export async function putProject(
     db: PouchDB.Database<Base>,
     doc: PouchDB.Core.PutDocument<Project>,
+    options: PouchDB.Core.PutOptions = {},
 ): Promise<PouchDB.Core.Response> {
     await db.info()
 
-    return await putWithConflictRetry<Project>(db, doc)
+    const response: PouchDB.Core.Response = await db.put<Project>(doc, options)
+
+    return response
 }
 
-/**
- * Removes a project and all associated installations in cascade.
- *
- * Fetches all child installations, marks them as deleted via bulkDocs, then
- * removes the project document. Auto-compaction reclaims space from deleted docs.
- * If bulkDocs encounters conflicts, they are retried individually.
- *
- * @param db - PouchDB database
- * @param id - Project document ID to remove
- * @param options - PouchDB remove options
- * @returns Tuple of [project removal response, installation removal responses]
- */
 export async function removeProject(
     db: PouchDB.Database<Base>,
     id: PouchDB.Core.DocumentId,

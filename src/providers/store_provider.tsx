@@ -21,21 +21,6 @@ function isPhotoOrUnknownType(blob: Blob): boolean {
     return isPhoto(blob) || !blob.type
 }
 
-/**
- * Writes a document with PouchDB's built-in atomic upsert mechanism.
- * PouchDB automatically handles conflict retries with fresh revisions.
- *
- * @param db - PouchDB database
- * @param doc - Document to write (complete, with current _rev)
- * @returns Upsert response
- */
-async function writeDocWithUpsert<T extends Base>(
-    db: PouchDB.Database<Base>,
-    doc: PouchDB.Core.Document<T> & PouchDB.Core.GetMeta,
-): Promise<PouchDB.UpsertResponse> {
-    return await db.upsert<T>(doc._id, () => doc)
-}
-
 export function useChangeEventHandler(
     callback?: (
         error: PouchDB.Core.Error | null,
@@ -48,16 +33,34 @@ export function useChangeEventHandler(
     return useCallback(
         async (doc: PouchDB.Core.Document<Base> & PouchDB.Core.GetMeta) => {
             try {
-                const result = await writeDocWithUpsert(db, doc)
+                const result = await db.put<Base>(doc)
                 clearError()
-                callback &&
-                    (await callback(
-                        null,
-                        result as unknown as PouchDB.Core.Response,
-                    ))
+                callback && (await callback(null, result))
             } catch (error) {
-                reportError(error)
-                callback && (await callback(error as PouchDB.Core.Error, null))
+                // Handle conflict errors by fetching latest version and retrying
+                const dbError = error as PouchDB.Core.Error
+                if (dbError.status === 409) {
+                    try {
+                        const latestDoc = await db.get<Base>(doc._id)
+                        const updatedDoc = {
+                            ...doc,
+                            _rev: latestDoc._rev,
+                        }
+                        const result = await db.put<Base>(updatedDoc)
+                        clearError()
+                        callback && (await callback(null, result))
+                    } catch (retryError) {
+                        reportError(retryError)
+                        callback &&
+                            (await callback(
+                                retryError as PouchDB.Core.Error,
+                                null,
+                            ))
+                    }
+                } else {
+                    reportError(dbError)
+                    callback && (await callback(dbError, null))
+                }
             }
         },
         [db, callback, reportError, clearError],
@@ -121,99 +124,90 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
     onChange,
     children,
 }) => {
-    const db = useDatabase()
     const { reportError } = useStorageError()
 
-    /**
-     * Atomically updates a data field via db.upsert.
-     * PouchDB handles conflict retries internally with fresh revisions.
-     */
     const upsertData = useCallback(
         async (path: string, value: unknown, errors: string[]) => {
             if (!onChange) return
 
+            const docWithErrors = immutableUpsert(
+                `metadata_.errors.data_.${path}`,
+                {
+                    ...doc,
+                    metadata_: {
+                        ...(doc.metadata_ ?? {}),
+                        errors: doc.metadata_?.errors ?? {
+                            data_: {},
+                            metadata_: {},
+                        },
+                    },
+                } as unknown as Record<string, unknown>,
+                errors,
+            ) as unknown as typeof doc
+
+            const lastModifiedAt = new Date()
+
             try {
-                await db.upsert<Base>(doc._id, currentDoc => {
-                    if (!currentDoc) return null as PouchDB.CancelUpsert
-
-                    const docWithErrors = immutableUpsert(
-                        `metadata_.errors.data_.${path}`,
-                        {
-                            ...currentDoc,
-                            metadata_: {
-                                ...(currentDoc.metadata_ ?? {}),
-                                errors: currentDoc.metadata_?.errors ?? {
-                                    data_: {},
-                                    metadata_: {},
-                                },
-                            },
-                        } as unknown as Record<string, unknown>,
-                        errors,
-                    ) as unknown as typeof currentDoc
-
-                    return immutableUpsert(
+                await onChange(
+                    immutableUpsert(
                         `data_.${path}`,
                         {
                             ...docWithErrors,
                             metadata_: {
                                 ...docWithErrors.metadata_,
-                                last_modified_at: new Date().toISOString(),
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
-                    ) as Base & Partial<PouchDB.Core.IdMeta>
-                })
+                    ),
+                )
             } catch (error) {
                 reportError(error)
             }
         },
-        [db, doc._id, onChange, reportError],
+        [doc, onChange, reportError],
     )
 
-    /**
-     * Atomically updates a metadata field via db.upsert.
-     * PouchDB handles conflict retries internally with fresh revisions.
-     */
     const upsertMetadata = useCallback(
         async (path: string, value: unknown, errors: string[]) => {
             if (!onChange) return
 
+            const docWithErrors = immutableUpsert(
+                `metadata_.errors.metadata_.${path}`,
+                {
+                    ...doc,
+                    metadata_: {
+                        ...(doc.metadata_ ?? {}),
+                        errors: doc.metadata_?.errors ?? {
+                            data_: {},
+                            metadata_: {},
+                        },
+                    },
+                } as unknown as Record<string, unknown>,
+                errors,
+            ) as unknown as typeof doc
+
+            const lastModifiedAt = new Date()
+
             try {
-                await db.upsert<Base>(doc._id, currentDoc => {
-                    if (!currentDoc) return null as PouchDB.CancelUpsert
-
-                    const docWithErrors = immutableUpsert(
-                        `metadata_.errors.metadata_.${path}`,
-                        {
-                            ...currentDoc,
-                            metadata_: {
-                                ...(currentDoc.metadata_ ?? {}),
-                                errors: currentDoc.metadata_?.errors ?? {
-                                    data_: {},
-                                    metadata_: {},
-                                },
-                            },
-                        } as unknown as Record<string, unknown>,
-                        errors,
-                    ) as unknown as typeof currentDoc
-
-                    return immutableUpsert(
+                await onChange(
+                    immutableUpsert(
                         `metadata_.${path}`,
                         {
                             ...docWithErrors,
                             metadata_: {
                                 ...docWithErrors.metadata_,
-                                last_modified_at: new Date().toISOString(),
+                                last_modified_at: lastModifiedAt.toISOString(),
                             },
                         },
                         value,
-                    ) as Base & Partial<PouchDB.Core.IdMeta>
-                })
+                    ),
+                )
             } catch (error) {
                 reportError(error)
             }
         },
-        [db, doc._id, onChange, reportError],
+        [doc, onChange, reportError],
     )
 
     const putAttachment = useCallback(
