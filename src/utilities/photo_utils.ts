@@ -160,15 +160,6 @@ export async function normalizePhotoBlob(
                 converted = result as Blob
             }
 
-            console.log(
-                'Photo conversion successful',
-                'Original size:',
-                blob.size,
-                'Converted size:',
-                converted.size,
-                'Converted type:',
-                converted.type,
-            )
             return {
                 blob: converted,
                 mimeType: 'image/jpeg',
