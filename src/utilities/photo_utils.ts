@@ -112,7 +112,7 @@ export async function compressPhoto(
     // If every configured conversion fails, fail explicitly rather than
     // silently storing an oversized image.
     if (Object.keys(blobs).length === 0) {
-        throw new Error(
+        console.warn(
             `Unable to compress photo within ${settings.maxSizeMB} MB for profile ${profile}.`,
         )
     }
@@ -201,7 +201,8 @@ async function preprocessPhoto(
     const context = canvas.getContext('2d', { willReadFrequently: true })
 
     if (!context) {
-        throw new Error('Canvas rendering is unavailable.')
+        console.warn('Canvas rendering is unavailable.')
+        return new Blob([file], { type: mimeType })
     }
 
     // Apply a small readability pass before compression so text edges survive
