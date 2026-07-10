@@ -19,13 +19,177 @@ import {
     type Base,
     type Installation,
     type Project,
+    type PhotoMetadata,
 } from '../types/database.types'
+import { compressPhoto, getPhotoMetadata } from './photo_utils'
+import { getPhotoProfileFromDoc } from './photo_resolution_utils'
 
 export const JSON_DOCUMENT_CONTENT_TYPE: string =
     process.env.REACT_APP_JSON_DOCUMENT_CONTENT_TYPE
 
 export const JSON_DOCUMENT_FILE_EXTENSION: string =
     process.env.REACT_APP_JSON_DOCUMENT_FILE_EXTENSION
+
+export function blobFromAttachmentData(
+    data: PouchDB.Core.AttachmentData | undefined,
+    contentType?: string,
+): Blob | undefined {
+    if (!data) {
+        return undefined
+    }
+
+    if (data instanceof Blob) {
+        return data
+    }
+
+    if (typeof data === 'string') {
+        const binaryString = atob(data)
+        const bytes = new Uint8Array(binaryString.length)
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i)
+        }
+        return new Blob([bytes], {
+            type: contentType || 'application/octet-stream',
+        })
+    }
+
+    // Handle Buffer or any ArrayBufferLike
+    if (
+        data &&
+        typeof data === 'object' &&
+        'buffer' in data &&
+        data.buffer instanceof ArrayBuffer
+    ) {
+        return new Blob([new Uint8Array(data.buffer)], {
+            type: contentType || 'application/octet-stream',
+        })
+    }
+
+    return undefined
+}
+
+export async function fixAttachmentsWithMissingContentType<T extends Base>(
+    doc: PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta,
+): Promise<PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta> {
+    if (!doc._attachments) {
+        return doc
+    }
+
+    const updatedAttachments: PouchDB.Core.Attachments = {}
+    const updatedMetadata = { ...doc.metadata_.attachments }
+    let attachmentsChanged = false
+    let metadataChanged = false
+
+    for (const [attachmentId, attachment] of Object.entries(doc._attachments)) {
+        if (!attachment.content_type) {
+            const fullAttachment = attachment as PouchDB.Core.FullAttachment
+            // Assume missing content_type is HEIC - create blob with HEIC type
+            const blob = blobFromAttachmentData(
+                fullAttachment.data,
+                'image/heic',
+            )
+
+            if (blob) {
+                try {
+                    // Try to extract metadata from original HEIC blob first
+                    let exifData = await getPhotoMetadata(blob)
+
+                    // Compress/convert HEIC to JPEG using the configured profile
+                    const profile = getPhotoProfileFromDoc(
+                        doc as PouchDB.Core.ExistingDocument<Base> &
+                            PouchDB.Core.AllDocsMeta,
+                    )
+                    const compressed = await compressPhoto(blob, profile)
+                    const compressedBlob =
+                        compressed.blobs[compressed.mainFormat] || blob
+                    const mimeType =
+                        compressed.mainFormat === 'jpeg'
+                            ? 'image/jpeg'
+                            : `image/${compressed.mainFormat}`
+
+                    // Convert compressed blob to base64 for storage
+                    const arrayBuffer = await compressedBlob.arrayBuffer()
+                    const uint8Array = new Uint8Array(arrayBuffer)
+                    let base64Data = ''
+                    for (let i = 0; i < uint8Array.length; i++) {
+                        base64Data += String.fromCharCode(uint8Array[i])
+                    }
+                    base64Data = btoa(base64Data)
+
+                    updatedAttachments[attachmentId] = {
+                        ...attachment,
+                        content_type: mimeType,
+                        data: base64Data,
+                    }
+                    attachmentsChanged = true
+
+                    // If no EXIF found in original, try converted blob
+                    if (!exifData || exifData.geolocationSource !== 'EXIF') {
+                        const convertedExif =
+                            await getPhotoMetadata(compressedBlob)
+                        if (convertedExif.geolocationSource === 'EXIF') {
+                            exifData = convertedExif
+                        }
+                    }
+
+                    // Update metadata with geolocation and timestamp if found
+                    if (
+                        exifData.geolocationSource === 'EXIF' &&
+                        exifData.geolocation.latitude &&
+                        exifData.geolocation.longitude
+                    ) {
+                        const currentMetadata = updatedMetadata[attachmentId]
+                        updatedMetadata[attachmentId] = {
+                            ...(currentMetadata as PhotoMetadata | undefined),
+                            geolocation: exifData.geolocation,
+                            geolocationSource: 'EXIF',
+                            timestamp:
+                                exifData.timestamp ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestamp,
+                            timestampSource:
+                                exifData.timestampSource ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestampSource,
+                        } as PhotoMetadata
+                        metadataChanged = true
+                    }
+                } catch (error) {
+                    console.warn(
+                        `Failed to fix attachment ${attachmentId}:`,
+                        error,
+                    )
+                    updatedAttachments[attachmentId] = attachment
+                }
+            } else {
+                updatedAttachments[attachmentId] = attachment
+            }
+        } else {
+            updatedAttachments[attachmentId] = attachment
+        }
+    }
+
+    if (!attachmentsChanged && !metadataChanged) {
+        return doc
+    }
+
+    const result: PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta = {
+        ...doc,
+    }
+
+    if (attachmentsChanged) {
+        result._attachments = updatedAttachments
+    }
+
+    if (metadataChanged) {
+        result.metadata_ = {
+            ...doc.metadata_,
+            attachments: updatedMetadata,
+        }
+    }
+
+    return result
+}
 
 export type JSONDocument = {
     all_docs: JSONDocumentObject | Array<JSONDocumentObject>
@@ -287,6 +451,15 @@ export async function importJSONDocument(
                 PouchDB.Core.AllDocsMeta,
         )
     })
+
+    docs = await Promise.all(
+        docs.map(doc =>
+            fixAttachmentsWithMissingContentType<Base>(
+                doc as PouchDB.Core.PutDocument<Base> &
+                    PouchDB.Core.AllDocsMeta,
+            ),
+        ),
+    )
 
     const responses = await db.bulkDocs<Base>(docs)
 
