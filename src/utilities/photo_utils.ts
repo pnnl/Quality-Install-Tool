@@ -32,6 +32,16 @@ const SHARPEN_KERNEL = [0, -1, 0, -1, 5, -1, 0, -1, 0]
 
 const picaResizer = pica()
 
+// Thrown when the browser cannot decode WebP (e.g. older Safari). This is the
+// only compression failure surfaced to the UI; all other format failures are
+// logged and result in an empty result.
+export class WebPUnsupportedError extends Error {
+    constructor(message = 'WebP is not supported in this browser version.') {
+        super(message)
+        this.name = 'WebPUnsupportedError'
+    }
+}
+
 export const PHOTO_MIME_TYPES: string[] = [
     // 'image/avif',
     'image/heic',
@@ -100,19 +110,30 @@ export async function compressPhoto(
     )
 
     const blobs: { [format: string]: Blob } = {}
+    let webpUnsupportedError: WebPUnsupportedError | undefined
     for (const format of formats) {
         const outMime = format === 'jpeg' ? 'image/jpeg' : `image/${format}`
         try {
             const processed = await preprocessPhoto(file, outMime, settings)
             blobs[format] = processed
         } catch (err) {
+            // Only the WebP-unsupported case is surfaced to the UI; any other
+            // failure is logged and treated as a skipped format.
+            if (err instanceof WebPUnsupportedError) {
+                webpUnsupportedError = err
+            }
             console.error('Photo compression failed for format:', format, err)
         }
     }
-    // If every configured conversion fails, fail explicitly rather than
-    // silently storing an oversized image.
+    // If every configured conversion fails, warn rather than silently storing
+    // an oversized image. The WebP-unsupported error is re-thrown so the UI can
+    // display it (e.g. in Safari); all other failures stay in the console.
     if (Object.keys(blobs).length === 0) {
-        throw new Error(
+        if (webpUnsupportedError) {
+            throw webpUnsupportedError
+        }
+
+        console.warn(
             `Unable to compress photo within ${settings.maxSizeMB} MB for profile ${profile}.`,
         )
     }
@@ -201,7 +222,8 @@ async function preprocessPhoto(
     const context = canvas.getContext('2d', { willReadFrequently: true })
 
     if (!context) {
-        throw new Error('Canvas rendering is unavailable.')
+        console.warn('Canvas rendering is unavailable.')
+        return new Blob([file], { type: mimeType })
     }
 
     // Apply a small readability pass before compression so text edges survive
@@ -466,7 +488,7 @@ function isWebPSupported(): boolean {
 
 async function loadImage(file: Blob): Promise<HTMLImageElement> {
     if (file.type === 'image/webp' && !isWebPSupported()) {
-        throw new Error('WebP is not supported in this browser version.')
+        throw new WebPUnsupportedError()
     }
 
     const imageUrl = URL.createObjectURL(file)
@@ -478,11 +500,7 @@ async function loadImage(file: Blob): Promise<HTMLImageElement> {
             }
             image.onerror = () => {
                 if (file.type === 'image/webp') {
-                    reject(
-                        new Error(
-                            'WebP is not supported in this browser version.',
-                        ),
-                    )
+                    reject(new WebPUnsupportedError())
                     return
                 }
 
