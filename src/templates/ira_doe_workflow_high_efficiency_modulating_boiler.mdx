@@ -16,8 +16,16 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         Attach a PDF of the Manual J load calculation
     </FileInput>
 
-    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
-      Take a photo of the nameplate.
+    <PhotoInput id="existing_heating_appliance_photo" label="Existing heating appliance – Photo">
+      Take a picture of the existing heating appliance.
+    </PhotoInput>
+
+    <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo">
+      Take a picture of the existing heating appliance’s nameplate (please make sure it is legible). If the equipment doesn’t have a nameplate write “no nameplate” in the Notes.
+    </PhotoInput>
+
+    <PhotoInput id="nameplate_photo" label="New Boiler Nameplate – Photo">
+      Take a photo of the nameplate for the new system (please make sure it is legible).
     </PhotoInput>
 
     <PhotoInput id="outdoor_temperature_sensor_photo" label="Outdoor Temperature Sensor – Photo">
@@ -108,7 +116,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     The photos in this report are intended to document the critical details of upgrading to a high efficiency modulating boiler installation.
 
     ### General
-    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+    <Photo id="existing_heating_appliance_photo" label="Existing heating appliance – Photo" required>
+      Photo of the existing heating appliance
+    </Photo>
+
+    <Photo id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo" required>
+      Photo of the existing heating appliance’s nameplate
+    </Photo>
+
+    <Photo id="nameplate_photo" label="New Boiler Nameplate – Photo" required>
       Photo of the nameplate of the new system
     </Photo>
 

@@ -2,6 +2,36 @@ import InstallationPermitInput from './reusable/installation_permit_input.mdx'
 import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
+  <Tab eventKey="pre-installation" title="Pre-Installation">
+    ## Existing Heating Equipment
+
+    This wood or pellet stove will primarily...
+
+    <Select label="This wood or pellet stove will primarily" options={[
+      "Replace electric resistance heat",
+      "Replace natural gas",
+      "Replace fuel oil heat",
+      "Replace propane heat",
+      "Replace wood heat",
+      "Displace/Reduce electric resistance heat",
+      "Displace/Reduce natural gas heat",
+      "Displace/Reduce fuel oil heat",
+      "Displace/Reduce propane heat",
+      "Displace/Reduce wood heat",
+      "Add comfort to a currently under-conditioned area",
+      "Be a source of backup heat in the event of a prolonged power outage"
+      ]} path="stove_purpose" />
+
+    <PhotoInput id="existing_heating_appliance_photo" label="Existing heating appliance – Photo">
+      Please take a picture of the existing heating appliance that the new wood or pellet stove will be replacing or displacing or providing backup heat.
+    </PhotoInput>
+
+    <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance’s nameplate – Photo">
+      Please take a picture of the existing heating appliance’s nameplate, make sure it is legible.
+    </PhotoInput>
+
+  </Tab>
+
   <Tab eventKey="installation" title="Installation">
     <DateInput label="Installation Date" path="install_date" />
 
@@ -59,6 +89,17 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <ProjectInfoReport {...props} />
 
+    ## Existing Heating Equipment
+    <LabelValue label="This wood or pellet stove will primarily" path="stove_purpose" />
+
+    <Photo label="Existing heating appliance – Photo" id="existing_heating_appliance_photo" required>
+      Photo of the existing heating appliance that the new wood or pellet stove will be replacing or displacing or providing backup heat.
+    </Photo>
+    <Photo label="Existing heating appliance’s nameplate – Photo" id="existing_heating_appliance_name_plate_photo" required>
+      Photo of the existing heating appliance’s nameplate.
+    </Photo>
+
+    ## Installation
     <LabelValue label="Stove Type" path="stove_type" />
 
     <Photo label="Interior stove photo – Name plate" id="interior_stove_name_plate" required>

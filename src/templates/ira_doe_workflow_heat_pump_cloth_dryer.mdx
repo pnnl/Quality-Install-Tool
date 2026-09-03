@@ -5,6 +5,24 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="pre_installation" title="Pre-Installation">
   ## Existing Condition
   <Radio label="What is the existing dryer fuel type?" path="existing_dryer_fuel_type" options={["Gas", "Electric" , "None"]} />
+
+<PhotoInput
+    id="existing_dryer_nameplate_photo"
+    label="Existing Appliance Name Plate – Photo"
+>
+    Please make sure it is legible.
+</PhotoInput>
+<PhotoInput
+    id="existing_dryer_wide_angle_photo"
+    label="Existing Appliance Wide-Angle Photo"
+>
+    Take a wide-angle photo of the appliance in its installation location
+    showing the surrounding area.
+</PhotoInput>
+
+  <ShowOrHide path="existing_dryer_fuel_type" value="Gas">
+    <div className="disclaimer-text-warning">if electrification is taking place (not eligible for HEAR)</div>
+  </ShowOrHide>
   </Tab>
   <Tab eventKey="installation" title="Installation">
 
@@ -28,9 +46,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <PhotoInput id="dryer_circuit_photo" label="Dryer Circuit – Photo">
       Please take a picture of the circuit breaker that powers the heat pump clothes dryer.
     </PhotoInput>
+    <PhotoInput id="new_dryer_wide_angle_photo" label="New Appliance Wide-Angle Photo">
+        Take a wide-angle photo of the appliance in its installation location showing the surrounding area.
+    </PhotoInput>
     <ShowOrHide visible={props.data?.existing_dryer_fuel_type === "Gas"}>
       <PhotoInput id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo">
-        Please take a picture of the gas pipe showing it is off and capped.
+        Take a photo of the gas line after it has been capped using the correct cap for the fitting and sealed with pipe tape/dope.
+      </PhotoInput>
+      <PhotoInput id="gas_leak_detector_photo" label="Leak Detector Testing the Capped Gas Line – Photo">
+        Take a photo of the cap leak tested with an electronic combustible gas leak detector.
       </PhotoInput>
     </ShowOrHide>
 
@@ -51,6 +75,13 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <p> What is the existing dryer fuel type?   <strong> <LabelValue path="existing_dryer_fuel_type" /> </strong> </p>
 
+    <Photo id="existing_dryer_nameplate_photo" label="Existing Appliance Name Plate – Photo" required>
+        Photo of the existing appliance name plate
+    </Photo>
+    <Photo id="existing_dryer_wide_angle_photo" label="Existing Appliance Wide-Angle Photo" required>
+        Wide-angle photo of the existing appliance in its installation location showing the surrounding area
+    </Photo>
+
     ## Installation
 
     <Photo id="nameplate_photo" label="Nameplate of the Heat Pump Dryer  – Photo" required>
@@ -65,9 +96,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <Photo id="dryer_circuit_photo" label="Dryer Circuit – Photo" required>
       Photo of the circuit breaker that powers the heat pump clothes dryer
     </Photo>
+    <Photo id="new_dryer_wide_angle_photo" label="New Appliance Wide-Angle Photo" required>
+        Wide-angle photo of the new appliance in its installation location showing the surrounding area
+    </Photo>
     <ShowOrHide visible={props.data?.existing_dryer_fuel_type === "Gas"}>
       <Photo id="gas_pipe_capped_photo" label="Gas Pipe Capped – Photo" required>
-        Photo of the gas pipe showing it is off and capped
+        Photo of the gas line after it has been capped using the correct cap for the fitting and sealed with pipe tape/dope
+      </Photo>
+      <Photo id="gas_leak_detector_photo" label="Leak Detector Testing the Capped Gas Line – Photo" required>
+        Photo of the cap leak tested with an electronic combustible gas leak detector
       </Photo>
     </ShowOrHide>
 

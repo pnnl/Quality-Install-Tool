@@ -10,7 +10,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
         ## Existing Heating and Cooling Equipment
 
-        <Select label="This heat pump will..." options={[
+        This ductless heat pump will...
+
+        <Select label="Heating" options={[
             "Replace electric resistance heat",
             "Replace natural gas heat",
             "Replace fuel oil heat",
@@ -23,6 +25,25 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             "Displace/Reduce wood heat",
             "Add comfort to a currently under-conditioned area"
             ]} path="heat_pump_purpose" />
+
+        <Select label="Cooling" options={[
+            "Add cooling to an area that previously didn't have cooling",
+            "Replace existing cooling equipment",
+            "Reduce the cooling load of other cooling system(s) in the home"
+            ]} path="heat_pump_cooling_purpose" />
+
+        <PhotoInput id="existing_heating_appliance_photo" label="Existing heating appliance – Photo">
+            Take a picture of the existing heating appliance.
+        </PhotoInput>
+        <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo">
+            Take a picture of the existing heating appliance’s nameplate (please make sure it is legible). If the equipment doesn’t have a nameplate write “no nameplate” in the Notes.
+        </PhotoInput>
+        <PhotoInput id="existing_cooling_appliance_photo" label="Existing cooling appliance – Photo">
+            Take a picture of the existing cooling appliance. If the existing appliance is a split system take a picture of both the indoor unit and the outdoor unit.
+        </PhotoInput>
+        <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing cooling appliance nameplate – Photo">
+            Take a picture of the existing cooling appliance’s nameplate (please make sure it is legible). If the equipment doesn’t have a nameplate write “no nameplate” in the Notes. If the existing appliance is a split system take a picture of both the indoor unit and the outdoor unit nameplates.
+        </PhotoInput>
 
 
         ## Proposed Outdoor Unit
@@ -299,7 +320,21 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 
             ## Pre-Installation
-            <LabelValue label="This heat pump will" value={props.data?.heat_pump_purpose}/>
+            <LabelValue label="This ductless heat pump will (Heating)" value={props.data?.heat_pump_purpose}/>
+            <LabelValue label="This ductless heat pump will (Cooling)" value={props.data?.heat_pump_cooling_purpose}/>
+
+            <Photo id="existing_heating_appliance_photo" label="Existing heating appliance – Photo" required>
+                Photo of the existing heating appliance
+            </Photo>
+            <Photo id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo" required>
+                Photo of the existing heating appliance’s nameplate
+            </Photo>
+            <Photo id="existing_cooling_appliance_photo" label="Existing cooling appliance – Photo" required>
+                Photo of the existing cooling appliance
+            </Photo>
+            <Photo id="existing_cooling_appliance_name_plate_photo" label="Existing cooling appliance nameplate – Photo" required>
+                Photo of the existing cooling appliance’s nameplate
+            </Photo>
 
             <Photo id="proposed_odu_location_photo" label="Proposed ODU Location – Photo" required>
                 Photo of the proposed heat pump outdoor unit (ODU) installation location

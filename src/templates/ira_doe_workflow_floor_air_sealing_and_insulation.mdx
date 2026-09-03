@@ -78,6 +78,16 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
+    ## Proposed Scope of Retrofit Work
+    Use this section to document the existing condition of the vented crawlspace/unconditioned basement.
+
+    <PhotoInput id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each spot where air sealing is needed.
+    </PhotoInput>
+    <PhotoInput id="insulation_needed_photo" label="Area where insulation is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each proposed area that will get insulation.
+    </PhotoInput>
+
   </Tab>
 
   <Tab eventKey="installation" title="Installation">
@@ -91,8 +101,12 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <DateInput label="Installation Date" path="install_date" />
 
-    <PhotoInput id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photo">
-    Please provide a representative photo of plumbing, electrical, and/or duct penetrations through the subfloor air sealed.
+    <PhotoInput id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photos">
+    Please provide a photo of each area where air sealing was completed e.g. plumbing, electrical, and/or duct penetrations through the subfloor air sealed.
+    </PhotoInput>
+
+    <PhotoInput id="insulation_product_photo" label="Insulation product – Photo">
+    Take a photo of the insulation product that is being installed showing its R-value, or R-value table.
     </PhotoInput>
 
     <PhotoInput id="floor_joist_air_sealed_and_insulated_photo" label="Floor Joists Air Sealed and Insulated – Photo">
@@ -199,10 +213,22 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
     <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
 
+    ## Proposed Scope of Retrofit Work
+    <Photo id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos" required>
+      Photos of each spot where air sealing is needed
+    </Photo>
+    <Photo id="insulation_needed_photo" label="Area where insulation is needed – Photos" required>
+      Photos of each proposed area that will get insulation
+    </Photo>
+
 
     ## Installation
 
-    <Photo id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photo" required />
+    <Photo id="plumbing_elec_duct_subfloor_sealed_photo" label="Penetrations through the Subfloor Sealed – Photos" required />
+
+    <Photo id="insulation_product_photo" label="Insulation product – Photo" required>
+      Photo of the insulation product showing its R-value, or R-value table
+    </Photo>
 
     <Photo id="floor_joist_air_sealed_and_insulated_photo" label="Floor Joists Air Sealed and Insulated – Photo" required>
       Photo of the Floor Joists Air Sealed and Insulated using one of three methods

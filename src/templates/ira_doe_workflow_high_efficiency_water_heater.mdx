@@ -11,15 +11,23 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <InstallationPermitInput />
 
     ## General
-    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
-      Take a photo of the nameplate for the new system.
+    <PhotoInput id="existing_water_heater_photo" label="Existing water heater – Photo">
+      Take a picture of the existing water heater.
+    </PhotoInput>
+
+    <PhotoInput id="existing_water_heater_name_plate_photo" label="Existing water heater nameplate – Photo">
+      Take a picture of the existing water heater’s nameplate (please make sure it is legible). If the equipment doesn’t have a nameplate write “no nameplate” in the Notes.
+    </PhotoInput>
+
+    <PhotoInput id="nameplate_photo" label="New Water Heater Nameplate – Photo">
+      Take a photo of the nameplate for the new system (please make sure it is legible).
     </PhotoInput>
 
     <PhotoInput id="water_supply_pressure_measurement_photo" label="Water Supply Pressure Measurement – Photo">
       Take a photo of the water supply pressure measurement to show that it is above 40 PSI but below 80 PSI.
     </PhotoInput>
 
-    <PhotoInput id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo">
+    <PhotoInput id="installation_location_at_completion_photo" label="Completed Installation – Wide-Angle Photo">
       Take a wide-angle photo of the installation location at completion.
       -	To show that there are no adjacent hazards, if installed in a garage this photo would show that the installation is at least 18 in. above the floor and protected from vehicle damage.
       -	To show the water pipes have been insulated, especially the hot water pipe and recirculation lines if present.
@@ -79,7 +87,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     The photos in this report are intended to document the critical details of upgrading to a high efficiency tankless water heater installation.
 
     ### General
-    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+    <Photo id="existing_water_heater_photo" label="Existing water heater – Photo" required>
+      Photo of the existing water heater
+    </Photo>
+
+    <Photo id="existing_water_heater_name_plate_photo" label="Existing water heater nameplate – Photo" required>
+      Photo of the existing water heater’s nameplate
+    </Photo>
+
+    <Photo id="nameplate_photo" label="New Water Heater Nameplate – Photo" required>
       Photo of the nameplate of the new system
     </Photo>
 
@@ -87,7 +103,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       Photo of the water supply pressure measurement. The pressure should be between 40 and 80 psi.
     </Photo>
 
-    <Photo id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo" required>
+    <Photo id="installation_location_at_completion_photo" label="Completed Installation – Wide-Angle Photo" required>
       Photo of the installation location at completion. Look for insulated hot water pipes, a pressure relief valve, and clearly labeled inlet air filter.
     </Photo>
 

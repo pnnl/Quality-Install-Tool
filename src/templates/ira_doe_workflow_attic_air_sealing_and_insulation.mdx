@@ -44,6 +44,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Select label="What is the existing insulation in the ceiling?" options={["None", "Batt insulation", "Blown-in insulation","Rigid board insulation","Closed cell spray foam insulation","Other"]} path="existing_insulation_type" />
 
+    <ShowOrHide path="existing_insulation_type" value={['None']} matchCondition="Excludes">
+      <Radio label="Will the existing insulation be reused?" options={['No', 'Yes, some', 'Yes, all']} path="existing_insulation_reused" />
+    </ShowOrHide>
+
     <NumberInput label="What is the existing insulation R-value in the ceiling?" min={0} path="airsealing_r_value"  />
 
     ## General Safety
@@ -73,6 +77,16 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <Radio label="Has mechanical ventilation calculation been performed pre-retrofit?" options={['Yes','No']} path="pre_retrofit_ashrae_62_2_calculation" />
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
+
+    ## Proposed Scope of Retrofit Work
+    Use this section to document the existing condition of the attic.
+
+    <PhotoInput id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each spot where air sealing is needed.
+    </PhotoInput>
+    <PhotoInput id="insulation_needed_photo" label="Area where insulation is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each proposed area that will get insulation. Document each knee walls, attic access door/scuttle panel, and all sections of attic.
+    </PhotoInput>
 
   </Tab>
 
@@ -292,6 +306,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 </ShowOrHide>
 
     <p> What is the existing insulation in the ceiling?  <strong> { props.data?.existing_insulation_type} </strong></p>
+    <ShowOrHide path="existing_insulation_type" value={['None']} matchCondition="Excludes">
+      <p> Will the existing insulation be reused?  <strong> { props.data?.existing_insulation_reused} </strong></p>
+    </ShowOrHide>
     <p> What is the existing insulation R-value in the ceiling?  <strong>{ props?.data.airsealing_r_value} </strong></p>
 
     ## General Safety
@@ -299,6 +316,14 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> Are there signs of mold or moisture in the attic?  <strong> { props.data?.signs_of_mold_or_moisture} </strong></p>
     <p> Has an mechanical ventilation calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
     <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
+
+    ## Proposed Scope of Retrofit Work
+    <Photo id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos" required>
+      Photos of each spot where air sealing is needed
+    </Photo>
+    <Photo id="insulation_needed_photo" label="Area where insulation is needed – Photos" required>
+      Photos of each proposed area that will get insulation
+    </Photo>
 
     ## Installation - Air Sealing Details
 
@@ -394,7 +419,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
       Wide angle photo showing the installed insulation
     </Photo>
 
-    <Photo id="attic_door_hatch_photo" label="Attic Access - Photo" required>
+    <Photo id="attic_access_photo" label="Attic Access - Photo" required>
       Photo of insulation on attic access
     </Photo>
 

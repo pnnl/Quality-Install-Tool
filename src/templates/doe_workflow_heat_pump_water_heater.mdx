@@ -51,7 +51,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <NumberInput label={<>Space Air Volume (ft<sup>2</sup>)</>} min={0} path="space_air_volume" />
 
-    <PhotoInput id="hpwh_location_photo" label="HPWH Location – Photo">
+    <PhotoInput id="hpwh_location_photo" label="HPWH Location – Wide-Angle Photo">
       Provide a wide-angle photo of the space where the HPWH will be installed to best capture the space requirements
       from the &ldquo;HPWH Space Evaluation - Instructions&rdquo; above.
     </PhotoInput>
@@ -245,7 +245,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p>What is the type of your water heating system before upgrading to a heat pump water heater? <strong>{props.data?.existing_water_heater_type}</strong> </p>
     <p>What is the storage capacity of the existing system? <strong>{props.data?.water_heater_storage_capacity}</strong> </p>
 
-    <Photo id="hpwh_location_photo" label="HPWH Location – Photo" required>
+    <Photo id="hpwh_location_photo" label="HPWH Location – Wide-Angle Photo" required>
       This wide-angle photo helps document that the HPWH Space Evaluation conditions 1-8 have been met.
     </Photo>
 

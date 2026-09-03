@@ -137,6 +137,39 @@ The appliance/equipment that use this workflow are ones that only require a phot
                         />
                     </ShowOrHide>
                 </ShowOrHide>
+                <Radio
+                    label={
+                        <>
+                            Is the clothes dryer switching from gas to electricity?
+                        </>
+                    }
+                    options={['Yes', 'No']}
+                    path="clothes_dryer_gas_to_electric"
+                />
+                <div className="disclaimer-text-warning">
+                    if electrification is taking place (not eligible for HEAR)
+                </div>
+                <ShowOrHide path="clothes_dryer_gas_to_electric" value="Yes">
+                    <PhotoInput
+                        id="gas_pipe_capped_photo"
+                        label="Gas Pipe Capped - Photo"
+                        uploadable={false}
+                        required={true}
+                    >
+                        Take a photo of the gas line after it has been capped
+                        using the correct cap for the fitting and sealed with
+                        pipe tape/dope.
+                    </PhotoInput>
+                    <PhotoInput
+                        id="gas_leak_detector_photo"
+                        label="Leak Detector Testing the Capped Gas Line - Photo"
+                        uploadable={false}
+                        required={true}
+                    >
+                        Take a photo of the cap leak tested with an electronic
+                        combustible gas leak detector.
+                    </PhotoInput>
+                </ShowOrHide>
             </ShowOrHide>
             <PhotoInput
                 id="existing_nameplate_photo"
@@ -299,6 +332,26 @@ The appliance/equipment that use this workflow are ones that only require a phot
                                 path="old_appliance_location_clothes_dryer"
                             />
                         </ShowOrHide>
+                    </ShowOrHide>
+                    <LabelValue
+                        label="Is the clothes dryer switching from gas to electricity?"
+                        path="clothes_dryer_gas_to_electric"
+                    />
+                    <ShowOrHide path="clothes_dryer_gas_to_electric" value="Yes">
+                        <Photo
+                            id="gas_pipe_capped_photo"
+                            label="Gas Pipe Capped - Photo"
+                            required={true}
+                        >
+                            Gas pipe capped photo
+                        </Photo>
+                        <Photo
+                            id="gas_leak_detector_photo"
+                            label="Leak Detector Testing the Capped Gas Line - Photo"
+                            required={true}
+                        >
+                            Leak detector testing the capped gas line photo
+                        </Photo>
                     </ShowOrHide>
                 </ShowOrHide>
                  <Photo
