@@ -81,18 +81,26 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
+    ## Proposed Scope of Retrofit Work
+    Use this section to document the existing condition of the conditioned crawlspace or conditioned basement that needs additional insulation and air sealing along the exterior walls, or unconditioned crawlspace to be encapsulated.
+
+    <PhotoInput id="repair_needed_photo" label="Areas that need repair/correction/improvements before insulation and air sealing – Photos">
+      * Look for major cracks in concrete, signs of water damage, pest damage, missing or inadequate lateral/shear bracing, missing or inadequate hold downs, and improper utility penetrations through the foundation wall.
+      * Look for mold.
+      * Look for appliances that are venting into the crawlspace/basement and not to outside.
+    </PhotoInput>
+    <PhotoInput id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each spot where air sealing is needed.
+    </PhotoInput>
+    <PhotoInput id="insulation_needed_photo" label="Area where insulation is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each proposed area that will get insulation.
+    </PhotoInput>
+
   </Tab>
 
   <Tab eventKey="installation" title="Installation">
 
     <DateInput label="Installation Date" path="install_date" />
-
-    <PhotoInput id="exisitng_condition_photo" label="Existing Condition – Photo" >
-    *	Representative photo of a section of the foundation wall/cripple wall/basement wall.
-    *	Look for major cracks in concrete, signs of water damage, pest damage, missing or inadequate lateral/shear bracing, missing or inadequate hold downs, and improper utility penetrations through the foundation wall.
-    *	Look for mold.
-    *	Look for appliances that are venting into the crawlspace/basement and not to outside.
-    </PhotoInput>
 
     <PhotoInput id="moisture_test_photo" label="Moisture Test – Photo" >
     *	Photo showing the moisture sensor reading of the foundation wall.
@@ -101,20 +109,24 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     * If the material’s moisture content is above 18% efforts should be made to dry the material and prevent it from getting wet in the future prior to applying air sealing and insulation products.
     </PhotoInput>
 
-    <PhotoInput id="rim_joist_air_sealed_photo" label="Rim Joist Air Sealed – Photo" >
+    <PhotoInput id="rim_joist_air_sealed_photo" label="Rim Joist Air Sealed (if applicable) – Photos" >
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </PhotoInput>
 
-    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo" >
+    <PhotoInput id="crawlspace_vents_photo" label="Crawlspace Vents Sealed (if applicable) – Photos" >
       Crawlspace vents blocked and sealed with spray foam
     </PhotoInput>
 
-    <PhotoInput id="foundataion_wall_sealed_photo" label="Foundation Wall Air Sealed – Photo" >
+    <PhotoInput id="foundataion_wall_sealed_photo" label="Foundation Wall Air Sealed (if applicable) – Photos" >
       If it is a wood framed cripple wall show the spray foam or caulking applied to the perimeter of each stud cavity.
     </PhotoInput>
 
     <PhotoInput id="foundataion_floor_photo" label="Foundation Floor – Photo" >
       Photo showing either a good condition vapor barrier that has been sealed to the foundation wall or a slab that is in good condition.
+    </PhotoInput>
+
+    <PhotoInput id="insulation_product_photo" label="Insulation product – Photo" >
+      Take a photo of the insulation product that is being installed showing its R-value, or R-value table.
     </PhotoInput>
 
     <PhotoInput id="foundataion_wall_insulation_photo" label="Foundation Wall Insulation – Photo" >
@@ -241,30 +253,41 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
     <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
 
-    ## Installation
-
-    <Photo id="exisitng_condition_photo" label="Existing Condition – Photo" required>
-    Photo of a section of the foundation wall/cripple wall/basement wall
+    ## Proposed Scope of Retrofit Work
+    <Photo id="repair_needed_photo" label="Areas that need repair/correction/improvements before insulation and air sealing – Photos" required>
+      Photos of areas that need repair/correction/improvements before insulation and air sealing
     </Photo>
+    <Photo id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos" required>
+      Photos of each spot where air sealing is needed
+    </Photo>
+    <Photo id="insulation_needed_photo" label="Area where insulation is needed – Photos" required>
+      Photos of each proposed area that will get insulation
+    </Photo>
+
+    ## Installation
 
     <Photo id="moisture_test_photo" label="Moisture Test – Photo" required>
     Photo of the moisture sensor reading of the foundation wall
     </Photo>
 
-    <Photo id="rim_joist_air_sealed_photo" label="Rim Joist Air Sealed – Photo" required>
+    <Photo id="rim_joist_air_sealed_photo" label="Rim Joist Air Sealed (if applicable) – Photos">
       Photo showing spray foam or caulking applied to rim joist for air sealing
     </Photo>
 
-    <Photo id="crawlspace_vents_photo" label="Crawlspace Vents Sealed – Photo" required>
+    <Photo id="crawlspace_vents_photo" label="Crawlspace Vents Sealed (if applicable) – Photos">
       Photo of Crawlspace vents blocked and sealed with spray foam
     </Photo>
 
-    <Photo id="foundataion_wall_sealed_photo" label="Foundation Wall Air Sealed – Photo" required>
+    <Photo id="foundataion_wall_sealed_photo" label="Foundation Wall Air Sealed (if applicable) – Photos">
       Photo of the foundation wall air sealed
     </Photo>
 
     <Photo id="foundataion_floor_photo" label="Foundation Floor – Photo" required>
       Photo showing either a good condition vapor barrier that has been sealed to the foundation wall or a slab that is in good condition
+    </Photo>
+
+    <Photo id="insulation_product_photo" label="Insulation product – Photo" required>
+      Photo of the insulation product showing its R-value, or R-value table
     </Photo>
 
     <Photo id="foundataion_wall_insulation_photo" label="Foundation Wall Insulation – Photo" required>

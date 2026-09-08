@@ -14,6 +14,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <NumberInput label="CFM of mechanical ventilation needed" path="cfm_of_mechanical_ventilation_needed" />
 
+    <PhotoInput id="red_calc_ventilation_calculation_photo" label="RED Calc Ventilation Calculation Screenshot (optional)" uploadable>
+      Optional: upload a screenshot of the ventilation CFM calculations in RED Calc used to determine the required ventilation.
+    </PhotoInput>
+
     ## Existing Condition
     <Collapsible header="Existing Condition Details">
     The existing conditions of the home must be evaluated prior to installing mechanical ventilation. This includes evaluating:
@@ -50,8 +54,20 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <ShowOrHide visible={props.data?.whole_house_ventilation === "No"}>
         Please select a whole-house mechanical ventilation system and document the installation and commissioning using this workflow.
     </ShowOrHide>
-
     <p>If there is not whole-house mechanical ventilation or it is insufficient to meet the ventilation requirements, continue the workflow. </p>
+
+
+    <PhotoInput id="ventilation_improvements_needed_photo" label="Areas where ventilation improvements are needed - Photo">
+      Example: a bathroom that lacks a bath fan, or a kitchen that lacks a range hood.
+    </PhotoInput>
+    <PhotoInput id="ventilation_equipment_to_be_replaced_photo" label="Ventilation equipment that will be replaced - Photo">
+      If there are old/worn out ventilation equipment that will be replaced take a photo of it.
+    </PhotoInput>
+    <PhotoInput id="ventilation_equipment_to_be_replaced_nameplate_photo" label="Nameplate of ventilation equipment that will be replaced – Photo">
+      If there are old/worn out ventilation equipment that will be replaced take a photo of its nameplate. If it contains no nameplate write “no nameplate” in the Notes.
+    </PhotoInput>
+
+
 
     ## Equipment Selection and Installation Considerations
     <Select label="Equipment selection:" options={["Continuous exhaust", "Supply only", "Balanced supply and return", "Energy recovery ventilation", "Heat recovery ventilation"]} path="ventilation_equipemnt_selection" />
@@ -107,6 +123,12 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <p>CFM of mechanical ventilation needed: <strong>{props.data?.cfm_of_mechanical_ventilation_needed}</strong> </p>
 
+    {props.metadata?.attachments?.red_calc_ventilation_calculation_photo && (
+      <Photo id="red_calc_ventilation_calculation_photo" label="RED Calc Ventilation Calculation Screenshot (optional)">
+        Screenshot of the ventilation CFM calculations in RED Calc used to determine the required ventilation
+      </Photo>
+    )}
+
     ## Existing Condition
     <p>Is there an existing whole-house ventilation system? <strong>{props.data?.whole_house_ventilation}</strong></p>
 
@@ -122,6 +144,16 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         <p>What is the total exhaust based mechanical ventilation CFM? <strong>{props.data?.total_exhaust_cfm}</strong> </p>
       </ShowOrHide>
     </ShowOrHide>
+
+     <Photo id="ventilation_improvements_needed_photo" label="Areas where ventilation improvements are needed - Photo" required>
+      Photo of areas where ventilation improvements are needed
+    </Photo>
+    <Photo id="ventilation_equipment_to_be_replaced_photo" label="Ventilation equipment that will be replaced - Photo" required>
+      Photo of the ventilation equipment that will be replaced
+    </Photo>
+    <Photo id="ventilation_equipment_to_be_replaced_nameplate_photo" label="Nameplate of ventilation equipment that will be replaced – Photo" required>
+      Photo of the nameplate of the ventilation equipment that will be replaced
+    </Photo>
 
 
     <p>Equipment selection: <strong>{props.data?.ventilation_equipemnt_selection}</strong></p>

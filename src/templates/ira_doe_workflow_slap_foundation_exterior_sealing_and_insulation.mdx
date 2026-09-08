@@ -63,6 +63,17 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
+    ## Proposed Scope of Retrofit Work
+    Use this section to document the existing condition and proposed areas where air sealing and insulation will be added to the slab perimeter.
+
+    <PhotoInput id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each spot where air sealing is needed.
+    </PhotoInput>
+
+    <PhotoInput id="insulation_needed_photo" label="Area where insulation is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each proposed area that will get insulation.
+    </PhotoInput>
+
   </Tab>
 
   <Tab eventKey="installation" title="Installation">
@@ -89,6 +100,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
        * In regions with medium or high termite risk the protective details should meet best practices or local jurisdiction requirements for termite risk mitigation.
     </PhotoInput>
 
+    <PhotoInput id="insulation_product_photo" label="Insulation product installed – Photo" >
+      Take a photo of the insulation product installed showing its R-value.
+    </PhotoInput>
+
     <PhotoInput id="final_exterior_condition_photo" label="Final Exterior Condition – Photo" >
       Photo showing the backfill and gutter downspouts reinstalled
     </PhotoInput>
@@ -111,16 +126,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Select
     label="What R-value was added to the foundation perimeter?"
-    options={[
-        'Less than R-10',
-        'R-10',
-        'R-13',
-        'R-19',
-        'R-30',
-        'more than R-30',
-    ]}
+    options={['R-5', 'R-10', 'R-15', 'Other']}
     path="postinstall_foundation_r_value"
 />
+<ShowOrHide visible={props.data?.postinstall_foundation_r_value === 'Other'}>
+    <StringInput
+        label="Notes (Other R-Value)"
+        path="postinstall_foundation_r_value_other"
+    />
+</ShowOrHide>
 
 <Radio
     label="What is the post air sealing and insulation air leakage rate?"
@@ -205,6 +219,15 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
     <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
 
+    ## Proposed Scope of Retrofit Work
+    <Photo id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos" required>
+      Photos of each spot where air sealing is needed
+    </Photo>
+
+    <Photo id="insulation_needed_photo" label="Area where insulation is needed – Photos" required>
+      Photos of each proposed area that will get insulation
+    </Photo>
+
     ## Installation
 
      <Photo id="exisitng_condition_photo" label="Existing Condition – Photo" required>
@@ -219,6 +242,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
        Photo showing the insulation and protective details prior to backfilling
     </Photo>
 
+    <Photo id="insulation_product_photo" label="Insulation product installed – Photo" required>
+       Photo of the insulation product installed showing its R-value
+    </Photo>
+
     <Photo id="final_exterior_condition_photo" label="Final Exterior Condition – Photo" required>
       Photo showing the backfill and gutter downspouts reinstalled
     </Photo>
@@ -231,7 +258,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <p> What percent of the foundation perimeter was insulated? <strong>{props.data?.postinstall_foundation_perimeter_percent}</strong> </p>
 
-    <p> What R-value was added to the floor? <strong>{props.data?.postinstall_foundation_r_value}</strong> </p>
+    <p> What R-value was added to the foundation perimeter? <strong>{props.data?.postinstall_foundation_r_value === 'Other' ? props.data?.postinstall_foundation_r_value_other : props.data?.postinstall_foundation_r_value}</strong> </p>
 
     <p> What is the air sealing level you have achieved? <strong>{
     props.data?.postinstall_foundation_air_leakage_cfm50 === 'CFM at 50Pa' ?

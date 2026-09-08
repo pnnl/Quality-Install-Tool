@@ -95,6 +95,25 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
     <Radio label="Have the answers to these safety questions been disclosed to the homeowner?" options={['Yes','No']} path="safety_questions_to_homeowner" />
 
+    ## Proposed Scope of Retrofit Work
+    Use this section to document the existing condition of the exterior walls that need air sealing and insulation upgrades.
+
+    <PhotoInput id="areas_needing_repair_photo" label="Areas that need repair/correction/improvements before insulation and air sealing – Photos">
+      * Look for wet or dry rotted wood.
+      * Look for mold.
+      * Look for missing flashing around windows and doors, window and door trim, roof to wall transitions.
+      * Look at trim pieces with missing or bad flashing that’s causing water to enter behind the siding.
+      * Remember: air sealing and insulating a wall will dramatically accelerate the rate of rot and mold from missing flashing that is causing excessive wetting of the wall.
+    </PhotoInput>
+
+    <PhotoInput id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each spot where air sealing is needed.
+    </PhotoInput>
+
+    <PhotoInput id="insulation_needed_photo" label="Area where insulation is needed – Photos">
+      You can add many photos under this photo prompt. Take a photo of each proposed area that will get insulation.
+    </PhotoInput>
+
   </Tab>
 
   <Tab eventKey="installation" title="Installation">
@@ -177,6 +196,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <PhotoInput id="insulation_plugs_photo" label="Insulation plugs – Photo" >
      * The holes drilled for blowing the insulation in have been plugged and caulked.
      *	Provide one representative photo.
+    </PhotoInput>
+
+    <PhotoInput id="insulation_product_photo" label="Insulation product installed – Photo" >
+      Take a photo of the insulation product installed showing its R-value and/or R-value table.
     </PhotoInput>
 
   </Tab>
@@ -297,6 +320,19 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <p> Has an ASHRAE 62.2 calculation been performed pre-retrofit?  <strong>{ props.data?.pre_retrofit_ashrae_62_2_calculation} </strong></p>
     <p> Have the answers to these safety questions been disclosed to the homeowner? <strong> { props.data?.safety_questions_to_homeowner}</strong></p>
 
+    ## Proposed Scope of Retrofit Work
+    <Photo id="areas_needing_repair_photo" label="Areas that need repair/correction/improvements before insulation and air sealing – Photos" required>
+      Photos of areas that need repair/correction/improvements before insulation and air sealing
+    </Photo>
+
+    <Photo id="air_sealing_needed_photo" label="Areas where air sealing is needed – Photos" required>
+      Photos of each spot where air sealing is needed
+    </Photo>
+
+    <Photo id="insulation_needed_photo" label="Area where insulation is needed – Photos" required>
+      Photos of each proposed area that will get insulation
+    </Photo>
+
     ## Installation - Air Sealing Details
 
     <Photo id="electrical_outlets_and_switches_photo" label="Electrical outlets and switches air sealed – Photo" required />
@@ -325,6 +361,14 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     required
 />
 <Photo id="insulation_plugs_photo" label="Insulation plugs – Photo" required />
+<Photo
+    id="insulation_product_photo"
+    label="Insulation product installed – Photo"
+    required
+>
+    Photo of the insulation product installed showing its R-value and/or R-value
+    table
+</Photo>
 
     ## Final Conditions
 

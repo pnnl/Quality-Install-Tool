@@ -34,14 +34,14 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
         <Checkbox options={['No cooling appliance']} path="no_cooling_appliance"/>
 
-        <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
+        <ShowOrHide visible={!props.data?.no_cooling_appliance?.includes('No cooling appliance')}>
             <PhotoInput id="existing_cooling_appliance_photo" label="Existing Cooling Appliance – Photo">
                 Take a wide-angle photo of the existing cooling appliance showing the condition.
                 Examples of cooling appliances: central air conditioner,
                 window air conditioner, wall air conditioner, evaporative cooler, old heat pump.
             </PhotoInput>
-            <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo">
-                Take a photo of the existing cooling appliance’s nameplate
+            <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance(s) Name Plate – Photo">
+                Take a photo of the existing cooling appliance’s nameplate. If the cooling appliance is a split system include both the indoor and outdoor nameplate.
             </PhotoInput>
         </ShowOrHide>
 
@@ -203,6 +203,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         </PhotoInput>
         <PhotoInput id="idu_nameplate_photo" label="IDU nameplate – Photo">
             Take a photo of the Indoor Unit (IDU) nameplate.
+        </PhotoInput>
+        <PhotoInput id="furnace_nameplate_photo" label="Furnace nameplate (if dual fuel) – Photo">
+            Take a photo of the furnace nameplate (must be legible) if this is a dual fuel setup.
         </PhotoInput>
         ## Electrical
         <PhotoInput id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
@@ -382,8 +385,8 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             >
             Photo of existing heating appliance’s nameplate
             </Photo>
-            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.length === 0 ? "Yes" : "No"}/>
-            <ShowOrHide visible={props.data?.no_cooling_appliance?.length === 0}>
+            <LabelValue label="Cooling appliance exists" value={props.data?.no_cooling_appliance?.includes('No cooling appliance') ? "No" : "Yes"}/>
+            <ShowOrHide visible={!props.data?.no_cooling_appliance?.includes('No cooling appliance')}>
                 <Photo
                     id="existing_cooling_appliance_photo"
                     label="Existing Cooling Appliance – Photo"
@@ -392,9 +395,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
                     Photo of existing cooling appliance’s nameplate
                 </Photo>
                 <Photo id="existing_cooling_appliance_name_plate_photo"
-                    label="Existing Cooling Appliance Name Plate – Photo"
+                    label="Existing Cooling Appliance(s) Name Plate – Photo"
                     required>
-                    Photo of the existing cooling appliance’s nameplate
+                    Photo of the existing cooling appliance’s nameplate. If the cooling appliance is a split system this includes both the indoor and outdoor nameplate.
                 </Photo>
 
             </ShowOrHide>
@@ -531,6 +534,9 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             ## Equipment
             <Photo id="odu_nameplate_photo" label="Outdoor Unit Nameplate – Photo" required />
             <Photo id="idu_nameplate_photo" label="Indoor Unit Nameplate – Photo" required />
+            <Photo id="furnace_nameplate_photo" label="Furnace nameplate (if dual fuel) – Photo">
+                Photo of the furnace nameplate (if this is a dual fuel setup)
+            </Photo>
             <Photo id="odu_circuit_breaker_photo" label="Outdoor Unit Circuit Breaker – Photo" required />
             <Photo id="idu_circuit_breaker_photo" label="Indoor Unit Circuit Breaker – Photo" required />
             <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>

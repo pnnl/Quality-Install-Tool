@@ -388,6 +388,13 @@ h1 + h3 {
     font-weight: bold;
 }
 
+.disclaimer-text-warning {
+    padding-right: 0.75rem;
+    padding-top: 0.75rem;
+    font-size:1rem;
+    font-weight: bold;
+}
+
 .combustion_tests {
     padding: 5px 10px 5px 10px;
     background-color: white;

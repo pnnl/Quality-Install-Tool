@@ -15,12 +15,22 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         Attach a PDF of the Manual J load calculation.
     </FileInput>
 
-    <PhotoInput id="nameplate_photo" label="Nameplate – Photo">
-      Take a photo of the nameplate for the new system.
+    <PhotoInput id="existing_heating_appliance_photo" label="Existing heating appliance – Photo">
+      Take a picture of the existing heating appliance.
     </PhotoInput>
 
-    <PhotoInput id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo">
-      Take a wide-angle photo of the installation location at completion to show that there are no adjacent hazards, if installed in a garage this photo would show that the installation is at least 18 in. above the floor and protected from vehicle damage.
+    <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo">
+      Take a picture of the existing heating appliance’s nameplate (please make sure it is legible). If the equipment doesn’t have a nameplate write “no nameplate” in the Notes.
+    </PhotoInput>
+
+    <PhotoInput id="nameplate_photo" label="New Furnace Nameplate – Photo">
+      Take a photo of the nameplate for the new system (please make sure it is legible).
+    </PhotoInput>
+
+    <PhotoInput id="installation_location_at_completion_photo" label="Completed Installation – Wide-Angle Photo">
+      Take a wide-angle photo of the installation location at completion to show that there are no adjacent hazards.
+      - If installed in a garage this photo would show that the section of the furnace with the burners and hot surface igniter is installed at least 18 in. above the garage floor.
+      - If the furnace is in the path of vehicle parking, bollards must be at least 4-inch diameter steel pipes filled with concrete, anchored to the slab, and sit a minimum of 12 inches away from the furnace.
     </PhotoInput>
 
     ## Venting
@@ -93,12 +103,20 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     The photos in this report are intended to document the critical details of upgrading to a high efficiency gas furnace installation.
 
     ### General
-    <Photo id="nameplate_photo" label="Nameplate – Photo" required>
+    <Photo id="existing_heating_appliance_photo" label="Existing heating appliance – Photo" required>
+      Photo of the existing heating appliance
+    </Photo>
+
+    <Photo id="existing_heating_appliance_name_plate_photo" label="Existing heating appliance nameplate – Photo" required>
+      Photo of the existing heating appliance’s nameplate
+    </Photo>
+
+    <Photo id="nameplate_photo" label="New Furnace Nameplate – Photo" required>
       Photo of the nameplate of the new system
     </Photo>
 
-    <Photo id="installation_location_at_completion_photo" label="Installation Location at Completion – Photo" required>
-      Photo of the installation location at completion
+    <Photo id="installation_location_at_completion_photo" label="Completed Installation – Wide-Angle Photo" required>
+      Wide-angle photo of the completed installation location showing there are no adjacent hazards
     </Photo>
 
     ### Venting
