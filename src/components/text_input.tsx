@@ -34,12 +34,21 @@ const TextInput: React.FC<TextInputProps> = ({
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+    // Ref mirror of isFocused so the sync effect below reads the current
+    // value without needing isFocused in its dependency array.
+    const isFocusedRef = useRef(isFocused)
+    isFocusedRef.current = isFocused
+
     // Ref avoids stale closure: always calls the latest onChange
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
 
-    // Sync local state from parent (e.g. when doc updates from DB)
+    // Sync local state from parent (e.g. when doc updates from DB), but not
+    // while the user is actively editing. The incoming prop is the delayed
+    // round-trip echo of our own debounced write; adopting it mid-typing
+    // would clobber characters the user just entered.
     useEffect(() => {
+        if (isFocusedRef.current) return
         setLocalValue(value)
     }, [value])
 
@@ -97,7 +106,15 @@ const TextInput: React.FC<TextInputProps> = ({
                 value={localValue}
                 isInvalid={errorMessages.length > 0}
                 onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onBlur={event => {
+                    setIsFocused(false)
+                    // Flush any pending debounced write immediately on blur.
+                    if (timerRef.current) {
+                        clearTimeout(timerRef.current)
+                        timerRef.current = null
+                    }
+                    void onChangeRef.current(event.target.value)
+                }}
             />
             {errorMessages.length > 0 && (
                 <Form.Control.Feedback type="invalid">

@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { createContext, useCallback, useRef } from 'react'
+import React, { createContext, useCallback, useMemo, useRef } from 'react'
 
 import { useDatabase } from './database_provider'
 import {
@@ -391,20 +391,35 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
         [onChange],
     )
 
+    // Memoize the context value so consumers (every MDX form field) only
+    // re-render when a member actually changes, not on every provider render.
+    // `doc` stays in the deps: putAttachment/removeAttachment close over it,
+    // and consumers read the displayed value from it — a stale doc here is
+    // what causes dropped keystrokes. upsertData/upsertMetadata are already
+    // doc-independent (they read docRef.current at execution time).
+    const value = useMemo(
+        () => ({
+            doc,
+            projectDoc,
+            upsertData,
+            upsertMetadata,
+            putAttachment,
+            removeAttachment,
+            UNSAFE_put,
+        }),
+        [
+            doc,
+            projectDoc,
+            upsertData,
+            upsertMetadata,
+            putAttachment,
+            removeAttachment,
+            UNSAFE_put,
+        ],
+    )
+
     return (
-        <StoreContext.Provider
-            value={{
-                doc,
-                projectDoc,
-                upsertData,
-                upsertMetadata,
-                putAttachment,
-                removeAttachment,
-                UNSAFE_put,
-            }}
-        >
-            {children}
-        </StoreContext.Provider>
+        <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
     )
 }
 

@@ -26,14 +26,29 @@ const StringInput: React.FC<StringInputProps> = ({
     const [localValue, setLocalValue] = useState(value)
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+    // While the field is focused we never overwrite localValue from the
+    // incoming prop. The prop is the round-trip echo of our own debounced
+    // write (delayed by the async PouchDB write queue + live changes feed),
+    // and adopting it mid-typing clobbers characters the user just entered.
+    const isFocusedRef = useRef(false)
+
     // Ref avoids stale closure: always calls the latest onChange
     const onChangeRef = useRef(onChange)
     onChangeRef.current = onChange
 
-    // Sync local state from parent (e.g. when doc updates from DB)
+    // Sync local state from parent (e.g. when doc updates from DB), but not
+    // while the user is actively editing — see isFocusedRef above.
     useEffect(() => {
+        if (isFocusedRef.current) return
         setLocalValue(value)
     }, [value])
+
+    const flush = useCallback(() => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current)
+            timerRef.current = null
+        }
+    }, [])
 
     const handleChange = useCallback(
         (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +68,21 @@ const StringInput: React.FC<StringInputProps> = ({
         [],
     )
 
+    const handleFocus = useCallback(() => {
+        isFocusedRef.current = true
+    }, [])
+
+    const handleBlur = useCallback(
+        (event: React.FocusEvent<HTMLInputElement>) => {
+            isFocusedRef.current = false
+            // Flush any pending debounced write immediately on blur so the
+            // value is persisted without waiting out the debounce window.
+            flush()
+            void onChangeRef.current(event.target.value)
+        },
+        [flush],
+    )
+
     // Clean up pending timer on unmount to avoid memory leaks
     useEffect(() => {
         return () => {
@@ -66,6 +96,8 @@ const StringInput: React.FC<StringInputProps> = ({
         <FloatingLabel controlId={id} label={label}>
             <Form.Control
                 onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 type="text"
                 value={localValue}
                 isInvalid={errorMessages.length > 0}
