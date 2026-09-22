@@ -91,8 +91,13 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
 
             if (blob) {
                 try {
-                    // Try to extract metadata from original HEIC blob first
-                    let exifData = await getPhotoMetadata(blob)
+                    // Try to extract metadata from original HEIC blob first.
+                    // Skip the device-location fallback: import only adopts
+                    // EXIF-embedded GPS, and the fallback would block up to
+                    // 60s per attachment (and may prompt for location).
+                    let exifData = await getPhotoMetadata(blob, undefined, {
+                        skipGeolocationFallback: true,
+                    })
 
                     // Compress/convert HEIC to JPEG using the configured profile
                     const profile = getPhotoProfileFromDoc(
@@ -125,8 +130,11 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
 
                     // If no EXIF found in original, try converted blob
                     if (!exifData || exifData.geolocationSource !== 'EXIF') {
-                        const convertedExif =
-                            await getPhotoMetadata(compressedBlob)
+                        const convertedExif = await getPhotoMetadata(
+                            compressedBlob,
+                            undefined,
+                            { skipGeolocationFallback: true },
+                        )
                         if (convertedExif.geolocationSource === 'EXIF') {
                             exifData = convertedExif
                         }

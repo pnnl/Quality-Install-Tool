@@ -12,13 +12,20 @@ import {
     compressPhoto,
     getPhotoMetadata,
     isPhoto,
-    normalizePhotoBlob,
+    sniffImageMimeType,
 } from '../utilities/photo_utils'
 import { getPhotoProfileFromDoc } from '../utilities/photo_resolution_utils'
 import { useStorageError } from './storage_error_provider'
 
-function isPhotoOrUnknownType(blob: Blob): boolean {
-    return isPhoto(blob) || !blob.type
+// Whether a blob should go through the photo pipeline. On Windows, HEIC photos
+// often arrive with a blank `blob.type`, so we fall back to sniffing the magic
+// bytes rather than assuming every blank-type blob is a photo (which would push
+// PDFs and other files through heic2any/compression and lose them).
+async function isPhotoBlob(blob: Blob): Promise<boolean> {
+    if (isPhoto(blob)) {
+        return true
+    }
+    return (await sniffImageMimeType(blob)) !== null
 }
 
 export function useChangeEventHandler(
@@ -256,6 +263,11 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                 return
             }
 
+            // Decide once (also used by the catch below): photo failures are
+            // re-thrown so the UI can surface them, non-photo failures are
+            // reported and swallowed.
+            const treatAsPhoto = await isPhotoBlob(blob)
+
             try {
                 const lastModifiedAt = new Date()
 
@@ -264,15 +276,24 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     timestamp: lastModifiedAt.toISOString(),
                 }
 
-                if (isPhotoOrUnknownType(blob)) {
-                    attachmentMetadata = await getPhotoMetadata(blob, blob)
-                    const normalized = await normalizePhotoBlob(blob)
+                if (treatAsPhoto) {
                     const profileSource = projectDoc ?? doc
                     const profile = getPhotoProfileFromDoc(profileSource)
 
-                    const { blobs } = await compressPhoto(
-                        normalized.blob,
+                    // compressPhoto normalizes (HEIC→JPEG) internally, so we
+                    // don't normalize separately — that was a double conversion.
+                    const { blobs, mainFormat } = await compressPhoto(
+                        blob,
                         profile,
+                    )
+
+                    // Measure the blob we actually store (converted JPEG), not
+                    // the original HEIC, which can't be decoded in-browser and
+                    // would record 0×0 dimensions.
+                    const storedBlob = blobs[mainFormat] ?? blob
+                    attachmentMetadata = await getPhotoMetadata(
+                        blob,
+                        storedBlob,
                     )
 
                     const attachments: PouchDB.Core.Attachments = {
@@ -324,7 +345,7 @@ const StoreProvider: React.FC<StoreProviderProps> = ({
                     },
                 })
             } catch (error) {
-                if (isPhoto(blob)) {
+                if (treatAsPhoto) {
                     throw error
                 }
                 reportError(error)

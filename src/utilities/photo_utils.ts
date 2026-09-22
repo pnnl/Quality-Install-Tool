@@ -142,10 +142,89 @@ export async function compressPhoto(
     return { blobs, mainFormat }
 }
 
+/**
+ * Detects an image's format from its magic bytes, independent of the (often
+ * missing or wrong on Windows) `blob.type`. Returns a MIME type string, or
+ * `null` if the bytes are not a recognized image. Reads only the 16-byte
+ * header, so it is cheap to call.
+ */
+export async function sniffImageMimeType(blob: Blob): Promise<string | null> {
+    const header = new Uint8Array(await blob.slice(0, 16).arrayBuffer())
+
+    // JPEG: FF D8 FF
+    if (header[0] === 0xff && header[1] === 0xd8 && header[2] === 0xff) {
+        return 'image/jpeg'
+    }
+    // PNG: 89 50 4E 47
+    if (
+        header[0] === 0x89 &&
+        header[1] === 0x50 &&
+        header[2] === 0x4e &&
+        header[3] === 0x47
+    ) {
+        return 'image/png'
+    }
+    // GIF: 47 49 46
+    if (header[0] === 0x47 && header[1] === 0x49 && header[2] === 0x46) {
+        return 'image/gif'
+    }
+    // WebP: 'RIFF' .... 'WEBP'
+    if (
+        header[0] === 0x52 &&
+        header[1] === 0x49 &&
+        header[2] === 0x46 &&
+        header[3] === 0x46 &&
+        header[8] === 0x57 &&
+        header[9] === 0x45 &&
+        header[10] === 0x42 &&
+        header[11] === 0x50
+    ) {
+        return 'image/webp'
+    }
+    // HEIC/HEIF: bytes 4-7 are 'ftyp', bytes 8-11 are a HEIF-family brand.
+    if (
+        header[4] === 0x66 &&
+        header[5] === 0x74 &&
+        header[6] === 0x79 &&
+        header[7] === 0x70
+    ) {
+        const brand = String.fromCharCode(
+            header[8],
+            header[9],
+            header[10],
+            header[11],
+        )
+        const heifBrands = [
+            'heic',
+            'heix',
+            'hevc',
+            'heim',
+            'heis',
+            'hevm',
+            'hevs',
+            'mif1',
+            'msf1',
+            'heif',
+        ]
+        if (heifBrands.includes(brand)) {
+            return 'image/heic'
+        }
+    }
+
+    return null
+}
+
 export async function normalizePhotoBlob(
     blob: Blob,
 ): Promise<{ blob: Blob; mimeType: string }> {
-    if (blob.type === 'image/heic' || !blob.type) {
+    // Only convert blobs that are actually HEIC — detected by MIME type or, on
+    // Windows where the type is often blank, by magic bytes. Feeding a non-HEIC
+    // blob (e.g. a typeless JPEG or a PDF) to heic2any throws; previously any
+    // empty-type blob was forced through it.
+    const sniffed = await sniffImageMimeType(blob)
+    const isHeic = blob.type === 'image/heic' || sniffed === 'image/heic'
+
+    if (isHeic) {
         try {
             const result = await heic2any({
                 blob,
@@ -170,9 +249,11 @@ export async function normalizePhotoBlob(
         }
     }
 
+    // Non-HEIC: pass through untouched, filling in a best-effort MIME type when
+    // the blob arrived without one.
     return {
         blob,
-        mimeType: blob.type,
+        mimeType: blob.type || sniffed || 'image/jpeg',
     }
 }
 
@@ -533,6 +614,7 @@ async function canvasToBlob(
 export async function getPhotoMetadata(
     blob: Blob,
     storedBlob?: Blob,
+    options?: { skipGeolocationFallback?: boolean },
 ): Promise<PhotoMetadata> {
     const timestamp = new Date().toISOString()
     const timestampSource = 'Date.now'
@@ -594,6 +676,25 @@ export async function getPhotoMetadata(
                     timestampSource,
                 }
             }
+        }
+    }
+
+    // Callers that only care about EXIF-embedded GPS (e.g. bulk JSON import)
+    // can skip the device-location fallback. Without this, every photo lacking
+    // EXIF GPS blocks for up to GEOLOCATION_TIMEOUT_MILLIS and may trigger a
+    // permission prompt — multiplied across every attachment in an import.
+    if (options?.skipGeolocationFallback) {
+        return {
+            geolocation: {
+                altitude: null,
+                latitude: null,
+                longitude: null,
+            },
+            geolocationSource: null,
+            imageHeightPx: height,
+            imageWidthPx: width,
+            timestamp,
+            timestampSource,
         }
     }
 
