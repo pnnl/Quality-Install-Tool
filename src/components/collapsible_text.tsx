@@ -46,9 +46,19 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
         }
 
         updateExpandableState()
+        const resizeObserver =
+            typeof ResizeObserver === 'undefined'
+                ? undefined
+                : new ResizeObserver(updateExpandableState)
+        const textContainer = textContainerRef.current
+
+        if (resizeObserver && textContainer) {
+            resizeObserver.observe(textContainer)
+        }
         window.addEventListener('resize', updateExpandableState)
 
         return () => {
+            resizeObserver?.disconnect()
             window.removeEventListener('resize', updateExpandableState)
         }
     }, [text])
