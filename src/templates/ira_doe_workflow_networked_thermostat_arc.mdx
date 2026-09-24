@@ -1,0 +1,348 @@
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<div className="disclaimer-text mb-4">
+This workflow documents the installation of a thermostat or other rooftop unit
+(RTU) controls to show a quality installation. It includes installation of a
+programmable or networked thermostat (also referred to as smart, connected, or
+internet-enabled thermostats), new RTU controller, variable-speed drive for
+fans, and the damper actuators and sensors for economizer control and
+demand-controlled ventilation (DCV).
+</div>
+<Tabs>
+    <Tab eventKey="equipment" title="Equipment">
+        <Select
+            label="Equipment Type"
+            options={['Networked Thermostat', 'ARC Upgrade']}
+            path="equipment_type"
+        />
+
+        <StringInput label="RTU ID" path="rtu_id" hint="e.g., RTU 1 – Conference Room. Each RTU and associated controls will be entered separately. We recommend naming each installation in accordance with existing RTU IDs and the space served. You can upload a roof plan with the installation naming convention identified in the Project tab." />
+    </Tab>
+    <Tab eventKey="pre_installation" title="Pre-Installation">
+
+        <Collapsible header="Preparing a site for thermostat or RTU control installation">
+            - Consider visiting the site ahead of ordering materials so that an appropriate solution can be provided.
+                - Most networked thermostats are wireless. Depending on the specific product and scale of the installation, repeaters may be required to boost signal strength to the gateway.
+                - If the customer is interested in an ARC Upgrade, look at the existing RTUs to determine what equipment will be needed for the installation. Existing RTUs may or may not have motorized dampers, for example, which are necessary for economizing.
+            - If the thermostat or other RTU controls require a gateway for wireless communication, discuss install location with the customer. The gateway will require an internet connection. Discuss the customers' plan for an internet connection and document the Wi-Fi password for the installation. Customers may decide to set up an isolated network for internet-enabled devices or to connect the devices to an existing network. Some manufacturers also offer a cellular option that avoids connecting to a local internet network.
+            - Verify you have received all the correct equipment and any problems with the existing equipment are fixed prior to scheduling the installation.
+        </Collapsible>
+
+        <PhotoInput id="building_exterior_photo" label="Building Exterior - Photo">
+            Provide a photo of the building where the installation is taking place. Include the street number in the photo if possible.
+        </PhotoInput>
+
+        ## Test Operation and Condition of Existing Equipment
+
+        Prior to installing new equipment, make sure there are no functional problems with the existing equipment. Change the setpoint and confirm hot or cold air is flowing appropriately. An infrared thermometer can be used to confirm temperature changes. Also note the condition of the existing RTU, dampers, and fan.
+
+        <Radio label="Fan" options={['Working', 'Not Working']} path="pre_install.fan" />
+        <Radio label="Heating" options={['Working', 'Not Working']} path="pre_install.heating" />
+        <Radio label="Cooling" options={['Working', 'Not Working']} path="pre_install.cooling" />
+        <ShowOrHide path="equipment_type" value="ARC Upgrade">
+            <StringInput label="Outside Air Damper (ARC only)" path="pre_install.outside_air_damper" hint="e.g., open or closed; manual, two-position actuator, multi-position actuator" />
+        </ShowOrHide>
+        <StringInput label="Condition of Existing Equipment" path="pre_install.existing_equipment_condition" hint="e.g., RTU in like new condition. Fan not working, need to replace. Note existing economizer controller, existing sensors, etc." />
+
+    </Tab>
+    <Tab eventKey="installation" title="Installation">
+        <DateInput label="Installation Date" path="installation_date" />
+
+        <ShowOrHide path="equipment_type" value="Networked Thermostat">
+            <PhotoInput id="new_equipment_photo" label="New Equipment – Photo">
+                Photograph all the materials that will be installed in their original packaging on a table.
+            </PhotoInput>
+
+            ## Installation Tips
+                - Thermostats should be installed on an interior wall away from direct sun exposure and airflow.
+                - Wireless thermostats and gateways should be installed away from metal objects for the best possible communication strength.
+                - You will need Wi-Fi credentials to connect the thermostat to the internet.
+
+            ## Install the Gateway
+            Install the gateway inside the building. Where possible, avoid installing the gateway in rooms with concrete walls or near other networking equipment to avoid potential interference and improve communication strength. A gateway may not be required for all installations.
+            <PhotoInput id="installed_gateway_photo" label="Installed Gateway – Photo">
+                Photograph the gateway where it is installed. Include room context to help locate the device in the future.
+            </PhotoInput>
+            <StringInput label="Gateway Notes" path="gateway_notes" hint="Room number or install location; relevant configuration settings" />
+
+            <PhotoInput id="existing_thermostat_wiring_photo" label="Existing Thermostat Wiring – Photo">
+                Photograph the existing thermostat wiring for reference when installing the new thermostat.
+            </PhotoInput>
+
+            ## Install the Thermostat
+            Install the thermostat on an interior wall away from direct sun exposure and airflow.
+            <PhotoInput id="installed_thermostat_photo" label="Installed Thermostat – Photo">
+                Photograph the thermostat where it is installed. Include room context to help locate the device in the future.
+            </PhotoInput>
+            <PhotoInput id="new_thermostat_wiring_photo" label="New Thermostat Wiring – Photo">
+                Photograph the new thermostat wiring.
+            </PhotoInput>
+            <StringInput label="Thermostat Notes" path="thermostat_notes" hint="Room number or install location; HVAC zone description" />
+
+            ## Program the Thermostat
+            Take a screenshot of programmed settings or enter the information below. The following setpoints are suggestions; always review local energy codes. Thermostatic controls should have a deadband of at least 5°F between occupied heating and cooling setpoints. Unoccupied setpoints should be different (i.e., a lower heating setpoint and a higher cooling setpoint) from occupied setpoints to save energy and prolong equipment life; suggested unoccupied heating/cooling setpoints are 60F/85F, respectively.
+            <PhotoInput id="thermostat_settings_photo" label="Thermostat Settings – Photo">
+                Take a photo or screenshot of the programmed thermostat settings.
+            </PhotoInput>
+            <StringInput label="Occupied Hours" path="program.occupied_hours" placeholder="e.g., 8 a.m. – 6 p.m." />
+            <StringInput label="Occupied Heating Setpoint" path="program.occupied_heating_setpoint" placeholder="e.g., 70F" />
+            <StringInput label="Occupied Cooling Setpoint" path="program.occupied_cooling_setpoint" placeholder="e.g., 75F" />
+            <StringInput label="Unoccupied Heating Setpoint" path="program.unoccupied_heating_setpoint" placeholder="e.g., 60F" />
+            <StringInput label="Unoccupied Cooling Setpoint" path="program.unoccupied_cooling_setpoint" placeholder="e.g., 85F" />
+            <StringInput label="Fan Setting" path="program.fan_setting" placeholder="e.g., auto, on, ventilation cycling" />
+            <StringInput label="Additional Settings" path="program.additional_settings" hint="e.g., holiday scheduling, door alarm settings, etc." />
+
+            ## Verify Operation of New Equipment
+            Verify that the new thermostat is functional before leaving the jobsite. Adjust the setpoint and confirm hot or cold air is flowing. Use a handheld temperature gun to quickly verify the flow of hot or cold air.
+
+            <Radio label="Wi-Fi Connection" options={['Working', 'Not Working']} path="verify.wifi" />
+            <Radio label="Fan" options={['Working', 'Not Working']} path="verify.fan" />
+            <Radio label="Heating" options={['Working', 'Not Working']} path="verify.heating" />
+            <Radio label="Cooling" options={['Working', 'Not Working']} path="verify.cooling" />
+            <StringInput label="Verification Notes" path="verify.notes" />
+
+            ## Customer Handover
+            Add the appropriate building contact as a member of the web portal as soon as the account is set up. Document the account credentials below. Ask the owner if they want you to maintain account access for maintenance or delete your user account once you confirm they have access. Go over operating expectations with the customer before leaving the job site. Be sure the customer can access any web portals to adjust settings.
+            <StringInput label="Account Owner Email" path="handover.account_owner_email" />
+            <StringInput label="Password" path="handover.account_password" />
+            <StringInput label="Invitations sent to Email(s)" path="handover.invitations_sent" />
+        </ShowOrHide>
+
+        <ShowOrHide path="equipment_type" value="ARC Upgrade">
+            <PhotoInput id="new_equipment_photo" label="New Equipment – Photo">
+                Photograph all the materials that will be installed in their original packaging on a table.
+            </PhotoInput>
+
+            ## Test Operation and Condition of Existing Equipment
+
+            If you did not test operation of existing equipment during a pre-installation site visit, do so now. Further instructions are provided in the <b>Pre-Installation</b> Tab.
+
+            Before installing new equipment, turn OFF the power to the RTU at the circuit breaker. Use a voltmeter to make sure that the power is OFF.
+
+            <PhotoInput id="interior_space_photo" label="Interior Space – Photo">
+                Photograph the room that is served by the RTU. You can also upload a floorplan with the zone identified.
+            </PhotoInput>
+            <PhotoInput id="rtu_in_place_photo" label="RTU in Place – Photo">
+                Take a photo of the RTU where it is installed.
+            </PhotoInput>
+            <PhotoInput id="rtu_nameplate_photo" label="RTU Nameplate – Photo">
+                Provide a close-up photo of the RTU nameplate showing the model number and serial number.
+            </PhotoInput>
+            <StringInput label="Year of RTU Install" path="rtu_install_year" />
+            <Radio label="What is the RTU used for?" options={['Heating', 'Cooling', 'Both']} path="rtu_use" />
+            <Radio label="What type of heating system does the RTU use?" options={['Gas', 'Heat pump', 'Resistance heat']} path="rtu_heating_type" />
+
+            <PhotoInput id="existing_controller_wiring_photo" label="Existing Controller Wiring – Photo">
+                At the RTU, photograph the existing wiring connections to the controller from the thermostat and to other RTU components.
+            </PhotoInput>
+            <PhotoInput id="existing_outdoor_air_damper_photo" label="Existing Outdoor Air Damper – Photo">
+                At the RTU, photograph the existing outdoor air damper and the adjustment mechanism (manual lever or actuator), and the wiring between the controller and the outdoor air damper actuator.
+            </PhotoInput>
+
+            ## Install New Equipment at the RTU
+            <PhotoInput id="installed_controller_photo" label="Installed Controller – Photo">
+                Photograph the installed controller.
+            </PhotoInput>
+            <PhotoInput id="installed_vfd_photo" label="Installed Variable Frequency Drive (VFD) – Photo">
+                Photograph the installed variable frequency drive (VFD).
+            </PhotoInput>
+            <PhotoInput id="installed_actuators_photo" label="Installed Actuators for Outdoor and Return Air Dampers – Photos">
+                Photograph the installed actuators for the outdoor and return air dampers.
+            </PhotoInput>
+
+            ## Install the Gateway
+            Install the gateway inside the building. Where possible, avoid installing the gateway in rooms with concrete walls or near other networking equipment to avoid potential interference and improve communication strength. A gateway may not be required for all installations.
+            <PhotoInput id="installed_gateway_photo" label="Installed Gateway – Photo">
+                Photograph the gateway where it is installed. Include room context to help locate the device in the future.
+            </PhotoInput>
+            <StringInput label="Gateway Notes" path="gateway_notes" hint="Room number or install location; relevant configuration settings" />
+
+            <PhotoInput id="existing_thermostat_wiring_photo" label="Existing Thermostat Wiring – Photo">
+                Photograph the existing thermostat wiring for reference when installing the new thermostat.
+            </PhotoInput>
+
+            ## Install the Thermostat
+            Install the thermostat on an interior wall away from direct sun exposure and airflow.
+            <PhotoInput id="installed_thermostat_photo" label="Installed Thermostat – Photo">
+                Photograph the thermostat where it is installed. Include room context to help locate the device in the future.
+            </PhotoInput>
+            <PhotoInput id="new_thermostat_wiring_photo" label="New Thermostat Wiring – Photo">
+                Photograph the new thermostat wiring.
+            </PhotoInput>
+            <StringInput label="Thermostat Notes" path="thermostat_notes" hint="Room number or install location; HVAC zone description" />
+
+            ## Program the Controls
+            Take a screenshot of programmed settings or enter the information below. The following setpoints are suggestions; always review local energy codes. Thermostatic controls should have a deadband of at least 5°F between occupied heating and cooling setpoints. Unoccupied setpoints should be different (i.e., a lower heating setpoint and a higher cooling setpoint) from occupied setpoints to save energy and prolong equipment life; suggested unoccupied heating/cooling setpoints are 65F/85F, respectively. Economizer parameters and multi-speed fan settings may vary between manufacturers, so add appropriate settings in the <b>Additional Settings</b> box or provide a screenshot.
+            <PhotoInput id="thermostat_settings_photo" label="Thermostat Settings – Photo">
+                Take a photo or screenshot of the programmed thermostat settings.
+            </PhotoInput>
+            <PhotoInput id="economizer_control_settings_photo" label="Economizer Control Settings – Photo">
+                Take a photo or screenshot of the economizer control settings.
+            </PhotoInput>
+            <PhotoInput id="variable_speed_fan_settings_photo" label="Variable Speed Fan Settings – Photo">
+                Take a photo or screenshot of the variable speed fan settings.
+            </PhotoInput>
+            <StringInput label="Occupied Hours" path="program.occupied_hours" placeholder="e.g., 8 a.m. – 6 p.m." />
+            <StringInput label="Occupied Heating Setpoint" path="program.occupied_heating_setpoint" placeholder="e.g., 70F" />
+            <StringInput label="Occupied Cooling Setpoint" path="program.occupied_cooling_setpoint" placeholder="e.g., 75F" />
+            <StringInput label="Unoccupied Heating Setpoint" path="program.unoccupied_heating_setpoint" placeholder="e.g., 60F" />
+            <StringInput label="Unoccupied Cooling Setpoint" path="program.unoccupied_cooling_setpoint" placeholder="e.g., 85F" />
+            <Checkbox label="Enable Economizing" options={['Enable Economizing']} path="program.enable_economizing" />
+            <Checkbox label="Enable Multi-Speed Fan" options={['Enable Multi-Speed Fan']} path="program.enable_multi_speed_fan" />
+            <StringInput label="CO2 Sensor Setpoints for Demand-Controlled Ventilation" path="program.co2_setpoints" hint="e.g., CO2 ppm should be (600 + 400 ppm outdoor CO2) for office spaces." />
+            <StringInput label="Additional Settings" path="program.additional_settings" hint="e.g., advanced economizer or fan configuration settings, holiday scheduling, door alarm settings, etc." />
+
+            ## Verify Operation of New Equipment
+            Verify that the new thermostat is functional before leaving the jobsite. Adjust the setpoint and confirm hot or cold air is flowing. Use a handheld temperature gun to quickly verify the flow of hot or cold air. View the temperature readings in the web portal to verify the sensors are working. Some manufacturers have an automated economizer calibration procedure, but it is important to visually verify that the dampers are moving. Economizing should be enabled when the outdoor air temperature is less than 68F.
+
+            <Radio label="Wi-Fi Connection" options={['Working', 'Not Working']} path="verify.wifi" />
+            <Radio label="Multi-Speed Fan" options={['Working', 'Not Working']} path="verify.multi_speed_fan" />
+            <Radio label="Heating" options={['Working', 'Not Working']} path="verify.heating" />
+            <Radio label="Cooling" options={['Working', 'Not Working']} path="verify.cooling" />
+            <Radio label="Economizing" options={['Working', 'Not Working']} path="verify.economizing" />
+            <Radio label="CO2 Sensor" options={['Working', 'Not Working']} path="verify.co2_sensor" />
+            <Radio label="Outdoor Air Temperature Sensor" options={['Working', 'Not Working']} path="verify.outdoor_air_temp_sensor" />
+            <Radio label="Outdoor Air Damper Response to CO2 Setpoint" options={['Working', 'Not Working']} path="verify.outdoor_air_damper_response" />
+            <StringInput label="Verification Notes" path="verify.notes" />
+
+            ## Customer Handover
+            Add the appropriate building contact as a member of the web portal as soon as the account is set up. Document the account credentials below. Ask the owner if they want you to maintain account access for maintenance or delete your user account once you confirm they have access. Go over operating expectations with the customer before leaving the job site. Be sure the customer can access any web portals to adjust settings.
+            <StringInput label="Account Owner Email" path="handover.account_owner_email" />
+            <StringInput label="Password" path="handover.account_password" />
+            <StringInput label="Invitations sent to Email(s)" path="handover.invitations_sent" />
+        </ShowOrHide>
+    </Tab>
+
+    <Tab eventKey="report" title="Report">
+        <PrintSection label="Print Report">
+              ---
+                # Networked Thermostat, Advanced Rooftop Controls (ARC) Upgrade
+                ## Photo Report
+            <LabelValue value={props.data.installation_date} type="date" label="Installation Date" />
+            <ProjectInfoReport {...props} />
+
+                <LabelValue label="Equipment Type" path="equipment_type" />
+                <LabelValue label="RTU ID" path="rtu_id" />
+
+                ## __Pre-Installation__
+                <Photo id="building_exterior_photo" label="Building Exterior - Photo" required>
+                    Building exterior photo
+                </Photo>
+                <LabelValue label="Fan" path="pre_install.fan" required/>
+                <LabelValue label="Heating" path="pre_install.heating" required/>
+                <LabelValue label="Cooling" path="pre_install.cooling" required/>
+                <LabelValue label="Outside Air Damper (ARC only)" path="pre_install.outside_air_damper" required/>
+                <LabelValue label="Condition of Existing Equipment" path="pre_install.existing_equipment_condition" required/>
+
+                ## __Installation__
+                <Photo id="new_equipment_photo" label="New Equipment – Photo" required>
+                    New equipment photo
+                </Photo>
+
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                <br />
+                    ### RTU Details (ARC Upgrade)
+                    <Photo id="interior_space_photo" label="Interior Space – Photo" required>
+                        Interior space photo
+                    </Photo>
+                    <Photo id="rtu_in_place_photo" label="RTU in Place – Photo" required>
+                        RTU in place photo
+                    </Photo>
+                    <Photo id="rtu_nameplate_photo" label="RTU Nameplate – Photo" required>
+                        RTU nameplate photo
+                    </Photo>
+                    <LabelValue label="Year of RTU Install" path="rtu_install_year" />
+                    <LabelValue label="What is the RTU used for?" path="rtu_use" />
+                    <LabelValue label="What type of heating system does the RTU use?" path="rtu_heating_type" />
+                </ShowOrHide>
+
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                <br />
+                    ### Install New Equipment at the RTU
+                    <Photo id="existing_controller_wiring_photo" label="Existing Controller Wiring – Photo" required>
+                        Existing controller wiring photo
+                    </Photo>
+                    <Photo id="existing_outdoor_air_damper_photo" label="Existing Outdoor Air Damper – Photo" required>
+                        Existing outdoor air damper photo
+                    </Photo>
+                    <Photo id="installed_controller_photo" label="Installed Controller – Photo" required>
+                        Installed controller photo
+                    </Photo>
+                    <Photo id="installed_vfd_photo" label="Installed Variable Frequency Drive (VFD) – Photo" required>
+                        Installed VFD photo
+                    </Photo>
+                    <Photo id="installed_actuators_photo" label="Installed Actuators for Outdoor and Return Air Dampers – Photos" required>
+                        Installed actuators photo
+                    </Photo>
+                </ShowOrHide>
+                <br />
+                ### Install the Gateway
+                <Photo id="installed_gateway_photo" label="Installed Gateway – Photo" required>
+                    Installed gateway photo
+                </Photo>
+                <LabelValue label="Gateway Notes" path="gateway_notes" />
+                <br />
+                ### Install the Thermostat
+                <Photo id="existing_thermostat_wiring_photo" label="Existing Thermostat Wiring – Photo" required>
+                    Existing thermostat wiring photo
+                </Photo>
+                <Photo id="installed_thermostat_photo" label="Installed Thermostat – Photo" required>
+                    Installed thermostat photo
+                </Photo>
+                <Photo id="new_thermostat_wiring_photo" label="New Thermostat Wiring – Photo" required>
+                    New thermostat wiring photo
+                </Photo>
+                <LabelValue label="Thermostat Notes" path="thermostat_notes" />
+                <br />
+                ### Program Settings
+
+                <Photo id="thermostat_settings_photo" label="Thermostat Settings – Photo" required>
+                    Thermostat settings photo
+                </Photo>
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                    <Photo id="economizer_control_settings_photo" label="Economizer Control Settings – Photo" required>
+                        Economizer control settings photo
+                    </Photo>
+                    <Photo id="variable_speed_fan_settings_photo" label="Variable Speed Fan Settings – Photo" required>
+                        Variable speed fan settings photo
+                    </Photo>
+                </ShowOrHide>
+                <LabelValue label="Occupied Hours" path="program.occupied_hours" />
+                <LabelValue label="Occupied Heating Setpoint" path="program.occupied_heating_setpoint" />
+                <LabelValue label="Occupied Cooling Setpoint" path="program.occupied_cooling_setpoint" />
+                <LabelValue label="Unoccupied Heating Setpoint" path="program.unoccupied_heating_setpoint" />
+                <LabelValue label="Unoccupied Cooling Setpoint" path="program.unoccupied_cooling_setpoint" />
+                <ShowOrHide path="equipment_type" value="Networked Thermostat">
+                    <LabelValue label="Fan Setting" path="program.fan_setting" />
+                </ShowOrHide>
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                    <LabelValue label="Enable Economizing" path="program.enable_economizing" />
+                    <LabelValue label="Enable Multi-Speed Fan" path="program.enable_multi_speed_fan" />
+                    <LabelValue label="CO2 Sensor Setpoints for Demand-Controlled Ventilation" path="program.co2_setpoints" />
+                </ShowOrHide>
+                <LabelValue label="Additional Settings" path="program.additional_settings" />
+                <br />
+                ### Verification
+                <LabelValue label="Wi-Fi Connection" path="verify.wifi" />
+                <ShowOrHide path="equipment_type" value="Networked Thermostat">
+                    <LabelValue label="Fan" path="verify.fan" />
+                </ShowOrHide>
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                    <LabelValue label="Multi-Speed Fan" path="verify.multi_speed_fan" />
+                </ShowOrHide>
+                <LabelValue label="Heating" path="verify.heating" />
+                <LabelValue label="Cooling" path="verify.cooling" />
+                <ShowOrHide path="equipment_type" value="ARC Upgrade">
+                    <LabelValue label="Economizing" path="verify.economizing" />
+                    <LabelValue label="CO2 Sensor" path="verify.co2_sensor" />
+                    <LabelValue label="Outdoor Air Temperature Sensor" path="verify.outdoor_air_temp_sensor" />
+                    <LabelValue label="Outdoor Air Damper Response to CO2 Setpoint" path="verify.outdoor_air_damper_response" />
+                </ShowOrHide>
+                <LabelValue label="Verification Notes" path="verify.notes" />
+
+                <LabelValue label="Account Owner Email" path="handover.account_owner_email" />
+                <LabelValue label="Invitations sent to Email(s)" path="handover.invitations_sent" />
+        </PrintSection>
+    </Tab>
+
+</Tabs>

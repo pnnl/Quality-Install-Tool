@@ -26,6 +26,7 @@ import IRADOEWorkflowLimitedAssessment from './ira_doe_workflow_limited_assessme
 import DOEAppliancesWorkflow from './ira_doe_workflow_appliances.mdx'
 import DOEWorkflowWoodAndPelletStove from './ira_doe_workflow_wood_and_pallet_stove.mdx'
 import DOEWorkflowRimJoist from './ira_doe_workflow_rim_joist_air_sealing_and_insulation.mdx'
+import DOEWorkflowNetworkedThermostatARC from './ira_doe_workflow_networked_thermostat_arc.mdx'
 //import Playground from './playground.mdx'
 
 import {
@@ -160,6 +161,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowLinearFluorescentToLEDRetrofit,
     },
+    doe_workflow_networked_thermostat_arc: {
+        title: 'Networked Thermostat, Advanced Rooftop Controls (ARC) Upgrade',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowNetworkedThermostatARC,
+    },
     doe_workflow_mechanical_ventilation: {
         title: 'Mechanical Ventilation',
         subtitle: INSTALLATION_SUB_TITLE,
@@ -195,16 +201,16 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowWoodAndPelletStove,
     },
-    //     playground: {
-    //         title: 'Playground',
-    //         subtitle: {
-    //             singularTitleCase: 'Playground',
-    //             singularLowerCase: 'playground',
-    //             pluralTitleCase: 'Playgrounds',
-    //             pluralLowerCase: 'playgrounds',
-    //         },
-    //         template: Playground,
+    // playground: {
+    //     title: 'Playground',
+    //     subtitle: {
+    //         singularTitleCase: 'Playground',
+    //         singularLowerCase: 'playground',
+    //         pluralTitleCase: 'Playgrounds',
+    //         pluralLowerCase: 'playgrounds',
     //     },
+    //     template: Playground,
+    // },
 }
 
 const RESERVED_TEMPLATE_KEYS: string[] = ['workflows']
