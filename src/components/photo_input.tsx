@@ -18,6 +18,7 @@ export interface PhotoInputProps {
     label: string
     loading: boolean
     notes?: boolean
+    hint?: string
     photoNameField?: boolean
     photoNamePath?: string
     photoName?: string
@@ -37,6 +38,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
     label,
     loading,
     notes = true,
+    hint,
     photoNameField = false,
     photoNamePath,
     photoName,
@@ -228,6 +230,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             event.target.value = ''
                         }}
                     />
+
                     {photoAttachments.length > 0 && (
                         <div className="photo-gallery">
                             {photoAttachments.map((photoAttachment, index) => (
@@ -362,6 +365,7 @@ const PhotoInput: React.FC<PhotoInputProps> = ({
                             min={0}
                             max={300}
                             regexp={/.*/}
+                            hint={hint}
                         />
                     )}
                 </Card.Body>
