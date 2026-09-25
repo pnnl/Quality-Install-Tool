@@ -203,15 +203,17 @@ demand-controlled ventilation (DCV).
                 <StringInput label="Verification Notes" path="verify.notes" />
             </ShowOrHide>
 
-            ## Customer Handover
-            Add the appropriate building contact as a member of the web portal as soon as the account is set up. Document the account credentials below. Ask the owner if they want you to maintain account access for maintenance or delete your user account once you confirm they have access.
-
-            Go over operating expectations with the customer before leaving the job site. Be sure the customer can access any web portals to adjust settings.
-            <Radio label="Did you review operating expectations and confirm the customer can access the web portal?" options={['Yes', 'No']} path="handover.operating_expectations_confirmed" />
-            <StringInput label="Account Owner Email" path="handover.account_owner_email" />
-            <StringInput label="Password" path="handover.account_password" />
-            <StringInput label="Invitations sent to Email(s)" path="handover.invitations_sent" />
         </RepeatableInput>
+
+        ## Customer Handover
+        Add the appropriate building contact as a member of the web portal as soon as the account is set up. Document the account credentials below. Ask the owner if they want you to maintain account access for maintenance or delete your user account once you confirm they have access.
+
+        Go over operating expectations with the customer before leaving the job site. Be sure the customer can access any web portals to adjust settings.
+        <Radio label="Did you review operating expectations and confirm the customer can access the web portal?" options={['Yes', 'No']} path="handover.operating_expectations_confirmed" />
+        <StringInput label="Account Owner Email" path="handover.account_owner_email" />
+        <StringInput label="Password" path="handover.account_password" />
+        <StringInput label="Invitations sent to Email(s)" path="handover.invitations_sent" />
+
     </Tab>
 
     <Tab eventKey="report" title="Report">
@@ -233,11 +235,11 @@ demand-controlled ventilation (DCV).
             <LabelValue label="Outside Air Damper (ARC only)" path="pre_install.outside_air_damper" required/>
             <LabelValue label="Condition of Existing Equipment" path="pre_install.existing_equipment_condition" required/>
 
+            ## __Installation__
             <Repeatable path="equipment" label="Equipment">
                 <LabelValue label="Equipment Type" path="equipment_type" />
                 <LabelValue label="RTU ID" path="rtu_id" />
 
-                ## __Installation__
                 <Photo id="new_equipment_photo" label="New Equipment – Photo" required>
                     New equipment photo
                 </Photo>
@@ -339,12 +341,12 @@ demand-controlled ventilation (DCV).
                 </ShowOrHide>
                 <LabelValue label="Verification Notes" path="verify.notes" />
                 <br/>
-                ### Customer Handover
-                <LabelValue label="Operating Expectations and Web Portal Access Confirmed" path="handover.operating_expectations_confirmed" />
-                <LabelValue label="Account Owner Email" path="handover.account_owner_email" />
-                <LabelValue label="Password" path="handover.account_password" />
-                <LabelValue label="Invitations sent to Email(s)" path="handover.invitations_sent" />
             </Repeatable>
+            ## __Customer Handover__
+            <LabelValue label="Operating Expectations and Web Portal Access Confirmed" path="handover.operating_expectations_confirmed"  required/>
+            <LabelValue label="Account Owner Email" path="handover.account_owner_email" />
+            <LabelValue label="Password" path="handover.account_password" />
+            <LabelValue label="Invitations sent to Email(s)" path="handover.invitations_sent" />
         </PrintSection>
     </Tab>
 
