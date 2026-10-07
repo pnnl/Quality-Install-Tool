@@ -12,6 +12,7 @@ interface TextInputWrapperProps {
     max: number
     regexp: RegExp
     placeholder?: string
+    hint?: string
 }
 
 const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
@@ -21,6 +22,7 @@ const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
     max = 10240,
     regexp = /.*/,
     placeholder,
+    hint,
 }) => {
     const valueValidators = useMemo<Validator<string>[]>(() => {
         return [
@@ -64,6 +66,7 @@ const TextInputWrapper: React.FC<TextInputWrapperProps> = ({
                             []
                         }
                         placeholder={placeholder}
+                        hint={hint}
                         onChange={async value =>
                             await upsertData(
                                 path,

@@ -12,6 +12,7 @@ interface RepeatableProps {
     label: string
     labelPath?: string
     maxValuesCount?: number
+    maxValuesMessage?: string
     values: object[]
     onAdd?: () => Promise<void>
     onRemove?: (index: number) => Promise<void>
@@ -23,6 +24,7 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
     labelPath,
     path,
     maxValuesCount,
+    maxValuesMessage,
     values,
     onAdd,
     onRemove,
@@ -144,6 +146,13 @@ const RepeatableInput: React.FC<RepeatableProps> = ({
                     Add {label}
                 </Button>
             )}
+            {maxValuesCount !== undefined &&
+                values.length >= maxValuesCount &&
+                maxValuesMessage && (
+                    <div className="alert alert-info mt-3" role="alert">
+                        {maxValuesMessage}
+                    </div>
+                )}
         </>
     )
 }

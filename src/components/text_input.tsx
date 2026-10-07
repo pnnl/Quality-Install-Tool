@@ -14,6 +14,7 @@ interface TextInputProps {
     value: string
     errorMessages: Array<string>
     placeholder?: string
+    hint?: string
 }
 
 // Debounce delay (ms) before triggering the DB write.
@@ -26,6 +27,7 @@ const TextInput: React.FC<TextInputProps> = ({
     value,
     errorMessages,
     placeholder,
+    hint,
 }) => {
     const id = useId()
 
@@ -85,26 +87,31 @@ const TextInput: React.FC<TextInputProps> = ({
     }, [])
 
     return (
-        <FloatingLabel
-            controlId={id}
-            className={floatingLabelClassName}
-            label={label}
-        >
-            <Form.Control
-                as="textarea"
-                onChange={handleChange}
-                placeholder={placeholder}
-                value={localValue}
-                isInvalid={errorMessages.length > 0}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-            />
-            {errorMessages.length > 0 && (
-                <Form.Control.Feedback type="invalid">
-                    {errorMessages.join(' ')}
-                </Form.Control.Feedback>
+        <>
+            <FloatingLabel
+                controlId={id}
+                className={floatingLabelClassName}
+                label={label}
+            >
+                <Form.Control
+                    as="textarea"
+                    onChange={handleChange}
+                    placeholder={placeholder}
+                    value={localValue}
+                    isInvalid={errorMessages.length > 0}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                />
+                {errorMessages.length > 0 && (
+                    <Form.Control.Feedback type="invalid">
+                        {errorMessages.join(' ')}
+                    </Form.Control.Feedback>
+                )}
+            </FloatingLabel>
+            {hint && (
+                <div className="form-text mb-2 text-muted small">{hint}</div>
             )}
-        </FloatingLabel>
+        </>
     )
 }
 

@@ -118,6 +118,7 @@ interface RepeatableInputWrapperProps {
     labelPath?: string
     children: React.ReactNode
     maxValuesCount: number
+    maxValuesMessage?: string
 }
 
 const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
@@ -126,6 +127,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
     labelPath,
     children,
     maxValuesCount,
+    maxValuesMessage,
 }) => {
     return (
         <StoreContext.Consumer>
@@ -136,6 +138,7 @@ const RepeatableInputWrapper: React.FC<RepeatableInputWrapperProps> = ({
                         label={label}
                         labelPath={labelPath}
                         maxValuesCount={maxValuesCount}
+                        maxValuesMessage={maxValuesMessage}
                         values={(doc && get(doc.data_, path)) ?? []}
                         onAdd={async () => {
                             if (doc) {

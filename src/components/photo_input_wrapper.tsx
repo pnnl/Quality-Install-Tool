@@ -15,6 +15,7 @@ interface PhotoInputWrapperProps {
     uploadable: boolean
     count?: number
     notes?: boolean
+    hint?: string
     photoNameField?: boolean
 }
 
@@ -25,6 +26,7 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
     uploadable,
     count = 10,
     notes,
+    hint,
     photoNameField = false,
 }) => {
     const [error, setError] = useState<string | undefined>(undefined)
@@ -53,6 +55,7 @@ const PhotoInputWrapper: React.FC<PhotoInputWrapperProps> = ({
                         count={count}
                         id={id}
                         notes={notes}
+                        hint={hint}
                         photoNameField={photoNameField}
                         photoNamePath={`${id}_photo_name`}
                         photoName={photoName}
