@@ -194,8 +194,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
     ---
-    # Heat Pump Water Heater Upgrade
-    ## Photo Report
+    <ReportHeader
+      title="Heat Pump Water Heater Upgrade"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

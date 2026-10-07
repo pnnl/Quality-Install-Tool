@@ -106,8 +106,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report" title="Report">
     <PrintSection label="Print Report">
     ---
-    # High Efficiency Modulating Boiler Upgrade
-    ## Photo Report
+    <ReportHeader
+      title="High Efficiency Modulating Boiler Upgrade"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

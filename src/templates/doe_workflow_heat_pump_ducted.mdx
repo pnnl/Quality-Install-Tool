@@ -304,8 +304,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <Tab eventKey="report" title="Report">
         <PrintSection label="Print Report">
             ---
-            # Central Ducted Split Heat Pump Upgrade
-            ## Photo Report
+            <ReportHeader
+              title="Central Ducted Split Heat Pump Upgrade"
+              docName={props.metadata.doc_name}
+              subtitle="Photo Report"
+            />
 
             <ProjectInfoReport {...props} />
 

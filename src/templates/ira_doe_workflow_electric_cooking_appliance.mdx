@@ -50,8 +50,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
-    # Electric Cooking Appliance Upgrade
-    ## Photo Report
+    <ReportHeader
+      title="Electric Cooking Appliance Upgrade"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

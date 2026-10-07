@@ -66,8 +66,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
-    # Heat Pump Clothes Dryer Upgrade
-    ## Photo Report
+    <ReportHeader
+      title="Heat Pump Clothes Dryer Upgrade"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

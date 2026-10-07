@@ -284,8 +284,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
  <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
-    # Wall Air Sealing and Insulation (Drill and Fill) Upgrade
-    ## Photo Report
+    <ReportHeader
+      title="Wall Air Sealing and Insulation (Drill and Fill) Upgrade"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

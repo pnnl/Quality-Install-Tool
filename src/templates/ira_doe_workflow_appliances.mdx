@@ -212,8 +212,11 @@ The appliance/equipment that use this workflow are ones that only require a phot
     <Tab eventKey="report"  title="Report">
         <PrintSection label="Print Report">
               ---
-                # Appliance Installation
-                ## Photo Report
+            <ReportHeader
+              title="Appliance Installation"
+              docName={props.metadata.doc_name}
+              subtitle="Photo Report"
+            />
             <LabelValue value ={props.data.assessment_date} type="date" label="Assessment Date"/>
             <ProjectInfoReport {...props} />
              <Repeatable path="appliances" label="Appliance / Equipment">
