@@ -250,14 +250,21 @@ const JobList: React.FC<JobListProps> = ({ workflowName }) => {
                             </div>
                         )}
                     <br />
-                    <Button
-                        variant="primary"
-                        onClick={() => {
-                            setIsInstallationForAddModalVisible(true)
-                        }}
-                    >
-                        Add {workflow.subtitle.singularTitleCase}
-                    </Button>
+                    <div className="d-flex align-items-center gap-2">
+                        <Button
+                            variant="primary"
+                            onClick={() => {
+                                setIsInstallationForAddModalVisible(true)
+                            }}
+                        >
+                            Add {workflow.subtitle.singularTitleCase}
+                        </Button>
+                        {workflow.instructions && (
+                            <span className="disclaimer-text">
+                                {workflow.instructions}
+                            </span>
+                        )}
+                    </div>
                     {installations.length > 0 && (
                         <>
                             <div className="bottom-margin"></div>

@@ -48,6 +48,9 @@ export interface TemplateConfiguration {
         pluralTitleCase: string // Plural title case (e.g., "Installations")
         pluralLowerCase: string // Plural lowercase (e.g., "installations")
     }
+    // Optional guidance shown next to the "Add <Installation>" button on the
+    // installation list page for this workflow.
+    instructions?: string
     template: React.FC<MDXProps & TemplateProps>
 }
 
@@ -113,6 +116,8 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_full_frame_replacement_windows: {
         title: 'Full Frame Replacement Windows',
         subtitle: INSTALLATION_SUB_TITLE,
+        instructions:
+            'Add an installation for each window that will be replaced.',
         template: DOEWorkflowFullFrameReplacementWindows,
     },
     doe_workflow_heat_pump_cloth_dryer: {
@@ -153,6 +158,8 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
     doe_workflow_insert_replacement_windows: {
         title: 'Insert Replacement Windows/Doors',
         subtitle: INSTALLATION_SUB_TITLE,
+        instructions:
+            'Add an installation for each window that will be replaced.',
         template: DOEWorkflowInsertReplacementWindows,
     },
     doe_workflow_linear_fluorescent_to_led_retrofit: {

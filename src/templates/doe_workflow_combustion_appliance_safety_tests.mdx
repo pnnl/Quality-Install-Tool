@@ -201,8 +201,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
     <Tab eventKey="report"  title="Report">
         <PrintSection label="Print Report">
               ---
-                # Combustion Appliance Safety Testing
-                ## Photo Report
+                <ReportHeader
+                  title="Combustion Appliance Safety Testing"
+                  docName={props.metadata.doc_name}
+                  subtitle="Photo Report"
+                />
             <LabelValue value ={props.data.assessment_date} type="date" label="Assessment Date"/>
             <ProjectInfoReport {...props} />
             <CombustionSafetyChecksReport {...props} />
