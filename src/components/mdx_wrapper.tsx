@@ -46,6 +46,7 @@ import ProjectsProvider, {
 import StoreProvider, { StoreContext } from '../providers/store_provider'
 import { type TemplateProps } from '../templates'
 import { type Project } from '../types/database.types'
+import ReportHeaderWrapper from './report_header_wrapper'
 
 const components = {
     Button,
@@ -80,6 +81,7 @@ const components = {
     Radio: RadioWrapper,
     Repeatable: RepeatableWrapper,
     RepeatableInput: RepeatableInputWrapper,
+    ReportHeader: ReportHeaderWrapper,
     Select: SelectWrapper,
     ShowOrHide: ShowOrHideWrapper,
     StoreProvider: StoreProvider,

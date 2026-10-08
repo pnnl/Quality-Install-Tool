@@ -95,8 +95,11 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
   <Tab eventKey="report"  title="Report">
     <PrintSection label="Print Report">
     ---
-    # Linear Fluorescent to LED Retrofit
-    ## Photo Report
+    <ReportHeader
+      title="Linear Fluorescent to LED Retrofit"
+      docName={props.metadata.doc_name}
+      subtitle="Photo Report"
+    />
 
     <ProjectInfoReport {...props} />
 

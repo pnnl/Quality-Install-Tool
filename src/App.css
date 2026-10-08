@@ -377,6 +377,13 @@ h1 + h3 {
     font-weight: bold;
 }
 
+.disclaimer-text-warning {
+    padding-right: 0.75rem;
+    padding-top: 0.75rem;
+    font-size:1rem;
+    font-weight: bold;
+}
+
 .combustion_tests {
     padding: 5px 10px 5px 10px;
     background-color: white;
@@ -973,4 +980,28 @@ btn-light:hover {
     .photo-quality-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Report Header */
+.report-header-container {
+    text-align: center;
+}
+
+.report-header-container h1 {
+    margin: 0;
+}
+
+.report-header-container h2 {
+    margin: 0;
+}
+
+.report-header-docname {
+    margin: 0.25rem;
+    padding-bottom: 0.50rem;
+    line-height: 1;
+}
+
+.report-header-subtitle {
+    margin: 0.50rem;
+    line-height: 1;
 }

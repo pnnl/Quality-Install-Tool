@@ -47,6 +47,7 @@
                 "Radio": false,
                 "Repeatable": false,
                 "RepeatableInput": false,
+                "ReportHeader": false,
                 "Select": false,
                 "ShowOrHide": false,
                 "StoreProvider": false,
