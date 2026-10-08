@@ -77,6 +77,8 @@ async function fetchReleaseNotes(): Promise<string> {
         if (releases.length === 0) return ''
 
         const latest = releases[0]
+        if (!latest || !latest.notes || latest.notes.length === 0) return ''
+
         const notesList = latest.notes
             .map((note: string) => `<li>${note}</li>`)
             .join('')
