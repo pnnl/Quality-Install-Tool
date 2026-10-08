@@ -1,6 +1,12 @@
 {
-  "current": "1.0.0",
+  "current": "1.1.0",
   "releases": [
+    {
+      "date": "2026-10-07",
+      "notes": [
+        "Template improvements: Enhanced templates with new fields.",
+      ]
+    },
     {
       "date": "2026-06-11",
       "notes": [
