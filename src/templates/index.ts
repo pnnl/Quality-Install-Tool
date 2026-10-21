@@ -4,6 +4,7 @@ import React from 'react'
 import DOECombustionApplianceSafetyTests from './doe_workflow_combustion_appliance_safety_tests.mdx'
 import DOEWorkflowAtticAirSealingAndInsulation from './ira_doe_workflow_attic_air_sealing_and_insulation.mdx'
 import DOEWorkflowDuctAirSealTemplate from './ira_doe_workflow_duct_air_sealing_and_insulation.mdx'
+import DOEWorkflowDualFuelHeatPumpTemplate from './doe_workflow_heat_pump_dual_fuel.mdx'
 import DOEWorkflowDuctedHeatPumpTemplate from './doe_workflow_heat_pump_ducted.mdx'
 import DOEWorkflowDuctlessHeatPumpTemplate from './doe_workflow_heat_pump_ductless.mdx'
 import DOEWorkflowElectricCookTemplate from './ira_doe_workflow_electric_cooking_appliance.mdx'
@@ -130,6 +131,11 @@ const TEMPLATES: Record<string, TemplateConfiguration> = {
         title: 'Heat Pump Ducted',
         subtitle: INSTALLATION_SUB_TITLE,
         template: DOEWorkflowDuctedHeatPumpTemplate,
+    },
+    doe_workflow_dual_fuel_heat_pump: {
+        title: 'Heat Pump Dual Fuel',
+        subtitle: INSTALLATION_SUB_TITLE,
+        template: DOEWorkflowDualFuelHeatPumpTemplate,
     },
     doe_workflow_ductless_heat_pump: {
         title: 'Heat Pump Ductless',

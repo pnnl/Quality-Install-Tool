@@ -1,0 +1,646 @@
+import InstallationPermitInput from './reusable/installation_permit_input.mdx'
+import CombustionSafetyChecksLink from './reusable/combustion_safety_checks_input.mdx'
+import CombustionSafetyChecksReport from './reusable/combustion_safety_checks_report.mdx'
+import ProjectInfoReport from './reusable/project_info_report.mdx'
+
+<Tabs>
+    <Tab eventKey="pre_installation" title="Pre-Installation">
+        <Collapsible header="Workflow Configurations and Installation Sequence">
+            This workflow supports adding a heat pump (outdoor unit and cased coil) to a gas furnace, and the photo prompts follow the typical
+            installation sequence when both a gas furnace and a cased coil are installed.
+
+            **Upgrade paths**
+            - Existing furnace with an AC coil to the existing furnace + heat pump
+            - Existing furnace with no AC to the existing furnace + heat pump
+            - Existing furnace with an AC coil to a new furnace + heat pump
+            - Existing furnace with no AC to a new furnace + heat pump
+
+            **Furnace types**: Condensing furnaces, Natural draft furnaces
+
+            **Furnace orientations**: Upflow, Downflow, Horizontal right, Horizontal left
+
+            **Reference images: wire routing between the furnace and the cased coil**
+
+            <Figure src="/images/dual_fuel/dhp1.png">Upflow furnace with cased coil</Figure>
+            <Figure src="/images/dual_fuel/dhp2.png">Downflow furnace with cased coil</Figure>
+            <Figure src="/images/dual_fuel/dhp3.png">Horizontal furnace with cased coil (discharge to the right)</Figure>
+            <Figure src="/images/dual_fuel/dhp4.png">Horizontal furnace with cased coil (discharge to the left)</Figure>
+        </Collapsible>
+
+        ## Visual Assessment of the Existing Equipment
+
+        <PhotoInput id="existing_heating_appliance_photo" label="Existing Heating Appliance - Photo">
+            Take a wide-angle photo of the existing heating appliance showing the condition.
+            Examples of heating appliances: gas furnace, oil furnace, gas boiler, oil boiler, gas wall heater,
+            electric wall heater, electric baseboard, wood stove, pellet stove, etc.
+        </PhotoInput>
+        <PhotoInput id="existing_heating_appliance_name_plate_photo" label="Existing Heating Appliance Name Plate – Photo">
+            Take a photo of the existing heating appliance’s nameplate.
+        </PhotoInput>
+
+        <Radio label="Is there an existing cooling appliance?" options={['Yes','No']} path="has_cooling_appliance" />
+
+        <ShowOrHide visible={props.data?.has_cooling_appliance === 'Yes'}>
+            <PhotoInput id="existing_cooling_appliance_photo" label="Existing Cooling Appliance – Photo">
+                Take a wide-angle photo of the existing cooling appliance showing the condition.
+                Examples of cooling appliances: central air conditioner,
+                window air conditioner, wall air conditioner, evaporative cooler, old heat pump.
+            </PhotoInput>
+            <PhotoInput id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo">
+                Take a photo of the existing cooling appliance’s nameplate. If the cooling appliance is a split system include both the indoor and outdoor nameplate.
+            </PhotoInput>
+        </ShowOrHide>
+
+        ## Visual Assessment of the Ductwork
+        <CollapsibleTextContainer
+            title="Duct Testing"
+            text={
+                <ul>
+                    <li>The performance of ducted HVAC equipment depends on the quality of the duct work.</li>
+                    <li>
+                        The size of the existing ducts may be the major driver to opt for a dual fuel heat pump versus a heat pump only system,
+                        since a gas furnace needs about half the airflow to deliver the same amount of heat.
+                    </li>
+                    <li>
+                        Start with the visual assessment. If no major issues are found, follow with:
+                        <ol>
+                            <li>Static pressure measurements</li>
+                            <li>Airflow measurements</li>
+                            <li>Duct leakage measurements</li>
+                        </ol>
+                    </li>
+                </ul>
+            }
+        />
+        If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and
+        repairs are needed:
+        - Make notes and skip performing a duct leakage test at the initial phase
+        - Perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight
+        <PhotoInput id="existing_ductwork_photo" label="Ductwork – Photo">
+            Provide a representative photo of the existing ductwork condition.
+        </PhotoInput>
+        <StringInput label="Ductwork Comments" path="comment_ductwork" />
+
+        ## Static Pressure Test
+        Total external static pressure measurement
+        <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
+            Take a photo of the manometer readout or screenshot from digital instrument app.
+        </PhotoInput>
+        <StringInput label="Comment on remediation plans" path="comment_pre_upgrade_static_pressure_test" hint="If total external static pressure is above 0.5 i.w.c, assess whether the static pressure is in the supply or return. If it is in the return, consider recommending upsizing the return filter to accommodate a larger size and a deeper filter. Adding a cased coil adds static pressure, so plan for it." />
+
+        ## Airflow Test
+        Use flow plate test OR the pressure matching technique OR the total external static pressure vs CFM fan curve method
+        <PhotoInput id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Airflow Test Setup – Photo">
+            Take a photo of the airflow test setup.
+        </PhotoInput>
+        <PhotoInput id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" uploadable >
+            Take a photo of the manometer CFM or upload a screenshot of the instrument app or the manometer and fan curve chart/table.
+        </PhotoInput>
+        <StringInput label="Comments on Pre-Upgrade Airflow Test" path="comment_pre_upgrade_air_flow_test" hint="Comment on remediation plan if flow is much lower than 400 CFM per ton" />
+
+        ## Duct Leakage Testing
+        If the ducts will be entirely replaced or the visual inspection found significant duct upgrades and
+        repairs are needed:
+        - Make notes and skip performing a duct leakage test at the initial phase
+        - Perform the duct leakage test post upgrades and repairs to verify the ducts are sufficiently airtight
+
+        <Select label="Select the test method used:" options={["Duct leakage tester", "Pressure pan","Airflow hood (capture hood, balometer)"]} path="duct_leakage_test_method" />
+
+        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}>
+            <PhotoInput id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+                Take a photo of the duct test setup showing ring size and how it is attached to the duct system.
+            </PhotoInput>
+            <PhotoInput id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+                Take a photo of the duct leakage test manometer, CFM at 25 Pa.
+            </PhotoInput>
+
+            | CFM25 per 100 ft<sup>2</sup> Calculator
+            | ---------------------------------------
+            | <NumberInput label="CFM25" min={0} path="cfm25_calculator.cfm25"  />
+            | <NumberInput label={<>Conditioned Floor Area (ft<sup>2</sup>)</>} min={0} path="cfm25_calculator.conditioned_floor_area"  />
+            | CFM25 per 100 ft<sup>2</sup> = { props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100).toFixed(2) : null }
+
+            ## Type Of Test
+            <Radio label="Type of duct leakage test performed" options={['Total Leakage','Leakage to Outside']} path="type_of_duct_leakage_radio" />
+        </ShowOrHide>
+        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}>
+            <PhotoInput id="pressure_pan_setup_photo" label="Pressure Pan Setup – Photo">
+                Take a photo of the pressure pan and manometer measuring one supply register.
+            </PhotoInput>
+            <PhotoInput id="pressure_pan_results_photo" label="Pressure Pan Results – Photo">
+                Take a photo of the document showing the readings from all the supply registers.
+            </PhotoInput>
+        </ShowOrHide>
+        <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Airflow hood (capture hood, balometer)'}>
+            <PhotoInput id="airflow_hood_setup_photo" label="Airflow Hood Setup  – Photo">
+                Take a photo of the airflow hood measuring one supply register.
+            </PhotoInput>
+            <PhotoInput id="airflow_hood_results_photo" label="Airflow Hood Results  – Photo">
+                Take a photo of the document showing the readings from all the supply registers.
+            </PhotoInput>
+        </ShowOrHide>
+
+        ## Combustion Appliance Safety Testing
+        <p>If the home upgrades will result in a barometric draft controlled or Category I appliance equipped with a draft
+        hood or connected to a natural draft venting system remaining in the conditioned envelope of the home, combustion
+        safety checks are required to be performed at the completion of the project. </p>
+    </Tab>
+    <Tab eventKey="planning" title="Planning">
+        ## Planned Install Location
+        Heat pump outdoor units need more careful placement planning than air conditioner condensers. They must not cause a slip hazard
+        when generating defrost melt water at below freezing temperatures, and they must be elevated above snow drifts to work well.
+
+        <PhotoInput id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo">
+            Take a photo of proposed ODU install location.
+        </PhotoInput>
+        <Radio label="ODU Mounting Style" options={['Pad','Ground Stand','Wall Mount','Roof Mount']} path="outdoor_unit.odu_mounting_style" />
+
+        <NumberInput label="ODU Inches Above The Ground (elevated above the snow)" min={0} path="outdoor_unit.odu_inches_above_ground" />
+
+        <Radio label="Overhead Snow & Ice Protection" options={['Awning/Cover','None']} path="outdoor_unit.snow_ice_protection" />
+
+        ## Manual J Calculation
+        <Collapsible header="Manual J Calculation Details">
+            Correctly sizing the heat pump for the home’s heating and cooling needs is much more
+            important for a heat pump than for a furnace and AC system. Use ACCA-approved Manual J
+            residential load calculation software. It is recommended that the Manual J calculations be
+            performed with the home occupant present that knows the most about the home to help
+            determine the most accurate values to enter. Ask the home occupant whether any rooms
+            presently get too hot or cold.
+        </Collapsible>
+
+        <FileInput id="manual_j_file" label="PDF of Manual J - File">
+            Attach the Manual J load calculations showing design conditions, conditioned square footage,
+            and the heating and cooling load calculations.
+        </FileInput>
+        <StringInput label="Manual J Notes or Comments" path="comment_manual_j" />
+
+        ## Equipment Performance Tables
+        You are encouraged to use the <a href="https://basc.pnnl.gov/cchp_decision_tool" target="_blank" rel="noopener noreferrer">Cold Climate Heat Pump Decision Tool</a> which
+        can help assist in selecting the right heat pump for this home.
+
+        <Collapsible header="Equipment Selection Details">
+            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or alternate load sizing
+            method such as sizing the equipment to the air flow capability of the ducts if it is less than the Manual J loads.
+            Equipment selection also depends on knowing the equipment’s performance at specific temperatures.
+            Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List.
+            The cased coil must be matched to the outdoor unit, and must be compatible with the furnace cabinet width, orientation
+            (upflow, downflow or horizontal), and the furnace blower capacity. Some manufacturers sell coils of different heights, picking the right
+            height can save installation time by not needing to fabricate transition sheet metal. If there is a large discrepancy between the heating and cooling load,
+            the furnace and the cased coil may be different sizes, most manufacturers include adapter plates to accommodate a one size difference.
+            Please add a comment recording the decisions made.
+        </Collapsible>
+        <PhotoInput id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" uploadable>
+            Upload a photo of the manufacturer&apos;s extended heating performance table.
+        </PhotoInput>
+
+        <Collapsible header="Dual Fuel Switch Over Planning">
+            - The switch over method (droop or fixed temperature) should be determined at the planning stage.
+            - The heat pump can be undersized because it is sized for the cooling load or the airflow capability of the ducts.
+            - A low-cost single stage heat pump that isn’t designed for cold climate performance can be used if the switch over temperature is set appropriately.
+            - Use the cost of electricity versus the cost of natural gas/propane and the COP curve to calculate the economic switch over temperature.
+        </Collapsible>
+
+        <NumberInput label={<>Auxiliary Heat Lockout Above This Temperature (&deg;F)</>} min={0} path="aux_heat_lockout_temperature" />
+        <NumberInput label={<>Compressor Lockout Below This Temperature (&deg;F)</>} min={0} path="compresser_lockout_temperature" />
+        <NumberInput label={<>Dual Fuel Switch Over Temperature (&deg;F)</>} min={0} path="dual_fuel_switch_over_temperature" />
+
+        <PhotoInput id="mfg_extended_cooling_performance_table_photo" label="Mfr's cooling performance table – Photo" uploadable>
+            Upload a photo of the manufacturer&apos;s extended cooling performance table showing sensible, latent, or SHR.
+        </PhotoInput>
+
+        ## Additional Comments
+        <StringInput label="Additional Comments" path="comment_planning_concluding_summary"  hint="E.g., Return air filter grille upsizing" />
+    </Tab>
+    <Tab eventKey="installation" title="Installation">
+        <DateInput label="Installation Date" path="install_date" />
+
+        <InstallationPermitInput />
+
+        ## Refrigerant Recovery
+        <Radio label="Is this heat pump installation replacing an old AC or heat pump?" options={['Yes','No']} path="replacing_old_ac_or_heatpump" />
+        <ShowOrHide visible={props.data?.replacing_old_ac_or_heatpump === 'Yes'}>
+            <PhotoInput id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo">
+                Take a photo of the old AC or heat pump nameplate showing the refrigerant charge.
+            </PhotoInput>
+            <PhotoInput id="recover_setup_photo" label="Recovery Setup – Photo">
+                Take a photo of the refrigerant recovery setup.
+            </PhotoInput>
+            <PhotoInput id="recover_scale_photo" label="Recovery Scale – Photo">
+                Take a photo of the scale showing how much refrigerant was recovered out of the system.
+            </PhotoInput>
+        </ShowOrHide>
+
+        ## Equipment
+        <PhotoInput id="odu_nameplate_photo" label="ODU nameplate – Photo">
+            Take a photo of the Outdoor Unit (ODU) nameplate.
+        </PhotoInput>
+        <PhotoInput id="idu_nameplate_photo" label="IDU nameplate – Photo">
+            Take a photo of the Indoor Unit (IDU) nameplates: gas furnace and cased coil.
+        </PhotoInput>
+
+        ## Electrical
+
+        <PhotoInput id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo">
+            Take a photo showing the amperage of the Outdoor Unit (ODU) circuit breaker.
+        </PhotoInput>
+        <PhotoInput id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo">
+            Take a photo showing the amperage of the Indoor Unit (IDU) circuit breaker.
+        </PhotoInput>
+        <StringInput label="Circuit Breaker Notes" path="comment_circuit_breaker_notes" hint="E.g., wire size modifications, or shared or repurposed circuits." />
+
+
+
+        ## Refrigerant Connection Quality
+
+        ### Installation Tests
+        <PhotoInput id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo">
+            Take a photo of the nitrogen pressure test setup. Test to 500 PSI or manufacturer&apos;s recommended test pressure.
+        </PhotoInput>
+        <PhotoInput id="nitrogen_pressure_test_result_photo" label="Nitrogen Pressure Decay Test Results – Photo">
+            Take a photo of the pressure gauge showing the temperature-compensated pressure decay after 10 minutes. Please use a digital pressure gauge while the
+            system is pressurized with nitrogen, check all the field made connections using non-corrosive bubble solution and/or an ultrasonic leak detector.
+        </PhotoInput>
+        <PhotoInput id="vacuum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo">
+            Take a photo of the vacuum/evacuation setup. Use a core removal tool and minimize number of fittings.
+
+            Valve cores are not to be reused under any circumstances after removal from the valve body. It is recommended that service personnel always install a new core when servicing the system.
+        </PhotoInput>
+        <PhotoInput id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo">
+            Take a photo of the vacuum decay test results. Use a digital micron gauge. The system must be isolated from the vacuum pump. The vacuum must not rise above 500 microns in 15 minutes.
+        </PhotoInput>
+
+        ### Refrigerant Adjustments
+        <PhotoInput id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo">
+            Take a photo of the scale readout and calculations for the refrigerant charge adjustment.
+        </PhotoInput>
+        | Additional Refrigerant Calculator
+        | ---------------------------------
+        | <NumberInput label="Feet of line set beyond factory charge" min={0} path="refrigerant_calculator.ft_line_set_beyond_factory_charge" hint=""  />
+        | <NumberInput label="Ounce of refrigerant per foot of line set" min={0} path="refrigerant_calculator.oz_per_ft_refrigerant" hint="Please write the ounces of additional refrigerant added beyond the factory charge behind the service cover." />
+        |  Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
+        <StringInput label="Notes about refrigerant quantity adjustments or weigh in" path="comment_refrigerant_quantity_adjustments_or_weigh_in" />
+
+        ## Gas Venting
+
+        <PhotoInput id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo">
+            Take a wide-angle photo of the exhaust vent termination from the exterior.
+            - To show that the vent is far enough away from windows, doors, soffits, eaves, crawlspace vents, and air intakes. All clearance requirements are in accordance with ANSI Z21.10.3 and the National Fuel Gas Code, ANSI Z223.1 / NFPA 54 and CGA B149.1 National Gas and Propane Installation Code.
+            - To show that the wall penetration for the vent has been flashed correctly.
+            - Install the termination high enough so that snow drifts won’t block the vent.
+            - Install termination fittings in a manner to prevent short circuit of air from exhaust to intake.
+        </PhotoInput>
+        <PhotoInput id="intake_vent_location_photo" label="Intake Vent Location – Photo">
+            Take a wide-angle photo of the intake vent location if different/not shown in the previous image.
+            Example: If the intake is in an unconditioned attic, this photo would show that it is sufficiently above or away from attic insulation.
+        </PhotoInput>
+        <PhotoInput id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo">
+            Optional: Take a photo of venting modifications for the remaining natural draft combustion appliance(s). Provide this photo if this installation results in any natural draft combustion appliances remaining such as a water heater.
+        </PhotoInput>
+
+        ## Condensate Management
+
+        <PhotoInput id="condensate_line_photo" label="Condensate Line – Photo">
+            Take a photo of the condensate line from the furnace and cased coil to the drain. Show that the line is protected from freezing in the winter
+            (for example it is not exposed to unconditioned or outdoor space, or is heat traced/insulated as needed) and from sweating in the summer (insulated where it
+            runs through an unconditioned attic or crawlspace).
+        </PhotoInput>
+        <PhotoInput id="line_set_protection_photo" label="Line Set Protection – Photo">
+            Take a photo of the line set and line set wall penetration protection.
+        </PhotoInput>
+        <PhotoInput id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo">
+            Take a photo of the electrical surge protection device installed.
+        </PhotoInput>
+        <PhotoInput id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+            Take a photo of the service caps showing they have been reinstalled and tightened. Your jurisdiction may require the service port caps to be locking refrigerant caps.
+
+            Install service caps that have o-ring seals or use a copper flare gasket to help seal a brass-on-brass mating surface.
+        </PhotoInput>
+
+        ## Gas Testing
+
+        <PhotoInput id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo">
+            Take a photo of the carbon monoxide alarm installed.
+        </PhotoInput>
+        <PhotoInput id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo">
+            Take a representative photo of the electronic methane leak detector while it is testing a gas connection. Please take the time to check all the other gas connections.
+        </PhotoInput>
+        <PhotoInput id="outlet_gas_pressure_manometer_photo" label="Manometer Showing Outlet Gas pressure – Photo">
+            Take a photo of the manometer measuring the outlet gas pressure for single, two, and three speed gas furnaces. Skip this photo prompt if the furnace is a modulating firing rate furnace.
+        </PhotoInput>
+        <PhotoInput id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo">
+            Take a photo of the combustion analysis results. Refer to local regulations on how to do this test, from the outside vent, or drilling into the PVC pipe. Some equipment may have a test port for this purpose.
+        </PhotoInput>
+    </Tab>
+    <Tab eventKey="post_install" title="Post-Installation">
+        ## Post-install Airflow Test
+        Airflow is a cornerstone to ducted equipment performance. The new equipment will result in some airflow changes.
+        Checking the system post upgrades to verify adequate airflow is an important step.
+
+        <PhotoInput id="post_install_air_flow_test_setup_photo" label="Post-Install Airflow Test Setup – Photo">
+            Take a photo of the post-installation airflow test setup.
+        </PhotoInput>
+        <PhotoInput id="post_install_air_flow_test_results_photo" label="Post-Install Airflow Test Results – Photo">
+            Take a photo of the post-installation airflow test results.
+        </PhotoInput>
+        ## Post-install Static Pressure Test
+        <PhotoInput id="post_install_static_pressure_test_setup_photo" label="Post-Install Static Pressure Test Setup – Photo">
+            Take a photo of the static pressure test setup showing the tap placement.
+        </PhotoInput>
+        <PhotoInput id="post_install_static_pressure_test_results_photo" label="Post-Install Static Pressure Test Results – Photo">
+            Take a photo of the manometer readout showing the total external static pressure.
+        </PhotoInput>
+        ## Thermostat Settings
+        How well a dual fuel heat pump operates and how much utility bill savings it offers depends on the thermostat settings. Important settings include:
+        - Switch over mode/method: droop versus fixed switch over temperature
+        - Switch over temperature
+        - Aux (gas heat) lock out temperature
+        - If using droop: degrees of droop before switch over, and minutes of runtime before switch over
+
+        Add multiple photos to document the setpoint/setting of the different important thermostat settings.
+
+        <PhotoInput id="thermostat_setting_photo" label="Thermostat Setting – Photo">
+            Take a photo of the thermostat showing the temperature value set for the auxiliary heat lockout, compressor lockout temperature, and dual fuel switch over temperature as applicable.
+        </PhotoInput>
+        <StringInput label="Notes about thermostat settings" path="comment_about_thermostat_settings" />
+
+        ## Project Invoice
+        <PhotoInput id="project_invoice_photo" label="Project Invoice – Photo">
+            Take a photo of the project invoice if your program requires it.
+        </PhotoInput>
+
+        ## Mechanical Ventilation
+        If the addition of supply based mechanical ventilation is included in the heat pump upgrade. Use the mechanical
+        ventilation quality installation workflow to document that installation.
+
+        <CombustionSafetyChecksLink {...props} />
+    </Tab>
+    <Tab eventKey="report" title="Report">
+        <PrintSection label="Print Report">
+            ---
+            <ReportHeader
+              title="Dual Fuel Heat Pump Upgrade"
+              docName={props.metadata.doc_name}
+              subtitle="Photo Report"
+            />
+
+            <ProjectInfoReport {...props} />
+
+            ## **Pre-Upgrade Assessment**
+            <Photo id="existing_heating_appliance_photo" label="Existing Heating Appliance - Photo" required>
+                Photo of existing heating appliance
+            </Photo>
+            <Photo id="existing_heating_appliance_name_plate_photo" label="Existing Heating Appliance Name Plate – Photo" required>
+                Photo of existing heating appliance’s nameplate
+            </Photo>
+            <LabelValue label="Existing cooling appliance" value={props.data?.has_cooling_appliance}/>
+            <ShowOrHide visible={props.data?.has_cooling_appliance === 'Yes'}>
+                <Photo id="existing_cooling_appliance_photo" label="Existing Cooling Appliance – Photo" required>
+                    Photo of existing cooling appliance
+                </Photo>
+                <Photo id="existing_cooling_appliance_name_plate_photo" label="Existing Cooling Appliance Name Plate – Photo" required>
+                    Photo of the existing cooling appliance’s nameplate. If the cooling appliance is a split system this includes both the indoor and outdoor nameplate.
+                </Photo>
+            </ShowOrHide>
+            <Photo id="existing_ductwork_photo" label="Ductwork – Photo" required>
+                Photo of existing ductwork condition
+            </Photo>
+            <LabelValue label="Ductwork Comments" value={props.data?.comment_ductwork}/>
+
+            ## Static Pressure Test Results
+            Total external static pressure measurement: This measurement is akin to taking the blood pressure of a person.
+            For an HVAC system, a total external static pressure value of 0.5 i.w.c or less is good. The ducts can be repaired or upgraded
+            to bring a high value down to a healthy value.
+
+            <Photo id="preupgrade_static_pressure_test_photo" label="Pre-Upgrade Static Pressure Test – Photo" required>
+                Photo of the manometer readout or screenshot from digital instrument app
+            </Photo>
+            <LabelValue label="Pre-Upgrade Static Pressure Test Notes" value={props.data.comment_pre_upgrade_static_pressure_test}/>
+
+            ## Airflow Test Results
+            In order for a heat pump to efficiently and effectively deliver the conditioned air to the house,
+            the ducts need to be able to move enough air. This test uses the home&apos;s existing blower to measure how much air the ducts can move.
+            <Photo id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Airflow Test Setup – Photo" required>
+                Photo of the airflow test setup
+            </Photo>
+            <Photo id="pre_upgrade_air_flow_test_results_photo" label="Pre-Upgrade Airflow Results – Photo" required>
+                Photo of the manometer CFM or screenshot of the instrument app or the manometer and fan curve chart/table.
+            </Photo>
+            <LabelValue label="Pre-Upgrade Airflow Test Notes" value={props.data.comment_pre_upgrade_air_flow_test}/>
+
+            ## Duct Leakage Test Results
+            Leaky ducts mean the conditioned air doesn&apos;t make it to the rooms where the conditioned air is needed.
+            In existing construction it is highly recommended that action be taken to reduce duct leakage if
+            the duct leakage test finds the leakage rate to be greater than 12 CFM25 per 100 ft<sup>2</sup> of conditioned floor area.
+
+            <LabelValue label="Test method used" value={props.data?.duct_leakage_test_method}/>
+            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Duct leakage tester'}>
+                <Photo id="duct_test_setup_photo" label="Duct Test Setup – Photo">
+                    Photo of duct test setup showing ring size and how it is attached to the duct system
+                </Photo>
+                <Photo id="duct_leakage_cfm_photo" label="Duct Leakage CFM – Photo">
+                    Photo of duct leakage test manometer, CFM at 25 Pa
+                </Photo>
+
+                <LabelValue label="Type Of Duct Leakage Test Performed" value={props.data.type_of_duct_leakage_radio}/>
+
+                <LabelValue label="CFM25" value={props.data.cfm25_calculator?.cfm25 ? props.data.cfm25_calculator.cfm25 : null}/>
+                <LabelValue label={<span>Conditioned Floor Area (ft<sup>2</sup>)</span>}
+                    value={props.data.cfm25_calculator?.conditioned_floor_area ? props.data.cfm25_calculator.conditioned_floor_area : null}/>
+                <LabelValue label={<span>Duct CFM25 per 100 ft<sup>2</sup></span>}
+                    type={props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? "number" : "string"}
+                    decimalPlaces={2}
+                    value={ props.data.cfm25_calculator?.cfm25 && props.data.cfm25_calculator?.conditioned_floor_area ? ((props.data.cfm25_calculator.cfm25 / props.data.cfm25_calculator.conditioned_floor_area) * 100) : null }/>
+            </ShowOrHide>
+
+            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Pressure pan'}>
+                <Photo id="pressure_pan_setup_photo" label="Pressure Pan Setup – Photo">
+                    Photo of the pressure pan and manometer measuring one supply register
+                </Photo>
+                <Photo id="pressure_pan_results_photo" label="Pressure Pan Results – Photo">
+                    Photo of the document showing the readings from all the supply registers
+                </Photo>
+            </ShowOrHide>
+
+            <ShowOrHide visible={props.data?.duct_leakage_test_method === 'Airflow hood (capture hood, balometer)'}>
+                <Photo id="airflow_hood_setup_photo" label="Airflow Hood Setup  – Photo">
+                    Photo of the airflow hood measuring one supply register
+                </Photo>
+                <Photo id="airflow_hood_results_photo" label="Airflow Hood Results  – Photo">
+                    Photo of the document showing the readings from all the supply registers
+                </Photo>
+            </ShowOrHide>
+
+            ## **Planning**
+            <Photo id="proposed_odu_install_location_photo" label="Proposed ODU Install Location – Photo" required>
+                Photo of proposed ODU install location
+            </Photo>
+            <LabelValue label="ODU Mounting Style" value={props.data.outdoor_unit?.odu_mounting_style}/>
+            <LabelValue label="ODU Inches Above The Ground (elevated above the snow)" value={props.data.outdoor_unit?.odu_inches_above_ground}/>
+            <LabelValue label="Overhead Snow & Ice Protection" value={props.data.outdoor_unit?.snow_ice_protection}/>
+
+            {
+                props.metadata.attachments?.manual_j_file && (
+                <>
+                <h2> Manual J </h2>
+                <p>Please see the attached Manual J report.</p>
+                </>)
+            }
+            <PDFRenderer id="manual_j_file" label="" />
+
+            <LabelValue label="Manual J Notes or Comments" value={props.data.comment_manual_j}/>
+
+            ## Equipment Selection
+            The selected heat pump&apos;s extended heating and cooling performance tables are shown below. These tables were used in concert with the ASHRAE heating
+            and cooling design conditions, and Manual J load calculations to select the best equipment to fit the home&apos;s heating and cooling needs.
+            <Photo id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" required>
+                The selected heat pump&apos;s extended heating performance table
+            </Photo>
+
+            <LabelValue label={<span>Auxiliary Heat Lockout Above This Temperature (&deg;F)</span>} value={props.data.aux_heat_lockout_temperature}/>
+            <LabelValue label={<span>Compresser Lockout Below This Temperature (&deg;F)</span>} value={props.data.compresser_lockout_temperature}/>
+            <LabelValue label={<span>Dual Fuel Switch Over Temperature (&deg;F)</span>} value={props.data.dual_fuel_switch_over_temperature}/>
+
+            <Photo id="mfg_extended_cooling_performance_table_photo" label="Mfr's cooling performance table – Photo" required>
+                The selected heat pump&apos;s extended cooling performance table
+            </Photo>
+
+            <LabelValue label="Additional Comments" value={props.data.comment_planning_concluding_summary}/>
+
+            ## **Installation**
+
+            ## Refrigerant Recovery
+            <LabelValue label="Is this heat pump installation replacing an old AC or heat pump?" value={props.data?.replacing_old_ac_or_heatpump}/>
+            <ShowOrHide visible={props.data?.replacing_old_ac_or_heatpump === 'Yes'}>
+                <Photo id="old_ac_or_heat_pump_photo" label="Old AC or Heat Hump Nameplate – Photo" required>
+                    Photo of the old AC or heat pump nameplate showing the refrigerant charge.
+                </Photo>
+                <Photo id="recover_setup_photo" label="Recovery Setup – Photo" required />
+                <Photo id="recover_scale_photo" label="Recovery Scale – Photo" required />
+            </ShowOrHide>
+
+            ### Equipment
+            <Photo id="odu_nameplate_photo" label="ODU nameplate – Photo" required />
+            <Photo id="idu_nameplate_photo" label="IDU nameplate – Photo" required />
+
+            ### Electrical
+            <Photo id="odu_circuit_breaker_photo" label="ODU circuit breaker – Photo" required />
+            <Photo id="idu_circuit_breaker_photo" label="IDU circuit breaker – Photo" required />
+            <LabelValue label="Circuit Breaker Notes" value={props.data.comment_circuit_breaker_notes}/>
+
+            ## Refrigerant Connection Quality
+
+            ### Installation Tests
+            <Photo id="nitrogen_pressure_test_setup_photo" label="Nitrogen Pressure Test Setup – Photo" required>
+                The test is conducted at 500 PSI or the manufacturer&apos;s recommended test pressure.
+            </Photo>
+            <Photo id="nitrogen_pressure_test_result_photo" label="Nitrogen Pressure Decay Test Results – Photo" required>
+                A passing temperature-compensated nitrogen pressure decay test will show zero or almost zero pressure decay after 10 minutes.
+            </Photo>
+            <Photo id="vacuum_decay_test_setup_photo" label="Vacuum Decay Test Setup – Photo" required>
+                A good vacuum decay test setup will have the micron gauge located as close to the equipment as possible, with an isolation
+                valve so that the vacuum pump and hose can be isolated from the system during the decay measurement period.
+            </Photo>
+            <Photo id="vacuum_decay_test_results_photo" label="Vacuum Decay Test Results – Photo" required >
+                A passing vacuum decay test is one where the system&apos;s vacuum does not rise above 500 microns in 10 minutes with the vacuum pump and
+                vacuum hose isolated from the system.
+            </Photo>
+
+            ### Refrigerant Adjustments
+            <Photo id="refrigerant_adjustments_photo" label="Refrigerant Adjustments (if applicable) – Photo" >
+                Photo of scale readout and calculations for refrigerant charge adjustment
+            </Photo>
+            | Additional Refrigerant Added
+            | ---------------------------------
+            | Feet of line set beyond factory charge = {props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge : null}
+            | Ounce of refrigerant per foot of line set = {props.data?.refrigerant_calculator?.oz_per_ft_refrigerant? props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
+            | Ounces of additional refrigerant = {(props.data?.refrigerant_calculator?.ft_line_set_beyond_factory_charge && props.data?.refrigerant_calculator?.oz_per_ft_refrigerant) ? props.data.refrigerant_calculator.ft_line_set_beyond_factory_charge  * props.data.refrigerant_calculator.oz_per_ft_refrigerant : null}
+            <LabelValue label="Notes About Refrigerant Quantity Adjustments Or Weigh In"
+                        value={props.data.comment_refrigerant_quantity_adjustments_or_weigh_in}/>
+
+            ## Gas Venting
+            <Photo id="exhaust_vent_termination_photo" label="Exhaust Vent Termination – Photo" required>
+                The exhaust termination must have the required clearances to windows, doors, soffits and air intakes, be flashed and be above the snow line.
+            </Photo>
+            <Photo id="intake_vent_location_photo" label="Intake Vent Location – Photo" />
+            <Photo id="remaining_natural_draft_combustion_appliance_photo" label="Remaining Natural Draft Combustion Appliance(s) – Photo" />
+
+            ## Condensate Management
+            <Photo id="condensate_line_photo" label="Condensate Line – Photo" required>
+                The condensate line should be protected from freezing in the winter and from sweating in the summer. A condensing furnace produces slightly acidic condensate when operating,
+                and the cased coil produces condensate when cooling, so a dual fuel system can produce condensate almost year-round.
+            </Photo>
+            <Photo id="line_set_protection_photo" label="Line Set Protection – Photo" required>
+                The line set and line set to wall penetration should be protected from damage by UV, rain, and pests.
+            </Photo>
+            <Photo id="electrical_surge_protection_device_photo" label="Electrical Surge Protection Device – Photo" />
+            <Photo id="service_caps_photo" label="Service Caps Reinstalled and Tight – Photo">
+                Your jurisdiction may require the service port caps to be locking refrigerant caps.
+            </Photo>
+
+            ## Gas Testing
+            <Photo id="co_alarm_photo" label="Carbon Monoxide Alarm Installed – Photo" />
+            <Photo id="electronic_methane_leak_detector_photo" label="Electronic Methane Leak Detector – Photo" />
+            <Photo id="outlet_gas_pressure_manometer_photo" label="Manometer Showing Outlet Gas pressure – Photo" />
+            <Photo id="combustion_analysis_results_photo" label="Combustion Analysis Results – Photo" />
+
+            ## **Post-Installation**
+            ## Airflow Test
+            <Photo id="post_install_air_flow_test_setup_photo" label="Post-Install Airflow Test Setup – Photo" required />
+            <Photo id="post_install_air_flow_test_results_photo" label="Post-Install Airflow Test Results – Photo" required>
+                Generally, a heat pump should move approximately 400 CFM per ton of heating/cooling capacity +/- 15%.
+            </Photo>
+            ## Static Pressure Test
+            <Photo id="post_install_static_pressure_test_setup_photo" label="Post-Install Static Pressure Test Setup – Photo" required />
+            <Photo id="post_install_static_pressure_test_results_photo" label="Post-Install Static Pressure Test Results – Photo" required>
+                Generally, an efficiently running system will have a total external static pressure of 0.5 i.w.c or less.
+                i.w.c stands of inches of water column which is the standard unit of measurement for this test.
+            </Photo>
+            ## Thermostat Settings
+            <Photo id="thermostat_setting_photo" label="Thermostat Setting – Photo" required>
+                Photo of thermostat setting for auxiliary heat lockout, compressor lockout and dual fuel switch over temperature.
+                Compare these values to the planned values in the equipment selection section of the report.
+            </Photo>
+            <LabelValue label="Post-Installation Notes About Thermostat Settings"
+                        value={props.data.comment_about_thermostat_settings}/>
+
+            {props.metadata?.attachments?.project_invoice_photo && (<>
+                <h3>Project Invoice</h3>
+                <Photo id="project_invoice_photo" label="Project Invoice – Photo">
+                Photo of the project invoice
+                </Photo> </>
+            )}
+
+            {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
+                <InstallationProvider
+                    installationId={props.data.links.doe_combustion_appliance_safety_test_doc_id}
+                    attachments={true}
+                >
+                    <InstallationConsumer>
+                        {([installation]) => {
+                            if (installation) {
+                                return (
+                                    <StoreProvider
+                                        doc={installation}
+                                        onChange={async () => {
+                                            return
+                                        }}
+                                    >
+                                        <CombustionSafetyChecksReport
+                                            project={props.project}
+                                            data={installation.data_}
+                                            metadata={installation.metadata_}
+                                        />
+                                    </StoreProvider>
+                                )
+                            } else {
+                                return null
+                            }
+                        }}
+                    </InstallationConsumer>
+                </InstallationProvider>
+            )}
+        </PrintSection>
+    </Tab>
+
+</Tabs>
