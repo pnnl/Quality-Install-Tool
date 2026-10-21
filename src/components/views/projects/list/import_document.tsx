@@ -1,5 +1,5 @@
 import PouchDB from 'pouchdb'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from 'react-bootstrap'
 
 import { useDatabase } from '../../../../providers/database_provider'
@@ -22,6 +22,14 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
 
     const [error, setError] = useState<string | undefined>(undefined)
     const [isLoading, setIsLoading] = useState(false)
+    const isMountedRef = useRef(true)
+
+    useEffect(() => {
+        isMountedRef.current = true
+        return () => {
+            isMountedRef.current = false
+        }
+    }, [])
 
     const reader = useMemo<FileReader>(() => {
         const _reader = new FileReader()
@@ -36,13 +44,15 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                     setIsLoading(true)
                     const responses = await importJSONDocument(db, data)
 
-                    setError(undefined)
+                    if (isMountedRef.current) setError(undefined)
 
                     onImport && (await onImport(responses))
                 } catch (cause) {
-                    setError(`Failed to import JSON: ${cause}`)
+                    if (isMountedRef.current) {
+                        setError(`Failed to import JSON: ${cause}`)
+                    }
                 } finally {
-                    setIsLoading(false)
+                    if (isMountedRef.current) setIsLoading(false)
                 }
             } catch (cause) {
                 setError(`Failed to parse as JSON: ${cause}`)
@@ -51,6 +61,12 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
 
         return _reader
     }, [db, onImport])
+
+    useEffect(() => {
+        return () => {
+            if (reader.readyState === FileReader.LOADING) reader.abort()
+        }
+    }, [reader])
 
     const handleChange = useCallback(
         async (event: React.ChangeEvent<HTMLInputElement>) => {

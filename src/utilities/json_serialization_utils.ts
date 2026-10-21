@@ -21,7 +21,11 @@ import {
     type Project,
     type PhotoMetadata,
 } from '../types/database.types'
-import { compressPhoto, getPhotoMetadata } from './photo_utils'
+import {
+    compressPhoto,
+    getPhotoMetadata,
+    sniffImageMimeType,
+} from './photo_utils'
 import { getPhotoProfileFromDoc } from './photo_resolution_utils'
 
 export const JSON_DOCUMENT_CONTENT_TYPE: string =
@@ -60,12 +64,27 @@ export function blobFromAttachmentData(
         'buffer' in data &&
         data.buffer instanceof ArrayBuffer
     ) {
-        return new Blob([new Uint8Array(data.buffer)], {
+        const view = data as ArrayBufferView
+        const bytes = new Uint8Array(view.byteLength)
+        bytes.set(new Uint8Array(view.buffer, view.byteOffset, view.byteLength))
+        return new Blob([bytes], {
             type: contentType || 'application/octet-stream',
         })
     }
 
     return undefined
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            const result = reader.result as string
+            resolve(result.slice(result.indexOf(',') + 1))
+        }
+        reader.onerror = () => reject(reader.error)
+        reader.readAsDataURL(blob)
+    })
 }
 
 export async function fixAttachmentsWithMissingContentType<T extends Base>(
@@ -83,11 +102,15 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
     for (const [attachmentId, attachment] of Object.entries(doc._attachments)) {
         if (!attachment.content_type) {
             const fullAttachment = attachment as PouchDB.Core.FullAttachment
-            // Assume missing content_type is HEIC - create blob with HEIC type
-            const blob = blobFromAttachmentData(
-                fullAttachment.data,
-                'image/heic',
-            )
+            const rawBlob = blobFromAttachmentData(fullAttachment.data)
+            // Only treat the attachment as a photo if its bytes say so.
+            const sniffedType = rawBlob
+                ? await sniffImageMimeType(rawBlob)
+                : null
+            const blob =
+                rawBlob && sniffedType
+                    ? new Blob([rawBlob], { type: sniffedType })
+                    : undefined
 
             if (blob) {
                 try {
@@ -112,14 +135,7 @@ export async function fixAttachmentsWithMissingContentType<T extends Base>(
                             ? 'image/jpeg'
                             : `image/${compressed.mainFormat}`
 
-                    // Convert compressed blob to base64 for storage
-                    const arrayBuffer = await compressedBlob.arrayBuffer()
-                    const uint8Array = new Uint8Array(arrayBuffer)
-                    let base64Data = ''
-                    for (let i = 0; i < uint8Array.length; i++) {
-                        base64Data += String.fromCharCode(uint8Array[i])
-                    }
-                    base64Data = btoa(base64Data)
+                    const base64Data = await blobToBase64(compressedBlob)
 
                     updatedAttachments[attachmentId] = {
                         ...attachment,
@@ -460,14 +476,18 @@ export async function importJSONDocument(
         )
     })
 
-    docs = await Promise.all(
-        docs.map(doc =>
-            fixAttachmentsWithMissingContentType<Base>(
+    // Sequential: photo conversion is memory-heavy, so avoid running it for
+    // every document at once.
+    const fixedDocs: typeof docs = []
+    for (const doc of docs) {
+        fixedDocs.push(
+            await fixAttachmentsWithMissingContentType<Base>(
                 doc as PouchDB.Core.PutDocument<Base> &
                     PouchDB.Core.AllDocsMeta,
             ),
-        ),
-    )
+        )
+    }
+    docs = fixedDocs
 
     const responses = await db.bulkDocs<Base>(docs)
 

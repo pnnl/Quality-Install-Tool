@@ -133,12 +133,16 @@ export async function compressPhoto(
             throw webpUnsupportedError
         }
 
+        // Fall back to the normalized (never HEIC) image, stored under its own
+        // real format so the content type is not mislabelled.
         console.warn(
-            `Unable to compress photo within ${settings.maxSizeMB} MB for profile ${profile}.`,
+            `Unable to compress photo within ${settings.maxSizeMB} MB for profile ${profile}; storing uncompressed image.`,
         )
+        const fallbackFormat = (mimeType.split('/')[1] || 'jpeg').toLowerCase()
+        return { blobs: { [fallbackFormat]: file }, mainFormat: fallbackFormat }
     }
 
-    const mainFormat = formats[0]
+    const mainFormat = formats.find(format => blobs[format]) ?? formats[0]
     return { blobs, mainFormat }
 }
 
@@ -295,7 +299,7 @@ async function preprocessPhoto(
 
     if (!context) {
         console.warn('Canvas rendering is unavailable.')
-        return new Blob([file], { type: mimeType })
+        return file
     }
 
     // Apply a small readability pass before compression so text edges survive
