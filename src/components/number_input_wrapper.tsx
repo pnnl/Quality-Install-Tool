@@ -49,14 +49,14 @@ const NumberInputWrapper: React.FC<NumberInputWrapperProps> = ({
     const valueValidators = useMemo<Validator<number>[]>(() => {
         return [
             input => {
-                if (min && input < min) {
+                if (min !== undefined && input < min) {
                     return `Input must be at least ${min}.`
                 } else {
                     return undefined
                 }
             },
             input => {
-                if (max && input > max) {
+                if (max !== undefined && input > max) {
                     return `Input must be at most ${max}.`
                 } else {
                     return undefined

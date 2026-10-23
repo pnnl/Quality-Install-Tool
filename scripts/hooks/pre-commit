@@ -1,0 +1,8 @@
+#!/bin/sh
+# Pre-commit hook: lint only the staged files
+
+NODE_ENV=development BABEL_ENV=development yarn lint-staged
+if [ $? -ne 0 ]; then
+  echo "Lint check failed. Commit aborted."
+  exit 1
+fi

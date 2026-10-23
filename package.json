@@ -36,7 +36,11 @@
         "test": "node scripts/test.js",
         "lint": "NODE_ENV=development BABEL_ENV=development eslint 'src/**/*.{js,jsx,mdx,ts,tsx}'",
         "lint:fix": "NODE_ENV=development BABEL_ENV=development eslint --fix 'src/**/*.{js,jsx,mdx,ts,tsx}'",
-        "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,mdx,json}' --config ./.prettierrc"
+        "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,md,mdx,json}' --config ./.prettierrc",
+        "postinstall": "git config core.hooksPath scripts/hooks || true"
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,mdx,ts,tsx}": "eslint --max-warnings=0"
     },
     "eslintConfig": {
         "extends": [
@@ -113,6 +117,7 @@
         "jest": "^27.4.3",
         "jest-resolve": "^27.4.2",
         "jest-watch-typeahead": "^1.0.0",
+        "lint-staged": "^17.6.0",
         "mini-css-extract-plugin": "^2.4.5",
         "postcss": "^8.4.4",
         "postcss-flexbugs-fixes": "^5.0.2",

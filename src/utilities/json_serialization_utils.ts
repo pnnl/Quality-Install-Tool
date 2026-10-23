@@ -19,13 +19,201 @@ import {
     type Base,
     type Installation,
     type Project,
+    type PhotoMetadata,
 } from '../types/database.types'
+import {
+    compressPhoto,
+    getPhotoMetadata,
+    sniffImageMimeType,
+} from './photo_utils'
+import { getPhotoProfileFromDoc } from './photo_resolution_utils'
 
 export const JSON_DOCUMENT_CONTENT_TYPE: string =
     process.env.REACT_APP_JSON_DOCUMENT_CONTENT_TYPE
 
 export const JSON_DOCUMENT_FILE_EXTENSION: string =
     process.env.REACT_APP_JSON_DOCUMENT_FILE_EXTENSION
+
+export function blobFromAttachmentData(
+    data: PouchDB.Core.AttachmentData | undefined,
+    contentType?: string,
+): Blob | undefined {
+    if (!data) {
+        return undefined
+    }
+
+    if (data instanceof Blob) {
+        return data
+    }
+
+    if (typeof data === 'string') {
+        const binaryString = atob(data)
+        const bytes = new Uint8Array(binaryString.length)
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i)
+        }
+        return new Blob([bytes], {
+            type: contentType || 'application/octet-stream',
+        })
+    }
+
+    // Handle Buffer or any ArrayBufferLike
+    if (
+        data &&
+        typeof data === 'object' &&
+        'buffer' in data &&
+        data.buffer instanceof ArrayBuffer
+    ) {
+        const view = data as ArrayBufferView
+        const bytes = new Uint8Array(view.byteLength)
+        bytes.set(new Uint8Array(view.buffer, view.byteOffset, view.byteLength))
+        return new Blob([bytes], {
+            type: contentType || 'application/octet-stream',
+        })
+    }
+
+    return undefined
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            const result = reader.result as string
+            resolve(result.slice(result.indexOf(',') + 1))
+        }
+        reader.onerror = () => reject(reader.error)
+        reader.readAsDataURL(blob)
+    })
+}
+
+export async function fixAttachmentsWithMissingContentType<T extends Base>(
+    doc: PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta,
+): Promise<PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta> {
+    if (!doc._attachments) {
+        return doc
+    }
+
+    const updatedAttachments: PouchDB.Core.Attachments = {}
+    const updatedMetadata = { ...doc.metadata_.attachments }
+    let attachmentsChanged = false
+    let metadataChanged = false
+
+    for (const [attachmentId, attachment] of Object.entries(doc._attachments)) {
+        if (!attachment.content_type) {
+            const fullAttachment = attachment as PouchDB.Core.FullAttachment
+            const rawBlob = blobFromAttachmentData(fullAttachment.data)
+            // Only treat the attachment as a photo if its bytes say so.
+            const sniffedType = rawBlob
+                ? await sniffImageMimeType(rawBlob)
+                : null
+            const blob =
+                rawBlob && sniffedType
+                    ? new Blob([rawBlob], { type: sniffedType })
+                    : undefined
+
+            if (blob) {
+                try {
+                    // Try to extract metadata from original HEIC blob first.
+                    // Skip the device-location fallback: import only adopts
+                    // EXIF-embedded GPS, and the fallback would block up to
+                    // 60s per attachment (and may prompt for location).
+                    let exifData = await getPhotoMetadata(blob, undefined, {
+                        skipGeolocationFallback: true,
+                    })
+
+                    // Compress/convert HEIC to JPEG using the configured profile
+                    const profile = getPhotoProfileFromDoc(
+                        doc as PouchDB.Core.ExistingDocument<Base> &
+                            PouchDB.Core.AllDocsMeta,
+                    )
+                    const compressed = await compressPhoto(blob, profile)
+                    const compressedBlob =
+                        compressed.blobs[compressed.mainFormat] || blob
+                    const mimeType =
+                        compressed.mainFormat === 'jpeg'
+                            ? 'image/jpeg'
+                            : `image/${compressed.mainFormat}`
+
+                    const base64Data = await blobToBase64(compressedBlob)
+
+                    updatedAttachments[attachmentId] = {
+                        ...attachment,
+                        content_type: mimeType,
+                        data: base64Data,
+                    }
+                    attachmentsChanged = true
+
+                    // If no EXIF found in original, try converted blob
+                    if (!exifData || exifData.geolocationSource !== 'EXIF') {
+                        const convertedExif = await getPhotoMetadata(
+                            compressedBlob,
+                            undefined,
+                            { skipGeolocationFallback: true },
+                        )
+                        if (convertedExif.geolocationSource === 'EXIF') {
+                            exifData = convertedExif
+                        }
+                    }
+
+                    // Update metadata with geolocation and timestamp if found
+                    if (
+                        exifData.geolocationSource === 'EXIF' &&
+                        exifData.geolocation.latitude &&
+                        exifData.geolocation.longitude
+                    ) {
+                        const currentMetadata = updatedMetadata[attachmentId]
+                        updatedMetadata[attachmentId] = {
+                            ...(currentMetadata as PhotoMetadata | undefined),
+                            geolocation: exifData.geolocation,
+                            geolocationSource: 'EXIF',
+                            timestamp:
+                                exifData.timestamp ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestamp,
+                            timestampSource:
+                                exifData.timestampSource ||
+                                (currentMetadata as PhotoMetadata | undefined)
+                                    ?.timestampSource,
+                        } as PhotoMetadata
+                        metadataChanged = true
+                    }
+                } catch (error) {
+                    console.warn(
+                        `Failed to fix attachment ${attachmentId}:`,
+                        error,
+                    )
+                    updatedAttachments[attachmentId] = attachment
+                }
+            } else {
+                updatedAttachments[attachmentId] = attachment
+            }
+        } else {
+            updatedAttachments[attachmentId] = attachment
+        }
+    }
+
+    if (!attachmentsChanged && !metadataChanged) {
+        return doc
+    }
+
+    const result: PouchDB.Core.PutDocument<T> & PouchDB.Core.AllDocsMeta = {
+        ...doc,
+    }
+
+    if (attachmentsChanged) {
+        result._attachments = updatedAttachments
+    }
+
+    if (metadataChanged) {
+        result.metadata_ = {
+            ...doc.metadata_,
+            attachments: updatedMetadata,
+        }
+    }
+
+    return result
+}
 
 export type JSONDocument = {
     all_docs: JSONDocumentObject | Array<JSONDocumentObject>
@@ -287,6 +475,19 @@ export async function importJSONDocument(
                 PouchDB.Core.AllDocsMeta,
         )
     })
+
+    // Sequential: photo conversion is memory-heavy, so avoid running it for
+    // every document at once.
+    const fixedDocs: typeof docs = []
+    for (const doc of docs) {
+        fixedDocs.push(
+            await fixAttachmentsWithMissingContentType<Base>(
+                doc as PouchDB.Core.PutDocument<Base> &
+                    PouchDB.Core.AllDocsMeta,
+            ),
+        )
+    }
+    docs = fixedDocs
 
     const responses = await db.bulkDocs<Base>(docs)
 
