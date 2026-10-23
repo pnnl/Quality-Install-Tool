@@ -45,22 +45,34 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
             setIsExpandable(hasOverflow)
         }
 
+        // Measuring toggles a class on the observed element, so defer it to the
+        // next frame; doing it inside the ResizeObserver callback triggers
+        // "ResizeObserver loop completed with undelivered notifications".
+        let frame = 0
+        const scheduleUpdate = () => {
+            cancelAnimationFrame(frame)
+            frame = requestAnimationFrame(updateExpandableState)
+        }
+
         updateExpandableState()
-        window.addEventListener('resize', updateExpandableState)
 
         // Content inside an inactive tab is display:none and measures 0, so
         // re-measure once the element becomes visible.
-        const observer =
-            typeof ResizeObserver !== 'undefined' && textContainerRef.current
-                ? new ResizeObserver(updateExpandableState)
-                : null
-        if (observer && textContainerRef.current) {
-            observer.observe(textContainerRef.current)
+        const resizeObserver =
+            typeof ResizeObserver === 'undefined'
+                ? undefined
+                : new ResizeObserver(scheduleUpdate)
+        const textContainer = textContainerRef.current
+
+        if (resizeObserver && textContainer) {
+            resizeObserver.observe(textContainer)
         }
+        window.addEventListener('resize', scheduleUpdate)
 
         return () => {
-            window.removeEventListener('resize', updateExpandableState)
-            observer?.disconnect()
+            cancelAnimationFrame(frame)
+            resizeObserver?.disconnect()
+            window.removeEventListener('resize', scheduleUpdate)
         }
     }, [text])
 
