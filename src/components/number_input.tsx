@@ -1,5 +1,7 @@
-import React, { useCallback, useId } from 'react'
+import React, { useId } from 'react'
 import { FloatingLabel, Form, InputGroup } from 'react-bootstrap'
+
+import { useDebouncedField } from '../hooks/useDebouncedField'
 
 interface NumberInputProps {
     label: React.ReactNode
@@ -28,22 +30,21 @@ const NumberInput: React.FC<NumberInputProps> = ({
 }) => {
     const id = useId()
 
-    const handleChange = useCallback(
-        async (event: React.ChangeEvent<HTMLInputElement>) => {
-            await onChange(event.target.value)
-        },
-        [onChange],
+    const { localValue, handleChange, flush } = useDebouncedField(
+        value,
+        onChange,
     )
 
     const floatingLabel = (
         <FloatingLabel controlId={id} label={label}>
             <Form.Control
                 onChange={handleChange}
+                onBlur={flush}
                 type="number"
                 min={min}
                 max={max}
                 step={step}
-                value={value}
+                value={localValue}
                 isInvalid={errorMessages.length > 0}
             />
         </FloatingLabel>

@@ -57,9 +57,20 @@ const CollapsibleText: React.FC<CollapsibleTextProps> = ({
         }
         window.addEventListener('resize', updateExpandableState)
 
+        // Content inside an inactive tab is display:none and measures 0, so
+        // re-measure once the element becomes visible.
+        const observer =
+            typeof ResizeObserver !== 'undefined' && textContainerRef.current
+                ? new ResizeObserver(updateExpandableState)
+                : null
+        if (observer && textContainerRef.current) {
+            observer.observe(textContainerRef.current)
+        }
+
         return () => {
             resizeObserver?.disconnect()
             window.removeEventListener('resize', updateExpandableState)
+            observer?.disconnect()
         }
     }, [text])
 
