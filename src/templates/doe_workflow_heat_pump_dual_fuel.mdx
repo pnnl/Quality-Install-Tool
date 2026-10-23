@@ -5,27 +5,33 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
 <Tabs>
     <Tab eventKey="pre_installation" title="Pre-Installation">
-        <Collapsible header="Workflow Configurations and Installation Sequence">
-            This workflow supports adding a heat pump (outdoor unit and cased coil) to a gas furnace, and the photo prompts follow the typical
-            installation sequence when both a gas furnace and a cased coil are installed.
+        <CollapsibleTextContainer
+            title="Workflow Configuration and Installation Sequence"
+            text={
+                <>
+                This workflow supports adding a heat pump (outdoor unit and cased coil) to a gas furnace, and the photo prompts follow the typical
+                installation sequence when both a gas furnace and a cased coil are installed.
+                <br/><strong>Upgrade paths</strong>
+                <ul>
+                <li>Existing furnace with an AC coil to reusing the existing furnace + new coil</li>
+                <li>Existing furnace with no AC to reusing the existing furnace + new coil</li>
+                <li>Existing furnace with an AC coil to a new furnace + new coil</li>
+                <li>Existing furnace with no AC to a new furnace + new coil</li>
+                </ul>
+                
+                <strong>Furnace types</strong>: Condensing furnaces, Natural draft furnaces<br/>
 
-            **Upgrade paths**
-            - Existing furnace with an AC coil to the existing furnace + heat pump
-            - Existing furnace with no AC to the existing furnace + heat pump
-            - Existing furnace with an AC coil to a new furnace + heat pump
-            - Existing furnace with no AC to a new furnace + heat pump
+                <strong>Furnace orientations</strong>: Upflow, Downflow, Horizontal right, Horizontal left <br/><br/>
 
-            **Furnace types**: Condensing furnaces, Natural draft furnaces
+                <strong>Reference images:</strong> wire routing between the furnace and the cased coil <br/>
 
-            **Furnace orientations**: Upflow, Downflow, Horizontal right, Horizontal left
-
-            **Reference images: wire routing between the furnace and the cased coil**
-
-            <Figure src="/images/dual_fuel/dhp1.png">Upflow furnace with cased coil</Figure>
-            <Figure src="/images/dual_fuel/dhp2.png">Downflow furnace with cased coil</Figure>
-            <Figure src="/images/dual_fuel/dhp3.png">Horizontal furnace with cased coil (discharge to the right)</Figure>
-            <Figure src="/images/dual_fuel/dhp4.png">Horizontal furnace with cased coil (discharge to the left)</Figure>
-        </Collapsible>
+                    <Figure src="/images/dual_fuel/dhp1.png">Upflow furnace with cased coil</Figure>
+                    <Figure src="/images/dual_fuel/dhp2.png">Downflow furnace with cased coil</Figure>
+                    <Figure src="/images/dual_fuel/dhp3.png">Horizontal furnace with cased coil (discharge to the right)</Figure>
+                    <Figure src="/images/dual_fuel/dhp4.png">Horizontal furnace with cased coil (discharge to the left)</Figure>
+                </>
+            }
+            />
 
         ## Visual Assessment of the Existing Equipment
 
@@ -82,7 +88,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         <StringInput label="Ductwork Comments" path="comment_ductwork" />
 
         ## Static Pressure Test
-        Total external static pressure measurement
+        Provided the static pressure test result from the mode that calls for the highest fan speed, that could be Y2 or W2 depending on the size of the heat pump versus the size of the gas furnace.
         <PhotoInput id="preupgrade_static_pressure_test_photo" label="Pre-upgrade Static Pressure Test – Photo" uploadable>
             Take a photo of the manometer readout or screenshot from digital instrument app.
         </PhotoInput>
@@ -179,17 +185,16 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         You are encouraged to use the <a href="https://basc.pnnl.gov/cchp_decision_tool" target="_blank" rel="noopener noreferrer">Cold Climate Heat Pump Decision Tool</a> which
         can help assist in selecting the right heat pump for this home.
 
-        <Collapsible header="Equipment Selection Details">
-            Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or alternate load sizing
-            method such as sizing the equipment to the air flow capability of the ducts if it is less than the Manual J loads.
-            Equipment selection also depends on knowing the equipment’s performance at specific temperatures.
-            Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List.
-            The cased coil must be matched to the outdoor unit, and must be compatible with the furnace cabinet width, orientation
-            (upflow, downflow or horizontal), and the furnace blower capacity. Some manufacturers sell coils of different heights, picking the right
-            height can save installation time by not needing to fabricate transition sheet metal. If there is a large discrepancy between the heating and cooling load,
-            the furnace and the cased coil may be different sizes, most manufacturers include adapter plates to accommodate a one size difference.
-            Please add a comment recording the decisions made.
-        </Collapsible>
+        <CollapsibleTextContainer title="Equipment Selection Details" text={
+                <p>
+                Select the equipment based on the ASHRAE heating and cooling design conditions, Manual J load calculation or alternate load sizing method such as sizing the equipment to the air flow capability of the ducts if it is less than the Manual J loads or sizing for the Manual J cooling load only for the coil because the gas furnace is sized for the Manual J heating load.
+
+                <br/><br/>Equipment selection also depends on knowing the equipment’s performance at specific temperatures. Reference the manufacturer’s extended performance tables and/or the data from the NEEP Cold Climate Air Source Heat Pump List.
+                <br/><br/>The cased coil should be a AHRI matched pair to the outdoor unit, and must be compatible with the furnace cabinet width and orientation (upflow, downflow or horizontal), and the furnace blower capacity. Some manufacturers sell coils of different heights, picking the right height can save installation time by not needing to fabricate different transition sheet metal. If there is a large discrepancy between the heating and cooling load, the furnace and the cased coil may be different sizes, most manufacturers include adapter plates to accommodate a one size difference. Please add a comment recording the decisions made.
+                </p>
+                }
+            />
+
         <PhotoInput id="mfg_extended_heating_performance_table_photo" label="Mfr's Heating Performance Table – Photo" uploadable>
             Upload a photo of the manufacturer&apos;s extended heating performance table.
         </PhotoInput>
@@ -333,9 +338,24 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
         </PhotoInput>
     </Tab>
     <Tab eventKey="post_install" title="Post-Installation">
-        ## Post-install Airflow Test
+        <CollapsibleTextContainer title="Post-install Airflow Test" text={
+        <>
         Airflow is a cornerstone to ducted equipment performance. The new equipment will result in some airflow changes.
-        Checking the system post upgrades to verify adequate airflow is an important step.
+        <br />
+        <br />
+        Checking the system post upgrades to verify proper airflow when there is a G, Y1, Y2, W1, W2 call for example is an important step.
+         On most gas furnaces there are push buttons, rotary dials, or dip switches to adjust the fan speed for each of these calls separately.
+         Depending on the thermostat and convenience, you may need to use alligator or magnet jumper leads to jumper R-G-and-Y1 for example to conduct these test.
+
+        <br />
+        <br />
+        Take a photo of the post-installation airflow test results. Please add multiple
+        photos for each test or a photo of a piece of paper showing the measurement
+        results of all the tests.
+
+        </>
+        }/>
+
 
         <PhotoInput id="post_install_air_flow_test_setup_photo" label="Post-Install Airflow Test Setup – Photo">
             Take a photo of the post-installation airflow test setup.
@@ -386,6 +406,10 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
             <ProjectInfoReport {...props} />
 
+            <Photo id="project_invoice_photo" label="Project Invoice">
+            Photo of the project invoice
+            </Photo>
+
             ## **Pre-Upgrade Assessment**
             <Photo id="existing_heating_appliance_photo" label="Existing Heating Appliance - Photo" required>
                 Photo of existing heating appliance
@@ -419,7 +443,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
 
             ## Airflow Test Results
             In order for a heat pump to efficiently and effectively deliver the conditioned air to the house,
-            the ducts need to be able to move enough air. This test uses the home&apos;s existing blower to measure how much air the ducts can move.
+            the ducts need to be able to move enough air. This test uses the home&apos;s existing equipment&apos;s blower to measure how much air the ducts can move..
             <Photo id="pre_upgrade_air_flow_test_setup_photo" label="Pre-Upgrade Airflow Test Setup – Photo" required>
                 Photo of the airflow test setup
             </Photo>
@@ -588,7 +612,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             ## Airflow Test
             <Photo id="post_install_air_flow_test_setup_photo" label="Post-Install Airflow Test Setup – Photo" required />
             <Photo id="post_install_air_flow_test_results_photo" label="Post-Install Airflow Test Results – Photo" required>
-                Generally, a heat pump should move approximately 400 CFM per ton of heating/cooling capacity +/- 15%.
+                Generally, a heat pump should move approximately 400 CFM per ton of heating/cooling capacity +/- 15% depending on latent or sensible cooling goals or temperature rise goals.
             </Photo>
             ## Static Pressure Test
             <Photo id="post_install_static_pressure_test_setup_photo" label="Post-Install Static Pressure Test Setup – Photo" required />
@@ -604,12 +628,7 @@ import ProjectInfoReport from './reusable/project_info_report.mdx'
             <LabelValue label="Post-Installation Notes About Thermostat Settings"
                         value={props.data.comment_about_thermostat_settings}/>
 
-            {props.metadata?.attachments?.project_invoice_photo && (<>
-                <h3>Project Invoice</h3>
-                <Photo id="project_invoice_photo" label="Project Invoice – Photo">
-                Photo of the project invoice
-                </Photo> </>
-            )}
+
 
             {props.data.links?.doe_combustion_appliance_safety_test_doc_id && (
                 <InstallationProvider
