@@ -275,8 +275,13 @@ export async function importJSONDocument(
                 })
             }
 
-            if (shouldMigrateProjectPhotoResolution(origProject)) {
-                docs[index] = transformProjectPhotoResolution(origProject)
+            const currentProject = docs[
+                index
+            ] as PouchDB.Core.ExistingDocument<Project> &
+                PouchDB.Core.AllDocsMeta
+
+            if (shouldMigrateProjectPhotoResolution(currentProject)) {
+                docs[index] = transformProjectPhotoResolution(currentProject)
             }
         }
     })
