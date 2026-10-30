@@ -18,6 +18,10 @@ The `yarn run start` command launches a server on localhost:3000. The browser vi
 
 You must rerun `yarn run start` in order to see the effect of any changes made to files outside of the `src` folder. This comes up if you make configuration changes in `config` or you change the resources in `public`.
 
+## Import regression tests
+
+See [Import Regression Tests](docs/IMPORT_REGRESSION_TESTS.md) for the test command and coverage.
+
 ## Serving the production build
 The `yarn run build` command generates a production build that is stored in the  
 `/build` folder. This can be served as a static web site.
