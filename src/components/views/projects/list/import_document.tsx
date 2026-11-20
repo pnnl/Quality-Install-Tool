@@ -7,15 +7,24 @@ import {
     JSON_DOCUMENT_FILE_EXTENSION,
     importJSONDocument,
 } from '../../../../utilities/json_serialization_utils'
+import { isBrowserStorageError } from '../../../../utilities/storage_error_utils'
+
+const STORAGE_FULL_MESSAGE =
+    'Import failed because this browser appears to have reached its storage limit. Please download older projects and remove them from the browser, then try again.'
 
 interface ImportDocProps {
     label: string
+    disabled?: boolean
     onImport: (
         responses: Array<PouchDB.Core.Response | PouchDB.Core.Error>,
     ) => void | Promise<void>
 }
 
-const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
+const ImportDoc: React.FC<ImportDocProps> = ({
+    label,
+    disabled = false,
+    onImport,
+}) => {
     const db = useDatabase()
 
     const ref = useRef<HTMLInputElement>(null)
@@ -29,7 +38,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
             const file = event.target.files?.[0]
             event.target.value = ''
 
-            if (!file || importInProgress.current) {
+            if (!file || disabled || importInProgress.current) {
                 return
             }
 
@@ -73,26 +82,34 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
 
                 await onImport(responses)
 
-                if (failures.length > 0) {
+                if (failures.some(failure => isBrowserStorageError(failure))) {
+                    setError(
+                        `${STORAGE_FULL_MESSAGE} Some documents may already have been imported.`,
+                    )
+                } else if (failures.length > 0) {
                     setError(
                         `Failed to import ${failures.length} of ${responses.length} documents: ${failures.map(failure => failure.message ?? failure.reason ?? failure.name ?? 'Unknown database error').join('; ')}. Some documents may already have been imported.`,
                     )
                 }
             } catch (cause) {
-                setError(`Failed to import JSON: ${cause}`)
+                setError(
+                    isBrowserStorageError(cause)
+                        ? STORAGE_FULL_MESSAGE
+                        : `Failed to import JSON: ${cause}`,
+                )
             } finally {
                 importInProgress.current = false
                 setIsImporting(false)
             }
         },
-        [db, onImport],
+        [db, disabled, onImport],
     )
 
     return (
         <>
             <Button
                 onClick={() => ref.current?.click()}
-                disabled={isImporting}
+                disabled={isImporting || disabled}
                 aria-busy={isImporting}
             >
                 {isImporting ? 'Importing...' : label}
@@ -103,7 +120,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                 type="file"
                 accept={`*${JSON_DOCUMENT_FILE_EXTENSION}`}
                 onChange={handleChange}
-                disabled={isImporting}
+                disabled={isImporting || disabled}
             />
             {error && (
                 <div className="error" role="alert">
