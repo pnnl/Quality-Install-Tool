@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from 'react-bootstrap'
+import { Button, Form, Pagination } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
 import ImportDoc from './import_document'
@@ -11,11 +11,14 @@ import {
     useProjects,
 } from '../../../../providers/projects_provider'
 import {
+    MAX_PROJECTS,
     removeProject,
     updateProjectLastModified,
 } from '../../../../utilities/database_utils'
 
 type HomeProps = Record<string, never>
+
+const PROJECTS_PER_PAGE = 20
 
 const Home: React.FC<HomeProps> = () => {
     const db = useDatabase()
@@ -27,6 +30,31 @@ const Home: React.FC<HomeProps> = () => {
     const [selectedProjectForDelete, setSelectedProjectForDelete] = useState<
         ProjectDocument | undefined
     >(undefined)
+
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const [searchText, setSearchText] = useState('')
+
+    const isProjectLimitReached = projects.length >= MAX_PROJECTS
+
+    const normalizedSearch = searchText.trim().toLowerCase()
+    const filteredProjects = normalizedSearch
+        ? projects.filter(project =>
+              (project.metadata_.doc_name ?? '')
+                  .toLowerCase()
+                  .includes(normalizedSearch),
+          )
+        : projects
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE),
+    )
+    const page = Math.min(currentPage, totalPages)
+    const pageProjects = filteredProjects.slice(
+        (page - 1) * PROJECTS_PER_PAGE,
+        page * PROJECTS_PER_PAGE,
+    )
 
     useEffect(() => {
         let isCancelled = false
@@ -156,26 +184,63 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
             ) : (
                 <div>
-                    <div className="align-right padding">
-                        <Button
-                            onClick={() => {
-                                navigate('/app/new', {
-                                    replace: true,
-                                })
-                            }}
+                    <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 padding">
+                        <span data-testid="project-count">
+                            Saved Projects: {projects.length}
+                            {normalizedSearch &&
+                                ` · ${filteredProjects.length} found`}
+                        </span>
+                        <div className="d-flex flex-wrap align-items-center gap-2">
+                            <Button
+                                disabled={isProjectLimitReached}
+                                onClick={() => {
+                                    navigate('/app/new', {
+                                        replace: true,
+                                    })
+                                }}
+                            >
+                                New Project
+                            </Button>
+                            <ImportDoc
+                                label="Import Project"
+                                disabled={isProjectLimitReached}
+                                onImport={async () => {
+                                    await reloadProjects()
+                                }}
+                            />
+                        </div>
+                    </div>
+                    {isProjectLimitReached && (
+                        <div
+                            className="alert alert-warning mx-3"
+                            role="alert"
+                            data-testid="project-limit-message"
                         >
-                            New Project
-                        </Button>
-                        &nbsp;&nbsp;
-                        <ImportDoc
-                            label="Import Project"
-                            onImport={async () => {
-                                await reloadProjects()
+                            You have reached the maximum of {MAX_PROJECTS} saved
+                            projects. To add or import a new project, please
+                            download any projects you want to keep and delete
+                            some older ones.
+                        </div>
+                    )}
+                    <div className="padding">
+                        <Form.Control
+                            type="search"
+                            placeholder="Search projects by name"
+                            aria-label="Search projects by name"
+                            value={searchText}
+                            onChange={event => {
+                                setSearchText(event.target.value)
+                                setCurrentPage(1)
                             }}
                         />
                     </div>
+                    {normalizedSearch && filteredProjects.length === 0 && (
+                        <p className="padding" data-testid="no-search-results">
+                            No projects match &quot;{searchText.trim()}&quot;.
+                        </p>
+                    )}
                     <div>
-                        {projects.map(project => (
+                        {pageProjects.map(project => (
                             <ProjectListGroup
                                 key={project._id}
                                 project={project}
@@ -193,6 +258,39 @@ const Home: React.FC<HomeProps> = () => {
                             />
                         ))}
                     </div>
+                    {totalPages > 1 && (
+                        <Pagination
+                            className="justify-content-center"
+                            data-testid="project-pagination"
+                        >
+                            <Pagination.Prev
+                                disabled={page === 1}
+                                onClick={() => setCurrentPage(page - 1)}
+                            />
+                            {Array.from({ length: totalPages }, (_, i) => {
+                                const first = i * PROJECTS_PER_PAGE + 1
+                                const last = Math.min(
+                                    (i + 1) * PROJECTS_PER_PAGE,
+                                    filteredProjects.length,
+                                )
+
+                                return (
+                                    <Pagination.Item
+                                        key={i + 1}
+                                        active={i + 1 === page}
+                                        title={`Projects ${first}-${last}`}
+                                        onClick={() => setCurrentPage(i + 1)}
+                                    >
+                                        {last}
+                                    </Pagination.Item>
+                                )
+                            })}
+                            <Pagination.Next
+                                disabled={page === totalPages}
+                                onClick={() => setCurrentPage(page + 1)}
+                            />
+                        </Pagination>
+                    )}
                 </div>
             )}
         </>

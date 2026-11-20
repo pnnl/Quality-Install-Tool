@@ -15,6 +15,15 @@ import { type Installer } from '../types/installer.type'
 import { comparator } from './comparison_utils'
 import { getDefaultProjectPhotoResolution } from './photo_resolution_utils'
 
+/**
+ * PouchDB's `find` returns only 25 documents unless a limit is given.
+ * Use an explicit, effectively unbounded limit so no documents are dropped.
+ */
+const FIND_LIMIT = Number.MAX_SAFE_INTEGER
+
+/** Maximum number of projects that can be saved in the browser. */
+export const MAX_PROJECTS = 50
+
 //
 // BASE
 //
@@ -129,6 +138,7 @@ export async function getInstallationIds(
                 },
             },
             fields: ['_id'],
+            limit: FIND_LIMIT,
         }
 
         const findResponse: PouchDB.Find.FindResponse<Base> =
@@ -362,6 +372,7 @@ export async function getProjectDocumentNames(
             },
         },
         fields: ['metadata_.doc_name'],
+        limit: FIND_LIMIT,
     }
 
     const findResponse: PouchDB.Find.FindResponse<Base> =
@@ -391,6 +402,7 @@ export async function getProjects(
             },
         },
         fields: ['_id'],
+        limit: MAX_PROJECTS,
     }
 
     const findResponse: PouchDB.Find.FindResponse<Base> =
@@ -589,6 +601,7 @@ export async function getLastModifiedInstaller(
             ],
         },
         fields: ['data_.installer', 'metadata_.last_modified_at'],
+        limit: FIND_LIMIT,
     }
 
     const findResponse: PouchDB.Find.FindResponse<Project> =

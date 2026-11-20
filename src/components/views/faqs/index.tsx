@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap'
 import Layout from '../layouts/default'
 import Collapsible from '../../collapsible'
 import { TfiImport } from 'react-icons/tfi'
+import { MAX_PROJECTS } from '../../../utilities/database_utils'
 
 const FaqsPage: React.FC = () => {
     return (
@@ -68,6 +69,26 @@ const FaqsPage: React.FC = () => {
                     older completed projects to your device and remove them from
                     browser storage, then try saving again. This frees space for
                     new project data and photos.
+                </Collapsible>
+                <Collapsible header="Is there a limit on the number of projects?">
+                    Yes. You can keep up to {MAX_PROJECTS} projects saved in
+                    your browser at a time. The project list shows 20 projects
+                    per page, and the count above the list shows how many
+                    projects you have saved.
+                    <br />
+                    <br />
+                    When you reach {MAX_PROJECTS} projects, the New Project and
+                    Import Project buttons are turned off and a message appears
+                    above the list. To add or import another project, first
+                    download any projects you want to keep (see the backup
+                    question above), then delete older projects you no longer
+                    need.
+                    <br />
+                    <br />
+                    The project limit is separate from your browser&rsquo;s
+                    storage limit. Photo-heavy projects can fill browser storage
+                    before you reach {MAX_PROJECTS} projects. See the Browser
+                    Storage Used question above.
                 </Collapsible>
                 <Collapsible header="Can I use the app on multiple devices?">
                     Since data is stored locally on each device, your projects
