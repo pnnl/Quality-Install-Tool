@@ -11,13 +11,14 @@ import {
     useProjects,
 } from '../../../../providers/projects_provider'
 import {
+    MAX_PROJECTS,
     removeProject,
     updateProjectLastModified,
 } from '../../../../utilities/database_utils'
 
 type HomeProps = Record<string, never>
 
-const PROJECTS_PER_PAGE = 25
+const PROJECTS_PER_PAGE = 20
 
 const Home: React.FC<HomeProps> = () => {
     const db = useDatabase()
@@ -33,6 +34,8 @@ const Home: React.FC<HomeProps> = () => {
     const [currentPage, setCurrentPage] = useState(1)
 
     const [searchText, setSearchText] = useState('')
+
+    const isProjectLimitReached = projects.length >= MAX_PROJECTS
 
     const normalizedSearch = searchText.trim().toLowerCase()
     const filteredProjects = normalizedSearch
@@ -189,6 +192,7 @@ const Home: React.FC<HomeProps> = () => {
                         </span>
                         <div className="d-flex flex-wrap align-items-center gap-2">
                             <Button
+                                disabled={isProjectLimitReached}
                                 onClick={() => {
                                     navigate('/app/new', {
                                         replace: true,
@@ -199,12 +203,25 @@ const Home: React.FC<HomeProps> = () => {
                             </Button>
                             <ImportDoc
                                 label="Import Project"
+                                disabled={isProjectLimitReached}
                                 onImport={async () => {
                                     await reloadProjects()
                                 }}
                             />
                         </div>
                     </div>
+                    {isProjectLimitReached && (
+                        <div
+                            className="alert alert-warning mx-3"
+                            role="alert"
+                            data-testid="project-limit-message"
+                        >
+                            You have reached the maximum of {MAX_PROJECTS} saved
+                            projects. To add or import a new project, please
+                            download any projects you want to keep and delete
+                            some older ones.
+                        </div>
+                    )}
                     <div className="padding">
                         <Form.Control
                             type="search"

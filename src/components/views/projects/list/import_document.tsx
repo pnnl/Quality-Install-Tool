@@ -14,12 +14,17 @@ const STORAGE_FULL_MESSAGE =
 
 interface ImportDocProps {
     label: string
+    disabled?: boolean
     onImport: (
         responses: Array<PouchDB.Core.Response | PouchDB.Core.Error>,
     ) => void | Promise<void>
 }
 
-const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
+const ImportDoc: React.FC<ImportDocProps> = ({
+    label,
+    disabled = false,
+    onImport,
+}) => {
     const db = useDatabase()
 
     const ref = useRef<HTMLInputElement>(null)
@@ -33,7 +38,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
             const file = event.target.files?.[0]
             event.target.value = ''
 
-            if (!file || importInProgress.current) {
+            if (!file || disabled || importInProgress.current) {
                 return
             }
 
@@ -97,14 +102,14 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                 setIsImporting(false)
             }
         },
-        [db, onImport],
+        [db, disabled, onImport],
     )
 
     return (
         <>
             <Button
                 onClick={() => ref.current?.click()}
-                disabled={isImporting}
+                disabled={isImporting || disabled}
                 aria-busy={isImporting}
             >
                 {isImporting ? 'Importing...' : label}
@@ -115,7 +120,7 @@ const ImportDoc: React.FC<ImportDocProps> = ({ label, onImport }) => {
                 type="file"
                 accept={`*${JSON_DOCUMENT_FILE_EXTENSION}`}
                 onChange={handleChange}
-                disabled={isImporting}
+                disabled={isImporting || disabled}
             />
             {error && (
                 <div className="error" role="alert">

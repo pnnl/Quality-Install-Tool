@@ -21,6 +21,9 @@ import { getDefaultProjectPhotoResolution } from './photo_resolution_utils'
  */
 const FIND_LIMIT = Number.MAX_SAFE_INTEGER
 
+/** Maximum number of projects that can be saved in the browser. */
+export const MAX_PROJECTS = 50
+
 //
 // BASE
 //
@@ -399,7 +402,7 @@ export async function getProjects(
             },
         },
         fields: ['_id'],
-        limit: FIND_LIMIT,
+        limit: MAX_PROJECTS,
     }
 
     const findResponse: PouchDB.Find.FindResponse<Base> =
