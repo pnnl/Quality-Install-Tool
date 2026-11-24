@@ -1,5 +1,6 @@
 import PouchDB from 'pouchdb'
 import React, { useCallback, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from 'react-bootstrap'
 
 import { useDatabase } from '../../../../providers/database_provider'
@@ -15,6 +16,12 @@ const STORAGE_FULL_MESSAGE =
 interface ImportDocProps {
     label: string
     disabled?: boolean
+    /**
+     * Where to show the error message. Use this when the button sits in a
+     * shrink-to-fit flex row, where an inline message would stretch the row
+     * and push the buttons around. Defaults to directly after the button.
+     */
+    errorContainer?: HTMLElement | null
     onImport: (
         responses: Array<PouchDB.Core.Response | PouchDB.Core.Error>,
     ) => void | Promise<void>
@@ -23,6 +30,7 @@ interface ImportDocProps {
 const ImportDoc: React.FC<ImportDocProps> = ({
     label,
     disabled = false,
+    errorContainer,
     onImport,
 }) => {
     const db = useDatabase()
@@ -105,6 +113,12 @@ const ImportDoc: React.FC<ImportDocProps> = ({
         [db, disabled, onImport],
     )
 
+    const errorMessage = error ? (
+        <div className="error" role="alert">
+            {error}
+        </div>
+    ) : null
+
     return (
         <>
             <Button
@@ -122,11 +136,10 @@ const ImportDoc: React.FC<ImportDocProps> = ({
                 onChange={handleChange}
                 disabled={isImporting || disabled}
             />
-            {error && (
-                <div className="error" role="alert">
-                    {error}
-                </div>
-            )}
+            {errorMessage &&
+                (errorContainer
+                    ? createPortal(errorMessage, errorContainer)
+                    : errorMessage)}
         </>
     )
 }
