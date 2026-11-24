@@ -32,6 +32,8 @@ const Home: React.FC<HomeProps> = () => {
     >(undefined)
 
     const [currentPage, setCurrentPage] = useState(1)
+    const [importErrorSlot, setImportErrorSlot] =
+        useState<HTMLDivElement | null>(null)
 
     const [searchText, setSearchText] = useState('')
 
@@ -204,12 +206,15 @@ const Home: React.FC<HomeProps> = () => {
                             <ImportDoc
                                 label="Import Project"
                                 disabled={isProjectLimitReached}
+                                errorContainer={importErrorSlot}
                                 onImport={async () => {
                                     await reloadProjects()
                                 }}
                             />
                         </div>
                     </div>
+                    {/* Import errors render here, below the button row. */}
+                    <div ref={setImportErrorSlot} className="px-3 text-end" />
                     {isProjectLimitReached && (
                         <div
                             className="alert alert-warning mx-3"
